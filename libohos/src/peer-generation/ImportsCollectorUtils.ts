@@ -31,10 +31,8 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | 
 
     let feature = convertDeclaration(featureNameConvertor, node)
     const featureNs = idl.getNamespaceName(node)
-    if ((library.language === Language.TS || library.language === Language.ARKTS) && featureNs !== '') {
-        if (library.language !== Language.ARKTS || !idl.isEnum(node)) {
-            feature = featureNs.split('.')[0]
-        }
+    if ([Language.TS, Language.ARKTS].includes(library.language) && featureNs !== '') {
+        feature = featureNs.split('.')[0]
     }
 
     const moduleName = library.layout.resolve(node, LayoutNodeRole.INTERFACE)
@@ -74,7 +72,7 @@ export function collectDeclItself(
         }
         if (options?.includeTransformedCallbacks) {
             if (idl.isCallback(node)) {
-                const maybeTransformed = maybeTransformManagedCallback(node)
+                const maybeTransformed = maybeTransformManagedCallback(node, library)
                 if (maybeTransformed)
                     collectDeclItself(library, maybeTransformed, emitter, options)
             }

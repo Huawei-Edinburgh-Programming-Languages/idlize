@@ -55,13 +55,11 @@ export class IldSkoalaFile implements LibraryFileInterface {
     }
 
     constructor(
-        public readonly originalFilename: string,
-        declarations?: idl.IDLEntry[]
-
+        public file: idl.IDLFile
     ) {
-        this.baseName = path.basename(this.originalFilename)
+        this.baseName = path.basename(file.fileName!)
         this.importsCollector = new ImportsCollector()
-        this.declarations = declarations ? new Set(declarations) : new Set()
+        this.declarations = new Set(file.entries)
     }
 
     addImportFeature(module: string, ...features: string[]) {
@@ -80,7 +78,7 @@ export class IdlSkoalaLibrary implements LibraryInterface {
 
     public readonly files: IldSkoalaFile[] = []
     findFileByOriginalFilename(filename: string): IldSkoalaFile | undefined {
-        return this.files.find(it => it.originalFilename === filename)
+        return this.files.find(it => it.file.fileName === filename)
     }
 
     get libraryPrefix(): string {
@@ -226,28 +224,43 @@ export class IdlSkoalaLibrary implements LibraryInterface {
     ///
 
     resolveTypeReference(type: idl.IDLReferenceType, pointOfView?: idl.IDLEntry, rootEntries?: idl.IDLEntry[]): idl.IDLEntry | undefined {
-        throw new Error("not implemented yet")
+        const qualifiedName = type.name.split(".");
+        let pointOfViewNamespace = idl.fetchNamespaceFrom(type.parent)
+        rootEntries ??= this.files.flatMap(it => it.entries)
 
-        // // let wrapperClassEntries: idl.IDLEntry[] = this.files.map(it => it.wrapperClasses.get(type.name)?.[1] as idl.IDLEntry).filter(it => !!it)
-        // let wrapperClassEntries = this.files.flatMap(f => f.wrapperClasses.get(type.name)?.[1]).filter(isDefined)
-        // entries ??= [...this.files.flatMap(it => [...it.declarations]), ...wrapperClassEntries]
+        let doWork = true
+        while (doWork) {
+            doWork = !!pointOfViewNamespace
+            let entries = pointOfViewNamespace
+                ? [...pointOfViewNamespace.members]
+                : [...rootEntries]
+            for (let qualifiedNamePart = 0; qualifiedNamePart < qualifiedName.length; ++qualifiedNamePart) {
+                const candidates = entries.filter(it => it.name === qualifiedName[qualifiedNamePart])
+                if (!candidates.length)
+                    break
+                if (qualifiedNamePart === qualifiedName.length - 1) {
+                    const target = candidates.length == 1
+                        ? candidates[0]
+                        : candidates.find(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import)) // probably the wrong logic here
+                    if (target && idl.isImport(target))// Temporary disable Import declarations
+                        return undefined
+                    return target
+                }
+                entries = []
+                for (const candidate of candidates) {
+                    if (idl.isNamespace(candidate))
+                        entries.push(...candidate.members)
+                    else if (idl.isEnum(candidate))
+                        entries.push(...candidate.elements)
+                    else if (idl.isInterface(candidate))
+                        entries.push(...candidate.constants, ...candidate.properties, ...candidate.methods)
+                }
+            }
+                
+            pointOfViewNamespace = idl.fetchNamespaceFrom(pointOfViewNamespace?.parent)
+        }
 
-        // const [qualifier, typeName] = idl.decomposeQualifiedName(type)
-        // if (qualifier) {
-        //     // This is a namespace or enum member. Try enum first
-        //     const parent = entries.find(it => it.name === qualifier)
-        //     if (parent && idl.isEnum(parent))
-        //         return parent.elements.find(it => it.name === type.name)
-        //     // Else try namespaces
-        //     return entries.find(it =>
-        //         it.name === typeName && it.namespace && qualifiedName(it.namespace, ".") === qualifier)
-
-        // }
-
-        // const candidates = entries.filter(it => type.name === it.name)
-        // return candidates.length == 1
-        //     ? candidates[0]
-        //     : candidates.find(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import))
+        return undefined
     }
 
     createContinuationCallbackReference(continuationType: idl.IDLType): idl.IDLReferenceType {
@@ -274,7 +287,7 @@ export class IdlWrapperClassConvertor extends BaseArgConvertor {
         protected table: IdlSkoalaLibrary,
         private type: idl.IDLInterface
     ) {
-        super(idl.createReferenceType(name, undefined, type), [RuntimeType.OBJECT], false, true, param)
+        super(idl.createReferenceType(type), [RuntimeType.OBJECT], false, true, param)
     }
 
     convertorArg(param: string, writer: LanguageWriter): string {
@@ -287,7 +300,7 @@ export class IdlWrapperClassConvertor extends BaseArgConvertor {
         const prefix = writer.language === Language.CPP ? generatorConfiguration().TypePrefix : ""
         const readStatement = writer.makeCast(
             writer.makeMethodCall(`${deserializerName}`, `readWrapper`, []),
-            idl.createReferenceType(`${prefix}${this.type.name}`, undefined, this.idlType)
+            idl.createReferenceType(`${prefix}${this.type.name}`)
         )
         return assigneer(readStatement)
     }
@@ -409,11 +422,11 @@ export class IdlWrapperProcessor {
         // process imports
         for (let file of this.library.files) {
             const importDecl = [...file.declarations].filter(it => idl.isImport(it)).map(it => it as idl.IDLImport)
-            importDecl.filter(it => isDefined(it.importClause)).forEach(importModule => {
-                if (importModule.name.includes("@")) {
-                    file.addImportFeature(importModule.name, ...importModule.importClause!)
+            importDecl.forEach(importModule => {
+                if (importModule.name === "" && {"ohos":1,"system":1,"internal":1}[importModule.clause[0]]) {
+                    file.addImportFeature(importModule.name, ...importModule.clause)
                 } else {
-                    importModule.importClause?.forEach(feature => {
+                    importModule.clause.forEach(feature => {
                         if (feature in Skoala.BaseClasses) {
                             file.addImportFeature(importModule.name, feature)
                         } else if (this.library.files.find(f => f.wrapperClasses.has(feature))) {
@@ -650,7 +663,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         this.writer.print(this.printer.output.join("\n"))
     }
     convertNamespace(node: idl.IDLNamespace): void {
-        this.writer.print(`${node.namespace ? "" : "declare " }namespace ${node.name} {`)
+        this.writer.print(`${idl.fetchNamespaceFrom(node.parent) ? "" : "declare " }namespace ${node.name} {`)
         this.writer.pushIndent()
         node.members.forEach(it => convertDeclaration(this, it))
         this.writer.popIndent()

@@ -31,7 +31,7 @@ export class ETSTypeNameConvertor extends TSTypeNameConvertor {
         const types = type.name.split(".")
         if (types.length > 1) {
             // Takes only name without the namespace prefix
-            const decl = this.resolver.resolveTypeReference(idl.createReferenceType(types.slice(-1).join(), undefined, type))
+            const decl = this.resolver.resolveTypeReference(idl.createReferenceType(types.slice(-1).join()))
             if (decl !== undefined) {
                 return convertDeclaration(createDeclarationNameConvertor(Language.ARKTS), decl)
             }
@@ -43,14 +43,6 @@ export class ETSTypeNameConvertor extends TSTypeNameConvertor {
         }
         return typeName
     }
-    convertEnum(node: idl.IDLEnum): string {
-        let ns = idl.getNamespaceName(node).split('.').join('_')
-        if (ns !== '') {
-            ns += '_'
-        }
-        return ns + node.name
-    }
-
     override convertContainer(type: idl.IDLContainerType): string {
         if (idl.IDLContainerUtils.isSequence(type)) {
             switch (type.elementType[0]) {

@@ -1,7 +1,9 @@
 import { xml, EventType, eventTypeStr, encodeText } from "#compat"
 
 export function run() {
-    xml.returnPromise().then(value => console.log('FROM PROMISE: ' + value))
+    xml.returnPromise().then((value: number) => console.log('FROM PROMISE: ' + value))
+    const point = xml.getPoint()
+    console.log(`GOT point (${point.x},${point.y})`)
     const sampleXml = `<foo valOfFoo="xx">Hello<bar>124</bar>World</foo>`
     console.log(`PARSING ${sampleXml}`)
     const buffer = encodeText(sampleXml)

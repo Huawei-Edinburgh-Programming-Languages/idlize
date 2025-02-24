@@ -41,12 +41,12 @@ export function qualifiedName(decl: idl.IDLNode, languageOrDelimiter: Language|s
     const delimiter = typeof languageOrDelimiter === "string"
         ? languageOrDelimiter
         : (languageOrDelimiter === Language.CPP ? '_' : '.')
-    if (idl.isEntry(decl) && decl.namespace)
-        return qualifiedName(decl.namespace, delimiter) + delimiter + idl.forceAsNamedNode(decl).name
-    return idl.forceAsNamedNode(decl).name
+    if (!idl.isEntry(decl))
+        throw new Error(`Expected to have an IDLEntry, got ${idl.IDLKind[decl.kind]}`)
+    return idl.getFQName(decl).split(".").join(delimiter)
 }
 
-export function typeOrUnion(types: idl.IDLType[], name?: string): idl.IDLType {
+export function collapseTypes(types: idl.IDLType[], name?: string): idl.IDLType {
     const seenNames = new Set<string>()
     const uniqueTypes = types.filter(it => {
         const typeName = idl.printType(it)

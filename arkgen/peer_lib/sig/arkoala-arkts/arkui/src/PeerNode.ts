@@ -2,9 +2,10 @@ import { int32 } from "@koalaui/common"
 import { IncrementalNode } from "@koalaui/runtime"
 import { NativePeerNode } from "./NativePeerNode"
 import { nullptr, pointer } from "@koalaui/interop"
-import { ArkRootPeer } from "./peers/ArkStaticComponentsPeer"
+import { ArkRootPeer } from "./generated/peers/ArkStaticComponentsPeer"
 
 export const PeerNodeType = 11
+export const LazyForEachType = 13
 const InitialID = 999
 
 export class PeerNode extends IncrementalNode {
@@ -15,6 +16,16 @@ export class PeerNode extends IncrementalNode {
     protected static currentId: int32 = InitialID
     static nextId(): int32 { return ++PeerNode.currentId }
     private id: int32
+
+    setId(id: int32) {
+        PeerNode.peerNodeMap.delete(this.id)
+        this.id = id
+        PeerNode.peerNodeMap.set(this.id, this)
+    }
+
+    getId(): int32 {
+        return this.id
+    }
 
     private static peerNodeMap = new Map<number, PeerNode>()
 

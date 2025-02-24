@@ -28,9 +28,9 @@ import {
     IDLExtendedAttributes,
     IDLInterface,
     IDLMethod,
-    IDLNode,
+    IDLNumberType,
     IDLParameter,
-    IDLPointerType,
+    IDLPrimitiveType,
     IDLProperty,
     IDLType,
     IDLVoidType,
@@ -39,7 +39,6 @@ import {
     isEnum,
     isInterface,
     isOptionalType,
-    isPrimitiveType,
     isReferenceType,
     isUnionType,
     linearizeNamespaceMembers
@@ -58,10 +57,13 @@ import {
     PeerLibrary,
     CppLanguageWriter,
     MethodSignature,
-    NamedMethodSignature,
     PrimitiveTypesInstance,
     CppConvertor,
+    CppReturnTypeConvertor,
     isStructureType,
+    PeerMethod,
+    dropSuffix,
+    MaterializedClass,
 } from '@idlizer/core'
 import {
     createOutArgConvertor,
@@ -69,7 +71,6 @@ import {
     makeDeserializeAndCall,
     readLangTemplate,
     getUniquePropertiesFromSuperTypes,
-    printBridgeCcForOHOS,
     printCallbacksKinds,
     printManagedCaller,
     writeDeserializer,
@@ -77,6 +78,9 @@ import {
     CppSourceFile,
     StructPrinter,
     TargetFile,
+    isGlobalScope,
+    BridgeCcApi,
+    BridgeCcVisitor,
 } from '@idlizer/libohos'
 
 class NameType {
@@ -92,9 +96,11 @@ interface SignatureDescriptor {
 class OHOSNativeVisitor {
     implementationStubsFile: CppSourceFile
 
-    hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), PrimitiveTypesInstance)
-    cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), PrimitiveTypesInstance)
+    private readonly argTypeConvertor = new CppConvertor(this.library)
+    private readonly returnTypeConvertor = new ReturnTypeConvertor(this.library)
 
+    hWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, this.argTypeConvertor, PrimitiveTypesInstance)
+    cppWriter = new CppLanguageWriter(new IndentedPrinter(), this.library, this.argTypeConvertor, PrimitiveTypesInstance)
     libraryName: string = ""
 
     interfaces = new Array<IDLInterface>()
@@ -113,31 +119,13 @@ class OHOSNativeVisitor {
 
         const fileNamePrefix = this.libraryName.toLowerCase()
         this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, library)
+        this.implementationStubsFile.addInclude("common-interop.h")
         this.implementationStubsFile.addInclude(`${fileNamePrefix}.h`)
     }
 
     private apiName(clazz: IDLInterface): string {
         if (hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)) return capitalize(this.libraryName)
         return capitalize(clazz.name)
-    }
-
-    private static knownBasicTypes = new Set(['ArrayBuffer', 'DataView'])
-
-    mapType(type: IDLType | IDLEnum): string {
-        const typeName = isEnum(type)
-            ? type.name
-            : isContainerType(type) || isUnionType(type)
-                ? ''
-                : isOptionalType(type)
-                    ? `Opt_${this.libraryName}_${this.mapType(type.type)}`
-                    : forceAsNamedNode(type).name
-        if (OHOSNativeVisitor.knownBasicTypes.has(typeName)) {
-            return this.mangleTypeName(typeName)
-        }
-        if (isReferenceType(type) || isEnum(type)) {
-            return this.mangleTypeName(qualifiedName(type, Language.CPP)).replaceAll(".", "_")
-        }
-        return this.hWriter.getNodeName(type)
     }
 
     makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
@@ -192,9 +180,10 @@ class OHOSNativeVisitor {
             }
             ctors.forEach((ctor, index) => {
                 let name = `construct${(index > 0) ? index.toString() : ""}`
-                let params = ctor.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!)))
+                let params = ctor.parameters.map(it =>
+                    new NameType(_h.escapeKeyword(it.name), this.argTypeConvertor.convert(it.type!)))
                 let argConvertors = ctor.parameters.map(param => generateArgConvertor(this.library, param))
-                let cppArgs = generateCParameters(ctor, argConvertors, _h)
+                let cppArgs = this.generateCParameters(ctor, argConvertors, _h)
                 _h.print(`${handleType} (*${name})(${cppArgs});`) // TODO check
                 let implName = `${clazz.name}_${name}Impl`
                 _c.print(`&${implName},`)
@@ -214,9 +203,10 @@ class OHOSNativeVisitor {
             if (!method.isStatic && !isGlobalScope) {
                 params.push(new NameType("thiz", handleType))
             }
-            params = params.concat(adjustedSignature.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!))))
-            let returnType = this.mapType(adjustedSignature.returnType)
-            const args = generateCParameters(method, adjustedSignature.convertors, _h)
+            params = params.concat(adjustedSignature.parameters.map(it =>
+                new NameType(_h.escapeKeyword(it.name), this.argTypeConvertor.convert(it.type!))))
+            let returnType = this.returnTypeConvertor.convert(adjustedSignature.returnType)
+            const args = this.generateCParameters(method, adjustedSignature.convertors, _h)
             _h.print(`${returnType} (*${method.name}${overloadPostfix})(${args});`)
             let implName = `${clazz.name}_${method.name}${overloadPostfix}Impl`
             _c.print(`&${implName},`)
@@ -241,9 +231,10 @@ class OHOSNativeVisitor {
                 if (!isGlobalScope) {
                     params.push(new NameType("thiz", handleType))
                 }
-                params = params.concat(adjustedSignature.parameters.map(it => new NameType(_h.escapeKeyword(it.name), this.mapType(it.type!))))
-                let returnType = this.mapType(adjustedSignature.returnType)
-                const args = generateCParameters(method, adjustedSignature.convertors, _h)
+                params = params.concat(adjustedSignature.parameters.map(it =>
+                    new NameType(_h.escapeKeyword(it.name), this.argTypeConvertor.convert(it.type!))))
+                let returnType = this.returnTypeConvertor.convert(adjustedSignature.returnType)
+                const args = this.generateCParameters(method, adjustedSignature.convertors, _h)
                 _h.print(`${returnType} (*${method.name})(${args});`)
                 let implName = `${clazz.name}_${method.name}Impl`
                 _c.print(`&${implName},`)
@@ -258,6 +249,22 @@ class OHOSNativeVisitor {
         _c.writeStatement(_c.makeReturn(_c.makeString("&instance")))
         _c.popIndent()
         _c.print(`}`)
+    }
+
+    // TODO drop this method
+    private generateCParameters(method: IDLMethod | IDLConstructor, argConvertors: ArgConvertor[], writer: LanguageWriter): string {
+        const args = argConvertors.map(it => {
+            const typeName = writer.getNodeName(it.nativeType())
+            const argName = writer.escapeKeyword(it.param)
+            return it.isPointerType()
+                ? `const ${typeName}* ${argName}`
+                : `${typeName} ${argName}`
+        })
+        if (!isConstructor(method) && !method.isStatic)
+            args.unshift(`${PrimitiveTypesInstance.NativePointer} thisPtr`)
+        if (hasExtAttribute(method, IDLExtendedAttributes.Throws))
+            args.unshift(`${generatorConfiguration().TypePrefix}${this.libraryName}_VMContext vmContext`)
+        return args.join(", ")
     }
 
     private modifierName(clazz: IDLInterface): string {
@@ -350,11 +357,11 @@ class OHOSNativeVisitor {
         writeSerializer(this.library, this.cppWriter, prefix)
         writeDeserializer(this.library, this.cppWriter, prefix)
 
-        let writer = new CppLanguageWriter(new IndentedPrinter(), this.library, new CppConvertor(this.library), PrimitiveTypesInstance)
+        let writer = new CppLanguageWriter(new IndentedPrinter(), this.library, this.argTypeConvertor, PrimitiveTypesInstance)
         this.writeModifiers(writer)
         this.writeImpls()
         this.cppWriter.concat(writer)
-        this.cppWriter.concat(printBridgeCcForOHOS(this.library).generated)
+        this.cppWriter.concat(printBridgeCc(this.library).generated)
         this.cppWriter.concat(makeDeserializeAndCall(this.library, Language.CPP, 'serializer.cc').content)
         this.cppWriter.concat(printManagedCaller('', this.library).content)
 
@@ -393,6 +400,76 @@ class OHOSNativeVisitor {
     }
 }
 
+class ReturnTypeConvertor extends CppReturnTypeConvertor {
+    override convertPrimitiveType(type: IDLPrimitiveType): string {
+        if (type === IDLNumberType)
+            return `${generatorConfiguration().TypePrefix}Number`
+        return super.convertPrimitiveType(type)
+    }
+}
+
+// TODO commonize this piece of code
+class OhosBridgeCcVisitor extends BridgeCcVisitor {
+    protected generateApiCall(method: PeerMethod, modifierName?: string): string {
+        // TODO: may be need some translation tables?
+        let clazz = modifierName ?? dropSuffix(dropSuffix(dropSuffix(method.originalParentName, "Method"), "Attribute"), "Interface")
+        return capitalize(clazz) + "()"
+    }
+
+    protected getApiCall(method: PeerMethod): string {
+        const libName = this.library.name;
+        return `Get${libName}APIImpl(${libName}_API_VERSION)`
+    }
+
+
+    protected getReceiverArgName(): string {
+        return "thisPtr"
+    }
+
+    protected printReceiverCastCall(method: PeerMethod) {
+        // OHOS API does not need to cast native pointer at this moment
+    }
+
+    protected getPeerMethodName(method: PeerMethod): string {
+        switch (method.peerMethodName) {
+            case "ctor": return "construct"
+            case "getFinalizer": return "destruct"
+            default: return method.peerMethodName
+        }
+    }
+
+    protected printAPICall(method: PeerMethod, modifierName?: string) {
+        if (method.peerMethodName == "getFinalizer") {
+            const modifier = this.generateApiCall(method, modifierName)
+            const peerMethod = this.getPeerMethodName(method)
+            const apiCall = this.getApiCall(method)
+            const call = `return (${PrimitiveTypesInstance.NativePointer}) ${apiCall}->${modifier}->${peerMethod};`
+            this.generatedApi.print(call)
+        } else {
+            super.printAPICall(method, modifierName)
+        }
+    }
+
+    protected printMaterializedClass(clazz: MaterializedClass) {
+        const isGlobal = isGlobalScope(clazz.decl);
+        const modifierName = isGlobal ? capitalize(this.library.name) : "";
+        for (const method of [clazz.ctor, clazz.finalizer].concat(clazz.methods)) {
+            if (!method) continue
+            if (isGlobal) {
+                this.printMethod(method, modifierName);
+            } else {
+                this.printMethod(method);
+            }
+        }
+    }
+}
+
+export function printBridgeCc(peerLibrary: PeerLibrary): BridgeCcApi {
+    const visitor = new OhosBridgeCcVisitor(peerLibrary, false)
+    visitor.print()
+    return { generated: visitor.generatedApi, custom: visitor.customApi }
+}
+
 export function generateNativeOhos(peerLibrary: PeerLibrary): Map<TargetFile, string> {
     const libraryName = suggestLibraryName(peerLibrary)
     const visitor = new OHOSNativeVisitor(peerLibrary, libraryName)
@@ -414,37 +491,19 @@ type AdjustedSignature = {
 function adjustSignature(library: PeerLibrary, parameters: IDLParameter[], returnType: IDLType): AdjustedSignature {
     const convertors = parameters.map(parameter => generateArgConvertor(library, parameter))
     const outConvertor = createOutArgConvertor(library, returnType, parameters.map(parameter => parameter.name))
-    if(outConvertor) {
-        convertors.push(outConvertor)
-        parameters = parameters.slice()
-        parameters.push(createParameter(outConvertor.param, outConvertor.idlType))
-        returnType = IDLVoidType
-    }
-    return {
-        convertors,
-        parameters,
-        returnType: isPrimitiveType(returnType) || isStructureType(returnType, library) ? returnType : IDLPointerType,
-    }
+    if (outConvertor)
+        return {
+            convertors: [...convertors, outConvertor],
+            parameters: [...parameters, createParameter(outConvertor.param, outConvertor.idlType)],
+            returnType: IDLVoidType
+        }
+    else
+        return { convertors, parameters, returnType }
 }
 
 function generateArgConvertor(library: PeerLibrary, param: IDLParameter): ArgConvertor {
     if (!param.type) throw new Error("Type is needed")
     return library.typeConvertor(param.name, param.type, param.isOptional)
-}
-
-// TODO drop this method
-function generateCParameters(method: IDLMethod | IDLConstructor, argConvertors: ArgConvertor[], writer: LanguageWriter): string {
-    let args = isConstructor(method) || method.isStatic ? [] : [`${PrimitiveTypesInstance.NativePointer} thisPtr`]
-    for (let i = 0; i < argConvertors.length; ++i) {
-        const typeName = writer.getNodeName(argConvertors[i].nativeType())
-        const argName = writer.escapeKeyword(argConvertors[i].param)
-        if (argConvertors[i].isPointerType()) {
-            args.push(`const ${typeName}* ${argName}`)
-        } else {
-            args.push(`${typeName} ${argName}`)
-        }
-    }
-    return args.join(", ")
 }
 
 interface MethodWithPostfix {
@@ -480,6 +539,9 @@ function generatePostfixForOverloads(methods:IDLMethod[]): MethodWithPostfix[]  
 }
 
 export function suggestLibraryName(library: PeerLibrary) {
+    if (library.name !== '') {
+        return library.name
+    }
     let libraryName = library.files.filter(f => !f.isPredefined)[0].packageName()
     libraryName = libraryName.replaceAll("@", "").replaceAll(".", "_").toUpperCase()
     return libraryName

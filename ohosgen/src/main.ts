@@ -16,7 +16,6 @@
 
 import { program } from "commander"
 import * as fs from "fs"
-import * as path from "path"
 import {
     generate,
     defaultCompilerOptions,
@@ -27,17 +26,17 @@ import {
     PeerLibrary,
 } from "@idlizer/core"
 import {
-    IDLEntry,
     isEnum,
     isInterface,
     isSyntheticEntry,
+    linkParentBack,
     transformMethodsAsync2ReturnPromise,
 } from "@idlizer/core/idl"
 import { IDLVisitor, loadPeerConfiguration,
-    IDLInteropPredefinesVisitor, IdlPeerProcessor, IDLPredefinesVisitor,
+    IdlPeerProcessor,
     loadPlugin, fillSyntheticDeclarations, peerGeneratorConfiguration,
-    scanPredefinedDirectory, scanNotPredefinedDirectory,
-    scanCommonPredefined,
+    scanNotPredefinedDirectory,
+    scanAndVisitCommonPredefined,
     formatInputPaths,
     validatePaths,
 } from "@idlizer/libohos"
@@ -47,6 +46,7 @@ import { suggestLibraryName } from "./OhosNativeVisitor"
 const options = program
     .option('--dts2peer', 'Convert .d.ts to peer drafts')
     .option('--input-dir <path>', 'Path to input dir(s), comma separated')
+    .option('--base-dir <path>', 'Base directories, for the purpose of packetization of IDL modules, comma separated, defaulted to --input-dir if missing')
     .option('--output-dir <path>', 'Path to output dir')
     .option('--input-files <files...>', 'Comma-separated list of specific files to process')
     .option('--file-to-package <fileToPackage>', 'Comma-separated list of pairs, what package name should be used for file in format <fileName:packageName>')
@@ -66,7 +66,7 @@ const options = program
     .option('--no-commented-code', 'Do not generate commented code in modifiers')
     .option('--use-new-ohos', 'Use new ohos generator')
     .option('--enable-log', 'Enable logging')
-    .option('--split-files', 'Experemental feature to store declarations to different files for ohos generator')
+    .option('--split-files', 'Experimental feature to store declarations in different files for ohos generator')
     .option('--options-file <path>', 'Path to generator configuration options file (appends to defaults)')
     .option('--override-options-file <path>', 'Path to generator configuration options file (replaces defaults)')
     .option('--arkts-extension <string> [.ts|.ets]', "Generated ArkTS language files extension.", ".ts")
@@ -75,7 +75,8 @@ const options = program
 
 let didJob = false
 let apiVersion = options.apiVersion ?? 9999
-Language.ARKTS.extension = options.arktsExtension as string
+
+options.inputFiles = processInputFiles(options.inputFiles)
 
 setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.overrideOptionsFile))
 
@@ -92,6 +93,7 @@ if (options.idl2peer) {
     validatePaths(inputFiles, "file")
 
     const idlLibrary = new PeerLibrary(language, libraryPackages)
+    scanAndVisitCommonPredefined(idlLibrary);
     idlLibrary.files.push(...scanNotPredefinedDirectory(inputDirs[0]))
     new IdlPeerProcessor(idlLibrary).process()
 
@@ -110,33 +112,17 @@ if (options.dts2peer) {
 
     options.docs = "all"
     const idlLibrary = new PeerLibrary(lang, libraryPackages)
-    const { interop, root } = scanCommonPredefined()
-    // collect predefined files
-    interop.forEach(file => {
-        new IDLInteropPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
-    })
-
-    root.forEach(file => {
-        new IDLPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
-    })
+    scanAndVisitCommonPredefined(idlLibrary);
 
     generate(
         inputDirs,
         inputFiles,
         generatedPeersDir,
-        (sourceFile, typeChecker) => new IDLVisitor(sourceFile, typeChecker, options, idlLibrary),
+        (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, idlLibrary),
         {
             compilerOptions: defaultCompilerOptions,
-            onSingleFile(entries: IDLEntry[], outputDir, sourceFile) {
-                entries = entries.filter(newEntry =>
+            onSingleFile(file, outputDir, sourceFile) {
+                file.entries = file.entries.filter(newEntry =>
                     !idlLibrary.files.find(peerFile => peerFile.entries.find(entry => {
                         if (([newEntry, entry].every(isInterface)
                             || [newEntry, entry].every(isEnum)
@@ -148,16 +134,16 @@ if (options.dts2peer) {
                         return false
                     }))
                 )
-                entries.forEach(it => {
+                file.entries.forEach(it => {
                     transformMethodsAsync2ReturnPromise(it)
                 })
+                linkParentBack(file)
 
-                const baseFileName = path.resolve(sourceFile.fileName)
-                const peerFile = new PeerFile(baseFileName, entries)
+                const peerFile = new PeerFile(file)
 
                 idlLibrary.files.push(peerFile)
             },
-            onEnd(outDir) {
+            onEnd(outDir: string) {
                 fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
                 peerProcessor.process()
@@ -173,16 +159,49 @@ if (!didJob) {
     program.help()
 }
 
+function processInputFiles(files: string[] | string | undefined): string[] {
+    if (!files) return []
+
+    const processPath = (path: string) => {
+        const trimmedPath = path.trim()
+        if (!fs.existsSync(trimmedPath)) {
+            console.error(`Input file does not exist: ${trimmedPath}`)
+            return false
+        }
+        return true
+    }
+
+    if (Array.isArray(files) && files.length === 1 && files[0].includes(',')) {
+        const filesList = files[0].split(',').map(f => f.trim()).filter(Boolean)
+        return filesList.filter(processPath)
+    }
+
+    if (Array.isArray(files)) {
+        return files.map(f => f.trim()).filter(Boolean).filter(processPath)
+    }
+
+    const filesList = files.split(',').map(f => f.trim()).filter(Boolean)
+    return filesList.filter(processPath)
+}
+
 function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language) {
+    idlLibrary.name = options.defaultIdlPackage?.toUpperCase() ?? ""
+    if (!idlLibrary.name.length) {
+        idlLibrary.name = suggestLibraryName(idlLibrary)
+    }
+    if (!idlLibrary.name.length) {
+        throw new Error("No name can be assigned to generated package. please provide name via --default-idl-package ")
+    }
     generateOhos(outDir, idlLibrary, {
         ...peerGeneratorConfiguration(),
-        LibraryPrefix: `${suggestLibraryName(idlLibrary)}_`,
+        LibraryPrefix: `${idlLibrary.name.toUpperCase()}_`,
         GenerateUnused: true,
         ApiVersion: apiVersion,
     })
+
     if (options.plugin) {
         loadPlugin(options.plugin)
-            .then(plugin => plugin.process({outDir: outDir}, idlLibrary))
+            .then(plugin => plugin.process({ outDir: outDir }, idlLibrary))
             .then(result => {
                 console.log(`Plugin ${options.plugin} process returned ${result}`)
             })

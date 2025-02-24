@@ -243,8 +243,8 @@ class PeerFileVisitor {
             `import { nullptr, KPointer, KInt, KBoolean, KStringPtr } from "@koalaui/interop"`,
             `import { isResource, isInstanceOf, runtimeType, RuntimeType } from "@koalaui/interop"`,
             `import { Serializer } from "./Serializer"`,
-            `import { ComponentBase } from "../ComponentBase"`,
-            `import { PeerNode } from "../PeerNode"`
+            `import { ComponentBase } from "../../ComponentBase"`,
+            `import { PeerNode } from "../../PeerNode"`
         ]
         switch (lang) {
             case Language.TS: {
@@ -535,7 +535,7 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
 
 function makeDeserializerInstance(returnValName: string, language: Language) {
     if (language === Language.TS) {
-        return `new Deserializer(${returnValName}, ${returnValName}.byteLength)`
+        return `new Deserializer(${returnValName}.buffer, ${returnValName}.byteLength)`
     } else if (language === Language.ARKTS) {
         return `new Deserializer(${returnValName}, ${returnValName}.length)`
     } else if (language === Language.JAVA) {

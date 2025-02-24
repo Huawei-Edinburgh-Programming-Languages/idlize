@@ -151,6 +151,7 @@ export class TSLanguageWriter extends LanguageWriter {
     maybeSemicolon() { return "" }
 
     pushNamespace(namespace: string, ident: boolean = true): void {
+        this.namespaceStack.push(namespace)
         this.print(`export namespace ${namespace} {`)
         if (ident) this.pushIndent()
     }
@@ -160,7 +161,14 @@ export class TSLanguageWriter extends LanguageWriter {
     }
 
     getNodeName(type: idl.IDLNode): string {
-        return this.typeConvertor.convert(type)
+        // just stub.
+        // language writers and name convertors are subject to rework for namespaces
+        const row = this.typeConvertor.convert(type)
+        const nsPrefix = this.namespaceStack.join('.') + '.'
+        if (row.startsWith(nsPrefix)) {
+            return row.substring(nsPrefix.length)
+        }
+        return row
     }
 
     writeClass(
@@ -275,9 +283,9 @@ export class TSLanguageWriter extends LanguageWriter {
             .filter(it => modifiers.includes(it))
             .map(it => this.mapMethodModifier(it)).join(" ")
         if (modifiers?.includes(MethodModifier.GETTER)) {
-            prefix = `get ${prefix}`
+            prefix = `${prefix} get`
         } else if (modifiers?.includes(MethodModifier.SETTER)) {
-            prefix = `set ${prefix}`
+            prefix = `${prefix} set`
             needReturn = false
         } else if (modifiers?.includes(MethodModifier.FREE)) {
             prefix = `${needBracket ? "" : "declare "}function ${prefix}`
@@ -426,8 +434,11 @@ export class TSLanguageWriter extends LanguageWriter {
     }
 
     makeDiscriminatorConvertor(convertor: ArgConvertor, value: string, index: number): LanguageExpression | undefined {
+        const convertorNativeType = convertor.nativeType()
         const decl = this.resolver.resolveTypeReference(
-            idl.createReferenceType(this.getNodeName(convertor.nativeType()), undefined, convertor.idlType)
+            idl.isReferenceType(convertorNativeType)
+                ? convertorNativeType
+                : idl.createReferenceType(this.getNodeName(convertorNativeType))
         )
         if (decl === undefined || !idl.isEnum(decl)) {
             throwException(`The type reference ${decl?.name} must be Enum`)
@@ -435,7 +446,7 @@ export class TSLanguageWriter extends LanguageWriter {
         const ordinal = idl.isStringEnum(decl)
             ? this.ordinalFromEnum(
                 this.makeCast(this.makeString(this.getObjectAccessor(convertor, value)), convertor.idlType),
-                idl.createReferenceType(this.getNodeName(convertor.nativeType()), undefined, convertor.idlType)
+                idl.createReferenceType(this.getNodeName(convertor.nativeType()))
             )
             : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), this.getNodeName(idl.IDLI32Type), convertor, index)
         const {low, high} = idl.extremumOfOrdinals(decl)

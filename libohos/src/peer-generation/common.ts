@@ -47,7 +47,7 @@ export function writeIntegratedFile(filename: string, content: string, message?:
 export const SyntheticModule = "./SyntheticDeclarations"
 export function HandwrittenModule(language: Language) {
     switch (language) {
-        case Language.TS: return "./handwritten"
+        case Language.TS: return "../handwritten"
         case Language.ARKTS: return "../handwritten"
         default: throw new Error("Not implemented")
     }
@@ -67,7 +67,7 @@ abstract class CommonLayoutBase implements LayoutManagerStrategy {
 }
 
 function suggestTSPackageName(library: PeerLibrary, node: idl.IDLEntry): string {
-    const packageName = library.resolvePackageName(node)
+    const packageName = idl.getPackageName(node)
     return `@${packageName.split(".").join("/")}`
 }
 
@@ -111,7 +111,7 @@ class TsLayout extends CommonLayoutBase {
                 return `peers/${this.prefix}${toFileName(node.name)}Peer`
             }
         }
-        return `CommonPeer`
+        throw new Error(`Can not resolve`)
     }
 
     private selectGlobal(node:idl.IDLEntry): string {

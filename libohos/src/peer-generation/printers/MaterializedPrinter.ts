@@ -107,14 +107,11 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             classTypeParameters = ["T extends Object"]
         }
 
-        const ns = idl.getNamespaceName(clazz.decl)
-        if (ns !== '') {
-            printer.pushNamespace(ns)
-        }
-
+        const nsPath = idl.getNamespacesPathFor(clazz.decl)
+        nsPath.forEach(it => printer.pushNamespace(it.name))
         if (clazz.isInterface) {
             if (printer.language == Language.CJ || printer.language == Language.JAVA) {
-                printer.writeInterface(clazz.className, writer => {})
+                printer.writeInterface(clazz.className, () => {})
             } else if (this.library.name === 'arkoala') {
                 writeInterface(clazz.decl, printer)
             }
@@ -153,32 +150,44 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
 
                 // TBD: use deserializer to get complex type from native
                 const isSimpleType = !field.argConvertor.useArray // type needs to be deserialized from the native
-                writer.writeGetterImplementation(new Method(mField.name,
-                    new MethodSignature(this.convertToPropertyType(field), [])), writer => {
+                const isStatic = mField.modifiers.includes(FieldModifier.STATIC)
+                writer.writeGetterImplementation(
+                    new Method(
+                        mField.name,
+                        new MethodSignature(this.convertToPropertyType(field), []),
+                        isStatic ? [MethodModifier.STATIC] : []
+                    ), writer => {
                         writer.writeStatement(
                             isSimpleType
                                 ? writer.makeReturn(writer.makeString(`this.get${capitalize(mField.name)}()`))
                                 : writer.makeThrowError("Not implemented")
                         )
-                    });
+                    }
+                );
 
                 const isReadOnly = mField.modifiers.includes(FieldModifier.READONLY)
                 if (!isReadOnly) {
                     const setSignature = new NamedMethodSignature(IDLVoidType,
                         [this.convertToPropertyType(field)], [mField.name])
-                    writer.writeSetterImplementation(new Method(mField.name, setSignature), writer => {
-                        let castedNonNullArg
-                        if (field.isNullableOriginalTypeField) {
-                            castedNonNullArg = `${mField.name}_NonNull`
-                            this.printer.writeStatement(writer.makeAssign(castedNonNullArg,
-                                undefined,
-                                writer.makeCast(writer.makeString(mField.name), mField.type),
-                                true))
-                        } else {
-                            castedNonNullArg = mField.name
+                    writer.writeSetterImplementation(
+                        new Method(
+                            mField.name,
+                            setSignature,
+                            isStatic ? [MethodModifier.STATIC] : []
+                        ), writer => {
+                            let castedNonNullArg
+                            if (field.isNullableOriginalTypeField) {
+                                castedNonNullArg = `${mField.name}_NonNull`
+                                this.printer.writeStatement(writer.makeAssign(castedNonNullArg,
+                                    undefined,
+                                    writer.makeCast(writer.makeString(mField.name), mField.type),
+                                    true))
+                            } else {
+                                castedNonNullArg = mField.name
+                            }
+                            writer.writeMethodCall("this", `set${capitalize(mField.name)}`, [castedNonNullArg])
                         }
-                        writer.writeMethodCall("this", `set${capitalize(mField.name)}`, [castedNonNullArg])
-                    });
+                    );
                 }
             })
 
@@ -329,10 +338,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             }
 
         }, superClassName, interfaces.length === 0 ? undefined : interfaces, classTypeParameters)
-
-        if (ns !== '') {
-            printer.popNamespace()
-        }
+        nsPath.forEach(() => printer.popNamespace())
     }
 }
 
@@ -390,7 +396,8 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
     }
 
     override get namespacePrefix(): string {
-        return this.clazz.decl.namespace ? this.clazz.decl.namespace.name + "." : ""
+        const namespacePrefix = idl.getNamespaceName(this.clazz.decl)
+        return namespacePrefix.length ? `${idl.getNamespaceName(this.clazz.decl)}.` : ""
     }
 
     visit(): PrinterResult {
@@ -544,6 +551,9 @@ function writeInterface(decl: idl.IDLInterface, writer: LanguageWriter) {
             writer.writeFieldDeclaration(p.name, p.type, modifiers, p.isOptional)
         }
         for (const m of decl.methods) {
+            if (m.isStatic) {
+                continue
+            }
             writer.writeMethodDeclaration(m.name,
                 new NamedMethodSignature(
                     m.returnType,

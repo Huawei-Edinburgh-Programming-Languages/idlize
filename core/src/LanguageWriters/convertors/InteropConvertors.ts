@@ -41,13 +41,13 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
             // TODO return array by some way
             return "void"
         }
-        return "void"
+        return KInteropReturnBuffer
     }
     convertImport(type: idl.IDLReferenceType, importClause: string): string {
         throw new Error(`Cannot pass import type ${type.name} through interop`)
     }
     convertOptional(type: idl.IDLOptionalType): string {
-        return 'void'
+        return KInteropReturnBuffer
     }
     convertPrimitiveType(type: idl.IDLPrimitiveType): string {
         switch (type) {
@@ -61,8 +61,8 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
             case idl.IDLU64Type:
             case idl.IDLF16Type:
             case idl.IDLF32Type:
-            case idl.IDLF64Type:
-            case idl.IDLNumberType: return PrimitiveTypesInstance.Int32.getText()
+            case idl.IDLF64Type: return PrimitiveTypesInstance.Int32.getText()
+            case idl.IDLNumberType: return PrimitiveTypesInstance.Number.getText()
             case idl.IDLBooleanType: return PrimitiveTypesInstance.Boolean.getText()
             case idl.IDLBigintType: return PrimitiveTypesInstance.Int64.getText()
             case idl.IDLAnyType:
@@ -70,8 +70,8 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
             case idl.IDLThisType:
             case idl.IDLUndefinedType:
             case idl.IDLUnknownType:
-            case idl.IDLStringType:
             case idl.IDLVoidType: return idl.IDLVoidType.name
+            case idl.IDLStringType: return PrimitiveTypesInstance.String.getText()
             case idl.IDLPointerType: return PrimitiveTypesInstance.NativePointer.getText()
         }
         throw new Error(`Cannot pass primitive type ${type.name} through interop`)
@@ -129,7 +129,7 @@ export class InteropArgConvertor implements TypeConvertor<string> {
             case idl.IDLDate: return 'KLong'
             case idl.IDLUndefinedType:
             case idl.IDLVoidType: return PrimitiveTypesInstance.NativePointer.getText()
-            case idl.IDLPointerType: return "KPointer"//PrimitiveType.NativePointer.getText()
+            case idl.IDLPointerType: return 'KPointer' // return PrimitiveTypesInstance.NativePointer.getText()
         }
         throw new Error(`Cannot pass primitive type ${type.name} through interop`)
     }

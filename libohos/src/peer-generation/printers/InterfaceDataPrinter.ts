@@ -16,9 +16,10 @@
 import { ImportsCollector } from "../ImportsCollector"
 import { collectDeclDependencies } from "../ImportsCollectorUtils";
 import { PrinterResult } from "../LayoutManager";
-import { LayoutNodeRole, PeerLibrary, isMaterialized } from "@idlizer/core";
+import { LayoutNodeRole, PeerLibrary, isMaterialized, NamedMethodSignature } from "@idlizer/core";
 import * as idl from '@idlizer/core'
 import { collectProperties } from "./StructPrinter";
+import { collapseSameMethodsIDL, groupOverloadsIDL } from "./OverloadsPrinter";
 
 /**
  * Printer for OHOS interfaces
@@ -57,16 +58,14 @@ function printInterfaceBody(library: PeerLibrary, entry: idl.IDLInterface, print
     entry.properties.forEach(prop => {
         printer.writeFieldDeclaration(prop.name, prop.type, toFieldModifiers(prop), prop.isOptional)
     })
-    entry.methods.forEach(method => {
-        printer.writeMethodDeclaration(
-            method.name,
-            idl.NamedMethodSignature.make(
-                method.returnType,
-                method.parameters
-                    .map(it => ({ name: it.name, type: idl.maybeOptional(it.type, it.isOptional) }))
-            ),
-            toMethodModifiers(method)
-        )
+    const groupedMethods = groupOverloadsIDL(entry.methods)
+    groupedMethods.forEach(methods => {
+        const method = collapseSameMethodsIDL(methods, library.language)
+        const signature = NamedMethodSignature.make(
+            method.returnType,
+            method.parameters
+            .map(it => ({ name: it.name, type: idl.maybeOptional(it.type, it.isOptional) })))
+        printer.writeMethodDeclaration(method.name, signature, toMethodModifiers(method.methods[0]))
     })
 }
 
@@ -142,7 +141,7 @@ class CJDeclConvertor {
             memberValue += 1
         }
         writer.writeClass(alias, () => {
-            const enumType = idl.createReferenceType(alias, undefined, enumDecl)
+            const enumType = idl.createReferenceType(enumDecl)
             members.forEach(it => {
                 writer.writeFieldDeclaration(it.name, enumType, [idl.FieldModifier.PUBLIC, idl.FieldModifier.STATIC, idl.FieldModifier.FINAL], false,
                     writer.makeString(`${alias}(${it.numberId})`)
@@ -208,7 +207,7 @@ function printEnum(library: PeerLibrary, entry: idl.IDLEnum): PrinterResult {
 
     collectDeclDependencies(library, entry, collector)
 
-    if (library.language === idl.Language.TS) {
+    if ([idl.Language.TS, idl.Language.ARKTS].includes(library.language)) {
         const ns = idl.getNamespaceName(entry)
         if (ns !== '') {
             printer.pushNamespace(ns)
@@ -221,17 +220,6 @@ function printEnum(library: PeerLibrary, entry: idl.IDLEnum): PrinterResult {
         if (ns !== '') {
             printer.popNamespace()
         }
-    }
-    if (library.language === idl.Language.ARKTS) {
-        let ns = idl.getNamespaceName(entry).split('.').join('_')
-        if (ns !== '') {
-            ns += '_'
-        }
-        printer.writeEnum(`${ns}${entry.name}`, entry.elements.map((it, idx) => ({
-            name: it.name,
-            numberId: typeof it.initializer === 'number' ? it.initializer : idx,
-            stringId: typeof it.initializer === 'string' ? it.initializer : undefined
-        })))
     }
     if (library.language === idl.Language.CJ) {
         CJDeclConvertor.makeEnum(entry, printer)

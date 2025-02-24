@@ -40,7 +40,7 @@ import {
 import { ImportFeature, ImportsCollector } from "../ImportsCollector"
 import { TargetFile } from "./TargetFile"
 import { convertDeclaration, DeclarationConvertor } from "@idlizer/core";
-import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, INT_VALUE_GETTER } from './lang/Java'
+import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from './lang/Java'
 import { printJavaImports } from './lang/JavaPrinters'
 import { collectJavaImports } from './lang/JavaIdlUtils'
 import { collectProperties } from './StructPrinter'
@@ -74,11 +74,12 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
                 readonly peerLibrary: PeerLibrary) {}
 
     private wrapWithNamespaces(node: idl.IDLEntry, cb: () => void) {
-        if (!node.namespace) {
+        const parentNamespace = idl.fetchNamespaceFrom(node.parent)
+        if (!parentNamespace) {
             cb()
         } else {
-            this.wrapWithNamespaces(node.namespace, () => {
-                this.writer.print(`export namespace ${node.namespace!.name} {`)
+            this.wrapWithNamespaces(parentNamespace, () => {
+                this.writer.print(`export namespace ${parentNamespace.name} {`)
                 this.writer.pushIndent()
                 cb()
                 this.writer.popIndent()
@@ -356,7 +357,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
             writer.print(`Object.assign(globalThis, {`)
             writer.pushIndent()
             for (const e of enums) {
-                const usageTypeName = this.peerLibrary.mapType(idl.createReferenceType(e.name, undefined, e.namespace))
+                const usageTypeName = this.peerLibrary.mapType(idl.createReferenceType(e))
                 writer.print(`${e.name}: ${usageTypeName},`)
             }
             writer.popIndent()
@@ -492,7 +493,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
             }
         }
         if (idl.isReferenceType(type)) {
-            const target = this.peerLibrary.resolveTypeReference(type, undefined, undefined) // TODO: namespace-related-to-rework
+            const target = this.peerLibrary.resolveTypeReference(type) // TODO: namespace-related-to-rework
             this.convertTypedefTarget(name, target!)
             return
         }
@@ -609,10 +610,6 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
         })
 
         const isStringEnum = initializers.every(it => typeof it.id == 'string')
-        // TODO: string enums
-        if (isStringEnum) {
-            throw new Error(`String enums (${alias}) not supported yet in Java`)
-        }
 
         let memberValue = 0
         const members: {
@@ -635,31 +632,38 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
         }
 
         writer.writeClass(alias, () => {
-            const enumType = idl.createReferenceType(alias, undefined, enumDecl)
+            const enumType = idl.createReferenceType(enumDecl)
             members.forEach(it => {
+                const initializer = isStringEnum ?
+                    `new ${alias}(${it.numberId}, "${it.stringId}")` :
+                    `new ${alias}(${it.numberId})`
                 writer.writeFieldDeclaration(it.name, enumType, [FieldModifier.PUBLIC, FieldModifier.STATIC, FieldModifier.FINAL], false,
-                    writer.makeString(`new ${alias}(${it.numberId})`)
+                    writer.makeString(initializer)
                 )
             })
 
+            // data fields
             const value = 'value'
-            const intType = idl.createReferenceType('int')
+            const stringValue = 'stringValue'
             writer.writeFieldDeclaration(value, idl.IDLI32Type, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
+            if (isStringEnum) {
+                writer.writeFieldDeclaration(stringValue, idl.IDLStringType, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
+            }
 
-            const signature = new MethodSignature(idl.IDLVoidType, [idl.IDLI32Type])
+            // constructor
+            const signature = isStringEnum ?
+                new MethodSignature(idl.IDLVoidType, [idl.IDLI32Type, idl.IDLStringType]) :
+                new MethodSignature(idl.IDLVoidType, [idl.IDLI32Type])
             writer.writeConstructorImplementation(alias, signature, () => {
                 writer.writeStatement(
                     writer.makeAssign(value, undefined, writer.makeString(signature.argName(0)), false)
                 )
-            })
-
-            const getIntValue = new Method('getIntValue', new MethodSignature(idl.IDLI32Type, []), [MethodModifier.PUBLIC])
-            writer.writeMethodImplementation(getIntValue, () => {
-                writer.writeStatement(
-                    writer.makeReturn(writer.makeString(value))
-                )
-            })
-        }, ARK_OBJECTBASE, [INT_VALUE_GETTER])
+                if (isStringEnum)
+                    writer.writeStatement(
+                        writer.makeAssign(stringValue, undefined, writer.makeString(signature.argName(1)), false)
+                    )
+            }, undefined, [MethodModifier.PRIVATE])
+        }, ARK_OBJECTBASE)
 
         return new JavaDeclaration(alias, writer)
     }
@@ -755,13 +759,13 @@ class ArkTSSyntheticGenerator extends DependenciesCollector {
             this.onSyntheticDeclaration(continuation)
         }
 
-        const transformed = maybeTransformManagedCallback(decl)
+        const transformed = maybeTransformManagedCallback(decl, this.library)
         if (transformed) {
             this.convert(transformed)
             this.onSyntheticDeclaration(transformed)
         }
 
-        const maybeTransformed = maybeTransformManagedCallback(decl)
+        const maybeTransformed = maybeTransformManagedCallback(decl, this.library)
         if (maybeTransformed)
             this.onSyntheticDeclaration(maybeTransformed)
 
@@ -805,7 +809,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
             writer.print(`Object.assign(globalThis, {`)
             writer.pushIndent()
             for (const e of enums) {
-                const usageTypeName = this.peerLibrary.mapType(idl.createReferenceType(e.name, undefined, e.namespace))
+                const usageTypeName = this.peerLibrary.mapType(idl.createReferenceType(e))
                 writer.print(`${e.name}: ${usageTypeName},`)
             }
             writer.popIndent()
@@ -961,7 +965,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             }
         }
         if (idl.isReferenceType(type)) {
-            const target = this.peerLibrary.resolveTypeReference(type, undefined, undefined) // TODO: namespace-related-to-rework
+            const target = this.peerLibrary.resolveTypeReference(type) // TODO: namespace-related-to-rework
             this.convertTypedefTarget(name, target!)
             return
         }
@@ -1106,7 +1110,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             memberValue += 1
         }
         writer.writeClass(alias, () => {
-            const enumType = idl.createReferenceType(alias, undefined, enumDecl)
+            const enumType = idl.createReferenceType(enumDecl)
             members.forEach(it => {
                 writer.writeFieldDeclaration(it.name, enumType, [FieldModifier.PUBLIC, FieldModifier.STATIC, FieldModifier.FINAL], false,
                     writer.makeString(`${alias}(${it.numberId})`)
