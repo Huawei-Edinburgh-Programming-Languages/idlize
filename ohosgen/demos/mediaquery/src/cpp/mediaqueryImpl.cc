@@ -26,6 +26,6 @@ OH_Boolean MediaQueryListener_getMatchesImpl(OH_NativePointer thisPtr) {
 OH_String MediaQueryListener_getMediaImpl(OH_NativePointer thisPtr) {
     return {};
 }
-OH_NativePointer GlobalScope_mediaquery_ohos_mediaquery_matchMediaSyncImpl(const OH_String* condition) {
+OH_NativePointer GlobalScope_mediaquery_matchMediaSyncImpl(const OH_String* condition) {
     return {};
 }
