@@ -1832,7 +1832,7 @@
 |`animation`| Function | Andrey Khudenkikh | done |  | |
 |`combine`| Function | Andrey Khudenkikh | done |  | |
 |*GlobalScope_focusControl_common*| *Class* | | | | |
-|`requestFocus`| Function | | | | |
+|`requestFocus`| Function | Erokhin Ilya | done |  | |
 |*GlobalScope_cursorControl_common*| *Class* | | | | |
 |`setCursor`| Function | | | | | 
 |`restoreDefault`| Function | | | | |
@@ -2038,7 +2038,6 @@
 |`px2fp`| Function | Erokhin Ilya | done |  | |
 |`lpx2px`| Function | Erokhin Ilya | done |  | |
 |`px2lpx`| Function | Erokhin Ilya | done |  | |
-|`requestFocus`| Function | Erokhin Ilya | done |  | |
 |`setCursor`| Function | Erokhin Ilya | done |  | |
 |`restoreDefault`| Function | Erokhin Ilya | done |  | |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
