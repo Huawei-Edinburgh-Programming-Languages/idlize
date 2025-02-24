@@ -17,7 +17,7 @@ import { SerializerBase, Tags, RuntimeType, runtimeType, isResource, isInstanceO
 import { int32, float32, unsafeCast, int64 } from "@koalaui/common"
 import { TypeChecker } from "#components"
 import { KUint8ArrayPtr, NativeBuffer, InteropNativeModule } from "@koalaui/interop"
-import { xml_EventType, xml } from "./../OHXmlNamespace"
+import { xml } from "./../OHXmlNamespace"
 export class Serializer extends SerializerBase {
     private static pool?: Array<Serializer> | undefined = undefined
     private static poolTop: int32 = -1

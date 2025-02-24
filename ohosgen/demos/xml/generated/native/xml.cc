@@ -742,16 +742,16 @@ class Deserializer : public DeserializerBase {
 };
 OH_XML_XmlSerializerHandle XmlSerializer_constructImpl(const OH_Buffer* buffer, const Opt_String* encoding);
 void XmlSerializer_destructImpl(OH_XML_XmlSerializerHandle thiz);
-void XmlSerializer_setAttributesImpl(OH_NativePointer thisPtr, const OH_String* name, const OH_String* value);
-void XmlSerializer_addEmptyElementImpl(OH_NativePointer thisPtr, const OH_String* name);
+void XmlSerializer_setAttributesImpl(OH_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_String* name, const OH_String* value);
+void XmlSerializer_addEmptyElementImpl(OH_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_String* name);
 void XmlSerializer_setDeclarationImpl(OH_NativePointer thisPtr);
-void XmlSerializer_startElementImpl(OH_NativePointer thisPtr, const OH_String* name);
+void XmlSerializer_startElementImpl(OH_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_String* name);
 void XmlSerializer_endElementImpl(OH_NativePointer thisPtr);
-void XmlSerializer_setNamespaceImpl(OH_NativePointer thisPtr, const OH_String* prefix, const OH_String* namespace_);
-void XmlSerializer_setCommentImpl(OH_NativePointer thisPtr, const OH_String* text);
-void XmlSerializer_setCDATAImpl(OH_NativePointer thisPtr, const OH_String* text);
-void XmlSerializer_setTextImpl(OH_NativePointer thisPtr, const OH_String* text);
-void XmlSerializer_setDocTypeImpl(OH_NativePointer thisPtr, const OH_String* text);
+void XmlSerializer_setNamespaceImpl(OH_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_String* prefix, const OH_String* namespace_);
+void XmlSerializer_setCommentImpl(OH_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_String* text);
+void XmlSerializer_setCDATAImpl(OH_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_String* text);
+void XmlSerializer_setTextImpl(OH_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_String* text);
+void XmlSerializer_setDocTypeImpl(OH_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_String* text);
 OH_XML_ParseInfoHandle ParseInfo_constructImpl();
 void ParseInfo_destructImpl(OH_XML_ParseInfoHandle thiz);
 OH_Number ParseInfo_getColumnNumberImpl(OH_NativePointer thisPtr);
@@ -766,8 +766,8 @@ OH_Boolean ParseInfo_isWhitespaceImpl(OH_NativePointer thisPtr);
 OH_Number ParseInfo_getAttributeCountImpl(OH_NativePointer thisPtr);
 OH_XML_XmlPullParserHandle XmlPullParser_constructImpl(const OH_Buffer* buffer, const Opt_String* encoding);
 void XmlPullParser_destructImpl(OH_XML_XmlPullParserHandle thiz);
-void XmlPullParser_parseImpl(OH_NativePointer thisPtr, const OH_XML_ParseOptions* option);
-void XmlPullParser_parseXmlImpl(OH_NativePointer thisPtr, const OH_XML_ParseOptions* option);
+void XmlPullParser_parseImpl(OH_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_XML_ParseOptions* option);
+void XmlPullParser_parseXmlImpl(OH_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_XML_ParseOptions* option);
 void GlobalScope_xml_xmlpromises_returnPromiseImpl(const XML_Callback_Opt_Number_Opt_Array_String_Void* outputArgumentForReturningPromise);
 OH_XML_Point GlobalScope_xml_xmlpromises_getPointImpl();
 const OH_XML_XmlSerializerModifier* OH_XML_XmlSerializerModifierImpl() {
@@ -852,46 +852,46 @@ OH_NativePointer impl_XmlSerializer_getFinalizer() {
         return (OH_NativePointer) GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->destruct;
 }
 KOALA_INTEROP_0(XmlSerializer_getFinalizer, OH_NativePointer)
-void impl_XmlSerializer_setAttributes(OH_NativePointer thisPtr, const KStringPtr& name, const KStringPtr& value) {
-        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setAttributes(thisPtr, (const OH_String*) (&name), (const OH_String*) (&value));
+void impl_XmlSerializer_setAttributes(KVMContext vmContext, OH_NativePointer thisPtr, const KStringPtr& name, const KStringPtr& value) {
+        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setAttributes(reinterpret_cast<OH_XML_VMContext>(vmContext), thisPtr, (const OH_String*) (&name), (const OH_String*) (&value));
 }
-KOALA_INTEROP_V3(XmlSerializer_setAttributes, OH_NativePointer, KStringPtr, KStringPtr)
-void impl_XmlSerializer_addEmptyElement(OH_NativePointer thisPtr, const KStringPtr& name) {
-        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->addEmptyElement(thisPtr, (const OH_String*) (&name));
+KOALA_INTEROP_CTX_V3(XmlSerializer_setAttributes, OH_NativePointer, KStringPtr, KStringPtr)
+void impl_XmlSerializer_addEmptyElement(KVMContext vmContext, OH_NativePointer thisPtr, const KStringPtr& name) {
+        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->addEmptyElement(reinterpret_cast<OH_XML_VMContext>(vmContext), thisPtr, (const OH_String*) (&name));
 }
-KOALA_INTEROP_V2(XmlSerializer_addEmptyElement, OH_NativePointer, KStringPtr)
+KOALA_INTEROP_CTX_V2(XmlSerializer_addEmptyElement, OH_NativePointer, KStringPtr)
 void impl_XmlSerializer_setDeclaration(OH_NativePointer thisPtr) {
         GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setDeclaration(thisPtr);
 }
 KOALA_INTEROP_V1(XmlSerializer_setDeclaration, OH_NativePointer)
-void impl_XmlSerializer_startElement(OH_NativePointer thisPtr, const KStringPtr& name) {
-        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->startElement(thisPtr, (const OH_String*) (&name));
+void impl_XmlSerializer_startElement(KVMContext vmContext, OH_NativePointer thisPtr, const KStringPtr& name) {
+        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->startElement(reinterpret_cast<OH_XML_VMContext>(vmContext), thisPtr, (const OH_String*) (&name));
 }
-KOALA_INTEROP_V2(XmlSerializer_startElement, OH_NativePointer, KStringPtr)
+KOALA_INTEROP_CTX_V2(XmlSerializer_startElement, OH_NativePointer, KStringPtr)
 void impl_XmlSerializer_endElement(OH_NativePointer thisPtr) {
         GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->endElement(thisPtr);
 }
 KOALA_INTEROP_V1(XmlSerializer_endElement, OH_NativePointer)
-void impl_XmlSerializer_setNamespace(OH_NativePointer thisPtr, const KStringPtr& prefix, const KStringPtr& namespace_) {
-        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setNamespace(thisPtr, (const OH_String*) (&prefix), (const OH_String*) (&namespace_));
+void impl_XmlSerializer_setNamespace(KVMContext vmContext, OH_NativePointer thisPtr, const KStringPtr& prefix, const KStringPtr& namespace_) {
+        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setNamespace(reinterpret_cast<OH_XML_VMContext>(vmContext), thisPtr, (const OH_String*) (&prefix), (const OH_String*) (&namespace_));
 }
-KOALA_INTEROP_V3(XmlSerializer_setNamespace, OH_NativePointer, KStringPtr, KStringPtr)
-void impl_XmlSerializer_setComment(OH_NativePointer thisPtr, const KStringPtr& text) {
-        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setComment(thisPtr, (const OH_String*) (&text));
+KOALA_INTEROP_CTX_V3(XmlSerializer_setNamespace, OH_NativePointer, KStringPtr, KStringPtr)
+void impl_XmlSerializer_setComment(KVMContext vmContext, OH_NativePointer thisPtr, const KStringPtr& text) {
+        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setComment(reinterpret_cast<OH_XML_VMContext>(vmContext), thisPtr, (const OH_String*) (&text));
 }
-KOALA_INTEROP_V2(XmlSerializer_setComment, OH_NativePointer, KStringPtr)
-void impl_XmlSerializer_setCDATA(OH_NativePointer thisPtr, const KStringPtr& text) {
-        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setCDATA(thisPtr, (const OH_String*) (&text));
+KOALA_INTEROP_CTX_V2(XmlSerializer_setComment, OH_NativePointer, KStringPtr)
+void impl_XmlSerializer_setCDATA(KVMContext vmContext, OH_NativePointer thisPtr, const KStringPtr& text) {
+        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setCDATA(reinterpret_cast<OH_XML_VMContext>(vmContext), thisPtr, (const OH_String*) (&text));
 }
-KOALA_INTEROP_V2(XmlSerializer_setCDATA, OH_NativePointer, KStringPtr)
-void impl_XmlSerializer_setText(OH_NativePointer thisPtr, const KStringPtr& text) {
-        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setText(thisPtr, (const OH_String*) (&text));
+KOALA_INTEROP_CTX_V2(XmlSerializer_setCDATA, OH_NativePointer, KStringPtr)
+void impl_XmlSerializer_setText(KVMContext vmContext, OH_NativePointer thisPtr, const KStringPtr& text) {
+        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setText(reinterpret_cast<OH_XML_VMContext>(vmContext), thisPtr, (const OH_String*) (&text));
 }
-KOALA_INTEROP_V2(XmlSerializer_setText, OH_NativePointer, KStringPtr)
-void impl_XmlSerializer_setDocType(OH_NativePointer thisPtr, const KStringPtr& text) {
-        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setDocType(thisPtr, (const OH_String*) (&text));
+KOALA_INTEROP_CTX_V2(XmlSerializer_setText, OH_NativePointer, KStringPtr)
+void impl_XmlSerializer_setDocType(KVMContext vmContext, OH_NativePointer thisPtr, const KStringPtr& text) {
+        GetXMLAPIImpl(XML_API_VERSION)->XmlSerializer()->setDocType(reinterpret_cast<OH_XML_VMContext>(vmContext), thisPtr, (const OH_String*) (&text));
 }
-KOALA_INTEROP_V2(XmlSerializer_setDocType, OH_NativePointer, KStringPtr)
+KOALA_INTEROP_CTX_V2(XmlSerializer_setDocType, OH_NativePointer, KStringPtr)
 OH_NativePointer impl_ParseInfo_ctor() {
         return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->construct();
 }
@@ -900,34 +900,34 @@ OH_NativePointer impl_ParseInfo_getFinalizer() {
         return (OH_NativePointer) GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->destruct;
 }
 KOALA_INTEROP_0(ParseInfo_getFinalizer, OH_NativePointer)
-OH_Int32 impl_ParseInfo_getColumnNumber(OH_NativePointer thisPtr) {
-        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getColumnNumber(thisPtr).i32;
+OH_Number impl_ParseInfo_getColumnNumber(OH_NativePointer thisPtr) {
+        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getColumnNumber(thisPtr);
 }
-KOALA_INTEROP_1(ParseInfo_getColumnNumber, OH_Int32, OH_NativePointer)
-OH_Int32 impl_ParseInfo_getDepth(OH_NativePointer thisPtr) {
-        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getDepth(thisPtr).i32;
+KOALA_INTEROP_1(ParseInfo_getColumnNumber, KInteropNumber, OH_NativePointer)
+OH_Number impl_ParseInfo_getDepth(OH_NativePointer thisPtr) {
+        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getDepth(thisPtr);
 }
-KOALA_INTEROP_1(ParseInfo_getDepth, OH_Int32, OH_NativePointer)
-OH_Int32 impl_ParseInfo_getLineNumber(OH_NativePointer thisPtr) {
-        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getLineNumber(thisPtr).i32;
+KOALA_INTEROP_1(ParseInfo_getDepth, KInteropNumber, OH_NativePointer)
+OH_Number impl_ParseInfo_getLineNumber(OH_NativePointer thisPtr) {
+        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getLineNumber(thisPtr);
 }
-KOALA_INTEROP_1(ParseInfo_getLineNumber, OH_Int32, OH_NativePointer)
-void impl_ParseInfo_getName(OH_NativePointer thisPtr) {
-        GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getName(thisPtr);
+KOALA_INTEROP_1(ParseInfo_getLineNumber, KInteropNumber, OH_NativePointer)
+OH_String impl_ParseInfo_getName(OH_NativePointer thisPtr) {
+        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getName(thisPtr);
 }
-KOALA_INTEROP_V1(ParseInfo_getName, OH_NativePointer)
-void impl_ParseInfo_getNamespace(OH_NativePointer thisPtr) {
-        GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getNamespace(thisPtr);
+KOALA_INTEROP_1(ParseInfo_getName, KStringPtr, OH_NativePointer)
+OH_String impl_ParseInfo_getNamespace(OH_NativePointer thisPtr) {
+        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getNamespace(thisPtr);
 }
-KOALA_INTEROP_V1(ParseInfo_getNamespace, OH_NativePointer)
-void impl_ParseInfo_getPrefix(OH_NativePointer thisPtr) {
-        GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getPrefix(thisPtr);
+KOALA_INTEROP_1(ParseInfo_getNamespace, KStringPtr, OH_NativePointer)
+OH_String impl_ParseInfo_getPrefix(OH_NativePointer thisPtr) {
+        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getPrefix(thisPtr);
 }
-KOALA_INTEROP_V1(ParseInfo_getPrefix, OH_NativePointer)
-void impl_ParseInfo_getText(OH_NativePointer thisPtr) {
-        GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getText(thisPtr);
+KOALA_INTEROP_1(ParseInfo_getPrefix, KStringPtr, OH_NativePointer)
+OH_String impl_ParseInfo_getText(OH_NativePointer thisPtr) {
+        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getText(thisPtr);
 }
-KOALA_INTEROP_V1(ParseInfo_getText, OH_NativePointer)
+KOALA_INTEROP_1(ParseInfo_getText, KStringPtr, OH_NativePointer)
 OH_Boolean impl_ParseInfo_isEmptyElementTag(OH_NativePointer thisPtr) {
         return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->isEmptyElementTag(thisPtr);
 }
@@ -936,10 +936,10 @@ OH_Boolean impl_ParseInfo_isWhitespace(OH_NativePointer thisPtr) {
         return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->isWhitespace(thisPtr);
 }
 KOALA_INTEROP_1(ParseInfo_isWhitespace, OH_Boolean, OH_NativePointer)
-OH_Int32 impl_ParseInfo_getAttributeCount(OH_NativePointer thisPtr) {
-        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getAttributeCount(thisPtr).i32;
+OH_Number impl_ParseInfo_getAttributeCount(OH_NativePointer thisPtr) {
+        return GetXMLAPIImpl(XML_API_VERSION)->ParseInfo()->getAttributeCount(thisPtr);
 }
-KOALA_INTEROP_1(ParseInfo_getAttributeCount, OH_Int32, OH_NativePointer)
+KOALA_INTEROP_1(ParseInfo_getAttributeCount, KInteropNumber, OH_NativePointer)
 OH_NativePointer impl_XmlPullParser_ctor(uint8_t* thisArray, int32_t thisLength) {
         Deserializer thisDeserializer(thisArray, thisLength);
         OH_Buffer buffer_value = static_cast<OH_Buffer>(thisDeserializer.readBuffer());;
@@ -958,18 +958,18 @@ OH_NativePointer impl_XmlPullParser_getFinalizer() {
         return (OH_NativePointer) GetXMLAPIImpl(XML_API_VERSION)->XmlPullParser()->destruct;
 }
 KOALA_INTEROP_0(XmlPullParser_getFinalizer, OH_NativePointer)
-void impl_XmlPullParser_parse(OH_NativePointer thisPtr, uint8_t* thisArray, int32_t thisLength) {
+void impl_XmlPullParser_parse(KVMContext vmContext, OH_NativePointer thisPtr, uint8_t* thisArray, int32_t thisLength) {
         Deserializer thisDeserializer(thisArray, thisLength);
         OH_XML_ParseOptions option_value = thisDeserializer.readParseOptions();;
-        GetXMLAPIImpl(XML_API_VERSION)->XmlPullParser()->parse(thisPtr, (const OH_XML_ParseOptions*)&option_value);
+        GetXMLAPIImpl(XML_API_VERSION)->XmlPullParser()->parse(reinterpret_cast<OH_XML_VMContext>(vmContext), thisPtr, (const OH_XML_ParseOptions*)&option_value);
 }
-KOALA_INTEROP_V3(XmlPullParser_parse, OH_NativePointer, uint8_t*, int32_t)
-void impl_XmlPullParser_parseXml(OH_NativePointer thisPtr, uint8_t* thisArray, int32_t thisLength) {
+KOALA_INTEROP_CTX_V3(XmlPullParser_parse, OH_NativePointer, uint8_t*, int32_t)
+void impl_XmlPullParser_parseXml(KVMContext vmContext, OH_NativePointer thisPtr, uint8_t* thisArray, int32_t thisLength) {
         Deserializer thisDeserializer(thisArray, thisLength);
         OH_XML_ParseOptions option_value = thisDeserializer.readParseOptions();;
-        GetXMLAPIImpl(XML_API_VERSION)->XmlPullParser()->parseXml(thisPtr, (const OH_XML_ParseOptions*)&option_value);
+        GetXMLAPIImpl(XML_API_VERSION)->XmlPullParser()->parseXml(reinterpret_cast<OH_XML_VMContext>(vmContext), thisPtr, (const OH_XML_ParseOptions*)&option_value);
 }
-KOALA_INTEROP_V3(XmlPullParser_parseXml, OH_NativePointer, uint8_t*, int32_t)
+KOALA_INTEROP_CTX_V3(XmlPullParser_parseXml, OH_NativePointer, uint8_t*, int32_t)
 void impl_GlobalScope_xml_xmlpromises_returnPromise(uint8_t* thisArray, int32_t thisLength) {
         Deserializer thisDeserializer(thisArray, thisLength);
         XML_Callback_Opt_Number_Opt_Array_String_Void outputArgumentForReturningPromise_value = {thisDeserializer.readCallbackResource(), reinterpret_cast<void(*)(const OH_Int32 resourceId, const Opt_Number value, const Opt_Array_String error)>(thisDeserializer.readPointerOrDefault(reinterpret_cast<OH_NativePointer>(getManagedCallbackCaller(Kind_Callback_Opt_Number_Opt_Array_String_Void)))), reinterpret_cast<void(*)(OH_XML_VMContext vmContext, const OH_Int32 resourceId, const Opt_Number value, const Opt_Array_String error)>(thisDeserializer.readPointerOrDefault(reinterpret_cast<OH_NativePointer>(getManagedCallbackCallerSync(Kind_Callback_Opt_Number_Opt_Array_String_Void))))};;
@@ -977,8 +977,9 @@ void impl_GlobalScope_xml_xmlpromises_returnPromise(uint8_t* thisArray, int32_t 
 }
 KOALA_INTEROP_V2(GlobalScope_xml_xmlpromises_returnPromise, uint8_t*, int32_t)
 KInteropReturnBuffer impl_GlobalScope_xml_xmlpromises_getPoint() {
+        const auto &retValue = GetXMLAPIImpl(XML_API_VERSION)->XML()->getPoint();
         Serializer _retSerializer {};
-        _retSerializer.writePoint(GetXMLAPIImpl(XML_API_VERSION)->XML()->getPoint());
+        _retSerializer.writePoint(retValue);
         return _retSerializer.toReturnBuffer();
 }
 KOALA_INTEROP_0(GlobalScope_xml_xmlpromises_getPoint, KInteropReturnBuffer)

@@ -1,5 +1,5 @@
 import { KBoolean, KStringPtr, NativeBuffer, MaterializedBase } from "@koalaui/interop"
-import { xml, xml_EventType } from "./../OHXmlNamespace"
+import { xml } from "./../OHXmlNamespace"
 export class TypeChecker {
     static typeInstanceOf<T>(value: Object, prop: string): boolean {
         return value instanceof T
@@ -7,8 +7,8 @@ export class TypeChecker {
     static typeCast<T>(value: Object): T {
         return value as T
     }
-    static isxml_EventType(value: object|string|number|undefined|null): boolean {
-        return value instanceof xml_EventType
+    static isxmlEventType(value: object|string|number|undefined|null): boolean {
+        return value instanceof xml.EventType
     }
     static isxmlParseInfo(value: object|string|number|undefined|null): boolean {
         return value instanceof xml.ParseInfo

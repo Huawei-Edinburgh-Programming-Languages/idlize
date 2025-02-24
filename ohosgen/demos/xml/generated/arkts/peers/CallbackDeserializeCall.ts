@@ -17,7 +17,7 @@ import { CallbackKind } from "./CallbackKind"
 import { Deserializer } from "./Deserializer"
 import { int32, float32, int64 } from "@koalaui/common"
 import { ResourceHolder, KInt, KStringPtr, wrapSystemCallback, KPointer, RuntimeType } from "@koalaui/interop"
-import { xml_EventType, xml } from "./../OHXmlNamespace"
+import { xml } from "./../OHXmlNamespace"
 
 export function deserializeAndCallCallback_Boolean_Void(thisDeserializer: Deserializer): void {
     const _resourceId : int32 = thisDeserializer.readInt32()
@@ -27,8 +27,8 @@ export function deserializeAndCallCallback_Boolean_Void(thisDeserializer: Deseri
 }
 export function deserializeAndCallCallback_EventType_ParseInfo_Boolean(thisDeserializer: Deserializer): void {
     const _resourceId : int32 = thisDeserializer.readInt32()
-    const _call  = (ResourceHolder.instance().get(_resourceId) as ((eventType: xml_EventType,value: xml.ParseInfo) => boolean))
-    let eventType : xml_EventType = (thisDeserializer.readInt32() as xml_EventType)
+    const _call  = (ResourceHolder.instance().get(_resourceId) as ((eventType: xml.EventType,value: xml.ParseInfo) => boolean))
+    let eventType : xml.EventType = (thisDeserializer.readInt32() as xml.EventType)
     let value : xml.ParseInfo = (thisDeserializer.readParseInfo() as xml.ParseInfo)
     let _continuation : ((value: boolean) => void) = thisDeserializer.readXML_Callback_Boolean_Void(true)
     const _callResult  = _call(eventType, value)

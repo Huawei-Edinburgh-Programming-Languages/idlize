@@ -272,23 +272,23 @@ export namespace xml {
         static getFinalizer(): KPointer {
             return XMLNativeModule._XmlPullParser_getFinalizer()
         }
-        public parse(option: xml.ParseOptions): void {
-            const option_casted = option as (xml.ParseOptions)
+        public parse(option: ParseOptions): void {
+            const option_casted = option as (ParseOptions)
             this?.parse_serialize(option_casted)
             return
         }
-        public parseXml(option: xml.ParseOptions): void {
-            const option_casted = option as (xml.ParseOptions)
+        public parseXml(option: ParseOptions): void {
+            const option_casted = option as (ParseOptions)
             this?.parseXml_serialize(option_casted)
             return
         }
-        private parse_serialize(option: xml.ParseOptions): void {
+        private parse_serialize(option: ParseOptions): void {
             const thisSerializer: Serializer = Serializer.hold()
             thisSerializer.writeParseOptions(option)
             XMLNativeModule._XmlPullParser_parse(this.peer!.ptr, thisSerializer.asArray(), thisSerializer.length())
             thisSerializer.release()
         }
-        private parseXml_serialize(option: xml.ParseOptions): void {
+        private parseXml_serialize(option: ParseOptions): void {
             const thisSerializer: Serializer = Serializer.hold()
             thisSerializer.writeParseOptions(option)
             XMLNativeModule._XmlPullParser_parseXml(this.peer!.ptr, thisSerializer.asArray(), thisSerializer.length())
@@ -301,7 +301,7 @@ export namespace xml {
         public static returnPromise(): Promise<number> {
             return GlobalScope_xml_xmlpromises.returnPromise_serialize()
         }
-        public static getPoint(): xml.Point {
+        public static getPoint(): Point {
             return GlobalScope_xml_xmlpromises.getPoint_serialize()
         }
         private static returnPromise_serialize(): Promise<number> {
@@ -311,7 +311,7 @@ export namespace xml {
             thisSerializer.release()
             return retval
         }
-        private static getPoint_serialize(): xml.Point {
+        private static getPoint_serialize(): Point {
             const retval = XMLNativeModule._GlobalScope_xml_xmlpromises_getPoint()
             return new Deserializer(retval.buffer, retval.byteLength).readPoint()
         }
@@ -365,7 +365,7 @@ export namespace xml {
     export function returnPromise(): Promise<number> {
         return GlobalScope_xml_xmlpromises.returnPromise()
     }
-    export function getPoint(): xml.Point {
+    export function getPoint(): Point {
         return GlobalScope_xml_xmlpromises.getPoint()
     }
 }

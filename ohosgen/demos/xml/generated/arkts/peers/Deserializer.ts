@@ -21,17 +21,17 @@ import { XMLNativeModule } from "#components"
 import { CallbackKind } from "./CallbackKind"
 import { TypeChecker } from "#components"
 import { KUint8ArrayPtr, NativeBuffer, InteropNativeModule } from "@koalaui/interop"
-import { xml_EventType, xml } from "./../OHXmlNamespace"
+import { xml } from "./../OHXmlNamespace"
 
 export class Deserializer extends DeserializerBase {
      constructor(data: KUint8ArrayPtr, length: int32) {
         super(data, length)
     }
-    readXML_Callback_EventType_ParseInfo_Boolean(isSync: boolean = false): ((eventType: xml_EventType,value: xml.ParseInfo) => boolean) {
+    readXML_Callback_EventType_ParseInfo_Boolean(isSync: boolean = false): ((eventType: xml.EventType,value: xml.ParseInfo) => boolean) {
         const _resource : CallbackResource = this.readCallbackResource()
         const _call : KPointer = this.readPointer()
         const _callSync : KPointer = this.readPointer()
-        return (eventType: xml_EventType, value: xml.ParseInfo):boolean => { 
+        return (eventType: xml.EventType, value: xml.ParseInfo):boolean => { 
     const _argsSerializer : Serializer = Serializer.hold();
     _argsSerializer.writeInt32(_resource.resourceId);
     _argsSerializer.writePointer(_call);
@@ -101,12 +101,12 @@ export class Deserializer extends DeserializerBase {
         }
         const attributeValueCallbackFunction_result : ((name: string,value: string) => boolean) | undefined = attributeValueCallbackFunction_buf
         const tokenValueCallbackFunction_buf_runtimeType  = (valueDeserializer.readInt8() as int32)
-        let tokenValueCallbackFunction_buf : ((eventType: xml_EventType,value: xml.ParseInfo) => boolean) | undefined
+        let tokenValueCallbackFunction_buf : ((eventType: xml.EventType,value: xml.ParseInfo) => boolean) | undefined
         if ((RuntimeType.UNDEFINED) != (tokenValueCallbackFunction_buf_runtimeType))
         {
             tokenValueCallbackFunction_buf = valueDeserializer.readXML_Callback_EventType_ParseInfo_Boolean()
         }
-        const tokenValueCallbackFunction_result : ((eventType: xml_EventType,value: xml.ParseInfo) => boolean) | undefined = tokenValueCallbackFunction_buf
+        const tokenValueCallbackFunction_result : ((eventType: xml.EventType,value: xml.ParseInfo) => boolean) | undefined = tokenValueCallbackFunction_buf
         let value : xml.ParseOptions = ({supportDoctype: supportDoctype_result,ignoreNameSpace: ignoreNameSpace_result,tagValueCallbackFunction: tagValueCallbackFunction_result,attributeValueCallbackFunction: attributeValueCallbackFunction_result,tokenValueCallbackFunction: tokenValueCallbackFunction_result} as xml.ParseOptions)
         return value
     }
