@@ -947,7 +947,7 @@ namespace OHOS::Ace::NG::GeneratedModifier {
         out.append(") \n");
         appendGroupedLog(1, out);
         auto frameNode = AsNode(node);
-        auto callback = *value;
+        auto callback = *event;
         callback.resource.hold(callback.resource.resourceId);
         auto onEvent = [frameNode, callback](Ark_ClickEvent event) {
             if (callback.call) {
@@ -960,10 +960,10 @@ namespace OHOS::Ace::NG::GeneratedModifier {
 
     namespace EventEmulatorAccessor {
     void EmitClickEventImpl(Ark_NativePointer node,
-                            Ark_ClickEvent event)
+                            const Ark_ClickEvent* event)
     {
         auto frameNode = AsNode(node);
-        frameNode->callClickEvent(event);
+        frameNode->callClickEvent(*event);
     }
     } // EventEmulatorAccessor
 }
