@@ -1583,6 +1583,9 @@
 |`OnRangeUpdate`| Function | managed side |  | | |
 |`SetCurrentIndex`| Function | managed side |  | | |
 |`Prepare`| Function | managed side |  | | |
+|*SystemOps*| *Class* | | | | |
+|`StartFrame`| Function | | | | |
+|`EndFrame`| Function | | | | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | done |  | |
 |`drawRect`| Function | Dudkin Sergey | done |  | |
 |*LengthMetrics*| *Class* | Evstigneev Roman | in progress | | |
@@ -1601,6 +1604,54 @@
 |`begin`| Function | Vadim Voronov | done | | |
 |`end`| Function | Vadim Voronov | done | | |
 |`recordInputEventTime`| Function | Vadim Voronov | blocked IDL | | implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
+|*CommonShape*| *Class* | | | | |
+|`offset`| Function | | | | |
+|`fill`| Function | | | | |
+|`position`| Function | | | | |
+|*BaseShape*| *Class* | | | | |
+|`width`| Function | | | | |
+|`height`| Function | | | | |
+|`size`| Function | | | | |
+|*RectShape*| *Class* | | | | |
+|`offset`| Function | | | | |
+|`fill`| Function | | | | |
+|`position`| Function | | | | |
+|`width`| Function | | | | |
+|`height`| Function | | | | |
+|`size`| Function | | | | |
+|`radiusWidth`| Function |  | || |
+|`radiusHeight`| Function | | | | |
+|`radius`| Function | | | | |
+|*CircleShape*| *Class* | | | | |
+|`offset`| Function | | | | |
+|`fill`| Function | | | | |
+|`position`| Function | | | | |
+|`width`| Function | | | | |
+|`height`| Function | | | | |
+|`size`| Function | | | | |
+|*EllipseShape*| *Class* | | | | |
+|`offset`| Function | | | | |
+|`fill`| Function | | | | |
+|`position`| Function | | | | |
+|`width`| Function | | | | |
+|`height`| Function | | | | |
+|`size`| Function | | | | |
+|*PathShape*| *Class* | | | | |
+|`offset`| Function | | | | |
+|`fill`| Function | | | | |
+|`position`| Function | | | | |
+|`commands`| Function | | | | |
+|*GlobalScope_ohos_font*| *Class* | | | | |
+|`registerFont`| Function | | | | |
+|`getSystemFontList`| Function | | | | |
+|*ScaleSymbolEffect*| *Class* |  |  | | |
+|`getScope`| Function |  |  | | |
+|`setScope`| Function |  |  | | |
+|`getDirection`| Function |  |  | | |
+|`setDirection`| Function |  |  | | |
+|*ReplaceSymbolEffect*| *Class* |  |  | | |
+|`getScope`| Function |  |  | | |
+|`setScope`| Function |  |  | | |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | done |  | |
 |`isModifiable`| Function | Tuzhilkin Ivan | done |  | |
 |`appendChild`| Function | Tuzhilkin Ivan | done |  | |
@@ -1780,6 +1831,11 @@
 |`asymmetric`| Function | Andrey Khudenkikh | done |  | |
 |`animation`| Function | Andrey Khudenkikh | done |  | |
 |`combine`| Function | Andrey Khudenkikh | done |  | |
+|*GlobalScope_focusControl_common*| *Class* | | | | |
+|`requestFocus`| Function | | | | |
+|*GlobalScope_cursorControl_common*| *Class* | | | | |
+|`setCursor`| Function | | | | | 
+|`restoreDefault`| Function | | | | |
 |*BaseEvent*| *Class* | Politov Mikhail | blocked IDL |  | |
 |`getModifierKeyState`| Function | Politov Mikhail | done |  | |
 |`setTarget`| Function | Politov Mikhail | done |  | |
@@ -1852,6 +1908,7 @@
 |`setRawDeltaX`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
 |`getRawDeltaY`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
 |`setRawDeltaY`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
+|`getPressedButtons`| Function | | | | |
 |`setPressedButtons`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
 |*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | blocked IDL |  | |
 |`getType`| Function | Pavelyev Ivan, Samarin Sergey | in progress |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
@@ -1872,7 +1929,9 @@
 |`getHistoricalPoints`| Function | Tuzhilkin Ivan | in progress |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getType`| Function | Tuzhilkin Ivan, Samarin Sergey | in progress |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setType`| Function | Tuzhilkin Ivan | done |  | empty implementation |
+|`getTouches`| Function | | | | |
 |`setTouches`| Function | Tuzhilkin Ivan | done |  | empty implementation |
+|`getChangedTouches`| Function | | | | |
 |`setChangedTouches`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
@@ -1991,6 +2050,7 @@
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
 |*BaseGestureEvent*| *Class* | Maksimov Nikita | done |  | |
+|`getFingerList`| Function | | | | |
 |`setFingerList`| Function | Maksimov Nikita | done |  | implementation and UT Vadim Voronov |
 |*TapGestureEvent*| *Class* | Samarin Sergey | done | | nothing to do |
 |*LongPressGestureEvent*| *Class* | | | | |
@@ -2025,6 +2085,7 @@
 |*GestureEvent*| *Class* | Samarin Sergey | blocked IDL |  | |
 |`getRepeat`| Function | Samarin Sergey | done |  | |
 |`setRepeat`| Function | Samarin Sergey | done |  | |
+|`getFingerList`| Function | | | | |
 |`setFingerList`| Function | Samarin Sergey | done |  | |
 |`getOffsetX`| Function | Samarin Sergey | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setOffsetX`| Function | Samarin Sergey | done |  | |
@@ -2208,11 +2269,6 @@
 |`showNext`| Function | Andrey Khudenkikh | done |  |  |
 |`showPrevious`| Function |  Andrey Khudenkikh | done |  |  |
 |`changeIndex`| Function |  Andrey Khudenkikh | done |  |  |
-|*ScaleSymbolEffect*| *Class* | | | | |
-|`getScope`| Function | | | | |
-|`setScope`| Function | | | | |
-|`getDirection`| Function | | | | |
-|`setDirection`| Function | | | | |
 |*HierarchicalSymbolEffect*| *Class* | | | | |
 |`getFillStyle`| Function | | | | |
 |`setFillStyle`| Function | | | | |
@@ -2227,9 +2283,6 @@
 |`setScope`| Function | | | | |
 |`getDirection`| Function | | | | |
 |`setDirection`| Function | | | | |
-|*ReplaceSymbolEffect*| *Class* | | | | |
-|`getScope`| Function | | | | |
-|`setScope`| Function | | | | |
 |*TabsController*| *Class* | Skroba Gleb | done |  | |
 |`changeIndex`| Function | Skroba Gleb | done |  | |
 |`preloadItems`| Function | Skroba Gleb | done |  | |
@@ -2475,6 +2528,7 @@
 |*LetterSpacingStyle*| *Class* | | |  | |
 |`getLetterSpacing`| Function | | |  | |
 |*TextShadowStyle*| *Class* | | |  | |
+|`getTextShadow`| Function | | | | |
 |*BackgroundColorStyle*| *Class* | | |  | |
 |*GestureStyle*| *Class* | | |  | |
 |*ParagraphStyle*| *Class* | | |  | |
@@ -2511,9 +2565,10 @@
 |`start`| Function | Kovalev Sergey | done |  | depricated |
 |`pause`| Function | Kovalev Sergey | done |  | depricated |
 |`stop`| Function | Kovalev Sergey | done |  | depricated |
+|*GlobalScope_Profiler_inspector*| *Class* | | | | |
+|`registerVsyncCallback`| Function | | | | |
+|`unregisterVsyncCallback`| Function | | | | |
 |*GlobalScope_inspector*| *Class* | | | | |
 |`getInspectorNodes`| Function | | |  |deprecated |
 |`getInspectorNodeById`| Function | | |  |deprecated |
-|`registerVsyncCallback`| Function | | | | |
-|`unregisterVsyncCallback`| Function | | | | |
 |`setAppBgColor`| Function | | | | |
