@@ -1929,9 +1929,9 @@
 |`getHistoricalPoints`| Function | Tuzhilkin Ivan | blocked IDL |  | implementation and UT are ready on FB, but correct behavior is blocked https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
 |`getType`| Function | Tuzhilkin Ivan, Samarin Sergey | in progress |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setType`| Function | Tuzhilkin Ivan | done |  | empty implementation |
-|`getTouches`| Function | | | | |
+|`getTouches`| Function | Tuzhilkin Ivan | in progress | | |
 |`setTouches`| Function | Tuzhilkin Ivan | done |  | empty implementation |
-|`getChangedTouches`| Function | | | | |
+|`getChangedTouches`| Function | Tuzhilkin Ivan | in progress | | |
 |`setChangedTouches`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
