@@ -2160,13 +2160,13 @@
 |`getNavDestinationId`| Function | Morozov Sergey | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setNavDestinationId`| Function | Morozov Sergey | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |*NavPathInfo*| *Class* | | | | |
-|`getName`| Function | | | | |
-|`setName`| Function | | | | |
-|`setParam`| Function | | | | |
-|`getOnPop`| Function | | | | |
-|`setOnPop`| Function | | | | |
-|`getIsEntry`| Function | | | | |
-|`setIsEntry`| Function | | | | |
+|`getName`| Function | Skroba Gleb | in progress | | |
+|`setName`| Function | Skroba Gleb | in progress | | |
+|`setParam`| Function | Skroba Gleb | in progress | | |
+|`getOnPop`| Function | Skroba Gleb | in progress | | |
+|`setOnPop`| Function | Skroba Gleb | in progress | | |
+|`getIsEntry`| Function | Skroba Gleb | in progress | | |
+|`setIsEntry`| Function | Skroba Gleb | in progress | | |
 |*NavPathStack*| *Class* | Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`pushPath`| Function | Skroba Gleb | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`pushDestination`| Function | Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, can be implemented without return val - https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
