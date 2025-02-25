@@ -151,7 +151,7 @@
 |`backgroundEffect`| Function | Skroba Gleb | done |  |  |
 |`backgroundImageResizable`| Function | Skroba Gleb | done |  | |
 |`foregroundEffect`| Function | Skroba Gleb | done |  |  |
-|`visualEffect`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`visualEffect`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBOT08 |
 |`backgroundFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`foregroundFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`compositingFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
