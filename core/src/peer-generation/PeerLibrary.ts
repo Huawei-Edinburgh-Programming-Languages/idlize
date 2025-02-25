@@ -15,6 +15,7 @@
 
 import { warn } from 'console'
 import * as idl from '../idl'
+import { resolveNamedNode } from '../resolveNamedNode'
 import { Language } from '../Language'
 import { LanguageWriter } from '../LanguageWriters/LanguageWriter'
 import { createLanguageWriter, IdlNameConvertor } from '../LanguageWriters'
@@ -149,7 +150,46 @@ export class PeerLibrary implements LibraryInterface {
     }
 
     resolveTypeReference(type: idl.IDLReferenceType): idl.IDLEntry | undefined {
-        return this.resolveTypeReferenceScoped(type)
+
+        const entry = this._syntheticFile.entries.find(it => it.name === type.name)
+        if (entry)
+            return entry
+
+        const target = type.name.split(".");
+
+        if (1 === target.length) {
+            const predefined = this.files.flatMap(it => it.entries).filter(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Predefined))
+            predefined.push(...this.predefinedDeclarations)
+            const found = predefined.find(it => it.name === target[0])
+            if (found)
+                return found;
+        }
+
+        const pov = idl.fetchNamespaceFrom(type.parent)
+        const corpus = this.files.map(it => it.file)
+
+        let result = resolveNamedNode(target, pov, corpus)
+        if (result && idl.isEntry(result))
+            return result
+
+        if (!pov) {
+            for (let file of this.files) {
+                result = resolveNamedNode([...file.packageClause(), ...target], pov, corpus)
+                if (result && idl.isEntry(result)) {
+                    console.log(`WARNING: Type reference '${type.name}' is not resolved without own namespace/pointOfView but resolved within some package '${file.packageClause().join(".")}'`)
+                    return result
+                }
+            }
+        }
+
+        {
+            result = this.resolveTypeReferenceScoped(type)
+            if (result && idl.isEntry(result))
+                return result
+        }
+
+        return undefined
+        //return this.resolveTypeReferenceScoped(type)
     }
 
     private resolveTypeReferenceScoped(type: idl.IDLReferenceType, pointOfView?: idl.IDLEntry, rootEntries?: idl.IDLEntry[]): idl.IDLEntry | undefined {
