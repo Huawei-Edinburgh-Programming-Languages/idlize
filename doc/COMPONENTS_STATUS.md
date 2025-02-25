@@ -1715,11 +1715,11 @@
 |*ImageData*| *Class* | | | | |
 |`getHeight`| Function | | | | |
 |`getWidth`| Function | | | | |
-|*RenderingContextSettings*| *Class* | | | | |
-|`getAntialias`| Function | | | | |
-|`setAntialias`| Function | | | | |
-|*CanvasRenderer*| *Class*  | Vadim Voronov | blocked IDL |  | |
-|`drawImage`| Function  | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
+|*RenderingContextSettings*| *Class* | Vadim Voronov | in progress | | |
+|`getAntialias`| Function | Vadim Voronov | devdone | | |
+|`setAntialias`| Function | Vadim Voronov | devdone | | |
+|*CanvasRenderer*| *Class*  | Vadim Voronov | blocked |  | |
+|`drawImage`| Function  | Vadim Voronov | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
 |`beginPath`| Function  | Vadim Voronov | done |  | |
 |`clip`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |`fill`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
