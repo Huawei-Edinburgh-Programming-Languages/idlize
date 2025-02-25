@@ -42,7 +42,7 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
             // imports
             const imports = new ImportsCollector()
             methods.forEach(method => {
-                collectDeclDependencies(library, method, imports)
+                collectDeclDependencies(library, method, imports, { includeMaterializedInternals: true })
             })
 
             peerImports.merge(imports)
