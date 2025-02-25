@@ -70,6 +70,8 @@ const options = program
     .option('--options-file <path>', 'Path to generator configuration options file (appends to defaults)')
     .option('--override-options-file <path>', 'Path to generator configuration options file (replaces defaults)')
     .option('--arkts-extension <string> [.ts|.ets]', "Generated ArkTS language files extension.", ".ts")
+    .option('--emit-stub [yes|no|only]', "Emit native side implementation template file", "yes")
+    .option('--no-emit-stub', "Do not emit native side implementation template file")
     .parse()
     .opts()
 
@@ -77,6 +79,7 @@ let didJob = false
 let apiVersion = options.apiVersion ?? 9999
 
 options.inputFiles = processInputFiles(options.inputFiles)
+options.emitStub = parseEmitStub(options.emitStub)
 
 setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.overrideOptionsFile))
 
@@ -192,12 +195,16 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
     if (!idlLibrary.name.length) {
         throw new Error("No name can be assigned to generated package. please provide name via --default-idl-package ")
     }
+    const opts = {
+        emitStub: options.emitStub
+    }
+
     generateOhos(outDir, idlLibrary, {
         ...peerGeneratorConfiguration(),
         LibraryPrefix: `${idlLibrary.name.toUpperCase()}_`,
         GenerateUnused: true,
         ApiVersion: apiVersion,
-    })
+    }, opts)
 
     if (options.plugin) {
         loadPlugin(options.plugin)
@@ -207,4 +214,15 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
             })
             .catch(error => console.error(`Plugin ${options.plugin} not found: ${error}`))
     }
+}
+
+function parseEmitStub(stub: boolean | string | undefined): boolean | "only" {
+    if (typeof stub === "boolean") return stub
+    if (typeof stub === "undefined") return true // Default
+    stub = stub.toLowerCase()
+    if (stub === "only") return stub
+    if (stub === "yes") return true
+    if (stub === "no") return false
+    console.warn("Unrecognized --emit-stub=" + stub + ", ignored")
+    return true
 }

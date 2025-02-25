@@ -470,16 +470,20 @@ export function printBridgeCc(peerLibrary: PeerLibrary): BridgeCcApi {
     return { generated: visitor.generatedApi, custom: visitor.customApi }
 }
 
-export function generateNativeOhos(peerLibrary: PeerLibrary): Map<TargetFile, string> {
+export function generateNativeOhos(peerLibrary: PeerLibrary, emitStub: boolean | "only"): Map<TargetFile, string> {
     const libraryName = suggestLibraryName(peerLibrary)
     const visitor = new OHOSNativeVisitor(peerLibrary, libraryName)
     visitor.prepare()
     visitor.printC()
-    return new Map([
-        [new TargetFile(`${peerLibrary.name.toLowerCase()}.h`), visitor.hWriter.getOutput().join('\n')],
-        [new TargetFile(`${peerLibrary.name.toLowerCase()}.cc`), visitor.cppWriter.getOutput().join('\n')],
-        [new TargetFile(`${peerLibrary.name.toLowerCase()}Impl_temp.cc`), visitor.implementationStubsFile.printToString()]
-    ])
+    const result = new Map()
+    if (emitStub !== "only") {
+        result.set(new TargetFile(`${peerLibrary.name.toLowerCase()}.h`), visitor.hWriter.getOutput().join('\n'))
+        result.set(new TargetFile(`${peerLibrary.name.toLowerCase()}.cc`), visitor.cppWriter.getOutput().join('\n'))
+    }
+    if (emitStub !== false) {
+        result.set(new TargetFile(`${peerLibrary.name.toLowerCase()}Impl_temp.cc`), visitor.implementationStubsFile.printToString())
+    }
+    return result
 }
 
 
