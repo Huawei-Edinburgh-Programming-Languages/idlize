@@ -1471,3 +1471,95 @@ export function extremumOfOrdinals(enumEntry: IDLEnum): {low: number, high: numb
     })
     return {low, high}
 }
+
+
+
+
+
+export function resolveNamedNode(nameString: string, pointOfView: IDLNode|undefined, corpus: IDLFile[]): IDLNamedNode | undefined {
+    const target = nameString.split(".")
+
+    if (!pointOfView)
+        return resolveDownFromRoot(corpus, target)
+
+    let it: IDLNode | undefined = pointOfView
+    let result: IDLNamedNode | undefined
+
+    while (it) {
+        if (isFile(it)) {
+            if (result = resolveDownFromFile(it, target))
+                return result
+            let itScope: string[] = it.packageClause
+            while (itScope.length) {
+                if (result = resolveDownFromRoot(corpus, [...itScope, ...target]))
+                    return result
+                itScope.pop()
+            }
+        } else if (isNamedNode(it)) {
+            if (result = resolveDownFromNode(it, target))
+                return result
+        }
+        it = it.parent
+    }
+
+    return undefined
+}
+
+function resolveDownFromNode(it: IDLNamedNode, target: string[]): IDLNamedNode | undefined {
+    if (!it.name.length || target[0] !== it.name)
+        return undefined
+
+    target = target.slice(1)
+    if (!target.length)
+        return it
+
+    let candidates: IDLNamedNode[]
+    if (isNamespace(it))
+        candidates = it.members
+    else if (isEnum(it))
+        candidates = it.elements
+    else if (isInterface(it))
+        candidates = [...it.constants, ...it.properties, ...it.methods]
+    else
+        return undefined
+
+    let result: IDLNamedNode | undefined
+    for (const candidate of candidates) {
+        if (result = resolveDownFromNode(candidate, target))
+            return result
+    }
+
+    return undefined
+}
+
+function resolveDownFromFile(it: IDLFile, target: string[]): IDLNamedNode | undefined {
+    let result: IDLNamedNode | undefined
+    for (const candidate of it.entries) {
+        if (result = resolveDownFromNode(candidate, target))
+            return result
+    }
+
+    return undefined
+}
+
+function resolveDownFromRoot(corpus: IDLFile[], target: string[]): IDLNamedNode | undefined {
+    let result: IDLNamedNode | undefined
+    for (const file of corpus) {
+        if (file.packageClause.length <= target.length)
+            continue
+
+        let match = true
+        for(let index = 0; index < file.packageClause.length; ++index)
+            if (file.packageClause[index] !== target[index]) {
+                match = false
+                break
+            }
+        if (!match)
+            continue
+
+        if (result = resolveDownFromFile(file, target.slice(file.packageClause.length)))
+            return result
+    }
+
+    return undefined
+}
