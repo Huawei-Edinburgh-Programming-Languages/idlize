@@ -1770,7 +1770,7 @@
 |`getLineCap`| Function  | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
 |`setLineCap`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |`getLineDashOffset`| Function  | Vadim Voronov | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
-|`setLineDashOffset`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4QKQ|
+|`setLineDashOffset`| Function  | Vadim Voronov | done |  | |
 |`getLineJoin`| Function  | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
 |`setLineJoin`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |`getLineWidth`| Function  | Vadim Voronov | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
@@ -2009,7 +2009,7 @@
 |*ChildrenMainSize*| *Class* | Morozov Sergey | blocked IDL |  |
 |`splice`| Function | Morozov Sergey | done |  |  |
 |`update`| Function | Morozov Sergey | done |  |  |
-|`getChildDefaultSize`| Function | Morozov Sergey | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IB4QKQ |
+|`getChildDefaultSize`| Function | Morozov Sergey | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J |
 |`setChildDefaultSize`| Function | Morozov Sergey| done |  | |
 |*UICommonEvent*| *Class* | Andrey Khudenkikh | in progress | | |
 |`setOnClick`| Function | Andrey Khudenkikh | testskipped | | |
