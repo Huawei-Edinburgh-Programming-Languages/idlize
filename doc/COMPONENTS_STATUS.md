@@ -306,7 +306,7 @@
 |`advancedBlendMode`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC80Y |
 |`bindPopup`| Function | Erokhin Ilya | testskipped |  | UT in progress Morozov Sergey |
 |`bindMenu`| Function | Erokhin Ilya | blocked IDL |  | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  |
-|`bindContextMenu`| Function | Erokhin Ilya | blocked IDL |  | Ark_ContextMenuAnimationOptions https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`bindContextMenu`| Function | Erokhin Ilya, Evstigneev Roman | in progress |  | Ark_ContextMenuAnimationOptions https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`bindContentCover`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |`bindSheet`| Function | Erokhin Ilya | testskipped |  | UT in progress Vadim Voronov |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done |  | |
