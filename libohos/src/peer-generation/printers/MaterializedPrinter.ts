@@ -146,6 +146,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                 // TBD: use deserializer to get complex type from native
                 const isSimpleType = !field.argConvertor.useArray // type needs to be deserialized from the native
                 const isStatic = mField.modifiers.includes(FieldModifier.STATIC)
+                const receiver = isStatic ? implementationClassName : "this"
                 writer.writeGetterImplementation(
                     new Method(
                         mField.name,
