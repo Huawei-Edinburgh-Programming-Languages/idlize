@@ -31,7 +31,8 @@ import {
     LibraryInterface,
     LibraryFileInterface,
     InterfaceConvertor,
-    PrimitiveTypesInstance
+    PrimitiveTypesInstance,
+    resolveNamedNode
 } from '@idlizer/core'
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
@@ -223,43 +224,78 @@ export class IdlSkoalaLibrary implements LibraryInterface {
 
     ///
 
-    resolveTypeReference(type: idl.IDLReferenceType, pointOfView?: idl.IDLEntry, rootEntries?: idl.IDLEntry[]): idl.IDLEntry | undefined {
-        const qualifiedName = type.name.split(".");
-        let pointOfViewNamespace = idl.fetchNamespaceFrom(type.parent)
-        rootEntries ??= this.files.flatMap(it => it.entries)
+    resolveTypeReference(type: idl.IDLReferenceType, terminalImports?: boolean): idl.IDLEntry | undefined {
+        let result = this.resolveNamedNode(
+            type.name.split("."),
+            type.parent)
+        if (result && idl.isImport(result) && !terminalImports)
+            result = this.resolveImport(result)
+        return result
+    }
 
-        let doWork = true
-        while (doWork) {
-            doWork = !!pointOfViewNamespace
-            let entries = pointOfViewNamespace
-                ? [...pointOfViewNamespace.members]
-                : [...rootEntries]
-            for (let qualifiedNamePart = 0; qualifiedNamePart < qualifiedName.length; ++qualifiedNamePart) {
-                const candidates = entries.filter(it => it.name === qualifiedName[qualifiedNamePart])
-                if (!candidates.length)
-                    break
-                if (qualifiedNamePart === qualifiedName.length - 1) {
-                    const target = candidates.length == 1
-                        ? candidates[0]
-                        : candidates.find(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import)) // probably the wrong logic here
-                    if (target && idl.isImport(target))// Temporary disable Import declarations
-                        return undefined
-                    return target
-                }
-                entries = []
-                for (const candidate of candidates) {
-                    if (idl.isNamespace(candidate))
-                        entries.push(...candidate.members)
-                    else if (idl.isEnum(candidate))
-                        entries.push(...candidate.elements)
-                    else if (idl.isInterface(candidate))
-                        entries.push(...candidate.constants, ...candidate.properties, ...candidate.methods)
+    resolveNamedNode(target: string[], pov: idl.IDLNode|undefined = undefined): idl.IDLEntry | undefined {
+        const qualifiedName = target.join(".")
+        const corpus = this.files.map(it => it.file)
+
+        let result = resolveNamedNode(target, pov, corpus)
+        if (result && idl.isEntry(result))
+            return result
+
+        // TODO: remove the next block after namespaces out of quarantine
+        {
+            const povAsReadableString = pov
+                ? `'${idl.getFQName(pov)}'`
+                : "[root]"
+
+            // retry from root
+            if (pov) {
+                pov = undefined
+                for (let file of this.files) {
+                    result = resolveNamedNode([...file.file.packageClause, ...target], pov, corpus)
+                    if (result && idl.isEntry(result)) {
+                        // too much spam
+                        // console.log(`WARNING: Type reference '${type.name}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
+                        return result
+                    }
                 }
             }
-                
-            pointOfViewNamespace = idl.fetchNamespaceFrom(pointOfViewNamespace?.parent)
-        }
 
+            // and from each namespace
+            const resolveds: idl.IDLNode[] = []
+            const traverseNamespaces = (entry: idl.IDLEntry) => {
+                if (entry && idl.isNamespace(entry) && entry.members.length) {
+                    const resolved = resolveNamedNode([...idl.getNamespacesPathFor(entry).map(it => it.name), ...target], pov, corpus)
+                    if (resolved)
+                        resolveds.push(resolved)
+                    entry.members.forEach(traverseNamespaces)
+                }
+            }
+            this.files.forEach(file => file.entries.forEach(traverseNamespaces))
+
+            for (const resolved of resolveds)
+                console.log(`WARNING: Name '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some namespace: '${idl.getNamespacesPathFor(resolved).map(obj => obj.name).join(".")}'`)
+
+            for (const resolved of resolveds)
+                if (idl.isEntry(resolved))
+                    return resolved
+        }// end of block to remove
+
+        return undefined
+    }
+
+    resolveImport(target: idl.IDLImport): idl.IDLEntry | undefined {
+        let result = this.resolveNamedNode(target.clause)
+        if (result) {
+            if (idl.isReferenceType(result))
+                return this.resolveTypeReference(result)
+            if (idl.isImport(result)) {
+                if (result == target)
+                    throw new Error("Self-targeted Import?")
+                return this.resolveImport(result)
+            }
+            if (idl.isEntry(result))
+                return result
+        }
         return undefined
     }
 

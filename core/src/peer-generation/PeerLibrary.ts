@@ -32,7 +32,7 @@ import { JavaTypeNameConvertor } from '../LanguageWriters/convertors/JavaConvert
 import { TSTypeNameConvertor } from '../LanguageWriters/convertors/TSConvertors'
 import { LibraryInterface } from '../LibraryInterface'
 import { BuilderClass, isBuilderClass } from './BuilderClass'
-import { generateSyntheticFunctionName, isImportAttr } from './idl/common'
+import { generateSyntheticFunctionName, isImportAttr, qualifiedName } from './idl/common'
 import { MaterializedClass } from './Materialized'
 import { PeerFile } from './PeerFile'
 import { LayoutManager, LayoutManagerStrategy } from './LayoutManager'
@@ -182,12 +182,20 @@ export class PeerLibrary implements LibraryInterface {
         return this.targetNameConvertorInstance.convert(type)
     }
 
-    resolveTypeReference(type: idl.IDLReferenceType): idl.IDLEntry | undefined {
-        const entry = this._syntheticFile.entries.find(it => it.name === type.name)
+    resolveTypeReference(type: idl.IDLReferenceType, terminalImports?: boolean): idl.IDLEntry | undefined {
+        let result = this.resolveNamedNode(
+            type.name.split("."),
+            type.parent)
+        if (result && idl.isImport(result) && !terminalImports)
+            result = this.resolveImport(result)
+        return result
+    }
+
+    resolveNamedNode(target: string[], pov: idl.IDLNode|undefined = undefined): idl.IDLEntry | undefined {
+        const qualifiedName = target.join(".")
+        const entry = this._syntheticFile.entries.find(it => it.name === qualifiedName)
         if (entry)
             return entry
-
-        const target = type.name.split(".");
 
         if (1 === target.length) {
             const predefined = this.files.flatMap(it => it.entries).filter(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Predefined))
@@ -197,7 +205,6 @@ export class PeerLibrary implements LibraryInterface {
                 return found;
         }
 
-        let pov = idl.fetchNamespaceFrom(type.parent)
         const corpus = this.files.map(it => it.file)
 
         let result = resolveNamedNode(target, pov, corpus)
@@ -211,13 +218,15 @@ export class PeerLibrary implements LibraryInterface {
                 : "[root]"
 
             // retry from root
-            pov = undefined
-            for (let file of this.files) {
-                result = resolveNamedNode([...file.packageClause(), ...target], pov, corpus)
-                if (result && idl.isEntry(result)) {
-                    // too much spam
-                    // console.log(`WARNING: Type reference '${type.name}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
-                    return result
+            if (pov) {
+                pov = undefined
+                for (let file of this.files) {
+                    result = resolveNamedNode([...file.file.packageClause, ...target], pov, corpus)
+                    if (result && idl.isEntry(result)) {
+                        // too much spam
+                        // console.log(`WARNING: Type reference '${type.name}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
+                        return result
+                    }
                 }
             }
 
@@ -234,13 +243,29 @@ export class PeerLibrary implements LibraryInterface {
             this.files.forEach(file => file.entries.forEach(traverseNamespaces))
 
             for (const resolved of resolveds)
-                console.log(`WARNING: Type reference '${type.name}' is not resolved from ${povAsReadableString} but resolved from some namespace: '${idl.getNamespacesPathFor(resolved).map(obj => obj.name).join(".")}'`)
+                console.log(`WARNING: Name '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some namespace: '${idl.getNamespacesPathFor(resolved).map(obj => obj.name).join(".")}'`)
 
             for (const resolved of resolveds)
                 if (idl.isEntry(resolved))
                     return resolved
         }// end of block to remove
 
+        return undefined
+    }
+
+    resolveImport(target: idl.IDLImport): idl.IDLEntry | undefined {
+        let result = this.resolveNamedNode(target.clause)
+        if (result) {
+            if (idl.isReferenceType(result))
+                return this.resolveTypeReference(result)
+            if (idl.isImport(result)) {
+                if (result == target)
+                    throw new Error("Self-targeted Import?")
+                return this.resolveImport(result)
+            }
+            if (idl.isEntry(result))
+                return result
+        }
         return undefined
     }
 
@@ -316,7 +341,11 @@ export class PeerLibrary implements LibraryInterface {
             return new ImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
         }
         if (idl.isImport(declaration)) {
-            return new ImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
+            const target = this.resolveImport(declaration)
+            if (target && idl.isEntry(target))
+                return this.declarationConvertor(param, type, target)
+            else
+                throw new Error(`Unable to resolve Import ${JSON.stringify(declaration)}`)
         }
         if (idl.isEnum(declaration)) {
             return new EnumConvertor(param, declaration)

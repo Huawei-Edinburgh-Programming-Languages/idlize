@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import { isTypeReferenceNode } from "typescript"
 import { IDLFile, IDLNode, IDLNamedNode, isReferenceType } from "./idl"
 import { isFile, isNamedNode, isNamespace, isEnum, isInterface, isImport } from "./idl"
 
@@ -24,7 +23,7 @@ export function resolveNamedNode(target: string[], pov: IDLNode|undefined, corpu
         if (isFile(pov)) {
             if (result = resolveDownFromFile(target, pov))
                 return result
-            povScope = pov.packageClause
+            povScope = pov.packageClause.slice()
             break
         } else {
             if (result = resolveDownFromNode(target, pov, false))
@@ -65,8 +64,6 @@ function resolveDownFromNode(target: string[], pov: IDLNode, withSelf: boolean):
         candidates = pov.elements
     else if (isInterface(pov))
         candidates = pov.constants
-    else if (isImport(pov))
-        throw new Error("not implemented yet")
     else
         return undefined
 

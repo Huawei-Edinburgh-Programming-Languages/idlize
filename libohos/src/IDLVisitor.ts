@@ -270,13 +270,13 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         if (1 == namesHere.length) {
             if (packageName[packageName.length - 1].toLowerCase() === namesHere[0].toLowerCase())
                 hasMatchedNameHere = true
-        } else {
+        } /* else {
             for (const nameHere of namesHere)
                 if (packageName[packageName.length - 1] === nameHere) {
                     hasMatchedNameHere = true
                     break
                 }
-        }
+        }*/
 
         if (hasMatchedNameHere)
             packageName.pop();

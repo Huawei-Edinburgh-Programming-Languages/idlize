@@ -618,15 +618,20 @@ export type QNPattern =
     "namespace.name" |
     "name";
 
-export function getQualifiedName(a:IDLNamedNode, pattern: QNPattern): string {
+export function getQualifiedName(a:IDLNode, pattern: QNPattern): string {
+    const result: string[] = []
     if ("package.namespace.name" === pattern)
-        return [...getPackageClause(a), ...getNamespacesPathFor(a).map(it => it.name), a.name].join('.')
+        result.push(...getPackageClause(a), ...getNamespacesPathFor(a).map(it => it.name))
     else if ("namespace.name" === pattern)
-        return [...getNamespacesPathFor(a).map(it => it.name), a.name].join('.')
-    return a.name
+        result.push(...getNamespacesPathFor(a).map(it => it.name))
+
+    if (isNamedNode(a) && a.name)
+        result.push(a.name)
+
+    return result.join(".")
 }
 
-export function getFQName(a:IDLNamedNode): string {
+export function getFQName(a:IDLNode): string {
     return getQualifiedName(a, "package.namespace.name")
 }
 

@@ -27,6 +27,7 @@ import {
     PeerLibrary,
 } from "@idlizer/core"
 import {
+    getFQName,
     IDLEntry,
     IDLFile,
     isEnum,
@@ -248,18 +249,18 @@ if (options.dts2peer) {
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile(file: IDLFile, outputDir, sourceFile) {
-                file.entries = file.entries.filter(newEntry =>
-                    !idlLibrary.files.find(peerFile => peerFile.entries.find(entry => {
-                        if (([newEntry, entry].every(isInterface)
-                            || [newEntry, entry].every(isEnum)
-                            || [newEntry, entry].every(isSyntheticEntry))) {
-                            if (newEntry.name === entry.name) {
-                                return true
-                            }
-                        }
-                        return false
-                    }))
-                )
+                // file.entries = file.entries.filter(newEntry =>
+                //     !idlLibrary.files.find(peerFile => peerFile.entries.find(entry => {
+                //         if (([newEntry, entry].every(isInterface)
+                //             || [newEntry, entry].every(isEnum)
+                //             || [newEntry, entry].every(isSyntheticEntry))) {
+                //             if (getFQName(newEntry) === getFQName(entry)) {
+                //                 return true
+                //             }
+                //         }
+                //         return false
+                //     }))
+                // )
                 file.entries.forEach(it => {
                     transformMethodsAsync2ReturnPromise(it)
                 })
