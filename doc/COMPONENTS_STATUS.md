@@ -1636,11 +1636,11 @@
 |`width`| Function | | | | |
 |`height`| Function | | | | |
 |`size`| Function | | | | |
-|*PathShape*| *Class* | | | | |
-|`offset`| Function | | | | |
-|`fill`| Function | | | | |
-|`position`| Function | | | | |
-|`commands`| Function | | | | |
+|*PathShape*| *Class* | Lobah Mikhail | in progress| | |
+|`offset`| Function | Lobah Mikhail| in progress| | |
+|`fill`| Function | Lobah Mikhail | in progress| | |
+|`position`| Function | Lobah Mikhail| in progress| | |
+|`commands`| Function | Lobah Mikhail| in progress| | |
 |*GlobalScope_ohos_font*| *Class* | | | | |
 |`registerFont`| Function | | | | |
 |`getSystemFontList`| Function | | | | |
