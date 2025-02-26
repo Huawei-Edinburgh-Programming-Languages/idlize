@@ -160,6 +160,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         this.file.entries.unshift(...this.imports)
 
         this.file.entries.forEach(idl.transformMethodsReturnPromise2Async)
+        idl.linkParentBack(this.file!)
         this.collectGlobalScope()
         idl.linkParentBack(this.file!)
         return this.file!
