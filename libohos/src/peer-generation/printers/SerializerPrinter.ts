@@ -333,7 +333,7 @@ class DeserializerPrinter {
                     this.writer.makeMethodCall(
                         this.writer.language == Language.CJ ?
                         getInternalClassName(this.writer.getNodeName(target)) :
-                        getInternalClassQualifiedName(target), "fromPtr", [this.writer.makeString(`ptr`)])))
+                        getInternalClassQualifiedName(target, "namespace.name"), "fromPtr", [this.writer.makeString(`ptr`)])))
     }
 
     private generateCallbackDeserializer(target: idl.IDLCallback): void {

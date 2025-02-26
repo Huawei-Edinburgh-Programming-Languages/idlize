@@ -561,7 +561,7 @@ function constructMaterializedObject(writer: LanguageWriter, signature: MethodSi
     if (!decl) {
         throw new Error("Can not resolve materialized class")
     }
-    const internalClassName = getInternalClassName(idl.getFQName(decl))
+    const internalClassName = getInternalClassName(idl.getQualifiedName(decl, "namespace.name"))
     return [
         writer.makeAssign(
             `${resultName}`,

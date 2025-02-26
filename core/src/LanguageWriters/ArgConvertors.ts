@@ -203,10 +203,16 @@ export class StringConvertor extends BaseArgConvertor {
 }
 
 export class EnumConvertor extends BaseArgConvertor {
+    private typeForSerializer: idl.IDLType
     constructor(param: string, public enumEntry: idl.IDLEnum) {
         super(idl.createReferenceType(enumEntry),
             [idl.isStringEnum(enumEntry) ? RuntimeType.STRING : RuntimeType.NUMBER],
             false, false, param)
+
+        if (this.enumEntry.name == "GestureType" || this.enumEntry.name == "GestureControl.GestureType") // TODO rework this hack after idl name resolver stands up
+            this.typeForSerializer = idl.createReferenceType(this.enumEntry)
+        else
+            this.typeForSerializer = idl.createReferenceType(this.enumEntry.name)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
         return writer.makeEnumCast(writer.escapeKeyword(param), false, this)
@@ -214,19 +220,19 @@ export class EnumConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
         value =
             idl.isStringEnum(this.enumEntry)
-                ? writer.ordinalFromEnum(writer.makeString(value), idl.createReferenceType(this.enumEntry)).asString()
+                ? writer.ordinalFromEnum(writer.makeString(value), this.typeForSerializer).asString()
                 : writer.makeEnumCast(value, false, this)
         writer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
         const enumExpr = idl.isStringEnum(this.enumEntry)
-            ? writer.enumFromOrdinal(readExpr, idl.createReferenceType(this.enumEntry))
-            : writer.makeCast(readExpr, idl.createReferenceType(this.enumEntry))
+            ? writer.enumFromOrdinal(readExpr, this.typeForSerializer)
+            : writer.makeCast(readExpr, this.typeForSerializer)
         return assigneer(enumExpr)
     }
     nativeType(): idl.IDLType {
-        return idl.createReferenceType(this.enumEntry)
+        return this.idlType
     }
     interopType(): idl.IDLType {
         return idl.IDLI32Type

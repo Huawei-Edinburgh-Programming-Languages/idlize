@@ -183,7 +183,6 @@ export class PeerLibrary implements LibraryInterface {
     }
 
     resolveTypeReference(type: idl.IDLReferenceType): idl.IDLEntry | undefined {
-
         const entry = this._syntheticFile.entries.find(it => it.name === type.name)
         if (entry)
             return entry
@@ -198,90 +197,35 @@ export class PeerLibrary implements LibraryInterface {
                 return found;
         }
 
-        const pov = idl.fetchNamespaceFrom(type.parent)
+        let pov = idl.fetchNamespaceFrom(type.parent)
         const corpus = this.files.map(it => it.file)
 
         let result = resolveNamedNode(target, pov, corpus)
         if (result && idl.isEntry(result))
             return result
 
-        if (!pov) {
+        // TODO: remove the next block after namespaces out of quarantine
+        {
+            const povAsReadableString = pov
+                ? `'${idl.getFQName(pov)}'`
+                : "[root]"
+
+            // retry from root
+            pov = undefined
             for (let file of this.files) {
                 result = resolveNamedNode([...file.packageClause(), ...target], pov, corpus)
                 if (result && idl.isEntry(result)) {
-                    console.log(`WARNING: Type reference '${type.name}' is not resolved without own namespace/pointOfView but resolved within some package '${file.packageClause().join(".")}'`)
+                    // too much spam
+                    // console.log(`WARNING: Type reference '${type.name}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
                     return result
                 }
             }
-        }
 
-        {
-            result = this.resolveTypeReferenceScoped(type)
-            if (result && idl.isEntry(result))
-                return result
-        }
-
-        return undefined
-        //return this.resolveTypeReferenceScoped(type)
-    }
-
-    private resolveTypeReferenceScoped(type: idl.IDLReferenceType, pointOfView?: idl.IDLEntry, rootEntries?: idl.IDLEntry[]): idl.IDLEntry | undefined {
-        const entry = this._syntheticFile.entries.find(it => it.name === type.name)
-        if (entry)
-            return entry
-
-        const qualifiedName = type.name.split(".");
-
-        let pointOfViewNamespace = idl.fetchNamespaceFrom(type.parent)
-
-        rootEntries ??= this.files.flatMap(it => it.entries)
-        if (1 === qualifiedName.length) {
-            const predefined = rootEntries.filter(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Predefined))
-            predefined.push(...this.predefinedDeclarations)
-            const found = predefined.find(it => it.name === qualifiedName[0])
-            if (found)
-                return found;
-        }
-
-        let doWork = true
-        while (doWork) {
-            doWork = !!pointOfViewNamespace
-            let entries = pointOfViewNamespace
-                ? [...pointOfViewNamespace.members]
-                : [...rootEntries]
-            for (let qualifiedNamePart = 0; qualifiedNamePart < qualifiedName.length; ++qualifiedNamePart) {
-                const candidates = entries.filter(it => it.name === qualifiedName[qualifiedNamePart])
-                if (!candidates.length)
-                    break
-                if (qualifiedNamePart === qualifiedName.length - 1) {
-                    const target = candidates.length == 1
-                        ? candidates[0]
-                        : candidates.find(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import)) // probably the wrong logic here
-                    if (target && idl.isImport(target))// Temporary disable Import declarations
-                        return undefined
-                    return target
-                }
-                entries = []
-                for (const candidate of candidates) {
-                    if (idl.isNamespace(candidate))
-                        entries.push(...candidate.members)
-                    else if (idl.isEnum(candidate))
-                        entries.push(...candidate.elements)
-                    else if (idl.isInterface(candidate))
-                        entries.push(...candidate.constants, ...candidate.properties, ...candidate.methods)
-                }
-            }
-
-            pointOfViewNamespace = idl.fetchNamespaceFrom(pointOfViewNamespace?.parent)
-        }
-
-        // TODO: remove the next block after namespaces out of quarantine
-        if (!pointOfView) {
-            const resolveds: idl.IDLEntry[] = []
+            // and from each namespace
+            const resolveds: idl.IDLNode[] = []
             const traverseNamespaces = (entry: idl.IDLEntry) => {
                 if (entry && idl.isNamespace(entry) && entry.members.length) {
-                    //console.log(`Try alien namespace '${idl.getNamespacesPathFor(entry.members[0]).map(obj => obj.name).join(".")}' to resolve name '${type.name}'`)
-                    const resolved = this.resolveTypeReferenceScoped(type, entry, rootEntries)
+                    const resolved = resolveNamedNode([...idl.getNamespacesPathFor(entry).map(it => it.name), ...target], pov, corpus)
                     if (resolved)
                         resolveds.push(resolved)
                     entry.members.forEach(traverseNamespaces)
@@ -289,12 +233,17 @@ export class PeerLibrary implements LibraryInterface {
             }
             this.files.forEach(file => file.entries.forEach(traverseNamespaces))
 
-            if (resolveds.length)
-                console.log(`WARNING: Type reference '${type.name}' is not resolved without own namespace/pointOfView but resolved within some other namespace: '${idl.getNamespacesPathFor(resolveds[0]).map(obj => obj.name).join(".")}'`)
+            for (const resolved of resolveds)
+                console.log(`WARNING: Type reference '${type.name}' is not resolved from ${povAsReadableString} but resolved from some namespace: '${idl.getNamespacesPathFor(resolved).map(obj => obj.name).join(".")}'`)
+
+            for (const resolved of resolveds)
+                if (idl.isEntry(resolved))
+                    return resolved
         }// end of block to remove
 
-        return undefined // empty result
+        return undefined
     }
+
     hasInLibrary(entry: idl.IDLEntry): boolean {
         return !this.libraryPackages?.length || this.libraryPackages?.includes(idl.getPackageName(entry))
     }
