@@ -646,7 +646,7 @@
 |`hideBackButton`| Function | | | | |
 |`onShown`| Function |Kovalev Sergey | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`onHidden`| Function |Kovalev Sergey | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
-|`onBackPressed`| Function |Kovalev Sergey | blocked IDL |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
+|`onBackPressed`| Function |Dudkin Sergey | in progress |  |RETURN_VALUE, RET_VAL_UNBLOCKED |
 |`onResult`| Function | | | | |
 |`mode`| Function |Kovalev Sergey | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`backButtonIcon`| Function |Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
@@ -1622,13 +1622,13 @@
 |`radiusWidth`| Function |  | || |
 |`radiusHeight`| Function | | | | |
 |`radius`| Function | | | | |
-|*CircleShape*| *Class* | | | | |
-|`offset`| Function | | | | |
-|`fill`| Function | | | | |
-|`position`| Function | | | | |
-|`width`| Function | | | | |
-|`height`| Function | | | | |
-|`size`| Function | | | | |
+|*CircleShape*| *Class* |Dudkin Sergey |in progress | | |
+|`offset`| Function |Dudkin Sergey |in progress | | |
+|`fill`| Function | |Dudkin Sergey |in progress | |
+|`position`| Function |Dudkin Sergey |in progress | | |
+|`width`| Function |Dudkin Sergey |in progress | | |
+|`height`| Function |Dudkin Sergey |in progress | | |
+|`size`| Function |Dudkin Sergey | |in progress | |
 |*EllipseShape*| *Class* | | | | |
 |`offset`| Function | | | | |
 |`fill`| Function | | | | |
@@ -1732,7 +1732,7 @@
 |`getImageData`| Function  | Vadim Voronov | blocked IDL | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getPixelMap`| Function  | Vadim Voronov | blocked AceEngine |  |RETURN_VALUE, https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T && https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`putImageData`| Function  | Vadim Voronov | done  |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
-|`getLineDash`| Function  | Vadim Voronov |  blocked IDL | |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getLineDash`| Function  | Dudkin Sergey |  in progress | |RETURN_VALUE, RET_VAL_UNBLOCKED |
 |`setLineDash`| Function  | Vadim Voronov | done |  | |
 |`clearRect`| Function  | Vadim Voronov | done |  | |
 |`fillRect`| Function  | Vadim Voronov | done |  | |
@@ -1740,7 +1740,7 @@
 |`restore`| Function  | Vadim Voronov | done |  | |
 |`save`| Function  | Vadim Voronov | done |  | |
 |`fillText`| Function  | Vadim Voronov | done |  | |
-|`measureText`| Function  | Vadim Voronov | testskipped |  |RETURN_VALUE, RET_VAL_UNBLOCKED, https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`measureText`| Function  | Dudkin Sergey | in progress |  |RETURN_VALUE, RET_VAL_UNBLOCKED |
 |`strokeText`| Function  | Vadim Voronov | done |  | |
 |`getTransform`| Function  | Vadim Voronov | blocked IDL | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`resetTransform`| Function  | Vadim Voronov | done |  | |
@@ -1998,7 +1998,7 @@
 |*View*| *Class* | Skroba Gleb | blocked IDL |  | |
 |`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | blocked IDL |  | |
-|`getCaretOffset`| Function | Morozov Sergey | blocked IDL |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getCaretOffset`| Function | Dudkin Sergey | in progress |  |RETURN_VALUE, RET_VAL_UNBLOCKED |
 |`getTextContentRect`| Function | Morozov Sergey | devdone |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getTextContentLineCount`| Function | Morozov Sergey | done |  | |
 |`addText`| Function | | | | |
