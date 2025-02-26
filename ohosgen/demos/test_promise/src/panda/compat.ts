@@ -9,5 +9,4 @@ export function pullEvents() {
 
 export function init() {
     registerNativeModuleLibraryName('InteropNativeModule', 'TEST_PROMISENativeModule');
-    registerNativeModuleLibraryName('FooNativeModule', 'TEST_PROMISENativeModule');
 }

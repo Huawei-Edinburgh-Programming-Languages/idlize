@@ -109,12 +109,11 @@ class PeerFileVisitor {
         if (printer.language == Language.ARKTS) {
             imports.addFeature("TypeChecker", "#components")
         }
-        imports.addFeature("wrapCallback", "@koalaui/interop")
         if (this.library.language !== Language.ARKTS) {
             imports.addFeature("Deserializer", "./peers/Deserializer")
             imports.addFeature("createDeserializer", "./peers/Deserializer")
         }
-        imports.addFeature("MaterializedBase", "@koalaui/interop")
+        imports.addFeatures(["MaterializedBase", "toPeerPtr", "wrapCallback"], "@koalaui/interop")
         // collectMaterializedImports(imports, this.library)
         Array.from(this.library.builderClasses.keys())
             .filter(it => this.library.builderClasses.get(it)?.needBeGenerated)
@@ -553,9 +552,16 @@ function returnsThis(method: PeerMethod, returnType: IDLType) {
 function constructMaterializedObject(writer: LanguageWriter, signature: MethodSignature,
     resultName: string, peerPtrName: string): LanguageStatement[] {
     const retType = signature.returnType
+    if (!idl.isReferenceType(retType)) {
+        throw new Error("Method returns wrong value")
+    }
     // TODO: Use "ClassNameInternal.fromPtr(ptr)"
     // once java is generated in the same way as typescript for materialized classes
-    const internalClassName = getInternalClassName(forceAsNamedNode(retType).name)
+    const decl = writer.resolver.resolveTypeReference(retType)
+    if (!decl) {
+        throw new Error("Can not resolve materialized class")
+    }
+    const internalClassName = getInternalClassName(idl.getFQName(decl))
     return [
         writer.makeAssign(
             `${resultName}`,

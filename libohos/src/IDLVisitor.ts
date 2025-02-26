@@ -161,8 +161,6 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
 
         this.file.entries.forEach(idl.transformMethodsReturnPromise2Async)
         idl.linkParentBack(this.file!)
-        this.collectGlobalScope()
-        idl.linkParentBack(this.file!)
         return this.file!
     }
 
@@ -223,72 +221,6 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         return result
     }
 
-    private getGlobalScopeName(nsName:string): string {
-        return `GlobalScope${nsName}_${path.basename(this.sourceFile.fileName).replace(".d.ts", "").replaceAll("@", "").replaceAll(".", "_")}`
-    }
-
-    collectGlobalScope() {
-
-        const groups = new Map<idl.IDLNamespace, [idl.IDLConstant[], idl.IDLMethod[]]>()
-        const topLevel: [idl.IDLConstant[], idl.IDLMethod[]] = [[], []]
-
-        function filter(entries: idl.IDLEntry[], ns:idl.IDLNamespace | undefined) {
-            return entries.filter(entry => {
-                const bucket = ns === undefined
-                    ? topLevel
-                    : getOrPut(groups, ns, () => [[], []] as [idl.IDLConstant[], idl.IDLMethod[]])
-
-                if (idl.isConstant(entry)) {
-                    bucket[0].push(entry)
-                    return false;
-                } else if (idl.isMethod(entry)) {
-                    const clone = idl.createMethod(
-                        entry.name,
-                        entry.parameters,
-                        entry.returnType,
-                        entry,
-                        entry,
-                        entry.typeParameters)
-                    clone.isStatic = true
-                    clone.isFree = false
-                    bucket[1].push(clone)
-                    return false;
-                } else if (idl.isNamespace(entry)) {
-                    entry.members = filter(entry.members, entry)
-                }
-                return true;
-            })
-        }
-        this.file.entries = filter(this.file.entries, undefined)
-        this.file.entries.forEach(it => idl.linkParentBack(it))
-
-        const globals = (Array.from(groups.entries()) as [idl.IDLNamespace | undefined, [idl.IDLConstant[], idl.IDLMethod[]]][])
-            .concat([[undefined, topLevel]])
-
-        for (const [ns, [constants, methods]] of globals) {
-            if (constants.length || methods.length) {
-                const nsName = ns ? '_' + idl.getFQName(ns) : ''
-                const int = idl.createInterface(
-                    this.getGlobalScopeName(nsName),
-                    idl.IDLInterfaceSubkind.Interface,
-                    [],
-                    [],
-                    constants,
-                    [],
-                    methods,
-                    [], [], {
-                        extendedAttributes: [ { name: idl.IDLExtendedAttributes.GlobalScope } ],
-                        fileName: this.sourceFile.fileName
-                    })
-                if (ns) {
-                    ns.members.push(int)
-                } else {
-                    this.file.entries.push(int)
-                }
-            }
-        }
-    }
-
     detectPackageName(sourceFile: ts.SourceFile): string[] {
         let baseDirs = this.options.baseDir || this.options.inputDir
         if (!baseDirs && this.options.inputFiles) {
@@ -305,8 +237,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         let relativeFileName
         for (const baseDir of baseDirs) {
             const rel = path.normalize(path.relative(baseDir, sourceFile.fileName))
-            if(rel.startsWith(".."))
+            if(rel.startsWith("..")) {
                 continue
+            }
             if (!relativeFileName || relativeFileName.length > rel.length)
                 relativeFileName = rel
         }

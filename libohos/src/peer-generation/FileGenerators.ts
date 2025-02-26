@@ -254,7 +254,9 @@ export function makeTSSerializer(library: PeerLibrary): LanguageWriter {
     let printer = library.createLanguageWriter()
     printer.writeLines(cStyleCopyright)
     const imports = new ImportsCollector()
-    imports.addFeatures(["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isResource", "isInstanceOf"], "@koalaui/interop")
+    imports.addFeatures(
+        ["SerializerBase", "Tags", "RuntimeType", "runtimeType", "isResource", "isInstanceOf", "toPeerPtr"],
+        "@koalaui/interop")
     imports.addFeatures(["int32", "float32"], "@koalaui/common")
     if (printer.language == Language.TS) {
         imports.addFeatures(["MaterializedBase"], "@koalaui/interop")
@@ -418,11 +420,11 @@ function copyFile(from: string, to: string, filters?: string[]) {
     fs.copyFileSync(from, to)
 }
 
-export function makeArkuiModule(componentsFiles: string[]): string {
+export function makeArkuiModule(componentsFiles: string[], root:string): string {
     return tsCopyrightAndWarning(
         componentsFiles.map(file => {
-            const basename = path.basename(file)
-            const basenameNoExt = basename.replaceAll(path.extname(basename), "")
+            const relativePath = path.relative(root, file)
+            const basenameNoExt = relativePath.replaceAll(path.extname(relativePath), "")
             return `export * from "./${basenameNoExt}"`
         }).join("\n")
     )
