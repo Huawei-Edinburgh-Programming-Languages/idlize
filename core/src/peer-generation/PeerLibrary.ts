@@ -315,6 +315,9 @@ export class PeerLibrary implements LibraryInterface {
         if (isImportAttr(declaration)) {
             return new ImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
         }
+        if (idl.isImport(declaration)) {
+            return new ImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
+        }
         if (idl.isEnum(declaration)) {
             return new EnumConvertor(param, declaration)
         }

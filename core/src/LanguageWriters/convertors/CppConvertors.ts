@@ -102,7 +102,11 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
         }
         throw new Error(`Unmapped container type ${idl.DebugUtils.debugPrintType(type)}`)
     }
-    convertImport(type: idl.IDLReferenceType, _: string): ConvertResult {
+    convertImport(type: idl.IDLImport): ConvertResult {
+        console.warn("Imports are not implemented yet")
+        return this.make(idl.IDLCustomObjectType.name)
+    }
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, _: string): ConvertResult {
         return this.make(idl.IDLCustomObjectType.name)
     }
     convertTypeReference(type: idl.IDLReferenceType): ConvertResult {
@@ -251,7 +255,11 @@ export class CppReturnTypeConvertor implements TypeConvertor<string> {
         if (idl.IDLContainerUtils.isPromise(type)) return 'void'
         return this.convertor.convert(type)
     }
-    convertImport(type: idl.IDLReferenceType, importClause: string): string {
+    convertImport(type: idl.IDLImport): string {
+        console.warn("Imports are not implemented yet")
+        return "void"
+    }
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): string {
         return this.convertor.convert(type)
     }
     convertOptional(type: idl.IDLOptionalType): string {

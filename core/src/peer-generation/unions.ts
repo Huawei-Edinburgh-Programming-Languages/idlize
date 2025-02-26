@@ -14,7 +14,7 @@
  */
 
 import { convertType, TypeConvertor } from "../LanguageWriters";
-import { IDLContainerType, IDLCustomObjectType, IDLOptionalType, IDLPrimitiveType, IDLReferenceType, IDLType, IDLTypeParameterType, IDLUndefinedType, IDLUnionType, isType, isUnionType } from '../idl'
+import { IDLImport, IDLContainerType, IDLCustomObjectType, IDLOptionalType, IDLPrimitiveType, IDLReferenceType, IDLType, IDLTypeParameterType, IDLUndefinedType, IDLUnionType, isType, isUnionType } from '../idl'
 import { collapseTypes } from "./idl/common"
 import { LanguageExpression, LanguageWriter } from "../LanguageWriters/LanguageWriter";
 import { ArgConvertor, CustomTypeConvertor } from "../LanguageWriters/ArgConvertors";
@@ -25,6 +25,10 @@ import { ReferenceResolver } from "./ReferenceResolver";
 export class UnionFlattener implements TypeConvertor<IDLType[]> {
     constructor(private resolver: ReferenceResolver) {}
 
+    convertImport(type: IDLImport): IDLType[] {
+        console.warn("Imports are not implemented yet")
+        return []
+    }
     convertUnion(type: IDLUnionType): IDLType[] {
         return type.types.flatMap(it => convertType(this, it))
     }
@@ -38,7 +42,7 @@ export class UnionFlattener implements TypeConvertor<IDLType[]> {
     convertContainer(type: IDLContainerType): IDLType[] {
         return [type]
     }
-    convertImport(type: IDLReferenceType, importClause: string): IDLType[] {
+    convertTypeReferenceAsImport(type: IDLReferenceType, importClause: string): IDLType[] {
         return [type]
     }
     convertPrimitiveType(type: IDLPrimitiveType): IDLType[] {

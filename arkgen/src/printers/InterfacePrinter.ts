@@ -290,6 +290,10 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         return ''
     }
 
+    convertImport(node: idl.IDLImport): void {
+        console.warn("Imports are not implemented yet")
+    }
+
     convertNamespace(node: idl.IDLNamespace): void {
         this.writer.pushNamespace(node.name);
         node.members.forEach(it => convertDeclaration(this, it))
@@ -305,10 +309,10 @@ class TSSyntheticGenerator extends DependenciesCollector {
         super(library)
     }
 
-    convertImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
         const decl = this.library.resolveTypeReference(type)
         if (decl) this.onSyntheticDeclaration(decl)
-        return super.convertImport(type, importClause)
+        return super.convertTypeReferenceAsImport(type, importClause)
     }
 }
 
@@ -410,7 +414,7 @@ class JavaSyntheticGenerator extends DependenciesCollector {
         return super.convertUnion(type)
     }
 
-    convertImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
         const generatedName = this.nameConvertor.convert(type)
         const clazz = idl.createInterface(
             generatedName,
@@ -418,7 +422,7 @@ class JavaSyntheticGenerator extends DependenciesCollector {
             [idl.createReferenceType(ARK_CUSTOM_OBJECT)]
         )
         this.onSyntheticDeclaration(clazz)
-        return super.convertImport(type, importClause)
+        return super.convertTypeReferenceAsImport(type, importClause)
     }
 
     convertTypedef(decl: idl.IDLTypedef): idl.IDLEntry[] {
@@ -484,6 +488,9 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
     }
     convertNamespace(node: idl.IDLNamespace): void {
         node.members.forEach(member => convertDeclaration(this, member))
+    }
+    convertImport(node: idl.IDLImport): void {
+        console.warn("Imports are not implemented yet")
     }
     convertInterface(node: idl.IDLInterface): void {
         const name = this.nameConvertor.convert(node)
@@ -719,10 +726,10 @@ class ArkTSSyntheticGenerator extends DependenciesCollector {
         super(library)
     }
 
-    convertImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
         const decl = this.library.resolveTypeReference(type)
         if (decl) this.onSyntheticDeclaration(decl)
-        return super.convertImport(type, importClause)
+        return super.convertTypeReferenceAsImport(type, importClause)
     }
 
     convertCallback(decl: idl.IDLCallback): idl.IDLEntry[] {
@@ -888,10 +895,10 @@ class CJSyntheticGenerator extends DependenciesCollector {
         return super.convertUnion(type)
     }
 
-    convertImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
         const decl = this.library.resolveTypeReference(type)
         if (decl) this.onSyntheticDeclaration(decl)
-        return super.convertImport(type, importClause)
+        return super.convertTypeReferenceAsImport(type, importClause)
     }
 }
 
@@ -947,6 +954,9 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
             return
         }
         throw new Error(`Unsupported typedef: ${name}, kind=${type.kind}`)
+    }
+    convertImport(node: idl.IDLImport): void {
+        console.warn("Imports are not implemented yet")
     }
     convertNamespace(node: idl.IDLNamespace): void {
         throw new Error("Internal error: namespaces are not allowed on the CJ layer")

@@ -30,7 +30,11 @@ export class DependenciesCollector implements NodeConvertor<idl.IDLEntry[]> {
     convertContainer(type: idl.IDLContainerType): idl.IDLEntry[] {
         return type.elementType.flatMap(ty => convertType(this, ty))
     }
-    convertImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
+    convertImport(type: idl.IDLImport): idl.IDLEntry[] {
+        console.warn("Imports are not implemented yet")
+        return []
+    }
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
         const maybeDecl = this.library.resolveTypeReference(type)
         return maybeDecl ? [maybeDecl] : []
     }

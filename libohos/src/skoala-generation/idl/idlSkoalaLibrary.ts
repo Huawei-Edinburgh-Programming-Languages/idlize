@@ -637,6 +637,8 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
     constructor(private readonly writer: LanguageWriter, readonly library: IdlSkoalaLibrary) {
         this.printer = new CustomPrintVisitor(resolveSyntheticType, writer.language)
     }
+    convertImport(node: idl.IDLImport): void {
+    }
     convertCallback(node: idl.IDLCallback): void {
         this.printer.output = []
         this.printer.printTypedef(node)
@@ -712,7 +714,11 @@ export class TSSkoalaTypeNameConvertor implements IdlNameConvertor, TypeConverto
             : throwException(`Unmapped container type: ${idl.DebugUtils.debugPrintType(type)}`)
         return `${containerName}<${type.elementType.map(it => this.convert(it)).join(",")}>`
     }
-    convertImport(type: idl.IDLReferenceType, importClause: string): string {
+    convertImport(type: idl.IDLImport): string {
+        console.warn("Imports are not implemented yet")
+        return ""
+    }
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): string {
         ///feed importClause into TS parser?
         if (importClause.includes("want?: import('../api/@ohos.app.ability.Want').default;"))
             return "IMPORT_Callback_code_number_want_IMPORT_default_FROM_api_ohos_app_ability_Want_FROM_api_ohos_base"

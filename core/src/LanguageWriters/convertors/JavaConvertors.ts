@@ -81,13 +81,17 @@ export class JavaTypeNameConvertor implements NodeConvertor<string>, IdlNameConv
     convertConstant(type: idl.IDLConstant): string {
         throw new Error('Method not implemented.'); // TODO: namespace-related-to-rework
     }
-    convertImport(type: idl.IDLReferenceType, importClause: string): string {
+    convertImport(type: idl.IDLImport): string {
+        console.warn("Imports are not implemented yet")
+        return type.name
+    }
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): string {
         return type.name
     }
     convertTypeReference(type: idl.IDLReferenceType): string {
         const importAttr = idl.getExtAttribute(type, idl.IDLExtendedAttributes.Import)
         if (importAttr) {
-            return this.convertImport(type, importAttr)
+            return this.convertTypeReferenceAsImport(type, importAttr)
         }
 
         const decl = this.resolver.resolveTypeReference(type)!

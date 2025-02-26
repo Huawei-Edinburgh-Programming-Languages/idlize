@@ -41,7 +41,11 @@ class SorterDependenciesCollector implements NodeConvertor<idl.IDLNode[]> {
     convertContainer(type: idl.IDLContainerType): idl.IDLNode[] {
         return []
     }
-    convertImport(type: idl.IDLReferenceType, importClause: string): idl.IDLNode[] {
+    convertImport(type: idl.IDLImport): idl.IDLNode[] {
+        console.warn("Imports are not implemented yet")
+        return []
+    }
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): idl.IDLNode[] {
         return []
     }
     convertTypeReference(type: idl.IDLReferenceType): idl.IDLNode[] {

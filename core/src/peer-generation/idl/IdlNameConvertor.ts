@@ -18,6 +18,10 @@ import { DeclarationConvertor } from "../../LanguageWriters/nameConvertor";
 import { Language } from "../../Language";
 
 export class DeclarationNameConvertor implements DeclarationConvertor<string> {
+    convertImport(decl: idl.IDLImport): string {
+        console.warn("Imports are not implemented yet")
+        return decl.name
+    }
     convertInterface(decl: idl.IDLInterface): string {
         return decl.name
     }

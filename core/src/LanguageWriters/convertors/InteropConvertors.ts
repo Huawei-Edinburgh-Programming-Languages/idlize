@@ -43,7 +43,10 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
         }
         return KInteropReturnBuffer
     }
-    convertImport(type: idl.IDLReferenceType, importClause: string): string {
+    convertImport(type: idl.IDLImport): string {
+        throw new Error(`Cannot pass import type ${type.name} through interop`)
+    }
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): string {
         throw new Error(`Cannot pass import type ${type.name} through interop`)
     }
     convertOptional(type: idl.IDLOptionalType): string {
@@ -109,7 +112,10 @@ export class InteropArgConvertor implements TypeConvertor<string> {
     convertContainer(type: idl.IDLContainerType): string {
         throw new Error(`Cannot pass container types through interop`)
     }
-    convertImport(type: idl.IDLReferenceType, importClause: string): string {
+    convertImport(type: idl.IDLImport): string {
+        throw new Error(`Cannot pass import types through interop`)
+    }
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): string {
         throw new Error(`Cannot pass import types through interop`)
     }
     convertOptional(type: idl.IDLOptionalType): string {

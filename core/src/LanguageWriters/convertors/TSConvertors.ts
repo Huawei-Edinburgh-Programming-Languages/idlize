@@ -76,10 +76,13 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
         }
         throw new Error(`Unmapped container type ${idl.DebugUtils.debugPrintType(type)}`)
     }
-    convertImport(type: idl.IDLReferenceType, importClause: string): string {
+    convertImport(type: idl.IDLImport): string {
+        console.warn("Imports are not implemented yet")
         return type.name
     }
-
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): string {
+        return type.name
+    }
     convertTypeReference(type: idl.IDLReferenceType): string {
         let decl = this.resolver.resolveTypeReference(type)
         if (decl) {
