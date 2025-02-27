@@ -2084,7 +2084,7 @@
 |*GestureEvent*| *Class* | Samarin Sergey | blocked IDL |  | |
 |`getRepeat`| Function | Samarin Sergey | done |  | |
 |`setRepeat`| Function | Samarin Sergey | done |  | |
-|`getFingerList`| Function | | | | |
+|`getFingerList`| Function | Kovalev Sergey | in progress | | |
 |`setFingerList`| Function | Samarin Sergey | done |  | |
 |`getOffsetX`| Function | Samarin Sergey | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setOffsetX`| Function | Samarin Sergey | done |  | |
