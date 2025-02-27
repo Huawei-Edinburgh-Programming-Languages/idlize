@@ -1716,10 +1716,10 @@
 |`getHeight`| Function | | | | |
 |`getWidth`| Function | | | | |
 |*RenderingContextSettings*| *Class* | Vadim Voronov | in progress | | |
-|`getAntialias`| Function | Vadim Voronov | devdone | | |
-|`setAntialias`| Function | Vadim Voronov | devdone | | |
+|`getAntialias`| Function | Vadim Voronov | done | | implemented with UT on FB, doesn't present in Upstream |
+|`setAntialias`| Function | Vadim Voronov | done | | implemented with UT on FB, doesn't present in Upstream |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | blocked |  | |
-|`drawImage`| Function  | Vadim Voronov | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
+|`drawImage`| Function  | Vadim Voronov | blocked IDL |  | testskipped on FB, https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
 |`beginPath`| Function  | Vadim Voronov | done |  | |
 |`clip`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |`fill`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
@@ -1755,43 +1755,43 @@
 |`restoreLayer`| Function  | Vadim Voronov | done |  | |
 |`reset`| Function  | Vadim Voronov | done |  | |
 |`setLetterSpacing`| Function | | | | |
-|`getGlobalAlpha`| Function  | Vadim Voronov | blocked AceEngine |  |RETURN_VALUE, https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getGlobalAlpha`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setGlobalAlpha`| Function  | Vadim Voronov | done |  | |
-|`getGlobalCompositeOperation`| Function  | Vadim Voronov | blocked IDL | |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getGlobalCompositeOperation`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setGlobalCompositeOperation`| Function  | Vadim Voronov | done |  | |
 |`setFillStyle`| Function  | Vadim Voronov | done |  | |
 |`setStrokeStyle`| Function  | Vadim Voronov | done |  | |
-|`getFilter`| Function  | Vadim Voronov | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getFilter`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setFilter`| Function  | Vadim Voronov | done |  | |
-|`getImageSmoothingEnabled`| Function  | Vadim Voronov | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getImageSmoothingEnabled`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setImageSmoothingEnabled`| Function  | Vadim Voronov | done |  | |
-|`getImageSmoothingQuality`| Function  | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getImageSmoothingQuality`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setImageSmoothingQuality`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
-|`getLineCap`| Function  | Vadim Voronov | blocked IDL |  |RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getLineCap`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setLineCap`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
-|`getLineDashOffset`| Function  | Vadim Voronov | blocked IDL | |RETURN_VALUE, implemented w/UT https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getLineDashOffset`| Function  | Vadim Voronov | blocked IDL |  | in progress on FB, RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setLineDashOffset`| Function  | Vadim Voronov | done |  | |
-|`getLineJoin`| Function  | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getLineJoin`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setLineJoin`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
-|`getLineWidth`| Function  | Vadim Voronov | blocked AceEngine |  | RETURN_VALUE, https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getLineWidth`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setLineWidth`| Function  | Vadim Voronov | done |  | |
-|`getMiterLimit`| Function  | Vadim Voronov | blocked AceEngine |  |RETURN_VALUE, https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getMiterLimit`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setMiterLimit`| Function  | Vadim Voronov | done |  | |
-|`getShadowBlur`| Function  | Vadim Voronov | blocked AceEngine |  |RETURN_VALUE, https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getShadowBlur`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setShadowBlur`| Function  | Vadim Voronov | done |  | |
-|`getShadowColor`| Function  | Vadim Voronov | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getShadowColor`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setShadowColor`| Function  | Vadim Voronov | done |  | |
-|`getShadowOffsetX`| Function  | Vadim Voronov | blocked AceEngine |  |RETURN_VALUE, https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getShadowOffsetX`| Function  | Vadim Voronov blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setShadowOffsetX`| Function  | Vadim Voronov | done |  | |
-|`getShadowOffsetY`| Function  | Vadim Voronov | blocked AceEngine |  |RETURN_VALUE, https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getShadowOffsetY`| Function  | Vadim Voronov blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setShadowOffsetY`| Function  | Vadim Voronov | done |  | |
-|`getDirection`| Function  | Vadim Voronov | blocked IDL |  |RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getDirection`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setDirection`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
-|`getFont`| Function  | Vadim Voronov | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getFont`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setFont`| Function  | Vadim Voronov | done |  | |
-|`getTextAlign`| Function  | Vadim Voronov | blocked IDL |  |RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getTextAlign`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextAlign`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
-|`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  |RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IB45FO & https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 & https://gitee.com/openharmony/arkui_ace_engine/issues/IB3UUE |
+|`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | RETURN_VALUE, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextBaseline`| Function  | Vadim Voronov | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IB45FO |
 |*CanvasRenderingContext2D*| *Class* | Vadim Voronov, Evstigneev Roman | done |  |  |
 |`toDataURL`| Function |Vadim Voronov| done |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
@@ -1804,15 +1804,15 @@
 |`getHeight`| Function |Vadim Voronov| done |  | |
 |`getWidth`| Function |Vadim Voronov| done |  | |
 |*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | blocked IDL | | |
-|`toDataURL`| Function | Vadim Voronov | blocked IDL | | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`transferToImageBitmap`| Function | Vadim Voronov | blocked AceEngine | | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
-|*OffscreenCanvas*| *Class* | | | | |
-|`transferToImageBitmap`| Function | | | | |
-|`getContext2d`| Function | | | | |
-|`getHeight`| Function | | | | |
-|`setHeight`| Function | | | | |
-|`getWidth`| Function | | | | |
-|`setWidth`| Function | | | | |
+|`toDataURL`| Function | Vadim Voronov | devdone | | testskipped on FB, doesn't present in Upstream |
+|`transferToImageBitmap`| Function | Vadim Voronov | blocked AceEngine | | doesn't present in Upstream  https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
+|*OffscreenCanvas*| *Class* | Vadim Voronov | in progress | | doesn't present in Upstream |
+|`transferToImageBitmap`| Function | Vadim Voronov | in progress | | doesn't present in Upstream |
+|`getContext2d`| Function | Vadim Voronov | in progress | | doesn't present in Upstream |
+|`getHeight`| Function | Vadim Voronov | in progress | | doesn't present in Upstream |
+|`setHeight`| Function | Vadim Voronov | in progress | | doesn't present in Upstream |
+|`getWidth`| Function | Vadim Voronov | in progress | | doesn't present in Upstream |
+|`setWidth`| Function | Vadim Voronov | in progress | | doesn't present in Upstream |
 |*DrawingRenderingContext*| *Class* | Dudkin Sergey | done |  | |
 |`invalidate`| Function | Dudkin Sergey | done |  | |
 |*ICurve*| *Class* | Erokhin Ilya | blocked IDL |  | |
