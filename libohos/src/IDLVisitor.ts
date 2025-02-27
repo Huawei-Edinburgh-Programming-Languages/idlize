@@ -118,9 +118,12 @@ function mergeSetGetProperties(properties: idl.IDLProperty[]): idl.IDLProperty[]
     }, new Array<idl.IDLProperty>)
 }
 
+type Siblings = { [key in string]: { tsSourceFile: ts.SourceFile, visitor: GenerateVisitor<idl.IDLFile>, result: idl.IDLFile }}
+
 export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     private file: idl.IDLFile = idl.createFile([])
     private imports: idl.IDLImport[] = []
+    private importTypeNodes: [NameSuggestion|undefined, ts.ImportTypeNode, idl.IDLReferenceType][] = []
 
     private seenNames = new Set<string>()
     private context = new Context()
@@ -151,11 +154,12 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         return this.file
     }
 
-    visitPhase2(siblings: { [key in string]: { tsSourceFile: ts.SourceFile, visitor: GenerateVisitor<idl.IDLFile>, result: idl.IDLFile }}): idl.IDLFile {
+    visitPhase2(siblings: Siblings): idl.IDLFile {
         if (!this.file)
             throw new Error("phase1 isnt processed?")
 
         ts.forEachChild(this.sourceFile, (node) => this.visitImport(node, siblings))
+        this.flushImportTypeNodes(siblings)
 
         this.file.entries.unshift(...this.imports)
 
@@ -381,30 +385,31 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             }))
     }
 
-    visitImport(node: ts.Node, siblings: { [key in string]: { tsSourceFile: ts.SourceFile, visitor: GenerateVisitor<idl.IDLFile>, result: idl.IDLFile }}): void {
-        if (!ts.isImportDeclaration(node))
-            return
-
-        const module = node.moduleSpecifier.getText().replaceAll(/['"]/g, "")
+    getModulePackageClause(module: string, siblings: Siblings): string[] {
         let moduleFileName = ts.resolveModuleName(
             module,
             this.sourceFile.fileName,
             this.program.getCompilerOptions(),
             this.compilerHost).resolvedModule?.resolvedFileName
         if (!moduleFileName) {
-            warn(`Import at '${this.sourceFile.fileName}', module '${module}: unable to resolve source file path`)
-            return
+            warn(`Import at '${this.sourceFile.fileName}', module '${module}': unable to resolve source file path`)
+            return []
         }
         const sibling = siblings[moduleFileName] || siblings[path.resolve(moduleFileName)]
         if (!sibling) {
-            warn(`Import at '${this.sourceFile.fileName}', module '${module}: not in a closed set`)
-            return
+            warn(`Import at '${this.sourceFile.fileName}', module '${module}': not in a closed set`)
+            return []
         }
-        const modulePackageClause = sibling.result.packageClause
-        if (!modulePackageClause) {
-            warn(`Import at '${this.sourceFile.fileName}', module '${module}: no Package entry found`)
+        return sibling.result.packageClause
+    }
+
+    visitImport(node: ts.Node, siblings: Siblings): void {
+        if (!ts.isImportDeclaration(node))
             return
-        }
+
+        const modulePackageClause = this.getModulePackageClause(
+            node.moduleSpecifier.getText(node.getSourceFile()).replaceAll(/['"]/g, ""), 
+            siblings)
 
         if (!node.importClause) {
             this.pushImportFor(node, modulePackageClause)
@@ -463,22 +468,14 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         }
 
         if (ts.isImportTypeNode(node.type)) {
-            const type = idl.createReferenceType(nameSuggestion.name)
-            if (this.predefinedTypeResolver?.resolveTypeReference(type)) {
-                // A predefined declaration exists for this type, so we need no typedef for it
-                return undefined
-            }
-            // No predefined declaration, create an import type and a typedef
-            const importAttr = { name: idl.IDLExtendedAttributes.Import, value: node.type.getText() }
-            extendedAttributes.push(importAttr)
-            type.extendedAttributes ??= []
-            type.extendedAttributes.push(importAttr)
+            extendedAttributes.push({ name: idl.IDLExtendedAttributes.Import, value: `${node.type.getText(node.getSourceFile())}` })
             return idl.createTypedef(
                 nameSuggestion.name,
-                type, undefined, {
+                this.serializeImportTypeNode(nameSuggestion, node.type), 
+                undefined, {
                     extendedAttributes: extendedAttributes,
                     fileName: node.getSourceFile().fileName
-            })
+                })
         }
         if (ts.isFunctionTypeNode(node.type)) {
             return this.serializeFunctionType(node.type, nameSuggestion, extendedAttributes)
@@ -501,6 +498,49 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                 extendedAttributes: extendedAttributes,
                 fileName: node.getSourceFile().fileName,
             })
+    }
+
+    serializeImportTypeNode(nameSuggestion: NameSuggestion|undefined, node: ts.ImportTypeNode): idl.IDLType {
+        const placeholder = idl.createReferenceType("")
+        this.importTypeNodes.push([nameSuggestion, node, placeholder])
+        return placeholder
+    }
+
+    flushImportTypeNodes(siblings: Siblings): void {
+        for(const [nameSuggestion, src, dst] of this.importTypeNodes) {
+            if (!ts.isLiteralTypeNode(src.argument))
+                throw new Error(`Only literal-argument allowed in in import-type at ${src.getSourceFile().fileName}, ${nameSuggestion ?? "UNDEFINED"}`)
+
+            let clause = this.getModulePackageClause(
+                (src.argument as ts.LiteralTypeNode).getText(src.getSourceFile()).replaceAll(/['"]/g, ""), 
+                siblings)
+            let target = asString(src.qualifier).replace(/^default./, "")
+            if (target == "default")
+                target = ""
+
+            if (target == "Callback" || target == "AsyncCallback") {
+                let funcType = this.serializeCallbackImpl(
+                    target, [this.serializeType(src.typeArguments![0], nameSuggestion?.extend(`Import`))],
+                    NameSuggestion.make(target),
+                    src.getSourceFile().fileName
+                )
+                this.addSyntheticType(funcType)
+                dst.name = funcType.name
+            } else {
+                if (target)
+                    clause = [...clause, target]
+                dst.name = clause.join(".")
+                // dst.typeArguments = this.mapTypeArgs(src.typeArguments, dst.name)
+            }
+            dst.extendedAttributes ??= []
+            dst.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Import, value: src.getText(src.getSourceFile()) })
+
+            // if (this.predefinedTypeResolver?.resolveTypeReference(type)) {
+            //     // A predefined declaration exists for this type, so we need no typedef for it
+            //     return undefined
+            // }
+        }
+        this.importTypeNodes = []
     }
 
     heritageIdentifiers(heritage: ts.HeritageClause): ts.Identifier[] {
@@ -1154,29 +1194,8 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             warn(`unsupported type query: ${type.getText()}`)
             return idl.IDLAnyType
         }
-        if (ts.isImportTypeNode(type)) {
-            let where = type.argument.getText(type.getSourceFile()).split("/").map(it => it.replaceAll("'", ""))
-            let what = asString(type.qualifier)
-            if (what == "Callback" || what == "AsyncCallback") {
-                let funcType = this.serializeCallbackImpl(
-                    what, [this.serializeType(type.typeArguments![0], nameSuggestion?.extend(`Import`))],
-                    NameSuggestion.make(what),
-                    type.getSourceFile().fileName
-                )
-                this.addSyntheticType(funcType)
-                return idl.createReferenceType(funcType.name)
-            }
-            let typeName = sanitize(what == "default" ? where[where.length - 1] : what)!
-            let result = idl.createReferenceType(typeName, this.mapTypeArgs(type.typeArguments, typeName))
-            if (!this.predefinedTypeResolver?.resolveTypeReference(result)) {
-                // No predefined declaration for this type, so add import attributes to both declaration and type reference
-                let originalText = `${type.getText(this.sourceFile)}`
-                warn(`import type: ${originalText}`)
-                result.extendedAttributes ??= []
-                result.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Import, value: originalText })
-            }
-            return result
-        }
+        if (ts.isImportTypeNode(type))
+            return this.serializeImportTypeNode(nameSuggestion, type)
         if (ts.isNamedTupleMember(type)) {
             return this.serializeType(type.type)
         }
