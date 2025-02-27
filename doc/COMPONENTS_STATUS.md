@@ -1,7 +1,7 @@
 | Component | Function | Owner | Status (done=merged **with** UT, devdone=implemented and pushed, testskipped=merged **without** UT, blocked=blocked by IDL)|  |issue/comment|
 | --------- | -------- | ----- | ------ |------|------|
-|*Root*| *Component* | | | | |
-|*ComponentRoot*| *Component* | | | | |
+|*Root*| *Component* | Tuzhilkin Ivan | testskipped | | implementation is created early by Nikolay Pisanov |
+|*ComponentRoot*| *Component* | Tuzhilkin Ivan | testskipped | | implementation is created early by Nikolay Pisanov |
 |*AbilityComponent*| *Component* | Tuzhilkin Ivan | deprecated |  | deprecated |
 |`setAbilityComponentOptions`| Function | Tuzhilkin Ivan | deprecated  |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onConnect`| Function | Tuzhilkin Ivan | deprecated |  | deprecated |
@@ -247,7 +247,7 @@
 |`motionPath`| Function | Lobah Mikhail | done |  | |
 |`shadow`| Function | Roman Sedaikin | done |  | |
 |`clip`| Function | Dudkin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH deprecated partially |
-|`clipShape`| Function | Dudkin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
+|`clipShape`| Function | Tuzhilkin Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
 |`mask`| Function | Maksimov Nikita | done |  |deprecated |
 |`maskShape`| Function | Dmitry A Smirnov| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`key`| Function | Lobah Mikhail | done |  | |
@@ -1604,14 +1604,14 @@
 |`begin`| Function | Vadim Voronov | done | | |
 |`end`| Function | Vadim Voronov | done | | |
 |`recordInputEventTime`| Function | Vadim Voronov | blocked IDL | | implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
-|*CommonShape*| *Class* | | | | |
-|`offset`| Function | | | | |
-|`fill`| Function | | | | |
-|`position`| Function | | | | |
-|*BaseShape*| *Class* | | | | |
-|`width`| Function | | | | |
-|`height`| Function | | | | |
-|`size`| Function | | | | |
+|*CommonShape*| *Class* | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`offset`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`fill`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`position`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|*BaseShape*| *Class* | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`width`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`height`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`size`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |*RectShape*| *Class* | Samarin Sergey | in progress | | |
 |`offset`| Function | Samarin Sergey | in progress | | |
 |`fill`| Function | Samarin Sergey | in progress | | |
@@ -1929,9 +1929,9 @@
 |`getHistoricalPoints`| Function | Tuzhilkin Ivan | blocked IDL |  | implementation and UT are ready on FB, but correct behavior is blocked https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
 |`getType`| Function | Tuzhilkin Ivan, Samarin Sergey | in progress |  | done for feature branch https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setType`| Function | Tuzhilkin Ivan | done |  | empty implementation |
-|`getTouches`| Function | Tuzhilkin Ivan | in progress | | |
+|`getTouches`| Function | Tuzhilkin Ivan | in progress | | done for feature branch |
 |`setTouches`| Function | Tuzhilkin Ivan | done |  | empty implementation |
-|`getChangedTouches`| Function | Tuzhilkin Ivan | in progress | | |
+|`getChangedTouches`| Function | Tuzhilkin Ivan | in progress | | done for feature branch|
 |`setChangedTouches`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
