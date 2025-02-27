@@ -1612,16 +1612,16 @@
 |`width`| Function | | | | |
 |`height`| Function | | | | |
 |`size`| Function | | | | |
-|*RectShape*| *Class* | | | | |
-|`offset`| Function | | | | |
-|`fill`| Function | | | | |
-|`position`| Function | | | | |
-|`width`| Function | | | | |
-|`height`| Function | | | | |
-|`size`| Function | | | | |
-|`radiusWidth`| Function |  | || |
-|`radiusHeight`| Function | | | | |
-|`radius`| Function | | | | |
+|*RectShape*| *Class* | Samarin Sergey | in progress | | |
+|`offset`| Function | Samarin Sergey | in progress | | |
+|`fill`| Function | Samarin Sergey | in progress | | |
+|`position`| Function | Samarin Sergey | in progress | | |
+|`width`| Function | Samarin Sergey | in progress | | |
+|`height`| Function | Samarin Sergey | in progress | | |
+|`size`| Function | Samarin Sergey | in progress | | |
+|`radiusWidth`| Function | Samarin Sergey | in progress | | |
+|`radiusHeight`| Function | Samarin Sergey | in progress | | |
+|`radius`| Function | Samarin Sergey | in progress | | |
 |*CircleShape*| *Class* |Dudkin Sergey |in progress | | |
 |`offset`| Function |Dudkin Sergey |in progress | | |
 |`fill`| Function | |Dudkin Sergey |in progress | |
