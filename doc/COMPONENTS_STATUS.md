@@ -779,7 +779,7 @@
 |`aboutToDelete`| Function | Dudkin Sergey| done |  |  |
 |`onDeleteComplete`| Function | Dudkin Sergey| done |  |  |
 |`copyOptions`| Function | Dudkin Sergey| done |  |  |
-|`onPaste`| Function | Dudkin Sergey| in progress |  |  |
+|`onPaste`| Function | Dudkin Sergey| done |  |  |
 |`enableDataDetector`| Function | Dudkin Sergey| done |  |  |
 |`enablePreviewText`| Function | Dudkin Sergey| done |  |  |
 |`dataDetectorConfig`| Function | Dudkin Sergey| done |  |  |
@@ -1624,11 +1624,11 @@
 |`radius`| Function | Samarin Sergey | in progress | | |
 |*CircleShape*| *Class* |Dudkin Sergey |in progress | | |
 |`offset`| Function |Dudkin Sergey |in progress | | |
-|`fill`| Function | |Dudkin Sergey |in progress | |
+|`fill`| Function | Dudkin Sergey |in progress | | |
 |`position`| Function |Dudkin Sergey |in progress | | |
 |`width`| Function |Dudkin Sergey |in progress | | |
 |`height`| Function |Dudkin Sergey |in progress | | |
-|`size`| Function |Dudkin Sergey | |in progress | |
+|`size`| Function |Dudkin Sergey | in progress | | |
 |*EllipseShape*| *Class* | | | | |
 |`offset`| Function | | | | |
 |`fill`| Function | | | | |
