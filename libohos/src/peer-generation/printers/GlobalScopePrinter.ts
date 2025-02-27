@@ -37,7 +37,7 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
     const printed = library.globals.flatMap(scope => {
 
         const groupedMethods = groupOverloadsIDL(scope.methods)
-        return groupedMethods.filter(it => it.length).flatMap((methods): PrinterResult[] => {
+        const methodPrinterResults = groupedMethods.filter(it => it.length).flatMap((methods): PrinterResult[] => {
 
             // imports
             const imports = new ImportsCollector()
@@ -52,7 +52,7 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
             const nsPath = idl.getNamespacesPathFor(methods[0])
             const peerMethods = idlFreeMethodToLegacy(library, methods)
             const method = collapseSameMethodsIDL(methods)
-            const signature = NamedMethodSignature.make(method.returnType, method.parameters.map(it => ({ name: it.name, type: it.type })))
+            const signature = NamedMethodSignature.make(method.returnType, method.parameters.map(it => ({ name: it.name, type: idl.maybeOptional(it.type, it.isOptional), })))
 
             // write
             const writer = library.createLanguageWriter()
@@ -94,6 +94,29 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
                 }
             }]
         })
+
+        const constantPrinterResults = scope.constants.flatMap((it):PrinterResult[] => {
+            const nsPath = idl.getNamespacesPathFor(it)
+            const writer = library.createLanguageWriter()
+
+            const imports = new ImportsCollector()
+            collectDeclDependencies(library, it.type, imports)
+
+            nsPath.forEach(it => writer.pushNamespace(it.name))
+            writer.writeConstant(it.name, it.type, it.value)
+            nsPath.forEach(() => writer.popNamespace())
+
+            return [{
+                collector: imports,
+                content: writer,
+                over: {
+                    node: it,
+                    role: idl.LayoutNodeRole.GLOBAL
+                }
+            }]
+        })
+
+        return constantPrinterResults.concat(methodPrinterResults)
     })
 
     if (printed.length === 0) {
