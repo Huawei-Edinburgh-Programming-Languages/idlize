@@ -352,7 +352,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
             const module = convertDeclToFeature(this.peerLibrary, entry).module
             if (!moduleToEntries.has(module))
                 moduleToEntries.set(module, [])
-            if (moduleToEntries.get(module)!.some(it => idl.isEqualByQualifedName(it, entry)))
+            if (moduleToEntries.get(module)!.some(it => idl.isEqualByQualifedName(it, entry, "namespace.name")))
                 return
             moduleToEntries.get(module)!.push(entry)
         }

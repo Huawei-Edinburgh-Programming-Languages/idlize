@@ -24,10 +24,7 @@ declare interface UIExtensionOptions {
    dpiFollowStrategy?: DpiFollowStrategy;
 }
 
-declare interface TerminationInfo {
-   code: number;
-   want?: import('../api/@ohos.app.ability.Want').default;
-}
+declare type TerminationInfo = import('./embedded_component').TerminationInfo;
 
 declare interface UIExtensionProxy {
    send(data: Record<string, Object>): void;

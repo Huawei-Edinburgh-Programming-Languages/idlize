@@ -49,12 +49,7 @@ declare type AltOffset = {
     dy2: Length;
 };
 
-declare interface Position {
-
-    x?: Length;
-
-    y?: Length;
-}
+declare type Position = import('./common').Position;
 
 declare interface LocalizedPadding {
 

@@ -218,15 +218,13 @@ export class PeerLibrary implements LibraryInterface {
                 : "[root]"
 
             // retry from root
-            if (pov) {
-                pov = undefined
-                for (let file of this.files) {
-                    result = resolveNamedNode([...file.file.packageClause, ...target], pov, corpus)
-                    if (result && idl.isEntry(result)) {
-                        // too much spam
-                        // console.log(`WARNING: Type reference '${type.name}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
-                        return result
-                    }
+            pov = undefined
+            for (let file of this.files) {
+                result = resolveNamedNode([...file.file.packageClause, ...target], pov, corpus)
+                if (result && idl.isEntry(result)) {
+                    // too much spam
+                    // console.log(`WARNING: Type reference '${type.name}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
+                    return result
                 }
             }
 

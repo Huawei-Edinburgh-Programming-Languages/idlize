@@ -590,14 +590,14 @@ export function getFileFor(node: IDLNode): IDLFile | undefined {
     return undefined
 }
 
-export function isEqualByQualifedName(a?: IDLNamedNode, b?: IDLNamedNode): boolean {
+export function isEqualByQualifedName(a?: IDLNamedNode, b?: IDLNamedNode, pattern: QNPattern = "package.namespace.name"): boolean {
     if (a === b)
         return true
     if (!a || !b)
         return false
     if (a.kind !== b.kind || a.name !== b.name)
         return false
-    return getFQName(a) === getFQName(b)
+    return getQualifiedName(a, pattern) === getQualifiedName(b, pattern)
 }
 
 export function getPackageClause(node: IDLNode): string[] {
