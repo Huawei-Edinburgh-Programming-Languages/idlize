@@ -20,13 +20,13 @@
 #include <future>
 #include <thread>
 
-#include "%API_GENERATED%.h"
 #include "Serializers.h"
 #include "interop-logging.h"
 #include "arkoala-macros.h"
 #include "tree.h"
 #include "logging.h"
 #include "dynamic-loader.h"
+#include "%API_GENERATED%.h"
 
 #undef max
 
@@ -908,6 +908,15 @@ namespace OHOS::Ace::NG::GeneratedModifier {
         if (!needGroupedLog(1))
             return;
         string out("Prepare(");
+        WriteToString(&out, node);
+        out.append(") \n");
+        appendGroupedLog(1, out);
+    }
+    void NotifyChangeImpl(Ark_NativePointer node, Ark_Int32 startIndex, Ark_Int32 endIndex, Ark_Int32 count)
+    {
+        if (!needGroupedLog(1))
+            return;
+        string out("NotifyChangeImpl(");
         WriteToString(&out, node);
         out.append(") \n");
         appendGroupedLog(1, out);

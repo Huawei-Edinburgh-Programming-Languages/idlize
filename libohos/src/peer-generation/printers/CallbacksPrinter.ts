@@ -152,11 +152,11 @@ class DeserializeCallbacksVisitor {
     private writeImports() {
         if (this.writer.language === Language.CPP) {
             const cppFile = this.destFile as CppSourceFile
-            cppFile.addInclude(`${this.libraryName}_api_generated.h`)
             cppFile.addInclude("callback_kind.h")
             cppFile.addInclude("Serializers.h")
             cppFile.addInclude("callbacks.h")
             cppFile.addInclude("common-interop.h")
+            cppFile.addInclude(`${this.libraryName}_api_generated.h`)
         }
 
         if (this.writer.language === Language.TS || this.writer.language === Language.ARKTS) {
@@ -426,11 +426,11 @@ class ManagedCallCallbackVisitor {
     }
 
     private writeImports() {
-        this.dest.addInclude(`${this.libraryName}_api_generated.h`)
         this.dest.addInclude("callback_kind.h")
         this.dest.addInclude("Serializers.h")
         this.dest.addInclude("common-interop.h")
         this.dest.addInclude("callbacks.h")
+        this.dest.addInclude(`${this.libraryName}_api_generated.h`)
     }
 
     private writeCallbackCaller(callback: idl.IDLCallback): void {
