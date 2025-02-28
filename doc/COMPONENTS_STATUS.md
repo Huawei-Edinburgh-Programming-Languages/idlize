@@ -2049,7 +2049,7 @@
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
 |*BaseGestureEvent*| *Class* | Maksimov Nikita | done |  | |
-|`getFingerList`| Function | Kovalev Sergey | done | | |
+|`getFingerList`| Function | Kovalev Sergey | in progress | done on FB| |
 |`setFingerList`| Function | Maksimov Nikita | done |  | implementation and UT Vadim Voronov |
 |*TapGestureEvent*| *Class* | Samarin Sergey | done | | nothing to do |
 |*LongPressGestureEvent*| *Class* | | | | |
