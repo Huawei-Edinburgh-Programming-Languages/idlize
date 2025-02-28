@@ -2528,7 +2528,7 @@
 |`getLetterSpacing`| Function | | |  | |
 |*TextShadowStyle*| *Class* | | |  | |
 |`getTextShadow`| Function | | | | |
-|*BackgroundColorStyle*| *Class* | | |  | |
+|*BackgroundColorStyle*| *Class* | Politov Mikhail | in progress |  | |
 |*GestureStyle*| *Class* | | |  | |
 |*ParagraphStyle*| *Class* | | |  | |
 |`getTextAlign`| Function | | |  | |
