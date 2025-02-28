@@ -247,9 +247,9 @@
 |`motionPath`| Function | Lobah Mikhail | done |  | |
 |`shadow`| Function | Roman Sedaikin | done |  | |
 |`clip`| Function | Dudkin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH deprecated partially |
-|`clipShape`| Function | Tuzhilkin Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH |
+|`clipShape`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature branch |
 |`mask`| Function | Maksimov Nikita | done |  |deprecated |
-|`maskShape`| Function | Dmitry A Smirnov| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`maskShape`| Function |Tuzhilkin Ivan| in progress |  | testskipped on feature branch |
 |`key`| Function | Lobah Mikhail | done |  | |
 |`id`| Function | Erokhin Ilya | done |  |  |
 |`geometryTransition`| Function | Lobah Mikhail | done |  | |
@@ -2519,13 +2519,13 @@
 |`getFontSize`| Function | | |  | |
 |`getFontWeight`| Function | | |  | |
 |`getFontStyle`| Function | | |  | |
-|*DecorationStyle*| *Class* | | |  | |
-|`getType`| Function | | |  | |
-|`getStyle`| Function | | |  | |
-|*BaselineOffsetStyle*| *Class* | | |  | |
-|`getBaselineOffset`| Function | | |  | |
-|*LetterSpacingStyle*| *Class* | | |  | |
-|`getLetterSpacing`| Function | | |  | |
+|*DecorationStyle*| *Class* | Tuzhilkin Ivan | in progress |  | |
+|`getType`| Function | Tuzhilkin Ivan | in progress |  | |
+|`getStyle`| Function | Tuzhilkin Ivan | in progress |  | |
+|*BaselineOffsetStyle*| *Class* | Tuzhilkin Ivan | in progress |  | |
+|`getBaselineOffset`| Function | Tuzhilkin Ivan | in progress |  | |
+|*LetterSpacingStyle*| *Class* | Tuzhilkin Ivan | in progress |  | |
+|`getLetterSpacing`| Function | Tuzhilkin Ivan | in progress |  | |
 |*TextShadowStyle*| *Class* | | |  | |
 |`getTextShadow`| Function | | | | |
 |*BackgroundColorStyle*| *Class* | Politov Mikhail | in progress |  | |
