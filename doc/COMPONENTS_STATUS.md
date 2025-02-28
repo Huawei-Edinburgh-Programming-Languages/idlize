@@ -2538,8 +2538,8 @@
 |`getWordBreak`| Function | | |  | |
 |*LineHeightStyle*| *Class* | | |  | |
 |`getLineHeight`| Function | | |  | |
-|*UrlStyle*| *Class* | | |  | |
-|`getUrl`| Function | | |  | |
+|*UrlStyle*| *Class* | Politov Mikhail | in progress |  | |
+|`getUrl`| Function | Politov Mikhail | in progress |  | |
 |*MutableStyledString*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBBYJE + |
 |`replaceString`| Function | Maksimov Nikita | done |  | |
 |`insertString`| Function | Maksimov Nikita | done |  | |
