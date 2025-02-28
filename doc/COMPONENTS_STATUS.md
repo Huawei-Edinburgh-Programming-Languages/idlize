@@ -2128,7 +2128,7 @@
 |*PanRecognizer*| *Class* | Politov Mikhail | done |  | |
 |`getPanGestureOptions`| Function | Politov Mikhail | done |  | |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked IDL|  | |
-|`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked Ace_Engine |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked Ace_Engine |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
 |*ListScroller*| *Class* |Morozov Sergey | blocked IDL|  |  |
 |`getItemRectInGroup`| Function |Morozov Sergey | devdone |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`scrollToItemInGroup`| Function |Morozov Sergey | done |  |  |
