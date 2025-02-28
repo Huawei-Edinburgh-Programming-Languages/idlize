@@ -268,6 +268,10 @@ export class OverloadsPrinter {
         }
         const collapsedMethod = collapseSameNamedMethods(methods.map(it => it.method), undefined, this.language)
         this.printer.writeMethodImplementation(collapsedMethod, (writer) => {
+            if (this.isComponent) {
+                writer.print(`if (this.checkPriority("${collapsedMethod.name}")) {`)
+                this.printer.pushIndent()
+            }
             if (methods.length > 1) {
                 const runtimeTypeCheckers = collapsedMethod.signature.args.map((_, argIndex) => {
                     const argName = collapsedMethod.signature.argName(argIndex)
@@ -282,6 +286,11 @@ export class OverloadsPrinter {
                 writer.makeThrowError(`Can not select appropriate overload`).write(writer)
             } else {
                 this.printPeerCallAndReturn(peer, collapsedMethod, methods[0])
+            }
+            if (this.isComponent) {
+                this.printer.popIndent()
+                this.printer.print(`}`)
+                this.printer.writeStatement(this.printer.makeReturn(collapsedMethod.signature.returnType == idl.IDLThisType ? this.printer.makeThis() : undefined))
             }
         })
     }
