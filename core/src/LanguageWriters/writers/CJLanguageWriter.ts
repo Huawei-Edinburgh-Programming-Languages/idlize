@@ -455,7 +455,7 @@ export class CJLanguageWriter extends LanguageWriter {
         throw new Error(`makeClassInit`)
     }
     makeArrayInit(type: idl.IDLContainerType, size?:number): LanguageExpression {
-        return this.makeString(`ArrayList<${this.getNodeName(type.elementType[0])}>(${size ?? ''})`)
+        return this.makeString(`ArrayList<${this.getNodeName(type.elementType[0])}>(Int64(${size ?? ''}))`)
     }
     makeMapInit(type: idl.IDLType): LanguageExpression {
         throw new Error(`TBD`)
@@ -527,7 +527,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return this.makeString("Option.None")
     }
     override makeUnwrapOptional(expression: LambdaExpression): LanguageExpression {
-        return new CJMatchExpression(expression, [this.makeString('Some(serializer)')], [this.makeString('serializer')], this.indentDepth())
+        return new CJMatchExpression(expression, [this.makeString(`Some(unwrap_value)`)], [this.makeString(`unwrap_value`)], this.indentDepth())
     }
     makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
         return this.makeString(`${value}`)
