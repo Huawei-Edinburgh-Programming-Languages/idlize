@@ -1591,10 +1591,10 @@
 |*LengthMetrics*| *Class* | Evstigneev Roman | in progress | | |
 |`px`| Function | Evstigneev Roman | in progress | | done for feature branch |
 |`resource`| Function | Evstigneev Roman | in progress | | done for feature branch |
-|`getUnit`| Function | Samarin Sergey | in progress | | |
-|`setUnit`| Function | Samarin Sergey | in progress | | |
+|`getUnit`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`setUnit`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`getValue`| Function | Samarin Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setValue`| Function | Samarin Sergey | in progress | | |
+|`setValue`| Function | Samarin Sergey | in progress | | done for feature branch |
 |*WebviewController*| *Class* | Politov Mikhail | in progress | | |
 |`initializeWebEngine`| Function | Politov Mikhail | in progress | | |
 |`loadUrl`| Function | Politov Mikhail | in progress | | |
@@ -1969,7 +1969,7 @@
 |`setKeyCode`| Function | Maksimov Nikita | done | | |
 |`getKeyText`| Function | Maksimov Nikita | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setKeyText`| Function | Maksimov Nikita | done | | |
-|`getKeySource`| Function | Maksimov Nikita, Samarin Sergey | in progress | |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getKeySource`| Function | Maksimov Nikita, Samarin Sergey | in progress | | done for feature branch https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setKeySource`| Function | Maksimov Nikita | done | | |
 |`getDeviceId`| Function | Maksimov Nikita | done | | |
 |`setDeviceId`| Function | Maksimov Nikita | done | | |
