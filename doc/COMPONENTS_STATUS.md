@@ -1644,14 +1644,14 @@
 |*GlobalScope_ohos_font*| *Class* | | | | |
 |`registerFont`| Function | | | | |
 |`getSystemFontList`| Function | | | | |
-|*ScaleSymbolEffect*| *Class* | Andrey Khudenkikh | in progress | | |
-|`getScope`| Function | Andrey Khudenkikh | in progress | | |
-|`setScope`| Function | Andrey Khudenkikh | in progress | | |
-|`getDirection`| Function | Andrey Khudenkikh | in progress | | |
-|`setDirection`| Function | Andrey Khudenkikh | in progress | | |
-|*ReplaceSymbolEffect*| *Class* | Andrey Khudenkikh | in progress | | |
-|`getScope`| Function | Andrey Khudenkikh | in progress | | |
-|`setScope`| Function | Andrey Khudenkikh | in progress | | |
+|*ScaleSymbolEffect*| *Class* | Andrey Khudenkikh | devdone | | |
+|`getScope`| Function | Andrey Khudenkikh | devdone | | |
+|`setScope`| Function | Andrey Khudenkikh | devdone | | |
+|`getDirection`| Function | Andrey Khudenkikh | devdone | | |
+|`setDirection`| Function | Andrey Khudenkikh | devdone | | |
+|*ReplaceSymbolEffect*| *Class* | Andrey Khudenkikh | devdone | | |
+|`getScope`| Function | Andrey Khudenkikh | devdone | | |
+|`setScope`| Function | Andrey Khudenkikh | devdone | | |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | done |  | |
 |`isModifiable`| Function | Tuzhilkin Ivan | done |  | |
 |`appendChild`| Function | Tuzhilkin Ivan | done |  | |
