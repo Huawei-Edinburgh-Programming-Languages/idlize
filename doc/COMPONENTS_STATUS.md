@@ -1710,8 +1710,8 @@
 |`setTransform`| Function | Andrey Khudenkikh | done |  |  |
 |*ImageBitmap*| *Class* | Pavelyev Ivan | done |  | |
 |`close`| Function | Pavelyev Ivan | done |  |  |
-|`getHeight`| Function | Pavelyev Ivan | done |  |  |
-|`getWidth`| Function | Pavelyev Ivan | done |  |  |
+|`getHeight`| Function | Pavelyev Ivan | blocked IDL |  | RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getWidth`| Function | Pavelyev Ivan | blocked IDL |  | RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*ImageData*| *Class* | | | | |
 |`getHeight`| Function | | | | |
 |`getWidth`| Function | | | | |
