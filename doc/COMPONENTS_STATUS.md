@@ -393,7 +393,7 @@
 |*EmbeddedComponent*| *Component* | Ekaterina Stepanova | blocked IDL |  | |
 |`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onTerminated`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`onError`| Function |Skroba Gleb | in preogress |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`onError`| Function |Skroba Gleb | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*Flex*| *Component* | Kovalev Sergey | done |  |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done |  |  |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1N86 (+) and https://gitee.com/openharmony/arkui_ace_engine/issues/IB1N6E, test in progress, Evstigneev Roman |
@@ -2159,14 +2159,14 @@
 |`setPathStack`| Function | Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
 |`getNavDestinationId`| Function | Morozov Sergey | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setNavDestinationId`| Function | Morozov Sergey | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
-|*NavPathInfo*| *Class* | | | | |
-|`getName`| Function | Skroba Gleb | in progress | | |
-|`setName`| Function | Skroba Gleb | in progress | | |
-|`setParam`| Function | Skroba Gleb | in progress | | |
-|`getOnPop`| Function | Skroba Gleb | in progress | | |
-|`setOnPop`| Function | Skroba Gleb | in progress | | |
-|`getIsEntry`| Function | Skroba Gleb | in progress | | |
-|`setIsEntry`| Function | Skroba Gleb | in progress | | |
+|*NavPathInfo*| *Class* | Skroba Gleb | in progress | | done on feature |
+|`getName`| Function | Skroba Gleb | in progress | | done on feature |
+|`setName`| Function | Skroba Gleb | in progress | | done on feature |
+|`setParam`| Function | Skroba Gleb | in progress | | done on feature |
+|`getOnPop`| Function | Skroba Gleb | in progress | | done on feature |
+|`setOnPop`| Function | Skroba Gleb | in progress | | done on feature |
+|`getIsEntry`| Function | Skroba Gleb | in progress | | done on feature |
+|`setIsEntry`| Function | Skroba Gleb | in progress | | done on feature |
 |*NavPathStack*| *Class* | Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`pushPath`| Function | Skroba Gleb | done |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`pushDestination`| Function | Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, can be implemented without return val - https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
