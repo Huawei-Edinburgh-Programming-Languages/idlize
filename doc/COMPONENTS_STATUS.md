@@ -973,7 +973,7 @@
 |*Slider*| *Component* |Morozov Sergey | blocked IDL |  |  |
 |`setSliderOptions`| Function |Morozov Sergey | done |  |  |
 |`blockColor`| Function |Morozov Sergey | done |  |  |
-|`trackColor`| Function |Morozov Sergey | blocked IDL |  |https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU|
+|`trackColor`| Function |Morozov Sergey | in progress | done on feature branch |unblocked https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU|
 |`selectedColor`| Function |Morozov Sergey |done  |  |
 |`minLabel`| Function |Morozov Sergey | done |  |deprecated  |
 |`maxLabel`| Function |Morozov Sergey | done |  |deprecated  |
@@ -1712,9 +1712,9 @@
 |`close`| Function | Pavelyev Ivan | done |  |  |
 |`getHeight`| Function | Pavelyev Ivan | blocked IDL |  | RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getWidth`| Function | Pavelyev Ivan | blocked IDL |  | RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|*ImageData*| *Class* | | | | |
-|`getHeight`| Function | | | | |
-|`getWidth`| Function | | | | |
+|*ImageData*| *Class* | Morozov Sergey | in progress | | |
+|`getHeight`| Function | Morozov Sergey | in progress | | |
+|`getWidth`| Function | Morozov Sergey | in progress | | |
 |*RenderingContextSettings*| *Class* | Vadim Voronov | in progress | | |
 |`getAntialias`| Function | Vadim Voronov | done | | implemented with UT on FB, doesn't present in Upstream |
 |`setAntialias`| Function | Vadim Voronov | done | | implemented with UT on FB, doesn't present in Upstream |
@@ -2045,7 +2045,7 @@
 |*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG & https://gitee.com/nikolay-igotti/idlize/issues/IBGU8S + |
 |`open`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
 |`close`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAX81Q & https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
-|*LinearGradient*| *Class* | Morozov Sergey | in progress | | |
+|*LinearGradient*| *Class* | Morozov Sergey | in progress | done on feature branch | |
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
 |*BaseGestureEvent*| *Class* | Maksimov Nikita | done |  | |
