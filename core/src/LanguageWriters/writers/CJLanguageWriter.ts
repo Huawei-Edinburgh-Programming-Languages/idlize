@@ -158,7 +158,7 @@ class CJLoopStatement implements LanguageStatement {
 class CJMapForEachStatement implements LanguageStatement {
     constructor(private map: string, private key: string, private value: string, private op: () => void) {}
     write(writer: LanguageWriter): void {
-        writer.print(`for ((key, value) in ${this.map}) {`)
+        writer.print(`for ((${this.key}, ${this.value}) in ${this.map}) {`)
         writer.pushIndent()
         this.op()
         writer.popIndent()
@@ -288,7 +288,9 @@ export class CJLanguageWriter extends LanguageWriter {
         return new CJLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor, this.typeForeignConvertor)
     }
     getNodeName(type: idl.IDLNode): string {
-        return this.typeConvertor.convert(type)
+        // rework for proper namespace logic
+        let name = this.typeConvertor.convert(type).split('.')
+        return name[name.length - 1]
     }
 
     writeClass(
