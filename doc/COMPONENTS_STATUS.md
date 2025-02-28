@@ -1641,7 +1641,7 @@
 |`fill`| Function | Lobah Mikhail | in progress| | |
 |`position`| Function | Lobah Mikhail| in progress| | |
 |`commands`| Function | Lobah Mikhail| in progress| | |
-|*GlobalScope_ohos_font*| *Class* | | | | |
+|*GlobalScope_ohos_font*| *Class* | Pavelyev Ivan | in progress | | |
 |`registerFont`| Function | Pavelyev Ivan | in progress | | |
 |`getSystemFontList`| Function | Pavelyev Ivan | in progress | | |
 |*ScaleSymbolEffect*| *Class* | Andrey Khudenkikh | devdone | | |
