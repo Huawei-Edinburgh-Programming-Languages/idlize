@@ -1629,13 +1629,13 @@
 |`width`| Function |Dudkin Sergey |in progress | | |
 |`height`| Function |Dudkin Sergey |in progress | | |
 |`size`| Function |Dudkin Sergey | in progress | | |
-|*EllipseShape*| *Class* | Erokhin Ilya | in progress | | |
-|`offset`| Function | Erokhin Ilya | in progress | | |
-|`fill`| Function | Erokhin Ilya | in progress | | |
-|`position`| Function | Erokhin Ilya | in progress | | |
-|`width`| Function | Erokhin Ilya | in progress | | |
-|`height`| Function | Erokhin Ilya | in progress | | |
-|`size`| Function | Erokhin Ilya | in progress | | |
+|*EllipseShape*| *Class* | Erokhin Ilya | in progress | | done on feature branch |
+|`offset`| Function | Erokhin Ilya | in progress | | done on feature branch |
+|`fill`| Function | Erokhin Ilya | in progress | | done on feature branch |
+|`position`| Function | Erokhin Ilya | in progress | | done on feature branch |
+|`width`| Function | Erokhin Ilya | in progress | | done on feature branch |
+|`height`| Function | Erokhin Ilya | in progress | | done on feature branch |
+|`size`| Function | Erokhin Ilya | in progress | | done on feature branch |
 |*PathShape*| *Class* | Lobah Mikhail | in progress| | |
 |`offset`| Function | Lobah Mikhail| in progress| | |
 |`fill`| Function | Lobah Mikhail | in progress| | |
