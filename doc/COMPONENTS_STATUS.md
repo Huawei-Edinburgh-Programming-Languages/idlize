@@ -2514,11 +2514,11 @@
 |`marshalling`| Function | Pavelyev Ivan | blocked IDL |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |`unmarshalling`| Function | Pavelyev Ivan | done |  | |
 |`getLength`| Function | Pavelyev Ivan | done |  | |
-|*TextStyle_styled_string*| *Class* | | |  | |
-|`getFontFamily`| Function | | |  | |
-|`getFontSize`| Function | | |  | |
-|`getFontWeight`| Function | | |  | |
-|`getFontStyle`| Function | | |  | |
+|*TextStyle_styled_string*| *Class* | Erokhin Ilya | in progress |  | testskipped on feature branch |
+|`getFontFamily`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
+|`getFontSize`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
+|`getFontWeight`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
+|`getFontStyle`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
 |*DecorationStyle*| *Class* | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
 |`getType`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
 |`getStyle`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
