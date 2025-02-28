@@ -2529,15 +2529,15 @@
 |*TextShadowStyle*| *Class* | | |  | |
 |`getTextShadow`| Function | | | | |
 |*BackgroundColorStyle*| *Class* | Politov Mikhail | in progress |  | |
-|*GestureStyle*| *Class* | | |  | |
-|*ParagraphStyle*| *Class* | | |  | |
-|`getTextAlign`| Function | | |  | |
-|`getTextIndent`| Function | | |  | |
-|`getMaxLines`| Function | | |  | |
-|`getOverflow`| Function | | |  | |
-|`getWordBreak`| Function | | |  | |
-|*LineHeightStyle*| *Class* | | |  | |
-|`getLineHeight`| Function | | |  | |
+|*GestureStyle*| *Class* | Dudkin Sergey| in progress |  | |
+|*ParagraphStyle*| *Class* |Dudkin Sergey |in progress |  | |
+|`getTextAlign`| Function |Dudkin Sergey |in progress |  | |
+|`getTextIndent`| Function |Dudkin Sergey |in progress |  | |
+|`getMaxLines`| Function |Dudkin Sergey |in progress |  | |
+|`getOverflow`| Function |Dudkin Sergey |in progress |  | |
+|`getWordBreak`| Function |Dudkin Sergey |in progress |  | |
+|*LineHeightStyle*| *Class* |Dudkin Sergey |in progress |  | |
+|`getLineHeight`| Function |Dudkin Sergey |in progress |  | |
 |*UrlStyle*| *Class* | Politov Mikhail | in progress |  | |
 |`getUrl`| Function | Politov Mikhail | in progress |  | |
 |*MutableStyledString*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBBYJE + |
