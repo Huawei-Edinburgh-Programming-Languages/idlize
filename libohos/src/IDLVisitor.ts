@@ -511,8 +511,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             if (!ts.isLiteralTypeNode(src.argument))
                 throw new Error(`Only literal-argument allowed in in import-type at ${src.getSourceFile().fileName}, ${nameSuggestion ?? "UNDEFINED"}`)
 
+            const module = (src.argument as ts.LiteralTypeNode).getText(src.getSourceFile()).replaceAll(/['"]/g, "")
             let clause = this.getModulePackageClause(
-                (src.argument as ts.LiteralTypeNode).getText(src.getSourceFile()).replaceAll(/['"]/g, ""), 
+                module, 
                 siblings)
             let target = asString(src.qualifier).replace(/^default./, "")
             if (target == "default")
@@ -529,6 +530,8 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             } else {
                 if (target)
                     clause = [...clause, target]
+                if (!clause.length)
+                    throw new Error("Empty import type clause is not allowed...")
                 dst.name = clause.join(".")
                 // dst.typeArguments = this.mapTypeArgs(src.typeArguments, dst.name)
             }
