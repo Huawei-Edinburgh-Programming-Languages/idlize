@@ -2519,13 +2519,13 @@
 |`getFontSize`| Function | | |  | |
 |`getFontWeight`| Function | | |  | |
 |`getFontStyle`| Function | | |  | |
-|*DecorationStyle*| *Class* | Tuzhilkin Ivan | in progress |  | |
-|`getType`| Function | Tuzhilkin Ivan | in progress |  | |
-|`getStyle`| Function | Tuzhilkin Ivan | in progress |  | |
-|*BaselineOffsetStyle*| *Class* | Tuzhilkin Ivan | in progress |  | |
-|`getBaselineOffset`| Function | Tuzhilkin Ivan | in progress |  | |
-|*LetterSpacingStyle*| *Class* | Tuzhilkin Ivan | in progress |  | |
-|`getLetterSpacing`| Function | Tuzhilkin Ivan | in progress |  | |
+|*DecorationStyle*| *Class* | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
+|`getType`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
+|`getStyle`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
+|*BaselineOffsetStyle*| *Class* | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
+|`getBaselineOffset`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
+|*LetterSpacingStyle*| *Class* | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
+|`getLetterSpacing`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
 |*TextShadowStyle*| *Class* | | |  | |
 |`getTextShadow`| Function | | | | |
 |*BackgroundColorStyle*| *Class* | Politov Mikhail | in progress |  | |
