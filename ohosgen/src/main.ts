@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-
 import { program } from "commander"
 import * as fs from "fs"
+import * as path from "path"
 import {
     generate,
     defaultCompilerOptions,
@@ -32,9 +32,13 @@ import {
     linkParentBack,
     transformMethodsAsync2ReturnPromise,
 } from "@idlizer/core/idl"
-import { IDLVisitor, loadPeerConfiguration,
+import {
+    IDLVisitor,
+    loadPeerConfiguration,
     IdlPeerProcessor,
-    loadPlugin, fillSyntheticDeclarations, peerGeneratorConfiguration,
+    loadPlugin,
+    fillSyntheticDeclarations,
+    peerGeneratorConfiguration,
     scanNotPredefinedDirectory,
     scanAndVisitCommonPredefined,
     formatInputPaths,
@@ -87,13 +91,27 @@ if (options.idl2peer) {
     const outDir = options.outputDir ?? "./out"
     const language = Language.fromString(options.language ?? "ts")
 
-    const { inputFiles, inputDirs, libraryPackages } = formatInputPaths(options)
+    const { inputFiles, inputDirs: origInputDirs, libraryPackages } = formatInputPaths(options)
+    let inputDirs: string[] = origInputDirs
+
+    if (inputDirs.length === 0 && inputFiles.length > 0) {
+        inputDirs = Array.from(new Set(inputFiles.map((file: string) => path.dirname(file))))
+    }
+
     validatePaths(inputDirs, "dir")
     validatePaths(inputFiles, "file")
 
     const idlLibrary = new PeerLibrary(language, libraryPackages)
     scanAndVisitCommonPredefined(idlLibrary);
-    idlLibrary.files.push(...scanNotPredefinedDirectory(inputDirs[0]))
+
+    inputDirs.forEach((dir: string) => {
+        if (fs.existsSync(dir)) {
+            idlLibrary.files.push(...scanNotPredefinedDirectory(dir))
+        } else {
+            console.warn(`Warning: Directory ${dir} does not exist`)
+        }
+    })
+
     new IdlPeerProcessor(idlLibrary).process()
 
     generateTarget(idlLibrary, outDir, language)
@@ -161,10 +179,10 @@ if (!didJob) {
 function processInputFiles(files: string[] | string | undefined): string[] {
     if (!files) return []
 
-    const processPath = (path: string) => {
-        const trimmedPath = path.trim()
-        if (!fs.existsSync(trimmedPath)) {
-            console.error(`Input file does not exist: ${trimmedPath}`)
+    const processPath = (p: string) => {
+        const trimmed = p.trim()
+        if (!fs.existsSync(trimmed)) {
+            console.error(`Input file does not exist: ${trimmed}`)
             return false
         }
         return true
@@ -189,7 +207,7 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
         idlLibrary.name = suggestLibraryName(idlLibrary)
     }
     if (!idlLibrary.name.length) {
-        throw new Error("No name can be assigned to generated package. please provide name via --default-idl-package ")
+        throw new Error("No name can be assigned to generated package. Please provide a name via --default-idl-package")
     }
     generateOhos(outDir, idlLibrary, {
         ...peerGeneratorConfiguration(),
