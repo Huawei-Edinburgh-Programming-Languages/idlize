@@ -2331,11 +2331,11 @@
 |*StyledStringController*| *Class* | Pavelyev Ivan | done |  | |
 |`setStyledString`| Function | Pavelyev Ivan | done |  | |
 |`getStyledString`| Function | Pavelyev Ivan | done |  | |
-|*LayoutManager*| *Class* | Andrey Khudenkikh | blocked IDL|  | |
+|*LayoutManager*| *Class* | Andrey Khudenkikh | in progress|  | |
 |`getLineCount`| Function | Andrey Khudenkikh | done |  | |
-|`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | blocked IDL |  | |
-|`getLineMetrics`| Function | Andrey Khudenkikh | blocked IDL |  | |
-|`getRectsForRange`| Function | Andrey Khudenkikh | blocked IDL |  | |
+|`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | in progress |  | |
+|`getLineMetrics`| Function | Andrey Khudenkikh | in progress |  | |
+|`getRectsForRange`| Function | Andrey Khudenkikh | in progress |  | |
 |*TextMenuItemId*| *Class* | Maksimov Nikita | done |  | |
 |`of`| Function | Maksimov Nikita | done |  | |
 |`equals`| Function | Maksimov Nikita | done |  | |
