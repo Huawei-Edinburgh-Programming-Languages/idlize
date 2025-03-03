@@ -131,6 +131,23 @@ constexpr TreeNode *AsNode(From ptr) {
     return reinterpret_cast<TreeNode *>(ptr);
 }
 
+void EmitOnClick(Ark_NativePointer node, Ark_ClickEvent event) {
+    LOGE("EmitOnclick %p", node);
+    auto frameNode = AsNode(node);
+    frameNode->callClickEvent(event);
+}
+void RegisterOnClick(Ark_NativePointer node, const Callback_ClickEvent_Void* event) {
+    auto frameNode = AsNode(node);
+    auto callback = *event;
+    callback.resource.hold(callback.resource.resourceId);
+    auto onEvent = [callback](Ark_ClickEvent event) {
+        if (callback.call) {
+            callback.call(callback.resource.resourceId, event);
+        }
+    };
+    frameNode->setClickEvent(std::move(onEvent));
+}
+
 void DumpTree(TreeNode *node, Ark_Int32 indent) {
     ARKOALA_LOG("%s[%s: %d]\n", string(indent * 2, ' ').c_str(), node->namePtr(), node->id());
     for (auto child: *node->children()) {
@@ -697,11 +714,6 @@ Ark_Float32 ConvertLengthMetricsUnit(Ark_Float32 value, Ark_Int32 originUnit, Ar
     return result;
 }
 
-void EmitOnClick(Ark_NativePointer node, Ark_ClickEvent event) {
-    auto frameNode = AsNode(node);
-    frameNode->callClickEvent(event);
-}
-
 void SetCustomMethodFlag(Ark_NodeHandle node, Ark_Int32 flag) {}
 Ark_Int32 GetCustomMethodFlag(Ark_NodeHandle node) {
     return 0;
@@ -819,13 +831,6 @@ void SetCurrentIndex(Ark_NativePointer nodePtr,
         data->updater.call(data->updater.resource.resourceId, index, mark, 1000);
     }
 }
-
-
-namespace GeneratedEvents {
-    const %CPP_PREFIX%ArkUIEventsAPI* g_OverriddenEventsImpl = nullptr;
-    const %CPP_PREFIX%ArkUIEventsAPI* %CPP_PREFIX%GetArkUiEventsAPI() { return g_OverriddenEventsImpl; }
-    void %CPP_PREFIX%SetArkUiEventsAPI(const %CPP_PREFIX%ArkUIEventsAPI* api) { g_OverriddenEventsImpl = api; }
-}
 }
 
 // handWritten implementations
@@ -927,26 +932,19 @@ namespace OHOS::Ace::NG::GeneratedModifier {
         void OnClick0Impl(Ark_NativePointer node,
                       const Callback_ClickEvent_Void* value)
     {
+        RegisterOnClick(node, value);
         if (!needGroupedLog(1))
             return;
         string out("onClick(");
         WriteToString(&out, value);
         out.append(") \n");
         appendGroupedLog(1, out);
-        auto frameNode = AsNode(node);
-        auto callback = *value;
-        callback.resource.hold(callback.resource.resourceId);
-        auto onEvent = [callback](Ark_ClickEvent event) {
-            if (callback.call) {
-                callback.call(callback.resource.resourceId, event);
-            }
-        };
-        frameNode->setClickEvent(std::move(onEvent));
     }
     void OnClick1Impl(Ark_NativePointer node,
                       const Callback_ClickEvent_Void* event,
                       const Ark_Number* distanceThreshold)
     {
+        RegisterOnClick(node, event);
         if (!needGroupedLog(1))
             return;
         string out("onClick(");
@@ -955,15 +953,6 @@ namespace OHOS::Ace::NG::GeneratedModifier {
         WriteToString(&out, distanceThreshold);
         out.append(") \n");
         appendGroupedLog(1, out);
-        auto frameNode = AsNode(node);
-        auto callback = *event;
-        callback.resource.hold(callback.resource.resourceId);
-        auto onEvent = [callback](Ark_ClickEvent event) {
-            if (callback.call) {
-                callback.call(callback.resource.resourceId, event);
-            }
-        };
-        frameNode->setClickEvent(std::move(onEvent));
     }
     } // CommonMethodModifier
 

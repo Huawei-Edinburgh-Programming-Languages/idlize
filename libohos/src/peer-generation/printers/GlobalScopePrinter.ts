@@ -73,6 +73,7 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
 
             peerMethods.forEach(peerMethod => {
                 writePeerMethod(
+                    library,
                     peerMethodWriter,
                     peerMethod,
                     true,
@@ -144,8 +145,6 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
 function fillCommonImports(collector: ImportsCollector, library: PeerLibrary) {
     collector.addFeatures([
         'Finalizable',
-        'isResource',
-        'isInstanceOf',
         'runtimeType',
         'RuntimeType',
         'SerializerBase',
@@ -164,6 +163,8 @@ function fillCommonImports(collector: ImportsCollector, library: PeerLibrary) {
         collector.addFeatures(['Deserializer'], './peers/Deserializer')
     }
     if (library.language === idl.Language.TS) {
+        collector.addFeature('isInstanceOf', '@koalaui/interop')
+        collector.addFeatures(['isResource', 'isPadding'], '../utils')
         collector.addFeatures(['Deserializer', 'createDeserializer'], './peers/Deserializer')
     }
     if (library.name === 'arkoala') {

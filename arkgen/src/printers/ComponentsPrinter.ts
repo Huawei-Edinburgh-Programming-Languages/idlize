@@ -23,7 +23,7 @@ import { removeExt, renameDtsToComponent, Language, isCommonMethod,
     MethodModifier,
     NamedMethodSignature
 } from '@idlizer/core'
-import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, collapseSameNamedMethods, collectComponents, collectDeclDependencies, collectJavaImports, COMPONENT_BASE, componentToPeerClass, convertIdlToCallback, convertPeerFilenameToModule, findComponentByType, groupOverloads, ImportsCollector, OverloadsPrinter, peerGeneratorConfiguration, printJavaImports, TargetFile, tsCopyrightAndWarning } from '@idlizer/libohos'
+import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, collapseSameNamedMethods, collectComponents, collectDeclDependencies, collectJavaImports, COMPONENT_BASE, componentToPeerClass, convertPeerFilenameToModule, findComponentByType, groupOverloads, ImportsCollector, OverloadsPrinter, peerGeneratorConfiguration, printJavaImports, TargetFile, tsCopyrightAndWarning } from '@idlizer/libohos'
 
 export function generateArkComponentName(component: string) {
     return `Ark${component}Component`
@@ -67,9 +67,13 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
         const imports = new ImportsCollector()
         this.file.peersToGenerate.forEach(peer => {
             imports.addFeatures(['int32', 'float32'], '@koalaui/common')
-            imports.addFeatures(["KStringPtr", "KBoolean", "RuntimeType", "runtimeType", "isResource", "isInstanceOf"], "@koalaui/interop")
+            imports.addFeatures(["KStringPtr", "KBoolean", "RuntimeType", "runtimeType"], "@koalaui/interop")
             imports.addFeatures(["NodeAttach", "remember"], "@koalaui/runtime")
             imports.addFeature('ComponentBase', '../ComponentBase')
+            if (this.language === Language.TS) {
+                imports.addFeature("isInstanceOf", "@koalaui/interop")
+                imports.addFeatures(["isResource", "isPadding"], "../utils")
+            }
             this.populateImports(imports)
 
             if (peer.originalParentFilename) {
@@ -81,12 +85,6 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             peer.attributesTypes.forEach((attrType) =>
                 imports.addFeature(attrType.typeName, peerModule)
             )
-
-            for (const method of peer.methods) {
-                for (const argType of method.method.signature.args)
-                    if (convertIdlToCallback(this.library, peer, method, argType))
-                        imports.addFeature("UseEventsProperties", './use_properties')
-            }
 
             const component = findComponentByType(this.library, idl.createReferenceType(peer.originalClassName!))!
             collectDeclDependencies(this.library, component.attributeDeclaration, imports)

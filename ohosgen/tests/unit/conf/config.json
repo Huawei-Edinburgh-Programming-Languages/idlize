@@ -1,0 +1,42 @@
+{
+    "TypePrefix": "OH_",
+    "LibraryPrefix": "",
+    "OptionalPrefix": "Opt_",
+    "GenerateUnused": false,
+    "dumpSerialized": false,
+    "ignoreMaterialized": [],
+    "forceMaterialized": [
+        "BaseContext"
+    ],
+    "forceCallback": [
+        "ForceCallbackListener"
+    ],
+    "boundProperties": {},
+    "rootComponents": [],
+    "standaloneComponents": [],
+    "parameterized": [],
+    "builderClasses": [],
+    "components": {
+        "custom": [],
+        "customNodeTypes": [],
+        "handWritten": [],
+        "ignoreEntry": [],
+        "ignoreEntryJava": [],
+        "ignoreComponents": [],
+        "ignorePeerMethod": [],
+        "ignoreMethodArkts": [],
+        "invalidAttributes": [],
+        "replaceThrowErrorReturn": []
+    },
+    "materialized": {
+        "ignoreReturnTypes": []
+    },
+    "cppPrefix": "GENERATED_",
+    "serializer": {
+        "ignore": []
+    },
+    "dummy": {
+        "ignoreMethods": {}
+    },
+    "CollapseOverloadsARKTS": false
+}

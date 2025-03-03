@@ -181,9 +181,12 @@ class PeerFileVisitor {
             const _peer = '_peer'
             writer.writeStatement(
                 writer.makeAssign(_peer, undefined,
-                    writer.makeString(
-                        `${writer.language == Language.CJ ? ' ' : 'new '}${peerClass}(${_peerPtr}, ${peerId}, "${peer.componentName}", flags)`
-                    ), true)
+                    writer.makeNewObject(peerClass, [
+                        writer.makeString(_peerPtr), 
+                        writer.makeString(peerId), 
+                        writer.makeString(`"${peer.componentName}"`),
+                        writer.makeString('flags')]),
+                    true)
             )
             writer.writeMethodCall(signature.argName(0), 'setPeer', [_peer], true)
             writer.writeStatement(writer.makeReturn(writer.makeString(_peer)))
@@ -192,7 +195,7 @@ class PeerFileVisitor {
 
     protected printPeerMethod(method: PeerMethod, printer: LanguageWriter) {
         this.library.setCurrentContext(`${method.originalParentName}.${method.overloadedName}`)
-        writePeerMethod(printer, method, true, this.dumpSerialized, "Attribute", "this.peer.ptr")
+        writePeerMethod(this.library, printer, method, true, this.dumpSerialized, "Attribute", "this.peer.ptr")
         this.library.setCurrentContext(undefined)
     }
 
@@ -240,7 +243,7 @@ class PeerFileVisitor {
         const defaultPeerImports = [
             `import { int32, float32 } from "@koalaui/common"`,
             `import { nullptr, KPointer, KInt, KBoolean, KStringPtr } from "@koalaui/interop"`,
-            `import { isResource, isInstanceOf, runtimeType, RuntimeType } from "@koalaui/interop"`,
+            `import { runtimeType, RuntimeType } from "@koalaui/interop"`,
             `import { Serializer } from "./Serializer"`,
             `import { ComponentBase } from "../../ComponentBase"`,
             `import { PeerNode } from "../../PeerNode"`
@@ -248,6 +251,8 @@ class PeerFileVisitor {
         switch (lang) {
             case Language.TS: {
                 return [...defaultPeerImports,
+                    `import { isInstanceOf } from "@koalaui/interop"`,
+                    `import { isResource, isPadding } from "../../utils"`,
                     `import { ${NativeModule.Generated.name} } from "../${NativeModule.Generated.name}"`,]
             }
             case Language.ARKTS: {
@@ -271,9 +276,7 @@ class JavaPeerFileVisitor extends PeerFileVisitor {
     }
 
     private printPackage(printer: LanguageWriter): void {
-        if (this.library.language == Language.JAVA) {
-            printer.print(`package ${ARKOALA_PACKAGE};\n`)
-        }
+        printer.print(`package ${ARKOALA_PACKAGE};\n`)
     }
 
     protected printApplyMethod(peer: PeerClass, printer: LanguageWriter) {
@@ -328,9 +331,7 @@ class CJPeerFileVisitor extends PeerFileVisitor {
     }
 
     private printPackage(printer: LanguageWriter): void {
-        if (this.library.language == Language.CJ) {
-            printer.print(`package idlize\n`)
-        }
+        printer.print(`package idlize\n`)
     }
 
     protected printApplyMethod(peer: PeerClass, printer: LanguageWriter) {
@@ -366,8 +367,8 @@ class PeersVisitor {
             const visitor = this.library.language == Language.JAVA
                 ? new JavaPeerFileVisitor(this.library, file, this.dumpSerialized)
                 : this.library.language == Language.CJ
-                    ? new CJPeerFileVisitor(this.library, file, this.dumpSerialized)
-                    : new PeerFileVisitor(this.library, file, this.dumpSerialized)
+                ? new CJPeerFileVisitor(this.library, file, this.dumpSerialized)
+                : new PeerFileVisitor(this.library, file, this.dumpSerialized)
             visitor.printFile()
             visitor.printers.forEach((printer, targetFile) => {
                 this.peers.set(targetFile, printer.getOutput())
@@ -404,7 +405,7 @@ export function printPeerFinalizer(peerClassBase: PeerClassBase, writer: Languag
     })
 }
 
-export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isIDL: boolean, dumpSerialized: boolean,
+export function writePeerMethod(library: PeerLibrary, printer: LanguageWriter, method: PeerMethod, isIDL: boolean, dumpSerialized: boolean,
     methodPostfix: string, ptr: string, returnType: IDLType = IDLVoidType, generics?: string[]
 ) {
     const signature = method.method.signature as NamedMethodSignature
@@ -493,35 +494,12 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
                     ]
 
                 } else if (!isPrimitiveType(returnType)) {
-                    let contType: LanguageExpression | undefined = undefined
-                    if (idl.isContainerType(returnType) && idl.IDLContainerUtils.isSequence(returnType)) {
-                        const elemType = returnType.elementType[0]
-                        if (idl.isNamedNode(elemType)) {
-                            contType = writer.makeNewObject(writer.getNodeName(returnType))
-                        }
-                    }
-                    let ret:LanguageExpression | undefined = undefined
-                    if (peerGeneratorConfiguration().isShouldReplaceThrowingError(method.originalParentName)) {
-                        ret = idl.isOptionalType(returnType)
-                            ? writer.makeUndefined()
-                            : contType
-                                ? contType
-                                : undefined
-                        if (ret) {
-                            writer.print(`console.log("Object deserialization is not implemented for type: ${contType}, return default value.")`)
-                        }
-                    }
-                    if (ret) {
-                        result = [writer.makeReturn(ret)]
+                    if ((idl.IDLContainerUtils.isSequence(returnType) || idl.IDLContainerUtils.isRecord(returnType)) && writer.language != Language.JAVA) {
+                        result = makeDeserializedReturn(library, printer, returnType)
                     } else if (isStructureType(returnType, writer.resolver) && writer.language != Language.JAVA) {
-                        const deserializerMethod = `read${writer.getNodeName(returnType).split(/\./).slice(-1)[0]}` // TODO Remove this hacky name conversion
-                        const instance = makeDeserializerInstance(returnValName, writer.language)
-                        result = [
-                            writer.makeStatement(writer.makeString(
-                                `return ${instance}.${deserializerMethod}()`
-                            ))
-                        ]
+                        result = makeDeserializedReturn(library, printer, returnType)
                     } else {
+                        // todo: implement other types deserialization!!!!
                         result = [writer.makeThrowError("Object deserialization is not implemented.")]
                     }
                 } else if (returnType === idl.IDLBufferType && writer.language !== Language.JAVA) {
@@ -542,6 +520,32 @@ export function writePeerMethod(printer: LanguageWriter, method: PeerMethod, isI
     })
 }
 
+function makeDeserializedReturn(library: PeerLibrary, writer: LanguageWriter, returnType: IDLType): LanguageStatement[] {
+    const deserializerName = `${returnValName}Deserializer`
+    writer.writeStatement(
+        writer.makeAssign(
+            deserializerName,
+            idl.createReferenceType("Deserializer"),
+            writer.makeString(makeDeserializerInstance(returnValName, writer.language)),
+            true,
+            false,
+            { assignRef: true }
+        )
+    )
+
+    const returnConvertor = library.typeConvertor(returnValName, returnType)
+    const returnResultValName = "returnResult"
+    return [
+        returnConvertor.convertorDeserialize(
+            'buffer',
+            deserializerName,
+            (expr) => writer.makeAssign(returnResultValName, returnType, expr, true),
+            writer
+        ),
+        writer.makeReturn(writer.makeString(returnResultValName))
+    ]
+}
+
 function makeDeserializerInstance(returnValName: string, language: Language) {
     if (language === Language.TS) {
         return `new Deserializer(${returnValName}.buffer, ${returnValName}.byteLength)`
@@ -549,6 +553,8 @@ function makeDeserializerInstance(returnValName: string, language: Language) {
         return `new Deserializer(${returnValName}, ${returnValName}.length)`
     } else if (language === Language.JAVA) {
         return `new Deserializer(${returnValName}, ${returnValName}.length)`
+    } else if (language === Language.CJ) {
+        return `Deserializer(${returnValName}, Int64(${returnValName}.size))`
     } else {
         throw "not implemented"
     }
