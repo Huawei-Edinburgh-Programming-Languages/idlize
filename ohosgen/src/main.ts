@@ -38,11 +38,11 @@ import {
     IdlPeerProcessor,
     loadPlugin,
     fillSyntheticDeclarations,
-    peerGeneratorConfiguration,
     scanNotPredefinedDirectory,
     scanAndVisitCommonPredefined,
     formatInputPaths,
     validatePaths,
+    peerGeneratorConfiguration,
 } from "@idlizer/libohos"
 import { generateOhos } from "./ohos"
 import { suggestLibraryName } from "./OhosNativeVisitor"
@@ -102,11 +102,23 @@ if (options.idl2peer) {
     validatePaths(inputFiles, "file")
 
     const idlLibrary = new PeerLibrary(language, libraryPackages)
-    scanAndVisitCommonPredefined(idlLibrary);
+    scanAndVisitCommonPredefined(idlLibrary)
 
     inputDirs.forEach((dir: string) => {
         if (fs.existsSync(dir)) {
-            idlLibrary.files.push(...scanNotPredefinedDirectory(dir))
+            const scannedFiles = scanNotPredefinedDirectory(dir)
+            inputFiles.forEach((inputFile: string) => {
+                const fileDir = path.dirname(inputFile)
+                if (fileDir === dir) {
+                    const filtered = scannedFiles.filter(f => path.resolve(f.originalFilename) === path.resolve(inputFile))
+                    if (filtered.length === 0) {
+                        console.error(`File ${inputFile} was not found in scanned directory ${dir}`)
+                        process.exit(1)
+                    } else {
+                        idlLibrary.files.push(...filtered)
+                    }
+                }
+            })
         } else {
             console.warn(`Warning: Directory ${dir} does not exist`)
         }
@@ -144,9 +156,7 @@ if (options.dts2peer) {
                         if (([newEntry, entry].every(isInterface)
                             || [newEntry, entry].every(isEnum)
                             || [newEntry, entry].every(isSyntheticEntry))) {
-                            if (newEntry.name === entry.name) {
-                                return true
-                            }
+                            return newEntry.name === entry.name
                         }
                         return false
                     }))
