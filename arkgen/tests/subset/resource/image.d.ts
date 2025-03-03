@@ -1,1 +1,4 @@
-interface PixelMap {}
+namespace image {
+    interface PixelMap {}
+}
+export default image

@@ -183,9 +183,7 @@ export class PeerLibrary implements LibraryInterface {
     }
 
     resolveTypeReference(type: idl.IDLReferenceType, terminalImports?: boolean): idl.IDLEntry | undefined {
-        let result = this.resolveNamedNode(
-            type.name.split("."),
-            type.parent)
+        let result = this.resolveNamedNode(type.name.split("."), type.parent)
         if (result && idl.isImport(result) && !terminalImports)
             result = this.resolveImport(result)
         return result

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLFile, IDLNode, IDLNamedNode, isReferenceType } from "./idl"
+import { IDLFile, IDLNode, IDLNamedNode, isReferenceType, hasExtAttribute, IDLExtendedAttributes } from "./idl"
 import { isFile, isNamedNode, isNamespace, isEnum, isInterface, isImport } from "./idl"
 
 export function resolveNamedNode(target: string[], pov: IDLNode|undefined, corpus: IDLFile[]): IDLNamedNode | undefined {
@@ -49,7 +49,10 @@ function resolveDownFromNode(target: string[], pov: IDLNode, withSelf: boolean):
         if (isReferenceType(pov) || !pov.name.length)
             return undefined
 
-        if (target[0] !== pov.name)
+        let nameMatched = target[0] === pov.name
+        if (!nameMatched)
+            nameMatched = target[0] === "default" && hasExtAttribute(pov, IDLExtendedAttributes.DefaultExport)
+        if (!nameMatched)
             return undefined
 
         target = target.slice(1)

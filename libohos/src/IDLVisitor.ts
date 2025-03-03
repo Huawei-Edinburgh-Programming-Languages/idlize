@@ -128,6 +128,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     private seenNames = new Set<string>()
     private context = new Context()
     exports: string[] = []
+    defaultExport?: string
     private currentNamespace?: idl.IDLNamespace = undefined
 
     private typeChecker: ts.TypeChecker
@@ -157,8 +158,14 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
 
         this.file.entries.unshift(...this.imports)
 
-        this.file.entries.forEach(idl.transformMethodsReturnPromise2Async)
         idl.linkParentBack(this.file!)
+        idl.linearizeNamespaceMembers(this.file.entries).forEach(it => {
+            idl.transformMethodsReturnPromise2Async(it)
+            if (this.defaultExport && this.defaultExport === idl.getQualifiedName(it, "namespace.name")) {
+                it.extendedAttributes ||= []
+                it.extendedAttributes.push({name:idl.IDLExtendedAttributes.DefaultExport})
+            }
+        })
         return this.file!
     }
 
@@ -284,6 +291,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
 
     /** visit nodes finding exported classes */
     visit(node: ts.Node) {
+        this.collectDefaultExport(node)
         if (ts.isClassDeclaration(node) ||
             ts.isInterfaceDeclaration(node) ||
             ts.isTypeAliasDeclaration(node) ||
@@ -357,7 +365,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         } else if (ts.isImportDeclaration(node)) {
         } else if (ts.isExportDeclaration(node)) {
             this.exports.push(node.getText())
-        } else if (ts.isExportAssignment(node)) {
+        } else if (ts.isExportAssignment(node)) { // export default Foo;
         } else if (ts.isImportEqualsDeclaration(node)) {
         } else if (ts.isEmptyStatement(node)) {
         } else if (node.kind == ts.SyntaxKind.EndOfFileToken) {
@@ -504,15 +512,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         for(const [nameSuggestion, src, dst] of this.importTypeNodes) {
             if (!ts.isLiteralTypeNode(src.argument))
                 throw new Error(`Only literal-argument allowed in in import-type at ${src.getSourceFile().fileName}, ${nameSuggestion ?? "UNDEFINED"}`)
-
-            const module = (src.argument as ts.LiteralTypeNode).getText(src.getSourceFile()).replaceAll(/['"]/g, "")
-            let clause = this.getModulePackageClause(
-                module, 
-                siblings)
-            let target = asString(src.qualifier).replace(/^default./, "")
-            if (target == "default")
-                target = ""
-
+            let target = asString(src.qualifier)
             if (target == "Callback" || target == "AsyncCallback") {
                 let funcType = this.serializeCallbackImpl(
                     target, [this.serializeType(src.typeArguments![0], nameSuggestion?.extend(`Import`))],
@@ -522,8 +522,10 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                 this.addSyntheticType(funcType)
                 dst.name = funcType.name
             } else {
+                const module = (src.argument as ts.LiteralTypeNode).getText(src.getSourceFile()).replaceAll(/['"]/g, "")
+                let clause = this.getModulePackageClause(module, siblings)
                 if (target)
-                    clause = [...clause, target]
+                    clause = [...clause, ...target.split(".")]
                 if (!clause.length)
                     throw new Error("Empty import type clause is not allowed...")
                 dst.name = clause.join(".")
@@ -586,6 +588,15 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             entity = isNamedTuple ? idl.IDLEntity.NamedTuple : idl.IDLEntity.Tuple
         }
         return [{ name: idl.IDLExtendedAttributes.Entity, value: entity }]
+    }
+
+    collectDefaultExport(node: ts.Node) {
+        const alias = (node as unknown as ts.Type).symbol
+        if (alias && alias.name === 'default') {
+            if (this.defaultExport)
+                throw new Error("internal error, maximum one default export is expected at the dts level, but second one is here")
+            this.defaultExport = identName(node)
+        }
     }
 
     computeComponentExtendedAttributes(node: ts.ClassDeclaration | ts.InterfaceDeclaration): idl.IDLExtendedAttribute[] | undefined {

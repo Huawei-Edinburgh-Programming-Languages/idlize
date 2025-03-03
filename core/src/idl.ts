@@ -69,6 +69,7 @@ export enum IDLExtendedAttributes {
     DtsTag = "DtsTag",
     Entity = "Entity",
     Import = "Import",
+    DefaultExport = "DefaultExport",
     IndexSignature = "IndexSignature",
     Interfaces = "Interfaces",
     NativeModule = "NativeModule",
@@ -1468,10 +1469,9 @@ export function isStringEnum(decl: IDLEnum): boolean {
 export function linearizeNamespaceMembers(entries: IDLEntry[]) {
     const linearized: IDLEntry[] = []
     for (const entry of entries) {
+        linearized.push(entry)
         if (isNamespace(entry))
             linearized.push(...linearizeNamespaceMembers(entry.members))
-        else
-            linearized.push(entry)
     }
     return linearized
 }
