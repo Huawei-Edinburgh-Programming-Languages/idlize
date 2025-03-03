@@ -278,6 +278,14 @@ export class TSLanguageWriter extends LanguageWriter {
     writeProperty(propName: string, propType: idl.IDLType) {
         throw new Error("writeProperty for TS is not implemented yet.")
     }
+    override writeTypeDeclaration(decl: idl.IDLTypedef): void {
+        const type = this.getNodeName(decl.type)
+        const typeParams = decl.typeParameters?.length ? `<${decl.typeParameters.join(",").replace("[]", "")}>` : ""
+        this.print(`export type ${decl.name}${typeParams} = ${type};`)
+    }
+    writeConstant(constName: string, constType: idl.IDLType, constVal?: string): void {
+        this.print(`export const ${constName}: ${this.getNodeName(constType)}${constVal ? ' = ' + constVal : ''}`)
+    }
     private writeDeclaration(name: string, signature: MethodSignature, needReturn: boolean, needBracket: boolean, modifiers?: MethodModifier[], generics?: string[]) {
         let prefix = !modifiers ? undefined : this.supportedModifiers
             .filter(it => modifiers.includes(it))
@@ -402,7 +410,7 @@ export class TSLanguageWriter extends LanguageWriter {
             this.makeString(`[${fields.map(it=> `${it}!`).join(",")}]`), false)
     }
     get supportedModifiers(): MethodModifier[] {
-        return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.STATIC]
+        return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.PROTECTED, MethodModifier.STATIC]
     }
     get supportedFieldModifiers(): FieldModifier[] {
         return [FieldModifier.PUBLIC, FieldModifier.PRIVATE, FieldModifier.PROTECTED, FieldModifier.READONLY, FieldModifier.STATIC]

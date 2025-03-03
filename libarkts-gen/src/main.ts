@@ -14,47 +14,42 @@
  */
 
 import { program } from "commander"
-import { toIDL } from "@idlizer/core"
+import { toIDLFile } from "@idlizer/core"
 import { FileEmitter } from "./FileEmitter"
 import { Config } from "./Config"
-import { IDLFile } from "./utils/idl"
 import { Options } from "./Options"
-import { VerifyVisitor } from "./visitors/VerifyVisitor"
 import * as path from "node:path"
 
 const cliOptions: {
     inputFile?: string,
     outputDir?: string,
-    transform?: boolean,
     files?: string
-    optionsFile?: string
+    optionsFile?: string,
+    debug?: boolean
 } = program
     .option('--input-file <path>', 'Path to file to generate from')
     .option('--output-dir <path>', 'Path to output dir')
-    .option('--transform', 'Applies some temporary fixes on input .idl')
     .option('--files <string>', 'Types of files to be emitted [bridges|bindings|enums], comma separated, no space')
     .option('--options-file <path>', 'Path to file which determines what to generate')
+    .option('--debug', 'Generate intermediate versions of IDL IR')
     .parse()
     .opts()
 
 function main() {
     const outDir = cliOptions.outputDir ?? `./out`
-    const idlFile = cliOptions.inputFile ?? `./input/full.idl`
+    const idlFileName = cliOptions.inputFile ?? `./input/full.idl`
     const files = cliOptions.files?.split(`,`)
     const optionsFile = cliOptions.optionsFile ?? path.join(__dirname, `../input/ignore.json5`)
-    const shouldFixInput = cliOptions.transform ?? false
-
-    const idl = new IDLFile(toIDL(idlFile))
-    new VerifyVisitor(idl).complain()
+    const isDebug = cliOptions.debug ?? false
 
     new FileEmitter(
         outDir,
-        idl,
+        toIDLFile(idlFileName),
         new Config(
             new Options(optionsFile),
-            shouldFixInput,
             files
         ),
+        isDebug
     ).print()
 }
 

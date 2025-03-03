@@ -70,7 +70,13 @@ export class EtsAssignStatement implements LanguageStatement {
 class ArkTSMapForEachStatement implements LanguageStatement {
     constructor(private map: string, private key: string, private value: string, private op: () => void) {}
     write(writer: LanguageWriter): void {
-        writer.print(`// TODO: map serialization not implemented`)
+        writer.print(`for (const pair of ${this.map}) {`)
+        writer.pushIndent()
+        writer.print(`const ${this.key} = pair[0]`)
+        writer.print(`const ${this.value} = pair[1]`)
+        this.op()
+        writer.popIndent()
+        writer.print(`}`)
     }
 }
 
@@ -245,8 +251,9 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         }
         return super.makeValueFromOption(value, destinationConvertor)
     }
-    makeCallIsResource(value: string): LanguageExpression {
-        return this.makeString(`isResource(${value})`)
+    override makeIsTypeCall(value: string, decl: idl.IDLInterface): LanguageExpression {
+        return makeInterfaceTypeCheckerCall(value, decl.name,
+            decl.properties.map(it => it.name), new Set(), this)
     }
     makeEnumEntity(enumEntity: IDLEnum, isExport: boolean): LanguageStatement {
         return new ArkTSEnumEntityStatement(enumEntity, isExport)
@@ -269,7 +276,8 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         if (!idl.isEnum(decl)) {
             throwException(`Declaration type must be Enum`)
         }
-        return this.makeCast(this.makeString(`${value}${idl.isStringEnum(decl) ? "" : ".valueOf()"}`),
+        // ((value as Axis) as int) - in case when Axis was casted to Object in Map<Axis, Smth>
+        return this.makeCast(this.makeCast(this.makeString(value), convertor.idlType),
             IDLI32Type).asString()
     }
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string,
@@ -367,17 +375,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
 }
 
-const builtInInterfaceTypes = new Map<string,
-    (writer: LanguageWriter, value: string) => LanguageExpression>([
-        ["Resource",
-            (writer: LanguageWriter, value: string) => writer.makeCallIsResource(value)],
-        ["Object",
-            (writer: LanguageWriter, value: string) => writer.makeCallIsObject(value)],
-        ["ArrayBuffer",
-            (writer: LanguageWriter, value: string) => writer.makeCallIsArrayBuffer(value)]
-    ],
-)
-
 function makeInterfaceTypeCheckerCall(
     valueAccessor: string,
     interfaceName: string,
@@ -385,9 +382,6 @@ function makeInterfaceTypeCheckerCall(
     duplicates: Set<string>,
     writer: LanguageWriter,
 ): LanguageExpression {
-    if (builtInInterfaceTypes.has(interfaceName)) {
-        return builtInInterfaceTypes.get(interfaceName)!(writer, valueAccessor)
-    }
     return writer.makeMethodCall(
         "TypeChecker",
         generateTypeCheckerName(interfaceName), [writer.makeString(valueAccessor),

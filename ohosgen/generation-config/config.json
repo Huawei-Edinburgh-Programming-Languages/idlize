@@ -8,6 +8,7 @@
     "forceMaterialized": [
         "BaseContext"
     ],
+    "forceCallback": [],
     "boundProperties": {},
     "rootComponents": [],
     "standaloneComponents": [],
@@ -34,5 +35,6 @@
     },
     "dummy": {
         "ignoreMethods": {}
-    }
+    },
+    "CollapseOverloadsARKTS": false
 }

@@ -254,8 +254,8 @@ function checkButton() {
     const builder: CustomBuilder = (): void => { }
     const options: Literal_Alignment_align = { align: Alignment.Center }
     checkResult("background", () => peer.backgroundAttribute(builder, options),
-        "background({.resource={.resourceId=104, .hold=0, .release=0}, .call=0}, {.tag=INTEROP_TAG_OBJECT, .value={.align={.tag=INTEROP_TAG_OBJECT, .value=Ark_Alignment(4)}}})")
-    checkResult("type", () => peer.typeAttribute(ButtonType.Circle), "type(Ark_ButtonType(1))")
+        "background({.resource={.resourceId=104, .hold=0, .release=0}, .call=0}, {.tag=INTEROP_TAG_OBJECT, .value={.align={.tag=INTEROP_TAG_OBJECT, .value=Ark_Alignment(9)}}})")
+    checkResult("type", () => peer.typeAttribute(ButtonType.Circle), "type(Ark_ButtonType(3))")
     checkResult("labelStyle", () => peer.labelStyleAttribute(new LabelStyleImpl(3)),
         "labelStyle({.overflow={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .maxLines={.tag=INTEROP_TAG_OBJECT, .value={.tag=102, .i32=3}}, .minFontSize={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .maxFontSize={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .heightAdaptivePolicy={.tag=INTEROP_TAG_UNDEFINED, .value={}}, .font={.tag=INTEROP_TAG_UNDEFINED, .value={}}})")
     checkResult("labelStyle2", () => peer.labelStyleAttribute(new LabelStyleImpl()),
@@ -341,7 +341,6 @@ function checkTwoSidesCallback() {
 }
 
 function checkTwoSidesCallbackSync() {
-    TestNativeModule._TestSetArkoalaCallbackCallerSync()
     wrapSystemCallback(1, (buff:byte[], len:int) => { deserializeAndCallCallback(new Deserializer(buff, len)); return 0 })
 
     let callResult1 = "NOT_CALLED"
@@ -363,7 +362,6 @@ function checkNumberIncrement() {
 }
 
 function checkCallbackWithReturn() {
-    TestNativeModule._TestSetArkoalaCallbackCallerSync()
     wrapSystemCallback(1, (buff:byte[], len:int) => { deserializeAndCallCallback(new Deserializer(buff, len)); return 0 })
 
     let callResult1 = "NOT_CALLED"
@@ -503,8 +501,6 @@ function checkNodeAPI() {
         `insertChildAfter(0x${child4.peer.ptr}, 0x${child5.peer.ptr}, 0x0)markDirty(0x${child4.peer.ptr}, 32)`)
     checkResult("BasicNodeAPI removeChild", () => root.peer.removeChild(child2.peer.ptr),
         `removeChild(0x${root.peer.ptr}, 0x${child2.peer.ptr})markDirty(0x${root.peer.ptr}, 32)`)
-    checkResult("BasicNodeAPI dispose", () => child2.peer.dispose(),
-        `disposeNode(0x${child2.peer.ptr})`)
     checkResult("BasicNodeAPI dumpTree", () => root.peer.dumpTree(),
         `dumpTreeNode(0x${root.peer.ptr})`)
     checkResult("BasicNodeAPI measureLayoutAndDraw", () => ArkUINativeModule._MeasureLayoutAndDraw(root.peer.ptr),

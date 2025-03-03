@@ -372,7 +372,7 @@ export class IdlWrapperProcessor {
         const deps: Set<idl.IDLEntry> = new Set(
             this.library.files
                 .flatMap(it => [...it.declarations])
-                .filter(it => !idl.isPackage(it) && !idl.isImport(it))
+                .filter(it => !idl.isImport(it))
         )
         const depsCopy = Array.from(deps)
         for (const dep of depsCopy) {
@@ -403,7 +403,7 @@ export class IdlWrapperProcessor {
                     file.wrapperClasses.set(wrapperClass.className, [wrapperClass, decl])
                     this.collectImports(file.importsCollector, wrapperClass.methods)
                     continue
-                } else if (!idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.GlobalScope)) {
+                } else {
                     this.library.serializerDeclarations.add(decl)
                 }
             }

@@ -99,8 +99,7 @@ function collectTypeCheckDeclarations(library: PeerLibrary): (idl.IDLInterface |
     })
     for (const file of library.files) {
         for (const decl of idl.linearizeNamespaceMembers(file.entries)) {
-            if (idl.isPackage(decl) || idl.isImport(decl) ||
-                idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.GlobalScope) ||
+            if (idl.isImport(decl) ||
                 isPredefined(decl) ||
                 isSystemEntry(decl)
             )

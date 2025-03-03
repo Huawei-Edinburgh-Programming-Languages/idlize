@@ -14,44 +14,54 @@
  */
 
 import {
+    createContainerType,
     createEmptyReferenceResolver,
     createInterface,
+    createMethod,
+    IDLContainerType,
     IDLContainerUtils,
     IDLEntry,
+    IDLExtendedAttribute,
     IDLInterface,
     IDLMethod,
     IDLNode,
+    IDLParameter,
     IDLPrimitiveType,
+    IDLReferenceType,
     IDLType,
-    IndentedPrinter,
+    IndentedPrinter, isContainerType,
     isEnum,
     isInterface,
     isPrimitiveType,
     isReferenceType,
+    Method,
+    MethodModifier,
+    MethodSignature,
     throwException,
     TSLanguageWriter
 } from "@idlizer/core"
 import { Config } from "../Config"
+import { mangleIfKeyword } from "./common";
 
 export function isString(node: IDLType): node is IDLPrimitiveType {
-    return isPrimitiveType(node) && node.name === "String"
+    return isPrimitiveType(node) && node.name === `String`
 }
 
 export function isSequence(node: IDLType): boolean {
     return IDLContainerUtils.isSequence(node)
 }
 
-export class IDLFile {
-    constructor(
-        public entries: IDLEntry[]
-    ) {}
-}
-
-export function createUpdatedInterface(node: IDLInterface, methods?: IDLMethod[], name?: string): IDLInterface {
+export function createUpdatedInterface(
+    node: IDLInterface,
+    methods?: IDLMethod[],
+    name?: string,
+    inheritance?: IDLReferenceType[],
+    extendedAttributes?: IDLExtendedAttribute[]
+): IDLInterface {
     return createInterface(
         name ?? node.name,
         node.subkind,
-        node.inheritance,
+        inheritance ?? node.inheritance,
         node.constructors,
         node.constants,
         node.properties,
@@ -59,10 +69,36 @@ export function createUpdatedInterface(node: IDLInterface, methods?: IDLMethod[]
         node.callables,
         node.typeParameters,
         {
-            extendedAttributes: node.extendedAttributes,
+            extendedAttributes: extendedAttributes ?? node.extendedAttributes,
             fileName: node.fileName,
             documentation: node.documentation
         }
+    )
+}
+
+export function createUpdatedMethod(
+    node: IDLMethod,
+    name?: string,
+    parameters?: IDLParameter[],
+    returnType?: IDLType,
+    extendedAttributes?: IDLExtendedAttribute[]
+): IDLMethod {
+    return createMethod(
+        name ?? node.name,
+        parameters ?? node.parameters,
+        returnType ?? node.returnType,
+        {
+            isAsync: node.isAsync,
+            isFree: node.isFree,
+            isStatic: node.isStatic,
+            isOptional: node.isOptional,
+        },
+        {
+            extendedAttributes: extendedAttributes ?? node.extendedAttributes,
+            fileName: node.fileName,
+            documentation: node.documentation,
+        },
+        node.typeParameters
     )
 }
 
@@ -73,6 +109,12 @@ export class Typechecker {
         const declarations = this.idl.filter(it => name === it.name)
         if (declarations.length === 1) {
             return declarations[0]
+        }
+        const ir = declarations
+            .filter(isInterface)
+            .filter(it => isIrNamespace(it))
+        if (ir.length === 1) {
+            return ir[0]
         }
         return undefined
     }
@@ -92,20 +134,11 @@ export class Typechecker {
         return this.isHeir(parent.name, ancestor)
     }
 
-
     isPeer(node: string): boolean {
-        return this.isHeir(node, Config.astNodeCommonAncestor) && node !== Config.astNodeCommonAncestor
-    }
-
-    isHollow(name: string): boolean {
-        const declaration = this.findRealDeclaration(name)
-        if (declaration === undefined) {
-            return false
-        }
-        if (!isInterface(declaration)) {
-            return false
-        }
-        return declaration.methods.length === 0
+        if (node === Config.astNodeCommonAncestor) return false // TODO: is handwritten
+        if (this.isHeir(node, Config.astNodeCommonAncestor)) return true
+        if (this.isHeir(node, Config.defaultAncestor)) return true
+        return false
     }
 
     isReferenceTo(type: IDLType, isTarget: (type: IDLNode) => boolean): boolean  {
@@ -148,24 +181,11 @@ export function parent(node: IDLInterface): string | undefined {
     return node.inheritance[0]?.name
 }
 
-export function isAbstract(node: IDLInterface): boolean {
-    return nodeType(node) === undefined
-}
-
-export function isGetter(node: IDLMethod): boolean {
-    if (node.parameters.length !== 1) {
-        return false
-    }
-    return node.extendedAttributes
-        ?.some(it => it.name === Config.getterAttribute)
-        ?? false
-}
-
 export function createDefaultTypescriptWriter() {
     return new TSLanguageWriter(
         new IndentedPrinter(),
         createEmptyReferenceResolver(),
-        { convert: (node: IDLType) => throwException(`Unexpected type conversion`) }
+        { convert: (node: IDLType) => throwException(`unexpected type conversion`) }
     )
 }
 
@@ -173,4 +193,48 @@ export function signatureTypes(node: IDLMethod): IDLType[] {
     return node.parameters
         .map(it => it.type)
         .concat(node.returnType)
+}
+
+export function isIrNamespace(node: IDLInterface): boolean {
+    return nodeNamespace(node) === Config.irNamespace
+}
+
+export function createSequence(inner: IDLType): IDLContainerType {
+    return createContainerType(
+        `sequence`,
+        [inner]
+    )
+}
+
+export function innerType(node: IDLContainerType): IDLType {
+    return node.elementType[0]
+}
+
+export function innerTypeIfContainer(node: IDLType): IDLType {
+    if (isContainerType(node)) {
+        return innerType(node)
+    }
+    return node
+}
+
+export function makeMethod(
+    name: string,
+    parameters: IDLParameter[],
+    returnType: IDLType,
+    modifiers?: MethodModifier[]
+): Method {
+    return new Method(
+        name,
+        new MethodSignature(
+            returnType,
+            parameters
+                .map(it => it.type),
+            undefined,
+            undefined,
+            parameters
+                .map(it => it.name)
+                .map(mangleIfKeyword)
+        ),
+        modifiers ?? []
+    )
 }

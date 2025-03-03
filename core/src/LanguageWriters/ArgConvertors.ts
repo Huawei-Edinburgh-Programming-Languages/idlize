@@ -26,7 +26,7 @@ import {
     StringExpression
 } from "./LanguageWriter";
 import { RuntimeType } from "./common";
-import { generatorTypePrefix } from "../config"
+import { generatorConfiguration, generatorTypePrefix } from "../config"
 import { LibraryInterface } from "../LibraryInterface";
 import { hashCodeFromString, warn } from "../util";
 import { UnionRuntimeTypeChecker } from "../peer-generation/unions";
@@ -592,7 +592,7 @@ export class ArrayConvertor extends BaseArgConvertor { //
         const statements: LanguageStatement[] = []
         const arrayType = this.idlType
         statements.push(writer.makeAssign(lengthBuffer, idl.IDLI32Type, writer.makeString(`${deserializerName}.readInt32()`), true))
-        statements.push(writer.makeAssign(bufferName, arrayType, writer.makeArrayInit(this.type), true, false))
+        statements.push(writer.makeAssign(bufferName, arrayType, writer.makeArrayInit(this.type, lengthBuffer), true, false))
         statements.push(writer.makeArrayResize(bufferName, writer.getNodeName(arrayType), lengthBuffer, deserializerName))
         statements.push(writer.makeLoop(counterBuffer, lengthBuffer,
             this.elementConvertor.convertorDeserialize(`${bufferName}_buf`, deserializerName, (expr) => {
@@ -643,7 +643,7 @@ export class MapConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         // Map size.
         const mapSize = printer.makeMapSize(value)
-        printer.writeMethodCall(`${param}Serializer`, "writeInt32", [mapSize.asString()])
+        printer.writeMethodCall(`${param}Serializer`, "writeInt32", [printer.castToInt(mapSize.asString(), 32)])
         printer.writeStatement(printer.makeMapForEach(value, `${value}_key`, `${value}_value`, () => {
             this.keyConvertor.convertorSerialize(param, `${value}_key`, printer)
             this.valueConvertor.convertorSerialize(param, `${value}_value`, printer)
@@ -811,7 +811,7 @@ export class CustomTypeConvertor extends BaseArgConvertor {
     }
 }
 
-export class OptionConvertor extends BaseArgConvertor { //
+export class OptionConvertor extends BaseArgConvertor {
     private readonly typeConvertor: ArgConvertor
     // TODO: be smarter here, and for smth like Length|undefined or number|undefined pass without serializer.
     constructor(private library: LibraryInterface, param: string, public type: idl.IDLType) {
@@ -860,11 +860,7 @@ export class OptionConvertor extends BaseArgConvertor { //
         statements.push(writer.makeAssign(runtimeBufferName, undefined,
             writer.makeCast(writer.makeString(`${deserializerName}.readInt8()`), writer.getRuntimeType()), true))
         const bufferType = this.nativeType()
-        if (writer.language == Language.CJ) {
-            statements.push(writer.makeAssign(bufferName, bufferType, idl.isOptionalType(bufferType) ? writer.makeString('Option.None') : undefined, true, false))
-        } else {
-            statements.push(writer.makeAssign(bufferName, bufferType, undefined, true, false))
-        }
+        statements.push(writer.makeAssign(bufferName, bufferType, writer.language == Language.CJ ? writer.makeNull() : undefined, true, false))
 
         const thenStatement = new BlockStatement([
             this.typeConvertor.convertorDeserialize(`${bufferName}_`, deserializerName, (expr) => {
@@ -1005,10 +1001,18 @@ export class FunctionConvertor extends BaseArgConvertor { //
 
 export class MaterializedClassConvertor extends BaseArgConvertor {
     constructor(param: string, public declaration: idl.IDLInterface) {
-        super(idl.createReferenceType(declaration), [RuntimeType.OBJECT], false, true, param)
+        super(idl.createReferenceType(declaration), [RuntimeType.OBJECT], false, false, param)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
-        throw new Error("Must never be used")
+        switch (writer.language) {
+            case Language.CPP:
+                return `static_cast<${generatorTypePrefix()}${this.declaration.name}>(${param})`
+            case Language.JAVA:
+            case Language.CJ:
+                return `MaterializedBase.toPeerPtr(${param})`
+            default:
+                return `toPeerPtr(${param})`
+        }
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeStatement(
@@ -1028,7 +1032,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
         return idl.createReferenceType(this.declaration)
     }
     interopType(): idl.IDLType {
-        throw new Error("Must never be used")
+        return idl.IDLPointerType
     }
     isPointerType(): boolean {
         return false

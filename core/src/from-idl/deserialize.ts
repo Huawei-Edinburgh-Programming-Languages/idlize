@@ -41,16 +41,13 @@ export function resolveSyntheticType(type: idl.IDLReferenceType): idl.IDLEntry |
     return syntheticTypes.get(type.name)
 }
 
-export function toIDLNode(file: string, node: webidl2.IDLRootType): idl.IDLEntry {
+function toIDLNode(file: string, node: webidl2.IDLRootType): idl.IDLEntry {
     return toIDLNodeForward(file, node)
 }
 
 function toIDLNodeForward(file: string, node: webidl2.IDLRootType): idl.IDLEntry {
     if (isEnum(node)) {
         return toIDLEnum(file, node)
-    }
-    if (isPackage(node)) {
-        return toIDLPackage(node)
     }
     if (isImport(node)) {
         return toIDLImport(node)
@@ -105,14 +102,6 @@ function isCallable(node: webidl2.IDLInterfaceMemberType): boolean {
     return node.extAttrs.some(it => it.name == "Invoke")
 }
 
-function toIDLPackage(node: webidl2.PackageType): idl.IDLPackage {
-    if (node.clause.startsWith('"')) { // TODO: remove after new schema formation
-        //node.clause = node.clause.substring(1, node.clause.length - 1)
-        throw new Error("Obsolete IDL-source syntax detected")
-    }
-    return idl.createPackage(node.clause.split("."))
-}
-
 function toIDLImport(node: webidl2.ImportType): idl.IDLImport {
     // console.log(node)
     return idl.createImport(node.clause.split("."), node.alias||undefined)
@@ -154,8 +143,6 @@ function toIDLInterface(file: string, node: webidl2.InterfaceType): idl.IDLInter
             extendedAttributes: toExtendedAttributes(node.extAttrs),
         }
     )
-    if (result.inheritance.length && idl.isReferenceType(result.inheritance[0]))
-        result.inheritance[0].typeArguments = extractTypeArguments(file, node.extAttrs, idl.IDLExtendedAttributes.TypeArguments)
     if (node.extAttrs.find(it => it.name === "Synthetic"))
         addSyntheticType(node.name, result)
     return result
@@ -469,14 +456,21 @@ function findExtendedAttribute(extAttrs: webidl2.ExtendedAttribute[], name: idl.
     return attr ? toExtendedAttributeValue(attr) : undefined
 }
 
-export function toIDL(file: string): idl.IDLEntry[] {
-    const content = fs.readFileSync(file).toString()
-    return webidl2.parse(content).map(it => toIDLNode(file, it))
-}
-
-export function toIDLFile(fileName: string): idl.IDLFile {
-    const content = fs.readFileSync(fileName).toString()
-    const entries = webidl2.parse(content).map(it => toIDLNode(fileName, it))
-    const file = idl.createFile(entries, fileName)
+export function toIDLFile(fileName: string, content?: string): idl.IDLFile {
+    if (undefined === content)
+        content = fs.readFileSync(fileName).toString()
+    let packageClause: string[] = []
+    const entries = webidl2.parse(content)
+        .filter(it => {
+            if (!it.type)
+                return false
+            if (isPackage(it)) {
+                packageClause = it.clause.split(".")
+                return false
+            }
+            return true
+        })
+        .map(it => toIDLNode(fileName, it))
+    const file = idl.createFile(entries, fileName, packageClause)
     return idl.linkParentBack(file)
 }

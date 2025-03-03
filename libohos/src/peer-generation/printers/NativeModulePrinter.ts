@@ -21,6 +21,7 @@ import { BlockStatement, ExpressionStatement, IfStatement, LanguageWriter, Metho
 import * as idl from  '@idlizer/core/idl'
 import { NativeModule } from "../NativeModule";
 import { ArkTSSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
+import { idlFreeMethodsGroupToLegacy } from "../GlobalScopeUtils";
 
 class NativeModulePrinterBase {
     readonly nativeModule: LanguageWriter = this.library.createLanguageWriter(this.language)
@@ -109,8 +110,24 @@ class NativeModuleArkUIGeneratedVisitor extends NativeModulePrinterBase {
             if (clazz.finalizer) this.printPeerMethod(clazz.finalizer, idl.IDLPointerType)
             clazz.methods.forEach(method => {
                 const returnType = method.tsReturnType()
-                const returnAsValue = returnType && (idl.isPrimitiveType(returnType) || isStructureType(returnType, this.library))
+                const returnAsValue = returnType
+                    && (
+                        idl.isPrimitiveType(returnType)
+                        || isStructureType(returnType, this.library)
+                        || idl.IDLContainerUtils.isSequence(returnType)
+                        || idl.IDLContainerUtils.isRecord(returnType)
+                    )
                 this.printPeerMethod(method, returnAsValue ? returnType : idl.IDLPointerType)
+            })
+        })
+    }
+
+    private printGlobalScopeMethods() {
+        this.library.globals.forEach(entry => {
+            const peerMethods = idlFreeMethodsGroupToLegacy(this.library, entry.methods)
+            peerMethods.forEach(method => {
+                const returnAsValue = idl.isPrimitiveType(method.returnType) || isStructureType(method.returnType, this.library)
+                this.printPeerMethod(method, returnAsValue ? method.returnType : idl.IDLPointerType)
             })
         })
     }
@@ -134,6 +151,7 @@ class NativeModuleArkUIGeneratedVisitor extends NativeModulePrinterBase {
             }
         }
         this.printMaterializedMethods()
+        this.printGlobalScopeMethods()
     }
 }
 
@@ -200,10 +218,23 @@ function writeCJNativeModuleMethod(method: Method, nativeModule: LanguageWriter,
                 functionCallArgs.push(signature.argsNames[ordinal])
             }
         }
-        const resultVarName = 'result'
+        let resultVarName = 'result'
         let shouldReturn = false
         if (signature.returnType === idl.IDLVoidType) {
             printer.print(`${new FunctionCallExpression(nativeName, functionCallArgs.map(it => printer.makeString(it))).asString()}`)
+        } else if (signature.returnType === idl.IDLInteropReturnBufferType) {
+            printer.writeStatement(
+                printer.makeAssign(
+                    resultVarName,
+                    undefined,
+                    new FunctionCallExpression(nativeName, functionCallArgs.map(it => printer.makeString(it))),
+                    true
+                )
+            )
+            printer.print(`let array = Array<UInt8>(Int64(result.length), repeat: 0)`)
+            printer.print(`for (i in 0..array.size) { unsafe { array[i] = result.data.read() } }`)
+            shouldReturn = true
+            resultVarName = 'array'
         } else {
             printer.writeStatement(
                 printer.makeAssign(
@@ -286,6 +317,7 @@ function collectNativeModuleImports(module: NativeModuleType, file: SourceFile, 
         const tsFile = file as TsSourceFile
         tsFile.imports.addFeatures([
             "KInt",
+            "KLong",
             "KBoolean",
             "KFloat",
             "KUInt",
@@ -396,12 +428,9 @@ export function printCJPredefinedNativeFunctions(library: PeerLibrary, module: N
     const entries = collectPredefinedNativeModuleEntries(library, module)
     const visitor = new CJNativeModulePredefinedVisitor(library, library.language, entries)
     visitor.visit()
-    const writer = library.createLanguageWriter(Language.CJ) as CJLanguageWriter
+    const writer = library.createLanguageWriter() as CJLanguageWriter
     writer.writeCJForeign(writer => {
         writer.concat(visitor.nativeFunctions)
-        const maybeTemplate = maybeReadLangTemplate(`${module.name}_nativeFunctions`, Language.CJ)
-        if (maybeTemplate)
-            writer.writeLines(maybeTemplate)
     })
     const file = SourceFile.make("", library.language, library)
     collectNativeModuleImports(module, file, library)

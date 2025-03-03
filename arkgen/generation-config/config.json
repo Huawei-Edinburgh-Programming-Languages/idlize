@@ -11,11 +11,13 @@
         "Configuration",
         "UIGestureEvent",
         "GestureHandler",
-        "AnimatableArithmetic"
+        "AnimatableArithmetic",
+        "DynamicNode"
     ],
     "forceMaterialized": [
         "BaseContext"
     ],
+    "forceCallback": [],
     "boundProperties": {
         "Checkbox": [
             "select"
@@ -155,10 +157,7 @@
         "ignoreEntry": [
             "Optional",
             "AppStorage",
-            "DataAddOperation",
             "DataChangeListener",
-            "DataChangeOperation",
-            "DataReloadOperation",
             "DisturbanceFieldOptions",
             "EntryOptions",
             "Environment",
@@ -248,5 +247,6 @@
                 "emitClickEvent"
             ]
         }
-    }
+    },
+    "CollapseOverloadsARKTS": true
 }

@@ -120,14 +120,12 @@ function mergeSetGetProperties(properties: idl.IDLProperty[]): idl.IDLProperty[]
 
 export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     private file: idl.IDLFile = idl.createFile([])
-    private package?: idl.IDLPackage
     private imports: idl.IDLImport[] = []
 
     private seenNames = new Set<string>()
     private context = new Context()
     exports: string[] = []
     private currentNamespace?: idl.IDLNamespace = undefined
-    private defaultPackage: string
 
     private typeChecker: ts.TypeChecker
     constructor(
@@ -138,18 +136,12 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         private predefinedTypeResolver?: ReferenceResolver,
     ) {
         this.typeChecker = program.getTypeChecker()
-        const sourceFilePath = path.resolve(sourceFile.fileName)
-        const suggestedPackage = (options.fileToPackage as string[] | undefined)
-            ?.map(it => it.split(":"))
-            ?.find(it => path.resolve(it[0]) === sourceFilePath)?.[1]
-        this.defaultPackage = suggestedPackage ?? options.defaultIdlPackage as string ?? "arkui"
     }
 
     visitPhase1(): idl.IDLFile {
         this.file.fileName = this.sourceFile.fileName
         ts.forEachChild(this.sourceFile, (node) => this.visit(node))
-        this.package = idl.createPackage(this.detectPackageName(this.sourceFile))
-        this.file.entries.unshift(this.package!)
+        this.file.packageClause = this.detectPackageName(this.sourceFile)
         return this.file
     }
 
@@ -159,13 +151,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
 
         ts.forEachChild(this.sourceFile, (node) => this.visitImport(node, siblings))
 
-        if (idl.isPackage(this.file.entries[0]))
-            this.file.entries.splice(1, 0, ...this.imports)
-        else
         this.file.entries.unshift(...this.imports)
 
         this.file.entries.forEach(idl.transformMethodsReturnPromise2Async)
-        this.collectGlobalScope()
         idl.linkParentBack(this.file!)
         return this.file!
     }
@@ -227,72 +215,6 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         return result
     }
 
-    private getGlobalScopeName(nsName:string): string {
-        return `GlobalScope${nsName}_${path.basename(this.sourceFile.fileName).replace(".d.ts", "").replaceAll("@", "").replaceAll(".", "_")}`
-    }
-
-    collectGlobalScope() {
-
-        const groups = new Map<idl.IDLNamespace, [idl.IDLConstant[], idl.IDLMethod[]]>()
-        const topLevel: [idl.IDLConstant[], idl.IDLMethod[]] = [[], []]
-
-        function filter(entries: idl.IDLEntry[], ns:idl.IDLNamespace | undefined) {
-            return entries.filter(entry => {
-                const bucket = ns === undefined
-                    ? topLevel
-                    : getOrPut(groups, ns, () => [[], []] as [idl.IDLConstant[], idl.IDLMethod[]])
-
-                if (idl.isConstant(entry)) {
-                    bucket[0].push(entry)
-                    return false;
-                } else if (idl.isMethod(entry)) {
-                    const clone = idl.createMethod(
-                        entry.name,
-                        entry.parameters,
-                        entry.returnType,
-                        entry,
-                        entry,
-                        entry.typeParameters)
-                    clone.isStatic = true
-                    clone.isFree = false
-                    bucket[1].push(clone)
-                    return false;
-                } else if (idl.isNamespace(entry)) {
-                    entry.members = filter(entry.members, entry)
-                }
-                return true;
-            })
-        }
-        this.file.entries = filter(this.file.entries, undefined)
-        this.file.entries.forEach(it => idl.linkParentBack(it))
-
-        const globals = (Array.from(groups.entries()) as [idl.IDLNamespace | undefined, [idl.IDLConstant[], idl.IDLMethod[]]][])
-            .concat([[undefined, topLevel]])
-
-        for (const [ns, [constants, methods]] of globals) {
-            if (constants.length || methods.length) {
-                const nsName = ns ? '_' + idl.getFQName(ns) : ''
-                const int = idl.createInterface(
-                    this.getGlobalScopeName(nsName),
-                    idl.IDLInterfaceSubkind.Interface,
-                    [],
-                    [],
-                    constants,
-                    [],
-                    methods,
-                    [], [], {
-                        extendedAttributes: [ { name: idl.IDLExtendedAttributes.GlobalScope } ],
-                        fileName: this.sourceFile.fileName
-                    })
-                if (ns) {
-                    ns.members.push(int)
-                } else {
-                    this.file.entries.push(int)
-                }
-            }
-        }
-    }
-
     detectPackageName(sourceFile: ts.SourceFile): string[] {
         let baseDirs = this.options.baseDir || this.options.inputDir
         if (!baseDirs && this.options.inputFiles) {
@@ -309,8 +231,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         let relativeFileName
         for (const baseDir of baseDirs) {
             const rel = path.normalize(path.relative(baseDir, sourceFile.fileName))
-            if(rel.startsWith(".."))
+            if(rel.startsWith("..")) {
                 continue
+            }
             if (!relativeFileName || relativeFileName.length > rel.length)
                 relativeFileName = rel
         }
@@ -471,14 +394,14 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             warn(`Import at '${this.sourceFile.fileName}', module '${module}: not in a closed set`)
             return
         }
-        const modulePackage = sibling.result.entries.find(it => idl.isPackage(it)) as (idl.IDLPackage | undefined)
-        if (!modulePackage) {
+        const modulePackageClause = sibling.result.packageClause
+        if (!modulePackageClause) {
             warn(`Import at '${this.sourceFile.fileName}', module '${module}: no Package entry found`)
             return
         }
 
         if (!node.importClause) {
-            this.pushImportFor(node, modulePackage.clause)
+            this.pushImportFor(node, modulePackageClause)
             return
         }
 
@@ -488,7 +411,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             if (ts.isNamespaceImport(namedBindings)) {
                 if (name)
                     throw new Error(`what is this case: namespace ${namedBindings.parent.getText()}`)
-                this.pushImportFor(node, modulePackage.clause, namedBindings.name.getText())
+                this.pushImportFor(node, modulePackageClause, namedBindings.name.getText())
             } else if (ts.isNamedImports(namedBindings)) {
                 if (name) {
                     throw new Error(`what is this case: import ${namedBindings.parent.getText()}`)
@@ -496,12 +419,12 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                 for(const element of namedBindings.elements) {
                     const aliasName = element.name.getText()
                     const targetEntityName = element.propertyName?.getText() || aliasName
-                    this.pushImportFor(node, [...modulePackage.clause, ...targetEntityName.split(".")], aliasName)
+                    this.pushImportFor(node, [...modulePackageClause, ...targetEntityName.split(".")], aliasName)
                 }
             }
         } else { // !namedBindings
             if (name)
-                this.pushImportFor(node, [...modulePackage.clause, ...name.getText().split(".")], name.getText())
+                this.pushImportFor(node, [...modulePackageClause, ...name.getText().split(".")], name.getText())
         }
     }
 
@@ -716,13 +639,13 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     }
     pickProperties(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): idl.IDLProperty[] {
         const properties = members
-            .filter(it => (ts.isPropertySignature(it) || ts.isPropertyDeclaration(it) || this.isCommonMethodUsedAsProperty(it)) && !isPrivate(it.modifiers))
+            .filter(it => (ts.isPropertySignature(it) || ts.isPropertyDeclaration(it) || this.isCommonMethodUsedAsProperty(it) || this.isMethodUsedAsCallback(it)) && !isPrivate(it.modifiers))
             .map(it => this.serializeProperty(it, nameSuggestion))
         return mergeSetGetProperties(properties)
     }
     pickMethods(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): idl.IDLMethod[] {
         return members
-            .filter(it => (ts.isMethodSignature(it) || ts.isMethodDeclaration(it) || ts.isIndexSignatureDeclaration(it)) && !this.isCommonMethodUsedAsProperty(it) && !isPrivate(it.modifiers))
+            .filter(it => (ts.isMethodSignature(it) || ts.isMethodDeclaration(it) || ts.isIndexSignatureDeclaration(it)) && !this.isCommonMethodUsedAsProperty(it) && !this.isMethodUsedAsCallback(it) && !isPrivate(it.modifiers))
             .map(it => this.serializeMethod(it as ts.MethodDeclaration | ts.MethodSignature, nameSuggestion))
     }
     pickCallables(members: ReadonlyArray<ts.TypeElement>, nameSuggestion: NameSuggestion): idl.IDLCallable[] {
@@ -804,9 +727,10 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
 
     // TODO: class and interface look identical, but their elements' types are different
     serializeInterface(node: ts.InterfaceDeclaration): idl.IDLInterface {
+        const name = getExportedDeclarationNameByDecl(node) ?? "UNDEFINED"
+        const nameSuggestion = NameSuggestion.make(name)
         const allMembers = node.members.filter(it => it.name && ts.isIdentifier(it.name))
         const inheritance = this.serializeInheritance(node.heritageClauses)
-        const nameSuggestion = NameSuggestion.make(getExportedDeclarationNameByDecl(node) ?? "UNDEFINED")
         const childNameSuggestion = nameSuggestion.prependType()
         this.context.enter(nameSuggestion.name)
         return idl.createInterface(
@@ -983,6 +907,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         let parameters: idl.IDLParameter[]
         if (isAsync) {
             returnType = idl.IDLVoidType
+            parameters = [idl.createParameter("error", idl.createReferenceType("BusinessError"))]
+            if (types[0] != idl.IDLVoidType)
+                parameters.push(idl.createParameter(`result`, types[0]))
             parameters = types[0] == idl.IDLVoidType ? [] : [{
                 kind: idl.IDLKind.Parameter,
                 name: `result`,
@@ -1321,29 +1248,49 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         return collapseTypes(types, selectedUnionName)
     }
 
+    methodToPropertyType(property: ts.TypeElement | ts.ClassElement,
+        escapedName: string,
+        extendedAttributes: idl.IDLExtendedAttribute[],
+        nameSuggestion?: NameSuggestion): idl.IDLType {
+        if (this.isMethodUsedAsCallback(property)) {
+            const parameters = property.parameters.map(it => this.serializeParameter(it))
+            const retType = this.serializeType(property.type)
+            let name = generateSyntheticFunctionName(parameters, retType, retType !== idl.IDLVoidType)
+            const fileName = property.getSourceFile().fileName
+            const extendedAttributes: idl.IDLExtendedAttribute[] = []
+            const funcType = idl.createCallback(name, parameters, retType, { fileName, extendedAttributes })
+            this.addSyntheticType(funcType)
+            return idl.createReferenceType(funcType.name)
+        }
+        if (this.isCommonMethodUsedAsProperty(property)) {
+            let [type, syntheticEntry] = IDLVisitorConfig.checkParameterTypeReplacement(property.parameters[0])
+            if (syntheticEntry) this.addSyntheticType(syntheticEntry)
+            if (!isDefined(type)) {
+                type = this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!))
+            }
+            extendedAttributes.push({ name: idl.IDLExtendedAttributes.CommonMethod })
+            return type
+        }
+        throw new Error("Not a CommonMethod or forced callback")
+    }
     serializeProperty(property: ts.TypeElement | ts.ClassElement, nameSuggestion?: NameSuggestion): idl.IDLProperty {
         const [propName, escapedName] = escapeName(this.propertyName(property.name!)!)
         nameSuggestion = nameSuggestion?.extend(escapedName)
         let extendedAttributes: idl.IDLExtendedAttribute[] = this.computeClassMemberExtendedAttributes(property, propName, escapedName)
         this.computeDeprecatedExtendAttributes(property, extendedAttributes)
         if (ts.isMethodDeclaration(property) || ts.isMethodSignature(property)) {
-            if (!this.isCommonMethodUsedAsProperty(property)) throw new Error("Wrong")
-            let [type, syntheticEntry] = IDLVisitorConfig.checkParameterTypeReplacement(property.parameters[0])
-            if (syntheticEntry) this.addSyntheticType(syntheticEntry)
-            if (!isDefined(type)) {
-                type = this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!))
+            if (this.isMethodUsedAsCallback(property) || this.isCommonMethodUsedAsProperty(property)) {
+                return idl.createProperty(
+                    escapedName,
+                    this.methodToPropertyType(property, escapedName, extendedAttributes, nameSuggestion),
+                    false,
+                    false,
+                    isDefined(property.parameters[0].questionToken), {
+                    extendedAttributes: extendedAttributes,
+                    documentation: getDocumentation(this.sourceFile, property, this.options.docs),
+                })
             }
-
-            extendedAttributes.push({ name: idl.IDLExtendedAttributes.CommonMethod })
-            return idl.createProperty(
-                escapedName,
-                type,
-                false,
-                false,
-                isDefined(property.parameters[0].questionToken), {
-                extendedAttributes: extendedAttributes,
-                documentation: getDocumentation(this.sourceFile, property, this.options.docs),
-            })
+            throw new Error("Not a CommonMethod or forced callback")
         }
 
         if (ts.isPropertyDeclaration(property) || ts.isPropertySignature(property)) {
@@ -1439,7 +1386,13 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             this.isCommonAttributeMethod(member) &&
             member.parameters.length == 1 && (returnType == "T" || returnType == className)
     }
-
+    isMethodUsedAsCallback(member: ts.ClassElement | ts.TypeElement): member is (ts.MethodDeclaration | ts.MethodSignature) {
+        const interfaceName = (ts.isInterfaceDeclaration(member.parent)) ? identName(member.parent.name) : undefined
+        if (interfaceName) {
+            return generatorConfiguration().forceCallback.includes(interfaceName)
+        }
+        return false
+    }
     /** Serialize a signature (call or construct) */
     serializeMethod(method: ts.MethodDeclaration | ts.MethodSignature | ts.IndexSignatureDeclaration | ts.FunctionDeclaration, nameSuggestion: NameSuggestion | undefined, isFree: boolean = false): idl.IDLMethod {
         const extendedAttributes = this.computeDeprecatedExtendAttributes(method)
@@ -1576,22 +1529,31 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         }) // check
     }
 
-    // TODO here we only handle initialized constants. Do we care for uninitialized const declarations?
     serializeConstants(stmt: ts.VariableStatement): idl.IDLConstant[] {
         return stmt.declarationList.declarations
-            .filter(decl => decl.initializer) // todo: handle uninitialized declarations (d.ts).
-            .map(decl => {
+            .flatMap(decl => {
                 const name = nameOrNull(decl.name)!
-                let [type, value] = this.guessTypeAndValue(decl)
-                return idl.createConstant(name, type, value, {
+                const result = this.guessTypeAndValue(decl)
+                if (!result) {
+                    return []
+                }
+                const [type, value] = result
+                return [idl.createConstant(name, type, value, {
                     documentation: getDocumentation(this.sourceFile, decl, this.options.docs),
                     fileName: stmt.getSourceFile().fileName,
-                })
+                })]
             })
     }
 
-    private guessTypeAndValue(declaration: ts.VariableDeclaration):  [idl.IDLType, string] {
-        if (declaration.type) return [this.serializeType(declaration.type), declaration.initializer!.getText()]
+    private guessTypeAndValue(declaration: ts.VariableDeclaration):  [idl.IDLType, string] | undefined {
+        if (declaration.type && declaration.initializer) return [this.serializeType(declaration.type), declaration.initializer.getText()]
+        if (declaration.type) {
+            const value = peerGeneratorConfiguration().constants.get(declaration.name.getText())
+            if (value) {
+                return [this.serializeType(declaration.type), value]
+            }
+            return undefined
+        }
         if (declaration.initializer) {
             let value = declaration.initializer.getText()
             if (value.startsWith('"') || value.startsWith("'")) {
@@ -1614,7 +1576,6 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             }
             throw new Error(`Cannot infer type of ${value}`)
         }
-        throw new Error(`Cannot infer type of ${declaration.getText()}`)
     }
 
     private collectTypeParameters(typeParameters: ts.NodeArray<ts.Node> | undefined): string[] | undefined {

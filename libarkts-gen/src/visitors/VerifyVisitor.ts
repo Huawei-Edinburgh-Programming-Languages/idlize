@@ -13,9 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLFile } from "../utils/idl"
-import { CachedLogger } from "../CachedLogger"
-import { isInterface, isReferenceType } from "@idlizer/core"
+import { IDLFile, isInterface, isReferenceType } from "@idlizer/core"
 
 export class VerifyVisitor {
     constructor(
@@ -33,6 +31,9 @@ export class VerifyVisitor {
             .map(it => it.type)
             .filter(isReferenceType)
             .forEach(it => this.verifyDeclaration(it.name))
+        this.incorrectDeclarations.forEach(it =>
+            console.log(`Expected reference type "${it}" to have exactly one declaration`)
+        )
     }
 
     private verifyDeclaration(name: string): void {
@@ -44,8 +45,5 @@ export class VerifyVisitor {
             return
         }
         this.incorrectDeclarations.add(name)
-        CachedLogger.warn(
-            `Expected reference type "${name}" to have exactly one declaration, got: ${declarations.length}`
-        )
     }
 }

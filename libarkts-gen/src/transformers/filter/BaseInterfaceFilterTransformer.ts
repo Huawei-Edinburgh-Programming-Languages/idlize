@@ -13,10 +13,11 @@
  * limitations under the License.
  */
 
-import { createUpdatedInterface, IDLFile, Typechecker } from "../../utils/idl"
-import { IDLMethod, isContainerType, isInterface, isReferenceType } from "@idlizer/core"
+import { createUpdatedInterface, innerTypeIfContainer, Typechecker } from "../../utils/idl"
+import { createFile, IDLFile, IDLMethod, isInterface, isReferenceType } from "@idlizer/core"
+import { Transformer } from "../Transformer";
 
-export abstract class BaseInterfaceFilterTransformer {
+export abstract class BaseInterfaceFilterTransformer implements Transformer {
     constructor(
         protected file: IDLFile
     ) {}
@@ -24,7 +25,7 @@ export abstract class BaseInterfaceFilterTransformer {
     protected typechecker = new Typechecker(this.file.entries)
 
     transformed(): IDLFile {
-        return new IDLFile(
+        return createFile(
             this.file.entries
                 .flatMap(entry => {
                     if (!isInterface(entry)) {
@@ -37,12 +38,13 @@ export abstract class BaseInterfaceFilterTransformer {
                         entry,
                         entry.methods
                             .filter(it => !this.shouldFilterOutMethod(entry.name, it.name))
-                            .filter(it => !this.isReferring(
+                            .filter(it => !this.isReferringForbiddenOrMissing(
                                 it,
                                 (name: string) => this.shouldFilterOutInterface(name)
                             ))
                     )
-                })
+                }),
+            this.file.fileName
         )
     }
 
@@ -50,21 +52,22 @@ export abstract class BaseInterfaceFilterTransformer {
 
     protected abstract shouldFilterOutInterface(name: string): boolean
 
-    protected isReferring(node: IDLMethod, predicate: (_: string) => boolean): boolean {
+    protected isReferringForbiddenOrMissing(node: IDLMethod, predicate: (_: string) => boolean): boolean {
         return node.parameters
             .map(it => it.type)
             .concat(node.returnType)
-            .map(it => {
-                if (isContainerType(it)) {
-                    return it.elementType[0]
+            .map(innerTypeIfContainer)
+            .filter(it => {
+                if (isReferenceType(it)) {
+                    if (this.typechecker.isReferenceTo(it, isInterface) && predicate(it.name)) {
+                        return true
+                    }
+                    if (this.typechecker.findRealDeclaration(it.name) === undefined) {
+                        return true
+                    }
                 }
-                return it
+                return false
             })
-            .filter(it =>
-                isReferenceType(it)
-                && this.typechecker.isReferenceTo(it, isInterface)
-                && predicate(it.name)
-            )
             .length !== 0
     }
 }

@@ -15,11 +15,10 @@
 
 import * as path from "node:path"
 import * as fs from "node:fs"
-import { forceWriteFile, printIDL } from "@idlizer/core"
+import { forceWriteFile, IDLFile, toIDLString } from "@idlizer/core"
 import { BridgesPrinter } from "./visitors/interop/bridges/BridgesPrinter"
 import { BindingsPrinter } from "./visitors/interop/bindings/BindingsPrinter"
 import { EnumsPrinter } from "./visitors/enums/EnumsPrinter"
-import { IDLFile } from "./utils/idl"
 import { Config } from "./Config"
 import { InteropTransformer } from "./transformers/InteropTransformer"
 import { AstNodeFilterTransformer } from "./transformers/filter/AstNodeFilterTransformer"
@@ -29,6 +28,12 @@ import { Result } from "./visitors/MultiFilePrinter"
 import { AllPeersPrinter } from "./visitors/peers/AllPeersPrinter"
 import { NodeMapPrinter } from "./visitors/peers/NodeMapPrinter"
 import { IndexPrinter } from "./visitors/peers/IndexPrinter"
+import { TwinMergeTransformer } from "./transformers/TwinMergeTransformer"
+import { ParameterTransformer } from "./transformers/ParameterTransformer";
+import { ConstMergeTransformer } from "./transformers/ConstMergeTransformer";
+import { VerifyVisitor } from "./visitors/VerifyVisitor";
+import { AddContextTransformer } from "./transformers/AddContextTransformer";
+import { Transformer } from "./transformers/Transformer";
 
 class SingleFileEmitter {
     constructor(
@@ -53,7 +58,12 @@ export class FileEmitter {
         private outDir: string,
         private file: IDLFile,
         private config: Config,
+        private shouldLog: boolean
     ) {}
+
+    private logDir = `./out/log-idl`
+
+    private logCount = 0
 
     private bridgesPrinter = new SingleFileEmitter(
         (idl: IDLFile) => new BridgesPrinter(idl).print(),
@@ -99,18 +109,25 @@ export class FileEmitter {
 
     print(): void {
         let idl = this.file
-
-        idl = new OptionsFilterTransformer(this.config, idl).transformed()
-        idl = new MultipleDeclarationFilterTransformer(idl).transformed()
-        console.log(idl.entries.forEach(it => printIDL(it)))
+        idl = this.withLog(new OptionsFilterTransformer(this.config, idl))
+        idl = this.withLog(new AddContextTransformer(idl))
+        idl = this.withLog(new TwinMergeTransformer(idl))
+        idl = this.withLog(new MultipleDeclarationFilterTransformer(idl))
         this.printFile(this.enumsPrinter, idl)
+        idl = this.withLog(new AstNodeFilterTransformer(idl))
+        idl = this.withLog(new ParameterTransformer(idl),)
+        this.printPeers(idl)
+        this.printInterop(idl)
+    }
 
-        idl = new AstNodeFilterTransformer(idl).transformed()
-        this.printFiles(this.peersPrinter, idl)
-        this.printFile(this.nodeMapPrinter, idl)
+    private printPeers(idl: IDLFile): void {
+        idl = this.withLog(new ConstMergeTransformer(idl))
         this.printFile(this.indexPrinter, idl)
+        this.printFiles(this.peersPrinter, idl)
+    }
 
-        idl = new InteropTransformer(idl).transformed()
+    private printInterop(idl: IDLFile): void {
+        idl = this.withLog(new InteropTransformer(idl))
         this.printFile(this.bindingsPrinter, idl)
         this.printFile(this.bridgesPrinter, idl)
     }
@@ -150,6 +167,19 @@ export class FileEmitter {
     }
 
     private readTemplate(name: string): string {
-        return fs.readFileSync(path.join(__dirname, `./../templates/${name}`), 'utf8')
+        return fs.readFileSync(path.join(__dirname, `./../templates/${name}`), `utf8`)
+    }
+
+    private withLog(transformer: Transformer): IDLFile {
+        const idl = transformer.transformed()
+        if (this.shouldLog) {
+            const name = Reflect.get(transformer, `constructor`).name
+            forceWriteFile(
+                path.join(this.logDir, `${this.logCount}-after-${name}.idl`),
+                toIDLString(idl, {})
+            )
+            this.logCount += 1
+        }
+        return idl
     }
 }

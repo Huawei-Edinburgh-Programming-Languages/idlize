@@ -81,8 +81,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         const finalizableType = FinalizableType
         const superClassName = generifiedTypeName(clazz.superClass, getSuperName(clazz)) ?? (new Set([Language.JAVA]).has(printer.language) ? ARK_MATERIALIZEDBASE : undefined)
 
-        const needPrintInterals = !clazz.isGlobalScope()
-        const interfaces: string[] = needPrintInterals ? ["MaterializedBase"] : []
+        const interfaces: string[] = printer.language == Language.CJ ? [] : ["MaterializedBase"]
         if (clazz.interfaces) {
             interfaces.push(...clazz.interfaces.map(it => `${this.namespacePrefix}${it.name}`))
         }
@@ -117,26 +116,22 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             }
         }
         else {
-            if (needPrintInterals) {
-                // Write internal Materialized class with fromPtr(ptr) method
-                printer.writeClass(
-                    getInternalClassName(clazz.className),
-                    writer => writeFromPtrMethod(clazz, writer, classTypeParameters),
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined,
-                    false
-                )
-            }
+            // Write internal Materialized class with fromPtr(ptr) method
+            printer.writeClass(
+                getInternalClassName(clazz.className),
+                writer => writeFromPtrMethod(clazz, writer, classTypeParameters),
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                false
+            )
         }
 
         const implementationClassName = clazz.getImplementationName()
         printer.writeClass(implementationClassName, writer => {
-            if (needPrintInterals &&
-                (writer.language == Language.TS || writer.language == Language.ARKTS || writer.language == Language.JAVA)
-            ) {
-                writer.writeFieldDeclaration("peer", FinalizableType, undefined, true)
+            if (!superClassName) {
+                writer.writeFieldDeclaration("peer", FinalizableType, undefined, true, writer.makeNull())
                 // write getPeer() method
                 const getPeerSig = new MethodSignature(idl.createOptionalType(idl.createReferenceType("Finalizable")), [])
                 writer.writeMethodImplementation(new Method("getPeer", getPeerSig, [MethodModifier.PUBLIC]), writer => {
@@ -151,6 +146,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                 // TBD: use deserializer to get complex type from native
                 const isSimpleType = !field.argConvertor.useArray // type needs to be deserialized from the native
                 const isStatic = mField.modifiers.includes(FieldModifier.STATIC)
+                const receiver = isStatic ? implementationClassName : 'this'
                 writer.writeGetterImplementation(
                     new Method(
                         mField.name,
@@ -159,7 +155,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                     ), writer => {
                         writer.writeStatement(
                             isSimpleType
-                                ? writer.makeReturn(writer.makeString(`this.get${capitalize(mField.name)}()`))
+                                ? writer.makeReturn(writer.makeMethodCall(receiver, `get${capitalize(mField.name)}`, []))
                                 : writer.makeThrowError("Not implemented")
                         )
                     }
@@ -185,7 +181,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                             } else {
                                 castedNonNullArg = mField.name
                             }
-                            writer.writeMethodCall("this", `set${capitalize(mField.name)}`, [castedNonNullArg])
+                            writer.writeMethodCall(receiver, `set${capitalize(mField.name)}`, [castedNonNullArg])
                         }
                     );
                 }
@@ -196,7 +192,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                 const pointerType = IDLPointerType
                 // makePrivate(clazz.ctor.method)
                 this.library.setCurrentContext(`${clazz.className}.constructor`)
-                writePeerMethod(writer, clazz.ctor, true, this.dumpSerialized, ctorPostfix, "", pointerType)
+                writePeerMethod(this.library, writer, clazz.ctor, true, this.dumpSerialized, ctorPostfix, "", pointerType)
                 this.library.setCurrentContext(undefined)
 
                 const ctorSig = clazz.ctor.method.signature as NamedMethodSignature
@@ -230,7 +226,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                         let ctorStatements: LanguageStatement = writer.makeBlock([
                             writer.makeAssign("ctorPtr", IDLPointerType,
                                 writer.makeMethodCall(implementationClassName, `ctor${ctorPostfix}`,
-                                    ctorSig.args.map((it, index) => writer.makeString(ctorSig.argsNames[index]))),
+                                    ctorSig.args.map((it, index) => writer.makeUnwrapOptional(writer.makeString(ctorSig.argsNames[index])))),
                                 true),
                             writer.makeAssign(
                                 "this.peer",
@@ -243,9 +239,9 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                             ctorStatements =
                                 writer.makeCondition(
                                     ctorSig.args.length === 0 ? writer.makeString("true") :
-                                        writer.makeNaryOp('&&', ctorSig.argsNames.map(it =>
+                                        writer.makeNaryOp('||', ctorSig.argsNames.map(it =>
                                             writer.language == Language.CJ ?
-                                                writer.makeRuntimeTypeCondition('', true, RuntimeType.OBJECT, it) :
+                                                writer.makeDefinedCheck(it) :
                                                 writer.language == Language.JAVA ?
                                                     writer.makeNaryOp('!=', [writer.makeString(it), writer.makeUndefined()]) :
                                                     writer.makeNaryOp('!==', [writer.makeString(it), writer.makeUndefined()]))
@@ -324,7 +320,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                 const privateMethod = method.getPrivateMethod()
                 const returnType = privateMethod.tsReturnType()
                 this.library.setCurrentContext(`${privateMethod.originalParentName}.${privateMethod.overloadedName}`)
-                writePeerMethod(writer, privateMethod, true, this.dumpSerialized, "_serialize",
+                writePeerMethod(this.library, writer, privateMethod, true, this.dumpSerialized, "_serialize",
                     writer.language == Language.CJ ?
                         "if (let Some(peer) <- this.peer) { peer.ptr } else {throw Exception(\"\")}" :
                         writer.language == Language.JAVA ?
@@ -333,7 +329,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                 this.library.setCurrentContext(undefined)
             })
 
-            if (needPrintInterals && clazz.isInterface) {
+            if (clazz.isInterface) {
                 writeFromPtrMethod(clazz, writer, classTypeParameters)
             }
 
@@ -359,13 +355,12 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
         // common runtime dependencies
         this.collector.addFeatures([
             'Finalizable',
-            'isResource',
-            'isInstanceOf',
             'runtimeType',
             'RuntimeType',
             'SerializerBase',
             'registerCallback',
             'wrapCallback',
+            'toPeerPtr',
             'KPointer',
         ], '@koalaui/interop')
         this.collector.addFeatures(['MaterializedBase'], '@koalaui/interop')
@@ -378,6 +373,8 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             this.collector.addFeatures(['Deserializer'], './peers/Deserializer')
         }
         if (this.library.language === Language.TS) {
+            this.collector.addFeature('isInstanceOf', '@koalaui/interop')
+            this.collector.addFeatures(['isResource', 'isPadding'], '../utils')
             this.collector.addFeatures(['Deserializer', 'createDeserializer'], './peers/Deserializer')
         }
 
@@ -432,6 +429,21 @@ function writeFromPtrMethod(clazz: MaterializedClass, writer: LanguageWriter, cl
                 writer.makeNewObject('Finalizable', [writer.makeString('ptr'), writer.makeString(`${className}.getFinalizer()`)]), false),
         )
         writer.writeStatement(writer.makeReturn(writer.makeString(objVar)))
+    })
+}
+
+function writeToPeerPtrMethod(writer: LanguageWriter) {
+    const toPeerPtrSignature = new MethodSignature(idl.IDLPointerType, [])
+    writer.writeFunctionImplementation('toPeerPtr', toPeerPtrSignature, () => {
+        writer.print(`
+            let base: MaterializedBase = match (value as MaterializedBase) {
+                case Some(x) => x
+                case None => throw Exception("Value is not a MaterializedBase instance!")
+            }
+            return match (base.getPeer()) {
+                case Some(peer) => peer.ptr
+                case None => nullptr
+            }`)
     })
 }
 

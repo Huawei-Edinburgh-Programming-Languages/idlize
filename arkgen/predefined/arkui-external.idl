@@ -153,7 +153,32 @@ interface LengthMetrics {
    * expand for M2 app
    */
   static LengthMetrics px(number value);
+  static LengthMetrics vp(number value);
+  static LengthMetrics fp(number value);
+  static LengthMetrics percent(number value);
+  static LengthMetrics lpx(number value);
   static LengthMetrics resource(Resource value);
+};
+
+/**
+ * The ColorMetrics API declaration, part for M2 app
+ */
+[Entity=Class]
+interface ColorMetrics {
+    [Accessor=Getter]
+    readonly attribute String color;
+    [Accessor=Getter]
+    readonly attribute number red;
+    [Accessor=Getter]
+    readonly attribute number green;
+    [Accessor=Getter]
+    readonly attribute number blue;
+    [Accessor=Getter]
+    readonly attribute number alpha;
+    static ColorMetrics numeric(number value);
+    static ColorMetrics rgba(number red, number green, number blue, optional number alpha);
+    static ColorMetrics resourceColor(ResourceColor color);
+    ColorMetrics blendColor(ColorMetrics overlayColor);
 };
 
 [Entity=Interface]
@@ -210,20 +235,6 @@ interface GlobalScope_ohos_arkui_performanceMonitor {
     static void begin(String scene, PerfMonitorActionType startInputType, optional String note);
     static void end(String scene);
     static void recordInputEventTime(PerfMonitorActionType actionType, PerfMonitorSourceType sourceType, number time);
-};
-
-/**
- * The BusinessError<void> declaration
- */
-[Entity=Interface]
-interface BusinessError {
-    attribute String name;
-    attribute String message;
-    [Optional]
-    attribute String stack;
-
-    attribute number code;
-    // the `data` attribute does not point with 'void' type
 };
 
 callback ErrorCallback = void (BusinessError err);

@@ -19,24 +19,20 @@ import { PrinterResult } from "../LayoutManager";
 import { LayoutNodeRole, PeerLibrary, isMaterialized, NamedMethodSignature } from "@idlizer/core";
 import * as idl from '@idlizer/core'
 import { collectProperties } from "./StructPrinter";
-import { collapseSameMethodsIDL, groupOverloadsIDL } from "./OverloadsPrinter";
+import { collapseSameMethodsIDL, groupOverloadsIDL, groupSameSignatureMethodsIDL } from "./OverloadsPrinter";
+import { peerGeneratorConfiguration } from "../PeerGeneratorConfig";
 
 /**
  * Printer for OHOS interfaces
  */
 export function printInterfaceData(library: PeerLibrary): PrinterResult[] {
     return library.files.flatMap(file => {
-        if (file.isPredefined) {
-            return []
-        }
         if (library?.libraryPackages?.length && !library.libraryPackages.includes(file.packageName()))
             return []
         return file.entries
             .flatMap(it => idl.isNamespace(it) ? it.members : [it])
+            .filter(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Predefined))
             .flatMap(entry => {
-                if (idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.GlobalScope)) {
-                    return []
-                }
                 if (idl.isInterface(entry)) {
                     if (isMaterialized(entry, library) && idl.isClassSubkind(entry)) {
                         return []
@@ -49,6 +45,10 @@ export function printInterfaceData(library: PeerLibrary): PrinterResult[] {
                 if (idl.isEnum(entry)) {
                     return [printEnum(library, entry)]
                 }
+                if (idl.isTypedef(entry)) {
+                    if (!idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.Import))
+                        return [printTypedef(library, entry)]
+                }
                 return []
             })
     })
@@ -58,15 +58,35 @@ function printInterfaceBody(library: PeerLibrary, entry: idl.IDLInterface, print
     entry.properties.forEach(prop => {
         printer.writeFieldDeclaration(prop.name, prop.type, toFieldModifiers(prop), prop.isOptional)
     })
+
     const groupedMethods = groupOverloadsIDL(entry.methods)
-    groupedMethods.forEach(methods => {
-        const method = collapseSameMethodsIDL(methods, library.language)
-        const signature = NamedMethodSignature.make(
-            method.returnType,
-            method.parameters
-            .map(it => ({ name: it.name, type: idl.maybeOptional(it.type, it.isOptional) })))
-        printer.writeMethodDeclaration(method.name, signature, toMethodModifiers(method.methods[0]))
-    })
+    if (library.language != idl.Language.ARKTS || peerGeneratorConfiguration().CollapseOverloadsARKTS) {
+        groupedMethods.forEach(methods => {
+            printCollapsedOverloads(library, methods, printer)
+        })
+    } else {
+        // Handle special case for same name AND same signature methods.
+        // Collapse same signature methods
+        groupedMethods.forEach(sameNameGroup => {
+            let copy = Array.from([...sameNameGroup])
+            const sameSignatureMethodsGroups = groupSameSignatureMethodsIDL([...copy])
+            for (let sameSignatureGroup of sameSignatureMethodsGroups) {
+                printCollapsedOverloads(library, sameSignatureGroup, printer)
+            }
+        })
+    }
+}
+
+function printCollapsedOverloads(library: PeerLibrary, methods: idl.IDLMethod[], printer: idl.LanguageWriter) {
+    if (methods.some(it => it.isStatic))
+        return
+    const method = collapseSameMethodsIDL(methods, library.language)
+    const signature = NamedMethodSignature.make(
+        method.returnType,
+        method.parameters
+            .map(it => ({ name: it.name, type: idl.maybeOptional(it.type, it.isOptional) }))
+    )
+    printer.writeMethodDeclaration(method.name, signature, toMethodModifiers(method.methods[0]))
 }
 
 class CJDeclConvertor {
@@ -167,6 +187,9 @@ function printInterface(library: PeerLibrary, entry: idl.IDLInterface): PrinterR
     const collector = new ImportsCollector()
 
     collectDeclDependencies(library, entry, collector)
+    if (library.language === idl.Language.ARKTS) {
+        collector.addFeatures(['NativeBuffer'], '@koalaui/interop')
+    }
 
     const ns = idl.getNamespaceName(entry)
     if (ns !== '') {
@@ -174,7 +197,8 @@ function printInterface(library: PeerLibrary, entry: idl.IDLInterface): PrinterR
     }
     if (library.language == idl.Language.CJ) {
         if (!idl.isMaterialized(entry, library)) {
-            CJDeclConvertor.makeInterface(library, entry, printer)
+            if (!['RuntimeType', 'CallbackResource', 'Materialized'].includes(entry.name))
+                CJDeclConvertor.makeInterface(library, entry, printer)
         }
     } else {
         if (idl.isInterfaceSubkind(entry)) {
@@ -223,6 +247,38 @@ function printEnum(library: PeerLibrary, entry: idl.IDLEnum): PrinterResult {
     }
     if (library.language === idl.Language.CJ) {
         CJDeclConvertor.makeEnum(entry, printer)
+    }
+
+    return {
+        over: {
+            node: entry,
+            role: LayoutNodeRole.INTERFACE
+        },
+        collector,
+        content: printer
+    }
+}
+
+function printTypedef(library: PeerLibrary, entry: idl.IDLTypedef): PrinterResult {
+    const printer = library.createLanguageWriter()
+    const collector = new ImportsCollector()
+
+    collectDeclDependencies(library, entry, collector)
+
+    if ([idl.Language.TS, idl.Language.ARKTS].includes(library.language)) {
+        const ns = idl.getNamespaceName(entry)
+        if (ns !== '') {
+            printer.pushNamespace(ns)
+        }
+
+        printer.writeTypeDeclaration(entry)
+
+        if (ns !== '') {
+            printer.popNamespace()
+        }
+    }
+    if (library.language === idl.Language.CJ) {
+        printer.writeTypeDeclaration(entry)
     }
 
     return {

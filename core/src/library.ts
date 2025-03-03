@@ -172,21 +172,17 @@ const utils = {
 
 interface EntitiesParams {
     expandNamespaces?: boolean
-    slipPackage?: boolean
 }
 
 const select = {
     files(): LibraryReducer<readonly idl.IDLFile[]> {
         return reduce('files', x => x.files)
     },
-    nodes(params:EntitiesParams): LibraryQuery<readonly idl.IDLFile[], idl.IDLNode[]> {
+    nodes(params?:EntitiesParams): LibraryQuery<readonly idl.IDLFile[], idl.IDLNode[]> {
         const key = 'entities' + serializeParam(params)
         function go(node:idl.IDLNode): idl.IDLNode[] {
-            if (idl.isNamespace(node) && params.expandNamespaces) {
+            if (idl.isNamespace(node) && params?.expandNamespaces) {
                 return node.members.flatMap(go)
-            }
-            if (idl.isPackage(node) && params.slipPackage) {
-                return []
             }
             return [node]
         }

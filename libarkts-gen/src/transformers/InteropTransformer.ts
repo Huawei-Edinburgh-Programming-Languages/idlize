@@ -13,31 +13,33 @@
  * limitations under the License.
  */
 
-import { createMethod, createParameter, createReferenceType, IDLMethod } from "@idlizer/core"
-import { IDLInterface, isInterface, } from "@idlizer/core/idl"
+import { createFile, createParameter, createReferenceType, IDLFile, IDLMethod } from "@idlizer/core"
+import { IDLInterface, isInterface } from "@idlizer/core/idl"
 import { InteropConstructions } from "../visitors/interop/InteropConstructions"
-import { createUpdatedInterface, IDLFile, nodeNamespace } from "../utils/idl"
+import { createUpdatedInterface, createUpdatedMethod, isSequence, nodeNamespace } from "../utils/idl"
 import { Config } from "../Config"
+import { mangleIfKeyword } from "../utils/common";
+import { Transformer } from "./Transformer";
 
-export class InteropTransformer {
+export class InteropTransformer implements Transformer {
     constructor(
         private file: IDLFile
     ) {}
 
     transformed(): IDLFile {
-        return new IDLFile(
+        return createFile(
             this.file.entries
                 .map(it => {
                     if (isInterface(it)) {
                         return this.transformInterface(it)
                     }
                     return it
-                })
+                }),
+            this.file.fileName
         )
     }
 
     private transformInterface(node: IDLInterface): IDLInterface {
-        node = this.withOverloadsRenamed(node)
         node = this.withTransformedMethods(node)
         return node
     }
@@ -51,58 +53,82 @@ export class InteropTransformer {
 
     private transformMethod(node: IDLMethod, parent: IDLInterface): IDLMethod {
         node = this.withInsertedReceiver(node, parent)
+        node = this.withInsertedContext(node)
         node = this.withQualifiedName(node, parent)
         node = this.withKeywordsReplaced(node)
+        node = this.withSequenceParameterSplit(node)
         return node
+    }
+
+    private withInsertedContext(node: IDLMethod): IDLMethod {
+        return createUpdatedMethod(
+            node,
+            node.name,
+            [
+                createParameter(
+                    InteropConstructions.context.name,
+                    InteropConstructions.context.type
+                ),
+                ...node.parameters
+            ]
+        )
     }
 
     private withInsertedReceiver(node: IDLMethod, parent: IDLInterface): IDLMethod {
         if (Config.isCreateOrUpdate(node.name)) {
             return node
         }
-        const copy = createMethod(
+        return createUpdatedMethod(
+            node,
             node.name,
-            [...node.parameters],
-            node.returnType
+            [
+                createParameter(
+                    InteropConstructions.receiver,
+                    createReferenceType(parent.name)
+                ),
+                ...node.parameters
+            ]
         )
-        copy.parameters.splice(
-            1,
-            0,
-            createParameter(
-                InteropConstructions.receiver,
-                createReferenceType(parent.name)
-            )
-        )
-        return copy
     }
 
     private withQualifiedName(node: IDLMethod, parent: IDLInterface): IDLMethod {
-        return createMethod(
-            `${InteropConstructions.method(parent.name, node.name, nodeNamespace(parent))}`,
+        return createUpdatedMethod(
+            node,
+            InteropConstructions.method(parent.name, node.name, nodeNamespace(parent)),
             node.parameters,
             node.returnType
         )
     }
 
     private withKeywordsReplaced(node: IDLMethod): IDLMethod {
-        const rename = (name: string) => {
-            if (InteropConstructions.keywords.includes(name)) {
-                return `_${name}`
-            }
-            return name
-        }
-        return createMethod(
-            rename(node.name),
+        return createUpdatedMethod(
+            node,
+            mangleIfKeyword(node.name),
             node.parameters.map(it => createParameter(
-                rename(it.name),
+                mangleIfKeyword(it.name),
                 it.type
             )),
             node.returnType
         )
     }
 
-    private withOverloadsRenamed(node: IDLInterface): IDLInterface {
-        // TODO
-        return node
+    private withSequenceParameterSplit(node: IDLMethod): IDLMethod {
+        return createUpdatedMethod(
+            node,
+            undefined,
+            node.parameters
+                .flatMap(it => {
+                    if (isSequence(it.type)) {
+                        return [
+                            it,
+                            createParameter(
+                                InteropConstructions.sequenceParameterLength(it.name),
+                                InteropConstructions.sequenceLengthType
+                            )
+                        ]
+                    }
+                    return it
+                })
+        )
     }
 }

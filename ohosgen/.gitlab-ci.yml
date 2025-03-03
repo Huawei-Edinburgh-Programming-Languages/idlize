@@ -35,15 +35,9 @@ check generated XML demo:
       - npm run build:interop:inc --prefix ../external/interop
       - npm run build:incremental:inc --prefix ../external/incremental/runtime
     script:
-      - npm run run:xml
-      - npm run run:xml:arkts
       - cd demos/xml
-      - rm -rf generated
-      - cp -r ../../out/xml/generated generated
-      - npm run compile:node
-      - npm start
-      - npm run compile:panda
-      - npm run start:panda
+      - npm run check:ts
+      - npm run check:arkts
 
 check ohos demos:
   stage: test
@@ -61,10 +55,33 @@ check ohos demos:
     - npm run build:interop:inc --prefix ../external/interop
     - npm run build:incremental:inc --prefix ../external/incremental/runtime
   script:
-    - cd demos/mediaquery
+    - cd $CI_PROJECT_DIR/ohosgen/demos/mediaquery
     - npm show @koalaui/interop && npm show @koalaui/common
     - npm i -d
     - npm run check:ts
     - npm run check:arkts
-#   - npm run run:ohos:context:ts
-#   - npm run check:ohos:context:run
+    - cd $CI_PROJECT_DIR/ohosgen/demos/context
+#   - npm run check:ts
+    - npm run check:arkts
+    - cd $CI_PROJECT_DIR/ohosgen/tests/unit
+    - npm run check:ts
+    - npm run check:arkts
+    - |
+      cd $CI_PROJECT_DIR/ohosgen
+      touch $CI_PROJECT_DIR/ohosgen/summary.txt
+      test_status=0
+      cat demos/expected.txt |
+      while read pkg expected; do
+        cd $pkg
+        npm i -d
+        npm run check:arkts && result=PASS || result=FAIL
+        echo "$pkg: $result (expected $expected)" >> $CI_PROJECT_DIR/ohosgen/summary.txt
+        if [ "$result" != "$expected" ]; then
+          test_status=1
+        fi
+        cd $CI_PROJECT_DIR/ohosgen
+      done
+      echo "---------------RESULT-----------------"
+      cat $CI_PROJECT_DIR/ohosgen/summary.txt
+      echo "--------------------------------------"
+      exit $test_status

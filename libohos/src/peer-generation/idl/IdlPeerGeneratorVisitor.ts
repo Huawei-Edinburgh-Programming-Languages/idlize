@@ -33,7 +33,6 @@ import { getInternalClassName, isBuilderClass, MaterializedClass, MaterializedFi
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
 import { BuilderClass, CUSTOM_BUILDER_CLASSES, isCustomBuilderClass, isMaterialized } from "@idlizer/core";
 import { ImportFeature } from "../ImportsCollector"
-import { collapseIdlEventsOverloads } from "../printers/EventsPrinter"
 import { convertDeclToFeature } from "../ImportsCollectorUtils"
 import { collectComponents, findComponentByType, IdlComponentDeclaration, isComponentDeclaration } from "../ComponentsCollector"
 import { ReferenceResolver } from "@idlizer/core"
@@ -76,14 +75,12 @@ export class IDLPredefinesVisitor implements GenericVisitor<void> {
     readonly peerLibrary: PeerLibrary
     readonly peerFile: PeerFile
 
-    private packageName?: string
+    private packageName: string
 
     constructor(options: IdlPeerGeneratorVisitorOptions) {
         this.peerLibrary = options.peerLibrary
         this.peerFile = options.peerFile
-        const packageDeclarations = this.peerFile.entries.filter(entry => idl.isPackage(entry)).map(entry => entry as idl.IDLPackage)
-        if (packageDeclarations.length === 1)
-            this.packageName = packageDeclarations[0].clause.join(".")
+        this.packageName = this.peerFile.packageName()
     }
 
     visitWholeFile(): void {
@@ -296,7 +293,9 @@ class PeersGenerator {
         }
 
         this.fillClass(peer, component.attributeDeclaration)
-        collapseIdlEventsOverloads(this.library, peer)
+        // TODO that changes ABI - some functions will not be merged. Do we want to continue with that? Or do we want to wait more
+        // accurate methods merging algorithm?
+        // collapseIdlEventsOverloads(this.library, peer)
         file.peers.set(component.name, peer)
     }
 }
@@ -494,16 +493,13 @@ export class IdlPeerProcessor {
         const curConfig = generatorConfiguration()
         const curPeerConfig = peerGeneratorConfiguration()
         console.log(curConfig.LibraryPrefix, curPeerConfig.LibraryPrefix)
-        
+
         for (const dep of allDeclarations) {
             if (peerGeneratorConfiguration().ignoreEntry(dep.name, this.library.language) || this.ignoreDeclaration(dep, this.library.language) || idl.isHandwritten(dep))
                 continue
             const isPeerDecl = idl.isInterface(dep) && isComponentDeclaration(this.library, dep)
             if (!isPeerDecl && idl.isInterface(dep) && [idl.IDLInterfaceSubkind.Class, idl.IDLInterfaceSubkind.Interface].includes(dep.subkind)) {
-                if (isGlobalScope(dep)) {
-                    this.processGlobal(dep)
-                    continue
-                } else if (isBuilderClass(dep)) {
+                if (isBuilderClass(dep)) {
                     this.processBuilder(dep)
                     continue
                 } else if (isMaterialized(dep, this.library)) {
@@ -536,10 +532,6 @@ export function createDependencyFilter(library: PeerLibrary): DependencyFilter {
     }
     // TODO: support other languages
     return new EmptyDependencyFilter()
-}
-
-export function isGlobalScope(declaration: idl.IDLEntry): boolean {
-    return idl.isInterface(declaration) && idl.hasExtAttribute(declaration, idl.IDLExtendedAttributes.GlobalScope)
 }
 
 export function isCommonMethodOrSubclass(library: PeerLibrary, decl?: idl.IDLEntry): boolean {

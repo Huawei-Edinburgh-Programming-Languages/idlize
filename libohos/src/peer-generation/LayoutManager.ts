@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLEntry, IDLNode, Language, LanguageWriter, LayoutNodeRole, PeerLibrary } from "@idlizer/core";
+import { IDLEntry, IDLNode, Language, LanguageWriter, LayoutManager, LayoutNodeRole, PeerLibrary } from "@idlizer/core";
 import { join } from "node:path";
 import { writeIntegratedFile } from "./common";
 import { ImportsCollector } from "./ImportsCollector"
@@ -26,6 +26,7 @@ export interface PrinterResult {
     }
     collector: ImportsCollector
     content: LanguageWriter
+    private?: boolean
     weight?: number
 }
 
@@ -37,7 +38,7 @@ export interface PrinterFunction {
 }
 export type Printer = PrinterClass | PrinterFunction
 
-export function install(outDir:string, library:PeerLibrary, printers:Printer[]): string[] {
+export function install(outDir:string, library:PeerLibrary, printers:Printer[], options?: { fileExtension?: string }): string[] {
     const storage = new Map<string, PrinterResult[]>()
 
     // groupBy
@@ -50,8 +51,12 @@ export function install(outDir:string, library:PeerLibrary, printers:Printer[]):
     })
 
     // print
+    const installedToExport: string[] = []
     Array.from(storage.entries()).forEach(([filePath, results]) => {
-        const installPath = join(outDir, filePath) + library.language.extension
+        const installPath = join(outDir, filePath) + (options?.fileExtension ?? library.language.extension)
+        if (!results.every(it => !!it.private)) {
+            installedToExport.push(installPath)
+        }
         results.sort((a, b) => (a.weight ?? 0) - (b.weight ?? 0))
 
         const imports = new ImportsCollector()
@@ -75,5 +80,5 @@ export function install(outDir:string, library:PeerLibrary, printers:Printer[]):
         writeIntegratedFile(installPath, text, 'producing')
     })
 
-    return Array.from(storage.keys())
+    return installedToExport
 }

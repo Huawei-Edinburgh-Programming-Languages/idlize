@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { generatorConfiguration, Language, isMaterialized, isBuilderClass, throwException } from '@idlizer/core'
+import { generatorConfiguration, Language, isMaterialized, isBuilderClass, throwException, LanguageExpression } from '@idlizer/core'
 import { ExpressionStatement, LanguageStatement, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter, PeerLibrary } from "@idlizer/core"
 import { peerGeneratorConfiguration } from '../PeerGeneratorConfig'
@@ -56,7 +56,7 @@ class SerializerPrinter {
                 new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(target)], ["value"])),
             writer => {
                 if (isMaterialized(target, this.library)) {
-                    this.generateMaterializedBodySerializer(target, writer)
+                    this.generateMaterializedBodySerializer(writer)
                 } else {
                     this.generateInterfaceBodySerializer(target, writer)
                 }
@@ -93,64 +93,24 @@ class SerializerPrinter {
         })
     }
 
-    private generateMaterializedBodySerializer(target: idl.IDLInterface, writer: LanguageWriter) {
+    private generateMaterializedBodySerializer(writer: LanguageWriter) {
         this.declareSerializer(writer)
-        if (writer.language === Language.CPP) {
-            writer.writeExpressionStatement(
-                writer.makeMethodCall(`valueSerializer`, `writePointer`, [writer.makeString(`value`)]))
-            return
+        const valueExpr = writer.makeString("value")
+        let peerExpr: LanguageExpression
+        switch (writer.language) {
+            case Language.CPP:
+                peerExpr = valueExpr
+                break
+            case Language.JAVA:
+            case Language.CJ:
+                peerExpr = writer.makeMethodCall("MaterializedBase", "toPeerPtr", [valueExpr])
+                break
+            default:
+                peerExpr = writer.makeFunctionCall("toPeerPtr", [valueExpr])
+                break
         }
-        const baseType = idl.createReferenceType("MaterializedBase")
-        const unsafe = writer.language === Language.TS
-        const writePtrStmts: LanguageStatement[] = [
-            writer.makeAssign(
-                `base`,
-                baseType,
-                writer.makeTypeCast(writer.makeString(`value`), baseType, { unsafe: unsafe }),
-                true,
-                true
-            ),
-            writer.makeAssign(
-                `peer`,
-                undefined,
-                writer.makeString(`base.getPeer()`),
-                true,
-                true
-            ),
-            writer.makeAssign(
-                `ptr`,
-                idl.IDLPointerType,
-                writer.makeString(`nullptr`),
-                true,
-                false
-            ),
-            writer.makeCheckOptional(
-                writer.makeString(`peer`),
-                writer.makeAssign(
-                    `ptr`,
-                    idl.IDLPointerType,
-                    writer.makeString(`peer.ptr`),
-                    false,
-                    false,
-                )
-            ),
-            writer.makeStatement(
-                writer.makeMethodCall(`valueSerializer`, `writePointer`, [
-                    writer.makeString(`ptr`)
-                ])
-            ),
-            writer.makeReturn(),
-        ]
-
-        writer.writeStatement(
-            writer.makeCondition(
-                writer.typeInstanceOf(
-                    MATERIALIZED_BASE,
-                    "value", [MATERIALIZED_BASE.properties[0].name]),
-                writer.makeBlock(writePtrStmts),
-                writer.makeBlock([writer.makeThrowError("Value is not a MaterializedBase instance!")])
-            )
-        )
+        writer.writeExpressionStatement(
+            writer.makeMethodCall(`valueSerializer`, `writePointer`, [peerExpr]))
     }
 
     private generateLengthSerializer() {
@@ -343,7 +303,7 @@ class DeserializerPrinter {
                         }
                     }
 
-                    this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeCast(this.writer.makeString(`{${propsAssignees.join(',')}}`), type), true, false))
+                    this.writer.writeStatement(this.writer.makeAssign("value", valueType, this.writer.makeCast(this.writer.makeString(`{${propsAssignees.join(', ')}}`), type), true, false))
                 }
             }
         } else {
@@ -525,16 +485,9 @@ class DeserializerPrinter {
         printSerializerImports(this.library, this.destFile, declarationPath)
         this.writer.print("")
         this.writer.writeClass(className, writer => {
-            if (ctorSignature && this.writer.language != Language.CJ) {
+            if (ctorSignature) {
                 const ctorMethod = new Method(`${className}Base`, ctorSignature)
                 writer.writeConstructorImplementation(className, ctorSignature, writer => {}, ctorMethod)
-            }
-            if (this.writer.language == Language.CJ) {
-                writer.print("Deserializer(data: Array<UInt8>, length: Int64) {")
-                writer.pushIndent()
-                writer.print("super(data, length)")
-                writer.popIndent()
-                writer.print("}")
             }
             for (const decl of serializerDeclarations) {
                 if (idl.isInterface(decl)) {
@@ -587,7 +540,6 @@ export function getSerializerDeclarations(library: PeerLibrary, dependencyFilter
     return collectDeclarationTargets(library)
         .filter((it): it is SerializableTarget => dependencyFilter.shouldAdd(it))
         .filter(it => !idl.isHandwritten(it))
-        .filter(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.GlobalScope))
         .filter(it => !it.typeParameters?.length)
         .filter(it => {
             const seen = seenNames.has(it.name!)
@@ -636,7 +588,6 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
 
     function collectMaterializedImports(imports: ImportsCollector, library: PeerLibrary) {
         for (const materialized of library.materializedClasses.values()) {
-            if (materialized.isGlobalScope()) continue
             const file = library.layout.resolve(materialized.decl, LayoutNodeRole.INTERFACE)
             const ns = idl.getNamespaceName(materialized.decl)
             const name = ns === '' ? getInternalClassName(materialized.className) : ns.split('.')[0]

@@ -16,6 +16,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import {
+    asPromise,
     createConstructor,
     createMethod,
     createParameter,
@@ -78,13 +79,14 @@ import {
     CppSourceFile,
     StructPrinter,
     TargetFile,
-    isGlobalScope,
     BridgeCcApi,
     BridgeCcVisitor,
+    createSyntheticGlobalScope,
+    isGlobalScope,
 } from '@idlizer/libohos'
 
 class NameType {
-    constructor(public name: string, public type: string) {}
+    constructor(public name: string, public type: string) { }
 }
 
 interface SignatureDescriptor {
@@ -124,7 +126,6 @@ class OHOSNativeVisitor {
     }
 
     private apiName(clazz: IDLInterface): string {
-        if (hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)) return capitalize(this.libraryName)
         return capitalize(clazz.name)
     }
 
@@ -172,8 +173,7 @@ class OHOSNativeVisitor {
         _c.print(`const static ${name} instance = {`)
         _c.pushIndent()
         _h.pushIndent()
-        let isGlobalScope = hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)
-        if (!isGlobalScope) {
+        if (!isGlobalScope(clazz)) {
             let ctors = [...clazz.constructors]
             if (ctors.length == 0) {
                 ctors.push(createConstructor([], undefined)) // Add empty fake constructor
@@ -187,21 +187,21 @@ class OHOSNativeVisitor {
                 _h.print(`${handleType} (*${name})(${cppArgs});`) // TODO check
                 let implName = `${clazz.name}_${name}Impl`
                 _c.print(`&${implName},`)
-                this.impls.set(implName, { params, returnType: handleType, paramsCString: cppArgs})
+                this.impls.set(implName, { params, returnType: handleType, paramsCString: cppArgs })
             })
             {
                 let destructName = `${clazz.name}_destructImpl`
-                let params = [new NameType("thiz", handleType)]
+                let params = [new NameType("thisPtr", handleType)]
                 _h.print(`void (*destruct)(${params.map(it => `${it.type} ${it.name}`).join(", ")});`)
                 _c.print(`&${destructName},`)
-                this.impls.set(destructName, { params, returnType: 'void'})
+                this.impls.set(destructName, { params, returnType: 'void' })
             }
         }
-        generatePostfixForOverloads(clazz.methods).forEach(({method, overloadPostfix}) => {
+        generatePostfixForOverloads(clazz.methods).forEach(({ method, overloadPostfix }) => {
             const adjustedSignature = adjustSignature(this.library, method.parameters, method.returnType)
             let params = new Array<NameType>()
-            if (!method.isStatic && !isGlobalScope) {
-                params.push(new NameType("thiz", handleType))
+            if (!method.isStatic && !method.isFree) {
+                params.push(new NameType("thisPtr", handleType))
             }
             params = params.concat(adjustedSignature.parameters.map(it =>
                 new NameType(_h.escapeKeyword(it.name), this.argTypeConvertor.convert(it.type!))))
@@ -216,20 +216,26 @@ class OHOSNativeVisitor {
         const propertiesFromInterface: IDLProperty[] = this.getPropertiesFromInterfaces(clazz)
         propertiesFromInterface.concat(clazz.properties).forEach(property => {
             let accessorMethods = []
-            let getterMethod = createMethod(`get${capitalize(property.name)}`, [], property.type)
+            let getterMethod = createMethod(
+                `get${capitalize(property.name)}`, [], property.type, {
+                isStatic: property.isStatic,
+                isAsync: false, isOptional: false, isFree: false})
             accessorMethods.push(getterMethod)
             if (!property.isReadonly) {
-                let setterMethod = createMethod(`set${capitalize(property.name)}`, [
-                    createParameter("value", property.type)
-                ], IDLVoidType)
+                let setterMethod = createMethod(
+                    `set${capitalize(property.name)}`,
+                    [createParameter("value", property.type)],
+                    IDLVoidType, {
+                    isStatic: property.isStatic,
+                    isAsync: false, isOptional: false, isFree: false})
                 accessorMethods.push(setterMethod)
             }
 
             for (const method of accessorMethods) {
                 const adjustedSignature = adjustSignature(this.library, method.parameters, method.returnType)
                 let params = new Array<NameType>()
-                if (!isGlobalScope) {
-                    params.push(new NameType("thiz", handleType))
+                if (!isGlobalScope(clazz)) {
+                    params.push(new NameType("thisPtr", handleType))
                 }
                 params = params.concat(adjustedSignature.parameters.map(it =>
                     new NameType(_h.escapeKeyword(it.name), this.argTypeConvertor.convert(it.type!))))
@@ -262,15 +268,14 @@ class OHOSNativeVisitor {
         })
         if (!isConstructor(method) && !method.isStatic)
             args.unshift(`${PrimitiveTypesInstance.NativePointer} thisPtr`)
-        if (hasExtAttribute(method, IDLExtendedAttributes.Throws))
+        if (!!asPromise(method.returnType))
+            args.unshift(`${generatorConfiguration().TypePrefix}${this.libraryName}_AsyncWorkerPtr asyncWorker`)
+        if (hasExtAttribute(method, IDLExtendedAttributes.Throws) || !!asPromise(method.returnType))
             args.unshift(`${generatorConfiguration().TypePrefix}${this.libraryName}_VMContext vmContext`)
         return args.join(", ")
     }
 
     private modifierName(clazz: IDLInterface): string {
-        if (hasExtAttribute(clazz, IDLExtendedAttributes.GlobalScope)) {
-            return this.mangleTypeName("Modifier")
-        }
         return this.mangleTypeName(`${clazz.name}Modifier`)
     }
     private handleType(name: string): string {
@@ -393,6 +398,11 @@ class OHOSNativeVisitor {
                 }
             })
         })
+
+        const global = createSyntheticGlobalScope(this.library)
+        if (global.methods.length) {
+            this.interfaces.push(global)
+        }
     }
 
     private mangleTypeName(typeName: string): string {
@@ -451,15 +461,10 @@ class OhosBridgeCcVisitor extends BridgeCcVisitor {
     }
 
     protected printMaterializedClass(clazz: MaterializedClass) {
-        const isGlobal = isGlobalScope(clazz.decl);
-        const modifierName = isGlobal ? capitalize(this.library.name) : "";
+        const modifierName = "";
         for (const method of [clazz.ctor, clazz.finalizer].concat(clazz.methods)) {
             if (!method) continue
-            if (isGlobal) {
-                this.printMethod(method, modifierName);
-            } else {
-                this.printMethod(method);
-            }
+            this.printMethod(method);
         }
     }
 }
@@ -511,7 +516,7 @@ interface MethodWithPostfix {
     overloadPostfix: string
 }
 
-function generatePostfixForOverloads(methods:IDLMethod[]): MethodWithPostfix[]  {
+function generatePostfixForOverloads(methods: IDLMethod[]): MethodWithPostfix[] {
     const overloads = new Map<string, number>()
     for (const method of methods) {
         overloads.set(method.name, (overloads.get(method.name) ?? 0) + 1)

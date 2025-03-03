@@ -34,6 +34,7 @@ import * as idl from "@idlizer/core";
 import { bridgeCcCustomDeclaration, bridgeCcGeneratedDeclaration } from "../FileGenerators";
 import { ExpressionStatement } from "../LanguageWriters";
 import { forceAsNamedNode, IDLBooleanType, IDLNumberType, IDLVoidType } from '@idlizer/core/idl'
+import { createGlobalScopeLegacy } from "../GlobalScopeUtils";
 
 export class BridgeCcVisitor {
     readonly generatedApi = this.library.createLanguageWriter(Language.CPP)
@@ -79,16 +80,17 @@ export class BridgeCcVisitor {
         const args = argAndOutConvertors.map(it => this.generateApiArgument(it))
         if (method.hasReceiver())
             args.unshift(this.getReceiverArgName())
-        if (method.method.modifiers?.includes(idl.MethodModifier.THROWS))
+        if (!!idl.asPromise(method.returnType))
+            args.unshift(`GetAsyncWorker()`)
+        if (this.needsVMContext(method))
             args.unshift(`reinterpret_cast<${generatorTypePrefix()}VMContext>(vmContext)`)
         const apiCall = this.getApiCall(method)
         const field = this.getApiCallResultField(method)
         // TODO: It is necessary to implement value passing to vm
         const peerMethodCall = `${apiCall}->${modifier}->${peerMethod}(${args.join(", ")})${field}`
-        if (idl.isCallback(this.library.toDeclaration(method.returnType))
-            || idl.IDLContainerUtils.isSequence(method.returnType)) {
+        if (idl.isCallback(this.library.toDeclaration(method.returnType))) {
             const statements = [
-                `[[maybe_unused]] const auto &value = ${peerMethodCall};`,
+                `[[maybe_unused]] const auto &_api_call_result = ${peerMethodCall};`,
                 `// TODO: Value serialization needs to be implemented`,
                 `return {};`
             ]
@@ -200,6 +202,10 @@ export class BridgeCcVisitor {
         this.generatedApi.print(`}`)
     }
 
+    private needsVMContext(method: PeerMethod): boolean {
+        return !!idl.asPromise(method.returnType) || !!method.method.modifiers?.includes(idl.MethodModifier.THROWS)
+    }
+
     private generateCMacroSuffix(method: PeerMethod): string {
         let argumentsCount = method.hasReceiver() ? 1 : 0
         let arrayAdded = false
@@ -213,7 +219,7 @@ export class BridgeCcVisitor {
                 argumentsCount += 1
             }
         })
-        const ctxSuffix = method.method.modifiers?.includes(idl.MethodModifier.THROWS) ? 'CTX_' : ''
+        const ctxSuffix = this.needsVMContext(method) ? 'CTX_' : ''
         const voidSuffix = this.returnTypeConvertor.isVoid(method) ? 'V' : ''
         return `${ctxSuffix}${voidSuffix}${argumentsCount}`
     }
@@ -251,7 +257,7 @@ export class BridgeCcVisitor {
         const argTypesAndNames = this.generateCParameters(method);
         const argDecls = argTypesAndNames.map(([type, name]) =>
             type === "KStringPtr" || type === "KLength" ? `const ${type}& ${name}` : `${type} ${name}`)
-        if (method.method.modifiers?.includes(idl.MethodModifier.THROWS))
+        if (this.needsVMContext(method))
             argDecls.unshift("KVMContext vmContext")
         this.generatedApi.print(`${retType} impl_${cName}(${argDecls.join(", ")}) {`)
         this.generatedApi.pushIndent()
@@ -315,6 +321,10 @@ export class BridgeCcVisitor {
         for (const clazz of this.library.materializedToGenerate) {
             this.printMaterializedClass(clazz);
         }
+        const global = createGlobalScopeLegacy(this.library)
+        if (global.methods) {
+            this.printMaterializedClass(global)
+        }
 
         /*
         this.customApi.print("\n// custom API methods\n")
@@ -361,13 +371,5 @@ class BridgeReturnTypeConvertor extends InteropReturnTypeConvertor {
             return PrimitiveTypesInstance.NativePointer.getText()
         }
         return super.convertTypeReference(type)
-    }
-
-    convertContainer(type: idl.IDLContainerType): string {
-        const retType = super.convertContainer(type)
-        if (idl.IDLContainerUtils.isSequence(type)) {
-            return PrimitiveTypesInstance.NativePointer.getText()
-        }
-        return retType
     }
 }

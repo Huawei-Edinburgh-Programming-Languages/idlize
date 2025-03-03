@@ -73,15 +73,15 @@ function suggestTSPackageName(library: PeerLibrary, node: idl.IDLEntry): string 
 
 class TsLayout extends CommonLayoutBase {
 
-    private selectInterface(node: idl.IDLEntry): string {
+    protected selectInterface(node: idl.IDLEntry): string {
         if (!this.library.hasInLibrary(node))
             return suggestTSPackageName(this.library, node)
         if (idl.isHandwritten(node)) {
             return HandwrittenModule(this.library.language)
         }
-        const ns = idl.getNamespaceName(node)
-        if (ns !== '') {
-            return `${this.prefix}${ns.split('.').map(it => idl.capitalize(it)).join('')}Namespace`
+        const ns = idl.getNamespacesPathFor(node)
+        if (ns.length) {
+            return `${this.prefix}${idl.capitalize(ns[0].name)}Namespace`
         }
         if (idl.isSyntheticEntry(node)) {
             return SyntheticModule
@@ -105,19 +105,19 @@ class TsLayout extends CommonLayoutBase {
         return `${this.prefix}${toFileName(entryName)}Interfaces`
     }
 
-    private selectPeer(node:idl.IDLEntry): string {
+    protected selectPeer(node:idl.IDLEntry): string {
         if (idl.isInterface(node)) {
             if (isComponentDeclaration(this.library, node)) {
                 return `peers/${this.prefix}${toFileName(node.name)}Peer`
             }
         }
-        throw new Error(`Can not resolve`)
+        return `peers/${node.name}`
     }
 
-    private selectGlobal(node:idl.IDLEntry): string {
-        const ns = idl.getNamespaceName(node)
-        if (ns !== '') {
-            return `${this.prefix}${ns.split('.').map(it => idl.capitalize(it)).join('')}Namespace`
+    protected selectGlobal(node:idl.IDLEntry): string {
+        const ns = idl.getNamespacesPathFor(node)
+        if (ns.length) {
+            return `${this.prefix}${idl.capitalize(ns[0].name)}Namespace`
         }
         return `GlobalScope`
     }
@@ -133,7 +133,16 @@ class TsLayout extends CommonLayoutBase {
     }
 }
 
-class ArkTsLayout extends TsLayout { }
+class ArkTsLayout extends TsLayout {
+    // replace point symbol inside names, but not when it is a part of path
+    readonly replacePattern = /(\.)[^\.\/]/g
+    protected selectInterface(node: idl.IDLEntry): string {
+        return super.selectInterface(node).replaceAll('@', '').replaceAll(this.replacePattern, '_')
+    }
+    protected selectPeer(node:idl.IDLEntry): string {
+        return super.selectPeer(node).replaceAll('@', '').replaceAll(this.replacePattern, '_')
+    }
+}
 
 class JavaLayout extends CommonLayoutBase {
     constructor(library: PeerLibrary, prefix: string, private packagePath: string) {

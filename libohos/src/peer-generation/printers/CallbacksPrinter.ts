@@ -152,11 +152,11 @@ class DeserializeCallbacksVisitor {
     private writeImports() {
         if (this.writer.language === Language.CPP) {
             const cppFile = this.destFile as CppSourceFile
-            cppFile.addInclude(`${this.libraryName}_api_generated.h`)
             cppFile.addInclude("callback_kind.h")
             cppFile.addInclude("Serializers.h")
             cppFile.addInclude("callbacks.h")
             cppFile.addInclude("common-interop.h")
+            cppFile.addInclude(`${this.libraryName}_api_generated.h`)
         }
 
         if (this.writer.language === Language.TS || this.writer.language === Language.ARKTS) {
@@ -368,6 +368,9 @@ class DeserializeCallbacksVisitor {
                 writer.writePrintLog(`Unknown callback kind`)
             }
         })
+        if (this.writer.language === Language.CPP) {
+            this.writer.print(`KOALA_EXECUTE(deserializeAndCallCallback, setCallbackCaller(static_cast<Callback_Caller_t>(deserializeAndCallCallback)))`)
+        }
         if (this.writer.language === Language.TS) {
             this.writer.print('wrapSystemCallback(1, (buff:Uint8Array, len:int32) => { deserializeAndCallCallback(new Deserializer(buff.buffer, len)); return 0 })')
         }
@@ -395,6 +398,7 @@ class DeserializeCallbacksVisitor {
                 }
                 writer.writePrintLog(`Unknown callback kind`)
             })
+            this.writer.print(`KOALA_EXECUTE(deserializeAndCallCallbackSync, setCallbackCallerSync(static_cast<Callback_Caller_Sync_t>(deserializeAndCallCallbackSync)))`)
         }
     }
 
@@ -426,11 +430,11 @@ class ManagedCallCallbackVisitor {
     }
 
     private writeImports() {
-        this.dest.addInclude(`${this.libraryName}_api_generated.h`)
         this.dest.addInclude("callback_kind.h")
         this.dest.addInclude("Serializers.h")
         this.dest.addInclude("common-interop.h")
         this.dest.addInclude("callbacks.h")
+        this.dest.addInclude(`${this.libraryName}_api_generated.h`)
     }
 
     private writeCallbackCaller(callback: idl.IDLCallback): void {

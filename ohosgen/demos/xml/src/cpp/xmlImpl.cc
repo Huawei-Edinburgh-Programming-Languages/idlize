@@ -13,8 +13,12 @@
  * limitations under the License.
  */
 
+#include <stdio.h>
+
 #include "xml.h"
 #include "parser_impl.h"
+
+#include "interop-logging.h"
 
 OH_XML_XmlSerializerHandle XmlSerializer_constructImpl(const OH_Buffer* buffer, const Opt_String* encoding) {
     return {};
@@ -131,15 +135,63 @@ void XmlPullParser_parseImpl(OH_XML_VMContext vmContext, OH_NativePointer thisPt
 }
 void XmlPullParser_parseXmlImpl(OH_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_XML_ParseOptions* option) {
 }
-void GlobalScope_xml_xmlpromises_returnPromiseImpl(const XML_Callback_Opt_Number_Opt_Array_String_Void* out) {
-    out->call(out->resource.resourceId,
-        { .tag = INTEROP_TAG_INT32, .value = { .tag = INTEROP_TAG_INT32, .i32 = 42 } },
-        { .tag = INTEROP_TAG_UNDEFINED }
-    );
+class TestPromiseHandler {
+private:
+    XML_Callback_Opt_Number_Opt_Array_String_Void callback;
+    int result = 0;
+public:
+    TestPromiseHandler(XML_Callback_Opt_Number_Opt_Array_String_Void callback): callback(callback) {
+        callback.resource.hold(callback.resource.resourceId);
+    }
+
+    void Execute() {
+        result = 42;
+    }
+
+    void Complete() {
+        callback.call(callback.resource.resourceId,
+            { .tag = INTEROP_TAG_INT32, .value = { .tag = INTEROP_TAG_INT32, .i32 = 42 } },
+            { .tag = INTEROP_TAG_UNDEFINED }
+        );
+        callback.resource.release(callback.resource.resourceId);
+        delete this;
+    }
+};
+static void DoPromiseExecute(void* handler) {
+    ((TestPromiseHandler*)handler)->Execute();
 }
-OH_XML_Point GlobalScope_xml_xmlpromises_getPointImpl() {
+static void DoPromiseComplete(void* handler) {
+    ((TestPromiseHandler*)handler)->Complete();
+}
+void GlobalScope_xml_returnPromiseImpl(OH_XML_VMContext vmContext, OH_XML_AsyncWorkerPtr asyncWorker, const XML_Callback_Opt_Number_Opt_Array_String_Void* out) {
+    auto work = asyncWorker->createWork(vmContext, new TestPromiseHandler(*out), DoPromiseExecute, DoPromiseComplete);
+    work.queue(work.workId);
+}
+OH_XML_Point GlobalScope_xml_getPointImpl() {
     return {
         .x = { .tag = INTEROP_TAG_INT32, .i32 = 42 },
         .y = { .tag = INTEROP_TAG_INT32, .i32 = 88 }
+    };
+}
+
+
+class ClassStub {};
+
+OH_XML_MapTestHandle MapTest_constructImpl() {
+    return (OH_XML_MapTestHandle)(new ClassStub());
+}
+void MapTest_destructImpl(OH_XML_MapTestHandle thiz) {
+    delete (ClassStub*)thiz;
+}
+OH_Number MapTest_testSerializeImpl(OH_NativePointer thisPtr, const Map_String_Number* options) {
+    int sum = 0;
+    printf("map->size %d\n", options->size);
+    for (int i = 0; i < options->size; i++) {
+       printf("  key %s, value %d\n", options->keys[i].chars, options->values[i].i32);
+       sum += options->values[i].i32;
+    }
+    return {
+        .tag=INTEROP_TAG_INT32,
+        .i32 = (int32_t)sum,
     };
 }

@@ -14,24 +14,98 @@
  */
 
 import { Config } from "../Config"
-import { throwException } from "@idlizer/core"
+import {
+    createParameter,
+    createReferenceType,
+    IDLInterface,
+    IDLMethod,
+    isVoidType,
+    throwException
+} from "@idlizer/core"
+import { InteropConstructions } from "../visitors/interop/InteropConstructions"
+import { createUpdatedMethod, nodeType, parent } from "./idl"
 
-export function pascalToCamel(value: string) {
+function pascalToCamel(value: string): string {
     return value.charAt(0).toLowerCase() + value.slice(1);
 }
 
+function dropPostfix(value: string, toDrop: string): string {
+    if (value.endsWith(toDrop)) {
+        return value.slice(0, -toDrop.length)
+    }
+    return value
+}
+
+function dropPrefix(value: string, toDrop: string): string {
+    if (value.startsWith(toDrop)) {
+        return value.slice(toDrop.length)
+    }
+    return value
+}
+
+export function peerMethod(name: string): string {
+    return pascalToCamel(dropPostfix(name, Config.constPostfix))
+}
+
 export function splitCreateOrUpdate(fullName: string): { createOrUpdate: string, rest: string } {
-    let createOrUpdate: string
-    let index: string
     if (fullName.startsWith(Config.createPrefix)) {
-        createOrUpdate = Config.createPrefix
-        index = fullName.slice(Config.createPrefix.length)
-        return { createOrUpdate, rest: index }
+        const createOrUpdate = Config.createPrefix
+        const rest = dropPrefix(fullName, Config.createPrefix)
+        return { createOrUpdate, rest }
     }
     if (fullName.startsWith(Config.updatePrefix)) {
-        createOrUpdate = Config.updatePrefix
-        index = fullName.slice(Config.updatePrefix.length)
-        return { createOrUpdate, rest: index }
+        const createOrUpdate = Config.updatePrefix
+        const rest = dropPrefix(fullName, Config.updatePrefix)
+        return { createOrUpdate, rest }
     }
     throwException(`method name doesn't start neither with ${Config.createPrefix} nor with ${Config.updatePrefix}`)
+}
+
+export function mangleIfKeyword(name: string): string {
+    if (InteropConstructions.keywords.includes(name)) {
+        return `_${name}`
+    }
+    return name
+}
+
+export function isGetter(node: IDLMethod): boolean {
+    if (node.parameters.length !== 0) {
+        return false
+    }
+    return node.extendedAttributes
+            ?.some(it => it.name === Config.getterAttribute)
+        ?? false
+}
+
+export function isRegular(node: IDLMethod): boolean {
+    if (!isVoidType(node.returnType)) {
+        return false
+    }
+    return true
+}
+
+export function isAbstract(node: IDLInterface): boolean {
+    if (isDataClass(node)) {
+        return false
+    }
+    if (isReal(node)) {
+        return false
+    }
+    return true
+}
+
+export function isReal(node: IDLInterface): boolean {
+    return nodeType(node) !== undefined
+}
+
+export function isDataClass(node: IDLInterface): boolean {
+    return parent(node) === Config.defaultAncestor
+}
+
+export function withInserted<T>(array: T[], index: number, value: T): T[] {
+    return [
+        ...array.slice(0, index),
+        value,
+        ...array.slice(index)
+    ]
 }

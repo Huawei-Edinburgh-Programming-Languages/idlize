@@ -26,6 +26,10 @@ export function isMaterialized(declaration: idl.IDLInterface, resolver: Referenc
         if (declaration.name == forceMaterialized) return true
     }
 
+    if (generatorConfiguration().forceCallback.includes(declaration.name)) {
+        return false
+    }
+
     for (const ignore of generatorConfiguration().ignoreMaterialized) {
             if (declaration.name.endsWith(ignore)) return false
     }
@@ -44,4 +48,11 @@ export function isMaterialized(declaration: idl.IDLInterface, resolver: Referenc
         return isMaterialized(superType, resolver)
     }
     return false
+}
+
+export function isMaterializedType(type: idl.IDLType, resolver: ReferenceResolver): boolean {
+    if (!idl.isReferenceType(type)) return false
+    const decl = resolver.resolveTypeReference(type)
+    if (!decl) return false
+    return (idl.isInterface(decl) && isMaterialized(decl, resolver))
 }
