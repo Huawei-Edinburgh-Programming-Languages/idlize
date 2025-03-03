@@ -1656,9 +1656,9 @@
 |`fill`| Function | Lobah Mikhail | in progress| | |
 |`position`| Function | Lobah Mikhail| in progress| | |
 |`commands`| Function | Lobah Mikhail| in progress| | |
-|*GlobalScope_ohos_font*| *Class* | Pavelyev Ivan | in progress | | |
-|`registerFont`| Function | Pavelyev Ivan | in progress | | |
-|`getSystemFontList`| Function | Pavelyev Ivan | in progress | | |
+|*GlobalScope_ohos_font*| *Class* | Pavelyev Ivan | in progress | | done on feature branch |
+|`registerFont`| Function | Pavelyev Ivan | in progress | | done on feature branch |
+|`getSystemFontList`| Function | Pavelyev Ivan | in progress | | done on feature branch |
 |*ScaleSymbolEffect*| *Class* | Andrey Khudenkikh | devdone | | |
 |`getScope`| Function | Andrey Khudenkikh | devdone | | |
 |`setScope`| Function | Andrey Khudenkikh | devdone | | |
