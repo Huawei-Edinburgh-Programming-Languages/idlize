@@ -22,7 +22,7 @@
 // import type { AsyncCallback } from '../@ohos.base';
 // import resmgr from '../@ohos.resourceManager';
 import BaseContext from './BaseContext';
-// import EventHub from './EventHub';
+import EventHub from './EventHub';
 // import ApplicationContext from './ApplicationContext';
 // import contextConstant from '../@ohos.app.ability.contextConstant';
 
