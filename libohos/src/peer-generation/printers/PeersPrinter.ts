@@ -528,6 +528,10 @@ export function writePeerMethod(library: PeerLibrary, printer: LanguageWriter, m
 }
 
 function makeDeserializedReturn(library: PeerLibrary, writer: LanguageWriter, returnType: IDLType): LanguageStatement[] {
+    if (library.language === Language.JAVA) {
+        return [writer.makeThrowError("Deserialization is not implemented in JAVA")]
+    }
+
     const deserializerName = `${returnValName}Deserializer`
     writer.writeStatement(
         writer.makeAssign(
