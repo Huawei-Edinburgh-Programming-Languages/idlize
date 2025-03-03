@@ -2526,8 +2526,8 @@
 |`getBaselineOffset`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
 |*LetterSpacingStyle*| *Class* | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
 |`getLetterSpacing`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
-|*TextShadowStyle*| *Class* | | |  | |
-|`getTextShadow`| Function | | | | |
+|*TextShadowStyle*| *Class* |  Politov Mikhail | in progress |  | |
+|`getTextShadow`| Function |  Politov Mikhail | in progress | | |
 |*BackgroundColorStyle*| *Class* | Politov Mikhail | in progress |  | |
 |*GestureStyle*| *Class* | Dudkin Sergey| in progress |  | |
 |*ParagraphStyle*| *Class* |Dudkin Sergey |in progress |  | |
