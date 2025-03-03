@@ -1954,28 +1954,28 @@
 |*PixelMapMock*| *Class* | Maksimov Nikita | done |  | |
 |`release`| Function | Maksimov Nikita | done |  | |
 |*DragEvent*| *Class* | Evstigneev Roman | in progress |  | |
-|`getDisplayX`| Function | Tuzhilkin Ivan | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getDisplayY`| Function | Tuzhilkin Ivan | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getWindowX`| Function | Evstigneev Roman | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getWindowY`| Function | Evstigneev Roman | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getX`| Function | Evstigneev Roman | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0, deprecated? |
-|`getY`| Function | Evstigneev Roman | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0, deprecated? |
+|`getDisplayX`| Function | Tuzhilkin Ivan | in progress |  | done on feature branch |
+|`getDisplayY`| Function | Tuzhilkin Ivan | in progress |  | done on feature branch |
+|`getWindowX`| Function | Evstigneev Roman | in progress |  | done on feature branch, priority |
+|`getWindowY`| Function | Evstigneev Roman | in progress |  | done on feature branch, priority |
+|`getX`| Function | Evstigneev Roman | in progress |  | done on feature branch, priority, deprecated? |
+|`getY`| Function | Evstigneev Roman | in progress |  | done on feature branch, priority, deprecated? |
 |`setData`| Function | Evstigneev Roman | done |  | |
-|`getData`| Function | Evstigneev Roman | in progress |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0, done for feature branch |
-|`getSummary`| Function | Tuzhilkin Ivan | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getData`| Function | Evstigneev Roman | in progress |  | done for feature branch |
+|`getSummary`| Function | Tuzhilkin Ivan | blocked IDL |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setResult`| Function | Evstigneev Roman | done |  | |
-|`getResult`| Function | Evstigneev Roman | in progress |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0, done for feature branch |
-|`getPreviewRect`| Function | Evstigneev Roman | in progress |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0, done for feature branch |
-|`getVelocityX`| Function | Tuzhilkin Ivan | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getVelocityY`| Function | Tuzhilkin Ivan | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getVelocity`| Function | Tuzhilkin Ivan | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getResult`| Function | Evstigneev Roman | in progress |  | done for feature branch |
+|`getPreviewRect`| Function | Evstigneev Roman | in progress |  | done for feature branch |
+|`getVelocityX`| Function | Tuzhilkin Ivan | blocked IDL |  | done for feature branch |
+|`getVelocityY`| Function | Tuzhilkin Ivan | blocked IDL |  | done for feature branch |
+|`getVelocity`| Function | Tuzhilkin Ivan | blocked IDL |  | done for feature branch |
 |`getModifierKeyState`| Function | Tuzhilkin Ivan | done |  | |
-|`executeDropAnimation`| Function | Tuzhilkin Ivan | in progress |  | wait MASTER upmerge |
-|`getDragBehavior`| Function | Tuzhilkin Ivan | in progress |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0, done for feature branch |
+|`executeDropAnimation`| Function | Tuzhilkin Ivan | in progress |  | done for feature branch |
+|`getDragBehavior`| Function | Tuzhilkin Ivan | blocked IDL |  | done for feature branch |
 |`setDragBehavior`| Function | Tuzhilkin Ivan | done |  | |
-|`getUseCustomDropAnimation`| Function | Evstigneev Roman | done |  | |
-|`setUseCustomDropAnimation`| Function | Evstigneev Roman | done |  | |
-|*KeyEvent*| *Class* | Maksimov Nikita | blocked IDL |  | |
+|`getUseCustomDropAnimation`| Function | Evstigneev Roman | done |  | priority |
+|`setUseCustomDropAnimation`| Function | Evstigneev Roman | done |  | priority |
+|*KeyEvent*| *Class* | Maksimov Nikita | blocked IDL |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`getModifierKeyState`| Function | Maksimov Nikita | done | | |
 |`getType`| Function | Maksimov Nikita, Samarin Sergey | in progress |  | done for feature branch https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setType`| Function | Maksimov Nikita | done | | |
