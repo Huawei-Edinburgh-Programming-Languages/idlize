@@ -71,6 +71,7 @@ export enum IDLExtendedAttributes {
     Import = "Import",
     IndexSignature = "IndexSignature",
     Interfaces = "Interfaces",
+    JavaType = "JavaType",
     NativeModule = "NativeModule",
     Optional = "Optional",
     OriginalEnumMemberName = "OriginalEnumMemberName",

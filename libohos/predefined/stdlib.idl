@@ -1,10 +1,10 @@
 package org.openharmony.idlize.predefined;
 
-[TSType=RuntimeType, CPPType=RuntimeType]
+[TSType=RuntimeType, JavaType=RuntimeType, CJType=RuntimeType, CPPType=RuntimeType]
 interface RuntimeType {};
-[TSType=Materialized, CPPType=Materialized]
+[TSType=Materialized, JavaType=Materialized, CJType=Materialized, CPPType=Materialized]
 interface Materialized {};
-[TSType=CallbackResource, CPPType=CallbackResource]
+[TSType=CallbackResource, JavaType=CallbackResource, CJType=CallbackResource, CPPType=CallbackResource]
 interface CallbackResource {};
 [CPPType=VMContext]
 interface VMContext {};

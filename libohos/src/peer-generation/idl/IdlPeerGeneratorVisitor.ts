@@ -117,6 +117,8 @@ export function isSystemEntry(entry: idl.IDLEntry) {
     return idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.CPPType)
         || idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.TSType)
         || idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.ArkTSType)
+        || idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.JavaType)
+        || idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.CJType)
 }
 
 function generateArgConvertor(library: PeerLibrary, param: idl.IDLParameter): ArgConvertor {
@@ -480,6 +482,8 @@ export class IdlPeerProcessor {
 
     private ignoreDeclaration(decl: idl.IDLEntry, language: Language): boolean {
         return idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.TSType) ||
+            idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.JavaType) ||
+            idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.CJType) ||
             idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.CPPType) ||
             peerGeneratorConfiguration().ignoreEntry(decl.name!, language)
     }

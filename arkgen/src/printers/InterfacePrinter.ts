@@ -859,7 +859,7 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
         })
         for (const file of this.peerLibrary.files) {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
-                if (idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.TSType) ||
+                if (idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.CJType) ||
                     isPredefined(entry))
                     continue
                 if (peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
