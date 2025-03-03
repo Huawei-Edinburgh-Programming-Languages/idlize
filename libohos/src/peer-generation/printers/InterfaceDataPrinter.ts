@@ -197,8 +197,7 @@ function printInterface(library: PeerLibrary, entry: idl.IDLInterface): PrinterR
     }
     if (library.language == idl.Language.CJ) {
         if (!idl.isMaterialized(entry, library)) {
-            if (!['RuntimeType', 'CallbackResource', 'Materialized'].includes(entry.name))
-                CJDeclConvertor.makeInterface(library, entry, printer)
+            CJDeclConvertor.makeInterface(library, entry, printer)
         }
     } else {
         if (idl.isInterfaceSubkind(entry)) {
