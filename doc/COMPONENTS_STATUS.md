@@ -1894,7 +1894,7 @@
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`setStopPropagation`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
+|`setStopPropagation`| Function | Tuzhilkin Ivan | in progress |  |  |
 |*MouseEvent*| *Class* | Kovalev Sergey | testskipped |  | |
 |`getButton`| Function | Kovalev Sergey | testskipped |  | |
 |`setButton`| Function | Kovalev Sergey | done |  | |
@@ -1917,7 +1917,7 @@
 |`getY`| Function | Kovalev Sergey | done |  | |
 |`setY`| Function | Kovalev Sergey | done |  | |
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`setStopPropagation`| Function | Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
+|`setStopPropagation`| Function | Kovalev Sergey | in progress |  |  |
 |`getRawDeltaX`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
 |`setRawDeltaX`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
 |`getRawDeltaY`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
@@ -1998,8 +1998,8 @@
 |`setUnicode`| Function | Maksimov Nikita | done | | |
 |*FocusAxisEvent*| *Class* | | | | |
 |`setAxisMap`| Function | | | | |
-|`getStopPropagation`| Function | Samarin Sergey | blocked IDL | | feature: API not present, upstream: https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
-|`setStopPropagation`| Function | | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
+|`getStopPropagation`| Function | Samarin Sergey | in progress | | feature: API not present |
+|`setStopPropagation`| Function | | in progress |  |  |
 |*ProgressMask*| *Class* | Maksimov Nikita | done |  | |
 |`updateProgress`| Function | Maksimov Nikita | done |  | |
 |`updateColor`| Function | Maksimov Nikita | done |  | |
