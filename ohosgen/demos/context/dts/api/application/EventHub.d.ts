@@ -15,6 +15,7 @@
 
 // import { BusinessError } from '../@ohos.base';
 
+/*
 export default class EventHub {
 
   on(event: string, callback: Function): void;
@@ -23,3 +24,4 @@ export default class EventHub {
 
   emit(event: string, ...args: Object[]): void;
 }
+*/
