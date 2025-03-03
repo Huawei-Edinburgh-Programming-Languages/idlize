@@ -87,6 +87,32 @@ if (process.env.npm_package_version) {
     console.log(`IDLize version ${findVersion()}`)
 }
 
+function collectFiles(inputDirs: string[], inputFiles: string[]): string[] {
+    const filesSet = new Set<string>()
+
+    inputFiles.forEach(file => {
+        const resolved = path.resolve(file)
+        if (fs.existsSync(resolved)) {
+            filesSet.add(resolved)
+        } else {
+            console.error(`Input file does not exist: ${resolved}`)
+        }
+    })
+
+    inputDirs.forEach(dir => {
+        if (fs.existsSync(dir)) {
+            const scannedFiles = scanNotPredefinedDirectory(dir)
+            scannedFiles.forEach(f => {
+                filesSet.add(path.resolve(f.originalFilename))
+            })
+        } else {
+            console.warn(`Warning: Directory ${dir} does not exist`)
+        }
+    })
+
+    return Array.from(filesSet)
+}
+
 if (options.idl2peer) {
     const outDir = options.outputDir ?? "./out"
     const language = Language.fromString(options.language ?? "ts")
@@ -95,7 +121,7 @@ if (options.idl2peer) {
     let inputDirs: string[] = origInputDirs
 
     if (inputDirs.length === 0 && inputFiles.length > 0) {
-        inputDirs = Array.from(new Set(inputFiles.map((file: string) => path.dirname(file))))
+        inputDirs = Array.from(new Set(inputFiles.map(file => path.dirname(file))))
     }
 
     validatePaths(inputDirs, "dir")
@@ -104,24 +130,21 @@ if (options.idl2peer) {
     const idlLibrary = new PeerLibrary(language, libraryPackages)
     scanAndVisitCommonPredefined(idlLibrary)
 
-    inputDirs.forEach((dir: string) => {
-        if (fs.existsSync(dir)) {
-            const scannedFiles = scanNotPredefinedDirectory(dir)
-            inputFiles.forEach((inputFile: string) => {
-                const fileDir = path.dirname(inputFile)
-                if (fileDir === dir) {
-                    const filtered = scannedFiles.filter(f => path.resolve(f.originalFilename) === path.resolve(inputFile))
-                    if (filtered.length === 0) {
-                        console.error(`File ${inputFile} was not found in scanned directory ${dir}`)
-                        process.exit(1)
-                    } else {
-                        idlLibrary.files.push(...filtered)
-                    }
-                }
-            })
-        } else {
-            console.warn(`Warning: Directory ${dir} does not exist`)
+    const finalFiles = collectFiles(inputDirs, inputFiles)
+    if (finalFiles.length === 0) {
+        console.error("No valid input files found")
+        process.exit(1)
+    }
+
+    finalFiles.forEach(filePath => {
+        const scannedFiles = scanNotPredefinedDirectory(path.dirname(filePath))
+        const matched = scannedFiles.filter(f => path.resolve(f.originalFilename) === filePath)
+        if (matched.length === 0) {
+            console.error(`File ${filePath} was not found in scanned directory`)
+            process.exit(1)
+
         }
+        idlLibrary.files.push(...matched)
     })
 
     new IdlPeerProcessor(idlLibrary).process()
@@ -141,13 +164,14 @@ if (options.dts2peer) {
 
     options.docs = "all"
     const idlLibrary = new PeerLibrary(lang, libraryPackages)
-    scanAndVisitCommonPredefined(idlLibrary);
+    scanAndVisitCommonPredefined(idlLibrary)
 
     generate(
         inputDirs,
         inputFiles,
         generatedPeersDir,
-        (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, idlLibrary),
+        (sourceFile, program, compilerHost) =>
+            new IDLVisitor(sourceFile, program, compilerHost, options, idlLibrary),
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile(file, outputDir, sourceFile) {
