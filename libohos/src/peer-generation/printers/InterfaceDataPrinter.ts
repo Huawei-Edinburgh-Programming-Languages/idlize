@@ -21,6 +21,7 @@ import * as idl from '@idlizer/core'
 import { collectProperties } from "./StructPrinter";
 import { collapseSameMethodsIDL, groupOverloadsIDL, groupSameSignatureMethodsIDL } from "./OverloadsPrinter";
 import { peerGeneratorConfiguration } from "../PeerGeneratorConfig";
+import { isPredefined } from "../idl/IdlPeerGeneratorVisitor";
 
 /**
  * Printer for OHOS interfaces
@@ -31,7 +32,7 @@ export function printInterfaceData(library: PeerLibrary): PrinterResult[] {
             return []
         return file.entries
             .flatMap(it => idl.isNamespace(it) ? it.members : [it])
-            .filter(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Predefined))
+            .filter(it => !(isPredefined(it) || idl.hasExtAttribute(it, idl.IDLExtendedAttributes.TSType)))
             .flatMap(entry => {
                 if (idl.isInterface(entry)) {
                     if (isMaterialized(entry, library) && idl.isClassSubkind(entry)) {
