@@ -1680,8 +1680,8 @@
 |`getParent`| Function | Tuzhilkin Ivan | done |  | |
 |`getChildrenCount`| Function | Tuzhilkin Ivan | done |  | |
 |`dispose`| Function | Tuzhilkin Ivan | done |  | |
-|`getOpacity`| Function | Morozov Sergey | in progress | |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getPositionToWindowWithTransform`| Function | Morozov Sergey | in progress | |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J|
+|`getOpacity`| Function | Morozov Sergey | in progress | done on feature branch |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getPositionToWindowWithTransform`| Function | Morozov Sergey | in progress | done on feature branch |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J|
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
 |`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
 |`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
@@ -1725,9 +1725,9 @@
 |`close`| Function | Pavelyev Ivan | done |  |  |
 |`getHeight`| Function | Pavelyev Ivan | in progress |  | RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getWidth`| Function | Pavelyev Ivan |in progress |  | RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|*ImageData*| *Class* | Morozov Sergey | in progress | | |
-|`getHeight`| Function | Morozov Sergey | in progress | | |
-|`getWidth`| Function | Morozov Sergey | in progress | | |
+|*ImageData*| *Class* | Morozov Sergey | devdone | | |
+|`getHeight`| Function | Morozov Sergey | devdone | | |
+|`getWidth`| Function | Morozov Sergey | devdone | | |
 |*RenderingContextSettings*| *Class* | Vadim Voronov | in progress | | |
 |`getAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB, doesn't present in Upstream |
 |`setAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB, doesn't present in Upstream |
@@ -2013,7 +2013,7 @@
 |`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | blocked IDL |  | |
 |`getCaretOffset`| Function | Dudkin Sergey | in progress |  |RETURN_VALUE, RET_VAL_UNBLOCKED |
-|`getTextContentRect`| Function | Morozov Sergey | devdone |  |  |
+|`getTextContentRect`| Function | Morozov Sergey | done on feature branch |  |  |
 |`getTextContentLineCount`| Function | Morozov Sergey | done |  | |
 |`addText`| Function | | | | |
 |`deleteText`| Function | | | | |
@@ -2021,7 +2021,7 @@
 |*ChildrenMainSize*| *Class* | Morozov Sergey | blocked IDL |  |
 |`splice`| Function | Morozov Sergey | done |  |  |
 |`update`| Function | Morozov Sergey | done |  |  |
-|`getChildDefaultSize`| Function | Morozov Sergey | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J |
+|`getChildDefaultSize`| Function | Morozov Sergey | done on feature branch |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IBLA1J |
 |`setChildDefaultSize`| Function | Morozov Sergey| done |  | |
 |*UICommonEvent*| *Class* | Andrey Khudenkikh | in progress | | |
 |`setOnClick`| Function | Andrey Khudenkikh | testskipped | | |
@@ -2068,16 +2068,16 @@
 |`getRepeat`| Function | | | | |
 |`setRepeat`| Function | | | | |
 |*PanGestureEvent*| *Class* | Morozov Sergey | blocked IDL | | |
-|`getOffsetX`| Function | Morozov Sergey | devdone | |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setOffsetX`| Function | Morozov Sergey | devdone | | |
-|`getOffsetY`| Function | Morozov Sergey | devdone | |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setOffsetY`| Function | Morozov Sergey | devdone | | |
-|`getVelocityX`| Function | Morozov Sergey | devdone | |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setVelocityX`| Function | Morozov Sergey | devdone | | |
-|`getVelocityY`| Function | Morozov Sergey | devdone | |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setVelocityY`| Function | Morozov Sergey | devdone | | |
-|`getVelocity`| Function | Morozov Sergey | devdone | |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setVelocity`| Function | Morozov Sergey | devdone | | |
+|`getOffsetX`| Function | Morozov Sergey | done on feature branch | |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setOffsetX`| Function | Morozov Sergey | done | | |
+|`getOffsetY`| Function | Morozov Sergey | done on feature branch | |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setOffsetY`| Function | Morozov Sergey | done | | |
+|`getVelocityX`| Function | Morozov Sergey | done on feature branch | |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setVelocityX`| Function | Morozov Sergey | done | | |
+|`getVelocityY`| Function | Morozov Sergey | done on feature branch | |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setVelocityY`| Function | Morozov Sergey | done | | |
+|`getVelocity`| Function | Morozov Sergey | done on feature branch | |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`setVelocity`| Function | Morozov Sergey | done | | |
 |*PinchGestureEvent*| *Class* | Vadim Voronov | done | | |
 |`getScale`| Function | Vadim Voronov | done | | |
 |`setScale`| Function | Vadim Voronov | done | | |
@@ -2145,7 +2145,7 @@
 |`getItemRectInGroup`| Function |Morozov Sergey | devdone |  | |
 |`scrollToItemInGroup`| Function |Morozov Sergey | done |  |  |
 |`closeAllSwipeActions`| Function |Morozov Sergey | done |  |  |
-|`getVisibleListContentInfo`| Function |Morozov Sergey | in progress|  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getVisibleListContentInfo`| Function |Morozov Sergey | in progress|  |unblocked, to be fixed, RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*Matrix2D*| *Class* | Vadim Voronov | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`identity`| Function | Vadim Voronov | done |  | |
 |`invert`| Function | Vadim Voronov | done |  | |
