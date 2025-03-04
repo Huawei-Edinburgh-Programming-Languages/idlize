@@ -19,16 +19,6 @@
  */
 
 /**
- * Import the SystemBarStyle type for Navigation.
- *
- * @typedef { import('../api/@ohos.window').default.SystemBarStyle } SystemBarStyle
- * @syscap SystemCapability.ArkUI.ArkUI.Full
- * @atomicservice
- * @since 12
- */
-declare type SystemBarStyle = import('../api/@ohos.window').default.SystemBarStyle;
-
-/**
  * Defines the navigation common title.
  *
  * @interface NavigationCommonTitle

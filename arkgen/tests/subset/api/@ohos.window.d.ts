@@ -5,7 +5,6 @@ declare namespace window {
   enum WindowLayoutMode {}
   enum WindowStatusType {}
   interface SystemBarProperties {}
-  interface SystemBarStyle {}
   interface SystemBarRegionTint {}
   interface SystemBarTintState {}
   interface Rect {}
