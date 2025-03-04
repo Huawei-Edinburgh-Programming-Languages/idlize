@@ -1896,25 +1896,25 @@
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | in progress |  |  |
 |*MouseEvent*| *Class* | Kovalev Sergey | testskipped |  | |
-|`getButton`| Function | Kovalev Sergey | testskipped |  | |
+|`getButton`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
 |`setButton`| Function | Kovalev Sergey | done |  | |
-|`getAction`| Function | Kovalev Sergey | testskipped |  | |
+|`getAction`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
 |`setAction`| Function | Kovalev Sergey | done |  | |
-|`getDisplayX`| Function | Kovalev Sergey | done |  | |
+|`getDisplayX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
 |`setDisplayX`| Function | Kovalev Sergey | done |  | |
-|`getDisplayY`| Function | Kovalev Sergey | done |  | |
+|`getDisplayY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
 |`setDisplayY`| Function | Kovalev Sergey | done |  | |
-|`getWindowX`| Function | Kovalev Sergey | done |  | |
+|`getWindowX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
 |`setWindowX`| Function | Kovalev Sergey | done |  | |
-|`getWindowY`| Function | Kovalev Sergey | done |  | |
+|`getWindowY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
 |`setWindowY`| Function | Kovalev Sergey | done |  | |
-|`getScreenX`| Function | Kovalev Sergey | done |  |deprecated? |
+|`getScreenX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  |deprecated? |
 |`setScreenX`| Function | Kovalev Sergey | done |  |deprecated? |
-|`getScreenY`| Function | Kovalev Sergey | done |  |deprecated? |
+|`getScreenY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  |deprecated? |
 |`setScreenY`| Function | Kovalev Sergey | done |  |deprecated? |
-|`getX`| Function | Kovalev Sergey | done |  | |
+|`getX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
 |`setX`| Function | Kovalev Sergey | done |  | |
-|`getY`| Function | Kovalev Sergey | done |  | |
+|`getY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
 |`setY`| Function | Kovalev Sergey | done |  | |
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Kovalev Sergey | in progress |  |  |
