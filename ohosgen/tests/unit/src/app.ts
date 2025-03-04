@@ -1,3 +1,4 @@
+import { and_values } from '#compat'
 import { sum_numbers } from '#compat'
 import {
   ForceCallbackListener,
@@ -9,6 +10,17 @@ import {
 
 function compareNumbers(v1: number, v2: number): boolean {
   return Math.abs(v1 - v1) < 0.1
+}
+
+function check_booleans() {
+  if (and_values(false, false))
+    throw new Error(`and(false, false) returns true!`)
+  if (and_values(false, true))
+    throw new Error(`and(false, true) returns true!`)
+  if (and_values(true, false))
+    throw new Error(`and(true, false) returns true!`)
+  if (!and_values(true, true))
+    throw new Error(`and(true, true) returns false!`)
 }
 
 function checkNumber() {
@@ -72,6 +84,7 @@ function checkForceCallback() {
 export function run() {
   console.log("Run common unit tests")
 
+  check_booleans()
   checkNumber()
   checkForceCallback()
 }

@@ -166,6 +166,11 @@ OH_Number GlobalScope_callForceCallbackListenerImpl() {
     return {.tag = INTEROP_TAG_INT32, .i32 = 102};
 }
 
+// OH_Boolean
+OH_Boolean GlobalScope_and_valuesImpl(OH_Boolean v1, OH_Boolean v2) {
+    return v1 && v2;
+}
+
 // OH_Number
 
 OH_Number GlobalScope_sum_numbersImpl(const OH_Number* v1, const OH_Number* v2) {
