@@ -402,3 +402,12 @@ interface ReplaceSymbolEffect: SymbolEffect {
     [Optional]
     attribute EffectScope scope;
 };
+
+///rm, add ut
+[Synthetic, TypeParameters="T,R"]
+callback Callback_T_R = R (T param);
+
+[Entity=Class, TypeParameters="T,R"]
+interface WrappedFunc {
+    attribute [TypeArguments="T,R"] Callback_T_R func;
+};

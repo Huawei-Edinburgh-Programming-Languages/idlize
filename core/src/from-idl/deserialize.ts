@@ -297,14 +297,19 @@ function toIDLParameter(file: string, node: webidl2.Argument): idl.IDLParameter 
 }
 
 function toIDLCallback(file: string, node: webidl2.CallbackType): idl.IDLCallback {
+    const extendedAttributes = toExtendedAttributes(node.extAttrs)
+    const typeParams = extendedAttributes
+        ?.find(it => it.name === idl.IDLExtendedAttributes.TypeParameters)
+        ?.value
+        ?.split(",")
     const result = idl.createCallback(
         node.name,
         node.arguments.map(it => toIDLParameter(file, it)),
         toIDLType(file, node.idlType), {
         fileName: file,
-        extendedAttributes: toExtendedAttributes(node.extAttrs),
+        extendedAttributes,
         documentation: makeDocs(node),
-    })
+        }, typeParams)
     if (node.extAttrs.find(it => it.name === "Synthetic"))
         addSyntheticType(node.name, result)
     return result
