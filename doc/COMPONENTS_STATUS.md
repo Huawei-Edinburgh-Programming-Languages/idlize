@@ -2268,7 +2268,7 @@
 |`changeIndex`| Function | Skroba Gleb | done |  |  |
 |`finishAnimation`| Function | Skroba Gleb | done |  |  |
 |`preloadItems`| Function | | | | |
-|*SwiperContentTransitionProxy*| *Class* | Skroba Gleb | blocked IDL |  | |
+|*SwiperContentTransitionProxy*| *Class* | Skroba Gleb | in progress |  | done on Feature |
 |`finishTransition`| Function | Skroba Gleb | done |  | |
 |`getSelectedIndex`| Function | Skroba Gleb | in progress |  | done on Feature |
 |`setSelectedIndex`| Function | Skroba Gleb | done |  | |
