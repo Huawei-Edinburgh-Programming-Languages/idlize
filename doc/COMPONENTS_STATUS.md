@@ -2553,15 +2553,15 @@
 |*TextShadowStyle*| *Class* |  Politov Mikhail | in progress |  | |
 |`getTextShadow`| Function |  Politov Mikhail | in progress | | |
 |*BackgroundColorStyle*| *Class* | Politov Mikhail | in progress |  | |
-|*GestureStyle*| *Class* | Dudkin Sergey| in progress |  | |
+|*GestureStyle*| *Class* | Dudkin Sergey| in progress |  | testskipped on feature_branch|
 |*ParagraphStyle*| *Class* |Dudkin Sergey |in progress |  | |
-|`getTextAlign`| Function |Dudkin Sergey |in progress |  | |
-|`getTextIndent`| Function |Dudkin Sergey |in progress |  | |
-|`getMaxLines`| Function |Dudkin Sergey |in progress |  | |
-|`getOverflow`| Function |Dudkin Sergey |in progress |  | |
-|`getWordBreak`| Function |Dudkin Sergey |in progress |  | |
+|`getTextAlign`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
+|`getTextIndent`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
+|`getMaxLines`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
+|`getOverflow`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
+|`getWordBreak`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
 |*LineHeightStyle*| *Class* |Dudkin Sergey |in progress |  | |
-|`getLineHeight`| Function |Dudkin Sergey |in progress |  | |
+|`getLineHeight`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
 |*UrlStyle*| *Class* | Politov Mikhail | in progress |  | |
 |`getUrl`| Function | Politov Mikhail | in progress |  | |
 |*MutableStyledString*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBBYJE + |
