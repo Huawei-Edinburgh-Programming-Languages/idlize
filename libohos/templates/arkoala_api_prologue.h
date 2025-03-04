@@ -71,6 +71,7 @@ typedef InteropFunction Ark_Function;
 typedef InteropAsyncWork Ark_AsyncWork;
 typedef InteropAsyncWorker Ark_AsyncWorker;
 typedef InteropAsyncWorkerPtr Ark_AsyncWorkerPtr;
+typedef InteropAny Ark_Any;
 
 // TODO: generate!
 typedef struct Opt_Ark_Callback {

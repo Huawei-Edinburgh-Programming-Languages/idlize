@@ -29,6 +29,7 @@ export {
     registerForceCallbackListener,
     callForceCallbackListener,
     ClassWithComplexPropertyType
+    TestAny,
 } from "../../generated/arkts"
 
 export {
@@ -46,6 +47,7 @@ export {
 } from '../../generated/arkts'
 
 export type OHBuffer = NativeBuffer
+export type OHAny = object
 
 export function pullEvents() {
     checkArkoalaCallbacks()
