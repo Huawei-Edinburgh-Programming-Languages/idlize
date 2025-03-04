@@ -2270,13 +2270,13 @@
 |`preloadItems`| Function | | | | |
 |*SwiperContentTransitionProxy*| *Class* | Skroba Gleb | blocked IDL |  | |
 |`finishTransition`| Function | Skroba Gleb | done |  | |
-|`getSelectedIndex`| Function | Skroba Gleb | in progress |  |Looks like it's done. RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getSelectedIndex`| Function | Skroba Gleb | in progress |  | done on Feature |
 |`setSelectedIndex`| Function | Skroba Gleb | done |  | |
-|`getIndex`| Function | Skroba Gleb | in progress |  |Looks like it's done. RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getIndex`| Function | Skroba Gleb | in progress |  | done on Feature |
 |`setIndex`| Function | Skroba Gleb | done |  | |
-|`getPosition`| Function | Skroba Gleb | in progress |  |Looks like it's done. RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getPosition`| Function | Skroba Gleb | in progress |  | done on Feature |
 |`setPosition`| Function | Skroba Gleb | done |  | |
-|`getMainAxisLength`| Function | Skroba Gleb | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getMainAxisLength`| Function | Skroba Gleb | in progress |  | done on Feature |
 |`setMainAxisLength`| Function | Skroba Gleb | done |  | |
 |*IndicatorComponentController*| *Class* | Andrey Khudenkikh | done |  |  |
 |`showNext`| Function | Andrey Khudenkikh | done |  |  |
