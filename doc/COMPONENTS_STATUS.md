@@ -1591,14 +1591,14 @@
 |`drawRect`| Function | Dudkin Sergey | done |  | |
 |*LengthMetrics*| *Class* | Evstigneev Roman | in progress | | |
 |`px`| Function | Evstigneev Roman | in progress | | done for feature branch |
-|`vp`| Function | Samarin Sergey | in progress | | |
-|`fp`| Function | Samarin Sergey | in progress | | |
-|`percent`| Function | Samarin Sergey | in progress | | |
-|`lpx`| Function | Samarin Sergey | in progress | | |
+|`vp`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`fp`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`percent`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`lpx`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`resource`| Function | Evstigneev Roman | in progress | | done for feature branch |
 |`getUnit`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setUnit`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`getValue`| Function | Samarin Sergey | in progress | | |
+|`getValue`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setValue`| Function | Samarin Sergey | in progress | | done for feature branch |
 |*ColorMetrics*| *Class* | | | | |
 |`numeric`| Function | | | | |
@@ -1983,7 +1983,7 @@
 |`setKeyCode`| Function | Maksimov Nikita | done | | |
 |`getKeyText`| Function | Maksimov Nikita | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setKeyText`| Function | Maksimov Nikita | done | | |
-|`getKeySource`| Function | Maksimov Nikita, Samarin Sergey | in progress | | done for feature branch https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getKeySource`| Function | Maksimov Nikita, Samarin Sergey | in progress | | done for feature branch |
 |`setKeySource`| Function | Maksimov Nikita | done | | |
 |`getDeviceId`| Function | Maksimov Nikita | done | | |
 |`setDeviceId`| Function | Maksimov Nikita | done | | |
