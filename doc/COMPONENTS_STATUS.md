@@ -208,7 +208,7 @@
 |`gridSpan`| Function | Lobah Mikhail | done |  |deprecated? |
 |`gridOffset`| Function | Lobah Mikhail | done |  |deprecated? |
 |`rotate`| Function | Dmitry A Smirnov| done |  | Dmitry A Smirnov|
-|`transform`| Function | Lobah Mikhail | blocked IDL | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX | |
+|`transform`| Function | Lobah Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 case 2 -- of Ark_CustomObject from type Object| |
 |`onAppear`| Function | Roman Sedaikin | done |  | |
 |`onDisAppear`| Function | Roman Sedaikin | done |  | |
 |`onAttach`| Function | Andrey Khudenkikh | done |  | |
@@ -1113,7 +1113,7 @@
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
 |*TabContent*| *Component* | Evstigneev Roman | done |  |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |  |
-|`tabBar`| Function | Evstigneev Roman | in progress | UT for CustomNodeBuilder done Lobah Mikhail |  |
+|`tabBar`| Function | Evstigneev Roman, Lobah Mikhail | blocked IDL | modifier and UT for CustomNodeBuilder done Lobah Mikhail. `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB |  |
 |`onWillShow`| Function |Evstigneev Roman | done |  |  |
 |`onWillHide`| Function |Evstigneev Roman | done |  |  |
 |*Text*| *Component* | Samarin Sergey | blocked IDL |  | |
