@@ -1111,7 +1111,7 @@
 |`onContentWillChange`| Function | Dudkin Sergey | done |  | |
 |`barModeScrollable`| Function | Tuzhilkin Ivan | done |  | |
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
-|*TabContent*| *Component* | Evstigneev Roman | done |  |  |
+|*TabContent*| *Component* | Evstigneev Roman | blocked IDL |  |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |  |
 |`tabBar`| Function | Evstigneev Roman, Lobah Mikhail | blocked IDL | modifier and UT for CustomNodeBuilder done Lobah Mikhail. `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB |  |
 |`onWillShow`| Function |Evstigneev Roman | done |  |  |
