@@ -22367,7 +22367,7 @@ declare interface MeasureResult extends SizeResult {
  * @atomicservice
  * @since 12
  */
-declare type NavDestinationInfo = import('../api/@ohos.arkui.observer').default.NavDestinationInfo;
+declare type NavDestinationInfo = import('../api/@ohos.arkui.observer').NavDestinationInfo;
 
 /**
  * The navigation information.
@@ -22476,7 +22476,7 @@ declare type ComponentContent<T = Object> = import('../api/arkui/ComponentConten
  */
 declare type Theme = import('../api/@ohos.arkui.theme').Theme;
 
-declare type PromptActionDialogController = import('../api/@ohos.promptAction').promptAction.DialogController;
+declare type PromptActionDialogController = import('../api/@ohos.promptActionDialogController').PromptActionDialogController;
 
 declare class BaseCustomComponent extends CommonAttribute {
   build(): void;
