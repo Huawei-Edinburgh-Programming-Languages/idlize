@@ -1894,7 +1894,7 @@
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`setStopPropagation`| Function | Tuzhilkin Ivan | in progress |  |  |
+|`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |*MouseEvent*| *Class* | Kovalev Sergey | testskipped |  | |
 |`getButton`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
 |`setButton`| Function | Kovalev Sergey | done |  | |
@@ -1917,7 +1917,7 @@
 |`getY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
 |`setY`| Function | Kovalev Sergey | done |  | |
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`setStopPropagation`| Function | Kovalev Sergey | in progress |  |  |
+|`setStopPropagation`| Function | Kovalev Sergey | done |  | empty implementation |
 |`getRawDeltaX`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
 |`setRawDeltaX`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
 |`getRawDeltaY`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
@@ -1992,14 +1992,14 @@
 |`getTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
 |`setTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`setStopPropagation`| Function | Maksimov Nikita | done | | |
+|`setStopPropagation`| Function | Maksimov Nikita | done | | empty implementation |
 |`setIntentionCode`| Function | Maksimov Nikita | done | | |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
 |*FocusAxisEvent*| *Class* | | | | |
 |`setAxisMap`| Function | | | | |
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | feature: API not present |
-|`setStopPropagation`| Function | | in progress |  |  |
+|`setStopPropagation`| Function | | done  |  | empty implementation |
 |*ProgressMask*| *Class* | Maksimov Nikita | done |  | |
 |`updateProgress`| Function | Maksimov Nikita | done |  | |
 |`updateColor`| Function | Maksimov Nikita | done |  | |
