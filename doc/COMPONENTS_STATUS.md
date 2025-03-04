@@ -1874,21 +1874,21 @@
 |`getTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
 |`setTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
 |*ClickEvent*| *Class* | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
-|`getDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getWindowX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getWindowY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
+|`getScreenX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  |done for feature branch, signature is changed in new generation, deprecated? |
 |`setScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
-|`getScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
+|`getScreenY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  |done for feature branch, signature is changed in new generation, deprecated? |
 |`setScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
-|`getX`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getY`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getPreventDefault`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
@@ -1896,25 +1896,25 @@
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |*MouseEvent*| *Class* | Kovalev Sergey | testskipped |  | |
-|`getButton`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
+|`getButton`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setButton`| Function | Kovalev Sergey | done |  | |
-|`getAction`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
+|`getAction`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setAction`| Function | Kovalev Sergey | done |  | |
-|`getDisplayX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
+|`getDisplayX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setDisplayX`| Function | Kovalev Sergey | done |  | |
-|`getDisplayY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
+|`getDisplayY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setDisplayY`| Function | Kovalev Sergey | done |  | |
-|`getWindowX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
+|`getWindowX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setWindowX`| Function | Kovalev Sergey | done |  | |
-|`getWindowY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
+|`getWindowY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setWindowY`| Function | Kovalev Sergey | done |  | |
-|`getScreenX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT, deprecated? |
+|`getScreenX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation, deprecated? |
 |`setScreenX`| Function | Kovalev Sergey | done |  |deprecated? |
-|`getScreenY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT, deprecated? |
+|`getScreenY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation, deprecated? |
 |`setScreenY`| Function | Kovalev Sergey | done |  |deprecated? |
-|`getX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
+|`getX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setX`| Function | Kovalev Sergey | done |  | |
-|`getY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
+|`getY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
 |`setY`| Function | Kovalev Sergey | done |  | |
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Kovalev Sergey | done |  | empty implementation |
