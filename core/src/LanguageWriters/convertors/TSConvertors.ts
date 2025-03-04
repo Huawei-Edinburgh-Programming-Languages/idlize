@@ -218,7 +218,7 @@ export class TSInteropArgConvertor implements TypeConvertor<string> {
             case idl.IDLNumberType: return 'number'
             case idl.IDLBigintType: return 'bigint'
             case idl.IDLBooleanType:
-            case idl.IDLFunctionType: return 'number'
+            case idl.IDLFunctionType: return 'KInt'
             case idl.IDLStringType: return 'KStringPtr'
             case idl.IDLBufferType: return `ArrayBuffer`
             case idl.IDLLengthType: return 'Length'
