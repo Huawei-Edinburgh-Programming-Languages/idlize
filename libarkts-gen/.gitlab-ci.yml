@@ -1,4 +1,15 @@
-libarkts-gen idl:
+build idlize-es2pandagen:
+  stage: build
+  tags:
+    - idlize-ci
+    - koala-ci
+  before_script:
+    - !reference [.setup, script]
+    - cd $CI_PROJECT_DIR/libarkts-gen
+  script:
+    - npm run compile
+
+test es2pandagen:
   stage: test
   tags:
     - idlize-ci
@@ -7,5 +18,44 @@ libarkts-gen idl:
     - !reference [.setup, script]
     - cd $CI_PROJECT_DIR
     - PANDA_SDK_VERSION=next npm run --prefix ./external/incremental/tools/panda panda:sdk:install
+    - cd libarkts-gen
   script:
     - npm run all --prefix libarkts-gen
+
+pack idlize-es2pandagen:
+  extends:
+    - .npm-pack
+  variables:
+    PACKAGE_DIR: libarkts-gen
+  needs:
+    - build idlize-es2pandagen
+
+prepublish test es2pandagen:
+  stage: pre-publish
+  tags:
+    - idlize-ci
+    - koala-ci
+  before_script:
+    - !reference [ .setup, script ]
+    - cd $CI_PROJECT_DIR/libarkts-gen
+  script:
+    - npm pack
+    - ls *.tgz | xargs -I {} tar -xvzf {} -C ./test
+    - cd test
+    - npm i
+    - npx @idlizer/libarkts-gen \
+      --panda-sdk-path ../../external/incremental/tools/panda/node_modules/@panda/sdk \
+      --output-dir .
+    - cd libarkts
+    - npm i
+    - npm run compile
+  needs:
+    - build idlize-es2pandagen
+
+publish idlize-es2pandagen:
+  extends:
+    - .npm-publish
+  variables:
+    PACKAGE_DIR: libarkts-gen
+  dependencies:
+    - build idlize-arkgen

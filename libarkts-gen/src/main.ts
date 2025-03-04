@@ -14,43 +14,54 @@
  */
 
 import { program } from "commander"
-import { toIDLFile } from "@idlizer/core"
-import { FileEmitter } from "./FileEmitter"
+import { throwException, toIDLFile } from "@idlizer/core"
+import { DynamicEmitter } from "./emitters/DynamicEmitter"
 import { Config } from "./Config"
 import { Options } from "./Options"
 import * as path from "node:path"
+import { StaticEmitter } from "./emitters/StaticEmitter"
 
 const cliOptions: {
-    inputFile?: string,
-    outputDir?: string,
+    pandaSdkPath?: string
+    outputDir?: string
     files?: string
-    optionsFile?: string,
+    optionsFile?: string
     debug?: boolean
+    noInitialize?: boolean
 } = program
-    .option('--input-file <path>', 'Path to file to generate from')
+    .option('--panda-sdk-path <path>', 'Path to panda sdk')
     .option('--output-dir <path>', 'Path to output dir')
     .option('--files <string>', 'Types of files to be emitted [bridges|bindings|enums], comma separated, no space')
     .option('--options-file <path>', 'Path to file which determines what to generate')
     .option('--debug', 'Generate intermediate versions of IDL IR')
+    .option('--no-initialize', 'Do not emit static part of sources')
     .parse()
     .opts()
 
 function main() {
-    const outDir = cliOptions.outputDir ?? `./out`
-    const idlFileName = cliOptions.inputFile ?? `./input/full.idl`
+    const outDir = cliOptions.outputDir ?? throwException(`output-dir is mandatory parameter`)
+    const pandaSdkPath = cliOptions.pandaSdkPath ?? throwException(`panda-sdk-path is mandatory parameter`)
+    const inputFile = path.join(pandaSdkPath, `ohos_arm64/include/tools/es2panda/generated/es2panda_lib/es2panda_lib.idl`)
     const files = cliOptions.files?.split(`,`)
     const optionsFile = cliOptions.optionsFile ?? path.join(__dirname, `../input/ignore.json5`)
     const isDebug = cliOptions.debug ?? false
+    const noInitialize = cliOptions.noInitialize ?? false
 
-    new FileEmitter(
+    new DynamicEmitter(
         outDir,
-        toIDLFile(idlFileName),
+        toIDLFile(inputFile),
         new Config(
             new Options(optionsFile),
             files
         ),
         isDebug
-    ).print()
+    ).emit()
+
+    new StaticEmitter(
+        outDir,
+        noInitialize,
+        pandaSdkPath
+    ).emit()
 }
 
 main()
