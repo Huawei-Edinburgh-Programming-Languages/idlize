@@ -1591,14 +1591,14 @@
 |`drawRect`| Function | Dudkin Sergey | done |  | |
 |*LengthMetrics*| *Class* | Evstigneev Roman | in progress | | |
 |`px`| Function | Evstigneev Roman | in progress | | done for feature branch |
-|`vp`| Function | | | | |
-|`fp`| Function | | | | |
-|`percent`| Function | | | | |
-|`lpx`| Function | | | | |
+|`vp`| Function | Samarin Sergey | in progress | | |
+|`fp`| Function | Samarin Sergey | in progress | | |
+|`percent`| Function | Samarin Sergey | in progress | | |
+|`lpx`| Function | Samarin Sergey | in progress | | |
 |`resource`| Function | Evstigneev Roman | in progress | | done for feature branch |
 |`getUnit`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setUnit`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`getValue`| Function | Samarin Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getValue`| Function | Samarin Sergey | in progress | | |
 |`setValue`| Function | Samarin Sergey | in progress | | done for feature branch |
 |*ColorMetrics*| *Class* | | | | |
 |`numeric`| Function | | | | |
@@ -1627,16 +1627,16 @@
 |`width`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |`height`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |`size`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|*RectShape*| *Class* | Samarin Sergey | in progress | | |
-|`offset`| Function | Samarin Sergey | in progress | | |
-|`fill`| Function | Samarin Sergey | in progress | | |
-|`position`| Function | Samarin Sergey | in progress | | |
-|`width`| Function | Samarin Sergey | in progress | | |
-|`height`| Function | Samarin Sergey | in progress | | |
-|`size`| Function | Samarin Sergey | in progress | | |
-|`radiusWidth`| Function | Samarin Sergey | in progress | | |
-|`radiusHeight`| Function | Samarin Sergey | in progress | | |
-|`radius`| Function | Samarin Sergey | in progress | | |
+|*RectShape*| *Class* | Samarin Sergey | in progress | | done for feature branch |
+|`offset`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`fill`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`position`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`width`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`height`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`size`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`radiusWidth`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`radiusHeight`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`radius`| Function | Samarin Sergey | in progress | | done for feature branch |
 |*CircleShape*| *Class* |Dudkin Sergey |in progress | | |
 |`offset`| Function |Dudkin Sergey |in progress | | |
 |`fill`| Function | Dudkin Sergey |in progress | | |
@@ -1925,7 +1925,7 @@
 |`getPressedButtons`| Function | | | | |
 |`setPressedButtons`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
 |*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | blocked IDL |  | |
-|`getType`| Function | Pavelyev Ivan, Samarin Sergey | in progress |  | done for feature branch https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getType`| Function | Pavelyev Ivan, Samarin Sergey | in progress |  | done for feature branch |
 |`setType`| Function | Pavelyev Ivan | done |  | |
 |`getX`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
 |`setX`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
@@ -1941,7 +1941,7 @@
 |`setWindowY`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
 |*TouchEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
 |`getHistoricalPoints`| Function | Tuzhilkin Ivan | blocked IDL |  | implementation and UT are ready on FB, but correct behavior is blocked https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
-|`getType`| Function | Tuzhilkin Ivan, Samarin Sergey | in progress |  | done for feature branch https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getType`| Function | Tuzhilkin Ivan, Samarin Sergey | in progress |  | done for feature branch |
 |`setType`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |`getTouches`| Function | Tuzhilkin Ivan | in progress | | done for feature branch |
 |`setTouches`| Function | Tuzhilkin Ivan | done |  | empty implementation |
@@ -1977,7 +1977,7 @@
 |`setUseCustomDropAnimation`| Function | Evstigneev Roman | done |  | priority |
 |*KeyEvent*| *Class* | Maksimov Nikita | blocked IDL |  |RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IBK1OL |
 |`getModifierKeyState`| Function | Maksimov Nikita | done | | |
-|`getType`| Function | Maksimov Nikita, Samarin Sergey | in progress |  | done for feature branch https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getType`| Function | Maksimov Nikita, Samarin Sergey | in progress |  | done for feature branch |
 |`setType`| Function | Maksimov Nikita | done | | |
 |`getKeyCode`| Function | Maksimov Nikita | done | | |
 |`setKeyCode`| Function | Maksimov Nikita | done | | |
@@ -2130,7 +2130,7 @@
 |`getId`| Function | Maksimov Nikita | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
 |*GestureRecognizer*| *Class* | Kovalev Sergey | blocked IDL |  | |
 |`getTag`| Function | Kovalev Sergey | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
-|`getType`| Function | Kovalev Sergey, Samarin Sergey | in progress |  | done for feature branch https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
+|`getType`| Function | Kovalev Sergey, Samarin Sergey | in progress |  | done for feature branch |
 |`isBuiltIn`| Function | Kovalev Sergey | done |  | |
 |`setEnabled`| Function | Kovalev Sergey | done |  | |
 |`isEnabled`| Function | Kovalev Sergey | done |  | |
