@@ -362,6 +362,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
         for (const file of this.peerLibrary.files) {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (idl.isImport(entry) ||
+                    idl.isNamespace(entry) ||
                     isPredefined(entry) ||
                     idl.isHandwritten(entry) ||
                     peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
@@ -698,7 +699,7 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
         })
         for (const file of this.peerLibrary.files.values()) {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
-                if (isPredefined(entry))
+                if (isPredefined(entry) || idl.isNamespace(entry))
                     continue;
                 syntheticsGenerator.convert(entry)
                 if (peerGeneratorConfiguration().ignoreEntry(entry.name, Language.JAVA))
@@ -815,6 +816,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
                 continue
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (isPredefined(entry) ||
+                    idl.isNamespace(entry) ||
                     idl.isHandwritten(entry) ||
                     peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
@@ -867,7 +869,8 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
         for (const file of this.peerLibrary.files) {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.TSType) ||
-                    isPredefined(entry))
+                    isPredefined(entry) ||
+                    idl.isNamespace(entry))
                     continue
                 if (peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
