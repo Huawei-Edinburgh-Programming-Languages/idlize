@@ -1896,25 +1896,25 @@
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |*MouseEvent*| *Class* | Kovalev Sergey | testskipped |  | |
-|`getButton`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
+|`getButton`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
 |`setButton`| Function | Kovalev Sergey | done |  | |
-|`getAction`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
+|`getAction`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
 |`setAction`| Function | Kovalev Sergey | done |  | |
-|`getDisplayX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
+|`getDisplayX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
 |`setDisplayX`| Function | Kovalev Sergey | done |  | |
-|`getDisplayY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
+|`getDisplayY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
 |`setDisplayY`| Function | Kovalev Sergey | done |  | |
-|`getWindowX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
+|`getWindowX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
 |`setWindowX`| Function | Kovalev Sergey | done |  | |
-|`getWindowY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
+|`getWindowY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
 |`setWindowY`| Function | Kovalev Sergey | done |  | |
-|`getScreenX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  |deprecated? |
+|`getScreenX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT, deprecated? |
 |`setScreenX`| Function | Kovalev Sergey | done |  |deprecated? |
-|`getScreenY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  |deprecated? |
+|`getScreenY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT, deprecated? |
 |`setScreenY`| Function | Kovalev Sergey | done |  |deprecated? |
-|`getX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
+|`getX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
 |`setX`| Function | Kovalev Sergey | done |  | |
-|`getY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | |
+|`getY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | signature is changed in new generation, need change implementation and UT |
 |`setY`| Function | Kovalev Sergey | done |  | |
 |`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setStopPropagation`| Function | Kovalev Sergey | done |  | empty implementation |
