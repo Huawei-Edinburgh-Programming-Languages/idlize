@@ -306,7 +306,7 @@
 |`advancedBlendMode`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC80Y |
 |`bindPopup`| Function | Erokhin Ilya | testskipped |  | UT in progress Morozov Sergey |
 |`bindMenu`| Function | Erokhin Ilya | blocked IDL |  | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  |
-|`bindContextMenu`| Function | Erokhin Ilya, Evstigneev Roman | in progress |  | Ark_ContextMenuAnimationOptions https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`bindContextMenu`| Function | Erokhin Ilya, Evstigneev Roman | in progress |  | Ark_ContextMenuAnimationOptions https://gitee.com/nikolay-igotti/idlize/issues/IB6H50, testskipped for feature branch |
 |`bindContentCover`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |`bindSheet`| Function | Erokhin Ilya | testskipped |  | UT in progress Vadim Voronov |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done |  | |
@@ -507,7 +507,7 @@
 |`interpolation`| Function | Evstigneev Roman | done |  | |
 |`sourceSize`| Function | Evstigneev Roman | done |  | |
 |`syncLoad`| Function | Evstigneev Roman | done |  | |
-|`colorFilter`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH and https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 (+) |
+|`colorFilter`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH and https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 (+),  DrawingColorFilter is stub, in progress for ColorFilter |
 |`copyOption`| Function | Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBEEFF (+) |
 |`draggable`| Function | Evstigneev Roman | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBEA6V (+) |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  |    |
@@ -539,7 +539,7 @@
 |*ImageSpan*| *Component* | Politov Mikhail | blocked IDL |  |  |
 |`setImageSpanOptions`| Function | Politov Mikhail | done |  | |
 |`verticalAlign`| Function | Politov Mikhail | done |  |  |
-|`colorFilter`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 | |
+|`colorFilter`| Function | Politov Mikhail, Evstigneev Roman | blocked IDL |  | DrawingColorFilter is stub, https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72, in progress for ColorFilter(feature) | |
 |`objectFit`| Function | Politov Mikhail | done |  |  |
 |`onComplete`| Function | Politov Mikhail | done |  |  |
 |`onError`| Function | Politov Mikhail | done |  |  |
