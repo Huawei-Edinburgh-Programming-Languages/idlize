@@ -49,12 +49,12 @@ declare namespace window {
   function setWindowLayoutMode(mode: WindowLayoutMode): Promise<void>;
   function setGestureNavigationEnabled(enable: boolean, callback: AsyncCallback<void>): void;
   function setGestureNavigationEnabled(enable: boolean): Promise<void>;
-  function setWaterMarkImage(pixelMap: image.PixelMap, enable: boolean): Promise<void>;
-  function setWaterMarkImage(pixelMap: image.PixelMap, enable: boolean, callback: AsyncCallback<void>): void;
+  function setWaterMarkImage(pixelMap: PixelMap, enable: boolean): Promise<void>;
+  function setWaterMarkImage(pixelMap: PixelMap, enable: boolean, callback: AsyncCallback<void>): void;
   function shiftAppWindowFocus(sourceWindowId: number, targetWindowId: number): Promise<void>;
   function shiftAppWindowPointerEvent(sourceWindowId: number, targetWindowId: number): Promise<void>;
   function getVisibleWindowInfo(): Promise<Array<WindowInfo>>;
-  function getSnapshot(windowId: number): Promise<image.PixelMap>;
+  function getSnapshot(windowId: number): Promise<PixelMap>;
   function getWindowsByCoordinate(displayId: number, windowNumber?: number, x?: number, y?: number): Promise<Array<Window>>;
   function getAllWindowLayoutInfo(displayId: number): Promise<Array<WindowLayoutInfo>>;
   function on(type: 'systemBarTintChange', callback: Callback<SystemBarTintState>): void;

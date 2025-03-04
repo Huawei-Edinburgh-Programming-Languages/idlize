@@ -9267,30 +9267,6 @@ declare type ShouldBuiltInRecognizerParallelWithCallback = (current: GestureReco
 declare type TransitionFinishCallback = (transitionIn: boolean) => void;
 
 /**
- * Defines the PixelMap type object for ui component.
- *
- * @syscap SystemCapability.ArkUI.ArkUI.Full
- * @since 7
- */
-/**
- * Defines the PixelMap type object for ui component.
- *
- * @syscap SystemCapability.ArkUI.ArkUI.Full
- * @crossplatform
- * @since 10
- */
-/**
- * Defines the PixelMap type object for ui component.
- *
- * @typedef { import('../api/@ohos.multimedia.image').default.PixelMap } PixelMap
- * @syscap SystemCapability.ArkUI.ArkUI.Full
- * @crossplatform
- * @atomicservice
- * @since 11
- */
-declare type PixelMap = import('../api/@ohos.multimedia.image').default.PixelMap;
-
-/**
  * pixelmap object with release function.
  *
  * @interface PixelMapMock
