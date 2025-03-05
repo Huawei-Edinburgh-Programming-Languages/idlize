@@ -1,4 +1,4 @@
-build idlize-es2pandagen:
+build idlize-libarktsgen:
   stage: build
   tags:
     - idlize-ci
@@ -9,7 +9,7 @@ build idlize-es2pandagen:
   script:
     - npm run compile
 
-test es2pandagen:
+test libarktsgen:
   stage: test
   tags:
     - idlize-ci
@@ -22,15 +22,15 @@ test es2pandagen:
   script:
     - npm run all --prefix libarkts-gen
 
-pack idlize-es2pandagen:
+pack idlize-libarktsgen:
   extends:
     - .npm-pack
   variables:
     PACKAGE_DIR: libarkts-gen
   needs:
-    - build idlize-es2pandagen
+    - build idlize-libarktsgen
 
-prepublish test es2pandagen:
+prepublish test libarktsgen:
   stage: pre-publish
   tags:
     - idlize-ci
@@ -50,9 +50,9 @@ prepublish test es2pandagen:
     - npm i
     - npm run compile
   needs:
-    - build idlize-es2pandagen
+    - build idlize-libarktsgen
 
-publish idlize-es2pandagen:
+publish idlize-libarktsgen:
   extends:
     - .npm-publish
   variables:
