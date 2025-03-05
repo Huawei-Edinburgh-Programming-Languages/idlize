@@ -184,15 +184,27 @@ export class PeerLibrary implements LibraryInterface {
 
     resolveTypeReference(type: idl.IDLReferenceType, singleStep?: boolean): idl.IDLEntry | undefined {
         let result = this.resolveNamedNode(type.name.split("."), type.parent)
+        const visited = new Set<idl.IDLEntry>
         while(result && !singleStep) {
+            let nextResult: idl.IDLEntry | undefined = undefined
             if (idl.isImport(result))
-                result = this.resolveImport(result)
+                nextResult = this.resolveImport(result)
             else if (idl.isReferenceType(result))
-                result = this.resolveNamedNode(result.name.split("."))
+                nextResult = this.resolveNamedNode(result.name.split("."))
             else if (idl.isTypedef(result) && idl.isReferenceType(result.type))
-                result = this.resolveNamedNode(result.type.name.split("."))
-            else
-                break
+                nextResult = this.resolveNamedNode(result.type.name.split("."))
+
+            if (!nextResult)
+                break;
+
+            if (visited.has(nextResult)) {
+                console.warn(`Cyclic referenceType: ${type.name}`)
+                for (const step of visited)
+                    console.warn(`step: ${idl.getFQName(step)}`)
+                break;
+            }
+            visited.add(nextResult)
+            result = nextResult
         }
         return result
     }
@@ -225,29 +237,27 @@ export class PeerLibrary implements LibraryInterface {
 
             // retry from root
             pov = undefined
+            const resolveds: idl.IDLNode[] = []
             for (let file of this.files) {
                 result = resolveNamedNode([...file.file.packageClause, ...target], pov, corpus)
                 if (result && idl.isEntry(result)) {
-                    // too much spam
-                    // console.log(`WARNING: Type reference '${type.name}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
-                    return result
+                    console.warn(`WARNING: Type reference '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
+                    resolveds.push(result)
                 }
             }
 
             // and from each namespace
-            const resolveds: idl.IDLNode[] = []
             const traverseNamespaces = (entry: idl.IDLEntry) => {
                 if (entry && idl.isNamespace(entry) && entry.members.length) {
                     const resolved = resolveNamedNode([...idl.getNamespacesPathFor(entry).map(it => it.name), ...target], pov, corpus)
-                    if (resolved)
+                    if (resolved) {
+                        console.warn(`WARNING: Name '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some namespace: '${idl.getNamespacesPathFor(resolved).map(obj => obj.name).join(".")}'`)
                         resolveds.push(resolved)
+                    }
                     entry.members.forEach(traverseNamespaces)
                 }
             }
             this.files.forEach(file => file.entries.forEach(traverseNamespaces))
-
-            for (const resolved of resolveds)
-                console.log(`WARNING: Name '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some namespace: '${idl.getNamespacesPathFor(resolved).map(obj => obj.name).join(".")}'`)
 
             for (const resolved of resolveds)
                 if (idl.isEntry(resolved))
