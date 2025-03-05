@@ -81,7 +81,11 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
         return type.name
     }
     convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): string {
-        return type.name
+        const maybeTypeArguments = type.typeArguments?.length ? `<${type.typeArguments.join(', ')}>` : ""
+        let decl = this.resolver.resolveTypeReference(type)
+        if (decl)
+            return `${decl.name}${maybeTypeArguments}`
+        return `${type.name}${maybeTypeArguments}`
     }
     convertTypeReference(type: idl.IDLReferenceType): string {
         let decl = this.resolver.resolveTypeReference(type)

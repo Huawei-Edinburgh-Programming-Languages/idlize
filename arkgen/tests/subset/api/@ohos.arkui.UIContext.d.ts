@@ -1,4 +1,3 @@
-export class Font {}
 export class MediaQuery {}
 export class UIInspector {}
 export class Router {}

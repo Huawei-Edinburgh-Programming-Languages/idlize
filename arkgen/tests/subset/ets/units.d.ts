@@ -18,8 +18,6 @@ declare type Resource = import('../resource/resource').Resource;
 
 declare type LengthMetricsUnit = import('../api/arkui/Graphics').LengthMetricsUnit;
 
-declare type LengthMetrics = import('../api/arkui/Graphics').LengthMetrics;
-
 declare type Length = string | number | Resource;
 
 declare type ResourceColor = Color | number | string | Resource;
