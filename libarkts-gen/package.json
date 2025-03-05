@@ -1,6 +1,6 @@
 {
   "name": "@idlizer/libarkts-gen",
-  "version": "1.0.34",
+  "version": "3.0.29",
   "description": "",
   "main": "lib/index.js",
   "bin": "lib/index.js",
