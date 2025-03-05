@@ -131,6 +131,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     private currentNamespace?: idl.IDLNamespace = undefined
 
     private typeChecker: ts.TypeChecker
+    private baseDirs: string[]
     constructor(
         private sourceFile: ts.SourceFile,
         private program: ts.Program,
@@ -139,6 +140,19 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         private predefinedTypeResolver?: ReferenceResolver,
     ) {
         this.typeChecker = program.getTypeChecker()
+
+        let baseDirs = this.options.baseDir || this.options.inputDir
+        if (!baseDirs && this.options.inputFiles) {
+            let inputFiles = this.options.inputFiles
+            if (!Array.isArray(inputFiles))
+                inputFiles = inputFiles.split(",")
+            baseDirs = inputFiles.map((it:string) => path.dirname(it))
+        }
+        if (!baseDirs)
+            throw new Error("Check your --base-dir parameter, value is missing")
+        if (!Array.isArray(baseDirs))
+            baseDirs = baseDirs.split(',')
+        this.baseDirs = baseDirs.map((dir:string) => path.normalize(path.resolve(dir)))
     }
 
     visitPhase1(): idl.IDLFile {
@@ -226,20 +240,8 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     }
 
     detectPackageName(sourceFile: ts.SourceFile): string[] {
-        let baseDirs = this.options.baseDir || this.options.inputDir
-        if (!baseDirs && this.options.inputFiles) {
-            let inputFiles = this.options.inputFiles
-            if (!Array.isArray(inputFiles))
-                inputFiles = inputFiles.split(",")
-            baseDirs = inputFiles.map((it:string) => path.dirname(it))
-        }
-        if (!baseDirs)
-            throw new Error("Unable to resolve relative dts file path for `" + sourceFile.fileName + "`, check your --base-dir parameter")
-        if (!Array.isArray(baseDirs))
-            baseDirs = baseDirs.split(',')
-        baseDirs = baseDirs.map((dir:string) => path.normalize(path.resolve(dir)))
         let relativeFileName
-        for (const baseDir of baseDirs) {
+        for (const baseDir of this.baseDirs) {
             const rel = path.normalize(path.relative(baseDir, sourceFile.fileName))
             if(rel.startsWith("..")) {
                 continue
@@ -387,11 +389,23 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     }
 
     getModulePackageClause(module: string, siblings: Siblings): string[] {
-        let moduleFileName = ts.resolveModuleName(
-            module,
-            this.sourceFile.fileName,
-            this.program.getCompilerOptions(),
-            this.compilerHost).resolvedModule?.resolvedFileName
+        let pov = this.sourceFile.fileName
+        let moduleFileName: string|undefined
+        for (;;) {
+            moduleFileName = ts.resolveModuleName(
+                module,
+                pov,
+                this.program.getCompilerOptions(),
+                this.compilerHost).resolvedModule?.resolvedFileName
+            if (moduleFileName)
+                break
+            const nextPov = path.resolve(pov, "..")
+            if (nextPov == pov)
+                break
+            if (this.baseDirs.some(baseDir => !path.relative(baseDir, nextPov).startsWith("..")))
+                break
+            pov = nextPov
+        }
         if (!moduleFileName) {
             warn(`Import at '${this.sourceFile.fileName}', module '${module}': unable to resolve source file path`)
             return []
