@@ -2085,9 +2085,9 @@
 |`setPinchCenterX`| Function | Vadim Voronov | done | | |
 |`getPinchCenterY`| Function | Vadim Voronov | done | | |
 |`setPinchCenterY`| Function | Vadim Voronov | done | | |
-|*RotationGestureEvent*| *Class* | | | | |
-|`getAngle`| Function | | | | |
-|`setAngle`| Function | | | | |
+|*RotationGestureEvent*| *Class* | Andrey Khudenkikh | devdone | | |
+|`getAngle`| Function | Andrey Khudenkikh | devdone | | |
+|`setAngle`| Function | Andrey Khudenkikh | devdone | | |
 |*SwipeGestureEvent*| *Class* | Evstigneev Roman | in progress | | |
 |`getAngle`| Function | Evstigneev Roman | in progress | |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`setAngle`| Function | Evstigneev Roman | in progress | | |
