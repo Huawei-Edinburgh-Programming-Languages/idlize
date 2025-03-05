@@ -2448,7 +2448,7 @@
 |`getMessage`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getSourceId`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getLineNumber`| Function | Erokhin Ilya | done |  |  |
-|`getMessageLevel`| Function | Erokhin Ilya | in progress |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getMessageLevel`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*WebResourceRequest*| *Class* | Erokhin Ilya | in progress |  |  |
 |`getRequestHeader`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getRequestUrl`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
