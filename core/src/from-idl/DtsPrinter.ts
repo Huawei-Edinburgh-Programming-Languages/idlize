@@ -186,8 +186,8 @@ export class CustomPrintVisitor {
             this.currentInterface = node
             this.pushIndent()
             node.constructors.map(it => this.visit(it))
-            node.properties.filter(it => !it.isStatic).map(it => this.visit(it))
-            node.methods.filter(it => !it.isStatic).map(it => this.visit(it))
+            node.properties.filter(it => entity === IDLEntity.Class || !it.isStatic).map(it => this.visit(it))
+            node.methods.filter(it => entity === IDLEntity.Class || !it.isStatic).map(it => this.visit(it))
             node.callables.map(it => this.visit(it))
             let verbatim = getVerbatimDts(node)
             if (verbatim) {
