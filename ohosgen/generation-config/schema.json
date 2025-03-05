@@ -1,0 +1,310 @@
+{
+  "$ref": "#/definitions/PeerGeneratorConfigurationJSON",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "IDLVisitorConfigurationJSON": {
+      "additionalProperties": false,
+      "properties": {
+        "DeletedDeclarations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "NameReplacements": {
+          "additionalProperties": false,
+          "properties": {
+            "size": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "size"
+          ],
+          "type": "object"
+        },
+        "StubbedDeclarations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "TypeReplacementsFilePath": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DeletedDeclarations",
+        "StubbedDeclarations",
+        "NameReplacements",
+        "TypeReplacementsFilePath"
+      ],
+      "type": "object"
+    },
+    "PeerGeneratorConfigurationJSON": {
+      "additionalProperties": false,
+      "properties": {
+        "ApiVersion": {
+          "type": "number"
+        },
+        "CollapseOverloadsARKTS": {
+          "type": "boolean"
+        },
+        "GenerateUnused": {
+          "type": "boolean"
+        },
+        "IDLVisitor": {
+          "$ref": "#/definitions/IDLVisitorConfigurationJSON"
+        },
+        "LibraryPrefix": {
+          "type": "string"
+        },
+        "OptionalPrefix": {
+          "type": "string"
+        },
+        "TypePrefix": {
+          "type": "string"
+        },
+        "boundProperties": {
+          "additionalProperties": false,
+          "properties": {
+            "size": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "size"
+          ],
+          "type": "object"
+        },
+        "builderClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "components": {
+          "additionalProperties": false,
+          "properties": {
+            "custom": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "customNodeTypes": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "handWritten": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "ignoreComponents": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "ignoreEntry": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "ignoreEntryJava": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "ignoreMethodArkts": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "ignorePeerMethod": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "invalidAttributes": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "replaceThrowErrorReturn": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "ignoreComponents",
+            "ignorePeerMethod",
+            "invalidAttributes",
+            "customNodeTypes",
+            "ignoreEntry",
+            "ignoreEntryJava",
+            "ignoreMethodArkts",
+            "custom",
+            "handWritten",
+            "replaceThrowErrorReturn"
+          ],
+          "type": "object"
+        },
+        "constants": {
+          "additionalProperties": false,
+          "properties": {
+            "size": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "size"
+          ],
+          "type": "object"
+        },
+        "cppPrefix": {
+          "type": "string"
+        },
+        "dummy": {
+          "additionalProperties": false,
+          "properties": {
+            "ignoreMethods": {
+              "additionalProperties": false,
+              "properties": {
+                "size": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "size"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "ignoreMethods"
+          ],
+          "type": "object"
+        },
+        "dumpSerialized": {
+          "type": "boolean"
+        },
+        "forceCallback": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "forceMaterialized": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "ignoreMaterialized": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "materialized": {
+          "additionalProperties": false,
+          "properties": {
+            "ignoreReturnTypes": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "ignoreReturnTypes"
+          ],
+          "type": "object"
+        },
+        "parameterized": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "patchMaterialized": {
+          "additionalProperties": false,
+          "properties": {
+            "size": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "size"
+          ],
+          "type": "object"
+        },
+        "rootComponents": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "serializer": {
+          "additionalProperties": false,
+          "properties": {
+            "ignore": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "ignore"
+          ],
+          "type": "object"
+        },
+        "standaloneComponents": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "ApiVersion",
+        "CollapseOverloadsARKTS",
+        "GenerateUnused",
+        "IDLVisitor",
+        "LibraryPrefix",
+        "OptionalPrefix",
+        "TypePrefix",
+        "boundProperties",
+        "builderClasses",
+        "components",
+        "constants",
+        "cppPrefix",
+        "dummy",
+        "dumpSerialized",
+        "forceCallback",
+        "forceMaterialized",
+        "ignoreMaterialized",
+        "materialized",
+        "parameterized",
+        "patchMaterialized",
+        "rootComponents",
+        "serializer",
+        "standaloneComponents"
+      ],
+      "type": "object"
+    }
+  }
+}

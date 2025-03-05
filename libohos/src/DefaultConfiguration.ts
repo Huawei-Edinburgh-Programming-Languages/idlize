@@ -16,7 +16,6 @@
 import * as fs from "fs"
 import * as path from "path"
 import {
-    CoreConfiguration,
     defaultCoreConfuguration,
     generatorConfiguration,
     isDefined,
@@ -27,48 +26,7 @@ import {
     defaultIDLVisitorConfiguration, 
     IDLVisitorConfiguration
 } from "./IDLVisitorConfig";
-
-export interface PeerGeneratorConfiguration extends CoreConfiguration {
-    readonly GenerateUnused: boolean
-    readonly ApiVersion: number
-    readonly dumpSerialized: boolean
-    readonly boundProperties: Map<string, string[]>
-
-    readonly cppPrefix: string
-    readonly components: {
-        readonly ignoreComponents: string[],
-        readonly ignorePeerMethod: string[],
-        readonly invalidAttributes: string[],
-        readonly customNodeTypes: string[],
-        readonly ignoreEntry: string[],
-        readonly ignoreEntryJava: string[],
-        readonly ignoreMethodArkts: string[],
-        readonly custom: string[],
-        readonly handWritten: string[],
-        readonly replaceThrowErrorReturn: string[],
-    }
-    readonly dummy: {
-        readonly ignoreMethods: Map<string, string[]>
-    }
-    readonly materialized: {
-        readonly ignoreReturnTypes: string[]
-    }
-    readonly serializer: {
-        readonly ignore: string[]
-    }
-    readonly constants: Map<string, string>
-    readonly patchMaterialized: Map<string, Record<string, string>>
-    readonly CollapseOverloadsARKTS: boolean
-    readonly IDLVisitor: IDLVisitorConfiguration
-
-    mapComponentName(originalName: string): string
-    ignoreEntry(name: string, language: Language): boolean
-    ignoreMethod(name: string, language: Language) : boolean
-    isHandWritten(component: string): boolean
-    isKnownParametrized(name: string | undefined): boolean
-    isShouldReplaceThrowingError(name: string) : boolean
-    noDummyGeneration(component: string, method?: string) : boolean
-}
+import { PeerGeneratorConfiguration } from "./PeerGeneratorConfiguration";
 
 function isWhole(methods: string[]): boolean {
     return methods.includes("*")

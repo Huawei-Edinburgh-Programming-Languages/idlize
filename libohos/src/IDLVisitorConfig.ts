@@ -20,14 +20,10 @@ import {
 import * as idl from '@idlizer/core/idl'
 import * as ts from "typescript"
 import * as path from "path"
+import { IDLVisitorConfigurationJSON } from "./IDLVisitorConfigurationJSON";
 
-
-export interface IDLVisitorConfiguration {
-    DeletedDeclarations: string[]
-    StubbedDeclarations: string[]
-    ReplacedDeclarations: Map<string, idl.IDLEntry>
-    NameReplacements: Map<string, [string, string]>
-    TypeReplacementsFilePath: string
+export interface IDLVisitorConfiguration extends IDLVisitorConfigurationJSON {
+    ReplacedDeclarations: Map<string, idl.IDLEntry>; // TODO check json
 
     isDeletedDeclaration(name: string): boolean
     isStubbedDeclaration(name: string): boolean

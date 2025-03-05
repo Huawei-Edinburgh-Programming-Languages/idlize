@@ -26,7 +26,8 @@
     "@types/chai": "^4.3.1",
     "@types/mocha": "^9.1.0",
     "@types/node": "^18.0.0",
-    "source-map-support": "^0.5.21"
+    "source-map-support": "^0.5.21",
+    "ts-json-schema-generator": "2.3.0"
   },
   "scripts": {
     "compile": "npm run --prefix .. download:sdk && npm run --prefix ../libohos compile && rollup -c",
@@ -44,6 +45,8 @@
     "run:ohos:unit:ts": "npm run compile && node . --use-new-ohos --language=ts --default-idl-package unit --input-dir ./tests/unit/dts --output-dir ./out/ohos-unit --dts2peer",
     "run:ohos:unit:arkts": "npm run compile && node . --use-new-ohos --language=arkts --default-idl-package unit --input-dir ./tests/unit/dts --output-dir ./out/ohos-unit --dts2peer",
     "configure:native-node-host-ts-ohos-context": "cd ./native && meson setup -Dsource_set=ohos-context build-node-host-ts-ohos-context",
-    "compile:native-node-host-ts-ohos-context": "npm run configure:native-node-host-ts-ohos-context && cd native && meson compile --verbose -C build-node-host-ts-ohos-context && meson install -C build-node-host-ts-ohos-context"
+    "compile:native-node-host-ts-ohos-context": "npm run configure:native-node-host-ts-ohos-context && cd native && meson compile --verbose -C build-node-host-ts-ohos-context && meson install -C build-node-host-ts-ohos-context",
+
+    "generate-schema": "ts-json-schema-generator --path '../libohos/src/PeerGeneratorConfigurationJSON.ts' --type 'PeerGeneratorConfigurationJSON' --no-type-check -o generation-config/schema.json"
   }
 }
