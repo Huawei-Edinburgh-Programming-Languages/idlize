@@ -507,7 +507,7 @@
 |`interpolation`| Function | Evstigneev Roman | done |  | |
 |`sourceSize`| Function | Evstigneev Roman | done |  | |
 |`syncLoad`| Function | Evstigneev Roman | done |  | |
-|`colorFilter`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH and https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 (+),  DrawingColorFilter is stub, in progress for ColorFilter |
+|`colorFilter`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH and https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 (+),  DrawingColorFilter is stub on the 2.0.41, in progress for ColorFilter |
 |`copyOption`| Function | Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBEEFF (+) |
 |`draggable`| Function | Evstigneev Roman | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBEA6V (+) |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  |    |
@@ -539,7 +539,7 @@
 |*ImageSpan*| *Component* | Politov Mikhail | blocked IDL |  |  |
 |`setImageSpanOptions`| Function | Politov Mikhail | done |  | |
 |`verticalAlign`| Function | Politov Mikhail | done |  |  |
-|`colorFilter`| Function | Politov Mikhail, Evstigneev Roman | blocked IDL |  | DrawingColorFilter is stub, https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72, in progress for ColorFilter(feature) | |
+|`colorFilter`| Function | Politov Mikhail, Evstigneev Roman | blocked IDL |  | DrawingColorFilter is stub on the 2.0.41, https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 (+), in progress for ColorFilter(feature) | |
 |`objectFit`| Function | Politov Mikhail | done |  |  |
 |`onComplete`| Function | Politov Mikhail | done |  |  |
 |`onError`| Function | Politov Mikhail | done |  |  |
@@ -2368,7 +2368,7 @@
 |`reset`| Function |Ekaterina Stepanova| done |  |  |
 |*TimePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL|  | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
-|*ColorFilter*| *Class* | Evstigneev Roman | in progress | | |
+|*ColorFilter*| *Class* | Evstigneev Roman | in progress | | done for feature branch |
 |*VideoController*| *Class* | Erokhin Ilya | done |  |  |
 |`start`| Function | Erokhin Ilya | done |  |  |
 |`pause`| Function | Erokhin Ilya | done |  |  |
