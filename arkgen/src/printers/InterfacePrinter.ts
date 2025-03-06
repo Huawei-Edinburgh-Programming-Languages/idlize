@@ -365,7 +365,6 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (idl.isImport(entry) ||
                     idl.isNamespace(entry) ||
-                    isPredefined(entry) ||
                     isInIdlizeInternal(entry) ||
                     idl.isHandwritten(entry) ||
                     peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
@@ -702,7 +701,7 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
         })
         for (const file of this.peerLibrary.files.values()) {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
-                if (isPredefined(entry) || idl.isNamespace(entry) ||isInIdlizeInternal(entry))
+                if (idl.isNamespace(entry) ||isInIdlizeInternal(entry))
                     continue;
                 syntheticsGenerator.convert(entry)
                 if (peerGeneratorConfiguration().ignoreEntry(entry.name, Language.JAVA))
@@ -818,8 +817,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
             if (this.peerLibrary?.libraryPackages?.length && !this.peerLibrary.libraryPackages.includes(file.packageName()))
                 continue
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
-                if (isPredefined(entry) ||
-                    idl.isNamespace(entry) ||
+                if (idl.isNamespace(entry) ||
                     isInIdlizeInternal(entry) ||
                     idl.isHandwritten(entry) ||
                     peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
@@ -872,9 +870,7 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
         })
         for (const file of this.peerLibrary.files) {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
-                if (idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.TSType) ||
-                    isPredefined(entry) ||
-                    idl.isNamespace(entry) || 
+                if (idl.isNamespace(entry) || 
                     isInIdlize(entry))
                     continue
                 if (peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
