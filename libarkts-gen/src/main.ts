@@ -27,7 +27,7 @@ const cliOptions: {
     files?: string
     optionsFile?: string
     debug?: boolean
-    noInitialize?: boolean
+    initialize?: boolean
 } = program
     .option('--panda-sdk-path <path>', 'Path to panda sdk')
     .option('--output-dir <path>', 'Path to output dir')
@@ -45,7 +45,7 @@ function main() {
     const files = cliOptions.files?.split(`,`)
     const optionsFile = cliOptions.optionsFile ?? path.join(__dirname, `../input/ignore.json5`)
     const isDebug = cliOptions.debug ?? false
-    const noInitialize = cliOptions.noInitialize ?? false
+    const shouldInitialize = cliOptions.initialize ?? false
 
     new DynamicEmitter(
         outDir,
@@ -57,11 +57,12 @@ function main() {
         isDebug
     ).emit()
 
-    new StaticEmitter(
-        outDir,
-        noInitialize,
-        pandaSdkPath
-    ).emit()
+    if (shouldInitialize) {
+        new StaticEmitter(
+            outDir,
+            pandaSdkPath
+        ).emit()
+    }
 }
 
 main()

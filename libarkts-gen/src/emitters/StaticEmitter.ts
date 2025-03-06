@@ -19,7 +19,6 @@ import path from "node:path"
 export class StaticEmitter {
     constructor(
         private outDir: string,
-        private noInitialize: boolean,
         private pandaSdkPath: string
     ) {}
 
@@ -57,9 +56,6 @@ export class StaticEmitter {
     ]
 
     emit(): void {
-        if (this.noInitialize) {
-            return
-        }
         this.copyLibarkts()
         this.patchFiles()
     }
