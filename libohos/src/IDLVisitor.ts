@@ -1562,8 +1562,14 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         }
         if (declaration.initializer) {
             let value = declaration.initializer.getText()
-            if (value.startsWith('"') || value.startsWith("'")) {
+            if (declaration.initializer.kind == ts.SyntaxKind.StringLiteral) {
                 return [idl.IDLStringType, value.replaceAll("'", '"')]
+            }
+            if (declaration.initializer.kind == ts.SyntaxKind.FalseKeyword) {
+                return [idl.IDLBooleanType, 'false']
+            }
+            if (declaration.initializer.kind == ts.SyntaxKind.TrueKeyword) {
+                return [idl.IDLBooleanType, 'true']
             }
             if (value.startsWith("0b")) {
                 return [idl.IDLNumberType, parseInt(value.substring(2), 2).toString()]
@@ -1573,9 +1579,6 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             }
             if (value.startsWith("0x")) {
                 return [idl.IDLNumberType, parseInt(value.substring(2), 16).toString()]
-            }
-            if (parseInt(value) != undefined) {
-                return [idl.IDLNumberType, parseInt(value).toString()]
             }
             if (parseFloat(value) != undefined) {
                 return [idl.IDLNumberType, parseFloat(value).toString()]
