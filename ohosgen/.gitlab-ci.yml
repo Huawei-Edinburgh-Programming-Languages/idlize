@@ -66,6 +66,7 @@ check ohos demos:
     - cd $CI_PROJECT_DIR/ohosgen/tests/unit
     - npm run check:ts
     - npm run check:arkts
+    - npm run run:ohos:demos:tests
 
 check ohos system tests:
   stage: test
