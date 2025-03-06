@@ -254,13 +254,7 @@ if (options.dts2peer) {
                 //         return false
                 //     }))
                 // )
-                file.entries.forEach(it => {
-                    transformMethodsAsync2ReturnPromise(it)
-                })
-                linkParentBack(file)
-
                 const peerFile = new PeerFile(file)
-
                 idlLibrary.files.push(peerFile)
             },
             onEnd(outDir) {

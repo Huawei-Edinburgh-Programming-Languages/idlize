@@ -159,6 +159,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         this.file.fileName = this.sourceFile.fileName
         ts.forEachChild(this.sourceFile, (node) => this.visit(node))
         this.file.packageClause = this.detectPackageName(this.sourceFile)
+        idl.linkParentBack(this.file!)
         return this.file
     }
 
@@ -173,10 +174,26 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
 
         idl.linkParentBack(this.file!)
         idl.linearizeNamespaceMembers(this.file.entries).forEach(it => {
-            idl.transformMethodsReturnPromise2Async(it)
+            // idl.transformMethodsReturnPromise2Async(it)
+            idl.transformMethodsAsync2ReturnPromise(it)
             if (this.defaultExport && this.defaultExport === idl.getQualifiedName(it, "namespace.name")) {
                 it.extendedAttributes ||= []
                 it.extendedAttributes.push({name:idl.IDLExtendedAttributes.DefaultExport})
+            }
+        })
+        idl.forEachChild(this.file!, it => {
+            if (idl.isReferenceType(it) && idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import)) {
+                if (this.predefinedTypeResolver && !this.predefinedTypeResolver.resolveTypeReference(it)) {
+                    it.name = it.name.replaceAll(/(^|\.)default(\.|$)/g, "") // try to drop dts-specific alias 'default'
+                    if (!this.predefinedTypeResolver.resolveTypeReference(it)) {
+                        if (it.parent && idl.isTypedef(it.parent)) // try to use name from enclosing typedef
+                            it.name = it.parent.name
+                        if (!this.predefinedTypeResolver.resolveTypeReference(it)) {
+                            it.name = idl.IDLObjectType.name
+                            it.extendedAttributes = undefined
+                        }
+                    }
+                }
             }
         })
         return this.file!
@@ -409,11 +426,15 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                 break
             pov = nextPov
         }
-        if (!moduleFileName)
-            throw new Error(`Import at '${this.sourceFile.fileName}', module '${module}': unable to resolve source file path`)
+        if (!moduleFileName) {
+            console.warn(`Import at '${this.sourceFile.fileName}', module '${module}': unable to resolve source file path`)
+            return []
+        }
         const sibling = siblings[moduleFileName] || siblings[path.resolve(moduleFileName)]
-        if (!sibling)
-            throw new Error(`Import at '${this.sourceFile.fileName}', module '${module}': not in a closed set`)
+        if (!sibling) {
+            console.warn(`Import at '${this.sourceFile.fileName}', module '${module}': not in a closed set`)
+            return []
+        }
         return sibling.result.packageClause
     }
 

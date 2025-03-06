@@ -150,14 +150,14 @@ export function generate<T>(
     }
 
     for (const resolvedSourceFileName in dtsFileName2Visitor) {
-        const visitorStaff = dtsFileName2Visitor[resolvedSourceFileName]
-        if (visitorStaff.visitor.visitPhase2)
-            visitorStaff.result = visitorStaff.visitor.visitPhase2(dtsFileName2Visitor)
+        const visitorStaff: VisitorStaff = dtsFileName2Visitor[resolvedSourceFileName]
+        options.onSingleFile?.(visitorStaff.result, outputDir, visitorStaff.tsSourceFile)
     }
 
     for (const resolvedSourceFileName in dtsFileName2Visitor) {
-        const visitorStaff: VisitorStaff = dtsFileName2Visitor[resolvedSourceFileName]
-        options.onSingleFile?.(visitorStaff.result, outputDir, visitorStaff.tsSourceFile)
+        const visitorStaff = dtsFileName2Visitor[resolvedSourceFileName]
+        if (visitorStaff.visitor.visitPhase2)
+            visitorStaff.result = visitorStaff.visitor.visitPhase2(dtsFileName2Visitor)
     }
 
     options.onEnd?.(outputDir)

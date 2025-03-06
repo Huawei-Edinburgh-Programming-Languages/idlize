@@ -196,8 +196,10 @@ export class PeerLibrary implements LibraryInterface {
             if (!nextResult)
                 break;
 
-            if (seen.has(nextResult))
-                throw new Error(`Cyclic referenceType: ${type.name}, steps are: [${[...seen.values()].map(idl.getFQName).join(", ")}]`)
+            if (seen.has(nextResult)) {
+                console.warn(`Cyclic referenceType: ${type.name}, steps are: [${[...seen.values()].map(idl.getFQName).join(", ")}]`)
+                break;
+            }
             seen.add(nextResult)
             result = nextResult
         }
@@ -222,6 +224,14 @@ export class PeerLibrary implements LibraryInterface {
         let result = resolveNamedNode(target, pov, corpus)
         if (result && idl.isEntry(result))
             return result
+
+        if (1 == target.length) {
+            for (const stdScope of [["idlize", "stdlib"], ["org", "openharmony", "idlize", "predefined"]]) { // TODO: move to some external config
+                result = resolveNamedNode([...stdScope, ...target], undefined, corpus)
+                if (result && idl.isEntry(result))
+                    return result
+            }
+        }
 
         // TODO: remove the next block after namespaces out of quarantine
         {
