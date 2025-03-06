@@ -231,7 +231,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return this.makeString(`${value.asString()} as ${enumName}`)
     }
     ordinalFromEnum(value: LanguageExpression, _: idl.IDLType): LanguageExpression {
-        return this.makeCast(this.makeString(`${value.asString()}`), IDLI32Type)
+        return this.makeCast(this.makeString(`${value.asString()}.getOrdinal()`), IDLI32Type)
     }
     makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => string},
                                 value: string,
@@ -277,8 +277,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             throwException(`Declaration type must be Enum`)
         }
         // ((value as Axis) as int) - in case when Axis was casted to Object in Map<Axis, Smth>
-        return this.makeCast(this.makeCast(this.makeString(value), convertor.idlType),
-            IDLI32Type).asString()
+        return this.ordinalFromEnum(this.makeString(value), IDLI32Type).asString()
     }
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string,
                               convertorIndex: number,
