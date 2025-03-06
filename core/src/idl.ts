@@ -583,7 +583,7 @@ export function getFileFor(node: IDLNode): IDLFile | undefined {
             return iterator
         iterator = iterator.parent
     }
-    console.warn(`Node ${JSON.stringify(node)} does not have IDLFile in parents`)
+    console.warn(`Node ${getFQName(node)} does not have IDLFile in parents`)
     return undefined
 }
 

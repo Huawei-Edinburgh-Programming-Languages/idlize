@@ -289,8 +289,10 @@ export class IdlSkoalaLibrary implements LibraryInterface {
             if (idl.isReferenceType(result))
                 return this.resolveTypeReference(result)
             if (idl.isImport(result)) {
-                if (result == target)
-                    throw new Error("Self-targeted Import?")
+                if (result == target) {
+                    console.log("Self-targeted Import?")
+                    return undefined
+                }
                 return this.resolveImport(result)
             }
             if (idl.isEntry(result))

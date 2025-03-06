@@ -277,8 +277,10 @@ export class PeerLibrary implements LibraryInterface {
             if (idl.isReferenceType(result))
                 return this.resolveTypeReference(result)
             if (idl.isImport(result)) {
-                if (result == target)
-                    throw new Error("Self-targeted Import?")
+                if (result == target) {
+                    console.log("Self-targeted Import?")
+                    return undefined
+                }
                 return this.resolveImport(result)
             }
             if (idl.isEntry(result))
@@ -364,7 +366,7 @@ export class PeerLibrary implements LibraryInterface {
             if (target && idl.isEntry(target))
                 return this.declarationConvertor(param, type, target)
             else
-                throw new Error(`Unable to resolve Import ${JSON.stringify(declaration)}`)
+                throw new Error(`Unable to resolve Import ${declaration.clause.join(".")} as ${declaration.name}`)
         }
         if (idl.isEnum(declaration)) {
             return new EnumConvertor(param, declaration)
