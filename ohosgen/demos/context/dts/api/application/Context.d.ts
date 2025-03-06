@@ -23,11 +23,8 @@
 // import resmgr from '../@ohos.resourceManager';
 import BaseContext from './BaseContext';
 // import EventHub from './EventHub';
-// import ApplicationContext from './ApplicationContext';
+import ApplicationContext from './ApplicationContext';
 // import contextConstant from '../@ohos.app.ability.contextConstant';
-import ApplicationContext = require('./ApplicationContext')
-
-type ApplicationContextAlias = typeof ApplicationContext
 
 export default class Context extends BaseContext {
 
@@ -50,7 +47,7 @@ export default class Context extends BaseContext {
   createModuleContext(moduleName: string): Context;
   createModuleContext(bundleName: string, moduleName: string): Context;
   // createSystemHspModuleResourceManager(bundleName: string, moduleName: string): resmgr.ResourceManager;
-  getApplicationContext(): ApplicationContextAlias;
+  getApplicationContext(): ApplicationContext;
   // getGroupDir(dataGroupID: string, callback: AsyncCallback<string>): void;
   getGroupDir(dataGroupID: string): Promise<string>;
   // createModuleResourceManager(bundleName: string, moduleName: string): resmgr.ResourceManager;
