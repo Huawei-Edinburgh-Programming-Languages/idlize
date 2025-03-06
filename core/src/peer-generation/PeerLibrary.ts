@@ -184,7 +184,7 @@ export class PeerLibrary implements LibraryInterface {
 
     resolveTypeReference(type: idl.IDLReferenceType, singleStep?: boolean): idl.IDLEntry | undefined {
         let result = this.resolveNamedNode(type.name.split("."), type.parent)
-        const visited = new Set<idl.IDLEntry>
+        const seen = new Set<idl.IDLEntry>
         while(result && !singleStep) {
             let nextResult: idl.IDLEntry | undefined = undefined
             if (idl.isImport(result))
@@ -197,13 +197,9 @@ export class PeerLibrary implements LibraryInterface {
             if (!nextResult)
                 break;
 
-            if (visited.has(nextResult)) {
-                console.warn(`Cyclic referenceType: ${type.name}`)
-                for (const step of visited)
-                    console.warn(`step: ${idl.getFQName(step)}`)
-                break;
-            }
-            visited.add(nextResult)
+            if (seen.has(nextResult))
+                throw new Error(`Cyclic referenceType: ${type.name}, steps are: [${[...seen.values()].map(idl.getFQName).join(", ")}]`)
+            seen.add(nextResult)
             result = nextResult
         }
         return result

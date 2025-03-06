@@ -402,19 +402,15 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             const nextPov = path.resolve(pov, "..")
             if (nextPov == pov)
                 break
-            if (this.baseDirs.some(baseDir => !path.relative(baseDir, nextPov).startsWith("..")))
+            if (this.baseDirs.every(baseDir => path.relative(baseDir, nextPov).startsWith("..")))
                 break
             pov = nextPov
         }
-        if (!moduleFileName) {
-            warn(`Import at '${this.sourceFile.fileName}', module '${module}': unable to resolve source file path`)
-            return []
-        }
+        if (!moduleFileName)
+            throw new Error(`Import at '${this.sourceFile.fileName}', module '${module}': unable to resolve source file path`)
         const sibling = siblings[moduleFileName] || siblings[path.resolve(moduleFileName)]
-        if (!sibling) {
-            warn(`Import at '${this.sourceFile.fileName}', module '${module}': not in a closed set`)
-            return []
-        }
+        if (!sibling)
+            throw new Error(`Import at '${this.sourceFile.fileName}', module '${module}': not in a closed set`)
         return sibling.result.packageClause
     }
 
