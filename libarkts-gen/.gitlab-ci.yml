@@ -37,14 +37,12 @@ prepublish test libarktsgen:
     - koala-ci
   before_script:
     - !reference [ .setup, script ]
-    - cd $CI_PROJECT_DIR/libarkts-gen
   script:
+    - cd $CI_PROJECT_DIR/libarkts-gen
     - npm pack
-    - ls *.tgz | xargs -I {} tar -xvzf {} -C ./test
-    - cd test
-    - npm i
-    - npx @idlizer/libarkts-gen \
-      --panda-sdk-path ../../external/incremental/tools/panda/node_modules/@panda/sdk \
+    - cd ../
+    - npx --yes ./libarkts-gen/idlizer-libarkts-gen-*.tgz \
+      --panda-sdk-path ./external/incremental/tools/panda/node_modules/@panda/sdk \
       --output-dir .
     - cd libarkts
     - npm i

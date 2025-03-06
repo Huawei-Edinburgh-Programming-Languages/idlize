@@ -1,5 +1,0 @@
-{
-  "dependencies": {
-    "@idlizer/libarkts-gen": "file:./package"
-  }
-}
