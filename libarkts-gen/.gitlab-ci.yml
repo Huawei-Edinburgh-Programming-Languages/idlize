@@ -30,7 +30,7 @@ pack idlize-libarktsgen:
   needs:
     - build idlize-libarktsgen
 
-prepublish test libarktsgen:
+pre-publish test libarktsgen:
   stage: pre-publish
   tags:
     - idlize-ci
