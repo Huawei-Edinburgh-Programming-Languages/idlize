@@ -247,7 +247,7 @@
 |`motionPath`| Function | Lobah Mikhail | done |  | |
 |`shadow`| Function | Roman Sedaikin | done |  | |
 |`clip`| Function | Dudkin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH deprecated partially |
-|`clipShape`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature branch |
+|`clipShape`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`mask`| Function | Maksimov Nikita | done |  |deprecated |
 |`maskShape`| Function |Tuzhilkin Ivan| in progress |  | testskipped on feature branch |
 |`key`| Function | Lobah Mikhail | done |  | |
@@ -1855,7 +1855,7 @@
 |`setTarget`| Function | Politov Mikhail | done |  | |
 |`getTimestamp`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
 |`setTimestamp`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
-|`getSource`| Function | Tuzzhilkin Ivan | in progress |  | done on feature_branch |
+|`getSource`| Function | Tuzzhilkin Ivan | done |  | |
 |`setSource`| Function | Politov Mikhail | done |  | |
 |`getAxisHorizontal`| Function | Politov Mikhail | done |  | |
 |`setAxisHorizontal`| Function | Politov Mikhail | done |  | |
@@ -1867,56 +1867,56 @@
 |`setTiltX`| Function | Politov Mikhail | done |  | |
 |`getTiltY`| Function | Politov Mikhail | done |  | |
 |`setTiltY`| Function | Politov Mikhail | done |  | |
-|`getSourceTool`| Function | Tuzhilkin Ivan | in progress |  |done on feature_branch |
+|`getSourceTool`| Function | Tuzhilkin Ivan | done |  | |
 |`setSourceTool`| Function | Politov Mikhail | done |  | |
 |`getDeviceId`| Function | Politov Mikhail | done |  | |
 |`setDeviceId`| Function | Politov Mikhail | done |  | |
 |`getTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
 |`setTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
 |*ClickEvent*| *Class* | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
-|`getDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
 |`setDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
 |`setDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getWindowX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getWindowX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
 |`setWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getWindowY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getWindowY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
 |`setWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getScreenX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  |done for feature branch, signature is changed in new generation, deprecated? |
+|`getScreenX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | deprecated? |
 |`setScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
-|`getScreenY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  |done for feature branch, signature is changed in new generation, deprecated? |
+|`getScreenY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | deprecated? |
 |`setScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
-|`getX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
 |`setX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
 |`setY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getPreventDefault`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`getPreventDefault`| Function | Samarin Sergey | done | | |
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |*MouseEvent*| *Class* | Kovalev Sergey | testskipped |  | |
-|`getButton`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getButton`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
 |`setButton`| Function | Kovalev Sergey | done |  | |
-|`getAction`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getAction`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
 |`setAction`| Function | Kovalev Sergey | done |  | |
-|`getDisplayX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getDisplayX`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
 |`setDisplayX`| Function | Kovalev Sergey | done |  | |
-|`getDisplayY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getDisplayY`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
 |`setDisplayY`| Function | Kovalev Sergey | done |  | |
-|`getWindowX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getWindowX`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
 |`setWindowX`| Function | Kovalev Sergey | done |  | |
-|`getWindowY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getWindowY`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
 |`setWindowY`| Function | Kovalev Sergey | done |  | |
-|`getScreenX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation, deprecated? |
+|`getScreenX`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | deprecated? |
 |`setScreenX`| Function | Kovalev Sergey | done |  |deprecated? |
-|`getScreenY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation, deprecated? |
+|`getScreenY`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | deprecated? |
 |`setScreenY`| Function | Kovalev Sergey | done |  |deprecated? |
-|`getX`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getX`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
 |`setX`| Function | Kovalev Sergey | done |  | |
-|`getY`| Function | Kovalev Sergey, Tuzhilkin Ivan | in progress |  | done for feature branch, signature is changed in new generation |
+|`getY`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
 |`setY`| Function | Kovalev Sergey | done |  | |
-|`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Kovalev Sergey | done |  | empty implementation |
 |`getRawDeltaX`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
 |`setRawDeltaX`| Function | | blocked IDL| noFB | doesn't present in Upstream and FB |
@@ -1940,16 +1940,16 @@
 |`getWindowY`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
 |`setWindowY`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
 |*TouchEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`getHistoricalPoints`| Function | Tuzhilkin Ivan | blocked IDL |  | implementation and UT are ready on FB, but correct behavior is blocked https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
-|`getType`| Function | Tuzhilkin Ivan, Samarin Sergey | in progress |  | done for feature branch |
+|`getHistoricalPoints`| Function | Tuzhilkin Ivan | blocked IDL |  | implementation and UT are ready, but correct behavior is blocked https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
+|`getType`| Function | Tuzhilkin Ivan, Samarin Sergey | done |  | |
 |`setType`| Function | Tuzhilkin Ivan | done |  | empty implementation |
-|`getTouches`| Function | Tuzhilkin Ivan | in progress | | done for feature branch |
+|`getTouches`| Function | Tuzhilkin Ivan | done | | |
 |`setTouches`| Function | Tuzhilkin Ivan | done |  | empty implementation |
-|`getChangedTouches`| Function | Tuzhilkin Ivan | in progress | | done for feature branch|
+|`getChangedTouches`| Function | Tuzhilkin Ivan | done | | |
 |`setChangedTouches`| Function | Tuzhilkin Ivan | done |  | empty implementation |
-|`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
-|`getPreventDefault`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`getPreventDefault`| Function | Samarin Sergey | done | | |
 |`setPreventDefault`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |*PixelMapMock*| *Class* | Maksimov Nikita | done |  | |
 |`release`| Function | Maksimov Nikita | done |  | |
@@ -1991,7 +1991,7 @@
 |`setMetaKey`| Function | Maksimov Nikita | done | | |
 |`getTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
 |`setTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
-|`getStopPropagation`| Function | Samarin Sergey | in progress | | done for feature branch |
+|`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Maksimov Nikita | done | | empty implementation |
 |`setIntentionCode`| Function | Maksimov Nikita | done | | |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
@@ -2503,13 +2503,13 @@
 |`forward`| Function | Erokhin Ilya | done |  | deprecated |
 |`getCookieManager`| Function | Erokhin Ilya | deprecated |  | testskipped |
 |*XComponentController*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`getXComponentSurfaceId`| Function | Tuzhilkin Ivan | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
+|`getXComponentSurfaceId`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`getXComponentContext`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF + |
 |`setXComponentSurfaceSize`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`setXComponentSurfaceRect`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`getXComponentSurfaceRect`| Function | Tuzhilkin Ivan | in progress |  | testskipped on FB, RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
+|`getXComponentSurfaceRect`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`setXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`getXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | in progress |  |testskipped on FB, RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 + |
+|`getXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`onSurfaceCreated`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
 |`onSurfaceChanged`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
 |`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
@@ -2543,13 +2543,13 @@
 |`getFontSize`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
 |`getFontWeight`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
 |`getFontStyle`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
-|*DecorationStyle*| *Class* | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
-|`getType`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
-|`getStyle`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
-|*BaselineOffsetStyle*| *Class* | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
-|`getBaselineOffset`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
-|*LetterSpacingStyle*| *Class* | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
-|`getLetterSpacing`| Function | Tuzhilkin Ivan | in progress |  | testskipped on feature_branch |
+|*DecorationStyle*| *Class* | Tuzhilkin Ivan | testskipped |  | |
+|`getType`| Function | Tuzhilkin Ivan | testskipped |  | |
+|`getStyle`| Function | Tuzhilkin Ivan | testskipped |  | |
+|*BaselineOffsetStyle*| *Class* | Tuzhilkin Ivan | testskipped |  | |
+|`getBaselineOffset`| Function | Tuzhilkin Ivan | testskipped |  | |
+|*LetterSpacingStyle*| *Class* | Tuzhilkin Ivan | testskipped |  | |
+|`getLetterSpacing`| Function | Tuzhilkin Ivan | testskipped |  | |
 |*TextShadowStyle*| *Class* |  Politov Mikhail | in progress |  | |
 |`getTextShadow`| Function |  Politov Mikhail | in progress | | |
 |*BackgroundColorStyle*| *Class* | Politov Mikhail | in progress |  | |
