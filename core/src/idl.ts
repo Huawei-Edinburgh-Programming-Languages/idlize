@@ -19,28 +19,28 @@ import { generateSyntheticIdlNodeName } from "./peer-generation/idl/common";
 import { IDLKeywords } from "./languageSpecificKeywords";
 
 export enum IDLKind {
-    Interface,
-    Import,
-    Callback,
-    Const,
-    Property,
-    Parameter,
-    Method,
-    Callable,
-    Constructor,
-    Enum,
-    EnumMember,
-    Typedef,
-    PrimitiveType,
-    ContainerType,
-    UnspecifiedGenericType,
-    ReferenceType,
-    UnionType,
-    TypeParameterType,
-    OptionalType,
-    Version,
-    Namespace,
-    File,
+    Interface = "Interface",
+    Import = "Import",
+    Callback = "Callback",
+    Const = "Const",
+    Property = "Property",
+    Parameter = "Parameter",
+    Method = "Method",
+    Callable = "Callable",
+    Constructor = "Constructor",
+    Enum = "Enum",
+    EnumMember = "EnumMember",
+    Typedef = "Typedef",
+    PrimitiveType = "PrimitiveType",
+    ContainerType = "ContainerType",
+    UnspecifiedGenericType = "UnspecifiedGenericType",
+    ReferenceType = "ReferenceType",
+    UnionType = "UnionType",
+    TypeParameterType = "TypeParameterType",
+    OptionalType = "OptionalType",
+    Version = "Version",
+    Namespace = "Namespace",
+    File = "File",
 }
 
 export enum IDLEntity {
@@ -56,13 +56,10 @@ export enum IDLEntity {
 export enum IDLExtendedAttributes {
     Accessor = "Accessor",
     Async = "Async",
-    ArkTSType = "ArkTSType",
     CallSignature = "CallSignature",
-    CJType = "CJType",
     CommonMethod = "CommonMethod",
     Component = "Component",
     ComponentInterface = "ComponentInterface",
-    CPPType = "CPPType",
     Deprecated = "Deprecated",
     Documentation = "Documentation",
     DtsName = "DtsName",
@@ -79,7 +76,6 @@ export enum IDLExtendedAttributes {
     Protected = "Protected",
     Synthetic = "Synthetic",
     Throws = "Throws",
-    TSType = "TSType",
     TypeArguments = "TypeArguments",
     TypeParameters = "TypeParameters",
     VerbatimDts = "VerbatimDts",
@@ -610,7 +606,15 @@ export function getPackageName(node: IDLNode): string {
     return getPackageClause(node).join(".")
 }
 
-export function getNamespaceName(a: IDLNode): string {
+
+export function isInPackage(entry: IDLEntry | IDLFile, packageName: string, exactMatch = false) {
+    const entryPackageName = getPackageName(entry)
+    return exactMatch
+        ? entryPackageName === packageName
+        : entryPackageName.startsWith(packageName)
+}
+
+export function getNamespaceName(a: IDLEntry): string {
     return getNamespacesPathFor(a).map(it => it.name).join('.')
 }
 

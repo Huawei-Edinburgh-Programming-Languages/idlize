@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-
+import * as path from "path"
 import { program } from "commander"
 import * as fs from "fs"
 import {
@@ -24,6 +24,9 @@ import {
     setDefaultConfiguration,
     PeerFile,
     PeerLibrary,
+    verifyIDLLinter,
+    toIDLFile,
+    scanInputDirs,
 } from "@idlizer/core"
 import {
     isEnum,
@@ -35,10 +38,9 @@ import {
 import { IDLVisitor, loadPeerConfiguration,
     IdlPeerProcessor,
     loadPlugin, fillSyntheticDeclarations, peerGeneratorConfiguration,
-    scanNotPredefinedDirectory,
-    scanAndVisitCommonPredefined,
     formatInputPaths,
-    validatePaths
+    validatePaths,
+    libohosPredefinedFiles,
 } from "@idlizer/libohos"
 import { generateOhos } from "./ohos"
 import { suggestLibraryName } from "./OhosNativeVisitor"
@@ -92,8 +94,21 @@ if (options.idl2peer) {
     validatePaths(inputFiles, "file")
 
     const idlLibrary = new PeerLibrary(language, libraryPackages)
-    scanAndVisitCommonPredefined(idlLibrary);
-    idlLibrary.files.push(...scanNotPredefinedDirectory(inputDirs[0]))
+    const allInputFiles = scanInputDirs(inputDirs)
+        .concat(inputFiles)
+        .concat(libohosPredefinedFiles())
+    const idlInputFiles = allInputFiles.filter(it => it.endsWith('.idl'))
+    idlInputFiles.forEach(idlFilename => {
+        idlFilename = path.resolve(idlFilename)
+        const file = toIDLFile(idlFilename)
+        const peerFile = new PeerFile(file)
+        idlLibrary.files.push(peerFile)
+    })
+    if (options.verifyIdl) {
+        idlLibrary.files.forEach(file => {
+            verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+        })
+    }
     new IdlPeerProcessor(idlLibrary).process()
 
     generateTarget(idlLibrary, outDir, language)
@@ -111,11 +126,21 @@ if (options.dts2peer) {
 
     options.docs = "all"
     const idlLibrary = new PeerLibrary(lang, libraryPackages)
-    scanAndVisitCommonPredefined(idlLibrary);
+    const allInputFiles = scanInputDirs(inputDirs)
+        .concat(inputFiles)
+        .concat(libohosPredefinedFiles())
+    const dtsInputFiles = allInputFiles.filter(it => it.endsWith('.d.ts'))
+    const idlInputFiles = allInputFiles.filter(it => it.endsWith('.idl'))
+
+    idlInputFiles.forEach(idlFilename => {
+        idlFilename = path.resolve(idlFilename)
+        const file = toIDLFile(idlFilename)
+        const peerFile = new PeerFile(file)
+        idlLibrary.files.push(peerFile)
+    })
 
     generate(
-        inputDirs,
-        inputFiles,
+        dtsInputFiles,
         generatedPeersDir,
         (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, idlLibrary),
         {
@@ -143,6 +168,11 @@ if (options.dts2peer) {
                 idlLibrary.files.push(peerFile)
             },
             onEnd(outDir: string) {
+                if (options.verifyIdl) {
+                    idlLibrary.files.forEach(file => {
+                        verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+                    })
+                }
                 fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
                 peerProcessor.process()

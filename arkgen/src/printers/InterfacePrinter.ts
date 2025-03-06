@@ -21,12 +21,14 @@ import { createLanguageWriter, LanguageWriter, PeerFile,
      FieldModifier,
      Method,
      MethodSignature,
-     NamedMethodSignature
+     NamedMethodSignature,
+     isInIdlize,
+     isInIdlizeInternal
 } from '@idlizer/core'
 import { ARK_CUSTOM_OBJECT, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH,
     collectDeclDependencies, collectJavaImports, collectProperties, convertDeclToFeature,
     DependenciesCollector, ImportFeature, ImportsCollector, isComponentDeclaration,
-    isPredefined, peerGeneratorConfiguration, printJavaImports, TargetFile, tsCopyrightAndWarning
+    peerGeneratorConfiguration, printJavaImports, TargetFile, tsCopyrightAndWarning
 } from '@idlizer/libohos'
 import { ARK_OBJECTBASE } from './JavaPrinter'
 
@@ -364,6 +366,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
                 if (idl.isImport(entry) ||
                     idl.isNamespace(entry) ||
                     isPredefined(entry) ||
+                    isInIdlizeInternal(entry) ||
                     idl.isHandwritten(entry) ||
                     peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
@@ -699,7 +702,7 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
         })
         for (const file of this.peerLibrary.files.values()) {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
-                if (isPredefined(entry) || idl.isNamespace(entry))
+                if (isPredefined(entry) || idl.isNamespace(entry) ||isInIdlizeInternal(entry))
                     continue;
                 syntheticsGenerator.convert(entry)
                 if (peerGeneratorConfiguration().ignoreEntry(entry.name, Language.JAVA))
@@ -817,6 +820,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (isPredefined(entry) ||
                     idl.isNamespace(entry) ||
+                    isInIdlizeInternal(entry) ||
                     idl.isHandwritten(entry) ||
                     peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
@@ -870,7 +874,8 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.TSType) ||
                     isPredefined(entry) ||
-                    idl.isNamespace(entry))
+                    idl.isNamespace(entry) || 
+                    isInIdlize(entry))
                     continue
                 if (peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
                     continue

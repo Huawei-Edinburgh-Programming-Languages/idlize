@@ -38,6 +38,7 @@ import { PeerFile } from './PeerFile'
 import { LayoutManager, LayoutManagerStrategy } from './LayoutManager'
 import { IDLLibrary, lib, query } from '../library'
 import { isMaterialized } from './isMaterialized'
+import { isInIdlizeInternal } from '../idlize'
 
 export interface GlobalScopeDeclarations {
     methods: idl.IDLMethod[]
@@ -109,8 +110,6 @@ export class PeerLibrary implements LibraryInterface {
     public get materializedToGenerate(): MaterializedClass[] {
         return Array.from(this.materializedClasses.values()).filter(it => it.needBeGenerated)
     }
-
-    public readonly predefinedDeclarations: idl.IDLInterface[] = []
 
     constructor(
         public language: Language,
@@ -212,8 +211,7 @@ export class PeerLibrary implements LibraryInterface {
             return entry
 
         if (1 === target.length) {
-            const predefined = this.files.flatMap(it => it.entries).filter(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Predefined))
-            predefined.push(...this.predefinedDeclarations)
+            const predefined = this.files.flatMap(it => it.entries).filter(isInIdlizeInternal)
             const found = predefined.find(it => it.name === target[0])
             if (found)
                 return found;
@@ -314,6 +312,7 @@ export class PeerLibrary implements LibraryInterface {
                 case idl.IDLVoidType: return new VoidConvertor(param)
                 case idl.IDLUnknownType:
                 case idl.IDLAnyType: return new CustomTypeConvertor(param, "Any", false, "Object")
+                case idl.IDLDate: return new DateConvertor(param)
                 default: throw new Error(`Unconverted primitive ${idl.DebugUtils.debugPrintType(type)}`)
             }
         }

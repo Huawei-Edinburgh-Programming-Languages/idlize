@@ -25,7 +25,10 @@ import {
     setDefaultConfiguration,
     PeerFile,
     PeerLibrary,
+    verifyIDLLinter,
     isDefined,
+    scanInputDirs,
+    toIDLFile,
 } from "@idlizer/core"
 import {
     getFQName,
@@ -38,15 +41,15 @@ import {
     transformMethodsAsync2ReturnPromise,
 } from "@idlizer/core/idl"
 import { IDLVisitor, loadPeerConfiguration,
-    generateTracker, IDLInteropPredefinesVisitor, IdlPeerProcessor, IDLPredefinesVisitor, loadPlugin,
+    generateTracker, IdlPeerProcessor, loadPlugin,
     SkoalaDeserializerPrinter, IdlSkoalaLibrary, IldSkoalaFile, generateIdlSkoala,
     IdlWrapperProcessor, fillSyntheticDeclarations,
-    scanPredefinedDirectory, scanNotPredefinedDirectory,
-    scanCommonPredefined,
     formatInputPaths,
     validatePaths,
     PeerGeneratorConfiguration,
-    defaultPeerGeneratorConfiguration
+    defaultPeerGeneratorConfiguration,
+    peerGeneratorConfiguration,
+    libohosPredefinedFiles
 } from "@idlizer/libohos"
 import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./arkoala"
 import { ArkoalaPeerLibrary } from "./ArkoalaPeerLibrary"
@@ -135,8 +138,7 @@ if (options.dts2skoala) {
     }
 
     generate(
-        inputDirs,
-        inputFiles,
+        scanInputDirs(inputDirs, '.d.ts').concat(inputFiles),
         outputDir,
         (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, skoalaLibrary),
         {
@@ -177,28 +179,32 @@ if (options.dts2skoala) {
     didJob = true
 }
 
+function arkgenPredefinedFiles(): string[] {
+    return scanInputDirs([path.join(__dirname, "../predefined")])
+}
+
 if (options.idl2peer) {
     const outDir = options.outputDir ?? "./out"
     const language = Language.fromString(options.language ?? "ts")
+    const { inputFiles, inputDirs } = formatInputPaths(options)
 
     const idlLibrary = new ArkoalaPeerLibrary(language, options.libraryPackages)
-    idlLibrary.files.push(...scanNotPredefinedDirectory(options.inputDir))
-    const { interop, root } = scanCommonPredefined()
-    interop.forEach(file => {
-        new IDLInteropPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
+    const allInputFiles = scanInputDirs(inputDirs)
+        .concat(inputFiles)
+        .concat(libohosPredefinedFiles())
+        .concat(arkgenPredefinedFiles())
+    const idlInputFiles = allInputFiles.filter(it => it.endsWith('.idl'))
+    idlInputFiles.forEach(idlFilename => {
+        idlFilename = path.resolve(idlFilename)
+        const file = toIDLFile(idlFilename)
+        const peerFile = new PeerFile(file)
+        idlLibrary.files.push(peerFile)
     })
-
-    root.forEach(file => {
-        new IDLPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
-    })
+    if (options.verifyIdl) {
+        idlLibrary.files.forEach(file => {
+            verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+        })
+    }
     new IdlPeerProcessor(idlLibrary).process()
 
     generateTarget(idlLibrary, outDir, language)
@@ -214,36 +220,23 @@ if (options.dts2peer) {
     validatePaths(inputDirs, "dir")
     validatePaths(inputFiles, "file")
 
+    const allInputFiles = scanInputDirs(inputDirs)
+        .concat(inputFiles)
+        .concat(libohosPredefinedFiles())
+        .concat(arkgenPredefinedFiles())
+    const dtsInputFiles = allInputFiles.filter(it => it.endsWith('.d.ts'))
+    const idlInputFiles = allInputFiles.filter(it => it.endsWith('.idl'))
+
     const idlLibrary = new ArkoalaPeerLibrary(lang, options.libraryPackages)
-    // collect predefined files
-    const { interop, root } = scanCommonPredefined()
-    interop.forEach(file => {
-        new IDLInteropPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
-    })
-
-    root.forEach(file => {
-        new IDLPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
-    })
-
-    scanPredefinedDirectory(__dirname, "../predefined").forEach(file => {
-        new IDLPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
+    idlInputFiles.forEach(idlFilename => {
+        idlFilename = path.resolve(idlFilename)
+        const file = toIDLFile(idlFilename)
+        const peerFile = new PeerFile(file)
+        idlLibrary.files.push(peerFile)
     })
 
     generate(
-        inputDirs,
-        inputFiles,
+        dtsInputFiles,
         generatedPeersDir,
         (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, idlLibrary),
         {
@@ -271,6 +264,11 @@ if (options.dts2peer) {
                 idlLibrary.files.push(peerFile)
             },
             onEnd(outDir) {
+                if (options.verifyIdl) {
+                    idlLibrary.files.forEach(file => {
+                        verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+                    })
+                }
                 fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
                 peerProcessor.process()

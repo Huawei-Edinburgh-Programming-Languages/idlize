@@ -15,6 +15,13 @@
         "DynamicNode"
     ],
     "forceMaterialized": [
+        "TapGestureInterface",
+        "LongPressGestureInterface",
+        "PanGestureInterface",
+        "SwipeGestureInterface",
+        "PinchGestureInterface",
+        "RotationGestureInterface",
+        "GestureGroupInterface",
         "BaseContext"
     ],
     "forceCallback": [],
@@ -254,5 +261,8 @@
             "ArkTS": "value && (value.builder.buildOptions.controller = this)"
         }
     },
-    "CollapseOverloadsARKTS": true
+    "CollapseOverloadsARKTS": true,
+    "linter": {
+        "checkReferencesResolved": false
+    }
 }
