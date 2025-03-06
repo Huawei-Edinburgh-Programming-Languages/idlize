@@ -24,7 +24,6 @@ export class Options {
             this.interfaces = []
             return
         }
-
         const json = JSON5.parse(fs.readFileSync(filePath).toString())
         if (json?.ignore !== undefined) {
             this.generateByDefault = true
@@ -36,22 +35,22 @@ export class Options {
         const interfaces = json.ignore?.interfaces ?? json.generate?.interfaces ?? throwException(
             `missing options.json section generate.interfaces or ignore.interfaces`
         )
-
         this.interfaces = [
-            ...Object.entries(interfaces).map(([name, methods]: [any, any]) => {
-                if (Interface.isWhole(methods)) {
-                    return this.generateByDefault
-                        ? new Ignored(name)
-                        : new Full(name)
-                }
-                return new Partial(
-                    name,
-                    new Map(
-                        Object.values(methods)
-                            .map((name: any) => [name, !this.generateByDefault])
+            ...Object.entries<string[]>(interfaces)
+                .map(([name, methods]) => {
+                    if (Interface.isWhole(methods)) {
+                        return this.generateByDefault
+                            ? new Ignored(name)
+                            : new Full(name)
+                    }
+                    return new Partial(
+                        name,
+                        new Map(
+                            Object.values<string>(methods)
+                                .map(it => [it, !this.generateByDefault])
+                        )
                     )
-                )
-            })
+                })
         ]
     }
 
@@ -82,7 +81,10 @@ export class Options {
         if (known === undefined) {
             return this.generateByDefault
         }
-        return !(known instanceof Ignored)
+        if (known instanceof Ignored) {
+            return false
+        }
+        return true
     }
 }
 
