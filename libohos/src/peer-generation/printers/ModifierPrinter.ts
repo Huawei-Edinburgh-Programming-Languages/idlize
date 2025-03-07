@@ -370,7 +370,7 @@ class AccessorVisitor extends ModifierVisitor {
         this.popNamespace(namespaceName, false)
         this.printMaterializedClassEpilog(clazz)
 
-        this.printStruct(clazz)
+        if (!clazz.isStaticMaterialized) this.printStruct(clazz)
     }
 
     printMaterializedClassProlog(clazz: MaterializedClass) {
