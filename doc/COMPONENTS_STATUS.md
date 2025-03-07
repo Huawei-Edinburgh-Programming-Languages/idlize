@@ -273,7 +273,7 @@
 |`accessibilitySelected`| Function | Lobah Mikhail | done |  | |
 |`obscured`| Function |Dmitry A Smirnov | done |  | |
 |`reuseId`| Function |Dmitry A Smirnov | blocked AceEngine |  | not implemented in ace_engine|
-|`reuse`| Function | | | | |
+|`reuse`| Function | | | | to be removed from CAPI generation |
 |`renderFit`| Function | Dmitry A Smirnov| done |  | |
 |`gestureModifier`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`backgroundBrightness`| Function | Skroba Gleb | done |  | |
@@ -2085,14 +2085,14 @@
 |`setPinchCenterX`| Function | Vadim Voronov | done | | |
 |`getPinchCenterY`| Function | Vadim Voronov | done | | |
 |`setPinchCenterY`| Function | Vadim Voronov | done | | |
-|*RotationGestureEvent*| *Class* | Andrey Khudenkikh | devdone | | |
-|`getAngle`| Function | Andrey Khudenkikh | devdone | | |
-|`setAngle`| Function | Andrey Khudenkikh | devdone | | |
-|*SwipeGestureEvent*| *Class* | Evstigneev Roman | in progress | | |
-|`getAngle`| Function | Evstigneev Roman | in progress | |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setAngle`| Function | Evstigneev Roman | in progress | | |
-|`getSpeed`| Function | Evstigneev Roman | in progress | |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`setSpeed`| Function | Evstigneev Roman | in progress | | |
+|*RotationGestureEvent*| *Class* | Andrey Khudenkikh | done | | |
+|`getAngle`| Function | Andrey Khudenkikh | done | | |
+|`setAngle`| Function | Andrey Khudenkikh | done | | |
+|*SwipeGestureEvent*| *Class* | Evstigneev Roman, Andrey Khudenkikh | done | | |
+|`getAngle`| Function | Evstigneev Roman, Andrey Khudenkikh | done | | |
+|`setAngle`| Function | Evstigneev Roman, Andrey Khudenkikh | done | | |
+|`getSpeed`| Function | Evstigneev Roman, Andrey Khudenkikh | done | | |
+|`setSpeed`| Function | Evstigneev Roman, Andrey Khudenkikh | done | | |
 |*GestureEvent*| *Class* | Samarin Sergey | blocked IDL |  | |
 |`getRepeat`| Function | Samarin Sergey | done |  | |
 |`setRepeat`| Function | Samarin Sergey | done |  | |
