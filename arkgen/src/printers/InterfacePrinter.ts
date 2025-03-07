@@ -473,6 +473,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
                     this.onNewDeclaration(this.makeTuple(name, type))
                     return
             }
+            return
         }
         if (idl.isReferenceType(type)) {
             const target = this.peerLibrary.resolveTypeReference(type) // TODO: namespace-related-to-rework
