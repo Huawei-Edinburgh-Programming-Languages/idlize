@@ -1827,9 +1827,9 @@
 |`setHeight`| Function | Vadim Voronov | testskipped | | |
 |`getWidth`| Function | Vadim Voronov | testskipped| | |
 |`setWidth`| Function | Vadim Voronov | testskipped | | |
-|*DrawingRenderingContext*| *Class* | Dudkin Sergey | done |  | |
-|`invalidate`| Function | Dudkin Sergey | done |  | |
-|`getCanvas`| Function | | | | |
+|*DrawingRenderingContext*| *Class* | Vadim Voronov | done |  | |
+|`invalidate`| Function | Vadim Voronov | done |  | |
+|`getCanvas`| Function | Vadim Voronov | in progress | | |
 |*ICurve*| *Class* | Erokhin Ilya | in progress |  | |
 |`interpolate`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*DrawModifier*| *Class* | Erokhin Ilya | blocked IDL|  | |
