@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { generatorConfiguration } from '../config'
+import { coreConfiguration } from '../config'
 import * as idl from '../idl'
 import { isBuilderClass } from './BuilderClass'
 import { ReferenceResolver } from './ReferenceResolver'
@@ -22,15 +22,15 @@ export function isMaterialized(declaration: idl.IDLInterface, resolver: Referenc
     if (!idl.isInterfaceSubkind(declaration) && !idl.isClassSubkind(declaration)) return false
     if (idl.isHandwritten(declaration) || isBuilderClass(declaration)) return false
 
-    for (const forceMaterialized of generatorConfiguration().forceMaterialized) {
+    for (const forceMaterialized of coreConfiguration().forceMaterialized) {
         if (declaration.name == forceMaterialized) return true
     }
 
-    if (generatorConfiguration().forceCallback.includes(declaration.name)) {
+    if (coreConfiguration().forceCallback.includes(declaration.name)) {
         return false
     }
 
-    for (const ignore of generatorConfiguration().ignoreMaterialized) {
+    for (const ignore of coreConfiguration().ignoreMaterialized) {
             if (declaration.name.endsWith(ignore)) return false
     }
 

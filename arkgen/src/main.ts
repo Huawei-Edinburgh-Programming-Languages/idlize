@@ -25,11 +25,8 @@ import {
     PeerFile,
     PeerLibrary,
     verifyIDLLinter,
-    isDefined,
     scanInputDirs,
     toIDLFile,
-    setDefaultConfiguration,
-    patchDefaultConfiguration,
     D,
 } from "@idlizer/core"
 import {
@@ -41,16 +38,15 @@ import {
     linkParentBack,
     transformMethodsAsync2ReturnPromise,
 } from "@idlizer/core/idl"
-import { IDLVisitor, loadPeerConfiguration,
+import { IDLVisitor,
     generateTracker, IdlPeerProcessor, loadPlugin,
     SkoalaDeserializerPrinter, IdlSkoalaLibrary, IldSkoalaFile, generateIdlSkoala,
     IdlWrapperProcessor, fillSyntheticDeclarations,
     formatInputPaths,
     validatePaths,
     libohosPredefinedFiles,
-    PeerGeneratorConfigurationType,
     PeerGeneratorConfigurationSchema,
-    peerGeneratorConfiguration,
+    GeneratorConfig,
 } from "@idlizer/libohos"
 import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./arkoala"
 import { ArkoalaPeerLibrary } from "./ArkoalaPeerLibrary"
@@ -104,21 +100,21 @@ const options = program
 let didJob = false
 
 if (options.showConfigSchema) {
-    console.log(D.printJSONSchema(PeerGeneratorConfigurationSchema))
+    console.log(D.printJSONSchema(PeerGeneratorConfigurationSchema, { partial: true }))
     didJob = true
 }
 
 let apiVersion = options.apiVersion ?? 9999
 Language.ARKTS.extension = options.arktsExtension as string
 
-setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.ignoreDefaultConfig as boolean))
+GeneratorConfig.load(options.optionsFile, options.ignoreDefaultConfig as boolean)
 
 if (process.env.npm_package_version && !options.showConfigSchema) {
     console.log(`IDLize version ${findVersion()}`)
 }
 
 if (options.dts2skoala) {
-    patchDefaultConfiguration<PeerGeneratorConfigurationType>({
+    GeneratorConfig.current.patch({
         ApiVersion: apiVersion,
         TypePrefix: "",
         LibraryPrefix: "",
@@ -209,7 +205,7 @@ if (options.idl2peer) {
     })
     if (options.verifyIdl) {
         idlLibrary.files.forEach(file => {
-            verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+            verifyIDLLinter(file.file, idlLibrary, GeneratorConfig.current.linter)
         })
     }
     new IdlPeerProcessor(idlLibrary).process()
@@ -273,7 +269,7 @@ if (options.dts2peer) {
             onEnd(outDir) {
                 if (options.verifyIdl) {
                     idlLibrary.files.forEach(file => {
-                        verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+                        verifyIDLLinter(file.file, idlLibrary, GeneratorConfig.current.linter)
                     })
                 }
                 fillSyntheticDeclarations(idlLibrary)

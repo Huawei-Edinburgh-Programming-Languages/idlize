@@ -10,7 +10,7 @@ import { LanguageWriter, PeerLibrary, createDeclarationNameConvertor, isInIdlize
 import { Language } from "@idlizer/core"
 import { getExtAttribute, IDLBooleanType, isReferenceType } from "@idlizer/core/idl"
 import { convertDeclaration, generateEnumToOrdinalName, generateEnumFromOrdinalName } from '@idlizer/core';
-import { peerGeneratorConfiguration} from "../../DefaultConfiguration";
+import { GeneratorConfig} from "../../config";
 import { collectDeclItself, collectDeclDependencies } from '../ImportsCollectorUtils';
 import { DependenciesCollector } from '../idl/IdlDependenciesCollector';
 
@@ -102,7 +102,7 @@ function collectTypeCheckDeclarations(library: PeerLibrary): (idl.IDLInterface |
                 isInIdlize(decl)
             )
                 continue
-            if (peerGeneratorConfiguration().ignoreEntry(decl.name, library.language))
+            if (GeneratorConfig.current.ignoreEntry(decl.name, library.language))
                 continue
             syntheticCollector.convert(decl)
             if ((idl.isInterface(decl) && decl.subkind != idl.IDLInterfaceSubkind.Tuple ||

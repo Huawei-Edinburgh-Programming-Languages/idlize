@@ -32,7 +32,7 @@ import { LanguageWriter, createConstructPeerMethod, PeerClassBase, PeerClass, Pe
 import { tsCopyrightAndWarning } from "../FileGenerators";
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";
 import { TargetFile } from "./TargetFile"
-import { peerGeneratorConfiguration} from "../../DefaultConfiguration";
+import { GeneratorConfig} from "../../config";
 import { collectJavaImports } from "./lang/JavaIdlUtils";
 import { printJavaImports } from "./lang/JavaPrinters";
 import { createOptionalType, createReferenceType, forceAsNamedNode, IDLI32Type, IDLPointerType, IDLStringType, IDLThisType, IDLType,
@@ -221,7 +221,7 @@ class PeerFileVisitor {
             this.printPeerConstructor(peer, writer)
             this.printCreateMethod(peer, writer);
             (peer.methods as any[])
-                .filter(method => !peerGeneratorConfiguration().ignoreMethod(method.overloadedName, writer.language))
+                .filter(method => !GeneratorConfig.current.ignoreMethod(method.overloadedName, writer.language))
                 .forEach(method => this.printPeerMethod(method, writer))
             this.printApplyMethod(peer, writer)
         }, this.generatePeerParentName(peer))

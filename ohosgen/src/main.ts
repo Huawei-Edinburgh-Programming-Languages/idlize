@@ -21,9 +21,8 @@ import {
     defaultCompilerOptions,
     Language,
     findVersion,
-    setDefaultConfiguration,
-    PeerFile,
     PeerLibrary,
+    PeerFile,
     verifyIDLLinter,
     toIDLFile,
     scanInputDirs,
@@ -36,13 +35,14 @@ import {
     linkParentBack,
     transformMethodsAsync2ReturnPromise,
 } from "@idlizer/core/idl"
-import { IDLVisitor, loadPeerConfiguration,
+import { IDLVisitor,
     IdlPeerProcessor,
-    loadPlugin, fillSyntheticDeclarations, peerGeneratorConfiguration,
+    loadPlugin, fillSyntheticDeclarations,
     formatInputPaths,
     validatePaths,
     libohosPredefinedFiles,
     PeerGeneratorConfigurationSchema,
+    GeneratorConfig,
 } from "@idlizer/libohos"
 import { generateOhos } from "./ohos"
 import { suggestLibraryName } from "./OhosNativeVisitor"
@@ -82,14 +82,14 @@ let apiVersion = options.apiVersion ?? 9999
 
 options.inputFiles = processInputFiles(options.inputFiles)
 
-setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.ignoreDefaultConfig as boolean))
+GeneratorConfig.load(options.optionsFile, options.ignoreDefaultConfig as boolean)
 
 if (process.env.npm_package_version && !options.showConfigSchema) {
     console.log(`IDLize version ${findVersion()}`)
 }
 
 if (options.showConfigSchema) {
-    console.log(D.printJSONSchema(PeerGeneratorConfigurationSchema))
+    console.log(D.printJSONSchema(PeerGeneratorConfigurationSchema, { partial: true }))
     didJob = true
 }
 
@@ -114,7 +114,7 @@ if (options.idl2peer) {
     })
     if (options.verifyIdl) {
         idlLibrary.files.forEach(file => {
-            verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+            verifyIDLLinter(file.file, idlLibrary, GeneratorConfig.current.linter)
         })
     }
     new IdlPeerProcessor(idlLibrary).process()
@@ -178,7 +178,7 @@ if (options.dts2peer) {
             onEnd(outDir: string) {
                 if (options.verifyIdl) {
                     idlLibrary.files.forEach(file => {
-                        verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+                        verifyIDLLinter(file.file, idlLibrary, GeneratorConfig.current.linter)
                     })
                 }
                 fillSyntheticDeclarations(idlLibrary)
@@ -229,11 +229,12 @@ function generateTarget(idlLibrary: PeerLibrary, outDir: string, lang: Language)
     if (!idlLibrary.name.length) {
         throw new Error("No name can be assigned to generated package. please provide name via --default-idl-package ")
     }
-    generateOhos(outDir, idlLibrary, {
-        ...peerGeneratorConfiguration(),
+    GeneratorConfig.current.withPatch({
         LibraryPrefix: `${idlLibrary.name.toUpperCase()}_`,
         GenerateUnused: true,
         ApiVersion: apiVersion,
+    }, () => {
+        generateOhos(outDir, idlLibrary)
     })
 
     if (options.plugin) {

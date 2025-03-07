@@ -20,7 +20,7 @@ import { LayoutNodeRole, PeerLibrary, isMaterialized, NamedMethodSignature, forc
 import * as idl from '@idlizer/core'
 import { collectProperties } from "./StructPrinter";
 import { collapseSameMethodsIDL, groupOverloadsIDL, groupSameSignatureMethodsIDL } from "./OverloadsPrinter";
-import { peerGeneratorConfiguration } from "../../DefaultConfiguration";
+import { GeneratorConfig } from "../../config";
 
 /**
  * Printer for OHOS interfaces
@@ -56,13 +56,13 @@ export function printInterfaceData(library: PeerLibrary): PrinterResult[] {
 
 function printInterfaceBody(library: PeerLibrary, entry: idl.IDLInterface, printer: idl.LanguageWriter): void {
     entry.properties.forEach(prop => {
-        const defValue = peerGeneratorConfiguration().constants.get(`${entry.name}.${prop.name}`)
+        const defValue = GeneratorConfig.current.options.constants.get(`${entry.name}.${prop.name}`)
         const initExpr = defValue != undefined ? printer.makeString(defValue) : undefined
         printer.writeFieldDeclaration(prop.name, prop.type, toFieldModifiers(prop), prop.isOptional, initExpr)
     })
 
     const groupedMethods = groupOverloadsIDL(entry.methods)
-    if (library.language != idl.Language.ARKTS || peerGeneratorConfiguration().CollapseOverloadsARKTS) {
+    if (library.language != idl.Language.ARKTS || GeneratorConfig.current.options.CollapseOverloadsARKTS) {
         groupedMethods.forEach(methods => {
             printCollapsedOverloads(library, methods, printer)
         })

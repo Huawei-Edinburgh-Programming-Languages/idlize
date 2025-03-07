@@ -32,7 +32,7 @@ import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod, Indente
 import { CppLanguageWriter, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
 import { DebugUtils, IDLAnyType, IDLBooleanType, IDLBufferType, IDLContainerType, IDLContainerUtils, IDLFunctionType, IDLI32Type, IDLNumberType, IDLOptionalType, IDLPointerType, IDLPrimitiveType, IDLReferenceType, IDLStringType, IDLThisType, IDLType, IDLTypeParameterType, IDLUndefinedType, IDLUnionType, isInterface, isOptionalType, isReferenceType, isTypeParameterType, isUnionType } from '@idlizer/core/idl'
 import { createGlobalScopeLegacy } from "../GlobalScopeUtils";
-import { peerGeneratorConfiguration } from "../../DefaultConfiguration";
+import { GeneratorConfig } from "../../config";
 
 class ReturnValueConvertor implements TypeConvertor<string | undefined> {
     constructor(
@@ -251,7 +251,7 @@ export class ModifierVisitor {
 
     printRealAndDummyModifier(method: PeerMethod, clazz: PeerClass) {
         this.modifiers.print(`${method.implNamespaceName}::${method.implName},`)
-        if (peerGeneratorConfiguration().noDummyGeneration(clazz.getComponentName(), method.toStringName)) {
+        if (GeneratorConfig.current.noDummyGeneration(clazz.getComponentName(), method.toStringName)) {
             return
         }
         this.printMethodProlog(this.dummy, method)
@@ -266,10 +266,10 @@ export class ModifierVisitor {
         const component = clazz.componentName
         const modifierStructImpl = `ArkUI${component}ModifierImpl`
 
-        this.modifiers.print(`const ${peerGeneratorConfiguration().cppPrefix}ArkUI${component}Modifier* Get${component}Modifier()`)
+        this.modifiers.print(`const ${GeneratorConfig.current.options.cppPrefix}ArkUI${component}Modifier* Get${component}Modifier()`)
         this.modifiers.print("{")
         this.modifiers.pushIndent()
-        this.modifiers.print(`static const ${peerGeneratorConfiguration().cppPrefix}ArkUI${component}Modifier ${modifierStructImpl} {`)
+        this.modifiers.print(`static const ${GeneratorConfig.current.options.cppPrefix}ArkUI${component}Modifier ${modifierStructImpl} {`)
         this.modifiers.pushIndent()
 
         this.modifierList.print(`Get${component}Modifier,`)
@@ -285,7 +285,7 @@ export class ModifierVisitor {
         this.modifiers.popIndent()
         this.modifiers.print(`}\n`)
 
-        this.getterDeclarations.print(`const ${peerGeneratorConfiguration().cppPrefix}ArkUI${name}Modifier* Get${name}Modifier();`)
+        this.getterDeclarations.print(`const ${GeneratorConfig.current.options.cppPrefix}ArkUI${name}Modifier* Get${name}Modifier();`)
     }
 
     pushNamespace(namespaceName: string, ident: boolean = true) {
@@ -358,7 +358,7 @@ class AccessorVisitor extends ModifierVisitor {
         [mDestroyPeer, clazz.ctor, clazz.finalizer].concat(clazz.methods).forEach(method => {
             if (!method) return
             this.accessors.print(`${method.implNamespaceName}::${method.implName},`)
-            if (peerGeneratorConfiguration().noDummyGeneration(clazz.getComponentName(), method.toStringName)) return
+            if (GeneratorConfig.current.noDummyGeneration(clazz.getComponentName(), method.toStringName)) return
 
             this.printMaterializedMethod(this.dummy, method, m => this.printDummyImplFunctionBody(m))
             this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
@@ -371,10 +371,10 @@ class AccessorVisitor extends ModifierVisitor {
 
     printMaterializedClassProlog(clazz: MaterializedClass) {
         const accessor = `${clazz.className}Accessor`
-        this.accessors.print(`const ${peerGeneratorConfiguration().cppPrefix}ArkUI${accessor}* Get${accessor}()`)
+        this.accessors.print(`const ${GeneratorConfig.current.options.cppPrefix}ArkUI${accessor}* Get${accessor}()`)
         this.accessors.print("{")
         this.accessors.pushIndent()
-        this.accessors.print(`static const ${peerGeneratorConfiguration().cppPrefix}ArkUI${accessor} ${accessor}Impl {`)
+        this.accessors.print(`static const ${GeneratorConfig.current.options.cppPrefix}ArkUI${accessor} ${accessor}Impl {`)
         this.accessors.pushIndent()
         this.accessorList.print(`Get${accessor},`)
     }
@@ -386,7 +386,7 @@ class AccessorVisitor extends ModifierVisitor {
         this.accessors.print(`return &${accessor}Impl;`)
         this.accessors.popIndent()
         this.accessors.print(`}\n`)
-        this.getterDeclarations.print(`const ${peerGeneratorConfiguration().cppPrefix}ArkUI${accessor}* Get${accessor}();`)
+        this.getterDeclarations.print(`const ${GeneratorConfig.current.options.cppPrefix}ArkUI${accessor}* Get${accessor}();`)
     }
 
     printMaterializedMethod(printer: LanguageWriter, method: MaterializedMethod, printBody: (m: MaterializedMethod) => void) {

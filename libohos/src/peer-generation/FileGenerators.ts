@@ -17,7 +17,7 @@ import * as path from "path"
 import { IndentedPrinter, camelCaseToUpperSnakeCase, Language, PeerLibrary, createLanguageWriter, CppConvertor, PrimitiveTypesInstance } from "@idlizer/core"
 import { Method, MethodSignature, NamedMethodSignature, PrinterLike } from "./LanguageWriters"
 import { CppLanguageWriter, LanguageWriter } from "@idlizer/core";
-import { peerGeneratorConfiguration } from "../DefaultConfiguration";
+import { GeneratorConfig } from "../config";
 import { writeDeserializer, writeSerializer } from "./printers/SerializerPrinter"
 import { ImportsCollector } from "./ImportsCollector"
 import { writeARKTSTypeCheckers, writeTSTypeCheckers } from "./printers/TypeCheckPrinter"
@@ -89,12 +89,12 @@ import {
 
 export function libraryCcDeclaration(): string {
     return readTemplate('library_template.cc')
-        .replaceAll(`%CPP_PREFIX%`, peerGeneratorConfiguration().cppPrefix)
+        .replaceAll(`%CPP_PREFIX%`, GeneratorConfig.current.options.cppPrefix)
 }
 
 export function bridgeCcGeneratedDeclaration(generatedApi: string[]): string {
     let prologue = readTemplate('bridge_generated_prologue.cc')
-        .replaceAll(`%CPP_PREFIX%`, peerGeneratorConfiguration().cppPrefix)
+        .replaceAll(`%CPP_PREFIX%`, GeneratorConfig.current.options.cppPrefix)
 
     return prologue.concat("\n")
         .concat(generatedApi.join("\n"))
@@ -102,7 +102,7 @@ export function bridgeCcGeneratedDeclaration(generatedApi: string[]): string {
 
 export function bridgeCcCustomDeclaration(customApi: string[]): string {
     let prologue = readTemplate('bridge_custom_prologue.cc')
-        .replaceAll(`%CPP_PREFIX%`, peerGeneratorConfiguration().cppPrefix)
+        .replaceAll(`%CPP_PREFIX%`, GeneratorConfig.current.options.cppPrefix)
 
     return prologue.concat("\n")
         .concat(customApi.join("\n"))
@@ -112,7 +112,7 @@ export function appendModifiersCommonPrologue(): LanguageWriter {
     let result = createLanguageWriter(Language.CPP)
     let body = readTemplate('impl_prologue.cc')
 
-    body = body.replaceAll("%CPP_PREFIX%", peerGeneratorConfiguration().cppPrefix)
+    body = body.replaceAll("%CPP_PREFIX%", GeneratorConfig.current.options.cppPrefix)
 
     result.writeLines(body)
     return result
@@ -125,7 +125,7 @@ export function getNodeTypes(library: PeerLibrary): string[] {
             components.push(peer.componentName)
         }
     }
-    return [...peerGeneratorConfiguration().components.customNodeTypes, ...components.sort()]
+    return [...GeneratorConfig.current.options.components.customNodeTypes, ...components.sort()]
 }
 
 export function appendViewModelBridge(library: PeerLibrary): LanguageWriter {
@@ -140,7 +140,7 @@ export function appendViewModelBridge(library: PeerLibrary): LanguageWriter {
     for (const component of getNodeTypes(library)) {
         const createNodeMethod = `create${component}Node`
         createNodeMethods.print(`Ark_NodeHandle ${createNodeMethod}(Ark_Int32 nodeId);`)
-        const name = `${peerGeneratorConfiguration().cppPrefix}ARKUI_${camelCaseToUpperSnakeCase(component)}`
+        const name = `${GeneratorConfig.current.options.cppPrefix}ARKUI_${camelCaseToUpperSnakeCase(component)}`
         createNodeSwitch.print(`case ${name}: return GeneratedViewModel::${createNodeMethod}(id);`)
     }
     createNodeSwitch.popIndent(3)
@@ -148,7 +148,7 @@ export function appendViewModelBridge(library: PeerLibrary): LanguageWriter {
 
     body = body.replaceAll("%CREATE_NODE_METHODS%", createNodeMethods.getOutput().join("\n"))
     body = body.replaceAll("%CREATE_NODE_SWITCH%", createNodeSwitch.getOutput().join("\n"))
-    body = body.replaceAll("%CPP_PREFIX%", peerGeneratorConfiguration().cppPrefix)
+    body = body.replaceAll("%CPP_PREFIX%", GeneratorConfig.current.options.cppPrefix)
 
     result.writeLines(body)
     return result
@@ -159,7 +159,7 @@ export function completeModifiersContent(content: PrinterLike, basicVersion: num
     let epilogue = readTemplate('dummy_impl_epilogue.cc')
 
     epilogue = epilogue
-        .replaceAll("%CPP_PREFIX%", peerGeneratorConfiguration().cppPrefix)
+        .replaceAll("%CPP_PREFIX%", GeneratorConfig.current.options.cppPrefix)
         .replaceAll(`%ARKUI_BASIC_NODE_API_VERSION_VALUE%`, basicVersion.toString())
         .replaceAll(`%ARKUI_FULL_API_VERSION_VALUE%`, fullVersion.toString())
         .replaceAll(`%ARKUI_EXTENDED_NODE_API_VERSION_VALUE%`, extendedVersion.toString())
@@ -184,10 +184,10 @@ export function dummyImplementations(modifiers: LanguageWriter, accessors: Langu
     let epilogue = readTemplate('dummy_impl_epilogue.cc')
 
     prologue = prologue
-        .replaceAll(`%CPP_PREFIX%`, peerGeneratorConfiguration().cppPrefix)
+        .replaceAll(`%CPP_PREFIX%`, GeneratorConfig.current.options.cppPrefix)
         .replaceAll(`%API_GENERATED%`, apiGeneratedFile)
     epilogue = epilogue
-        .replaceAll("%CPP_PREFIX%", peerGeneratorConfiguration().cppPrefix)
+        .replaceAll("%CPP_PREFIX%", GeneratorConfig.current.options.cppPrefix)
         .replaceAll(`%ARKUI_BASIC_NODE_API_VERSION_VALUE%`, basicVersion.toString())
         .replaceAll(`%ARKUI_FULL_API_VERSION_VALUE%`, fullVersion.toString())
         .replaceAll(`%ARKUI_EXTENDED_NODE_API_VERSION_VALUE%`, extendedVersion.toString())
@@ -206,11 +206,11 @@ export function dummyImplementations(modifiers: LanguageWriter, accessors: Langu
 
 export function modifierStructList(lines: LanguageWriter): LanguageWriter {
     let result = createLanguageWriter(Language.CPP)
-    result.print(`const ${peerGeneratorConfiguration().cppPrefix}ArkUINodeModifiers* ${peerGeneratorConfiguration().cppPrefix}GetArkUINodeModifiers()`)
+    result.print(`const ${GeneratorConfig.current.options.cppPrefix}ArkUINodeModifiers* ${GeneratorConfig.current.options.cppPrefix}GetArkUINodeModifiers()`)
     result.print("{")
     result.pushIndent()
 
-    result.print(`static const ${peerGeneratorConfiguration().cppPrefix}ArkUINodeModifiers modifiersImpl = {`)
+    result.print(`static const ${GeneratorConfig.current.options.cppPrefix}ArkUINodeModifiers modifiersImpl = {`)
     result.pushIndent()
     result.concat(lines)
     result.popIndent()
@@ -224,11 +224,11 @@ export function modifierStructList(lines: LanguageWriter): LanguageWriter {
 
 export function accessorStructList(lines: LanguageWriter): LanguageWriter {
     let result = createLanguageWriter(Language.CPP)
-    result.print(`const ${peerGeneratorConfiguration().cppPrefix}ArkUIAccessors* ${peerGeneratorConfiguration().cppPrefix}GetArkUIAccessors()`)
+    result.print(`const ${GeneratorConfig.current.options.cppPrefix}ArkUIAccessors* ${GeneratorConfig.current.options.cppPrefix}GetArkUIAccessors()`)
     result.print("{")
     result.pushIndent()
 
-    result.print(`static const ${peerGeneratorConfiguration().cppPrefix}ArkUIAccessors accessorsImpl = {`)
+    result.print(`static const ${GeneratorConfig.current.options.cppPrefix}ArkUIAccessors accessorsImpl = {`)
     result.pushIndent()
     result.concat(lines)
     result.popIndent()

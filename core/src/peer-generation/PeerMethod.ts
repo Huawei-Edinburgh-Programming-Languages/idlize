@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { generatorConfiguration, generatorTypePrefix } from "../config"
+import { coreConfiguration, generatorTypePrefix } from "../config"
 import { asPromise, IDLType } from "../idl"
 import { IdlNameConvertor } from "../LanguageWriters"
 import { ArgConvertor } from "../LanguageWriters/ArgConvertors"

@@ -19,10 +19,8 @@ import {
     IDLI32Type,
     IDLUint8ArrayType,
     NamedMethodSignature,
-    generatorConfiguration,
     Language,
     NativeModuleType,
-    setDefaultConfiguration,
     PeerLibrary,
     Method,
 } from "@idlizer/core";
@@ -44,14 +42,13 @@ import {
     printInterfaceData,
     printCJArkUIGeneratedNativeFunctions,
     PeerGeneratorConfiguration,
+    GeneratorConfig,
 } from '@idlizer/libohos';
 import { OhosInstall } from "./OhosInstall"
 import { generateNativeOhos, suggestLibraryName } from './OhosNativeVisitor';
 
-export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: PeerGeneratorConfiguration) {
-    const origGenConfig = generatorConfiguration()
-    setDefaultConfiguration(config)
-    peerLibrary.setFileLayout(layout(peerLibrary, "OH", `org/openharmony/${config.LibraryPrefix}`))
+export function generateOhos(outDir: string, peerLibrary: PeerLibrary) {
+    peerLibrary.setFileLayout(layout(peerLibrary, "OH", `org/openharmony/${GeneratorConfig.current.options.LibraryPrefix}`))
 
     const ohos = new OhosInstall(outDir, peerLibrary.language)
 
@@ -170,8 +167,6 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
     for (const [ file, content ] of native) {
         writeIntegratedFile(ohos.native(file), content)
     }
-
-    setDefaultConfiguration(origGenConfig)
 }
 
 function makeOhosModule(root:string, componentsFiles: string[]): string {

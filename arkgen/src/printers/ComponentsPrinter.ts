@@ -23,7 +23,7 @@ import { removeExt, renameDtsToComponent, Language, isCommonMethod,
     MethodModifier,
     NamedMethodSignature
 } from '@idlizer/core'
-import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, collapseSameNamedMethods, collectComponents, collectDeclDependencies, collectJavaImports, COMPONENT_BASE, componentToPeerClass, convertPeerFilenameToModule, findComponentByType, groupOverloads, ImportsCollector, OverloadsPrinter, peerGeneratorConfiguration, printJavaImports, TargetFile, tsCopyrightAndWarning } from '@idlizer/libohos'
+import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, collapseSameNamedMethods, collectComponents, collectDeclDependencies, collectJavaImports, COMPONENT_BASE, componentToPeerClass, convertPeerFilenameToModule, findComponentByType, GeneratorConfig, groupOverloads, ImportsCollector, OverloadsPrinter, printJavaImports, TargetFile, tsCopyrightAndWarning } from '@idlizer/libohos'
 
 export function generateArkComponentName(component: string) {
     return `Ark${component}Component`
@@ -126,7 +126,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
                 )
             )
             const filteredMethods = (peer.methods as any[]).filter(it =>
-                !peerGeneratorConfiguration().ignoreMethod(it.overloadedName, this.language))
+                !GeneratorConfig.current.ignoreMethod(it.overloadedName, this.language))
             for (const grouped of groupOverloads(filteredMethods))
                 this.overloadsPrinter.printGroupedComponentOverloads(peer, grouped)
             // todo stub until we can process AttributeModifier

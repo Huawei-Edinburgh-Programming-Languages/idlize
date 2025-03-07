@@ -40,7 +40,7 @@ import {
 import { printJavaImports } from "./lang/JavaPrinters";
 import { createReferenceType, forceAsNamedNode, IDLPointerType, IDLType, IDLVoidType, isOptionalType, maybeOptional } from '@idlizer/core/idl'
 import { collectDeclItself, collectDeclDependencies } from "../ImportsCollectorUtils";
-import { peerGeneratorConfiguration } from "../../DefaultConfiguration";
+import { GeneratorConfig } from "../../config";
 import { NativeModule } from '../NativeModule';
 import { PrinterClass, PrinterResult } from '../LayoutManager';
 import { SyntheticModule } from '../common';
@@ -76,7 +76,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
     }
 
     protected printMaterializedClass(clazz: MaterializedClass) {
-        const config = peerGeneratorConfiguration()
+        const config = GeneratorConfig.current
         const printer = this.printer
 
         this.printImports()
@@ -257,7 +257,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                         }
                         writer.writeStatement(ctorStatements)
                         const key = nsPath.map(it => it.name).concat([implementationClassName, 'constructor']).join('.')
-                        injectPatch(writer, key, config.patchMaterialized)
+                        injectPatch(writer, key, config.options.patchMaterialized)
                     })
                 } else {
                     // constructor with a special parameter to use in static methods

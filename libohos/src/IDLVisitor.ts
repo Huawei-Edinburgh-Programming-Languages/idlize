@@ -23,11 +23,11 @@ import {
     nameEnumValues, nameOrNull, identString, getNameWithoutQualifiersLeft, stringOrNone, warn,
     snakeCaseToCamelCase, escapeIDLKeyword, GenerateVisitor,
     generateSyntheticUnionName, generateSyntheticIdlNodeName, generateSyntheticFunctionName,
-    collapseTypes, isCommonMethodOrSubclass, generatorConfiguration,
+    collapseTypes, isCommonMethodOrSubclass, coreConfiguration,
     getOrPut
 } from "@idlizer/core"
 import { ReferenceResolver } from "@idlizer/core"
-import { peerGeneratorConfiguration, IDLVisitorConfiguration } from "./DefaultConfiguration"
+import { GeneratorConfig } from "./config"
 
 const MaxSyntheticTypeLength = 60
 
@@ -287,10 +287,10 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             ts.isTypeAliasDeclaration(node) ||
             ts.isFunctionDeclaration(node)) {
             const name = identName(node.name)
-            if (name && IDLVisitorConfiguration().isDeletedDeclaration(name)) {
+            if (name && GeneratorConfig.current.isDeletedDeclaration(name)) {
                 return
             }
-            if (name && IDLVisitorConfiguration().isStubbedDeclaration(name)) {
+            if (name && GeneratorConfig.current.isStubbedDeclaration(name)) {
                 const decl = idl.createInterface(
                     name,
                     idl.IDLInterfaceSubkind.Interface,
@@ -310,21 +310,21 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                 this.file.entries.push(decl)
                 return
             }
-            if (name && IDLVisitorConfiguration().getReplacedDeclaration(name)) {
+            if (name && GeneratorConfig.current.getReplacedDeclaration(name)) {
                 this.file.entries.push({
                     fileName: node.getSourceFile().fileName,
-                    ...IDLVisitorConfiguration().getReplacedDeclaration(name)!,
+                    ...GeneratorConfig.current.getReplacedDeclaration(name)!,
                 })
                 return
             }
         }
         if (ts.isClassDeclaration(node)) {
             const entry = this.serializeClass(node)
-            if (!peerGeneratorConfiguration().components.ignoreComponents.includes(idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
+            if (!GeneratorConfig.current.options.components.ignoreComponents.includes(idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
                 this.file.entries.push(entry)
         } else if (ts.isInterfaceDeclaration(node)) {
             const entry = this.serializeInterface(node)
-            if (!peerGeneratorConfiguration().components.ignoreComponents.includes(idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
+            if (!GeneratorConfig.current.options.components.ignoreComponents.includes(idl.getExtAttribute(entry, idl.IDLExtendedAttributes.Component) ?? ""))
                 this.file.entries.push(entry)
         } else if (ts.isModuleDeclaration(node)) {
             if (this.isKnownAmbientModuleDeclaration(node)) {
@@ -444,7 +444,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         const nameSuggestion = NameSuggestion.make(nameOrNull(node.name) ?? "UNDEFINED_TYPE_NAME", true)
         let extendedAttributes = this.computeDeprecatedExtendAttributes(node)
 
-        let [type, syntheticEntry] = IDLVisitorConfiguration().checkTypedefReplacement(node)
+        let [type, syntheticEntry] = GeneratorConfig.current.checkTypedefReplacement(node)
         if (syntheticEntry) this.addSyntheticType(syntheticEntry)
         if (type) {
             return idl.createTypedef(
@@ -521,7 +521,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             } else {
                 throw new Error(`Unsupported heritage: ${it.expression.getText()}: ${it.expression.kind}`)
             }
-            name = IDLVisitorConfiguration().checkNameReplacement(name, heritage.getSourceFile())
+            name = GeneratorConfig.current.checkNameReplacement(name, heritage.getSourceFile())
             return idl.createReferenceType(escapeIDLKeyword(name), this.mapTypeArgs(it.typeArguments, name))
         })
     }
@@ -550,11 +550,11 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     computeComponentExtendedAttributes(node: ts.ClassDeclaration | ts.InterfaceDeclaration): idl.IDLExtendedAttribute[] | undefined {
         let result: idl.IDLExtendedAttribute[] = this.computeExtendedAttributes(node)
         let name = identName(node.name)
-        if (name && peerGeneratorConfiguration().isHandWritten(peerGeneratorConfiguration().mapComponentName(name))) {
+        if (name && GeneratorConfig.current.isHandWritten(GeneratorConfig.current.mapComponentName(name))) {
             result.push({ name: idl.IDLExtendedAttributes.HandWrittenImplementation })
         }
         if (name && ts.isClassDeclaration(node) && isCommonMethodOrSubclass(this.typeChecker, node)) {
-            result.push({ name: idl.IDLExtendedAttributes.Component, value: `"${peerGeneratorConfiguration().mapComponentName(name)}"` })
+            result.push({ name: idl.IDLExtendedAttributes.Component, value: `"${GeneratorConfig.current.mapComponentName(name)}"` })
         }
         return this.computeDeprecatedExtendAttributes(node, result)
     }
@@ -620,7 +620,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         const methods = this.pickMethods(node.members, childNameSuggestion)
             .concat(this.pickPropertyBindings(nameSuggestion.name, props, fileName))
         return idl.createInterface(
-            IDLVisitorConfiguration().checkNameReplacement(nameSuggestion.name, node.getSourceFile()),
+            GeneratorConfig.current.checkNameReplacement(nameSuggestion.name, node.getSourceFile()),
             idl.IDLInterfaceSubkind.Class,
             inheritance,
             node.members.filter(ts.isConstructorDeclaration).map(it => this.serializeConstructor(it as ts.ConstructorDeclaration, childNameSuggestion)),
@@ -666,8 +666,8 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
      * List of such properties is taken from the GeneratorConfiguration.boundProperties parameter
      */
     pickPropertyBindings(className: string, props: idl.IDLProperty[], fileName: string): idl.IDLMethod[] {
-        const componentName = peerGeneratorConfiguration().mapComponentName(className)
-        const boundProps = peerGeneratorConfiguration().boundProperties.get(componentName)
+        const componentName = GeneratorConfig.current.mapComponentName(className)
+        const boundProps = GeneratorConfig.current.options.boundProperties.get(componentName)
         return !boundProps ? []
             : boundProps.map(propName => {
                 let propType = props.find(it => it.name === propName)?.type
@@ -736,7 +736,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         const childNameSuggestion = nameSuggestion.prependType()
         this.context.enter(nameSuggestion.name)
         return idl.createInterface(
-            IDLVisitorConfiguration().checkNameReplacement(nameSuggestion.name, node.getSourceFile()),
+            GeneratorConfig.current.checkNameReplacement(nameSuggestion.name, node.getSourceFile()),
             idl.IDLInterfaceSubkind.Interface,
             inheritance,
             this.pickConstructors(node.members, childNameSuggestion),
@@ -980,7 +980,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         }
         if (!parent) return false
         const name = identName(parent.name)
-        return peerGeneratorConfiguration().isKnownParametrized(name)
+        return GeneratorConfig.current.isKnownParametrized(name)
     }
 
     isKnownAmbientModuleDeclaration(type: ts.Node): boolean {
@@ -1269,7 +1269,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             return idl.createReferenceType(funcType.name)
         }
         if (this.isCommonMethodUsedAsProperty(property)) {
-            let [type, syntheticEntry] = IDLVisitorConfiguration().checkParameterTypeReplacement(property.parameters[0])
+            let [type, syntheticEntry] = GeneratorConfig.current.checkParameterTypeReplacement(property.parameters[0])
             if (syntheticEntry) this.addSyntheticType(syntheticEntry)
             if (!isDefined(type)) {
                 type = this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!))
@@ -1300,7 +1300,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         }
 
         if (ts.isPropertyDeclaration(property) || ts.isPropertySignature(property)) {
-            let [type, syntheticEntry] = IDLVisitorConfiguration().checkPropertyTypeReplacement(property)
+            let [type, syntheticEntry] = GeneratorConfig.current.checkPropertyTypeReplacement(property)
             if (syntheticEntry) this.addSyntheticType(syntheticEntry)
             if (!isDefined(type)) type = this.serializeType(property.type, nameSuggestion)
 
@@ -1364,7 +1364,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         }
         const parameterName = nameOrNull(parameter.name)!
         nameSuggestion = nameSuggestion?.extend(parameterName)
-        let [type, syntheticEntry] = IDLVisitorConfiguration().checkParameterTypeReplacement(parameter)
+        let [type, syntheticEntry] = GeneratorConfig.current.checkParameterTypeReplacement(parameter)
         if (syntheticEntry) {
             this.addSyntheticType(syntheticEntry)
         }
@@ -1395,7 +1395,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     isMethodUsedAsCallback(member: ts.ClassElement | ts.TypeElement): member is (ts.MethodDeclaration | ts.MethodSignature) {
         const interfaceName = (ts.isInterfaceDeclaration(member.parent)) ? identName(member.parent.name) : undefined
         if (interfaceName) {
-            return generatorConfiguration().forceCallback.includes(interfaceName)
+            return coreConfiguration().forceCallback.includes(interfaceName)
         }
         return false
     }
@@ -1554,7 +1554,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     private guessTypeAndValue(declaration: ts.VariableDeclaration):  [idl.IDLType, string] | undefined {
         if (declaration.type && declaration.initializer) return [this.serializeType(declaration.type), declaration.initializer.getText()]
         if (declaration.type) {
-            const value = peerGeneratorConfiguration().constants.get(declaration.name.getText())
+            const value = GeneratorConfig.current.options.constants.get(declaration.name.getText())
             if (value) {
                 return [this.serializeType(declaration.type), value]
             }

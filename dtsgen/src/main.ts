@@ -23,9 +23,7 @@ import {
     defaultCompilerOptions,
     idlToDtsString,
     findVersion,
-    setDefaultConfiguration,
     Language,
-    isDefined,
     verifyIDLLinter,
     PeerLibrary,
     scanInputDirs,
@@ -36,7 +34,7 @@ import {
     toIDLString,
     verifyIDLString
 } from "@idlizer/core/idl"
-import { formatInputPaths, validatePaths, loadPeerConfiguration, IDLVisitor, peerGeneratorConfiguration } from "@idlizer/libohos"
+import { formatInputPaths, validatePaths, IDLVisitor, GeneratorConfig } from "@idlizer/libohos"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -61,7 +59,7 @@ const options = program
 
 Language.ARKTS.extension = options.arktsExtension as string
 
-setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.ignoreDefaultConfig as boolean))
+GeneratorConfig.load(options.optionsFile, options.ignoreDefaultConfig)
 
 if (process.env.npm_package_version) {
     console.log(`IDLize version ${findVersion()}`)
@@ -116,7 +114,7 @@ if (options.dts2idl) {
             onEnd(outDir: string) {
                 if (options.verifyIdl) {
                     idlLibrary.files.forEach(file => {
-                        verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+                        verifyIDLLinter(file.file, idlLibrary, GeneratorConfig.current.linter)
                     })
                 }
             },

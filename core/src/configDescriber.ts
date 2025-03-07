@@ -113,24 +113,28 @@ class ValidationBox<T> {
     }
 }
 
+export interface DescriberPrintSchemaConfig {
+    partial?: boolean
+}
+
 class ConfigDescriberLeaf<T> {
     constructor(
         public validate: (x: unknown) => ValidationBox<T>,
-        public printSchema: () => JsonSchemaNode,
+        public printSchema: (config:DescriberPrintSchemaConfig) => JsonSchemaNode,
     ) { }
 }
 
 class ConfigDescriberOptionalLeaf<T> extends ConfigDescriberLeaf<T> {
     constructor(
         validate: (x: unknown) => ValidationBox<T>,
-        printSchema: () => JsonSchemaNode,
+        printSchema: (config:DescriberPrintSchemaConfig) => JsonSchemaNode,
     ) { super(validate, printSchema) }
 }
 
 class ConfigDescriberObjectLeaf<T> extends ConfigDescriberLeaf<T> {
     constructor(
         validate: (x: unknown) => ValidationBox<T>,
-        printSchema: () => JsonSchemaNode,
+        printSchema: (config:DescriberPrintSchemaConfig) => JsonSchemaNode,
         public schema: Record<string, ConfigDescriberLeaf<T>>,
     ) { super(validate, printSchema) }
 }
@@ -236,13 +240,13 @@ export const D = {
                 value: result
             })
         },
-            () => {
+            (config) => {
                 const properties: Record<string, JsonSchemaNode> = {}
                 const required: string[] = []
                 for (const key in schema) {
                     const leaf = schema[key]
-                    properties[key] = leaf.printSchema()
-                    if (!(leaf instanceof ConfigDescriberOptionalLeaf)) {
+                    properties[key] = leaf.printSchema(config)
+                    if (!(leaf instanceof ConfigDescriberOptionalLeaf) && !config.partial) {
                         required.push(key)
                     }
                 }
@@ -265,15 +269,15 @@ export const D = {
                 return ValidationBox.ok(undefined)
             }
             return type.validate(x)
-        }, () => {
-            return type.printSchema()
+        }, (config) => {
+            return type.printSchema(config)
         })
     },
     default<T>(type: ConfigDescriberLeaf<T>, def: T): ConfigDescriberOptionalLeaf<T> {
         return new ConfigDescriberOptionalLeaf(x => {
             return type.validate(x).or(def)
-        }, () => {
-            return type.printSchema()
+        }, (config) => {
+            return type.printSchema(config)
         })
     },
     array<T>(type: ConfigDescriberLeaf<T>, initAsEmpty: boolean = true): ConfigDescriberLeaf<T[]> {
@@ -293,10 +297,10 @@ export const D = {
                 result.push(box.unwrap())
             }
             return ValidationBox.ok(result)
-        }, () => {
+        }, (config) => {
             return {
                 type: 'array',
-                items: type.printSchema()
+                items: type.printSchema(config)
             }
         })
     },
@@ -322,10 +326,10 @@ export const D = {
                 result.set(keyResult.unwrap(), valResult.unwrap())
             }
             return ValidationBox.ok(result)
-        }, () => {
+        }, (config) => {
             return {
                 type: 'object',
-                additionalProperties: valSchema.printSchema()
+                additionalProperties: valSchema.printSchema(config)
             }
         })
     },
@@ -346,9 +350,9 @@ export const D = {
                 result.push(r.unwrap())
             })
             return ValidationBox.ok(result as TraverseTuple<Ts>)
-        }, () => {
+        }, (config) => {
             return {
-                items: items.map(it => it.printSchema())
+                items: items.map(it => it.printSchema(config))
             }
         })
     },
@@ -373,8 +377,8 @@ export const D = {
     ////////////////////////////////////////
     // Helpers
 
-    printJSONSchema<T>(schema: ConfigDescriberLeaf<T>): string {
-        const configSchema = schema.printSchema()
+    printJSONSchema<T>(schema: ConfigDescriberLeaf<T>, config?:DescriberPrintSchemaConfig): string {
+        const configSchema = schema.printSchema(config ?? {})
         if ("properties" in configSchema) {
             configSchema.properties.$schema = {
                 type: "string",

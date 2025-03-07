@@ -22,7 +22,7 @@ import {
     isBuilderClass,
     isImportAttr,
     isStringEnum,
-    generatorConfiguration,
+    coreConfiguration,
     generatorTypePrefix,
     cleanPrefix,
     PeerLibrary,
@@ -32,7 +32,7 @@ import {
 import { RuntimeType } from "@idlizer/core"
 import { LanguageExpression, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter } from "@idlizer/core"
-import { peerGeneratorConfiguration} from "../../DefaultConfiguration"
+import { GeneratorConfig} from "../../config"
 import { PrintHint } from "@idlizer/core"
 import { LibraryInterface } from "@idlizer/core"
 import { collectDeclarationTargets } from "../DeclarationTargetCollector"
@@ -127,7 +127,7 @@ export class StructPrinter {
                 forwardDeclarations.print(`typedef struct ${nameAssigned} ${nameAssigned};`)
                 this.printStructsCHead(nameAssigned, target, concreteDeclarations)
                 if (idl.isUnionType(target)) {
-                    concreteDeclarations.print(`${generatorConfiguration().TypePrefix}Int32 selector;`)
+                    concreteDeclarations.print(`${coreConfiguration().TypePrefix}Int32 selector;`)
                     concreteDeclarations.print("union {")
                     concreteDeclarations.pushIndent()
                     target.types.forEach((it, index) =>
@@ -170,7 +170,7 @@ export class StructPrinter {
                 this.generateWriteToString(nameAssigned, target, writeToString, isPointer)
                 this.printOptionalIfNeeded(forwardDeclarations, concreteDeclarations, writeToString, target, seenNames)
             } else if (isAccessor) {
-                const peerName = cleanPrefix(`${nameAssigned}Peer`, peerGeneratorConfiguration().TypePrefix)
+                const peerName = cleanPrefix(`${nameAssigned}Peer`, GeneratorConfig.current.options.TypePrefix)
                 forwardDeclarations.print(`typedef struct ${peerName} ${peerName};`)
                 forwardDeclarations.print(`typedef struct ${peerName}* ${nameAssigned};`)
                 this.writeRuntimeType(target, targetType, idl.isOptionalType(target), writeToString)
@@ -188,7 +188,7 @@ export class StructPrinter {
         structs.concat(concreteDeclarations)
         // TODO: hack, remove me!
         if (["arkoala", "libace"].includes(this.library.name)) { // TODO we probably don't need this typedef for any library except Ark
-            typedefs.print(`typedef ${generatorConfiguration().OptionalPrefix}Length ${generatorConfiguration().OptionalPrefix}Dimension;`)
+            typedefs.print(`typedef ${coreConfiguration().OptionalPrefix}Length ${coreConfiguration().OptionalPrefix}Dimension;`)
         }
     }
 
@@ -204,7 +204,7 @@ export class StructPrinter {
         const nameAssigned = concreteDeclarations.getNodeName(target)
         const nameOptional = idl.isType(target)
             ? concreteDeclarations.getNodeName(idl.createOptionalType(target))
-            : generatorConfiguration().OptionalPrefix + cleanPrefix(concreteDeclarations.getNodeName(target as idl.IDLEntry), generatorTypePrefix())
+            : coreConfiguration().OptionalPrefix + cleanPrefix(concreteDeclarations.getNodeName(target as idl.IDLEntry), generatorTypePrefix())
         if (forceOptional || nameOptional.includes("Opt_CustomObject")) {
             if (seenNames.has(nameOptional)) {
                 return
@@ -490,7 +490,7 @@ inline void WriteToString(std::string* result, const ${name}* value) {
     }
 
     private ignoreTarget(target: idl.IDLNode): target is idl.IDLPrimitiveType | idl.IDLEnum {
-        if (idl.isNamedNode(target) && peerGeneratorConfiguration().serializer.ignore.includes(target.name)) return true
+        if (idl.isNamedNode(target) && GeneratorConfig.current.options.serializer.ignore.includes(target.name)) return true
         if (idl.isPrimitiveType(target)) return true
         if (idl.isEnum(target)) return true
         if (isImportAttr(target)) return true

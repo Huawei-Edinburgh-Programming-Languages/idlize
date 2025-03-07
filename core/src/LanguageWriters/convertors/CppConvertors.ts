@@ -14,7 +14,7 @@
  */
 
 import * as idl from '../../idl'
-import { generatorConfiguration, generatorTypePrefix } from "../../config"
+import { coreConfiguration, generatorTypePrefix } from "../../config"
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from "../nameConvertor"
 import { PrimitiveTypesInstance } from '../../peer-generation/PrimitiveType'
 import { InteropArgConvertor } from './InteropConvertors'
@@ -71,7 +71,7 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
         return this.make(node.name)
     }
     convertCallback(node: idl.IDLCallback): ConvertResult {
-        return this.make(generatorConfiguration().LibraryPrefix + node.name, true)
+        return this.make(coreConfiguration().LibraryPrefix + node.name, true)
     }
     convertMethod(node: idl.IDLMethod): ConvertResult {
         return this.make(node.name)
@@ -113,7 +113,7 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
             case "Object":
                 return this.make('CustomObject')
         }
-        if (generatorConfiguration().parameterized.includes(refName)) {
+        if (coreConfiguration().parameterized.includes(refName)) {
             return this.make('CustomObject')
         }
         let decl = this.resolver.toDeclaration(type)
@@ -184,7 +184,7 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
 
 export class CppConvertor extends GenericCppConvertor implements IdlNameConvertor {
     private unwrap(type: idl.IDLNode, result: ConvertResult): string {
-        const conf = generatorConfiguration()
+        const conf = coreConfiguration()
         if (idl.isType(type) && idl.isOptionalType(type)) {
             return `${conf.OptionalPrefix}${result.text}`
         }

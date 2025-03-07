@@ -48,7 +48,7 @@ import {
     ArgConvertor,
     capitalize,
     generateCallbackAPIArguments,
-    generatorConfiguration,
+    coreConfiguration,
     generatorTypePrefix,
     IndentedPrinter,
     Language,
@@ -270,9 +270,9 @@ class OHOSNativeVisitor {
         if (!isConstructor(method) && !method.isStatic)
             args.unshift(`${PrimitiveTypesInstance.NativePointer} thisPtr`)
         if (!!asPromise(method.returnType))
-            args.unshift(`${generatorConfiguration().TypePrefix}${this.libraryName}_AsyncWorkerPtr asyncWorker`)
+            args.unshift(`${coreConfiguration().TypePrefix}${this.libraryName}_AsyncWorkerPtr asyncWorker`)
         if (hasExtAttribute(method, IDLExtendedAttributes.Throws) || !!asPromise(method.returnType))
-            args.unshift(`${generatorConfiguration().TypePrefix}${this.libraryName}_VMContext vmContext`)
+            args.unshift(`${coreConfiguration().TypePrefix}${this.libraryName}_VMContext vmContext`)
         return args.join(", ")
     }
 
@@ -309,9 +309,9 @@ class OHOSNativeVisitor {
         // Create API.
         let api = this.libraryName
         let _c = writer
-        _c.print(`const ${generatorConfiguration().TypePrefix}${api}_API* Get${api}APIImpl(int version) {`)
+        _c.print(`const ${coreConfiguration().TypePrefix}${api}_API* Get${api}APIImpl(int version) {`)
         _c.pushIndent()
-        _c.print(`const static ${generatorConfiguration().TypePrefix}${api}_API api = {`)
+        _c.print(`const static ${coreConfiguration().TypePrefix}${api}_API api = {`)
         _c.pushIndent()
         _c.print(`1, // version`)
         this.interfaces.forEach(it => {
@@ -323,11 +323,11 @@ class OHOSNativeVisitor {
         _c.print(`return &api;`)
         _c.popIndent()
         _c.print(`}`)
-        let name = `${generatorConfiguration().TypePrefix}${api}_API`
+        let name = `${coreConfiguration().TypePrefix}${api}_API`
         let _h = this.hWriter
         _h.print(`typedef struct ${name} {`)
         _h.pushIndent()
-        _h.print(`${generatorConfiguration().TypePrefix}Int32 version;`)
+        _h.print(`${coreConfiguration().TypePrefix}Int32 version;`)
         this.interfaces.forEach(it => {
             _h.print(`const ${this.modifierName(it)}* (*${this.apiName(it)})();`)
         })
@@ -414,7 +414,7 @@ class OHOSNativeVisitor {
 class ReturnTypeConvertor extends CppReturnTypeConvertor {
     override convertPrimitiveType(type: IDLPrimitiveType): string {
         if (type === IDLNumberType)
-            return `${generatorConfiguration().TypePrefix}Number`
+            return `${coreConfiguration().TypePrefix}Number`
         return super.convertPrimitiveType(type)
     }
 }

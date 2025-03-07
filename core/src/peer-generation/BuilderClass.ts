@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { generatorConfiguration } from "../config"
+import { coreConfiguration } from "../config"
 import { IDLInterface, IDLReferenceType } from "../idl"
 import { Field, Method } from "../LanguageWriters/LanguageWriter"
 import { isDefined } from "../util"
@@ -37,7 +37,7 @@ export class BuilderClass {
  */
 export function isBuilderClass(declaration: IDLInterface): boolean {
     const className = declaration.name!
-    if (generatorConfiguration().builderClasses.includes(className)) {
+    if (coreConfiguration().builderClasses.includes(className)) {
         return true
     }
     if (isCustomBuilderClass(className)) {

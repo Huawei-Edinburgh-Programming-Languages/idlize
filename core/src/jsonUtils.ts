@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { resolve, normalize, dirname } from "node:path"
 
 function mergeJSON(a: unknown, b: unknown): unknown {
     if (a === undefined && b !== undefined) {
@@ -54,4 +57,27 @@ export function mergeJSONs(objects: unknown[]): unknown {
         result = mergeJSON(result, obj)
     }
     return result
+}
+
+export function resolveJSONPaths(fields:string[], objectPath:string, object: unknown[]): unknown {
+    const path: string[] = []
+    function resolvePath(path:string) {
+        return normalize(resolve(dirname(objectPath), path))
+    }
+    function scan(entry:unknown) {
+        if (fields.includes(path.join('.')) && typeof entry === 'string') {
+            return resolvePath(entry)
+        }
+        if (typeof entry !== 'object' || entry === null) {
+            return entry
+        }
+        const anyEntry = entry as any
+        for (const key in anyEntry) {
+            path.push(key)
+            anyEntry[key] = scan(anyEntry[key])
+            path.pop()
+        }
+        return anyEntry
+    }
+    return scan(object)
 }

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { generatorConfiguration } from "../config"
+import { coreConfiguration } from "../config"
 
 export class PrimitiveType {
     constructor(protected name: string,
@@ -21,7 +21,7 @@ export class PrimitiveType {
     }
 
     getText(): string {
-        return generatorConfiguration().TypePrefix + this.name
+        return coreConfiguration().TypePrefix + this.name
     }
 
     getInterop(): string {

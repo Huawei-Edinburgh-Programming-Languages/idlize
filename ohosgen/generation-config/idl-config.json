@@ -1,4 +1,5 @@
 {
+    "$schema": "./schema.json",
     "IDLVisitor": {
         "DeletedDeclarations": [
             "WrappedBuilder",
@@ -49,6 +50,6 @@
                 ["TextStyle", "TextStyle_styled_string"]
             ]
         },
-        "TypeReplacementsFilePath": "./generation-config/type-replacements.idl"
+        "TypeReplacementsFilePath": "./type-replacements.idl"
     }
 }

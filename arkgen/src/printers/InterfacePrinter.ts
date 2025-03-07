@@ -25,11 +25,10 @@ import { createLanguageWriter, LanguageWriter, PeerFile,
      isInIdlize,
      isInIdlizeInternal
 } from '@idlizer/core'
-import { ARK_CUSTOM_OBJECT, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH,
+import { ARK_CUSTOM_OBJECT, ARK_OBJECTBASE, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH,
     collectDeclDependencies, collectJavaImports, collectProperties, convertDeclToFeature,
-    DependenciesCollector, ImportFeature, ImportsCollector, isComponentDeclaration,
-    peerGeneratorConfiguration, printJavaImports, TargetFile, tsCopyrightAndWarning,
-    ARK_OBJECTBASE
+    DependenciesCollector, GeneratorConfig, ImportFeature, ImportsCollector, isComponentDeclaration,
+    printJavaImports, TargetFile, tsCopyrightAndWarning
 } from '@idlizer/libohos'
 
 interface InterfacesVisitor {
@@ -362,7 +361,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
                 if (idl.isImport(entry) ||
                     isInIdlizeInternal(entry) ||
                     idl.isHandwritten(entry) ||
-                    peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
+                    GeneratorConfig.current.ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
                 syntheticGenerator.convert(entry)
                 if (idl.isInterface(entry) && (isMaterialized(entry, this.peerLibrary) && entry.subkind == idl.IDLInterfaceSubkind.Class || isBuilderClass(entry)))
@@ -424,7 +423,7 @@ class JavaSyntheticGenerator extends DependenciesCollector {
     }
 
     convertTypedef(decl: idl.IDLTypedef): idl.IDLEntry[] {
-        if (peerGeneratorConfiguration().ignoreEntry(decl.name, Language.JAVA))
+        if (GeneratorConfig.current.ignoreEntry(decl.name, Language.JAVA))
             return []
         return super.convertTypedef(decl)
     }
@@ -696,7 +695,7 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
                 if (isInIdlizeInternal(entry))
                     continue;
                 syntheticsGenerator.convert(entry)
-                if (peerGeneratorConfiguration().ignoreEntry(entry.name, Language.JAVA))
+                if (GeneratorConfig.current.ignoreEntry(entry.name, Language.JAVA))
                     continue
                 if (idl.isInterface(entry) && (
                     isBuilderClass(entry) ||
@@ -811,7 +810,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (isInIdlizeInternal(entry) ||
                     idl.isHandwritten(entry) ||
-                    peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
+                    GeneratorConfig.current.ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
                 syntheticGenerator.convert(entry)
                 if (idl.isInterface(entry) && (isMaterialized(entry, this.peerLibrary) || isBuilderClass(entry)))
@@ -863,7 +862,7 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (isInIdlize(entry))
                     continue
-                if (peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language))
+                if (GeneratorConfig.current.ignoreEntry(entry.name, this.peerLibrary.language))
                     continue
                 syntheticGenerator.convert(entry)
                 if (idl.isInterface(entry) && (isMaterialized(entry, this.peerLibrary) || isBuilderClass(entry)))

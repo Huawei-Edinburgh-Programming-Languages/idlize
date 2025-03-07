@@ -26,7 +26,7 @@ import { LanguageWriter, PeerClassBase, PeerMethod, PeerLibrary } from "@idlizer
 import { isDefined, Language, throwException, collapseTypes } from '@idlizer/core'
 import { ArgConvertor, UndefinedConvertor } from "@idlizer/core"
 import { ReferenceResolver, UnionRuntimeTypeChecker, zipMany } from "@idlizer/core";
-import { peerGeneratorConfiguration } from '../../DefaultConfiguration';
+import { GeneratorConfig } from '../../config';
 
 function collapseReturnTypes(types: idl.IDLType[], language?: Language) {
     let returnType: idl.IDLType = collapseTypes(types)
@@ -249,7 +249,7 @@ export class OverloadsPrinter {
                 return cardinalityA - cardinalityB
             })
 
-        if (this.language != Language.ARKTS || peerGeneratorConfiguration().CollapseOverloadsARKTS) {
+        if (this.language != Language.ARKTS || GeneratorConfig.current.options.CollapseOverloadsARKTS) {
             this.printCollapsedOverloads(peer, orderedMethods)
         } else {
             // Handle special case for same name AND same signature methods.

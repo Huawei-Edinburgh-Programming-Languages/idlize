@@ -26,7 +26,7 @@ import {
     StringExpression
 } from "./LanguageWriter";
 import { RuntimeType } from "./common";
-import { generatorConfiguration, generatorTypePrefix } from "../config"
+import { coreConfiguration, generatorTypePrefix } from "../config"
 import { LibraryInterface } from "../LibraryInterface";
 import { hashCodeFromString, warn } from "../util";
 import { UnionRuntimeTypeChecker } from "../peer-generation/unions";

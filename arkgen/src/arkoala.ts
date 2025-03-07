@@ -47,8 +47,8 @@ import {
     HeaderVisitor,
     makeCSerializers,
     readTemplate,
-    peerGeneratorConfiguration,
     readInteropTypesHeader,
+    GeneratorConfig,
 } from "@idlizer/libohos"
 import { ArkoalaInstall, LibaceInstall } from "./ArkoalaInstall"
 import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
@@ -743,7 +743,7 @@ function makeAPI(apiVersion: number,
     return `
 ${readTemplate('arkoala_api_prologue.h')
     .replaceAll(`%ARKUI_FULL_API_VERSION_VALUE%`, apiVersion.toString())
-    .replaceAll(`%CPP_PREFIX%`, peerGeneratorConfiguration().cppPrefix)
+    .replaceAll(`%CPP_PREFIX%`, GeneratorConfig.current.options.cppPrefix)
     .replaceAll(`%INTEROP_TYPES_HEADER`, readInteropTypesHeader())}
 
 ${structs.getOutput().join("\n")}
@@ -757,26 +757,26 @@ ${headers.getOutput().join("\n")}
  * layout, i.e. adding new events - increase ARKUI_API_VERSION above for binary
  * layout checks.
  */
-typedef struct ${peerGeneratorConfiguration().cppPrefix}ArkUINodeModifiers {
+typedef struct ${GeneratorConfig.current.options.cppPrefix}ArkUINodeModifiers {
 ${modifiers.getOutput().join("\n")}
-} ${peerGeneratorConfiguration().cppPrefix}ArkUINodeModifiers;
+} ${GeneratorConfig.current.options.cppPrefix}ArkUINodeModifiers;
 
-typedef struct ${peerGeneratorConfiguration().cppPrefix}ArkUIAccessors {
+typedef struct ${GeneratorConfig.current.options.cppPrefix}ArkUIAccessors {
 ${accessors.getOutput().join("\n")}
-} ${peerGeneratorConfiguration().cppPrefix}ArkUIAccessors;
+} ${GeneratorConfig.current.options.cppPrefix}ArkUIAccessors;
 
-typedef struct ${peerGeneratorConfiguration().cppPrefix}ArkUIGraphicsAPI {
+typedef struct ${GeneratorConfig.current.options.cppPrefix}ArkUIGraphicsAPI {
     ${ArkPrimitiveTypesInstance.Int32.getText()} version;
-} ${peerGeneratorConfiguration().cppPrefix}ArkUIGraphicsAPI;
+} ${GeneratorConfig.current.options.cppPrefix}ArkUIGraphicsAPI;
 
-typedef enum ${peerGeneratorConfiguration().cppPrefix}Ark_NodeType {
+typedef enum ${GeneratorConfig.current.options.cppPrefix}Ark_NodeType {
 ${nodeTypes.getOutput().join(",\n")}
-} ${peerGeneratorConfiguration().cppPrefix}Ark_NodeType;
+} ${GeneratorConfig.current.options.cppPrefix}Ark_NodeType;
 
 ${readTemplate('arkoala_node_api.h')
-    .replaceAll(`%CPP_PREFIX%`, peerGeneratorConfiguration().cppPrefix)}
+    .replaceAll(`%CPP_PREFIX%`, GeneratorConfig.current.options.cppPrefix)}
 
 ${readTemplate('arkoala_api_epilogue.h')
-        .replaceAll("%CPP_PREFIX%", peerGeneratorConfiguration().cppPrefix)}
+        .replaceAll("%CPP_PREFIX%", GeneratorConfig.current.options.cppPrefix)}
 `
 }

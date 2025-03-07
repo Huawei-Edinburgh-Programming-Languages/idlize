@@ -1,15 +1,15 @@
 import * as idl from "@idlizer/core/idl"
-import { generatorConfiguration, Language, LibraryInterface, isMaterialized, cleanPrefix, isInIdlize, isStaticMaterialized, PeerFile } from "@idlizer/core";
+import { coreConfiguration, Language, LibraryInterface, isMaterialized, cleanPrefix, isInIdlize, isStaticMaterialized, PeerFile } from "@idlizer/core";
 import { isComponentDeclaration } from "./ComponentsCollector";
 import { DependencySorter } from "./idl/DependencySorter";
 import { IdlNameConvertor } from "@idlizer/core";
-import { peerGeneratorConfiguration } from "../DefaultConfiguration";
+import { GeneratorConfig } from "../config";
 import { collectUniqueCallbacks } from "./printers/CallbacksPrinter";
 
 const collectDeclarationTargets_cache = new Map<LibraryInterface, idl.IDLNode[]>()
 export function collectDeclarationTargets(library: LibraryInterface): idl.IDLNode[] {
 
-    const generateUnused = peerGeneratorConfiguration().GenerateUnused
+    const generateUnused = GeneratorConfig.current.options.GenerateUnused
 
     if (collectDeclarationTargets_cache.has(library))
         return collectDeclarationTargets_cache.get(library)!
@@ -21,7 +21,7 @@ export function collectDeclarationTargets(library: LibraryInterface): idl.IDLNod
         if (library.libraryPackages?.length && !library.libraryPackages.includes((file as PeerFile).packageName()))
             continue
         for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
-            if (peerGeneratorConfiguration().ignoreEntry(entry.name, library.language) ||
+            if (GeneratorConfig.current.ignoreEntry(entry.name, library.language) ||
                 isInIdlize(entry) ||
                 idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.HandWrittenImplementation)
                 )
@@ -31,12 +31,12 @@ export function collectDeclarationTargets(library: LibraryInterface): idl.IDLNod
                     if (isMaterialized(entry, library) && !isStaticMaterialized(entry, library))
                         orderer.addDep(entry)
                     for (const property of entry.properties) {
-                        if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(property.name))
+                        if (GeneratorConfig.current.options.components.ignorePeerMethod.includes(property.name))
                             continue
                         orderer.addDep(library.toDeclaration(property.type))
                     }
                     for (const method of entry.methods) {
-                        if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(method.name))
+                        if (GeneratorConfig.current.options.components.ignorePeerMethod.includes(method.name))
                             continue
                         for (const parameter of method.parameters)
                             orderer.addDep(parameter.type!)
@@ -53,7 +53,7 @@ export function collectDeclarationTargets(library: LibraryInterface): idl.IDLNod
                 } else if (generateUnused && !isInIdlize(entry)) {
                     orderer.addDep(library.toDeclaration(entry))
                     for (const property of entry.properties) {
-                        if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(property.name))
+                        if (GeneratorConfig.current.options.components.ignorePeerMethod.includes(property.name))
                             continue
                         orderer.addDep(library.toDeclaration(property.type))
                     }
@@ -112,7 +112,7 @@ export namespace DeclarationTargets {
             .filter(it => it !== idl.IDLVoidType)
             .map(it => idl.isType(it)
                 ? nativeNameConvertorInstance.convert(idl.createOptionalType(it))
-                : generatorConfiguration().OptionalPrefix + cleanPrefix(nativeNameConvertorInstance.convert(it), generatorConfiguration().TypePrefix)
+                : coreConfiguration().OptionalPrefix + cleanPrefix(nativeNameConvertorInstance.convert(it), coreConfiguration().TypePrefix)
             )
         return new Set(data)
     }

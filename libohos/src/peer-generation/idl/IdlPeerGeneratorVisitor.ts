@@ -22,7 +22,7 @@ import {
     Language,
     isRoot,
     MethodSignature,
-    generatorConfiguration,
+    coreConfiguration,
     VoidConvertor,
     PointerConvertor,
     isInIdlizeInternal,
@@ -31,7 +31,7 @@ import {
 } from '@idlizer/core'
 import { ArgConvertor, PeerLibrary, PeerFile, PeerClass, PeerMethod } from "@idlizer/core"
 import { createOutArgConvertor } from "../PromiseConvertors"
-import { peerGeneratorConfiguration} from "../../DefaultConfiguration";
+import { GeneratorConfig } from "../../config";
 import { getInternalClassName, isBuilderClass, MaterializedClass, MaterializedField, MaterializedMethod } from "@idlizer/core"
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
 import { BuilderClass, CUSTOM_BUILDER_CLASSES, isCustomBuilderClass, isMaterialized } from "@idlizer/core";
@@ -112,7 +112,7 @@ class PeersGenerator {
     ) {}
 
     private processProperty(prop: idl.IDLProperty, peer: PeerClass, parentName?: string): PeerMethod | undefined {
-        if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(prop.name))
+        if (GeneratorConfig.current.options.components.ignorePeerMethod.includes(prop.name))
             return
         const originalParentName = parentName ?? peer.originalClassName!
         const argConvertor = this.library.typeConvertor("value", prop.type, prop.isOptional)
@@ -126,7 +126,7 @@ class PeersGenerator {
     }
 
     private processMethodOrCallable(method: idl.IDLMethod | idl.IDLCallable, peer: PeerClass, parentName?: string): PeerMethod | undefined {
-        if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(method.name!))
+        if (GeneratorConfig.current.options.components.ignorePeerMethod.includes(method.name!))
             return
         // Some method have other parents as part of their names
         // Such as the ones coming from the friend interfaces
@@ -149,7 +149,7 @@ class PeersGenerator {
     }
 
     private createComponentAttributesDeclaration(clazz: idl.IDLInterface, peer: PeerClass) {
-        if (peerGeneratorConfiguration().components.invalidAttributes.includes(peer.componentName)) {
+        if (GeneratorConfig.current.options.components.invalidAttributes.includes(peer.componentName)) {
             return
         }
         const seenAttributes = new Set<string>()
@@ -329,7 +329,7 @@ export class IdlPeerProcessor {
         const mMethods = decl.methods
             // TODO: Properly handle methods with return Promise<T> type
             .map(method => this.makeMaterializedMethod(decl, method, implemenationParentName))
-            .filter(it => !idl.isNamedNode(it.method.signature.returnType) || !peerGeneratorConfiguration().materialized.ignoreReturnTypes.includes(it.method.signature.returnType.name))
+            .filter(it => !idl.isNamedNode(it.method.signature.returnType) || !GeneratorConfig.current.options.materialized.ignoreReturnTypes.includes(it.method.signature.returnType.name))
 
         const taggedMethods = decl.methods.filter(m => m.extendedAttributes?.find(it => it.name === idl.IDLExtendedAttributes.DtsTag))
 
@@ -406,7 +406,7 @@ export class IdlPeerProcessor {
 
     private ignoreDeclaration(decl: idl.IDLEntry, language: Language): boolean {
         return isInIdlize(decl) ||
-            peerGeneratorConfiguration().ignoreEntry(decl.name!, language)
+        GeneratorConfig.current.ignoreEntry(decl.name!, language)
     }
 
     process(): void {
@@ -415,12 +415,12 @@ export class IdlPeerProcessor {
         for (const component of collectComponents(this.library))
             peerGenerator.generatePeer(component)
         const allDeclarations = this.library.files.flatMap(file => idl.linearizeNamespaceMembers(file.entries))
-        const curConfig = generatorConfiguration()
-        const curPeerConfig = peerGeneratorConfiguration()
-        console.log(curConfig.LibraryPrefix, curPeerConfig.LibraryPrefix)
+        const curConfig = coreConfiguration()
+        const curPeerConfig = GeneratorConfig.current
+        console.log(curConfig.LibraryPrefix, curPeerConfig.options.LibraryPrefix)
 
         for (const dep of allDeclarations) {
-            if (peerGeneratorConfiguration().ignoreEntry(dep.name, this.library.language) || this.ignoreDeclaration(dep, this.library.language) || idl.isHandwritten(dep) || isInIdlizeInternal(dep))
+            if (GeneratorConfig.current.ignoreEntry(dep.name, this.library.language) || this.ignoreDeclaration(dep, this.library.language) || idl.isHandwritten(dep) || isInIdlizeInternal(dep))
                 continue
             const isPeerDecl = idl.isInterface(dep) && isComponentDeclaration(this.library, dep)
             if (!isPeerDecl && idl.isInterface(dep) && [idl.IDLInterfaceSubkind.Class, idl.IDLInterfaceSubkind.Interface].includes(dep.subkind)) {

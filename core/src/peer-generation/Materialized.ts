@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { generatorConfiguration } from '../config'
+import { coreConfiguration } from '../config'
 import * as idl from '../idl'
 import { ArgConvertor, VoidConvertor } from '../LanguageWriters/ArgConvertors'
 import { CppReturnTypeConvertor } from '../LanguageWriters/convertors/CppConvertors'

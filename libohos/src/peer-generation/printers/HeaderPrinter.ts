@@ -18,12 +18,12 @@ import { IndentedPrinter, camelCaseToUpperSnakeCase, maybeOptional, Language, Cp
     MaterializedClass,
 } from '@idlizer/core'
 import { getNodeTypes } from "../FileGenerators";
-import { peerGeneratorConfiguration} from "../../DefaultConfiguration";
+import { GeneratorConfig} from "../../config";
 import { printMethodDeclaration } from "../LanguageWriters";
 import { createGlobalScopeLegacy } from '../GlobalScopeUtils';
 
 export function generateEventReceiverName(componentName: string) {
-    return `${peerGeneratorConfiguration().cppPrefix}ArkUI${componentName}EventsReceiver`
+    return `${GeneratorConfig.current.options.cppPrefix}ArkUI${componentName}EventsReceiver`
 }
 
 export class HeaderVisitor {
@@ -38,14 +38,14 @@ export class HeaderVisitor {
     private readonly returnTypeConvertor = new CppReturnTypeConvertor(this.library)
 
     private apiModifierHeader(clazz: PeerClass) {
-        return `typedef struct ${peerGeneratorConfiguration().cppPrefix}ArkUI${clazz.componentName}Modifier {`
+        return `typedef struct ${GeneratorConfig.current.options.cppPrefix}ArkUI${clazz.componentName}Modifier {`
     }
 
     private printClassProlog(clazz: PeerClass) {
         this.api.print(this.apiModifierHeader(clazz))
         this.api.pushIndent()
         this.modifiersList.pushIndent()
-        this.modifiersList.print(`const ${peerGeneratorConfiguration().cppPrefix}ArkUI${clazz.componentName}Modifier* (*get${clazz.componentName}Modifier)();`)
+        this.modifiersList.print(`const ${GeneratorConfig.current.options.cppPrefix}ArkUI${clazz.componentName}Modifier* (*get${clazz.componentName}Modifier)();`)
     }
 
     private printMethod(method: PeerMethod) {
@@ -55,7 +55,7 @@ export class HeaderVisitor {
 
     private printClassEpilog(clazz: PeerClass) {
         this.api.popIndent()
-        this.api.print(`} ${peerGeneratorConfiguration().cppPrefix}ArkUI${clazz.componentName}Modifier;\n`)
+        this.api.print(`} ${GeneratorConfig.current.options.cppPrefix}ArkUI${clazz.componentName}Modifier;\n`)
         this.modifiersList.popIndent()
     }
 
@@ -64,19 +64,19 @@ export class HeaderVisitor {
         this.accessorsList.pushIndent()
         this.library.materializedClasses.forEach(c => {
             this.printAccessor(c)
-            this.accessorsList.print(`const ${peerGeneratorConfiguration().cppPrefix}ArkUI${c.className}Accessor* (*get${c.className}Accessor)();`)
+            this.accessorsList.print(`const ${GeneratorConfig.current.options.cppPrefix}ArkUI${c.className}Accessor* (*get${c.className}Accessor)();`)
         })
         const globals = createGlobalScopeLegacy(this.library)
         if (globals.methods.length) {
             this.printAccessor(globals)
-            this.accessorsList.print(`const ${peerGeneratorConfiguration().cppPrefix}ArkUI${globals.className}Accessor* (*get${globals.className}Accessor)();`)
+            this.accessorsList.print(`const ${GeneratorConfig.current.options.cppPrefix}ArkUI${globals.className}Accessor* (*get${globals.className}Accessor)();`)
         }
         this.accessorsList.popIndent()
     }
 
     private printAccessor(clazz: MaterializedClass) {
         let peerName = `${clazz.className}Peer`
-        let accessorName = `${peerGeneratorConfiguration().cppPrefix}ArkUI${clazz.className}Accessor`
+        let accessorName = `${GeneratorConfig.current.options.cppPrefix}ArkUI${clazz.className}Accessor`
         this.api.print(`typedef struct ${accessorName} {`)
         this.api.pushIndent()
         const mDestroyPeer = createDestroyPeerMethod(clazz)
@@ -89,7 +89,7 @@ export class HeaderVisitor {
     private printNodeTypes() {
         this.nodeTypesList.pushIndent()
         for (const nodeType of getNodeTypes(this.library)) {
-            const name = `${peerGeneratorConfiguration().cppPrefix}ARKUI_${camelCaseToUpperSnakeCase(nodeType)}`
+            const name = `${GeneratorConfig.current.options.cppPrefix}ARKUI_${camelCaseToUpperSnakeCase(nodeType)}`
             this.nodeTypesList.print(name)
         }
         this.nodeTypesList.popIndent()

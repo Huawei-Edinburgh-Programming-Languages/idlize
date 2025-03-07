@@ -141,18 +141,7 @@
                             }
                         }
                     },
-                    "required": [
-                        "ignoreComponents",
-                        "ignorePeerMethod",
-                        "invalidAttributes",
-                        "customNodeTypes",
-                        "ignoreEntry",
-                        "ignoreEntryJava",
-                        "ignoreMethodArkts",
-                        "custom",
-                        "handWritten",
-                        "replaceThrowErrorReturn"
-                    ],
+                    "required": [],
                     "type": "object"
                 },
                 "dummy": {
@@ -168,9 +157,7 @@
                             }
                         }
                     },
-                    "required": [
-                        "ignoreMethods"
-                    ],
+                    "required": [],
                     "type": "object"
                 },
                 "materialized": {
@@ -183,9 +170,7 @@
                             }
                         }
                     },
-                    "required": [
-                        "ignoreReturnTypes"
-                    ],
+                    "required": [],
                     "type": "object"
                 },
                 "serializer": {
@@ -198,9 +183,7 @@
                             }
                         }
                     },
-                    "required": [
-                        "ignore"
-                    ],
+                    "required": [],
                     "type": "object"
                 },
                 "constants": {
@@ -256,12 +239,7 @@
                             "type": "string"
                         }
                     },
-                    "required": [
-                        "DeletedDeclarations",
-                        "StubbedDeclarations",
-                        "NameReplacements",
-                        "TypeReplacementsFilePath"
-                    ],
+                    "required": [],
                     "type": "object"
                 },
                 "$schema": {
@@ -269,29 +247,7 @@
                     "description": "The schema to verify this document against."
                 }
             },
-            "required": [
-                "TypePrefix",
-                "LibraryPrefix",
-                "OptionalPrefix",
-                "rootComponents",
-                "standaloneComponents",
-                "parameterized",
-                "ignoreMaterialized",
-                "builderClasses",
-                "forceMaterialized",
-                "forceCallback",
-                "GenerateUnused",
-                "ApiVersion",
-                "dumpSerialized",
-                "boundProperties",
-                "cppPrefix",
-                "components",
-                "dummy",
-                "materialized",
-                "serializer",
-                "CollapseOverloadsARKTS",
-                "IDLVisitor"
-            ],
+            "required": [],
             "type": "object"
         }
     }

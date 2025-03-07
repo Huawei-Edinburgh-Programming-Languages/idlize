@@ -17,7 +17,6 @@ import * as fs from 'fs'
 
 export * from './launch'
 export * from './IDLVisitor'
-export * from "./DefaultConfiguration"
 export * from "./peer-generation/Tracker"
 export * from "./peer-generation/ImportsCollector"
 export * from './peer-generation/ComponentsCollector'
@@ -64,6 +63,7 @@ export * from './peer-generation/ImportsCollectorUtils'
 export * from './peer-generation/NativeModule'
 export * from './peer-generation/FileGenerators'
 export * from './TestGeneratorVisitor'
+export * from './config'
 export * from './skoala-generation/utils'
 export * from './skoala-generation/WrapperClass'
 export * from './skoala-generation/printers/WrappersPrinter'

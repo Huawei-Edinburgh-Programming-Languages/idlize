@@ -51,19 +51,19 @@ export const defaultCoreConfiguration: CoreConfiguration = {
 
 let currentConfig: CoreConfiguration = defaultCoreConfiguration
 
-export function setDefaultConfiguration<T extends CoreConfiguration>(config: T): void {
+export function setCoreConfiguration(config: CoreConfiguration): void {
     currentConfig = config
 }
 
-export function patchDefaultConfiguration<T extends CoreConfiguration>(config: Partial<T>): void {
+export function patchCoreConfiguration(config: Partial<CoreConfiguration>): void {
     currentConfig = Object.assign({}, currentConfig, config)
 }
 
-export function generatorConfiguration<T extends CoreConfiguration>(): T {
-    return currentConfig as T
+export function coreConfiguration(): CoreConfiguration {
+    return currentConfig
 }
 
-export function generatorTypePrefix() {
-    const conf = generatorConfiguration()
+export function generatorTypePrefix(): string {
+    const conf = coreConfiguration()
     return `${conf.TypePrefix}${conf.LibraryPrefix}`
 }
