@@ -2098,25 +2098,25 @@
 |`setRepeat`| Function | Samarin Sergey | done |  | |
 |`getFingerList`| Function | Kovalev Sergey | in progress | done for FB | |
 |`setFingerList`| Function | Samarin Sergey | done |  | |
-|`getOffsetX`| Function | Samarin Sergey | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getOffsetX`| Function | Samarin Sergey | in progress |  | done for feature branch |
 |`setOffsetX`| Function | Samarin Sergey | done |  | |
-|`getOffsetY`| Function | Samarin Sergey | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getOffsetY`| Function | Samarin Sergey | in progress |  | done for feature branch |
 |`setOffsetY`| Function | Samarin Sergey | done |  | |
-|`getAngle`| Function | Samarin Sergey | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getAngle`| Function | Samarin Sergey | in progress |  | done for feature branch |
 |`setAngle`| Function | Samarin Sergey | done |  | |
-|`getSpeed`| Function | Samarin Sergey | in progress|  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getSpeed`| Function | Samarin Sergey | in progress|  | done for feature branch |
 |`setSpeed`| Function | Samarin Sergey | done |  | |
-|`getScale`| Function | Samarin Sergey | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getScale`| Function | Samarin Sergey | in progress |  | done for feature branch |
 |`setScale`| Function | Samarin Sergey | done |  | |
-|`getPinchCenterX`| Function | Samarin Sergey | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getPinchCenterX`| Function | Samarin Sergey | in progress |  | done for feature branch |
 |`setPinchCenterX`| Function | Samarin Sergey | done |  | |
-|`getPinchCenterY`| Function | Samarin Sergey | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getPinchCenterY`| Function | Samarin Sergey | in progress |  | done for feature branch |
 |`setPinchCenterY`| Function | Samarin Sergey | done |  | |
-|`getVelocityX`| Function | Samarin Sergey | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getVelocityX`| Function | Samarin Sergey | in progress |  | done for feature branch |
 |`setVelocityX`| Function | Samarin Sergey | done |  | |
-|`getVelocityY`| Function | Samarin Sergey | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getVelocityY`| Function | Samarin Sergey | in progress |  | done for feature branch |
 |`setVelocityY`| Function | Samarin Sergey | done |  | |
-|`getVelocity`| Function | Samarin Sergey | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getVelocity`| Function | Samarin Sergey | in progress |  | done for feature branch |
 |`setVelocity`| Function | Samarin Sergey | blocked IDL|  | not applicable https://gitee.com/nikolay-igotti/idlize/issues/IBQEWR |
 |*PanGestureOptions*| *Class* | Politov Mikhail | blocked IDL |  | |
 |`setDirection`| Function | Politov Mikhail | done |  | |
