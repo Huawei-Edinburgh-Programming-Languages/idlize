@@ -18,11 +18,14 @@ import { BlockStatement, ExpressionStatement, IfStatement, LanguageWriter, Metho
     createConstructPeerMethod, PeerClass, PeerMethod, PeerLibrary, Language, InteropArgConvertor,
     createInteropArgConvertor, NativeModuleType, CJLanguageWriter, isStructureType, InteropReturnTypeConvertor,
     isInIdlizeInterop,
+    TypeConvertor,
+    convertType,
 } from "@idlizer/core"
 import * as idl from  '@idlizer/core/idl'
 import { NativeModule } from "../NativeModule";
 import { ArkTSSourceFile, SourceFile, TsSourceFile } from "./SourceFile";
 import { idlFreeMethodsGroupToLegacy } from "../GlobalScopeUtils";
+import { collectFilePeers } from "../PeersCollector";
 
 class NativeModulePrinterBase {
     readonly nativeModule: LanguageWriter = this.library.createLanguageWriter(this.language)
@@ -32,9 +35,11 @@ class NativeModulePrinterBase {
         protected readonly language: Language,
     ) {}
 
+
     protected printMethod(method: Method) {
-        this.nativeModule.writeNativeMethodDeclaration(method.name, method.signature)
+        this.nativeModule.writeNativeMethodDeclaration(method)
     }
+
 }
 
 class NativeModulePredefinedVisitor extends NativeModulePrinterBase {
@@ -147,7 +152,7 @@ class NativeModuleArkUIGeneratedVisitor extends NativeModulePrinterBase {
 
     visit(): void {
         for (const file of this.library.files) {
-            for (const peer of file.peersToGenerate.values()) {
+            for (const peer of collectFilePeers(this.library, file)) {
                 this.printPeerMethods(peer)
             }
         }
@@ -264,7 +269,7 @@ function writeCJNativeModuleMethod(method: Method, nativeModule: LanguageWriter,
     })
     if (nativeFunctions) {
         nativeFunctions!.pushIndent()
-        nativeFunctions!.writeNativeMethodDeclaration(nativeName, signature)
+        nativeFunctions!.writeNativeMethodDeclaration(new Method(nativeName, signature))
         nativeFunctions!.popIndent()
     }
 }
@@ -478,8 +483,8 @@ export function printCJArkUIGeneratedNativeFunctions(library: PeerLibrary, modul
 
 export function collectPredefinedNativeModuleEntries(library: PeerLibrary, module: NativeModuleType): idl.IDLInterface[] {
     const interopDeclarations = library.files
-        .filter(it => isInIdlizeInterop(it.file))
-        .flatMap(it => it.file.entries.filter(idl.isInterface))
+        .filter(isInIdlizeInterop)
+        .flatMap(it => it.entries.filter(idl.isInterface))
     switch (module) {
         case NativeModule.Interop:
             return interopDeclarations.filter(it => it.name === "Interop" || it.name === "Loader")
@@ -492,9 +497,9 @@ export function collectPredefinedNativeModuleEntries(library: PeerLibrary, modul
     }
 }
 
-export function makeInteropSignature(method: PeerMethod, returnType: idl.IDLType | undefined, interopConvertor: InteropArgConvertor, retConvertor: InteropReturnTypeConvertor): NamedMethodSignature {
+export function makeInteropSignature(method: PeerMethod, returnType: idl.IDLType | undefined, interopConvertor: TypeConvertor<string>, retConvertor: InteropReturnTypeConvertor): NamedMethodSignature {
     const maybeReceiver: ({name: string, type: idl.IDLType})[] = method.hasReceiver()
-        ? [{ name: 'ptr', type: idl.createReferenceType('KPointer') }] : []
+        ? [{ name: 'ptr', type: idl.IDLPointerType }] : []
     let serializerArgCreated = false
     method.argAndOutConvertors.forEach(it => {
         if (it.useArray) {
@@ -505,7 +510,7 @@ export function makeInteropSignature(method: PeerMethod, returnType: idl.IDLType
         } else {
             maybeReceiver.push({
                 name: `${it.param}`,
-                type: idl.createReferenceType(interopConvertor.convert(it.interopType()))
+                type: idl.createReferenceType(convertType(interopConvertor, it.interopType()))
             })
         }
     })

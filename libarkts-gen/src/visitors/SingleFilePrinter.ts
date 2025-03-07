@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import { Typechecker } from "../utils/Typechecker"
+import { Typechecker } from "../general/Typechecker"
 import { IDLFile } from "@idlizer/core"
 import { LanguageWriter } from "@idlizer/core"
-import { PeerImporter } from "./peers/PeerImporter";
+import { PeerImporter } from "./library/PeerImporter";
 
 export abstract class SingleFilePrinter {
     constructor(
@@ -38,5 +38,5 @@ export abstract class SingleFilePrinter {
 
     }
 
-    abstract visit(): void
+    protected abstract visit(): void
 }

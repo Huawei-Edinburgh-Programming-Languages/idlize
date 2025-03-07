@@ -1,8 +1,10 @@
 {
+    "$schema": "./schema.json",
     "TypePrefix": "Ark_",
     "LibraryPrefix": "",
     "OptionalPrefix": "Opt_",
     "GenerateUnused": false,
+    "ApiVersion": 9999,
     "dumpSerialized": false,
     "ignoreMaterialized": [
         "Attribute",
@@ -257,12 +259,9 @@
     },
     "patchMaterialized": {
         "CustomDialogController.constructor": {
-            "TS": "value && (value.builder.buildOptions.controller = this)",
-            "ArkTS": "value && (value.builder.buildOptions.controller = this)"
+            "TS": "if (value) value.builder.buildOptions.controller = this",
+            "ArkTS": "// /*TODO: API required*/ if (value) value.builder.buildOptions.controller = this"
         }
     },
-    "CollapseOverloadsARKTS": true,
-    "linter": {
-        "checkReferencesResolved": false
-    }
+    "CollapseOverloadsARKTS": true
 }

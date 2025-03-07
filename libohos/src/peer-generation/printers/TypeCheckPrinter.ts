@@ -140,6 +140,7 @@ abstract class TypeCheckerPrinter {
         imports.print(this.writer, 'arkts/type_check')
     }
 
+    protected abstract writeIsNativeBuffer(): void
     protected abstract writeTypeInstanceOf(): void
     protected abstract writeTypeCast(): void
 
@@ -170,7 +171,8 @@ abstract class TypeCheckerPrinter {
         this.writeImports(importFeatures)
         this.writer.writeClass("TypeChecker", writer => {
             this.writeTypeInstanceOf();
-            this.writeTypeCast();
+            this.writeTypeCast()
+            this.writeIsNativeBuffer()
             for (const struct of interfaces)
                 this.writeInterfaceChecker(struct.name, struct.descriptor, struct.type)
             for (const array of arrays) {
@@ -186,6 +188,24 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
         library: PeerLibrary
     ) {
         super(library, library.createLanguageWriter(Language.ARKTS))
+    }
+
+
+    protected writeIsNativeBuffer(): void {
+        let className = "NativeBuffer"
+        this.writer.writeMethodImplementation(
+            new Method("isNativeBuffer",
+                new NamedMethodSignature(
+                    idl.IDLBooleanType,
+                    [idl.IDLObjectType], ["value"]),
+                    [MethodModifier.STATIC]),
+                       writer => {
+                           writer.writeStatement(
+                                writer.makeReturn(
+                                    writer.makeString(`value instanceof ${className}`),
+                                )
+                            )
+                        })
     }
 
     private writeInstanceofChecker(typeName: string,
@@ -278,6 +298,25 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
             }
         )
     }
+
+    protected writeIsNativeBuffer(): void {
+        let className = "ArrayBuffer"
+        this.writer.writeMethodImplementation(
+            new Method("isNativeBuffer",
+                new NamedMethodSignature(
+                    idl.IDLBooleanType,
+                    [idl.IDLObjectType], ["value"]),
+                    [MethodModifier.STATIC]),
+                       writer => {
+                           writer.writeStatement(
+                                writer.makeReturn(
+                                    writer.makeString(`value instanceof ${className}`),
+                                )
+                            )
+                        })
+    }
+
+
 
     protected writeTypeCast(): void {
         this.writer.writeMethodImplementation(

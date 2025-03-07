@@ -13,13 +13,14 @@
  * limitations under the License.
  */
 
-import { Options } from "./Options"
-import { splitCreateOrUpdate } from "./utils/common"
+import { IgnoreOptions } from "./options/IgnoreOptions"
+import { splitCreateOrUpdate } from "./general/common"
+import { NonNullableOptions } from "./options/NonNullableOptions"
 
 export class Config {
     constructor(
-        public options: Options,
-        private files?: string[]
+        public ignore: IgnoreOptions,
+        public nonNullable: NonNullableOptions,
     ) {}
 
     static get createPrefix(): string {
@@ -54,13 +55,6 @@ export class Config {
         return `Context`
     }
 
-    shouldEmitFile(name: string): boolean {
-        if (this.files !== undefined) {
-            return this.files.includes(name)
-        }
-        return true
-    }
-
     static isCreate(name: string): boolean {
         return Config.isCreateOrUpdate(name) && name.startsWith(Config.createPrefix)
     }
@@ -83,12 +77,5 @@ export class Config {
 
     static get irNamespace(): string {
         return `ir`
-    }
-
-    static isAllowedPeerRegularMethod(name: string): boolean {
-        return [
-            `annotation`,
-            `optional`
-        ].some(it => name.toLowerCase().includes(it))
     }
 }

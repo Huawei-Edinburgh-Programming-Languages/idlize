@@ -17,7 +17,8 @@ import { Method, NamedMethodSignature } from "../LanguageWriters";
 import { LanguageWriter, createConstructPeerMethod, PeerClassBase, PeerClass, PeerMethod, PeerLibrary,
     InteropArgConvertor, createInteropArgConvertor, generateSyntheticFunctionName, createAlternativeReferenceResolver,
     Language,
-    InteropReturnTypeConvertor
+    InteropReturnTypeConvertor,
+    TypeConvertor
 } from '@idlizer/core'
 import { ImportsCollector } from "../ImportsCollector"
 import {
@@ -25,10 +26,11 @@ import {
     IDLNumberType, IDLObjectType, IDLPointerType, IDLStringType, IDLType, IDLUint8ArrayType, IDLUndefinedType, IDLVoidType
 } from "@idlizer/core/idl"
 import { makeInteropSignature } from "./NativeModulePrinter";
+import { collectFilePeers } from "../PeersCollector";
 
 class NativeModuleRecorderVisitor {
     readonly nativeModuleRecorder: LanguageWriter
-    private readonly interopConvertor: InteropArgConvertor
+    private readonly interopConvertor: TypeConvertor<string>
     private readonly interopRetConvertor: InteropReturnTypeConvertor
 
     constructor(
@@ -296,7 +298,7 @@ class NativeModuleRecorderVisitor {
         })
 
         for (const file of this.library.files) {
-            for (const peer of file.peersToGenerate.values()) {
+            for (const peer of collectFilePeers(this.library, file)) {
                 this.printConstructMethod(peer, this.nativeModuleRecorder)
             }
         }
@@ -336,7 +338,7 @@ class NativeModuleRecorderVisitor {
         this.printOtherField()
 
         for (const file of this.library.files) {
-            for (const peer of file.peersToGenerate.values()) {
+            for (const peer of collectFilePeers(this.library, file)) {
                 this.printInterface(peer)
             }
         }
@@ -348,7 +350,7 @@ class NativeModuleRecorderVisitor {
             this.printOtherMethods()
 
             for (const file of this.library.files) {
-                for (const peer of file.peersToGenerate.values()) {
+                for (const peer of collectFilePeers(this.library, file)) {
                     this.printPeerMethods(peer)
                 }
             }

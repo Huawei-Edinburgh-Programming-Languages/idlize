@@ -49,7 +49,6 @@ export * from "./peer-generation/idl/IdlNameConvertor"
 export * from "./peer-generation/LayoutManager"
 export * from "./peer-generation/PrimitiveType"
 export * from "./peer-generation/PeerLibrary"
-export * from "./peer-generation/PeerFile"
 export * from "./peer-generation/PeerClass"
 export * from "./peer-generation/PeerMethod"
 export * from "./peer-generation/BuilderClass"
@@ -65,3 +64,5 @@ export * from "./from-idl/IDLLinter"
 export { fromIDL }  from "./from-idl/common"
 export { idlToDtsString, CustomPrintVisitor }  from "./from-idl/DtsPrinter"
 export { toIDLFile, addSyntheticType, resolveSyntheticType } from "./from-idl/deserialize"
+
+export { D, ConfigTypeInfer, ConfigSchema } from './configDescriber'
