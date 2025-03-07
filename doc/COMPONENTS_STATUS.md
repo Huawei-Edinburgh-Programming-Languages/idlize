@@ -646,7 +646,7 @@
 |`hideBackButton`| Function | | | | |
 |`onShown`| Function |Kovalev Sergey | done |  |  |
 |`onHidden`| Function |Kovalev Sergey | done |  |   |
-|`onBackPressed`| Function |Dudkin Sergey | in progress |  |RETURN_VALUE, RET_VAL_UNBLOCKED |
+|`onBackPressed`| Function |Dudkin Sergey | done |  |  |
 |`onResult`| Function | | | | |
 |`mode`| Function |Kovalev Sergey | done |  |   |
 |`backButtonIcon`| Function |Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IAPDBZ |
@@ -2012,7 +2012,7 @@
 |*View*| *Class* | Skroba Gleb | blocked IDL |  | |
 |`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | blocked IDL |  | |
-|`getCaretOffset`| Function | Dudkin Sergey | in progress |  |RETURN_VALUE, RET_VAL_UNBLOCKED |
+|`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
 |`getTextContentRect`| Function | Morozov Sergey | done on feature branch |  |  |
 |`getTextContentLineCount`| Function | Morozov Sergey | done |  | |
 |`addText`| Function | | | | |
