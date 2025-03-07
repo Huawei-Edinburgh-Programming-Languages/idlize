@@ -396,6 +396,8 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     }
 
     private pushImportFor(node: ts.Node, clause: string[], name?: string) {
+        if (name && IDLVisitorConfiguration().isDeletedDeclaration(name))
+            return
         const extendedAttributes:idl.IDLExtendedAttribute[] = []
         this.computeDeprecatedExtendAttributes(node, extendedAttributes)
         this.imports.push(idl.createImport(
