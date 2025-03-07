@@ -197,7 +197,7 @@ export class PeerLibrary implements LibraryInterface {
                 break;
 
             if (seen.has(nextResult)) {
-                console.warn(`Cyclic referenceType: ${type.name}, steps are: [${[...seen.values()].map(idl.getFQName).join(", ")}]`)
+                console.warn(`Cyclic referenceType: ${type.name}, loop is: [${[...seen.values()].map(idl.getFQName).join(", ")}]`)
                 break;
             }
             seen.add(nextResult)
@@ -245,7 +245,8 @@ export class PeerLibrary implements LibraryInterface {
             for (let file of this.files) {
                 result = resolveNamedNode([...file.file.packageClause, ...target], pov, corpus)
                 if (result && idl.isEntry(result)) {
-                    console.warn(`WARNING: Type reference '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
+                    // too much spam
+                    // console.warn(`WARNING: Type reference '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
                     resolveds.push(result)
                 }
             }
@@ -365,8 +366,10 @@ export class PeerLibrary implements LibraryInterface {
             const target = this.resolveImport(declaration)
             if (target && idl.isEntry(target))
                 return this.declarationConvertor(param, type, target)
-            else
-                throw new Error(`Unable to resolve Import ${declaration.clause.join(".")} as ${declaration.name}`)
+            else {
+                warn(`Unable to resolve Import ${declaration.clause.join(".")} as ${declaration.name}`)
+                return new CustomTypeConvertor(param, declaration.name, false, declaration.name)
+            }
         }
         if (idl.isEnum(declaration)) {
             return new EnumConvertor(param, declaration)

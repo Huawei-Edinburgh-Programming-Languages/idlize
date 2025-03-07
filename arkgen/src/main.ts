@@ -244,11 +244,8 @@ if (options.dts2peer) {
             compilerOptions: defaultCompilerOptions,
             onSingleFile(file: IDLFile, outputDir, sourceFile) {
                 // TODO: this hack must be removed
-                const packageName = getPackageName(file)
                 file.entries = file.entries.filter(newEntry =>
-                    !idlLibrary.files
-                    .filter(peerFile => getPackageName(peerFile.file) === packageName)
-                    .find(peerFile => peerFile.entries.find(entry => {
+                    !idlLibrary.files.find(peerFile => peerFile.entries.find(entry => {
                         if (([newEntry, entry].every(isInterface)
                             || [newEntry, entry].every(isEnum)
                             || [newEntry, entry].every(isSyntheticEntry))) {
