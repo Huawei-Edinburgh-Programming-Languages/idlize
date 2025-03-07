@@ -235,9 +235,8 @@ export class IdlSkoalaLibrary implements LibraryInterface {
 
     resolveNamedNode(target: string[], pov: idl.IDLNode|undefined = undefined): idl.IDLEntry | undefined {
         const qualifiedName = target.join(".")
-        const corpus = this.files.map(it => it.file)
 
-        let result = resolveNamedNode(target, pov, corpus)
+        let result = resolveNamedNode(target, pov, this.files)
         if (result && idl.isEntry(result))
             return result
 
@@ -251,7 +250,7 @@ export class IdlSkoalaLibrary implements LibraryInterface {
             if (pov) {
                 pov = undefined
                 for (let file of this.files) {
-                    result = resolveNamedNode([...file.file.packageClause, ...target], pov, corpus)
+                    result = resolveNamedNode([...file.packageClause, ...target], pov, this.files)
                     if (result && idl.isEntry(result)) {
                         // too much spam
                         // console.log(`WARNING: Type reference '${type.name}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
@@ -264,7 +263,7 @@ export class IdlSkoalaLibrary implements LibraryInterface {
             const resolveds: idl.IDLNode[] = []
             const traverseNamespaces = (entry: idl.IDLEntry) => {
                 if (entry && idl.isNamespace(entry) && entry.members.length) {
-                    const resolved = resolveNamedNode([...idl.getNamespacesPathFor(entry).map(it => it.name), ...target], pov, corpus)
+                    const resolved = resolveNamedNode([...idl.getNamespacesPathFor(entry).map(it => it.name), ...target], pov, this.files)
                     if (resolved)
                         resolveds.push(resolved)
                     entry.members.forEach(traverseNamespaces)

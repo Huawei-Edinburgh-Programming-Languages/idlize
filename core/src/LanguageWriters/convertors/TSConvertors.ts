@@ -210,7 +210,7 @@ export class TSInteropArgConvertor implements TypeConvertor<string> {
     convertContainer(type: idl.IDLContainerType): string {
         throw new Error(`Cannot pass container types through interop`)
     }
-    convertImport(type: idl.IDLReferenceType, importClause: string): string {
+    convertImport(type: idl.IDLImport): string {
         throw new Error(`Cannot pass import types through interop`)
     }
     convertOptional(type: idl.IDLOptionalType): string {
@@ -238,6 +238,9 @@ export class TSInteropArgConvertor implements TypeConvertor<string> {
     }
     convertTypeParameter(type: idl.IDLTypeParameterType): string {
         throw new Error("Cannot pass type parameters through interop")
+    }
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): string {
+        throw new Error(`Cannot pass import types through interop`)
     }
     convertTypeReference(type: idl.IDLReferenceType): string {
         throw new Error(`Cannot pass type references through interop`)

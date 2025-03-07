@@ -218,15 +218,13 @@ export class PeerLibrary implements LibraryInterface {
                 return found;
         }
 
-        const corpus = this.files.map(it => it.file)
-
-        let result = resolveNamedNode(target, pov, corpus)
+        let result = resolveNamedNode(target, pov, this.files)
         if (result && idl.isEntry(result))
             return result
 
         if (1 == target.length) {
             for (const stdScope of [["idlize", "stdlib"], ["org", "openharmony", "idlize", "predefined"]]) { // TODO: move to some external config
-                result = resolveNamedNode([...stdScope, ...target], undefined, corpus)
+                result = resolveNamedNode([...stdScope, ...target], undefined, this.files)
                 if (result && idl.isEntry(result))
                     return result
             }
@@ -242,7 +240,7 @@ export class PeerLibrary implements LibraryInterface {
             pov = undefined
             const resolveds: idl.IDLNode[] = []
             for (let file of this.files) {
-                result = resolveNamedNode([...file.file.packageClause, ...target], pov, corpus)
+                result = resolveNamedNode([...file.packageClause, ...target], pov, this.files)
                 if (result && idl.isEntry(result)) {
                     // too much spam
                     // console.warn(`WARNING: Type reference '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
@@ -253,7 +251,7 @@ export class PeerLibrary implements LibraryInterface {
             // and from each namespace
             const traverseNamespaces = (entry: idl.IDLEntry) => {
                 if (entry && idl.isNamespace(entry) && entry.members.length) {
-                    const resolved = resolveNamedNode([...idl.getNamespacesPathFor(entry).map(it => it.name), ...target], pov, corpus)
+                    const resolved = resolveNamedNode([...idl.getNamespacesPathFor(entry).map(it => it.name), ...target], pov, this.files)
                     if (resolved) {
                         console.warn(`WARNING: Name '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some namespace: '${idl.getNamespacesPathFor(resolved).map(obj => obj.name).join(".")}'`)
                         resolveds.push(resolved)
