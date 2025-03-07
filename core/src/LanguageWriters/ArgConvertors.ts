@@ -387,7 +387,7 @@ export class BigIntToU64Convertor extends BaseArgConvertor {
     }
 }
 
-export class AnyConvertor extends BaseArgConvertor {
+export class ObjectConvertor extends BaseArgConvertor {
     constructor(param: string) {
         super(
             idl.IDLAnyType,
@@ -412,14 +412,14 @@ export class AnyConvertor extends BaseArgConvertor {
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         if (printer.language === Language.CPP) {
-            printer.writeMethodCall(`${param}Serializer`, "writeAny", [value])
+            printer.writeMethodCall(`${param}Serializer`, "writeObject", [value])
         } else {
-            printer.writeMethodCall(`${param}Serializer`, "holdAndWriteAny", [value])
+            printer.writeMethodCall(`${param}Serializer`, "holdAndWriteObject", [value])
         }
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(writer.makeCast(
-            writer.makeMethodCall(deserializerName, 'readAny', []),
+            writer.makeMethodCall(deserializerName, 'readObject', []),
             this.idlType, { optional: false })
         )
     }

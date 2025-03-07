@@ -154,7 +154,7 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
             case idl.IDLPointerType: return this.make('NativePointer')
             case idl.IDLCustomObjectType: return this.make('CustomObject')
             case idl.IDLUnknownType:
-            case idl.IDLAnyType: return this.make(`Any`)
+            case idl.IDLAnyType: return this.make(`Object`)
             case idl.IDLUndefinedType: return this.make(`Undefined`)
             case idl.IDLLengthType: return this.make(`Length`)
             case idl.IDLFunctionType: return this.make(`Function`)

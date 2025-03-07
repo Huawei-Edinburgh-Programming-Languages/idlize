@@ -23,7 +23,7 @@ import {
   ForceCallbackClass,
   registerForceCallbackListener,
   callForceCallbackListener,
-  ClassWithComplexPropertyType
+  ClassWithComplexPropertyType,
   TestAny,
   OHAny
 } from '#compat'

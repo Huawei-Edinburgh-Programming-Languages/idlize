@@ -27,7 +27,7 @@ export {
     ForceCallbackClass,
     registerForceCallbackListener,
     callForceCallbackListener,
-    ClassWithComplexPropertyType
+    ClassWithComplexPropertyType,
     TestAny
 } from "../../generated/ts"
 export {
