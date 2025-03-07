@@ -1719,31 +1719,31 @@
 |`rect`| Function | Kovalev Sergey | done |  |  |
 |*Path2D*| *Class* | Vadim Voronov | done |  | |
 |`addPath`| Function | Vadim Voronov | done |  | |
-|*CanvasPattern*| *Class* | Andrey Khudenkikh | done |  |  |
-|`setTransform`| Function | Andrey Khudenkikh | done |  |  |
-|*ImageBitmap*| *Class* | Pavelyev Ivan | done |  | |
-|`close`| Function | Pavelyev Ivan | done |  |  |
-|`getHeight`| Function | Pavelyev Ivan | in progress |  | RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getWidth`| Function | Pavelyev Ivan |in progress |  | RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|*CanvasPattern*| *Class* | Vadim Voronov | done |  |  |
+|`setTransform`| Function | Vadim Voronov | done |  |  |
+|*ImageBitmap*| *Class* | Vadim Voronov | done |  | |
+|`close`| Function | Vadim Voronov | done |  |  |
+|`getHeight`| Function | Vadim Voronov | in progress |  | RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getWidth`| Function | Vadim Voronov | in progress |  | RETURN_VALUE https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*ImageData*| *Class* | Morozov Sergey | devdone | | |
 |`getHeight`| Function | Morozov Sergey | devdone | | |
 |`getWidth`| Function | Morozov Sergey | devdone | | |
 |*RenderingContextSettings*| *Class* | Vadim Voronov | in progress | | |
-|`getAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB, doesn't present in Upstream |
-|`setAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB, doesn't present in Upstream |
+|`getAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
+|`setAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | blocked |  | |
-|`drawImage`| Function  | Vadim Voronov | blocked IDL |  | testskipped on FB, https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
+|`drawImage`| Function  | Vadim Voronov | in progress |  | testskipped on FB, https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
 |`beginPath`| Function  | Vadim Voronov | done |  | |
 |`clip`| Function  | Vadim Voronov | done |  |   |
 |`fill`| Function  | Vadim Voronov | done |  |   |
 |`stroke`| Function  | Vadim Voronov | done |  | |
-|`createLinearGradient`| Function  | Vadim Voronov | blocked IDL | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`createPattern`| Function  | Vadim Voronov | blocked IDL | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`createRadialGradient`| Function  | Vadim Voronov | blocked IDL | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`createConicGradient`| Function  | Vadim Voronov | blocked IDL | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`createImageData`| Function  | Vadim Voronov | blocked IDL | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getImageData`| Function  | Vadim Voronov | blocked IDL | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getPixelMap`| Function  | Vadim Voronov | blocked AceEngine |  |RETURN_VALUE, https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T && https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`createLinearGradient`| Function  | Vadim Voronov | in progress IDL | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`createPattern`| Function  | Vadim Voronov | in prgoress | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`createRadialGradient`| Function  | Vadim Voronov | in progress | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`createConicGradient`| Function  | Vadim Voronov | in prgress | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`createImageData`| Function  | Vadim Voronov | in progress | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getImageData`| Function  | Vadim Voronov | in prgoress | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getPixelMap`| Function  | Vadim Voronov | in progress |  |RETURN_VALUE, https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T && https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`putImageData`| Function  | Vadim Voronov | done  |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
 |`getLineDash`| Function  | Dudkin Sergey |  in progress | |RETURN_VALUE, RET_VAL_UNBLOCKED |
 |`setLineDash`| Function  | Vadim Voronov | done |  | |
@@ -1755,7 +1755,7 @@
 |`fillText`| Function  | Vadim Voronov | done |  | |
 |`measureText`| Function  | Dudkin Sergey | in progress |  |RETURN_VALUE, RET_VAL_UNBLOCKED |
 |`strokeText`| Function  | Vadim Voronov | done |  | |
-|`getTransform`| Function  | Vadim Voronov | blocked IDL | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getTransform`| Function  | Vadim Voronov | in progress | |RETURN_VALUE, implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`resetTransform`| Function  | Vadim Voronov | done |  | |
 |`rotate`| Function  | Vadim Voronov | done |  | |
 |`scale`| Function  | Vadim Voronov | done |  | |
@@ -1816,17 +1816,17 @@
 |`offOnDetach`| Function | Vadim Voronov, Evstigneev Roman | done |  |  |
 |`getHeight`| Function |Vadim Voronov| done |  | |
 |`getWidth`| Function |Vadim Voronov| done |  | |
-|`getCanvas`| Function | | | | |
-|*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | blocked IDL | | |
-|`toDataURL`| Function | Vadim Voronov | devdone | | testskipped on FB, doesn't present in Upstream |
-|`transferToImageBitmap`| Function | Vadim Voronov | blocked AceEngine | | doesn't present in Upstream  https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
-|*OffscreenCanvas*| *Class* | Vadim Voronov | in progress | | doesn't present in Upstream |
-|`transferToImageBitmap`| Function | Vadim Voronov | in progress | | doesn't present in Upstream |
-|`getContext2d`| Function | Vadim Voronov | in progress | | doesn't present in Upstream |
-|`getHeight`| Function | Vadim Voronov | in progress | | doesn't present in Upstream |
-|`setHeight`| Function | Vadim Voronov | in progress | | doesn't present in Upstream |
-|`getWidth`| Function | Vadim Voronov | in progress | | doesn't present in Upstream |
-|`setWidth`| Function | Vadim Voronov | in progress | | doesn't present in Upstream |
+|`getCanvas`| Function |Vadim Voronov | in progress | | |
+|*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | in progress | | |
+|`toDataURL`| Function | Vadim Voronov | in progress | |  doesn't present in Upstream |
+|`transferToImageBitmap`| Function | Vadim Voronov | in progress | |  https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
+|*OffscreenCanvas*| *Class* | Vadim Voronov | in progress | | |
+|`transferToImageBitmap`| Function | Vadim Voronov | testskipped | | |
+|`getContext2d`| Function | Vadim Voronov | testskipped | | |
+|`getHeight`| Function | Vadim Voronov | testskipped | | |
+|`setHeight`| Function | Vadim Voronov | testskipped | | |
+|`getWidth`| Function | Vadim Voronov | testskipped| | |
+|`setWidth`| Function | Vadim Voronov | testskipped | | |
 |*DrawingRenderingContext*| *Class* | Dudkin Sergey | done |  | |
 |`invalidate`| Function | Dudkin Sergey | done |  | |
 |`getCanvas`| Function | | | | |
@@ -2139,8 +2139,8 @@
 |`isValid`| Function | Kovalev Sergey | done |  | |
 |*PanRecognizer*| *Class* | Politov Mikhail | done |  | |
 |`getPanGestureOptions`| Function | Politov Mikhail | done |  | |
-|*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked IDL|  | |
-|`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked Ace_Engine |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
+|*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked Ace_Engine |  | |
+|`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked Ace_Engine |  | done for feature branch, RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
 |*ListScroller*| *Class* |Morozov Sergey | blocked IDL|  |  |
 |`getItemRectInGroup`| Function |Morozov Sergey | devdone |  | |
 |`scrollToItemInGroup`| Function |Morozov Sergey | done |  |  |
