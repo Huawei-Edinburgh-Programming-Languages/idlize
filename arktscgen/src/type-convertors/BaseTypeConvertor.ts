@@ -43,24 +43,24 @@ import { Typechecker } from "../general/Typechecker"
 
 export abstract class BaseTypeConvertor<T> implements TypeConvertor<T> {
     protected constructor(
-        private typechecker: Typechecker,
+        protected typechecker: Typechecker,
         private conversions: {
             sequence: (type: IDLContainerType) => T
-            enum: (type: IDLReferenceType) => T,
-            reference: (type: IDLReferenceType) => T,
-            optional: (type: IDLOptionalType) => T,
-            i8: (type: IDLPrimitiveType) => T,
-            i16: (type: IDLPrimitiveType) => T,
-            i32: (type: IDLPrimitiveType) => T,
-            iu32: (type: IDLPrimitiveType) => T,
-            i64: (type: IDLPrimitiveType) => T,
-            iu64: (type: IDLPrimitiveType) => T,
-            f32: (type: IDLPrimitiveType) => T,
-            f64: (type: IDLPrimitiveType) => T,
-            boolean: (type: IDLPrimitiveType) => T,
-            string: (type: IDLPrimitiveType) => T,
-            void: (type: IDLPrimitiveType) => T,
-            pointer: (type: IDLPrimitiveType) => T,
+            enum: (type: IDLReferenceType) => T
+            reference: (type: IDLReferenceType) => T
+            optional: (type: IDLOptionalType) => T
+            i8: (type: IDLPrimitiveType) => T
+            i16: (type: IDLPrimitiveType) => T
+            i32: (type: IDLPrimitiveType) => T
+            iu32: (type: IDLPrimitiveType) => T
+            i64: (type: IDLPrimitiveType) => T
+            iu64: (type: IDLPrimitiveType) => T
+            f32: (type: IDLPrimitiveType) => T
+            f64: (type: IDLPrimitiveType) => T
+            boolean: (type: IDLPrimitiveType) => T
+            string: (type: IDLPrimitiveType) => T
+            void: (type: IDLPrimitiveType) => T
+            pointer: (type: IDLPrimitiveType) => T
         }
     ) {}
 
@@ -68,7 +68,7 @@ export abstract class BaseTypeConvertor<T> implements TypeConvertor<T> {
         if (isSequence(type)) {
             return this.conversions.sequence(type)
         }
-        throwException(`Only sequence container type is supported`)
+        throwException(`only sequence container type is supported`)
     }
 
     convertPrimitiveType(type: IDLPrimitiveType): T {
@@ -85,7 +85,7 @@ export abstract class BaseTypeConvertor<T> implements TypeConvertor<T> {
             case IDLVoidType: return this.conversions.void(type)
             case IDLPointerType: return this.conversions.pointer(type)
         }
-        throwException(`Unsupported primitive type: ${JSON.stringify(type)}`)
+        throwException(`unsupported primitive type: ${JSON.stringify(type)}`)
     }
 
     convertTypeReferenceAsImport(type: IDLReferenceType, importClause: string): T {
@@ -104,7 +104,7 @@ export abstract class BaseTypeConvertor<T> implements TypeConvertor<T> {
     }
 
     convertUnion(type: IDLUnionType): T {
-        throwException("Union type is not supported")
+        throwException("union type is not supported")
     }
 
     convertImport(type: IDLImport): T {
@@ -112,10 +112,20 @@ export abstract class BaseTypeConvertor<T> implements TypeConvertor<T> {
     }
 
     convertTypeParameter(type: IDLTypeParameterType): T {
-        throw new Error("Type parameters are not supported")
+        throw new Error("type parameters are not supported")
     }
 
     convertType(type: IDLType): T {
         return convertType(this, type)
     }
+}
+
+export function composedConvertType<T>(
+    result: BaseTypeConvertor<T>,
+    effect: BaseTypeConvertor<IDLType>,
+    type: IDLType
+): T {
+    return result.convertType(
+        effect.convertType(type)
+    )
 }

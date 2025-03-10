@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { createLanguageWriter, LanguageWriter,
+import { createLanguageWriter, LanguageWriter, PeerFile,
     indentedBy, isBuilderClass, isMaterialized, stringOrNone, throwException, Language, PeerLibrary,
      convertDeclaration, DeclarationConvertor, maybeTransformManagedCallback,
      MethodModifier,
@@ -334,7 +334,7 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
         imports.print(writer, module)
     }
 
-    protected printAssignEnumsToGlobalScope(writer: LanguageWriter, peerFile: idl.IDLFile) {
+    protected printAssignEnumsToGlobalScope(writer: LanguageWriter, peerFile: PeerFile) {
         const enums = idl.linearizeNamespaceMembers(peerFile.entries).filter(idl.isEnum)
         if (enums.length != 0) {
             writer.print(`Object.assign(globalThis, {`)
@@ -787,7 +787,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
         imports.print(writer, module)
     }
 
-    protected printAssignEnumsToGlobalScope(writer: LanguageWriter, peerFile: idl.IDLFile) {
+    protected printAssignEnumsToGlobalScope(writer: LanguageWriter, peerFile: PeerFile) {
         const enums = idl.linearizeNamespaceMembers(peerFile.entries).filter(idl.isEnum)
         if (enums.length != 0) {
             writer.print(`Object.assign(globalThis, {`)
@@ -815,7 +815,7 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
             registerEntry(entry)
         })
         for (const file of this.peerLibrary.files) {
-            if (this.peerLibrary?.libraryPackages?.length && !this.peerLibrary.libraryPackages.includes(idl.getPackageName(file)))
+            if (this.peerLibrary?.libraryPackages?.length && !this.peerLibrary.libraryPackages.includes(file.packageName()))
                 continue
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (idl.isNamespace(entry) ||

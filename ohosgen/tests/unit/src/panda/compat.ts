@@ -29,7 +29,18 @@ export {
     ClassWithComplexPropertyType
 } from "../../generated/arkts"
 
-export { OrdinaryEnum, IntEnum, StringEnum } from "../../generated/arkts"
+export {
+    OrdinaryEnum,
+    IntEnum,
+    StringEnum,
+    checkOrdinaryEnums,
+    IDLOrdinaryEnum,
+    IDLIntEnum,
+    IDLStringEnum,
+    idlCheckOrdinaryEnums,
+    DataClass, DataInterface, IDLDataClass, IDLDataInterface,
+    testDataClass, testDataInterface, testIDLDataClass, testIDLDataInterface
+} from '../../generated/arkts'
 
 export type OHBuffer = NativeBuffer
 

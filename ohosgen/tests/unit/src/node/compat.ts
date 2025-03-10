@@ -27,7 +27,18 @@ export {
     callForceCallbackListener,
     ClassWithComplexPropertyType
 } from "../../generated/ts"
-export { OrdinaryEnum, IntEnum, StringEnum } from "../../generated/ts"
+export {
+    OrdinaryEnum,
+    IntEnum,
+    StringEnum,
+    checkOrdinaryEnums,
+    IDLOrdinaryEnum,
+    IDLIntEnum,
+    IDLStringEnum,
+    idlCheckOrdinaryEnums,
+    DataClass, DataInterface, IDLDataClass, IDLDataInterface,
+    testDataClass, testDataInterface, testIDLDataClass, testIDLDataInterface
+} from '../../generated/ts'
 
 export type OHBuffer = ArrayBuffer
 
