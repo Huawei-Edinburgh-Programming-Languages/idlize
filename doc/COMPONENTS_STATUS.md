@@ -2420,8 +2420,8 @@
 |*DataResubmissionHandler*| *Class* | Erokhin Ilya | done |  |  |
 |`resend`| Function | Erokhin Ilya | done |  |  |
 |`cancel`| Function | Erokhin Ilya | done |  |  |
-|*ControllerHandler*| *Class* | Erokhin Ilya | in progress |  |  |
-|`setWebController`| Function | Erokhin Ilya | in progress |  | unblocked Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|*ControllerHandler*| *Class* | Erokhin Ilya | devdone |  |  |
+|`setWebController`| Function | Erokhin Ilya | devdone |  | unblocked Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*WebContextMenuParam*| *Class* | Erokhin Ilya | done |  |  |
 |`x`| Function | Erokhin Ilya | done |  |  |
 |`y`| Function | Erokhin Ilya | done |  |  |
@@ -2444,18 +2444,18 @@
 |`paste`| Function | Erokhin Ilya | done |  |  |
 |`cut`| Function | Erokhin Ilya | done |  |  |
 |`selectAll`| Function | Erokhin Ilya | done |  |  |
-|*ConsoleMessage*| *Class* | Erokhin Ilya | in progress |  |  |
-|`getMessage`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getSourceId`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|*ConsoleMessage*| *Class* | Erokhin Ilya | done |  |  |
+|`getMessage`| Function | Erokhin Ilya | done |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getSourceId`| Function | Erokhin Ilya | done |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getLineNumber`| Function | Erokhin Ilya | done |  |  |
-|`getMessageLevel`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|*WebResourceRequest*| *Class* | Erokhin Ilya | in progress |  |  |
-|`getRequestHeader`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
-|`getRequestUrl`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getMessageLevel`| Function | Erokhin Ilya | done |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|*WebResourceRequest*| *Class* | Erokhin Ilya | done |  |  |
+|`getRequestHeader`| Function | Erokhin Ilya | done |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getRequestUrl`| Function | Erokhin Ilya | done |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`isRequestGesture`| Function | Erokhin Ilya | done |  |  |
 |`isMainFrame`| Function | Erokhin Ilya | done |  |  |
 |`isRedirect`| Function | Erokhin Ilya | done |  |  |
-|`getRequestMethod`| Function | Erokhin Ilya | in progress |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
+|`getRequestMethod`| Function | Erokhin Ilya | done |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |*WebResourceResponse*| *Class* | Erokhin Ilya | in progress |  |  |
 |`getResponseData`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_BLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
 |`getResponseDataEx`| Function | Erokhin Ilya | devdone |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IAUYD0 |
