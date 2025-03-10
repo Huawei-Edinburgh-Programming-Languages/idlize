@@ -2125,8 +2125,8 @@
 |`onAction`| Function | | | | |
 |*LongPressGestureInterface*| *Class* | Morozov Sergey | | | |
 |`onAction`| Function | Morozov Sergey | | | |
-|`onActionEnd`| Function | Morozov Sergey | | | |
-|`onActionCancel`| Function | Morozov Sergey | | | |
+|`onActionEnd`| Function | Morozov Sergey | in progress | | |
+|`onActionCancel`| Function | Morozov Sergey |in progress | | |
 |*PanGestureOptions*| *Class* | Politov Mikhail | blocked IDL |  | |
 |`setDirection`| Function | Politov Mikhail | done |  | |
 |`setDistance`| Function | Politov Mikhail | done |  | |
@@ -2135,7 +2135,7 @@
 |*PanGestureInterface*| *Class* | Morozov Sergey | in progress | | |
 |`onActionStart`| Function | Morozov Sergey | in progress | | |
 |`onActionUpdate`| Function | Morozov Sergey | in progress | | |
-|`onActionEnd`| Function | | Morozov Sergey | in progress | |
+|`onActionEnd`| Function | Morozov Sergey | in progress | | |
 |`onActionCancel`| Function | Morozov Sergey | in progress | | |
 |*SwipeGestureInterface*| *Class* | | | | |
 |`onAction`| Function | | | | |
