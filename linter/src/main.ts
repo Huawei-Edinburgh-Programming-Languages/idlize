@@ -19,7 +19,7 @@ import * as ts from "typescript"
 
 import { LinterVisitor, toLinterString } from "./linter"
 import { LinterMessage } from "./LinterMessage"
-import { patchDefaultConfiguration, findVersion, generate, scanInputDirs } from "@idlizer/core"
+import { patchCoreConfiguration, findVersion, generate, scanInputDirs } from "@idlizer/core"
 
 const options = program
     .option('--input-dir <path>', 'Path to input dir(s), comma separated')
@@ -77,7 +77,7 @@ function validatePaths(paths: string[], type: 'file' | 'dir'): void {
 function main() {
     console.log(`IDLize Linter version ${findVersion()}`)
 
-    patchDefaultConfiguration({
+    patchCoreConfiguration({
         rootComponents: [
             "Root",
             "ComponentRoot",
