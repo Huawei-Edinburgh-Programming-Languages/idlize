@@ -1646,13 +1646,13 @@
 |`width`| Function |Dudkin Sergey |in progress | | |
 |`height`| Function |Dudkin Sergey |in progress | | |
 |`size`| Function |Dudkin Sergey | in progress | | |
-|*EllipseShape*| *Class* | Erokhin Ilya | in progress | | done on feature branch |
-|`offset`| Function | Erokhin Ilya | in progress | | done on feature branch |
-|`fill`| Function | Erokhin Ilya | in progress | | done on feature branch |
-|`position`| Function | Erokhin Ilya | in progress | | done on feature branch |
-|`width`| Function | Erokhin Ilya | in progress | | done on feature branch |
-|`height`| Function | Erokhin Ilya | in progress | | done on feature branch |
-|`size`| Function | Erokhin Ilya | in progress | | done on feature branch |
+|*EllipseShape*| *Class* | Erokhin Ilya | devdone | | done on feature branch |
+|`offset`| Function | Erokhin Ilya | devdone | | done on feature branch |
+|`fill`| Function | Erokhin Ilya | devdone | | done on feature branch |
+|`position`| Function | Erokhin Ilya | devdone | | done on feature branch |
+|`width`| Function | Erokhin Ilya | devdone | | done on feature branch |
+|`height`| Function | Erokhin Ilya | devdone | | done on feature branch |
+|`size`| Function | Erokhin Ilya | devdone | | done on feature branch |
 |*PathShape*| *Class* | Lobah Mikhail | in progress| | |
 |`offset`| Function | Lobah Mikhail| in progress| | |
 |`fill`| Function | Lobah Mikhail | in progress| | |
@@ -2441,8 +2441,8 @@
 |`getOrigin`| Function | Erokhin Ilya | done |  |  |
 |`getAccessibleResource`| Function | Erokhin Ilya | done |  |  |
 |`grant`| Function | Erokhin Ilya | done |  |  |
-|*ScreenCaptureHandler*| *Class* | Erokhin Ilya | blocked IDL|  |  |
-|`getOrigin`| Function | Erokhin Ilya | in progress |  |  |
+|*ScreenCaptureHandler*| *Class* | Erokhin Ilya | devdone |  |  |
+|`getOrigin`| Function | Erokhin Ilya | devdone |  |  |
 |`grant`| Function | Erokhin Ilya | done |  |  |
 |`deny`| Function | Erokhin Ilya | done |  |  |
 |*DataResubmissionHandler*| *Class* | Erokhin Ilya | done |  |  |
