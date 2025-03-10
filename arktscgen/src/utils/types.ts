@@ -16,3 +16,7 @@
 export function isNumber(value: any): value is number {
     return typeof value === `number`
 }
+
+export function id<T>(value: T): T {
+    return value
+}
