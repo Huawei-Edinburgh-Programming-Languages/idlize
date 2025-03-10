@@ -2121,8 +2121,8 @@
 |`setVelocityY`| Function | Samarin Sergey | done |  | |
 |`getVelocity`| Function | Samarin Sergey | in progress |  | done for feature branch |
 |`setVelocity`| Function | Samarin Sergey | blocked IDL|  | not applicable https://gitee.com/nikolay-igotti/idlize/issues/IBQEWR |
-|*TapGestureInterface*| *Class* | | | | |
-|`onAction`| Function | | | | |
+|*TapGestureInterface*| *Class* | Dudkin Sergey | in progress| | |
+|`onAction`| Function | Dudkin Sergey | in progress| | |
 |*LongPressGestureInterface*| *Class* | Morozov Sergey | | | |
 |`onAction`| Function | Morozov Sergey | | | |
 |`onActionEnd`| Function | Morozov Sergey | in progress | | |
