@@ -1728,9 +1728,9 @@
 |`close`| Function | Vadim Voronov | done |  |  |
 |`getHeight`| Function | Vadim Voronov | in progress |  |  |
 |`getWidth`| Function | Vadim Voronov | in progress |  |  |
-|*ImageData*| *Class* | Morozov Sergey | in progress | | done on Feature branch |
-|`getHeight`| Function | Morozov Sergey | in progress | | done on Feature branch |
-|`getWidth`| Function | Morozov Sergey | in progress | | done on Feature branch |
+|*ImageData*| *Class* | Morozov Sergey | devdone | | done on Feature branch |
+|`getHeight`| Function | Morozov Sergey | devdone | | done on Feature branch |
+|`getWidth`| Function | Morozov Sergey | devdone | | done on Feature branch |
 |*RenderingContextSettings*| *Class* | Vadim Voronov | in progress | | |
 |`getAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
 |`setAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
@@ -2123,20 +2123,20 @@
 |`setVelocity`| Function | Samarin Sergey | blocked IDL|  | not applicable https://gitee.com/nikolay-igotti/idlize/issues/IBQEWR |
 |*TapGestureInterface*| *Class* | | | | |
 |`onAction`| Function | | | | |
-|*LongPressGestureInterface*| *Class* | | | | |
-|`onAction`| Function | | | | |
-|`onActionEnd`| Function | | | | |
-|`onActionCancel`| Function | | | | |
+|*LongPressGestureInterface*| *Class* | Morozov Sergey | | | |
+|`onAction`| Function | Morozov Sergey | | | |
+|`onActionEnd`| Function | Morozov Sergey | | | |
+|`onActionCancel`| Function | Morozov Sergey | | | |
 |*PanGestureOptions*| *Class* | Politov Mikhail | blocked IDL |  | |
 |`setDirection`| Function | Politov Mikhail | done |  | |
 |`setDistance`| Function | Politov Mikhail | done |  | |
 |`setFingers`| Function | Politov Mikhail | done |  | |
 |`getDirection`| Function | Politov Mikhail | in progress |  |  |
-|*PanGestureInterface*| *Class* | | | | |
-|`onActionStart`| Function | | | | |
-|`onActionUpdate`| Function | | | | |
-|`onActionEnd`| Function | | | | |
-|`onActionCancel`| Function | | | | |
+|*PanGestureInterface*| *Class* | Morozov Sergey | in progress | | |
+|`onActionStart`| Function | Morozov Sergey | in progress | | |
+|`onActionUpdate`| Function | Morozov Sergey | in progress | | |
+|`onActionEnd`| Function | | Morozov Sergey | in progress | |
+|`onActionCancel`| Function | Morozov Sergey | in progress | | |
 |*SwipeGestureInterface*| *Class* | | | | |
 |`onAction`| Function | | | | |
 |*PinchGestureInterface*| *Class* | | | | |
@@ -2169,11 +2169,11 @@
 |`getPanGestureOptions`| Function | Politov Mikhail | done |  | |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked AceEngine |  | |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked AceEngine |  | done for feature branch, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
-|*ListScroller*| *Class* |Morozov Sergey | in progress|  |  |
-|`getItemRectInGroup`| Function |Morozov Sergey | in progress | | done on Feature Branch |
+|*ListScroller*| *Class* |Morozov Sergey | devdone|  |  |
+|`getItemRectInGroup`| Function |Morozov Sergey | devdone | | done on Feature Branch |
 |`scrollToItemInGroup`| Function |Morozov Sergey | done |  |  |
 |`closeAllSwipeActions`| Function |Morozov Sergey | done |  |  |
-|`getVisibleListContentInfo`| Function |Morozov Sergey | in progress| | done on Feature branch | 
+|`getVisibleListContentInfo`| Function |Morozov Sergey | devdone | | done on Feature branch | 
 |*Matrix2D*| *Class* | Vadim Voronov | in progress |  |  |
 |`identity`| Function | Vadim Voronov | done |  | |
 |`invert`| Function | Vadim Voronov | done |  | |
