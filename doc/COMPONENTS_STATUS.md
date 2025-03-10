@@ -2576,10 +2576,10 @@
 |`replaceStyledString`| Function | Maksimov Nikita | done |  | |
 |`insertStyledString`| Function | Maksimov Nikita | done |  | |
 |`appendStyledString`| Function | Maksimov Nikita | done |  | |
-|*ImageAttachment*| *Class* | | |  | |
-|`getValue`| Function | | | | |
-|`getVerticalAlign`| Function | | |  | |
-|`getObjectFit`| Function | | |  | |
+|*ImageAttachment*| *Class* | Evstigneev Roman | in progress | | |
+|`getValue`| Function | Evstigneev Roman | in progress | | |
+|`getVerticalAlign`| Function | Evstigneev Roman | in progress | | |
+|`getObjectFit`| Function | Evstigneev Roman | in progress | | |
 |*CustomSpan*| *Class* | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onMeasure`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onDraw`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
