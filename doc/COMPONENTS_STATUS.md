@@ -973,7 +973,7 @@
 |*Slider*| *Component* |Morozov Sergey | blocked IDL |  |  |
 |`setSliderOptions`| Function |Morozov Sergey | done |  |  |
 |`blockColor`| Function |Morozov Sergey | done |  |  |
-|`trackColor`| Function |Morozov Sergey | in progress | done on feature branch | |
+|`trackColor`| Function |Morozov Sergey | in progress | | done on feature branch |
 |`selectedColor`| Function |Morozov Sergey |done  |  |
 |`minLabel`| Function |Morozov Sergey | done |  |deprecated  |
 |`maxLabel`| Function |Morozov Sergey | done |  |deprecated  |
@@ -1355,7 +1355,7 @@
 |`enableCascade`| Function | | | | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*Toggle*| *Component* |Morozov Sergey |blocked IDL |  |
-|`setToggleOptions`| Function |Morozov Sergey | done on feature branch | unblocked since AceEngine won't fix it |  |
+|`setToggleOptions`| Function |Morozov Sergey | | done on feature branch, unblocked since AceEngine won't fix it |
 |`onChange`| Function | Morozov Sergey| done |  |  |
 |`contentModifier`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`selectedColor`| Function | Morozov Sergey| done |  |  |
@@ -1740,12 +1740,12 @@
 |`clip`| Function  | Vadim Voronov | done |  |   |
 |`fill`| Function  | Vadim Voronov | done |  |   |
 |`stroke`| Function  | Vadim Voronov | done |  | |
-|`createLinearGradient`| Function  | Vadim Voronov | in progress IDL | | |
-|`createPattern`| Function  | Vadim Voronov | in prgoress | | |
+|`createLinearGradient`| Function  | Vadim Voronov | in progress | | |
+|`createPattern`| Function  | Vadim Voronov | in progress | | |
 |`createRadialGradient`| Function  | Vadim Voronov | in progress | |  |
-|`createConicGradient`| Function  | Vadim Voronov | in prgress | |  |
+|`createConicGradient`| Function  | Vadim Voronov | in progress | |  |
 |`createImageData`| Function  | Vadim Voronov | in progress | |  |
-|`getImageData`| Function  | Vadim Voronov | in prgoress | | |
+|`getImageData`| Function  | Vadim Voronov | in progress | | |
 |`getPixelMap`| Function  | Vadim Voronov | in progress |  |https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T  |
 |`putImageData`| Function  | Vadim Voronov | done  |  |  |
 |`getLineDash`| Function  | Dudkin Sergey |  in progress | |  |
@@ -2016,7 +2016,7 @@
 |`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | blocked IDL |  | |
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
-|`getTextContentRect`| Function | Morozov Sergey | done on feature branch |  |  |
+|`getTextContentRect`| Function | Morozov Sergey |in progress | done on feature branch |
 |`getTextContentLineCount`| Function | Morozov Sergey | done |  | |
 |`addText`| Function | | | | |
 |`deleteText`| Function | | | | |
@@ -2024,7 +2024,7 @@
 |*ChildrenMainSize*| *Class* | Morozov Sergey | blocked IDL |  |
 |`splice`| Function | Morozov Sergey | done |  |  |
 |`update`| Function | Morozov Sergey | done |  |  |
-|`getChildDefaultSize`| Function | Morozov Sergey | done on feature branch |  |  |
+|`getChildDefaultSize`| Function | Morozov Sergey |in progress | done on feature branch |
 |`setChildDefaultSize`| Function | Morozov Sergey| done |  | |
 |*UICommonEvent*| *Class* | Andrey Khudenkikh | in progress | | |
 |`setOnClick`| Function | Andrey Khudenkikh | testskipped | | |
@@ -2060,7 +2060,7 @@
 |*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBECPG & https://gitee.com/nikolay-igotti/idlize/issues/IBGU8S + |
 |`open`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
 |`close`| Function | Maksimov Nikita | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
-|*LinearGradient*| *Class* | Morozov Sergey | in progress | done on feature branch | |
+|*LinearGradient*| *Class* | Morozov Sergey | in progress | | done on feature branch |
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
 |*BaseGestureEvent*| *Class* | Maksimov Nikita | done |  | |
@@ -2167,13 +2167,13 @@
 |`isValid`| Function | Kovalev Sergey | done |  | |
 |*PanRecognizer*| *Class* | Politov Mikhail | done |  | |
 |`getPanGestureOptions`| Function | Politov Mikhail | done |  | |
-|*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked Ace_Engine |  | |
-|`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked Ace_Engine |  | done for feature branch, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
+|*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked AceEngine |  | |
+|`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked AceEngine |  | done for feature branch, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
 |*ListScroller*| *Class* |Morozov Sergey | in progress|  |  |
-|`getItemRectInGroup`| Function |Morozov Sergey | in progress | done on Feature Branch | |
+|`getItemRectInGroup`| Function |Morozov Sergey | in progress | | done on Feature Branch |
 |`scrollToItemInGroup`| Function |Morozov Sergey | done |  |  |
 |`closeAllSwipeActions`| Function |Morozov Sergey | done |  |  |
-|`getVisibleListContentInfo`| Function |Morozov Sergey | in progress| done on Feature branch | |
+|`getVisibleListContentInfo`| Function |Morozov Sergey | in progress| | done on Feature branch | 
 |*Matrix2D*| *Class* | Vadim Voronov | in progress |  |  |
 |`identity`| Function | Vadim Voronov | done |  | |
 |`invert`| Function | Vadim Voronov | done |  | |
