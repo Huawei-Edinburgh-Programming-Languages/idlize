@@ -432,7 +432,7 @@
 |`indicator`| Function | Maksimov Nikita | done |  |  |
 |`privacySensitive`| Function | Maksimov Nikita | done |  ||
 |`contentModifier`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
-|*Grid*|*Component*| Erokhin Ilya | blocked IDL |  |  |
+|*Grid*|*Component*| Erokhin Ilya | in progress |  |  |
 |`setGridOptions`|Function| Erokhin Ilya | in progress |  | |
 |`columnsTemplate`|Function| Erokhin Ilya | done |  |  |
 |`rowsTemplate`|Function| Erokhin Ilya | done |  |  |
@@ -492,7 +492,7 @@
 |*Hyperlink*| *Component* | Morozov Sergey | done |  |   |
 |`setHyperlinkOptions`| Function | Morozov Sergey | done |  | |
 |`color`| Function | Morozov Sergey | done |  | |
-|*Image*| *Component* | Evstigneev Roman | in progress |  |  |
+|*Image*| *Component* | Evstigneev Roman | blocked IDL |  |  |
 |`setImageOptions`| Function | Berezin Kirill | done |  | SetImageOptions2 unavailable https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`alt`| Function | Evstigneev Roman | done |  | UT done Lobah Mikhail   |
 |`matchTextDirection`| Function | Evstigneev Roman | done |  | |
@@ -517,7 +517,7 @@
 |`onFinish`| Function | Evstigneev Roman | done |  | |
 |`enableAnalyzer`| Function | Evstigneev Roman | done |  | |
 |`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (+) |
-|`resizable`| Function | Evstigneev Roman, Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y7V |
+|`resizable`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y7V |
 |`privacySensitive`| Function | Evstigneev Roman | done |  | |
 |`enhancedImageQuality`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB1ISB (+) |
 |`orientation`| Function | Samarin Sergey | done |  | |
@@ -539,7 +539,7 @@
 |*ImageSpan*| *Component* | Politov Mikhail | blocked IDL |  |  |
 |`setImageSpanOptions`| Function | Politov Mikhail | done |  | |
 |`verticalAlign`| Function | Politov Mikhail | done |  |  |
-|`colorFilter`| Function | Politov Mikhail, Evstigneev Roman | blocked IDL |  | DrawingColorFilter is stub on the 2.0.41, https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 (+), in progress for ColorFilter(feature) | |
+|`colorFilter`| Function | Politov Mikhail| blocked IDL |  | DrawingColorFilter is stub on the 2.0.41, https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 (+), in progress for ColorFilter(feature) | |
 |`objectFit`| Function | Politov Mikhail | done |  |  |
 |`onComplete`| Function | Politov Mikhail | done |  |  |
 |`onError`| Function | Politov Mikhail | done |  |  |
@@ -617,8 +617,8 @@
 |`onStart`| Function | Andrey Khudenkikh| done |  |  |
 |`onBounce`| Function |Andrey Khudenkikh | done |  |  |
 |`onFinish`| Function |Andrey Khudenkikh | done |  |  |
-|*MediaCachedImage*| *Component* | Skroba Gleb, Evstgneev Roman | in progress |  | |
-|`setMediaCachedImageOptions`| Function | Skroba Gleb, Evstgneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX, https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
+|*MediaCachedImage*| *Component* | Skroba Gleb | blocked IDL |  | |
+|`setMediaCachedImageOptions`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX, https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
 |*Menu*|*Component*|Morozov Sergey| done |  |  |
 |`setMenuOptions`| Function |Morozov Sergey| done |  |  |
 |`fontSize`|Function|Morozov Sergey| done |  |deprecated  |
@@ -713,7 +713,7 @@
 |`onDotConnect`| Function | Dmitry A Smirnov| done |  |  |
 |`activateCircleStyle`| Function | Dmitry A Smirnov| done |  | |
 |`skipUnselectedPoint`| Function | | | | |
-|*PluginComponent*| *Component* | Evstigneev Roman | blocked IDL |  | |
+|*PluginComponent*| *Component* | Evstigneev Roman | in progress |  | |
 |`setPluginComponentOptions`| Function | Evstigneev Roman | in progress |  |  |
 |`onComplete`| Function | Evstigneev Roman | done |  | |
 |`onError`| Function | Evstigneev Roman | done |  | |
@@ -1066,7 +1066,7 @@
 |`loop`| Function |  Andrey Khudenkikh | done |  |  |
 |`vertical`| Function | Andrey Khudenkikh | done |  |  |
 |`onChange`| Function | Andrey Khudenkikh | done |  |  |
-|*SymbolGlyph*| *Component* |Andrey Khudenkikh | in progress |  |  |
+|*SymbolGlyph*| *Component* |Andrey Khudenkikh | blocked IDL |  |  |
 |`setSymbolGlyphOptions`| Function |Andrey Khudenkikh | done |  |  |
 |`fontSize`| Function |Andrey Khudenkikh | done |  |  |
 |`fontColor`| Function |Andrey Khudenkikh | done |  |  |
@@ -1075,7 +1075,7 @@
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |  |
 |`minFontScale`| Function | Kovalev Sergey | in progress  | |
 |`maxFontScale`| Function | Kovalev Sergey | in progress  | |
-|`symbolEffect`| Function | Andrey Khudenkikh, Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBRPIQ |
+|`symbolEffect`| Function | Andrey Khudenkikh | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBRPIQ |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| done |  |  |
 |`setSymbolSpanOptions`| Function |Dmitry A Smirnov| done |  |   |
 |`fontSize`| Function |Dmitry A Smirnov| done |  |  |
@@ -1113,7 +1113,7 @@
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
 |*TabContent*| *Component* | Evstigneev Roman | blocked IDL |  |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |  |
-|`tabBar`| Function | Evstigneev Roman, Lobah Mikhail | blocked IDL | modifier and UT for CustomNodeBuilder done Lobah Mikhail. `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB |  |
+|`tabBar`| Function | Evstigneev Roman | blocked IDL | modifier and UT for CustomNodeBuilder done Lobah Mikhail. `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB |  |
 |`onWillShow`| Function |Evstigneev Roman | done |  |  |
 |`onWillHide`| Function |Evstigneev Roman | done |  |  |
 |*Text*| *Component* | Samarin Sergey | blocked IDL |  | |
@@ -1734,7 +1734,7 @@
 |*RenderingContextSettings*| *Class* | Vadim Voronov | in progress | | |
 |`getAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
 |`setAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
-|*CanvasRenderer*| *Class*  | Vadim Voronov | blocked |  | |
+|*CanvasRenderer*| *Class*  | Vadim Voronov | blocked IDL |  | |
 |`drawImage`| Function  | Vadim Voronov | in progress |  | testskipped on FB, https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
 |`beginPath`| Function  | Vadim Voronov | done |  | |
 |`clip`| Function  | Vadim Voronov | done |  |   |
