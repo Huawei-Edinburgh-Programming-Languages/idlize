@@ -2382,7 +2382,7 @@
 |`onMenuItemClick`| Function | Skroba Gleb | in progress |RETURN_VALUE, RET_VAL_UNBLOCKED  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |*SubmitEvent*| *Class* | Tuzhilkin Ivan | blocked IDL|  | |
 |`keepEditableState`| Function | Tuzhilkin Ivan | done |  | |
-|`getText`| Function | Tuzhilkin Ivan | in progress |  | |
+|`getText`| Function | Tuzhilkin Ivan, Pavelyev Ivan | in progress |  | |
 |`setText`| Function | Tuzhilkin Ivan | done |  | |
 |*TextInputController*| *Class* | Spirin Andrey | done |  |  |
 |`caretPosition`| Function | Spirin Andrey | done |  |  |
