@@ -59,10 +59,10 @@ export class TSFeatureNameConvertor extends DeclarationNameConvertor {
 
 export class ETSDeclarationNameConvertor extends DeclarationNameConvertor {
     override convertInterface(decl: idl.IDLInterface): string {
-        return idl.getFQName(decl)
+        return idl.getQualifiedName(decl, "namespace.name")
     }
     override convertEnum(decl: idl.IDLEnum): string {
-        return idl.getFQName(decl)
+        return idl.getQualifiedName(decl, "namespace.name")
     }
     static readonly I = new ETSDeclarationNameConvertor()
 }

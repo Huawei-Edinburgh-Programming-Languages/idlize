@@ -29,10 +29,10 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
         return node.name
     }
     convertInterface(node: idl.IDLInterface): string {
-        return idl.getFQName(node)
+        return idl.getQualifiedName(node, "namespace.name")
     }
     convertEnum(node: idl.IDLEnum): string {
-        return idl.getFQName(node)
+        return idl.getQualifiedName(node, "namespace.name")
     }
     convertTypedef(node: idl.IDLTypedef): string {
         return node.name
@@ -81,6 +81,9 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
         return type.name
     }
     convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): string {
+        if (type.name === 'default' && importClause) {
+            return this.convert(idl.IDLCustomObjectType)
+        }
         const maybeTypeArguments = type.typeArguments?.length ? `<${type.typeArguments.join(', ')}>` : ""
         let decl = this.resolver.resolveTypeReference(type)
         if (decl)
@@ -88,6 +91,9 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
         return `${type.name}${maybeTypeArguments}`
     }
     convertTypeReference(type: idl.IDLReferenceType): string {
+        if (type.name === idl.IDLObjectType.name) {
+            return type.name
+        }
         let decl = this.resolver.resolveTypeReference(type)
         if (decl) {
             if (idl.isSyntheticEntry(decl)) {
@@ -100,35 +106,38 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
                     return this.productType(decl as idl.IDLInterface, isTuple, !isTuple)
                 }
             }
-        }
 
-        // FIXME: isEnumMember is not TYPE!
-        if (decl && idl.isEnumMember(decl) && decl.parent) {
-            // when `interface A { field?: MyEnum.Value1 }` is generated, it is not possible
-            // to deserialize A, because there is no such type information in declaration target
-            // (can not cast MyEnum to exact MyEnum.Value1)
-            decl = decl.parent
-        }
+            // FIXME: isEnumMember is not TYPE!
+            if (decl && idl.isEnumMember(decl) && decl.parent) {
+                // when `interface A { field?: MyEnum.Value1 }` is generated, it is not possible
+                // to deserialize A, because there is no such type information in declaration target
+                // (can not cast MyEnum to exact MyEnum.Value1)
+                decl = decl.parent
+            }
 
-        let typeSpec = type.name
-        let typeArgs = type.typeArguments?.map(it => idl.printType(it)) ?? []
-        if (typeSpec === `Optional`)
-            return `${typeArgs} | undefined`
-        if (typeSpec === `Function`)
-            return this.mapFunctionType(typeArgs)
-        const maybeTypeArguments = !typeArgs?.length ? '' : `<${typeArgs.join(', ')}>`
-        if (decl) {
-            const path = idl.getNamespacesPathFor(decl).map(it => it.name)
-            path.push(decl.name)
-            return `${path.join(".")}${maybeTypeArguments}`
+            let typeSpec = type.name
+            let typeArgs = type.typeArguments?.map(it => idl.printType(it)) ?? []
+            if (typeSpec === `Optional`)
+                return `${typeArgs} | undefined`
+            if (typeSpec === `Function`)
+                return this.mapFunctionType(typeArgs)
+            const maybeTypeArguments = !typeArgs?.length ? '' : `<${typeArgs.join(', ')}>`
+            if (decl) {
+                const path = idl.getNamespacesPathFor(decl).map(it => it.name)
+                path.push(decl.name)
+                return `${path.join(".")}${maybeTypeArguments}`
+            }
+            return `${type.name}${maybeTypeArguments}`
         }
-        return `${type.name}${maybeTypeArguments}`
+        return this.convert(idl.IDLCustomObjectType)
     }
     convertTypeParameter(type: idl.IDLTypeParameterType): string {
         return type.name
     }
     convertPrimitiveType(type: idl.IDLPrimitiveType): string {
         switch (type) {
+            case idl.IDLFunctionType: return 'Function'
+
             case idl.IDLUnknownType:
             case idl.IDLCustomObjectType: return 'unknown'
             case idl.IDLThisType: return 'this'
@@ -181,19 +190,16 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
     }
 
     protected productType(decl: idl.IDLInterface, isTuple: boolean, includeFieldNames: boolean): string {
-        const name = `${
-                isTuple ? "[" : "{"
-            } ${
-                decl.properties
-                    .map(it => isTuple ? this.processTupleType(it) : it)
-                    .map(it => {
-                        const type = this.convert(it.type)
-                        return it.isOptional
-                            ? includeFieldNames ? `${it.name}?: ${type}` : `(${type})?`
-                            : includeFieldNames ? `${it.name}: ${type}` : `${type}`
+        const name = `${isTuple ? "[" : "{"
+            } ${decl.properties
+                .map(it => isTuple ? this.processTupleType(it) : it)
+                .map(it => {
+                    const type = this.convert(it.type)
+                    return it.isOptional
+                        ? includeFieldNames ? `${it.name}?: ${type}` : `(${type})?`
+                        : includeFieldNames ? `${it.name}: ${type}` : `${type}`
                 }).join(", ")
-            } ${
-                isTuple ? "]" : "}"
+            } ${isTuple ? "]" : "}"
             }`
 
         return name

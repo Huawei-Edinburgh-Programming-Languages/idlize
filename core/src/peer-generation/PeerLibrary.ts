@@ -215,7 +215,7 @@ export class PeerLibrary implements LibraryInterface {
 
         if (1 === target.length) {
             const predefined = this.files.flatMap(it => it.entries).filter(isInIdlizeInternal)
-            const found = predefined.find(it => it.name === target[0])
+            const found = predefined.find(it => it.name === target.at(-1))
             if (found)
                 return found;
         }
@@ -331,6 +331,8 @@ export class PeerLibrary implements LibraryInterface {
                 case idl.IDLUnknownType:
                 case idl.IDLAnyType: return new CustomTypeConvertor(param, "Any", false, "Object")
                 case idl.IDLDate: return new DateConvertor(param)
+
+                case idl.IDLFunctionType: return new FunctionConvertor(this, param)
                 default: throw new Error(`Unconverted primitive ${idl.DebugUtils.debugPrintType(type)}`)
             }
         }
@@ -371,8 +373,9 @@ export class PeerLibrary implements LibraryInterface {
         let customConv = this.customConvertor(param, type.name, type)
         if (customConv)
             return customConv
-        if (!declaration)
+        if (!declaration) {
             return new CustomTypeConvertor(param, this.targetNameConvertorInstance.convert(type), false, this.targetNameConvertorInstance.convert(type)) // assume some predefined type
+        }
 
         const declarationName = declaration.name!
         if (isImportAttr(declaration)) {
@@ -430,7 +433,7 @@ export class PeerLibrary implements LibraryInterface {
             case `Date`:
                 return new DateConvertor(param)
             case `Function`:
-                return new FunctionConvertor(this, param, type as idl.IDLReferenceType)
+                return new FunctionConvertor(this, param)
             case `Record`:
                 return new CustomTypeConvertor(param, "Record", false, "Record<string, string>")
             case `Optional`:

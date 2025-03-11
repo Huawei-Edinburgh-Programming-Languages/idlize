@@ -400,7 +400,7 @@ export function printPeerFinalizer(clazz: MaterializedClass, writer: LanguageWri
     writer.writeMethodImplementation(finalizer, writer => {
         writer.writeStatement(
             writer.makeReturn(
-                writer.makeNativeCall(NativeModule.Generated, `_${qualifiedName(clazz.decl, "_")}_getFinalizer`, [])))
+                writer.makeNativeCall(NativeModule.Generated, `_${qualifiedName(clazz.decl, "_", "namespace.name")}_getFinalizer`, [])))
     })
 }
 

@@ -300,7 +300,7 @@ export class IdlPeerProcessor {
         if (!this.library.hasInLibrary(decl)) {
             return
         }
-        const fullCName = qualifiedName(decl, "_")
+        const fullCName = qualifiedName(decl, "_", "namespace.name")
         if (this.library.materializedClasses.has(fullCName)) {
             return
         }

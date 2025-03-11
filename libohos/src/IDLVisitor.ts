@@ -235,6 +235,8 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             ["Callback", (type, name) => this.makeCallbackType("Callback", type, name)],
             ["AsyncCallback", (type, name) => this.makeCallbackType("AsyncCallback", type, name)],
             ["Optional", (type, name) => this.makeOptionalType(type, name)],
+            ["Object", () => idl.IDLObjectType],
+            ["Function", () => idl.IDLFunctionType],
             // TODO: rethink that
             ["\"2d\"", () => idl.IDLStringType],
             ["\"auto\"", () => idl.IDLStringType],
@@ -247,7 +249,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     }
 
     detectPackageName(sourceFile: ts.SourceFile): string[] {
-        let relativeFileName
+        let relativeFileName: string | undefined = undefined
         for (const baseDir of this.baseDirs) {
             const rel = path.normalize(path.relative(baseDir, sourceFile.fileName))
             if(rel.startsWith("..")) {
@@ -491,7 +493,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             extendedAttributes.push({ name: idl.IDLExtendedAttributes.Import, value: `${node.type.getText(node.getSourceFile())}` })
             return idl.createTypedef(
                 nameSuggestion.name,
-                this.serializeImportTypeNode(nameSuggestion, node.type), 
+                this.serializeImportTypeNode(nameSuggestion, node.type),
                 undefined, {
                     extendedAttributes: extendedAttributes,
                     fileName: node.getSourceFile().fileName
@@ -521,7 +523,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     }
 
     serializeImportTypeNode(nameSuggestion: NameSuggestion|undefined, node: ts.ImportTypeNode): idl.IDLType {
-        const placeholder = idl.createReferenceType("")
+        const placeholder = idl.createReferenceType('')
         this.importTypeNodes.push([nameSuggestion, node, placeholder])
         return placeholder
     }
@@ -548,9 +550,10 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                     throw new Error("Empty import type clause is not allowed...")
                 dst.name = clause.join(".")
                 // dst.typeArguments = this.mapTypeArgs(src.typeArguments, dst.name)
+
+                dst.extendedAttributes ??= []
+                dst.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Import, value: src.getText(src.getSourceFile()) })
             }
-            dst.extendedAttributes ??= []
-            dst.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Import, value: src.getText(src.getSourceFile()) })
 
             // if (this.predefinedTypeResolver?.resolveTypeReference(type)) {
             //     // A predefined declaration exists for this type, so we need no typedef for it
@@ -1031,7 +1034,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         let name = entry.name
         if (!name || !this.seenNames.has(name)) {
             if (name) this.seenNames.add(name)
-                this.file.entries.push(entry)
+            this.file.entries.push(entry)
         }
     }
 
@@ -1225,8 +1228,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             warn(`unsupported type query: ${type.getText()}`)
             return idl.IDLAnyType
         }
-        if (ts.isImportTypeNode(type))
+        if (ts.isImportTypeNode(type)) {
             return this.serializeImportTypeNode(nameSuggestion, type)
+        }
         if (ts.isNamedTupleMember(type)) {
             return this.serializeType(type.type)
         }

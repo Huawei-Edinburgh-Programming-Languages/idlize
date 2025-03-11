@@ -35,7 +35,7 @@ export function generateSyntheticIdlNodeName(type: idl.IDLType): string {
     throw `Can not compute type name of ${idl.IDLKind[type.kind]}`
 }
 
-export function qualifiedName(decl: idl.IDLNode, languageOrDelimiter: Language|string, pattern: idl.QNPattern = "package.namespace.name"): string {
+export function qualifiedName(decl: idl.IDLNode, languageOrDelimiter: Language|string, pattern: idl.QNPattern): string {
     if (!idl.isNamedNode(decl))
         throw new Error("internal error, name required for no-named node")
     const delimiter = typeof languageOrDelimiter === "string"

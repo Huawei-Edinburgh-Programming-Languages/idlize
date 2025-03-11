@@ -1029,7 +1029,7 @@ export class UnionConvertor extends BaseArgConvertor { //
 }
 
 export class FunctionConvertor extends BaseArgConvertor { //
-    constructor(private library: LibraryInterface, param: string, protected type: idl.IDLReferenceType) {
+    constructor(private library: LibraryInterface, param: string) {
         // TODO: pass functions as integers to native side.
         super(idl.IDLFunctionType, [RuntimeType.FUNCTION], false, false, param)
     }
@@ -1042,7 +1042,7 @@ export class FunctionConvertor extends BaseArgConvertor { //
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         return assigneer(writer.makeCast(
             writer.makeString(`${deserializerName}.readFunction()`),
-            this.type, { optional: true }
+            idl.IDLFunctionType, { optional: true }
         ))
     }
     nativeType(): idl.IDLType {
@@ -1063,7 +1063,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     convertorArg(param: string, writer: LanguageWriter): string {
         switch (writer.language) {
             case Language.CPP:
-                return `static_cast<${generatorTypePrefix()}${qualifiedName(this.declaration, "_")}>(${param})`
+                return `static_cast<${generatorTypePrefix()}${qualifiedName(this.declaration, "_", "namespace.name")}>(${param})`
             case Language.JAVA:
             case Language.CJ:
                 return `MaterializedBase.toPeerPtr(${param})`
@@ -1074,13 +1074,13 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeStatement(
             printer.makeStatement(
-                printer.makeMethodCall(`${param}Serializer`, `write${qualifiedName(this.declaration, "_")}`, [
+                printer.makeMethodCall(`${param}Serializer`, `write${qualifiedName(this.declaration, "_", "namespace.name")}`, [
                     printer.makeString(value)
                 ])))
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const readStatement = writer.makeCast(
-            writer.makeMethodCall(`${deserializerName}`, `read${qualifiedName(this.declaration, "_")}`, []),
+            writer.makeMethodCall(`${deserializerName}`, `read${qualifiedName(this.declaration, "_", "namespace.name")}`, []),
             idl.createReferenceType(this.declaration)
         )
         return assigneer(readStatement)

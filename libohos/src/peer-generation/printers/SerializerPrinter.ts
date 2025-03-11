@@ -542,7 +542,7 @@ export function getSerializerDeclarations(library: PeerLibrary, dependencyFilter
         .filter(it => !idl.isHandwritten(it) && !isInIdlizeInternal(it))
         .filter(it => !it.typeParameters?.length)
         .filter(it => {
-            const fullName = qualifiedName(it, "_")
+            const fullName = qualifiedName(it, "_", "namespace.name")
             const seen = seenNames.has(fullName)
             seenNames.add(fullName)
             return !seen

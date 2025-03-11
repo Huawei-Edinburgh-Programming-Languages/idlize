@@ -1,6 +1,8 @@
 import * as idl from '@idlizer/core/idl'
 import { generateSyntheticFunctionName, maybeTransformManagedCallback, getInternalClassName, isMaterialized, PeerLibrary } from "@idlizer/core";
 import { DependenciesCollector } from "./IdlDependenciesCollector";
+import { componentToPeerClass } from '../printers/PeersPrinter';
+import { isComponentDeclaration } from '../ComponentsCollector';
 
 function createTransformedCallbacks(library: PeerLibrary, synthesizedEntries: Map<string, idl.IDLEntry>) {
     for (const file of library.files) {
@@ -118,6 +120,17 @@ function createMaterializedInternal(library: PeerLibrary, synthesizedEntries: Ma
     }
 }
 
+function createComponentPeers(library: PeerLibrary, synthesizedEntries: Map<string, idl.IDLEntry>): void {
+    library.files.forEach(file => {
+        file.entries.forEach(it => {
+            if (isComponentDeclaration(library, it)) {
+                const name = componentToPeerClass(it.name.replace('Attribute', ''))
+                synthesizedEntries.set(name, idl.createInterface(name, idl.IDLInterfaceSubkind.Class))
+            }
+        })
+    })
+}
+
 /** @deprecated please do not extend this file. Storing synthetic declarations globally seems a bad pattern */
 export function fillSyntheticDeclarations(library: PeerLibrary) {
     const synthesizedEntries = new Map<string, idl.IDLEntry>()
@@ -125,5 +138,6 @@ export function fillSyntheticDeclarations(library: PeerLibrary) {
     createContinuationCallbacks(library, synthesizedEntries)
     createImportsStubs(library, synthesizedEntries)
     createMaterializedInternal(library, synthesizedEntries)
+    createComponentPeers(library, synthesizedEntries)
     library.initSyntheticEntries(idl.linkParentBack(idl.createFile([...synthesizedEntries.values()])))
 }
