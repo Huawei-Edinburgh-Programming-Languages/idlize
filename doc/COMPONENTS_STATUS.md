@@ -1728,9 +1728,9 @@
 |`close`| Function | Vadim Voronov | done |  |  |
 |`getHeight`| Function | Vadim Voronov | in progress |  |  |
 |`getWidth`| Function | Vadim Voronov | in progress |  |  |
-|*ImageData*| *Class* | Morozov Sergey | devdone | | done on Feature branch |
-|`getHeight`| Function | Morozov Sergey | devdone | | done on Feature branch |
-|`getWidth`| Function | Morozov Sergey | devdone | | done on Feature branch |
+|*ImageData*| *Class* | Morozov Sergey | done | | |
+|`getHeight`| Function | Morozov Sergey | done | | |
+|`getWidth`| Function | Morozov Sergey | done | | |
 |*RenderingContextSettings*| *Class* | Vadim Voronov | in progress | | |
 |`getAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
 |`setAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
@@ -2124,7 +2124,7 @@
 |*TapGestureInterface*| *Class* | Dudkin Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
 |`onAction`| Function | Dudkin Sergey | in progress| | |
 |*LongPressGestureInterface*| *Class* | Morozov Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
-|`onAction`| Function | Morozov Sergey | | | |
+|`onAction`| Function | Morozov Sergey | in progress | | |
 |`onActionEnd`| Function | Morozov Sergey | in progress | | |
 |`onActionCancel`| Function | Morozov Sergey |in progress | | |
 |*PanGestureOptions*| *Class* | Politov Mikhail | blocked IDL |  | |
@@ -2169,11 +2169,11 @@
 |`getPanGestureOptions`| Function | Politov Mikhail | done |  | |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked AceEngine |  | |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked AceEngine |  | done for feature branch, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
-|*ListScroller*| *Class* |Morozov Sergey | devdone|  |  |
-|`getItemRectInGroup`| Function |Morozov Sergey | devdone | | done on Feature Branch |
-|`scrollToItemInGroup`| Function |Morozov Sergey | done |  |  |
-|`closeAllSwipeActions`| Function |Morozov Sergey | done |  |  |
-|`getVisibleListContentInfo`| Function |Morozov Sergey | devdone | | done on Feature branch | 
+|*ListScroller*| *Class* |Morozov Sergey | done|  |  |
+|`getItemRectInGroup`| Function |Morozov Sergey | done | | |
+|`scrollToItemInGroup`| Function |Morozov Sergey | done | | |
+|`closeAllSwipeActions`| Function |Morozov Sergey | done | | |
+|`getVisibleListContentInfo`| Function |Morozov Sergey | done | | |
 |*Matrix2D*| *Class* | Vadim Voronov | in progress |  |  |
 |`identity`| Function | Vadim Voronov | done |  | |
 |`invert`| Function | Vadim Voronov | done |  | |
