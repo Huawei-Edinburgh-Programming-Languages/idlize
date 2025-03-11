@@ -70,11 +70,14 @@ export class EtsAssignStatement implements LanguageStatement {
 }
 
 class ArkTSMapForEachStatement implements LanguageStatement {
-    constructor(private map: string, private key: string, private value: string, private op: () => void) {}
+    constructor(private map: string, private key: { name: string, type?: idl.IDLType }, private value: string, private op: () => void) {}
     write(writer: LanguageWriter): void {
         writer.print(`for (const pair of ${this.map}) {`)
         writer.pushIndent()
-        writer.print(`const ${this.key} = pair[0]`)
+        // Explicit type cast if key is Enum, this fixes the error:
+        // MapTypeError: 'valueOf' is a static property of '#AxisModel'
+        const keyType = this.key.type ? `: ${writer.getNodeName(this.key.type)}` : ``
+        writer.print(`const ${this.key.name}${keyType} = pair[0]`)
         writer.print(`const ${this.value} = pair[1]`)
         this.op()
         writer.popIndent()
@@ -210,8 +213,8 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
         return new ETSLambdaExpression(this, this.typeConvertor, signature, this.resolver, body)
     }
-    makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement {
-        return new ArkTSMapForEachStatement(map, key, value, op)
+    makeMapForEach(map: string, key: string, value: string, op: () => void, keyType?: idl.IDLType): LanguageStatement {
+        return new ArkTSMapForEachStatement(map, {name: key, type: keyType}, value, op)
     }
     makeMapSize(map: string): LanguageExpression {
         return this.makeString(`${super.makeMapSize(map).asString()} as int32`) // TODO: cast really needed?

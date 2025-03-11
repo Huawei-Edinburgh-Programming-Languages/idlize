@@ -645,7 +645,7 @@ export class MapConvertor extends BaseArgConvertor {
         printer.writeStatement(printer.makeMapForEach(value, `${value}_key`, `${value}_value`, () => {
             this.keyConvertor.convertorSerialize(param, `${value}_key`, printer)
             this.valueConvertor.convertorSerialize(param, `${value}_value`, printer)
-        }))
+        }, idl.isEnum(this.library.toDeclaration(this.keyType)) ? this.keyType : undefined))
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const mapTypeName = writer.getNodeName(this.idlType)

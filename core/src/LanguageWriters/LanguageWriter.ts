@@ -485,7 +485,7 @@ export abstract class LanguageWriter {
     abstract makeMapInsert(keyAccessor: string, key: string, valueAccessor: string, value: string): LanguageStatement
     abstract makeLoop(counter: string, limit: string): LanguageStatement
     abstract makeLoop(counter: string, limit: string, statement: LanguageStatement): LanguageStatement
-    abstract makeMapForEach(map: string, key: string, value: string, op: () => void): LanguageStatement
+    abstract makeMapForEach(map: string, key: string, value: string, op: () => void, keyType?: idl.IDLType): LanguageStatement
     // No need for these two.
     abstract getTagType(): idl.IDLType
     abstract getRuntimeType(): idl.IDLType
