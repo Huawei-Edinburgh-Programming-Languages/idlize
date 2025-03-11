@@ -1710,16 +1710,16 @@
 |`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
 |*CanvasGradient*| *Class* | Vadim Voronov | done |  | |
 |`addColorStop`| Function | Vadim Voronov | done |  | |
-|*CanvasPath*| *Class* | Kovalev Sergey | done |  |  |
-|`arc`| Function | Kovalev Sergey | done |  |  |
-|`arcTo`| Function | Kovalev Sergey | done |  |  |
-|`bezierCurveTo`| Function | Kovalev Sergey | done |  |  |
-|`closePath`| Function | Kovalev Sergey | done |  |  |
-|`ellipse`| Function | Kovalev Sergey | done |  |  |
-|`lineTo`| Function | Kovalev Sergey | done |  |  |
-|`moveTo`| Function | Kovalev Sergey | done |  |  |
-|`quadraticCurveTo`| Function | Kovalev Sergey | done |  |  |
-|`rect`| Function | Kovalev Sergey | done |  |  |
+|*CanvasPath*| *Class* | Vadim Voronov | in progress |  |  |
+|`arc`| Function | Vadim Voronov | in progress |  |  |
+|`arcTo`| Function | Vadim Voronov | in progress |  |  |
+|`bezierCurveTo`| Function | Vadim Voronov | in progress |  |  |
+|`closePath`| Function | Vadim Voronov | in progress |  |  |
+|`ellipse`| Function | Vadim Voronov | in progress |  |  |
+|`lineTo`| Function | Vadim Voronov | in progress |  |  |
+|`moveTo`| Function | Vadim Voronov | in progress |  |  |
+|`quadraticCurveTo`| Function | Vadim Voronov | in progress |  |  |
+|`rect`| Function | Vadim Voronov | in progress |  |  |
 |*Path2D*| *Class* | Vadim Voronov | done |  | |
 |`addPath`| Function | Vadim Voronov | done |  | |
 |*CanvasPattern*| *Class* | Vadim Voronov | done |  |  |
