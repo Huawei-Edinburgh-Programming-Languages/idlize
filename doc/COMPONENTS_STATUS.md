@@ -2068,8 +2068,8 @@
 |`setFingerList`| Function | Maksimov Nikita | done |  | implementation and UT Vadim Voronov |
 |*TapGestureEvent*| *Class* | Samarin Sergey | done | | nothing to do |
 |*LongPressGestureEvent*| *Class* | | | | |
-|`getRepeat`| Function | | | | |
-|`setRepeat`| Function | | | | |
+|`getRepeat`| Function | Kovalev Sergey | done | | |
+|`setRepeat`| Function | Kovalev Sergey | done | | |
 |*PanGestureEvent*| *Class* | Morozov Sergey | done | | |
 |`getOffsetX`| Function | Morozov Sergey | done | | |
 |`setOffsetX`| Function | Morozov Sergey | done | | |
