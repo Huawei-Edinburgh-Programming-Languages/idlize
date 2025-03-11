@@ -1646,13 +1646,13 @@
 |`width`| Function |Dudkin Sergey |in progress | | |
 |`height`| Function |Dudkin Sergey |in progress | | |
 |`size`| Function |Dudkin Sergey | in progress | | |
-|*EllipseShape*| *Class* | Erokhin Ilya | devdone | | done on feature branch |
-|`offset`| Function | Erokhin Ilya | devdone | | done on feature branch |
-|`fill`| Function | Erokhin Ilya | devdone | | done on feature branch |
-|`position`| Function | Erokhin Ilya | devdone | | done on feature branch |
-|`width`| Function | Erokhin Ilya | devdone | | done on feature branch |
-|`height`| Function | Erokhin Ilya | devdone | | done on feature branch |
-|`size`| Function | Erokhin Ilya | devdone | | done on feature branch |
+|*EllipseShape*| *Class* | Erokhin Ilya | done | | |
+|`offset`| Function | Erokhin Ilya | done | | |
+|`fill`| Function | Erokhin Ilya | done | | |
+|`position`| Function | Erokhin Ilya | done | | |
+|`width`| Function | Erokhin Ilya | done | | |
+|`height`| Function | Erokhin Ilya | done | | |
+|`size`| Function | Erokhin Ilya | done | | |
 |*PathShape*| *Class* | Lobah Mikhail | in progress| | |
 |`offset`| Function | Lobah Mikhail| in progress| | |
 |`fill`| Function | Lobah Mikhail | in progress| | |
@@ -2566,11 +2566,11 @@
 |`marshalling`| Function | Pavelyev Ivan | in progress |  |  |
 |`unmarshalling`| Function | Pavelyev Ivan | done |  | |
 |`getLength`| Function | Pavelyev Ivan | done |  | |
-|*TextStyle_styled_string*| *Class* | Erokhin Ilya | in progress |  | testskipped on feature branch |
-|`getFontFamily`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
-|`getFontSize`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
-|`getFontWeight`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
-|`getFontStyle`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
+|*TextStyle_styled_string*| *Class* | Erokhin Ilya | devdone |  | testskipped on feature branch |
+|`getFontFamily`| Function | Erokhin Ilya | devdone |  | testskipped on feature branch |
+|`getFontSize`| Function | Erokhin Ilya | devdone |  | testskipped on feature branch |
+|`getFontWeight`| Function | Erokhin Ilya | devdone |  | testskipped on feature branch |
+|`getFontStyle`| Function | Erokhin Ilya | devdone |  | testskipped on feature branch |
 |*DecorationStyle*| *Class* | Tuzhilkin Ivan | testskipped |  | |
 |`getType`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`getStyle`| Function | Tuzhilkin Ivan | testskipped |  | |
