@@ -47,7 +47,7 @@ export class InteropReturnTypeConvertor implements TypeConvertor<string> {
         throw new Error(`Cannot pass import type ${type.name} through interop`)
     }
     convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): string {
-        throw new Error(`Cannot pass import type ${type.name} through interop`)
+        return this.convertTypeReference(type)
     }
     convertOptional(type: idl.IDLOptionalType): string {
         return KInteropReturnBuffer

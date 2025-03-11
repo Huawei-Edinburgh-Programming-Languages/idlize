@@ -58,7 +58,7 @@ class ReturnValueConvertor implements TypeConvertor<string | undefined> {
         throw new Error('Can not return import');
     }
     convertTypeReferenceAsImport(type: IDLReferenceType, importClause: string): string | undefined {
-        throw new Error('Can not return import');
+        return this.convertTypeReference(type)
     }
     convertTypeReference(type: IDLReferenceType): string | undefined {
         const decl = this.resolver.resolveTypeReference(type)
