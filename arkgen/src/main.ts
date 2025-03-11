@@ -63,9 +63,11 @@ const options = program
     .option('--dts2peer', 'Convert .d.ts to peer drafts')
     .option('--ets2ts', 'Convert .ets to .ts')
     .option('--input-dir <path>', 'Path to input dir(s), comma separated')
+    .option('--aux-input-dir <path>', 'Path to aux input dir(s), comma separated')
     .option('--base-dir <path>', 'Base directories, for the purpose of packetization of IDL modules, comma separated, defaulted to --input-dir if missing')
     .option('--output-dir <path>', 'Path to output dir')
     .option('--input-files <files...>', 'Comma-separated list of specific files to process')
+    .option('--aux-input-files <files...>', 'Comma-separated list of specific aux files to process')
     .option('--library-packages <packages>', 'Comma separated list of packages included into library')
     .option('--idl2peer', 'Convert IDL to peer drafts')
     .option('--dts2skoala', 'Convert DTS to skoala definitions')
@@ -138,16 +140,23 @@ if (options.dts2skoala) {
     const generatedIDLMap = new Map<string, IDLEntry[]>()
     const skoalaLibrary = new IdlSkoalaLibrary()
 
-    const inputDirs = options.inputDir ? options.inputDir.split(',') : []
-    const inputFiles = options.inputFile ? (Array.isArray(options.inputFile) ? options.inputFile : [options.inputFile]) : []
+    const { inputFiles, auxInputFiles, inputDirs, auxInputDirs } = formatInputPaths(options)
+    validatePaths(inputDirs, "dir")
+    validatePaths(auxInputDirs, "dir")
+    validatePaths(inputFiles, "file")
+    validatePaths(auxInputFiles, "file")
 
-    if (inputDirs.length === 0 && inputFiles.length === 0) {
+    const dtsInputFiles = scanInputDirs(inputDirs, '.d.ts').concat(inputFiles)
+    const dtsAuxInputFiles = scanInputDirs(auxInputDirs, '.d.ts').concat(auxInputFiles)
+
+    if (dtsInputFiles.length === 0) {
         console.error("Error: No input directory or files provided.")
         process.exit(1)
     }
 
     generate(
-        scanInputDirs(inputDirs, '.d.ts').concat(inputFiles),
+        dtsInputFiles,
+        dtsAuxInputFiles,
         outputDir,
         (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, skoalaLibrary),
         {
@@ -225,32 +234,44 @@ if (options.dts2peer) {
     const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
     const lang = Language.fromString(options.language ?? "ts")
 
-    const { inputFiles, inputDirs } = formatInputPaths(options)
+    const { inputFiles, auxInputFiles, inputDirs, auxInputDirs } = formatInputPaths(options)
     validatePaths(inputDirs, "dir")
+    validatePaths(auxInputDirs, "dir")
     validatePaths(inputFiles, "file")
+    validatePaths(auxInputFiles, "file")
 
     const allInputFiles = scanInputDirs(inputDirs)
         .concat(inputFiles)
         .concat(libohosPredefinedFiles())
         .concat(arkgenPredefinedFiles())
+    const allAuxInputFiles = scanInputDirs(auxInputDirs)
+        .concat(auxInputFiles)
     const dtsInputFiles = allInputFiles.filter(it => it.endsWith('.d.ts'))
+    const dtsAuxInputFiles = allAuxInputFiles.filter(it => it.endsWith('.d.ts'))
     const idlInputFiles = allInputFiles.filter(it => it.endsWith('.idl'))
+    const idlAuxInputFiles = allAuxInputFiles.filter(it => it.endsWith('.idl'))
 
     const idlLibrary = new ArkoalaPeerLibrary(lang, options.libraryPackages)
-    idlInputFiles.forEach(idlFilename => {
-        idlFilename = path.resolve(idlFilename)
-        const file = toIDLFile(idlFilename)
-        const peerFile = new PeerFile(file)
-        idlLibrary.files.push(peerFile)
-    })
+
+    {
+        const pushOne = (idlFilename: string, resultFilesArray: PeerFile[]) => {
+            idlFilename = path.resolve(idlFilename)
+            const file = toIDLFile(idlFilename)
+            const peerFile = new PeerFile(file)
+            resultFilesArray.push(peerFile)
+        }
+        idlInputFiles.forEach(idlFilename => pushOne(idlFilename, idlLibrary.files))
+        idlAuxInputFiles.forEach(auxIdlFilename => pushOne(auxIdlFilename, idlLibrary.auxFiles))
+    }
 
     generate(
         dtsInputFiles,
+        dtsAuxInputFiles,
         generatedPeersDir,
         (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, idlLibrary),
         {
             compilerOptions: defaultCompilerOptions,
-            onSingleFile(file: IDLFile, outputDir, sourceFile) {
+            onSingleFile(file: IDLFile, outputDir, sourceFile, isAux) {
                 // TODO: this hack must be removed
                 file.entries = file.entries.filter(newEntry =>
                     !idlLibrary.files.find(peerFile => peerFile.entries.find(entry => {
@@ -267,7 +288,10 @@ if (options.dts2peer) {
 
                 const peerFile = new PeerFile(file)
 
-                idlLibrary.files.push(peerFile)
+                if (isAux)
+                    idlLibrary.auxFiles.push(peerFile)
+                else
+                    idlLibrary.files.push(peerFile)
             },
             onEnd(outDir) {
                 if (options.verifyIdl) {

@@ -101,6 +101,7 @@ export class PeerLibrary implements LibraryInterface {
         return this._syntheticFile.entries.filter(it => idl.isInterface(it)) as idl.IDLInterface[]
     }
     public readonly files: PeerFile[] = []
+    public readonly auxFiles: PeerFile[] = []
     public readonly builderClasses: Map<string, BuilderClass> = new Map()
     public get buildersToGenerate(): BuilderClass[] {
         return Array.from(this.builderClasses.values()).filter(it => it.needBeGenerated)

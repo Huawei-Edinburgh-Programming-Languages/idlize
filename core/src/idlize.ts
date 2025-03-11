@@ -18,6 +18,7 @@ import * as fs from "fs"
 import * as path from "path"
 import * as idl from "./idl"
 import { GenerateOptions } from "./options"
+import { isDefined } from "./util"
 
 export function scanDirectory(dir: string, fileFilter: (file: string) => boolean, recursive = false): string[] {
     const dirsToVisit = [path.resolve(dir)]
@@ -65,11 +66,12 @@ export function scanInputDirs(
 
 export interface GenerateVisitor<T> {
     visitPhase1(): T
-    visitPhase2?(siblings: { [key in string]: { tsSourceFile: ts.SourceFile, visitor: GenerateVisitor<T>, result: T }}): T
+    visitPhase2?(siblings: { [key in string]: { tsSourceFile: ts.SourceFile, visitor: GenerateVisitor<T>, result: T, isAux: boolean }}): T
 }
 
 export function generate<T>(
     inputFiles: string[],
+    auxInputFiles: string[],
     outputDir: string,
     visitorFactory: (sourceFile: ts.SourceFile, program: ts.Program, compilerHost: ts.CompilerHost) => GenerateVisitor<T>,
     options: GenerateOptions<T>
@@ -83,27 +85,26 @@ export function generate<T>(
         process.exit(1)
     }
 
-    let input: string[] = []
+    let input: Set<string> = new Set<string>
+    let auxInput: Set<string> = new Set<string>
 
-    if (inputFiles.length > 0) {
-        inputFiles.forEach(file => {
+    {
+        const resolveOne = (file: string, tag: string) => {
             const fullPath = path.resolve(file)
             if (fs.existsSync(fullPath)) {
-                if (options.enableLog) {
-                    console.log(`Including input file: ${fullPath}`)
-                }
-                input.push(fullPath)
-            } else {
-                console.warn(`Warning: Input file does not exist: ${fullPath}`)
-            }
-        })
+                if (options.enableLog)
+                    console.log(`Including ${tag} file: ${fullPath}`)
+                return fullPath
+            } else
+                console.warn(`Warning: ${tag} file does not exist: ${fullPath}`)
+        }
+        inputFiles.map(file => resolveOne(file, "file")).filter(isDefined).sort().map(file => input.add(file))
+        auxInputFiles.map(file => resolveOne(file, "aux file")).filter(isDefined).sort().map(file => input.add(file))
     }
-
-    input = Array.from(new Set(input.map(p => path.resolve(p)))).sort()
 
     let compilerHost = ts.createCompilerHost(options.compilerOptions)
     let program = ts.createProgram(
-        input.concat([path.join(__dirname, "../stdlib.d.ts")]),
+        [...input.values(), ...auxInput.values(), path.join(__dirname, "../stdlib.d.ts")],
         options.compilerOptions,
         compilerHost
     )
@@ -120,20 +121,12 @@ export function generate<T>(
     type VisitorStaff = {
         tsSourceFile: ts.SourceFile,
         visitor: GenerateVisitor<T>,
-        result: T
+        result: T,
+        isAux: boolean
     }
     const dtsFileName2Visitor: { [key in string]: VisitorStaff } = {}
     for (const sourceFile of program.getSourceFiles()) {
         const resolvedSourceFileName = path.resolve(sourceFile.fileName)
-
-        const isExplicitFile = input.some(f => path.resolve(f) === resolvedSourceFileName)
-
-        if (!isExplicitFile) {
-            if (options.enableLog) {
-                console.log(`Skipping file: ${resolvedSourceFileName}`)
-            }
-            continue
-        }
 
         if (options.enableLog) {
             console.log(`Processing file: ${resolvedSourceFileName}`)
@@ -145,13 +138,14 @@ export function generate<T>(
         dtsFileName2Visitor[sourceFile.fileName] = {
             tsSourceFile: sourceFile,
             visitor,
-            result
+            result,
+            isAux: !input.has(resolvedSourceFileName)
         }
     }
 
     for (const resolvedSourceFileName in dtsFileName2Visitor) {
         const visitorStaff: VisitorStaff = dtsFileName2Visitor[resolvedSourceFileName]
-        options.onSingleFile?.(visitorStaff.result, outputDir, visitorStaff.tsSourceFile)
+        options.onSingleFile?.(visitorStaff.result, outputDir, visitorStaff.tsSourceFile, visitorStaff.isAux)
     }
 
     for (const resolvedSourceFileName in dtsFileName2Visitor) {

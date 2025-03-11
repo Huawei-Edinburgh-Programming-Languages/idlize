@@ -42,9 +42,11 @@ const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
     .option('--idl2dts', 'Convert IDL to .d.ts definitions')
     .option('--input-dir <path>', 'Path to input dir(s), comma separated')
+    .option('--aux-input-dir <path>', 'Path to aux input dir(s), comma separated')
     .option('--base-dir <path>', 'Base directories, for the purpose of packetization of IDL modules, comma separated, defaulted to --input-dir if missing')
     .option('--output-dir <path>', 'Path to output dir')
     .option('--input-files <files...>', 'Comma-separated list of specific files to process')
+    .option('--aux-input-files <files...>', 'Comma-separated list of specific aux files to process')
     .option('--verbose', 'Verbose processing')
     .option('--verify-idl', 'Verify produced IDL')
     .option('--docs [all|opt|none]', 'How to handle documentation: include, optimize, or skip')
@@ -69,20 +71,21 @@ if (process.env.npm_package_version) {
 
 let didJob = false
 
-const { inputFiles, inputDirs } = formatInputPaths(options)
+const { inputFiles, auxInputFiles, inputDirs, auxInputDirs } = formatInputPaths(options)
 validatePaths(inputDirs, "dir")
+validatePaths(auxInputDirs, "dir")
 validatePaths(inputFiles, "file")
+validatePaths(auxInputFiles, "file")
 
 options.docs = "all"
 const dtsInputFiles = scanInputDirs(inputDirs).concat(inputFiles)
+const dtsAuxInputFiles = scanInputDirs(auxInputDirs).concat(auxInputFiles)
 
 if (options.dts2idl) {
-    const { inputDirs, inputFiles } = formatInputPaths(options)
-    validatePaths(inputDirs, 'dir')
-    validatePaths(inputFiles, 'file')
     const idlLibrary = new PeerLibrary(Language.TS, [])
     generate(
         dtsInputFiles,
+        dtsAuxInputFiles,
         options.outputDir ?? "./idl",
         (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options),
         {
