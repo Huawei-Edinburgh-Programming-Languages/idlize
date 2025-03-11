@@ -2144,11 +2144,11 @@
 |`onActionUpdate`| Function | | | | |
 |`onActionEnd`| Function | | | | |
 |`onActionCancel`| Function | | | | |
-|*RotationGestureInterface*| *Class* | | | | |
-|`onActionStart`| Function | | | | |
-|`onActionUpdate`| Function | | | | |
-|`onActionEnd`| Function | | | | |
-|`onActionCancel`| Function | | | | |
+|*RotationGestureInterface*| *Class* | Andrey Khudenkikh | in progress | | |
+|`onActionStart`| Function | Andrey Khudenkikh | in progress | | |
+|`onActionUpdate`| Function | Andrey Khudenkikh | in progress | | |
+|`onActionEnd`| Function | Andrey Khudenkikh | in progress | | |
+|`onActionCancel`| Function | Andrey Khudenkikh | in progress | | |
 |*GestureGroupInterface*| *Class* | | | | |
 |`onCancel`| Function | | | | |
 |*ScrollableTargetInfo*| *Class* | Maksimov Nikita | done |  | |
