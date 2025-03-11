@@ -2484,13 +2484,13 @@
 |`isMainFrame`| Function | Erokhin Ilya | done |  |  |
 |`isRedirect`| Function | Erokhin Ilya | done |  |  |
 |`getRequestMethod`| Function | Erokhin Ilya | done |  | |
-|*WebResourceResponse*| *Class* | Erokhin Ilya | in progress |  |  |
-|`getResponseData`| Function | Erokhin Ilya | devdone |  |  |
-|`getResponseDataEx`| Function | Erokhin Ilya | devdone |  |  |
-|`getResponseEncoding`| Function | Erokhin Ilya | devdone |  |  |
-|`getResponseMimeType`| Function | Erokhin Ilya | devdone |  |  |
-|`getReasonMessage`| Function | Erokhin Ilya | devdone |  |  |
-|`getResponseHeader`| Function | Erokhin Ilya | devdone |  |  |
+|*WebResourceResponse*| *Class* | Erokhin Ilya | done |  |  |
+|`getResponseData`| Function | Erokhin Ilya | done |  |  |
+|`getResponseDataEx`| Function | Erokhin Ilya | done |  |  |
+|`getResponseEncoding`| Function | Erokhin Ilya | done |  |  |
+|`getResponseMimeType`| Function | Erokhin Ilya | done |  |  |
+|`getReasonMessage`| Function | Erokhin Ilya | done |  |  |
+|`getResponseHeader`| Function | Erokhin Ilya | done |  |  |
 |`getResponseCode`| Function | Erokhin Ilya | done |  |  |
 |`setResponseData`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |`setResponseEncoding`| Function | Erokhin Ilya | done |  |  |
