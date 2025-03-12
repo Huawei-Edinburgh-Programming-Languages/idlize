@@ -2067,7 +2067,7 @@
 |`getFingerList`| Function | Kovalev Sergey | in progress | done on FB| |
 |`setFingerList`| Function | Maksimov Nikita | done |  | implementation and UT Vadim Voronov |
 |*TapGestureEvent*| *Class* | Samarin Sergey | done | | nothing to do |
-|*LongPressGestureEvent*| *Class* | | | | |
+|*LongPressGestureEvent*| *Class* | Kovalev Sergey | done | | |
 |`getRepeat`| Function | Kovalev Sergey | done | | |
 |`setRepeat`| Function | Kovalev Sergey | done | | |
 |*PanGestureEvent*| *Class* | Morozov Sergey | done | | |
