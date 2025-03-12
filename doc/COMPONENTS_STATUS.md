@@ -1612,9 +1612,9 @@
 |`getGreen`| Function | | | | |
 |`getBlue`| Function | | | | |
 |`getAlpha`| Function | | | | |
-|*WebviewController*| *Class* | Politov Mikhail | testskipped | | |
-|`initializeWebEngine`| Function | Politov Mikhail | testskipped | | |
-|`loadUrl`| Function | Politov Mikhail | testskipped | | |
+|*WebviewController*| *Class* | Politov Mikhail | done | | |
+|`initializeWebEngine`| Function | Politov Mikhail | done | | |
+|`loadUrl`| Function | Politov Mikhail | done | | |
 |*GlobalScope_ohos_arkui_componentSnapshot*| *Class* | Dudkin Sergey| in progress| | |
 |`get`| Function | Dudkin Sergey | in progress | | |
 |*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | Vadim Voronov | blocked IDL | | |
