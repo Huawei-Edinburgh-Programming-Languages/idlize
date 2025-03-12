@@ -22,6 +22,7 @@ export { and_values } from "../../generated/arkts"
 export { sum_numbers } from "../../generated/arkts"
 export { test_buffer } from "../../generated/arkts"
 export { test_materialized_classes, UtilityInterface } from "../../generated/arkts"
+export { InterfaceWithMethodsInternal } from "../../generated/arkts"
 export {
     ForceCallbackListener,
     ForceCallbackClass,

@@ -18,6 +18,7 @@ import {
 import { and_values } from '#compat'
 import { sum_numbers } from '#compat'
 import { test_materialized_classes, UtilityInterface } from '#compat'
+import { InterfaceWithMethodsInternal } from "#compat"
 import {
   ForceCallbackListener,
   ForceCallbackClass,
@@ -271,6 +272,60 @@ function checkMaterialized() {
   checkEQ(utilsArray[1].fieldArrayNumber[0], - modifiedUtilsArray[1].fieldArrayNumber[0])
 }
 
+function checkMaterializedInterface() {
+  const instance = new InterfaceWithMethodsInternal()
+  instance.method1()
+  instance.method1(true)
+  instance.method1(false, "test_message")
+
+  instance.valNumber = 54321
+  instance.valBoolean = true
+  checkEQ(54321, instance.valNumber)
+  checkEQ(true, instance.valBoolean)
+
+  const utils: UtilityInterface = {
+    fieldString: "test_message", 
+    fieldBoolean: true,
+    fieldArrayNumber: new Array<number>(1, 2, 3, 4, 5)
+  }
+
+  console.log(instance.method3(utils))
+
+  const array = new Array<number>(10, 11, 12, 13, 14)
+  const stringifyArray = instance.method4(array)
+  checkEQ(array.join(","), stringifyArray.join(","))
+
+  const utilsArray = new Array<UtilityInterface>()
+  let hiUtils: UtilityInterface = { 
+    fieldString: "hi_message", 
+    fieldBoolean: true, 
+    fieldArrayNumber: new Array<number>(6, 7, 8, 9, 10) 
+  }
+  let byeUtils: UtilityInterface = { 
+    fieldString: "bye_message", 
+    fieldBoolean: false, 
+    fieldArrayNumber: new Array<number>(5, 4, 3, 2, 1) 
+  }
+  utilsArray.push(hiUtils)
+  utilsArray.push(byeUtils)
+  
+  const returnedArray = instance.method5(utilsArray)
+  checkEQ(utilsArray[0].fieldString, returnedArray[0].fieldString)
+  checkEQ(utilsArray[1].fieldString, returnedArray[1].fieldString)
+  checkEQ(utilsArray[0].fieldBoolean, returnedArray[0].fieldBoolean)
+  checkEQ(utilsArray[1].fieldBoolean, returnedArray[1].fieldBoolean)
+  checkEQ(utilsArray[0].fieldArrayNumber.join(','), returnedArray[0].fieldArrayNumber.join(","))
+  checkEQ(utilsArray[1].fieldArrayNumber.join(','), returnedArray[1].fieldArrayNumber.join(","))
+
+  /////
+
+  console.log(instance.valUtils)
+  console.log(instance.valUtils)
+  instance.valUtils = hiUtils
+  // console.log(instance.valUtils) - error
+
+}
+
 export function run() {
   console.log("Run common unit tests")
 
@@ -285,6 +340,7 @@ export function run() {
   suite.addTest("checkDataInterfaces", checkDataInterfaces)
   suite.addTest("checkStaticMaterialized", checkStaticMaterialized)
   suite.addTest("checkMaterialized", checkMaterialized)
+  suite.addTest("checkMaterializedInterface", checkMaterializedInterface)
 
   return suite.run()
 }

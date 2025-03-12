@@ -21,6 +21,7 @@ export { and_values } from "../../generated/ts"
 export { sum_numbers } from "../../generated/ts"
 export { test_buffer } from "../../generated/ts"
 export { test_materialized_classes, UtilityInterface } from "../../generated/ts"
+export { InterfaceWithMethodsInternal } from "../../generated/ts"
 export {
     ForceCallbackListener,
     ForceCallbackClass,

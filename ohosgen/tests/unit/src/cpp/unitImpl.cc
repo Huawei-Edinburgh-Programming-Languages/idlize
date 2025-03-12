@@ -36,30 +36,117 @@ void Hello_helloImpl(OH_NativePointer thisPtr, const OH_UNIT_HelloType *value)
 
 /// InterfaceWithMethods real implementations
 
-OH_UNIT_InterfaceWithMethodsHandle InterfaceWithMethods_constructImpl()
-{
+struct OH_UNIT_InterfaceWithMethodsPeer {
+    OH_UNIT_InterfaceWithMethodsPeer(): valNumber(OH_Number{.tag = INTEROP_TAG_INT32, .i32=12345}), valBoolean(true) {
+        char* newChars = reinterpret_cast<char*>(calloc(15, sizeof(char)));
+        toClean.push_back(newChars);
+        memcpy(newChars, "initial_string", 15);
+
+        OH_Number * newArrayNumber = reinterpret_cast<OH_Number*>(calloc(5, sizeof(OH_Number)));
+        toClean.push_back(newArrayNumber);
+        newArrayNumber[0] = OH_Number{.tag=INTEROP_TAG_INT32, .i32 = 1};
+        newArrayNumber[1] = OH_Number{.tag=INTEROP_TAG_INT32, .i32 = 2};
+        newArrayNumber[2] = OH_Number{.tag=INTEROP_TAG_INT32, .i32 = 3};
+        newArrayNumber[3] = OH_Number{.tag=INTEROP_TAG_INT32, .i32 = 4};
+        newArrayNumber[4] = OH_Number{.tag=INTEROP_TAG_INT32, .i32 = 5};
+
+        valUtils = OH_UNIT_UtilityInterface {
+            .fieldString = OH_String{.chars = newChars, .length = 14},
+            .fieldBoolean = OH_Boolean(true), 
+            .fieldArrayNumber = Array_Number{.array = newArrayNumber, .length = 5},
+        }; 
+    }
+    ~OH_UNIT_InterfaceWithMethodsPeer() {
+        for (auto data : toClean) {
+            free(data);
+        }
+    }
+    std::vector<void *> toClean;
+    OH_Number valNumber;
+    OH_Boolean valBoolean;
+    OH_UNIT_UtilityInterface valUtils;
+    // Array_UtilityInterface valUtilsArray;
+
+    void method1(OH_Boolean valBoolean = true, OH_String valString = {.chars = "hi", .length = 2}) {
+        printf("method1. Got boolean - %i, string - %s.\n", valBoolean, valString.chars);
+    };
+    OH_UNIT_UtilityInterface method3(OH_UNIT_UtilityInterface utils) {
+        return utils;
+    }
+    Array_String method4(Array_Number array) {
+        OH_String * newArrayString = reinterpret_cast<OH_String*>(calloc(array.length, sizeof(OH_String)));
+        toClean.push_back(newArrayString);
+        for (size_t i = 0; i < array.length; i++) {
+            std::string stringifyNum = std::to_string(array.array[i].i32);
+            char* newChars = reinterpret_cast<char*>(calloc(stringifyNum.size(), sizeof(char)));
+            toClean.push_back(newChars);
+            memcpy(newChars, stringifyNum.c_str(), stringifyNum.size());
+            newArrayString[i] = OH_String{.chars = newChars, .length = (InteropInt32)stringifyNum.size()};
+        }
+
+        return Array_String{.array = newArrayString, .length = array.length};
+    };
+    Array_UtilityInterface method5(Array_UtilityInterface arrayUtils) {
+        return arrayUtils;
+    };
+};
+
+OH_UNIT_InterfaceWithMethodsHandle InterfaceWithMethods_constructImpl() {
+    return reinterpret_cast<OH_UNIT_InterfaceWithMethodsHandle>(
+        new OH_UNIT_InterfaceWithMethodsPeer()
+    );
+}
+void InterfaceWithMethods_destructImpl(OH_UNIT_InterfaceWithMethodsHandle thisPtr) {
+    delete reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer *>(thisPtr);
+}
+void InterfaceWithMethods_method10Impl(OH_NativePointer thisPtr, OH_Boolean valBoolean, const OH_String* valString) {
+    reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer *>(thisPtr)->method1(valBoolean, *valString);
+}
+void InterfaceWithMethods_method11Impl(OH_NativePointer thisPtr, const Opt_Boolean* valBoolean, const Opt_String* valString) {
+    if (valString->tag == INTEROP_TAG_UNDEFINED) {
+        if (valBoolean->tag == INTEROP_TAG_UNDEFINED) {
+            reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer*>(thisPtr)->method1();
+        } else {
+            reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer*>(thisPtr)->method1(valBoolean->value);
+        }
+    } else {
+        reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer*>(thisPtr)->method1(valBoolean->value, valString->value);
+    }
+}
+void InterfaceWithMethods_method12Impl(OH_NativePointer thisPtr) {
+    reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer *>(thisPtr)->method1();
+}
+OH_UNIT_UtilityInterface InterfaceWithMethods_method3Impl(OH_NativePointer thisPtr, const OH_UNIT_UtilityInterface* interface_) {
+    return reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer *>(thisPtr)->method3(*interface_);
+}
+Array_String InterfaceWithMethods_method4Impl(OH_NativePointer thisPtr, const Array_Number* array) {
+    return reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer *>(thisPtr)->method4(*array);
+}
+Array_UtilityInterface InterfaceWithMethods_method5Impl(OH_NativePointer thisPtr, const Array_UtilityInterface* arrayInterfaces) {
+    return reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer *>(thisPtr)->method5(*arrayInterfaces);
+}
+OH_Number InterfaceWithMethods_getValNumberImpl(OH_NativePointer thisPtr) {
+    return reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer *>(thisPtr)->valNumber;
+}
+void InterfaceWithMethods_setValNumberImpl(OH_NativePointer thisPtr, const OH_Number* value) {
+    reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer *>(thisPtr)->valNumber = *value;
+}
+OH_Boolean InterfaceWithMethods_getValBooleanImpl(OH_NativePointer thisPtr) {
+    return reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer *>(thisPtr)->valBoolean;
+}
+void InterfaceWithMethods_setValBooleanImpl(OH_NativePointer thisPtr, OH_Boolean value) {
+    reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer *>(thisPtr)->valBoolean = value;
+}
+OH_UNIT_UtilityInterface InterfaceWithMethods_getValUtilsImpl(OH_NativePointer thisPtr) {
+    return reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer *>(thisPtr)->valUtils;
+}
+void InterfaceWithMethods_setValUtilsImpl(OH_NativePointer thisPtr, const OH_UNIT_UtilityInterface* value) {
+    reinterpret_cast<OH_UNIT_InterfaceWithMethodsPeer *>(thisPtr)->valUtils = *value;
+}
+Array_UtilityInterface InterfaceWithMethods_getValUtilsArrayImpl(OH_NativePointer thisPtr) {
     return {};
 }
-void InterfaceWithMethods_destructImpl(OH_UNIT_InterfaceWithMethodsHandle thiz)
-{
-}
-OH_Boolean InterfaceWithMethods_isUsedImpl(OH_NativePointer thisPtr, const OH_Number *value)
-{
-    return {};
-}
-OH_Boolean InterfaceWithMethods_getPropBooleanImpl(OH_NativePointer thisPtr)
-{
-    return {};
-}
-void InterfaceWithMethods_setPropBooleanImpl(OH_NativePointer thisPtr, OH_Boolean value)
-{
-}
-OH_Number InterfaceWithMethods_getPropNumberImpl(OH_NativePointer thisPtr)
-{
-    return {};
-}
-void InterfaceWithMethods_setPropNumberImpl(OH_NativePointer thisPtr, const OH_Number *value)
-{
+void InterfaceWithMethods_setValUtilsArrayImpl(OH_NativePointer thisPtr, const Array_UtilityInterface* value) {
 }
 
 /// PersonInfo real implementations
