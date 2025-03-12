@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLFile, IDLNode, IDLNamedNode, isReferenceType, hasExtAttribute, IDLExtendedAttributes } from "./idl"
+import { IDLFile, IDLNode, IDLNamedNode, IDLImport, isReferenceType, hasExtAttribute, IDLExtendedAttributes, getFileFor } from "./idl"
 import { isFile, isNamedNode, isNamespace, isEnum, isInterface, isImport } from "./idl"
 
 export function resolveNamedNode(target: string[], pov: IDLNode|undefined, corpus: IDLFile[]): IDLNamedNode | undefined {
@@ -23,6 +23,10 @@ export function resolveNamedNode(target: string[], pov: IDLNode|undefined, corpu
         if (isFile(pov)) {
             if (result = resolveDownFromFile(target, pov))
                 return result
+            const importUsings = pov.entries.filter(it => isImport(it) && !it.name).map(it => it as IDLImport)
+            for (const importUsing of importUsings)
+                if (result = resolveDownFromRoot([...importUsing.clause, ...target], corpus))
+                    return result
             povScope = pov.packageClause.slice()
             break
         } else {
