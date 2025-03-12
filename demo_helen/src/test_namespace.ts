@@ -12,9 +12,9 @@ export interface UtilityInterface_Global {
     fieldArrayNumber: number[]
 }
 
-function operationWithArrayOfInterface(value: object): boolean {
-    return value instanceof Array<test_namespace.UtilityInterface>
-}
+// function operationWithArrayOfInterface(value: object): boolean {
+//     return value instanceof Array<test_namespace.UtilityInterface>
+// }
 
 function operationWithArrayOfGlobalInterface(value: object): boolean {
     return value instanceof Array<UtilityInterface_Global>
