@@ -1551,39 +1551,46 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             })
     }
 
-    private guessTypeAndValue(name: string, declaration: ts.VariableDeclaration):  [idl.IDLType, string] | undefined {
+    private guessTypeAndValue(name: string, declaration: ts.VariableDeclaration): [idl.IDLType, string] | undefined {
         if (declaration.type && declaration.initializer) return [this.serializeType(declaration.type), declaration.initializer.getText()]
+        const confValue = peerGeneratorConfiguration().constants.get(declaration.name.getText())
         if (declaration.type) {
-            const value = peerGeneratorConfiguration().constants.get(declaration.name.getText())
-            if (value) {
-                return [this.serializeType(declaration.type), value]
+            if (confValue) {
+                return [this.serializeType(declaration.type), confValue]
             }
             warn(`Const ${name}' at '${this.sourceFile.fileName}': the default value is missed in the source and configuration files.`)
             return undefined
         }
         if (declaration.initializer) {
-            let value = declaration.initializer.getText()
-            if (value.startsWith('"') || value.startsWith("'")) {
-                return [idl.IDLStringType, value.replaceAll("'", '"')]
-            }
-            if (value.startsWith("0b")) {
-                return [idl.IDLNumberType, parseInt(value.substring(2), 2).toString()]
-            }
-            if (value.startsWith("0o")) {
-                return [idl.IDLNumberType, parseInt(value.substring(2), 8).toString()]
-            }
-            if (value.startsWith("0x")) {
-                return [idl.IDLNumberType, parseInt(value.substring(2), 16).toString()]
-            }
-            if (!isNaN(parseFloat(value))) {
-                return [idl.IDLNumberType, parseFloat(value).toString()]
-            }
-            if (value === "true" || value === "false") {
-                return [idl.IDLBooleanType, value]
-            }
-            throw new Error(`Const ${name}' at '${this.sourceFile.fileName}': Cannot infer type from the config value ${value}`)
+            return this.inferTypeAndValue(name, declaration, declaration.initializer.getText())
         }
-        throw new Error(`Const ${name}' at '${this.sourceFile.fileName}': the type and the default value is not provided neither in  the source nor in the config file.`)
+        if (confValue === undefined) {
+            throw new Error(`Const ${name}' at '${this.sourceFile.fileName}': the type and the default value is not provided neither in the source nor in the config file.`)
+        }
+        return this.inferTypeAndValue(name, declaration, confValue)
+    }
+
+    private inferTypeAndValue(name: string, declaration: ts.VariableDeclaration, value: string): [idl.IDLType, string] | undefined {
+
+        if (value.startsWith('"') || value.startsWith("'")) {
+            return [idl.IDLStringType, value.replaceAll("'", '"')]
+        }
+        if (value.startsWith("0b")) {
+            return [idl.IDLNumberType, parseInt(value.substring(2), 2).toString()]
+        }
+        if (value.startsWith("0o")) {
+            return [idl.IDLNumberType, parseInt(value.substring(2), 8).toString()]
+        }
+        if (value.startsWith("0x")) {
+            return [idl.IDLNumberType, parseInt(value.substring(2), 16).toString()]
+        }
+        if (!isNaN(parseFloat(value))) {
+            return [idl.IDLNumberType, parseFloat(value).toString()]
+        }
+        if (value === "true" || value === "false") {
+            return [idl.IDLBooleanType, value]
+        }
+        throw new Error(`Const ${name}' at '${this.sourceFile.fileName}': Cannot infer type from value ${value}`)
     }
 
     private collectTypeParameters(typeParameters: ts.NodeArray<ts.Node> | undefined): string[] | undefined {
