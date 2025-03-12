@@ -1720,11 +1720,11 @@
 |`moveTo`| Function | Vadim Voronov | in progress |  |  |
 |`quadraticCurveTo`| Function | Vadim Voronov | in progress |  |  |
 |`rect`| Function | Vadim Voronov | in progress |  |  |
-|*Path2D*| *Class* | Vadim Voronov | done |  | |
-|`addPath`| Function | Vadim Voronov | done |  | |
-|*CanvasPattern*| *Class* | Vadim Voronov | done |  |  |
-|`setTransform`| Function | Vadim Voronov | done |  |  |
-|*ImageBitmap*| *Class* | Vadim Voronov | done |  | |
+|*Path2D*| *Class* | Vadim Voronov | in progress |  | |
+|`addPath`| Function | Vadim Voronov | in progress |  | |
+|*CanvasPattern*| *Class* | Vadim Voronov | in progress |  |  |
+|`setTransform`| Function | Vadim Voronov | in progress |  |  |
+|*ImageBitmap*| *Class* | Vadim Voronov | in progress  |  | |
 |`close`| Function | Vadim Voronov | done |  |  |
 |`getHeight`| Function | Vadim Voronov | in progress |  |  |
 |`getWidth`| Function | Vadim Voronov | in progress |  |  |
@@ -1735,102 +1735,102 @@
 |`getAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
 |`setAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | blocked IDL |  | |
-|`drawImage`| Function  | Vadim Voronov | in progress |  | testskipped on FB, https://gitee.com/nikolay-igotti/idlize/issues/IB4BTA |
-|`beginPath`| Function  | Vadim Voronov | done |  | |
-|`clip`| Function  | Vadim Voronov | done |  |   |
-|`fill`| Function  | Vadim Voronov | done |  |   |
-|`stroke`| Function  | Vadim Voronov | done |  | |
+|`drawImage`| Function  | Vadim Voronov | in progress |  | testskipped on FB |
+|`beginPath`| Function  | Vadim Voronov | in progress  |  | |
+|`clip`| Function  | Vadim Voronov | in progress  |  |   |
+|`fill`| Function  | Vadim Voronov | in progress  |  |   |
+|`stroke`| Function  | Vadim Voronov | in progress  |  | |
 |`createLinearGradient`| Function  | Vadim Voronov | in progress | | |
 |`createPattern`| Function  | Vadim Voronov | in progress | | |
 |`createRadialGradient`| Function  | Vadim Voronov | in progress | |  |
 |`createConicGradient`| Function  | Vadim Voronov | in progress | |  |
 |`createImageData`| Function  | Vadim Voronov | in progress | |  |
 |`getImageData`| Function  | Vadim Voronov | in progress | | |
-|`getPixelMap`| Function  | Vadim Voronov | in progress |  |https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T  |
-|`putImageData`| Function  | Vadim Voronov | done  |  |  |
-|`getLineDash`| Function  | Dudkin Sergey |  in progress | |  |
-|`setLineDash`| Function  | Vadim Voronov | done |  | |
-|`clearRect`| Function  | Vadim Voronov | done |  | |
-|`fillRect`| Function  | Vadim Voronov | done |  | |
-|`strokeRect`| Function  | Vadim Voronov | done |  | |
-|`restore`| Function  | Vadim Voronov | done |  | |
-|`save`| Function  | Vadim Voronov | done |  | |
-|`fillText`| Function  | Vadim Voronov | done |  | |
-|`measureText`| Function  | Dudkin Sergey | in progress |  |  |
-|`strokeText`| Function  | Vadim Voronov | done |  | |
+|`getPixelMap`| Function  | Vadim Voronov | in progress | | |
+|`putImageData`| Function  | Vadim Voronov | in progress   |  |  |
+|`getLineDash`| Function  | Vadim Voronov |  in progress | |  |
+|`setLineDash`| Function  | Vadim Voronov | in progress |  | |
+|`clearRect`| Function  | Vadim Voronov | in progress |  | |
+|`fillRect`| Function  | Vadim Voronov | in progress |  | |
+|`strokeRect`| Function  | Vadim Voronov | in progress |  | |
+|`restore`| Function  | Vadim Voronov | in progress |  | |
+|`save`| Function  | Vadim Voronov | in progress |  | |
+|`fillText`| Function  | Vadim Voronov | in progress |  | |
+|`measureText`| Function  | Vadim Voronov | in progress |  |  |
+|`strokeText`| Function  | Vadim Voronov | in progress |  | |
 |`getTransform`| Function  | Vadim Voronov | in progress | |  |
-|`resetTransform`| Function  | Vadim Voronov | done |  | |
-|`rotate`| Function  | Vadim Voronov | done |  | |
-|`scale`| Function  | Vadim Voronov | done |  | |
-|`setTransform`| Function  | Vadim Voronov | done |  | |
-|`transform`| Function  | Vadim Voronov | done |  | |
-|`translate`| Function  | Vadim Voronov | done |  | |
-|`setPixelMap`| Function  | Vadim Voronov | done |  |  |
-|`transferFromImageBitmap`| Function  | Vadim Voronov | done |  | |
-|`saveLayer`| Function  | Vadim Voronov | done |  | |
-|`restoreLayer`| Function  | Vadim Voronov | done |  | |
-|`reset`| Function  | Vadim Voronov | done |  | |
+|`resetTransform`| Function  | Vadim Voronov | in progress |  | |
+|`rotate`| Function  | Vadim Voronov | in progress |  | |
+|`scale`| Function  | Vadim Voronov | in progress |  | |
+|`setTransform`| Function  | Vadim Voronov | in progress |  | |
+|`transform`| Function  | Vadim Voronov | in progress |  | |
+|`translate`| Function  | Vadim Voronov | in progress |  | |
+|`setPixelMap`| Function  | Vadim Voronov | in progress |  |  |
+|`transferFromImageBitmap`| Function  | Vadim Voronov | in progress |  | |
+|`saveLayer`| Function  | Vadim Voronov | in progress |  | |
+|`restoreLayer`| Function  | Vadim Voronov | in progress |  | |
+|`reset`| Function  | Vadim Voronov | in progress |  | |
 |`setLetterSpacing`| Function | | | | |
 |`getGlobalAlpha`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setGlobalAlpha`| Function  | Vadim Voronov | done |  | |
+|`setGlobalAlpha`| Function  | Vadim Voronov | in progress |  | |
 |`getGlobalCompositeOperation`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setGlobalCompositeOperation`| Function  | Vadim Voronov | done |  | |
-|`setFillStyle`| Function  | Vadim Voronov | done |  | |
-|`setStrokeStyle`| Function  | Vadim Voronov | done |  | |
+|`setGlobalCompositeOperation`| Function  | Vadim Voronov | in progress |  | |
+|`setFillStyle`| Function  | Vadim Voronov | in progress |  | |
+|`setStrokeStyle`| Function  | Vadim Voronov | in progress |  | |
 |`getFilter`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setFilter`| Function  | Vadim Voronov | done |  | |
+|`setFilter`| Function  | Vadim Voronov | in progress |  | |
 |`getImageSmoothingEnabled`| Function  | Vadim Voronov | in progress |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setImageSmoothingEnabled`| Function  | Vadim Voronov | done |  | |
+|`setImageSmoothingEnabled`| Function  | Vadim Voronov | in progress |  | |
 |`getImageSmoothingQuality`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setImageSmoothingQuality`| Function  | Vadim Voronov | done |  |   |
+|`setImageSmoothingQuality`| Function  | Vadim Voronov | in progress |  |   |
 |`getLineCap`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setLineCap`| Function  | Vadim Voronov | done |  |  |
-|`getLineDashOffset`| Function  | Vadim Voronov | blocked IDL |  | in progress on FB, to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setLineDashOffset`| Function  | Vadim Voronov | done |  | |
+|`setLineCap`| Function  | Vadim Voronov | in progress |  |  |
+|`getLineDashOffset`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
+|`setLineDashOffset`| Function  | Vadim Voronov | in progress |  | |
 |`getLineJoin`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setLineJoin`| Function  | Vadim Voronov | done |  |   |
+|`setLineJoin`| Function  | Vadim Voronov | in progress |  |   |
 |`getLineWidth`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setLineWidth`| Function  | Vadim Voronov | done |  | |
+|`setLineWidth`| Function  | Vadim Voronov | in progress |  | |
 |`getMiterLimit`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setMiterLimit`| Function  | Vadim Voronov | done |  | |
+|`setMiterLimit`| Function  | Vadim Voronov | in progress |  | |
 |`getShadowBlur`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setShadowBlur`| Function  | Vadim Voronov | done |  | |
+|`setShadowBlur`| Function  | Vadim Voronov | in progress |  | |
 |`getShadowColor`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setShadowColor`| Function  | Vadim Voronov | done |  | |
+|`setShadowColor`| Function  | Vadim Voronov | in progress |  | |
 |`getShadowOffsetX`| Function  | Vadim Voronov blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setShadowOffsetX`| Function  | Vadim Voronov | done |  | |
+|`setShadowOffsetX`| Function  | Vadim Voronov | in progress |  | |
 |`getShadowOffsetY`| Function  | Vadim Voronov blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setShadowOffsetY`| Function  | Vadim Voronov | done |  | |
+|`setShadowOffsetY`| Function  | Vadim Voronov | in progress |  | |
 |`getDirection`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setDirection`| Function  | Vadim Voronov | done |  |   |
+|`setDirection`| Function  | Vadim Voronov | in progress |  |   |
 |`getFont`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setFont`| Function  | Vadim Voronov | done |  | |
+|`setFont`| Function  | Vadim Voronov | in progress |  | |
 |`getTextAlign`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setTextAlign`| Function  | Vadim Voronov | done |  |   |
+|`setTextAlign`| Function  | Vadim Voronov | in progress |  |   |
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setTextBaseline`| Function  | Vadim Voronov | done |  |   |
-|*CanvasRenderingContext2D*| *Class* | Vadim Voronov, Evstigneev Roman | done |  |  |
-|`toDataURL`| Function |Vadim Voronov| done |  |  |
-|`startImageAnalyzer`| Function | Vadim Voronov, Tuzhilkin Ivan | done |  | |
-|`stopImageAnalyzer`| Function | Vadim Voronov| done |  | |
-|`onOnAttach`| Function | Vadim Voronov, Evstigneev Roman | done |  |  |
-|`offOnAttach`| Function | Vadim Voronov, Evstigneev Roman | done |  |  |
-|`onOnDetach`| Function | Vadim Voronov, Evstigneev Roman | done |  | |
-|`offOnDetach`| Function | Vadim Voronov, Evstigneev Roman | done |  |  |
-|`getHeight`| Function |Vadim Voronov| done |  | |
-|`getWidth`| Function |Vadim Voronov| done |  | |
+|`setTextBaseline`| Function  | Vadim Voronov | in progress |  |   |
+|*CanvasRenderingContext2D*| *Class* | Vadim Voronov, Evstigneev Roman | in progress |  |  |
+|`toDataURL`| Function |Vadim Voronov| in progress |  |  |
+|`startImageAnalyzer`| Function | Vadim Voronov, Tuzhilkin Ivan | in progress |  | |
+|`stopImageAnalyzer`| Function | Vadim Voronov| in progress |  | |
+|`onOnAttach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  |  |
+|`offOnAttach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  |  |
+|`onOnDetach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  | |
+|`offOnDetach`| Function | Vadim Voronov, Evstigneev Roman | in progress |  |  |
+|`getHeight`| Function |Vadim Voronov| in progress |  | |
+|`getWidth`| Function |Vadim Voronov| in progress |  | |
 |`getCanvas`| Function |Vadim Voronov | in progress | | |
 |*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | in progress | | |
-|`toDataURL`| Function | Vadim Voronov | in progress | |  doesn't present in Upstream |
+|`toDataURL`| Function | Vadim Voronov | in progress | | |
 |`transferToImageBitmap`| Function | Vadim Voronov | in progress | |    |
 |*OffscreenCanvas*| *Class* | Vadim Voronov | in progress | | |
-|`transferToImageBitmap`| Function | Vadim Voronov | testskipped | | |
-|`getContext2d`| Function | Vadim Voronov | testskipped | | |
-|`getHeight`| Function | Vadim Voronov | testskipped | | |
-|`setHeight`| Function | Vadim Voronov | testskipped | | |
-|`getWidth`| Function | Vadim Voronov | testskipped| | |
-|`setWidth`| Function | Vadim Voronov | testskipped | | |
-|*DrawingRenderingContext*| *Class* | Vadim Voronov | done |  | |
+|`transferToImageBitmap`| Function | Vadim Voronov | in progress | | |
+|`getContext2d`| Function | Vadim Voronov | in progress | | |
+|`getHeight`| Function | Vadim Voronov | in progress | | |
+|`setHeight`| Function | Vadim Voronov | in progress | | |
+|`getWidth`| Function | Vadim Voronov | in progress| | |
+|`setWidth`| Function | Vadim Voronov | in progress | | |
+|*DrawingRenderingContext*| *Class* | Vadim Voronov | in progress |  | |
 |`invalidate`| Function | Vadim Voronov | done |  | |
 |`getCanvas`| Function | Vadim Voronov | in progress | | |
 |*ICurve*| *Class* | Erokhin Ilya | done |  | |
@@ -2175,24 +2175,24 @@
 |`closeAllSwipeActions`| Function |Morozov Sergey | done | | |
 |`getVisibleListContentInfo`| Function |Morozov Sergey | done | | |
 |*Matrix2D*| *Class* | Vadim Voronov | in progress |  |  |
-|`identity`| Function | Vadim Voronov | done |  | |
-|`invert`| Function | Vadim Voronov | done |  | |
+|`identity`| Function | Vadim Voronov | in progress |  | |
+|`invert`| Function | Vadim Voronov | in progress |  | |
 |`multiply`| Function | Vadim Voronov | deprecated |  | deprecated |
-|`rotate`| Function | Vadim Voronov | done |  | rotate0 deprecated, rotate1 done |
-|`translate`| Function | Vadim Voronov | done |  | |
-|`scale`| Function | Vadim Voronov | done |  | |
+|`rotate`| Function | Vadim Voronov | in progress |  | rotate0 deprecated, rotate1 in progress |
+|`translate`| Function | Vadim Voronov | in progress |  | |
+|`scale`| Function | Vadim Voronov | in progress |  | |
 |`getScaleX`| Function | Vadim Voronov | in progress |  | |
-|`setScaleX`| Function | Vadim Voronov | done |  | |
+|`setScaleX`| Function | Vadim Voronov | in progress |  | |
 |`getRotateY`| Function | Vadim Voronov | in progress |  | |
-|`setRotateY`| Function | Vadim Voronov | done |  | |
+|`setRotateY`| Function | Vadim Voronov | in progress |  | |
 |`getRotateX`| Function | Vadim Voronov | in progress |  | |
-|`setRotateX`| Function | Vadim Voronov | done |  | |
+|`setRotateX`| Function | Vadim Voronov | in progress |  | |
 |`getScaleY`| Function | Vadim Voronov | in progress |  | |
-|`setScaleY`| Function | Vadim Voronov | done |  | |
+|`setScaleY`| Function | Vadim Voronov | in progress |  | |
 |`getTranslateX`| Function | Vadim Voronov | in progress |  | |
-|`setTranslateX`| Function | Vadim Voronov | done |  | |
+|`setTranslateX`| Function | Vadim Voronov | in progress |  | |
 |`getTranslateY`| Function | Vadim Voronov | in progress |  | |
-|`setTranslateY`| Function | Vadim Voronov | done |  | |
+|`setTranslateY`| Function | Vadim Voronov | in progress |  | |
 |*NavDestinationContext*| *Class* | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`getConfigInRouteMap`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`getPathInfo`| Function | | | | |
