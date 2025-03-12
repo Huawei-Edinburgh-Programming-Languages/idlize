@@ -2296,16 +2296,16 @@
 |`changeIndex`| Function | Skroba Gleb | done |  |  |
 |`finishAnimation`| Function | Skroba Gleb | done |  |  |
 |`preloadItems`| Function | | | | |
-|*SwiperContentTransitionProxy*| *Class* | Skroba Gleb | in progress |  | done on Feature |
-|`finishTransition`| Function | Skroba Gleb | done |  | |
-|`getSelectedIndex`| Function | Skroba Gleb | in progress |  | done on Feature |
-|`setSelectedIndex`| Function | Skroba Gleb | done |  | |
-|`getIndex`| Function | Skroba Gleb | in progress |  | done on Feature |
-|`setIndex`| Function | Skroba Gleb | done |  | |
-|`getPosition`| Function | Skroba Gleb | in progress |  | done on Feature |
-|`setPosition`| Function | Skroba Gleb | done |  | |
-|`getMainAxisLength`| Function | Skroba Gleb | in progress |  | done on Feature |
-|`setMainAxisLength`| Function | Skroba Gleb | done |  | |
+|*SwiperContentTransitionProxy*| *Class* | Skroba Gleb | done | | |
+|`finishTransition`| Function | Skroba Gleb | done | | |
+|`getSelectedIndex`| Function | Skroba Gleb | done | | |
+|`setSelectedIndex`| Function | Skroba Gleb | done | | |
+|`getIndex`| Function | Skroba Gleb | done | | |
+|`setIndex`| Function | Skroba Gleb | done | | |
+|`getPosition`| Function | Skroba Gleb | done | | |
+|`setPosition`| Function | Skroba Gleb | done | | |
+|`getMainAxisLength`| Function | Skroba Gleb | done | | |
+|`setMainAxisLength`| Function | Skroba Gleb | done | | |
 |*IndicatorComponentController*| *Class* | Andrey Khudenkikh | done |  |  |
 |`showNext`| Function | Andrey Khudenkikh | done |  |  |
 |`showPrevious`| Function |  Andrey Khudenkikh | done |  |  |
