@@ -11,7 +11,6 @@ export {
     CONST_NUMBER_FLOAT,
     CONST_STRING,
     CONST_BOOLEAN_FALSE_CONF,
-    constNamespace,
 
     // .idl
     IDL_CONST_BOOLEAN_FALSE,
@@ -19,6 +18,9 @@ export {
     IDL_CONST_NUMBER_INT,
     IDL_CONST_NUMBER_FLOAT,
     IDL_CONST_STRING,
+
+    // namespace
+    constNamespace,
 } from "../../generated/arkts"
 
 export { and_values } from "../../generated/arkts"

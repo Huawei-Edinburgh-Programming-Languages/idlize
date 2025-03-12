@@ -8,7 +8,6 @@ import {
   CONST_NUMBER_FLOAT,
   CONST_STRING,
   CONST_BOOLEAN_FALSE_CONF,
-  constNamespace,
 
   // .idl
   IDL_CONST_BOOLEAN_FALSE,
@@ -16,6 +15,9 @@ import {
   IDL_CONST_NUMBER_INT,
   IDL_CONST_NUMBER_FLOAT,
   IDL_CONST_STRING,
+
+  // namespace
+  constNamespace,
 } from '#compat'
 
 import { and_values } from '#compat'
@@ -51,18 +53,21 @@ function compareNumbers(v1: number, v2: number): boolean {
 
 function check_constants() {
 
+  // 1. Check TypeScript const values
   assertEQ(false, CONST_BOOLEAN_FALSE)
   assertEQ(true, CONST_BOOLEAN_TRUE)
   assertEQ(312, CONST_NUMBER_INT)
   assertEQ(312.415, CONST_NUMBER_FLOAT)
   assertEQ("hello_string", CONST_STRING);
 
+  assertEQ(false, CONST_BOOLEAN_FALSE_CONF);
 
   assertEQ(false, constNamespace.CONST_NS_BOOLEAN_FALSE)
   assertEQ(true, constNamespace.CONST_NS_BOOLEAN_TRUE)
   assertEQ(312, constNamespace.CONST_NS_NUMBER_INT)
   assertEQ(312.415, constNamespace.CONST_NS_NUMBER_FLOAT)
   assertEQ("hello_string", constNamespace.CONST_NS_STRING);
+  assertEQ(false, constNamespace.CONST_NS_BOOLEAN_FALSE_CONF);
 
   // 2. Check idl const values
   assertEQ(312, IDL_CONST_NUMBER_INT)

@@ -41,6 +41,9 @@
     },
     "CollapseOverloadsARKTS": false,
     "constants": {
+	"CONST_BOOLEAN_FALSE_CONF" : "false",
+	"CONST_NS_BOOLEAN_FALSE_CONF" : "false",
+	"IDL_CONST_BOOLEAN_FALSE_CONF" : "false",
         "ClassWithComplexPropertyType.prop": "new ClassWithPrimitivePropertyType(true, 10)",
         "DataClass.propString": "''",
         "DataClass.propObject": "[false, 0, '']",

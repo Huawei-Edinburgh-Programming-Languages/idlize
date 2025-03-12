@@ -9,15 +9,16 @@ export {
     CONST_NUMBER_FLOAT,
     CONST_STRING,
     CONST_BOOLEAN_FALSE_CONF,
-    constNamespace,
 
     // .idl
     IDL_CONST_BOOLEAN_FALSE,
     IDL_CONST_BOOLEAN_TRUE,
     IDL_CONST_NUMBER_INT,
     IDL_CONST_NUMBER_FLOAT,
-    IDL_CONST_STRING
+    IDL_CONST_STRING,
 
+    // namespace
+    constNamespace,
 } from "../../generated/ts"
 
 export { and_values } from "../../generated/ts"
