@@ -21,6 +21,11 @@ import { LinterVisitor, toLinterString } from "./linter"
 import { LinterMessage } from "./LinterMessage"
 import { patchDefaultConfiguration, findVersion, generate, scanInputDirs } from "@idlizer/core"
 
+import { IDLVisitor, loadPeerConfiguration,
+    formatInputPaths,
+    validatePaths,
+} from "@idlizer/libohos"
+
 const options = program
     .option('--input-dir <path>', 'Path to input dir(s), comma separated')
     .option('--output-dir <path>', 'Path to output dir')
@@ -48,31 +53,31 @@ function processInputOption(option: string | undefined): string[] {
     return []
 }
 
-function formatInputPaths(options: any): { inputDirs: string[]; inputFiles: string[] } {
-    if (options.inputFiles && typeof options.inputFiles === 'string') {
-        options.inputFiles = processInputOption(options.inputFiles)
-    }
+// function formatInputPaths(options: any): { inputDirs: string[]; inputFiles: string[] } {
+//     if (options.inputFiles && typeof options.inputFiles === 'string') {
+//         options.inputFiles = processInputOption(options.inputFiles)
+//     }
 
-    if (options.inputDir && typeof options.inputDir === 'string') {
-        options.inputDir = processInputOption(options.inputDir)
-    }
+//     if (options.inputDir && typeof options.inputDir === 'string') {
+//         options.inputDir = processInputOption(options.inputDir)
+//     }
 
-    const inputDirs: string[] = options.inputDir || []
-    const inputFiles: string[] = options.inputFiles || []
+//     const inputDirs: string[] = options.inputDir || []
+//     const inputFiles: string[] = options.inputFiles || []
 
-    return { inputDirs, inputFiles }
-}
+//     return { inputDirs, inputFiles }
+// }
 
-function validatePaths(paths: string[], type: 'file' | 'dir'): void {
-    paths.forEach(pathItem => {
-        if (!fs.existsSync(pathItem)) {
-            console.error(`Input ${type} does not exist: ${pathItem}`)
-            process.exit(1)
-        } else {
-            console.log(`Input ${type} exists: ${pathItem}`)
-        }
-    })
-}
+// function validatePaths(paths: string[], type: 'file' | 'dir'): void {
+//     paths.forEach(pathItem => {
+//         if (!fs.existsSync(pathItem)) {
+//             console.error(`Input ${type} does not exist: ${pathItem}`)
+//             process.exit(1)
+//         } else {
+//             console.log(`Input ${type} exists: ${pathItem}`)
+//         }
+//     })
+// }
 
 function main() {
     console.log(`IDLize Linter version ${findVersion()}`)
@@ -95,14 +100,20 @@ function main() {
         ]
     })
 
-    const { inputDirs, inputFiles } = formatInputPaths(options)
-    validatePaths(inputDirs, 'dir')
-    validatePaths(inputFiles, 'file')
+    const { baseDirs, inputDirs, auxInputDirs, inputFiles, auxInputFiles } = formatInputPaths(options)
+    validatePaths(baseDirs, "dir")
+    validatePaths(inputDirs, "dir")
+    validatePaths(auxInputDirs, "dir")
+    validatePaths(inputFiles, "file")
+    validatePaths(auxInputFiles, "file")
     const dtsInputFiles = scanInputDirs(inputDirs).concat(inputFiles).filter(it => it.endsWith('.d.ts'))
 
     const allEntries = new Array<LinterMessage[]>()
     generate(
+        baseDirs,
+        [...inputDirs, ...auxInputDirs],
         dtsInputFiles,
+        [],
         options.outputDir,
         (sourceFile, program, compilerHost) => new LinterVisitor(sourceFile, program, compilerHost),
         {

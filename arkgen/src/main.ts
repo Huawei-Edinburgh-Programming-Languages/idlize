@@ -140,7 +140,8 @@ if (options.dts2skoala) {
     const generatedIDLMap = new Map<string, IDLEntry[]>()
     const skoalaLibrary = new IdlSkoalaLibrary()
 
-    const { inputFiles, auxInputFiles, inputDirs, auxInputDirs } = formatInputPaths(options)
+    const { baseDirs, inputDirs, auxInputDirs, inputFiles, auxInputFiles } = formatInputPaths(options)
+    validatePaths(baseDirs, "dir")
     validatePaths(inputDirs, "dir")
     validatePaths(auxInputDirs, "dir")
     validatePaths(inputFiles, "file")
@@ -155,10 +156,12 @@ if (options.dts2skoala) {
     }
 
     generate(
+        baseDirs,
+        [...inputDirs, ...auxInputDirs],
         dtsInputFiles,
         dtsAuxInputFiles,
         outputDir,
-        (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, skoalaLibrary),
+        (sourceFile, program, compilerHost) => new IDLVisitor(baseDirs, sourceFile, program, compilerHost, options, skoalaLibrary),
         {
             compilerOptions: {
                 ...defaultCompilerOptions,
@@ -234,7 +237,8 @@ if (options.dts2peer) {
     const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
     const lang = Language.fromString(options.language ?? "ts")
 
-    const { inputFiles, auxInputFiles, inputDirs, auxInputDirs } = formatInputPaths(options)
+    const { baseDirs, inputDirs, auxInputDirs, inputFiles, auxInputFiles } = formatInputPaths(options)
+    validatePaths(baseDirs, "dir")
     validatePaths(inputDirs, "dir")
     validatePaths(auxInputDirs, "dir")
     validatePaths(inputFiles, "file")
@@ -265,10 +269,12 @@ if (options.dts2peer) {
     }
 
     generate(
+        baseDirs,
+        [...inputDirs, ...auxInputDirs],
         dtsInputFiles,
         dtsAuxInputFiles,
         generatedPeersDir,
-        (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, idlLibrary),
+        (sourceFile, program, compilerHost) => new IDLVisitor(baseDirs, sourceFile, program, compilerHost, options, idlLibrary),
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile(file: IDLFile, outputDir, sourceFile, isAux) {

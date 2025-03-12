@@ -71,7 +71,8 @@ if (process.env.npm_package_version) {
 
 let didJob = false
 
-const { inputFiles, auxInputFiles, inputDirs, auxInputDirs } = formatInputPaths(options)
+const { baseDirs, inputDirs, auxInputDirs, inputFiles, auxInputFiles } = formatInputPaths(options)
+validatePaths(baseDirs, "dir")
 validatePaths(inputDirs, "dir")
 validatePaths(auxInputDirs, "dir")
 validatePaths(inputFiles, "file")
@@ -84,10 +85,12 @@ const dtsAuxInputFiles = scanInputDirs(auxInputDirs).concat(auxInputFiles)
 if (options.dts2idl) {
     const idlLibrary = new PeerLibrary(Language.TS, [])
     generate(
+        baseDirs,
+        [...inputDirs, ...auxInputDirs],
         dtsInputFiles,
         dtsAuxInputFiles,
         options.outputDir ?? "./idl",
-        (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options),
+        (sourceFile, program, compilerHost) => new IDLVisitor(baseDirs, sourceFile, program, compilerHost, options),
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile: (file: IDLFile, outputDir, sourceFile) => {

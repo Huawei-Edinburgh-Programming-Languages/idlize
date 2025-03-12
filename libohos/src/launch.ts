@@ -28,6 +28,7 @@ function processInputOption(option: string | undefined): string[] {
 }
 
 export type InputPaths = {
+    baseDirs: string[]
     inputDirs: string[]
     auxInputDirs: string[]
     inputFiles: string[]
@@ -61,7 +62,15 @@ export function formatInputPaths(options: any): InputPaths {
     const auxInputFiles: string[] = options.auxInputFiles || []
     const libraryPackages: string[] = options.libraryPackages || []
 
+    let baseDirs = options.baseDir ? processInputOption(options.baseDir) : inputDirs
+    if (!baseDirs.length && inputFiles.length) {
+        baseDirs = [...(new Set<string>(options.inputFiles.map((it:string) => path.dirname(it))).values())]
+    }
+    if (!baseDirs.length)
+        throw new Error("Check your --base-dir parameter, value is missing")
+
     return {
+        baseDirs,
         inputDirs,
         auxInputDirs,
         inputFiles,

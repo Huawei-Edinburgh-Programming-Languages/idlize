@@ -131,8 +131,8 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     private currentNamespace?: idl.IDLNamespace = undefined
 
     private typeChecker: ts.TypeChecker
-    private baseDirs: string[]
     constructor(
+        private baseDirs: string[],
         private sourceFile: ts.SourceFile,
         private program: ts.Program,
         private compilerHost: ts.CompilerHost,
@@ -140,19 +140,6 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         private predefinedTypeResolver?: ReferenceResolver,
     ) {
         this.typeChecker = program.getTypeChecker()
-
-        let baseDirs = this.options.baseDir || this.options.inputDir
-        if (!baseDirs && this.options.inputFiles) {
-            let inputFiles = this.options.inputFiles
-            if (!Array.isArray(inputFiles))
-                inputFiles = inputFiles.split(",")
-            baseDirs = inputFiles.map((it:string) => path.dirname(it))
-        }
-        if (!baseDirs)
-            throw new Error("Check your --base-dir parameter, value is missing")
-        if (!Array.isArray(baseDirs))
-            baseDirs = baseDirs.split(',')
-        this.baseDirs = baseDirs.map((dir:string) => path.normalize(path.resolve(dir)))
     }
 
     visitPhase1(): idl.IDLFile {
@@ -391,7 +378,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         } else if (ts.isEmptyStatement(node)) {
         } else if (node.kind == ts.SyntaxKind.EndOfFileToken) {
         } else {
-            throw new Error(`Unknown node type: ${node.kind}`)
+            let { line, character } = ts.getLineAndCharacterOfPosition(node.getSourceFile(), node.pos);
+            //throw new Error(`Unknown node type: ${node.kind} at ${node.getSourceFile().fileName}:${line+1}:${character+1}`)
+            console.warn(`Unknown node type: ${node.kind} at ${node.getSourceFile().fileName}:${line+1}:${character+1}`)
         }
     }
 
@@ -411,22 +400,21 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     }
 
     getModulePackageClause(module: string, siblings: Siblings): string[] {
-        let pov = this.sourceFile.fileName
         let moduleFileName: string|undefined
-        for (;;) {
+        if (this.compilerHost.resolveModuleNames) {
+            moduleFileName = this.compilerHost.resolveModuleNames!(
+                [module],
+                this.sourceFile.fileName,
+                undefined,
+                undefined,
+                this.program.getCompilerOptions(),
+                this.sourceFile)[0]?.resolvedFileName
+        } else {
             moduleFileName = ts.resolveModuleName(
                 module,
-                pov,
+                this.sourceFile.fileName,
                 this.program.getCompilerOptions(),
                 this.compilerHost).resolvedModule?.resolvedFileName
-            if (moduleFileName)
-                break
-            const nextPov = path.resolve(pov, "..")
-            if (nextPov == pov)
-                break
-            if (this.baseDirs.every(baseDir => path.relative(baseDir, nextPov).startsWith("..")))
-                break
-            pov = nextPov
         }
         if (!moduleFileName) {
             console.warn(`Import at '${this.sourceFile.fileName}', module '${module}': unable to resolve source file path`)
@@ -454,25 +442,20 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         }
 
         const name = node.importClause.name
+        if (name)
+            this.pushImportFor(node, [...modulePackageClause, ...name.getText().split(".")], name.getText())
+
         const namedBindings = node.importClause.namedBindings
         if (namedBindings) {
             if (ts.isNamespaceImport(namedBindings)) {
-                if (name)
-                    throw new Error(`what is this case: namespace ${namedBindings.parent.getText()}`)
                 this.pushImportFor(node, modulePackageClause, namedBindings.name.getText())
             } else if (ts.isNamedImports(namedBindings)) {
-                if (name) {
-                    throw new Error(`what is this case: import ${namedBindings.parent.getText()}`)
-                }
                 for(const element of namedBindings.elements) {
                     const aliasName = element.name.getText()
                     const targetEntityName = element.propertyName?.getText() || aliasName
                     this.pushImportFor(node, [...modulePackageClause, ...targetEntityName.split(".")], aliasName)
                 }
             }
-        } else { // !namedBindings
-            if (name)
-                this.pushImportFor(node, [...modulePackageClause, ...name.getText().split(".")], name.getText())
         }
     }
 

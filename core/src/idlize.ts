@@ -69,7 +69,13 @@ export interface GenerateVisitor<T> {
     visitPhase2?(siblings: { [key in string]: { tsSourceFile: ts.SourceFile, visitor: GenerateVisitor<T>, result: T, isAux: boolean }}): T
 }
 
+function fileExists(fileName: string): boolean {
+    return ts.sys.fileExists(fileName);
+}
+
 export function generate<T>(
+    baseDirs: string[],
+    lookupDirs: string[],
     inputFiles: string[],
     auxInputFiles: string[],
     outputDir: string,
@@ -102,8 +108,77 @@ export function generate<T>(
         auxInputFiles.map(file => resolveOne(file, "aux file")).filter(isDefined).sort().map(file => input.add(file))
     }
 
-    let compilerHost = ts.createCompilerHost(options.compilerOptions)
-    let program = ts.createProgram(
+    const compilerHostBase = ts.createCompilerHost(options.compilerOptions)
+    const compilerHost: ts.CompilerHost = {
+        ...compilerHostBase,
+        resolveModuleNames: (moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ts.ResolvedProjectReference | undefined, options: ts.CompilerOptions, containingSourceFile?: ts.SourceFile): (ts.ResolvedModule | undefined)[] => {
+            const resolvedModules: (ts.ResolvedModule|undefined)[] = []
+            for (let moduleName of moduleNames) {
+
+                // TODO: move this replacement table to some external config...
+                {
+                    const replacement:{[key:string]:string} = {
+                        "../component/navigation": "@internal/component/ets/navigation",
+                        "wrappedBuilderObject": "@internal/component/ets/common",
+                    }
+                    moduleName = replacement[moduleName] || moduleName;
+                }
+
+                let result:ts.ResolvedModuleFull|undefined = ts.resolveModuleName(moduleName, containingFile, options, compilerHostBase).resolvedModule
+                if (result)
+                    resolvedModules.push(result)
+                else {
+                    // as a some fallback - try to resolve from parents of containingFile, lookupDirs
+                    for(let pov of [path.dirname(containingFile), ...lookupDirs]) {
+                        while (!result) {
+                            for(const extension of ["", ".d.ts", ".d.ets"]) {
+                                const candidate = `${moduleName}${extension}`;
+                                if (path.isAbsolute(candidate) && fileExists(candidate)) {
+                                    result = {resolvedFileName: candidate, extension: ts.Extension.Dts, isExternalLibraryImport: false}
+                                    break
+                                }
+                                const povCandidate = path.join(pov, candidate)
+                                if (fileExists(povCandidate)) {
+                                    result = {resolvedFileName: povCandidate, extension: ts.Extension.Dts, isExternalLibraryImport: false}
+                                    break
+                                }
+                            }
+                            if (result)
+                                break
+                            result = ts.resolveModuleName(
+                                path.join(pov, moduleName),
+                                containingFile,
+                                options,
+                                compilerHostBase).resolvedModule
+                            if (result)
+                                break
+                            result = ts.resolveModuleName(
+                                moduleName,
+                                pov,
+                                options,
+                                compilerHostBase).resolvedModule
+                            if (result)
+                                break
+                            const nextPov = path.resolve(pov, "..")
+                            if (nextPov == pov)
+                                break
+                            if (baseDirs.every(baseDir => path.relative(baseDir, nextPov).startsWith("..")))
+                                break
+                            pov = nextPov
+                        }
+                        if (result)
+                            break
+                    }
+                    if (!result)
+                        console.warn(`Dts import at '${containingFile}', module '${moduleName}': unable to resolve source file path`)
+                    resolvedModules.push(result);
+                }
+            }
+            return resolvedModules;
+        }
+    }
+    
+    const program = ts.createProgram(
         [...input.values(), ...auxInput.values(), path.join(__dirname, "../stdlib.d.ts")],
         options.compilerOptions,
         compilerHost

@@ -128,7 +128,8 @@ if (options.dts2peer) {
     const generatedPeersDir = options.outputDir ?? "./out/ts-peers/generated"
     const lang = Language.fromString(options.language ?? "ts")
 
-    const { inputFiles, auxInputFiles, inputDirs, auxInputDirs, libraryPackages } = formatInputPaths(options)
+    const { baseDirs, inputDirs, auxInputDirs, inputFiles, auxInputFiles, libraryPackages } = formatInputPaths(options)
+    validatePaths(baseDirs, "dir")
     validatePaths(inputDirs, "dir")
     validatePaths(auxInputDirs, "dir")
     validatePaths(inputFiles, "file")
@@ -158,10 +159,12 @@ if (options.dts2peer) {
     }
 
     generate(
+        baseDirs,
+        [...inputDirs, ...auxInputDirs],
         dtsInputFiles,
         dtsAuxInputFiles,
         generatedPeersDir,
-        (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, idlLibrary),
+        (sourceFile, program, compilerHost) => new IDLVisitor(baseDirs, sourceFile, program, compilerHost, options, idlLibrary),
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile(file, outputDir, sourceFile, isAux) {
