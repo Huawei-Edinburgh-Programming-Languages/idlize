@@ -1539,7 +1539,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         return stmt.declarationList.declarations
             .flatMap(decl => {
                 const name = nameOrNull(decl.name)!
-                const result = this.guessTypeAndValue(decl)
+                const result = this.guessTypeAndValue(name, decl)
                 if (!result) {
                     return []
                 }
@@ -1551,14 +1551,15 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             })
     }
 
-    private guessTypeAndValue(declaration: ts.VariableDeclaration):  [idl.IDLType, string] | undefined {
+    private guessTypeAndValue(name: string, declaration: ts.VariableDeclaration):  [idl.IDLType, string] | undefined {
         if (declaration.type && declaration.initializer) return [this.serializeType(declaration.type), declaration.initializer.getText()]
         if (declaration.type) {
+            const type = this.serializeType(declaration.type)
             const value = peerGeneratorConfiguration().constants.get(declaration.name.getText())
             if (value) {
-                return [this.serializeType(declaration.type), value]
+                return [type, value]
             }
-            return undefined
+            return [type, `"Provide the const ${name} value in the configuration file"`]
         }
         if (declaration.initializer) {
             let value = declaration.initializer.getText()
@@ -1580,7 +1581,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             if (value === "true" || value === "false") {
                 return [idl.IDLBooleanType, value]
             }
-            throw new Error(`Cannot infer type of ${value}`)
+            throw new Error(`Cannot infer type of const ${name} from the config value ${value}`)
         }
     }
 

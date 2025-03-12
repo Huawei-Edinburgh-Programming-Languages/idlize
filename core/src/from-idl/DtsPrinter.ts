@@ -92,7 +92,8 @@ import {
     escapeIDLKeyword,
     getNamespacesPathFor,
     IDLBigintType,
-    IDLDate
+    IDLDate,
+    isConstant,
 } from "../idl"
 import { resolveSyntheticType, toIDLFile } from "./deserialize"
 import { Language } from "../Language"
@@ -131,6 +132,8 @@ export class CustomPrintVisitor {
             this.printVersion(node)
         } else if (isNamespace(node)) {
             this.printNamespace(node)
+        } else if (isConstant(node)) {
+            this.printConstant(node)
         } else {
             throw new Error(`Unexpected node kind: ${IDLKind[node.kind!]}`)
         }
