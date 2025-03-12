@@ -7,6 +7,7 @@ import {
   CONST_NUMBER_INT,
   CONST_NUMBER_FLOAT,
   CONST_STRING,
+  CONST_BOOLEAN_FALSE_CONF,
   constNamespace,
 
   // .idl

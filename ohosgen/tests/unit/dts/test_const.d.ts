@@ -6,6 +6,8 @@ declare const CONST_NUMBER_INT = 312;
 declare const CONST_NUMBER_FLOAT = 312.415;
 declare const CONST_STRING = 'hello_string';
 
+declare const CONST_BOOLEAN_FALSE_CONF: string;
+
 declare namespace constNamespace {
 
     const CONST_NS_BOOLEAN_FALSE = false;
