@@ -8,6 +8,8 @@ export {
     CONST_NUMBER_INT,
     CONST_NUMBER_FLOAT,
     CONST_STRING,
+    constNamespace,
+
     // .idl
     IDL_CONST_BOOLEAN_FALSE,
     IDL_CONST_BOOLEAN_TRUE,

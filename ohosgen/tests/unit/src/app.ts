@@ -7,12 +7,14 @@ import {
   CONST_NUMBER_INT,
   CONST_NUMBER_FLOAT,
   CONST_STRING,
+  constNamespace,
+
   // .idl
   IDL_CONST_BOOLEAN_FALSE,
   IDL_CONST_BOOLEAN_TRUE,
   IDL_CONST_NUMBER_INT,
   IDL_CONST_NUMBER_FLOAT,
-  IDL_CONST_STRING
+  IDL_CONST_STRING,
 } from '#compat'
 
 import { and_values } from '#compat'
@@ -47,19 +49,19 @@ function compareNumbers(v1: number, v2: number): boolean {
 }
 
 function check_constants() {
-  // 1. Check dts const value
-  // Fix boolean const type generation
-  if (CONST_BOOLEAN_FALSE != false)
-    throw new Error(`CONST_BOOLEAN_FALSE is not false!`)
-  if (CONST_BOOLEAN_TRUE != true)
-    throw new Error(`CONST_BOOLEAN_FALSE is not true!`)
 
+  assertEQ(false, CONST_BOOLEAN_FALSE)
+  assertEQ(true, CONST_BOOLEAN_TRUE)
   assertEQ(312, CONST_NUMBER_INT)
+  assertEQ(312.415, CONST_NUMBER_FLOAT)
+  assertEQ("hello_string", CONST_STRING);
 
 
-  if (CONST_NUMBER_FLOAT != 312.415) {
-    throw new Error(`CONST_NUMBER_FLOAT is not 312.415!`)
-  }
+  assertEQ(false, constNamespace.CONST_NS_BOOLEAN_FALSE)
+  assertEQ(true, constNamespace.CONST_NS_BOOLEAN_TRUE)
+  assertEQ(312, constNamespace.CONST_NS_NUMBER_INT)
+  assertEQ(312.415, constNamespace.CONST_NS_NUMBER_FLOAT)
+  assertEQ("hello_string", constNamespace.CONST_NS_STRING);
 
   // 2. Check idl const values
   assertEQ(312, IDL_CONST_NUMBER_INT)
@@ -67,6 +69,12 @@ function check_constants() {
   assertEQ(false, IDL_CONST_BOOLEAN_FALSE)
   assertEQ(true, IDL_CONST_BOOLEAN_TRUE);
   assertEQ("hello_string", IDL_CONST_STRING);
+
+  assertEQ(false, constNamespace.IDL_CONST_NS_BOOLEAN_FALSE)
+  assertEQ(true, constNamespace.IDL_CONST_NS_BOOLEAN_TRUE)
+  assertEQ(312, constNamespace.IDL_CONST_NS_NUMBER_INT)
+  assertEQ(312.415, constNamespace.IDL_CONST_NS_NUMBER_FLOAT)
+  assertEQ("hello_string", constNamespace.IDL_CONST_NS_STRING);
 }
 
 function check_booleans() {
