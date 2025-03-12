@@ -2016,7 +2016,7 @@
 |`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | blocked IDL |  | |
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
-|`getTextContentRect`| Function | Morozov Sergey |in progress | done on feature branch |
+|`getTextContentRect`| Function | Morozov Sergey, SkrobaGleb | done | |
 |`getTextContentLineCount`| Function | Morozov Sergey | done |  | |
 |`addText`| Function | | | | |
 |`deleteText`| Function | | | | |
@@ -2280,11 +2280,11 @@
 |`scrollEdge`| Function | Erokhin Ilya | done |  |  |
 |`fling`| Function | Erokhin Ilya | done |  |  |
 |`scrollPage`| Function | Erokhin Ilya | done |  |  |
-|`currentOffset`| Function | Erokhin Ilya | devdone |  | |
+|`currentOffset`| Function | Erokhin Ilya, Skroba Gleb | done | | |
 |`scrollToIndex`| Function | Erokhin Ilya | done |  | |
 |`scrollBy`| Function | Erokhin Ilya | done |  |  |
 |`isAtEnd`| Function | Erokhin Ilya | done |  |  |
-|`getItemRect`| Function | Erokhin Ilya | devdone |  | |
+|`getItemRect`| Function | Erokhin Ilya, Skroba Gleb | done | | |
 |`getItemIndex`| Function | Erokhin Ilya | done |  |  |
 |*SearchController*| *Class* |Evstigneev Roman | done |  |  |
 |`caretPosition`| Function |Evstigneev Roman | done |  |  |
