@@ -40,6 +40,7 @@ export const PeerGeneratorConfigurationSchema = D.combine(
         ApiVersion: D.number(),
         dumpSerialized: D.boolean(),
         boundProperties: D.map(D.string(), T.stringArray()),
+        throwOnConstMissedDefaultValue: D.boolean(),
 
         cppPrefix: D.string(),
         components: D.object({

@@ -1558,6 +1558,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             if (confValue) {
                 return [this.serializeType(declaration.type), confValue]
             }
+            if (peerGeneratorConfiguration().throwOnConstMissedDefaultValue) {
+                throw new Error(`Const '${name}' at '${this.sourceFile.fileName}': the default value is not provided neither in the source nor in the config file.`)
+            }
             warn(`Const ${name}' at '${this.sourceFile.fileName}': the default value is missed in the source and configuration files.`)
             return undefined
         }
@@ -1565,7 +1568,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             return this.inferTypeAndValue(name, declaration, declaration.initializer.getText())
         }
         if (confValue === undefined) {
-            throw new Error(`Const ${name}' at '${this.sourceFile.fileName}': the type and the default value is not provided neither in the source nor in the config file.`)
+            throw new Error(`Const '${name}' at '${this.sourceFile.fileName}': the type and the default value is not provided neither in the source nor in the config file.`)
         }
         return this.inferTypeAndValue(name, declaration, confValue)
     }
@@ -1590,7 +1593,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         if (value === "true" || value === "false") {
             return [idl.IDLBooleanType, value]
         }
-        throw new Error(`Const ${name}' at '${this.sourceFile.fileName}': Cannot infer type from value ${value}`)
+        throw new Error(`Const '${name}' at '${this.sourceFile.fileName}': Cannot infer type from value ${value}`)
     }
 
     private collectTypeParameters(typeParameters: ts.NodeArray<ts.Node> | undefined): string[] | undefined {
