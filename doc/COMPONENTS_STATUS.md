@@ -2275,7 +2275,7 @@
 |`getStyledString`| Function | Maksimov Nikita | done |  | |
 |`getSelection`| Function |Dudkin Sergey| in progress |  | |
 |`onContentChanged`| Function | Dudkin Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB944G + |
-|*Scroller*| *Class* | Erokhin Ilya | blocked IDL|  |  |
+|*Scroller*| *Class* | Erokhin Ilya | done |  |  |
 |`scrollTo`| Function | Erokhin Ilya | done |  |  |
 |`scrollEdge`| Function | Erokhin Ilya | done |  |  |
 |`fling`| Function | Erokhin Ilya | done |  |  |
