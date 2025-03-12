@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "package": "@demo",
+        "baseUrl": ".",
+        "outDir": "out",
+        "paths": {
+        }
+    },
+    "include": ["src/*.ts"]
+}
