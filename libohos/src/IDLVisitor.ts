@@ -1554,12 +1554,12 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     private guessTypeAndValue(name: string, declaration: ts.VariableDeclaration):  [idl.IDLType, string] | undefined {
         if (declaration.type && declaration.initializer) return [this.serializeType(declaration.type), declaration.initializer.getText()]
         if (declaration.type) {
-            const type = this.serializeType(declaration.type)
             const value = peerGeneratorConfiguration().constants.get(declaration.name.getText())
             if (value) {
-                return [type, value]
+                return [this.serializeType(declaration.type), value]
             }
-            return [type, `"Provide the const ${name} value in the configuration file"`]
+            warn(`Const ${name}' at '${this.sourceFile.fileName}': the default value is missed in the source and configuration files.`)
+            return undefined
         }
         if (declaration.initializer) {
             let value = declaration.initializer.getText()
@@ -1581,8 +1581,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             if (value === "true" || value === "false") {
                 return [idl.IDLBooleanType, value]
             }
-            throw new Error(`Cannot infer type of const ${name} from the config value ${value}`)
+            throw new Error(`Const ${name}' at '${this.sourceFile.fileName}': Cannot infer type from the config value ${value}`)
         }
+        throw new Error(`Const ${name}' at '${this.sourceFile.fileName}': the type and the default value is not provided neither in  the source nor in the config file.`)
     }
 
     private collectTypeParameters(typeParameters: ts.NodeArray<ts.Node> | undefined): string[] | undefined {
