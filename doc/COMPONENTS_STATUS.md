@@ -2041,7 +2041,7 @@
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*GlobalScope_common*| *Class* | Erokhin Ilya | blocked IDL |  | |
-|`getContext`| Function | Erokhin Ilya | blocked IDL |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IBJXAR |
+|`getContext`| Function | Erokhin Ilya | blocked IDL |  | RET_VAL_STABBED https://gitee.com/nikolay-igotti/idlize/issues/IBJXAR |
 |`postCardAction`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`dollar_r`| Function | Erokhin Ilya | blocked IDL |  | NEED TO BE REMOVED https://gitee.com/nikolay-igotti/idlize/issues/IBJVPN |
 |`dollar_rawfile`| Function | Erokhin Ilya | blocked IDL |  | NEED TO BE REMOVED https://gitee.com/nikolay-igotti/idlize/issues/IBJVPN |
@@ -2441,8 +2441,8 @@
 |`getOrigin`| Function | Erokhin Ilya | done |  |  |
 |`getAccessibleResource`| Function | Erokhin Ilya | done |  |  |
 |`grant`| Function | Erokhin Ilya | done |  |  |
-|*ScreenCaptureHandler*| *Class* | Erokhin Ilya | devdone |  |  |
-|`getOrigin`| Function | Erokhin Ilya | devdone |  |  |
+|*ScreenCaptureHandler*| *Class* | Erokhin Ilya | done |  |  |
+|`getOrigin`| Function | Erokhin Ilya | done |  |  |
 |`grant`| Function | Erokhin Ilya | done |  |  |
 |`deny`| Function | Erokhin Ilya | done |  |  |
 |*DataResubmissionHandler*| *Class* | Erokhin Ilya | done |  |  |
