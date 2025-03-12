@@ -2380,9 +2380,9 @@
 |*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`onCreateMenu`| Function | Skroba Gleb | in progress |  |RETURN_VALUE, RET_VAL_UNBLOCKED https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N, |
 |`onMenuItemClick`| Function | Skroba Gleb | in progress |RETURN_VALUE, RET_VAL_UNBLOCKED  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|*SubmitEvent*| *Class* | Tuzhilkin Ivan | blocked IDL|  | |
+|*SubmitEvent*| *Class* | Tuzhilkin Ivan | done |  | |
 |`keepEditableState`| Function | Tuzhilkin Ivan | done |  | |
-|`getText`| Function | Tuzhilkin Ivan, Pavelyev Ivan | in progress |  | |
+|`getText`| Function | Tuzhilkin Ivan, Pavelyev Ivan | done |  | |
 |`setText`| Function | Tuzhilkin Ivan | done |  | |
 |*TextInputController*| *Class* | Spirin Andrey | done |  |  |
 |`caretPosition`| Function | Spirin Andrey | done |  |  |
