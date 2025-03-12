@@ -160,9 +160,9 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                         isStatic ? [MethodModifier.STATIC] : []
                     ), writer => {
                         writer.writeStatement(
-                            isSimpleType
-                                ? writer.makeReturn(writer.makeMethodCall(receiver, `get${capitalize(mField.name)}`, []))
-                                : writer.makeThrowError("Not implemented")
+                            // isSimpleType ? 
+                            writer.makeReturn(writer.makeMethodCall(receiver, `get${capitalize(mField.name)}`, []))
+                                // : writer.makeThrowError("Not implemented")
                         )
                     }
                 );
