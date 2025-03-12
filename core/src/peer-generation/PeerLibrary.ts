@@ -227,7 +227,12 @@ export class PeerLibrary implements LibraryInterface {
             return result
 
         if (1 == target.length) {
-            for (const stdScope of [["idlize", "stdlib"], ["org", "openharmony", "idlize", "predefined"]]) { // TODO: move to some external config
+            const stdScopes = [// TODO: move to some external config
+                ["idlize", "stdlib"],
+                ["org", "openharmony", "idlize", "predefined"],
+                ["org", "openharmony", "arkui"],
+            ]
+            for (const stdScope of stdScopes) {
                 result = resolveNamedNode([...stdScope, ...target], undefined, corpus)
                 if (result && idl.isEntry(result))
                     return result
