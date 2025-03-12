@@ -3,6 +3,7 @@
     "LibraryPrefix": "",
     "OptionalPrefix": "Opt_",
     "GenerateUnused": false,
+    "throwOnConstMissedDefaultValue": true,
     "rootComponents": [
         "Root",
         "ComponentRoot",

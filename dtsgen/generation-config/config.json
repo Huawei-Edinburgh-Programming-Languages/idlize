@@ -5,6 +5,7 @@
     "OptionalPrefix": "Opt_",
     "GenerateUnused": false,
     "dumpSerialized": false,
+    "throwOnConstMissedDefaultValue": true,
     "ignoreMaterialized": [],
     "forceMaterialized": [
         "BaseContext"

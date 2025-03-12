@@ -4,6 +4,7 @@
     "OptionalPrefix": "Opt_",
     "GenerateUnused": false,
     "dumpSerialized": false,
+    "throwOnConstMissedDefaultValue": true,
     "ignoreMaterialized": [],
     "forceMaterialized": [],
     "forceCallback": [],
@@ -36,10 +37,5 @@
     },
     "CollapseOverloadsARKTS": false,
     "constants": {
-        "ClassWithComplexPropertyType.prop": "new ClassWithPrimitivePropertyType(true, 10)",
-        "DataClass.propString": "''",
-        "DataClass.propObject": "[false, 0, '']",
-        "IDLDataClass.propString": "''",
-        "IDLDataClass.propObject": "[false, 0, '']"
     }
 }

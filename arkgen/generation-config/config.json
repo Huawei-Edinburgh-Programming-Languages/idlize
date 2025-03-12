@@ -6,6 +6,7 @@
     "GenerateUnused": false,
     "ApiVersion": 9999,
     "dumpSerialized": false,
+    "throwOnConstMissedDefaultValue": false,
     "ignoreMaterialized": [
         "Attribute",
         "Interface",
