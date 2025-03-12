@@ -1,11 +1,5 @@
-import { Chrono } from "std/time"
+import { performance, toPaddedString } from "#compat"
 import { mediaquery as idl } from '#compat'
-
-namespace performance {
-    export function now(): number {
-        return Chrono.nanoNow()
-    }
-}
 
 type BenchmarkFunction = () => void;
 class BenchmarkResult {
@@ -121,7 +115,7 @@ class BenchmarkBase {
             console.log(
                 `${result.mechanism.padEnd(maxMechLen)} | ` +
                 `${result.scenario.padEnd(maxScenLen)} | ` +
-                `${StringBuilder.toString(result.averageNs as long).padLeft(' ', 10)} |`
+                `${toPaddedString(result.averageNs, 10)} |`
             );
         });
     }

@@ -16,24 +16,24 @@
 import * as idl from "../idl";
 import { Language } from "../Language";
 import {
+    BlockStatement,
+    BranchStatement,
+    ExpressionAssigner,
     LanguageExpression,
     LanguageStatement,
     LanguageWriter,
-    ExpressionAssigner,
     PrintHint,
-    BlockStatement,
-    BranchStatement,
     StringExpression
 } from "./LanguageWriter";
 import { RuntimeType } from "./common";
-import { generatorConfiguration, generatorTypePrefix } from "../config"
+import { generatorTypePrefix } from "../config"
 import { LibraryInterface } from "../LibraryInterface";
 import { hashCodeFromString, warn } from "../util";
 import { UnionRuntimeTypeChecker } from "../peer-generation/unions";
-import { CppNameConvertor } from "./convertors/CppConvertors";
+import { CppConvertor, CppNameConvertor } from "./convertors/CppConvertors";
 import { createEmptyReferenceResolver, ReferenceResolver } from "../peer-generation/ReferenceResolver";
-import { CppConvertor } from "./convertors/CppConvertors";
 import { PrimitiveTypesInstance } from "../peer-generation/PrimitiveType";
+import { qualifiedName } from "../peer-generation/idl/common";
 
 export interface ArgConvertor {
     param: string
@@ -215,14 +215,12 @@ export class EnumConvertor extends BaseArgConvertor {
             this.typeForSerializer = idl.createReferenceType(this.enumEntry.name)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
-        return writer.makeEnumCast(writer.escapeKeyword(param), false, this)
+        return writer.makeEnumCast(this.enumEntry, writer.escapeKeyword(param))
     }
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
-        value =
-            idl.isStringEnum(this.enumEntry)
-                ? writer.ordinalFromEnum(writer.makeString(value), this.typeForSerializer).asString()
-                : writer.makeEnumCast(value, false, this)
-        writer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
+        writer.writeMethodCall(`${param}Serializer`,
+            "writeInt32",
+            [writer.makeEnumCast(this.enumEntry, value)])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
@@ -1012,7 +1010,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     convertorArg(param: string, writer: LanguageWriter): string {
         switch (writer.language) {
             case Language.CPP:
-                return `static_cast<${generatorTypePrefix()}${this.declaration.name}>(${param})`
+                return `static_cast<${generatorTypePrefix()}${qualifiedName(this.declaration, "_")}>(${param})`
             case Language.JAVA:
             case Language.CJ:
                 return `MaterializedBase.toPeerPtr(${param})`
@@ -1023,13 +1021,13 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeStatement(
             printer.makeStatement(
-                printer.makeMethodCall(`${param}Serializer`, `write${this.declaration.name}`, [
+                printer.makeMethodCall(`${param}Serializer`, `write${qualifiedName(this.declaration, "_")}`, [
                     printer.makeString(value)
                 ])))
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const readStatement = writer.makeCast(
-            writer.makeMethodCall(`${deserializerName}`, `read${this.declaration.name}`, []),
+            writer.makeMethodCall(`${deserializerName}`, `read${qualifiedName(this.declaration, "_")}`, []),
             idl.createReferenceType(this.declaration)
         )
         return assigneer(readStatement)
