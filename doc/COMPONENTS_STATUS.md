@@ -1612,9 +1612,9 @@
 |`getGreen`| Function | | | | |
 |`getBlue`| Function | | | | |
 |`getAlpha`| Function | | | | |
-|*WebviewController*| *Class* | Politov Mikhail | in progress | | |
-|`initializeWebEngine`| Function | Politov Mikhail | in progress | | |
-|`loadUrl`| Function | Politov Mikhail | in progress | | |
+|*WebviewController*| *Class* | Politov Mikhail | testskipped | | |
+|`initializeWebEngine`| Function | Politov Mikhail | testskipped | | |
+|`loadUrl`| Function | Politov Mikhail | testskipped | | |
 |*GlobalScope_ohos_arkui_componentSnapshot*| *Class* | Dudkin Sergey| in progress| | |
 |`get`| Function | Dudkin Sergey | in progress | | |
 |*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | Vadim Voronov | blocked IDL | | |
@@ -2578,9 +2578,9 @@
 |`getBaselineOffset`| Function | Tuzhilkin Ivan | testskipped |  | |
 |*LetterSpacingStyle*| *Class* | Tuzhilkin Ivan | testskipped |  | |
 |`getLetterSpacing`| Function | Tuzhilkin Ivan | testskipped |  | |
-|*TextShadowStyle*| *Class* |  Politov Mikhail | in progress |  | |
-|`getTextShadow`| Function |  Politov Mikhail | in progress | | |
-|*BackgroundColorStyle*| *Class* | Politov Mikhail | in progress |  | |
+|*TextShadowStyle*| *Class* |  Politov Mikhail | testskipped |  | |
+|`getTextShadow`| Function |  Politov Mikhail | testskipped | | |
+|*BackgroundColorStyle*| *Class* | Politov Mikhail | testskipped |  | |
 |*GestureStyle*| *Class* | Dudkin Sergey| in progress |  | testskipped on feature_branch|
 |*ParagraphStyle*| *Class* |Dudkin Sergey |in progress |  | |
 |`getTextAlign`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
@@ -2590,8 +2590,8 @@
 |`getWordBreak`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
 |*LineHeightStyle*| *Class* |Dudkin Sergey |in progress |  | |
 |`getLineHeight`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
-|*UrlStyle*| *Class* | Politov Mikhail | in progress |  | |
-|`getUrl`| Function | Politov Mikhail | in progress |  | |
+|*UrlStyle*| *Class* | Politov Mikhail | testskipped |  | |
+|`getUrl`| Function | Politov Mikhail | testskipped |  | |
 |*MutableStyledString*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBBYJE + |
 |`replaceString`| Function | Maksimov Nikita | done |  | |
 |`insertString`| Function | Maksimov Nikita | done |  | |
