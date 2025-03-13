@@ -38,12 +38,12 @@ export interface PrinterFunction {
 }
 export type Printer = PrinterClass | PrinterFunction
 
-export function install(outDir:string, library:PeerLibrary, printers:Printer[], options?: { fileExtension?: string }): string[] {
-    const storage = new Map<string, PrinterResult[]>()
-
+export function install(outDir:string, library:PeerLibrary, printers:Printer[], options?: { fileExtension?: string }, customLayout?: LayoutManager): string[] {
+    const layout: LayoutManager = customLayout ?? library.layout
     // groupBy
+    const storage = new Map<string, PrinterResult[]>()
     printers.flatMap(it => typeof it === 'function' ? it(library) : it.print(library)).forEach(it => {
-        const filePath = library.layout.resolve(it.over.node, it.over.role)
+        const filePath = layout.resolve(it.over.node, it.over.role)
         if (!storage.has(filePath)) {
             storage.set(filePath, [])
         }

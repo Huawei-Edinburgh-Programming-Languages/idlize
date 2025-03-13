@@ -73,6 +73,17 @@ function suggestTSPackageName(library: PeerLibrary, node: idl.IDLEntry): string 
 
 class TsLayout extends CommonLayoutBase {
 
+    protected interfaceFileName(node: idl.IDLEntry): string {
+        let pureFileName = node.fileName
+            ?.replaceAll('.d.ts', '')
+            ?.replaceAll('.idl', '')
+        if (pureFileName) {
+            pureFileName = path.basename(pureFileName)
+        }
+        const entryName = pureFileName ?? node.name
+        return `${this.prefix}${toFileName(entryName)}Interfaces`
+    }
+
     protected selectInterface(node: idl.IDLEntry): string {
         if (!this.library.hasInLibrary(node))
             return suggestTSPackageName(this.library, node)
@@ -95,14 +106,8 @@ class TsLayout extends CommonLayoutBase {
                 return `${this.prefix}${toFileName(name)}Materialized`
             }
         }
-        let pureFileName = node.fileName
-            ?.replaceAll('.d.ts', '')
-            ?.replaceAll('.idl', '')
-        if (pureFileName) {
-            pureFileName = path.basename(pureFileName)
-        }
-        const entryName = pureFileName ?? node.name
-        return `${this.prefix}${toFileName(entryName)}Interfaces`
+        
+        return this.interfaceFileName(node)
     }
 
     protected selectPeer(node:idl.IDLEntry): string {
@@ -141,6 +146,19 @@ class ArkTsLayout extends TsLayout {
     }
     protected selectPeer(node:idl.IDLEntry): string {
         return super.selectPeer(node)
+    }
+}
+
+export class StsLayout extends ArkTsLayout {
+    protected interfaceFileName(node: idl.IDLEntry): string {
+        let pureFileName = node.fileName
+            ?.replaceAll('.d.ts', '')
+            ?.replaceAll('.idl', '')
+        if (pureFileName) {
+            pureFileName = path.basename(pureFileName)
+        }
+        const entryName = pureFileName ?? node.name
+        return `@ohos.arkui.${this.prefix}${entryName}`
     }
 }
 

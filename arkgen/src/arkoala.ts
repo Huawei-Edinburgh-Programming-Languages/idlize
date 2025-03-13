@@ -14,7 +14,7 @@
  */
 import * as fs from "fs"
 import * as path from "path"
-import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration, CppConvertor, PeerMethod, MethodModifier } from '@idlizer/core'
+import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration, CppConvertor, PeerMethod, MethodModifier, LayoutManager } from '@idlizer/core'
 import {
     dummyImplementations, gniFile, libraryCcDeclaration,
     makeArkuiModule, makeCallbacksKinds, makeTSDeserializer, makeArkTSDeserializer,
@@ -49,6 +49,7 @@ import {
     readTemplate,
     peerGeneratorConfiguration,
     readInteropTypesHeader,
+    StsLayout
 } from "@idlizer/libohos"
 import { ArkoalaInstall, LibaceInstall } from "./ArkoalaInstall"
 import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
@@ -289,7 +290,8 @@ export function generateArkoalaFromIdl(config: {
             path.join(selectOutDir(arkoala, peerLibrary.language), "../sts/generated"),
             peerLibrary,
             [printStsComponents],
-            { fileExtension: ".sts" }
+            { fileExtension: ".sts" },
+            new LayoutManager(new StsLayout(peerLibrary))
         )
         install(
             path.join(selectOutDir(arkoala, peerLibrary.language), "../sts/generated"),
