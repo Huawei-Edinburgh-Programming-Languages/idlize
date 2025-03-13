@@ -2018,9 +2018,9 @@
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
 |`getTextContentRect`| Function | Morozov Sergey, SkrobaGleb | done | |
 |`getTextContentLineCount`| Function | Morozov Sergey | done |  | |
-|`addText`| Function | | | | |
-|`deleteText`| Function | | | | |
-|`getSelection`| Function | | | | |
+|`addText`| Function | Morozov Sergey | no api in sdk on FB, on UB only | | |
+|`deleteText`| Function | Morozov Sergey | no api in sdk on FB, on UB only | | |
+|`getSelection`| Function | Morozov Sergey | no api in sdk on FB, on UB only | | |
 |*ChildrenMainSize*| *Class* | Morozov Sergey | blocked IDL |  |
 |`splice`| Function | Morozov Sergey | done |  |  |
 |`update`| Function | Morozov Sergey | done |  |  |
