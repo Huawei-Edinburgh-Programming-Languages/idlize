@@ -1921,12 +1921,12 @@
 |`setY`| Function | Kovalev Sergey | done |  | |
 |`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Kovalev Sergey | done |  | empty implementation |
-|`getRawDeltaX`| Function | Kovalev Sergey| in progress| noFB | doesn't present in FB, done for Upstream |
-|`setRawDeltaX`| Function | Kovalev Sergey|in progress| noFB | doesn't present in FB, done for Upstream |
-|`getRawDeltaY`| Function | Kovalev Sergey | in progress| noFB | doesn't present in FB, done for Upstream |
-|`setRawDeltaY`| Function | Kovalev Sergey| in progress| noFB | doesn't present in FB, done for Upstream |
-|`getPressedButtons`| Function | | | | done for Upstream |
-|`setPressedButtons`| Function |Kovalev Sergey| in progress| noFB | doesn't present in FB, done for Upstream |
+|`getRawDeltaX`| Function | Kovalev Sergey| done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
+|`setRawDeltaX`| Function | Kovalev Sergey| done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
+|`getRawDeltaY`| Function | Kovalev Sergey | done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
+|`setRawDeltaY`| Function | Kovalev Sergey | done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
+|`getPressedButtons`| Function | Kovalev Sergey | done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
+|`setPressedButtons`| Function |Kovalev Sergey| done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
 |*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | blocked IDL |  | |
 |`getType`| Function | Pavelyev Ivan, Samarin Sergey | done |  | |
 |`setType`| Function | Pavelyev Ivan | done |  | |
