@@ -163,10 +163,6 @@ abstract class TsLikeSourceFile extends SourceFile {
 export class TsSourceFile extends TsLikeSourceFile {
     declare public readonly content: TSLanguageWriter
 
-    public static wrap(content: TSLanguageWriter, imports: ImportsCollector): TsSourceFile {
-        return Object.assign(new TsSourceFile(""), { content, imports })
-    }
-
     constructor(name: string) {
         super(name, Language.TS)
     }
@@ -179,10 +175,6 @@ export class TsSourceFile extends TsLikeSourceFile {
 export class ArkTSSourceFile extends TsLikeSourceFile {
     declare public readonly content: ETSLanguageWriter
 
-    public static wrap(content: ETSLanguageWriter, imports: ImportsCollector): ArkTSSourceFile {
-        return Object.assign(new ArkTSSourceFile(""), { content, imports })
-    }
-
     constructor(name: string) {
         super(name, Language.ARKTS)
     }
@@ -194,10 +186,6 @@ export class ArkTSSourceFile extends TsLikeSourceFile {
 
 export class CJSourceFile extends SourceFile {
     declare public readonly content: CJLanguageWriter
-
-    public static wrap(content: CJLanguageWriter): CJSourceFile {
-        return Object.assign(new CJSourceFile(""), { content })
-    }
 
     constructor(name: string) {
         super(name, Language.CJ)
@@ -223,11 +211,7 @@ export class CJSourceFile extends SourceFile {
 
 export class JavaSourceFile extends SourceFile {
     declare public readonly content: JavaLanguageWriter
-    public packageName: string = "org.koalaui.arkoala";
-
-    public static wrap(content: JavaLanguageWriter): JavaSourceFile {
-        return Object.assign(new JavaSourceFile(""), { content })
-    }
+    public packageName: string = "org.koalaui.arkoala"
 
     constructor(name: string) {
         super(name, Language.JAVA)
