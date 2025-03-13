@@ -24,6 +24,7 @@ import { createOutArgConvertor } from "../PromiseConvertors"
 import { NativeModule } from "../NativeModule"
 import { GlobalScopePeerName, idlFreeMethodToLegacy, mangledGlobalScopeName } from "../GlobalScopeUtils"
 import { importTypeChecker } from "./TypeCheckPrinter"
+import { SourceFile } from "./SourceFile"
 
 export function printGlobal(library: PeerLibrary): PrinterResult[] {
 
@@ -88,8 +89,7 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
             nsPath.forEach(() => writer.popNamespace())
 
             return [{
-                collector: imports,
-                content: writer,
+                sourceFile: SourceFile.wrap(writer, imports),
                 over: {
                     node: methods[0],
                     role: idl.LayoutNodeRole.GLOBAL
@@ -109,8 +109,7 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
             nsPath.forEach(() => writer.popNamespace())
 
             return [{
-                collector: imports,
-                content: writer,
+                sourceFile: SourceFile.wrap(writer, imports),
                 over: {
                     node: it,
                     role: idl.LayoutNodeRole.GLOBAL
@@ -131,8 +130,7 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
     })
     fillCommonImports(peerImports, library)
     const realization: PrinterResult = {
-        collector: peerImports,
-        content: realizationWriter,
+        sourceFile: SourceFile.wrap(realizationWriter, peerImports),
         over: {
             node: realizationHolder,
             role: idl.LayoutNodeRole.PEER

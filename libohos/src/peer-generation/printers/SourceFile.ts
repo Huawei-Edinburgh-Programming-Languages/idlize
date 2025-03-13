@@ -16,37 +16,41 @@
 import { cStyleCopyright, makeIncludeGuardDefine } from "../FileGenerators"
 import { ImportsCollector } from "../ImportsCollector"
 import { CppLanguageWriter } from "../LanguageWriters"
-import { Language, LanguageWriter, CJLanguageWriter, ETSLanguageWriter, TSLanguageWriter, PeerLibrary } from "@idlizer/core"
+import { Language, LanguageWriter, CJLanguageWriter, ETSLanguageWriter, TSLanguageWriter, createLanguageWriter, ReferenceResolver, JavaLanguageWriter } from "@idlizer/core"
 
 export abstract class SourceFile {
     public readonly content: LanguageWriter
 
-    public static make(name: string, language: Language, resolver: PeerLibrary): SourceFile {
+    public static make(name: string, language: Language): SourceFile {
         if (language === Language.CPP) {
-            return new CppSourceFile(name, resolver)
+            return new CppSourceFile(name)
         } else if (language === Language.TS) {
-            return new TsSourceFile(name, resolver)
+            return new TsSourceFile(name)
         } else if (language === Language.ARKTS) {
-            return new ArkTSSourceFile(name, resolver)
+            return new ArkTSSourceFile(name)
         } else if (language === Language.CJ) {
-            return new CJSourceFile(name, resolver)
+            return new CJSourceFile(name)
         } else if (language === Language.JAVA) {
-            return new JavaSourceFile(name, resolver)
+            return new JavaSourceFile(name)
         } else {
-            return new GenericSourceFile(name, language, resolver)
+            return new GenericSourceFile(name, language)
         }
     }
 
     public static makeSameAs<T extends SourceFile>(file: T): T {
-        return SourceFile.make(file.name, file.language, file.library) as T
+        return SourceFile.make(file.name, file.language) as T
+    }
+
+    /** @deprecated avoid using any of Source.wrap methods. Consider using content writer and imports collector provided by SourceFile */
+    public static wrap(content: LanguageWriter, imports: ImportsCollector): SourceFile {
+        return Object.assign(SourceFile.make("", content.language), { content, imports })
     }
 
     constructor (
         public readonly name: string,
         public readonly language: Language,
-        protected readonly library: PeerLibrary // TODO try to avoid this dependency
     ) {
-        this.content = library.createLanguageWriter(language)
+        this.content = createLanguageWriter(language)
     }
 
     public merge(file: this) {
@@ -69,8 +73,8 @@ export class CppSourceFile extends SourceFile {
     public readonly includes: Set<string> = new Set();
     public readonly globalIncludes: Set<string> = new Set();
 
-    constructor(name: string, library: PeerLibrary) {
-        super(name, Language.CPP, library)
+    constructor(name: string) {
+        super(name, Language.CPP)
     }
 
     public addInclude(...includes: string[]) {
@@ -91,7 +95,7 @@ export class CppSourceFile extends SourceFile {
     }
 
     public printToString(): string {
-        let fileWriter = this.library.createLanguageWriter(Language.CPP) as CppLanguageWriter
+        let fileWriter = createLanguageWriter(Language.CPP) as CppLanguageWriter
         let includeGuard = ""
 
         fileWriter.writeLines(cStyleCopyright);
@@ -140,7 +144,7 @@ abstract class TsLikeSourceFile extends SourceFile {
     }
 
     public printToString(): string {
-        let fileWriter = this.library.createLanguageWriter(this.language) as TSLanguageWriter
+        let fileWriter = createLanguageWriter(this.language) as TSLanguageWriter
         fileWriter.print(cStyleCopyright)
         this.printImports(fileWriter)
         fileWriter.print("")
@@ -159,8 +163,12 @@ abstract class TsLikeSourceFile extends SourceFile {
 export class TsSourceFile extends TsLikeSourceFile {
     declare public readonly content: TSLanguageWriter
 
-    constructor(name: string, library: PeerLibrary) {
-        super(name, Language.TS, library)
+    public static wrap(content: TSLanguageWriter, imports: ImportsCollector): TsSourceFile {
+        return Object.assign(new TsSourceFile(""), { content, imports })
+    }
+
+    constructor(name: string) {
+        super(name, Language.TS)
     }
 
     protected override supportsWriter(writer: LanguageWriter) {
@@ -171,8 +179,12 @@ export class TsSourceFile extends TsLikeSourceFile {
 export class ArkTSSourceFile extends TsLikeSourceFile {
     declare public readonly content: ETSLanguageWriter
 
-    constructor(name: string, library: PeerLibrary) {
-        super(name, Language.ARKTS, library)
+    public static wrap(content: ETSLanguageWriter, imports: ImportsCollector): ArkTSSourceFile {
+        return Object.assign(new ArkTSSourceFile(""), { content, imports })
+    }
+
+    constructor(name: string) {
+        super(name, Language.ARKTS)
     }
 
     protected override supportsWriter(writer: LanguageWriter) {
@@ -183,12 +195,16 @@ export class ArkTSSourceFile extends TsLikeSourceFile {
 export class CJSourceFile extends SourceFile {
     declare public readonly content: CJLanguageWriter
 
-    constructor(name: string, library: PeerLibrary) {
-        super(name, Language.CJ, library)
+    public static wrap(content: CJLanguageWriter): CJSourceFile {
+        return Object.assign(new CJSourceFile(""), { content })
+    }
+
+    constructor(name: string) {
+        super(name, Language.CJ)
     }
 
     public printToString(): string {
-        let fileWriter = this.library.createLanguageWriter(this.language) as CJLanguageWriter
+        let fileWriter = createLanguageWriter(this.language) as CJLanguageWriter
         fileWriter.print(cStyleCopyright)
         this.printImports(fileWriter)
         fileWriter.concat(this.content)
@@ -206,15 +222,19 @@ export class CJSourceFile extends SourceFile {
 }
 
 export class JavaSourceFile extends SourceFile {
-    declare public readonly content: CJLanguageWriter
+    declare public readonly content: JavaLanguageWriter
     public packageName: string = "org.koalaui.arkoala";
 
-    constructor(name: string, library: PeerLibrary) {
-        super(name, Language.JAVA, library)
+    public static wrap(content: JavaLanguageWriter): JavaSourceFile {
+        return Object.assign(new JavaSourceFile(""), { content })
+    }
+
+    constructor(name: string) {
+        super(name, Language.JAVA)
     }
 
     public printToString(): string {
-        let printer = this.library.createLanguageWriter(Language.JAVA)
+        let printer = createLanguageWriter(Language.JAVA)
         printer.print(cStyleCopyright)
         printer.print(`package ${this.packageName};`)
         printer.print('')

@@ -122,7 +122,7 @@ class OHOSNativeVisitor {
         this.library.name = libraryName
 
         const fileNamePrefix = this.libraryName.toLowerCase()
-        this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`, library)
+        this.implementationStubsFile = new CppSourceFile(`${fileNamePrefix}Impl_template${Language.CPP.extension}`)
         this.implementationStubsFile.addInclude("common-interop.h")
         this.implementationStubsFile.addInclude(`${fileNamePrefix}.h`)
     }

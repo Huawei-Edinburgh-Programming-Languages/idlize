@@ -1,6 +1,6 @@
 import * as idl from "@idlizer/core"
 import { Language, LayoutNodeRole, PeerClass, PeerLibrary } from "@idlizer/core";
-import { collapseSameNamedMethods, collectComponents, componentToPeerClass, ImportsCollector, PrinterResult, readLangTemplate } from "@idlizer/libohos";
+import { collapseSameNamedMethods, collectComponents, componentToPeerClass, ImportsCollector, PrinterResult, readLangTemplate, SourceFile } from "@idlizer/libohos";
 import { ArkoalaPeerLibrary } from "../ArkoalaPeerLibrary";
 import { generateArkComponentName } from "./ComponentsPrinter";
 
@@ -24,8 +24,7 @@ function printStsComponent(library: PeerLibrary, peer: PeerClass, isDeclaration:
             node: component.attributeDeclaration,
             role: LayoutNodeRole.INTERFACE,
         },
-        collector: new ImportsCollector(),
-        content: writer,
+        sourceFile: SourceFile.wrap(writer, new ImportsCollector()),
     }
 }
 

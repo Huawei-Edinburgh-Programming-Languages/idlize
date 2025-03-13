@@ -21,6 +21,7 @@ import * as idl from '@idlizer/core'
 import { collectProperties } from "./StructPrinter";
 import { collapseSameMethodsIDL, groupOverloadsIDL, groupSameSignatureMethodsIDL } from "./OverloadsPrinter";
 import { peerGeneratorConfiguration } from "../../DefaultConfiguration";
+import { SourceFile } from "./SourceFile";
 
 /**
  * Printer for OHOS interfaces
@@ -221,8 +222,7 @@ function printInterface(library: PeerLibrary, entry: idl.IDLInterface): PrinterR
             node: entry,
             role: LayoutNodeRole.INTERFACE
         },
-        collector,
-        content: printer
+        sourceFile: SourceFile.wrap(printer, collector)
     }
 }
 
@@ -255,8 +255,7 @@ function printEnum(library: PeerLibrary, entry: idl.IDLEnum): PrinterResult {
             node: entry,
             role: LayoutNodeRole.INTERFACE
         },
-        collector,
-        content: printer
+        sourceFile: SourceFile.wrap(printer, collector)
     }
 }
 
@@ -287,8 +286,7 @@ function printTypedef(library: PeerLibrary, entry: idl.IDLTypedef): PrinterResul
             node: entry,
             role: LayoutNodeRole.INTERFACE
         },
-        collector,
-        content: printer
+        sourceFile: SourceFile.wrap(printer, collector)
     }
 }
 

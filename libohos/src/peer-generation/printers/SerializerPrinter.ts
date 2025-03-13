@@ -513,7 +513,7 @@ class DeserializerPrinter {
 }
 
 export function writeSerializer(library: PeerLibrary, writer: LanguageWriter, prefix: string) {
-    const destFile = SourceFile.make("peers/Serializer" + writer.language.extension, writer.language, library)
+    const destFile = SourceFile.make("peers/Serializer" + writer.language.extension, writer.language)
     writeSerializerFile(library, destFile, prefix)
     destFile.printImports(writer)
     writer.concat(destFile.content)
@@ -524,7 +524,7 @@ export function writeSerializerFile(library: PeerLibrary, destFile: SourceFile, 
 }
 
 export function writeDeserializer(library: PeerLibrary, writer: LanguageWriter, prefix: string) {
-    const destFile = SourceFile.make("peers/Deserializer" + writer.language.extension, writer.language, library)
+    const destFile = SourceFile.make("peers/Deserializer" + writer.language.extension, writer.language)
     writeDeserializerFile(library, destFile, prefix)
     destFile.printImports(writer)
     writer.concat(destFile.content)

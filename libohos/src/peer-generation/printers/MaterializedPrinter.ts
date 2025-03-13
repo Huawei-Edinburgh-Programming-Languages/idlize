@@ -43,6 +43,7 @@ import { collectDeclDependencies } from "../ImportsCollectorUtils";
 import { peerGeneratorConfiguration } from "../../DefaultConfiguration";
 import { NativeModule } from '../NativeModule';
 import { PrinterClass, PrinterResult } from '../LayoutManager';
+import { SourceFile, TsSourceFile } from './SourceFile';
 
 interface MaterializedFileVisitor {
     visit(): PrinterResult
@@ -407,8 +408,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
     visit(): PrinterResult {
         this.printMaterializedClass(this.clazz)
         return {
-            collector: this.collector,
-            content: this.printer,
+            sourceFile: SourceFile.wrap(this.printer, this.collector),
             over: {
                 node: this.clazz.decl,
                 role: LayoutNodeRole.INTERFACE
@@ -453,8 +453,7 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
     visit(): PrinterResult {
         this.printMaterializedClass(this.clazz)
         return {
-            collector: this.collector,
-            content: this.printer,
+            sourceFile: SourceFile.wrap(this.printer, this.collector),
             over: {
                 node: this.clazz.decl,
                 role: LayoutNodeRole.INTERFACE
@@ -480,8 +479,7 @@ class CJMaterializedFileVisitor extends MaterializedFileVisitorBase {
     visit(): PrinterResult {
         this.printMaterializedClass(this.clazz)
         return {
-            collector: this.collector,
-            content: this.printer,
+            sourceFile: SourceFile.wrap(this.printer, this.collector),
             over: {
                 node: this.clazz.decl,
                 role: LayoutNodeRole.INTERFACE

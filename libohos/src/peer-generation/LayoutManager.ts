@@ -13,19 +13,17 @@
  * limitations under the License.
  */
 
-import { IDLEntry, IDLNode, Language, LanguageWriter, LayoutManager, LayoutNodeRole, PeerLibrary } from "@idlizer/core";
+import { IDLEntry, LayoutNodeRole, PeerLibrary } from "@idlizer/core";
 import { join } from "node:path";
 import { writeIntegratedFile } from "./common";
-import { ImportsCollector } from "./ImportsCollector"
-import { tsCopyrightAndWarning } from "./FileGenerators";
+import { SourceFile } from "./printers/SourceFile";
 
 export interface PrinterResult {
     over: {
         node: IDLEntry
         role: LayoutNodeRole
     }
-    collector: ImportsCollector
-    content: LanguageWriter
+    sourceFile: SourceFile
     private?: boolean
     weight?: number
 }
@@ -47,38 +45,20 @@ export function install(outDir:string, library:PeerLibrary, printers:Printer[], 
         if (!storage.has(filePath)) {
             storage.set(filePath, [])
         }
-        storage.get(filePath)?.push(it)
+        storage.get(filePath)!.push(it)
     })
 
     // print
     const installedToExport: string[] = []
-    Array.from(storage.entries()).forEach(([filePath, results]) => {
+    for (const [filePath, results] of storage) {
         const installPath = join(outDir, filePath) + (options?.fileExtension ?? library.language.extension)
         if (!results.every(it => !!it.private)) {
             installedToExport.push(installPath)
         }
         results.sort((a, b) => (a.weight ?? 0) - (b.weight ?? 0))
-
-        const imports = new ImportsCollector()
-        let content: string[] = []
-
-        for (const record of results) {
-            imports.merge(record.collector)
-            content = content.concat(record.content.getOutput())
-        }
-        if (library.language === Language.CJ) {
-            imports.clear()
-            content = ['package idlize', 'import std.collection.*', 'import Interop.*'].concat(content)
-        }
-
-        const text = tsCopyrightAndWarning(
-            imports.printToLines(filePath)
-                .concat(content)
-                .join('\n')
-        )
-
-        writeIntegratedFile(installPath, text, 'producing')
-    })
+        let resultFile = results.reduce((a, b) => (a.sourceFile.merge(b.sourceFile), a)).sourceFile
+        writeIntegratedFile(installPath, resultFile.printToString(), 'producing')
+    }
 
     return installedToExport
 }
