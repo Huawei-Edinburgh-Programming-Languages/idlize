@@ -51,12 +51,16 @@ export function install(outDir:string, library:PeerLibrary, printers:Printer[], 
     // print
     const installedToExport: string[] = []
     for (const [filePath, results] of storage) {
-        const installPath = join(outDir, filePath) + (options?.fileExtension ?? library.language.extension)
+        if (results.length == 0) continue;
+
+        const fileName = filePath + (options?.fileExtension ?? library.language.extension)
+        const installPath = join(outDir, fileName)
         if (!results.every(it => !!it.private)) {
             installedToExport.push(installPath)
         }
         results.sort((a, b) => (a.weight ?? 0) - (b.weight ?? 0))
-        let resultFile = results.reduce((a, b) => (a.sourceFile.merge(b.sourceFile), a)).sourceFile
+        const resultFile = SourceFile.make(fileName, results[0].sourceFile.language);
+        results.forEach(({sourceFile}) => { resultFile.merge(sourceFile); });
         writeIntegratedFile(installPath, resultFile.printToString(), 'producing')
     }
 

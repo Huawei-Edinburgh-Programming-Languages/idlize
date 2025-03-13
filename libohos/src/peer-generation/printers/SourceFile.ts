@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { cStyleCopyright, makeIncludeGuardDefine } from "../FileGenerators"
+import { cStyleCopyright, makeIncludeGuardDefine, warning } from "../FileGenerators"
 import { ImportsCollector } from "../ImportsCollector"
 import { CppLanguageWriter } from "../LanguageWriters"
 import { Language, LanguageWriter, CJLanguageWriter, ETSLanguageWriter, TSLanguageWriter, createLanguageWriter, ReferenceResolver, JavaLanguageWriter } from "@idlizer/core"
@@ -99,6 +99,8 @@ export class CppSourceFile extends SourceFile {
         let includeGuard = ""
 
         fileWriter.writeLines(cStyleCopyright);
+        fileWriter.print("// " + warning)
+        fileWriter.print("")
         if (this.isHeaderFile) {
             includeGuard = makeIncludeGuardDefine(this.name)
             fileWriter.print(`#ifndef ${includeGuard}\n#define ${includeGuard}\n`)
@@ -146,6 +148,8 @@ abstract class TsLikeSourceFile extends SourceFile {
     public printToString(): string {
         let fileWriter = createLanguageWriter(this.language) as TSLanguageWriter
         fileWriter.print(cStyleCopyright)
+        fileWriter.print("// " + warning)
+        fileWriter.print("")
         this.printImports(fileWriter)
         fileWriter.print("")
         fileWriter.concat(this.content)
@@ -220,6 +224,8 @@ export class JavaSourceFile extends SourceFile {
     public printToString(): string {
         let printer = createLanguageWriter(Language.JAVA)
         printer.print(cStyleCopyright)
+        printer.print("// " + warning)
+        printer.print("")
         printer.print(`package ${this.packageName};`)
         printer.print('')
         printer.concat(this.content)
