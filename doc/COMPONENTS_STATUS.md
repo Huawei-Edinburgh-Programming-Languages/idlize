@@ -2099,7 +2099,7 @@
 |*GestureEvent*| *Class* | Samarin Sergey | blocked IDL |  | |
 |`getRepeat`| Function | Samarin Sergey | done |  | |
 |`setRepeat`| Function | Samarin Sergey | done |  | |
-|`getFingerList`| Function | Kovalev Sergey | in progress | done for FB | |
+|`getFingerList`| Function | Kovalev Sergey | done | | |
 |`setFingerList`| Function | Samarin Sergey | done |  | |
 |`getOffsetX`| Function | Samarin Sergey | in progress |  | done for feature branch |
 |`setOffsetX`| Function | Samarin Sergey | done |  | |
