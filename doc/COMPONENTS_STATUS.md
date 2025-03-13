@@ -2566,11 +2566,11 @@
 |`marshalling`| Function | Pavelyev Ivan | in progress |  |  |
 |`unmarshalling`| Function | Pavelyev Ivan | done |  | |
 |`getLength`| Function | Pavelyev Ivan | done |  | |
-|*TextStyle_styled_string*| *Class* | Erokhin Ilya | devdone |  | testskipped on feature branch |
-|`getFontFamily`| Function | Erokhin Ilya | devdone |  | testskipped on feature branch |
-|`getFontSize`| Function | Erokhin Ilya | devdone |  | testskipped on feature branch |
-|`getFontWeight`| Function | Erokhin Ilya | devdone |  | testskipped on feature branch |
-|`getFontStyle`| Function | Erokhin Ilya | devdone |  | testskipped on feature branch |
+|*TextStyle_styled_string*| *Class* | Erokhin Ilya | done |  |  |
+|`getFontFamily`| Function | Erokhin Ilya | done |  |  |
+|`getFontSize`| Function | Erokhin Ilya | done |  |  |
+|`getFontWeight`| Function | Erokhin Ilya | done |  |  |
+|`getFontStyle`| Function | Erokhin Ilya | done |  |  |
 |*DecorationStyle*| *Class* | Tuzhilkin Ivan | testskipped |  | |
 |`getType`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`getStyle`| Function | Tuzhilkin Ivan | testskipped |  | |
