@@ -1355,7 +1355,7 @@
 |`enableCascade`| Function | | | | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*Toggle*| *Component* |Morozov Sergey |blocked IDL |  |
-|`setToggleOptions`| Function |Morozov Sergey | | done on feature branch, unblocked since AceEngine won't fix it |
+|`setToggleOptions`| Function |Morozov Sergey | done | unblocked since AceEngine won't fix it |
 |`onChange`| Function | Morozov Sergey| done |  |  |
 |`contentModifier`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`selectedColor`| Function | Morozov Sergey| done |  |  |
