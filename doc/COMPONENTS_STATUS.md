@@ -2156,8 +2156,8 @@
 |`isEnd`| Function | Maksimov Nikita | done |  | |
 |*EventTargetInfo*| *Class* | Maksimov Nikita | blocked IDL |  | |
 |`getId`| Function | Maksimov Nikita | in progress |  | |
-|*GestureRecognizer*| *Class* | Kovalev Sergey | blocked IDL |  | |
-|`getTag`| Function | Kovalev Sergey | in progress | done for FB | |
+|*GestureRecognizer*| *Class* | Kovalev Sergey | done |  | |
+|`getTag`| Function | Kovalev Sergey | done | | |
 |`getType`| Function | Kovalev Sergey, Samarin Sergey | done |  | |
 |`isBuiltIn`| Function | Kovalev Sergey | done |  | |
 |`setEnabled`| Function | Kovalev Sergey | done |  | |
