@@ -262,10 +262,12 @@ export function makeTSSerializer(library: PeerLibrary): LanguageWriter {
         imports.addFeatures([
             "MaterializedBase", "InteropNativeModule", "ResourceHolder",
             "nullptr", "KPointer", "isInstanceOf",
-        ], "@koalaui/interop")
-        imports.addFeatures(["isResource", "isPadding"], "../../utils")        
+        ], "@koalaui/interop")      
         imports.addFeatures(["unsafeCast"], "@koalaui/common")
         imports.addFeatures(["CallbackKind"], "CallbackKind")
+        if (library.name == 'arkoala') {
+            imports.addFeatures(["isResource", "isPadding"], "../../utils")  
+        }
     }
     if (printer.language == Language.ARKTS) {
         imports.addFeatures(["unsafeCast"], "@koalaui/common")
