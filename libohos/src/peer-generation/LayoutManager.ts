@@ -54,9 +54,7 @@ export function install(outDir:string, library:PeerLibrary, printers:Printer[], 
     const installedToExport: string[] = []
     Array.from(storage.entries()).forEach(([filePath, results]) => {
         const installPath = join(outDir, filePath) + (options?.fileExtension ?? library.language.extension)
-        if (!results.every(it => !!it.private)) {
-            installedToExport.push(installPath)
-        }
+
         results.sort((a, b) => (a.weight ?? 0) - (b.weight ?? 0))
 
         const imports = new ImportsCollector()
@@ -66,18 +64,22 @@ export function install(outDir:string, library:PeerLibrary, printers:Printer[], 
             imports.merge(record.collector)
             content = content.concat(record.content.getOutput())
         }
-        if (library.language === Language.CJ) {
-            imports.clear()
-            content = ['package idlize', 'import std.collection.*', 'import Interop.*'].concat(content)
+        if (content.length > 0) {
+            if (!results.every(it => !!it.private)) {
+                installedToExport.push(installPath)
+            }
+            if (library.language === Language.CJ) {
+                imports.clear()
+                content = ['package idlize', 'import std.collection.*', 'import Interop.*'].concat(content)
+            }
+
+            const text = tsCopyrightAndWarning(
+                imports.printToLines(filePath)
+                    .concat(content)
+                    .join('\n')
+            )
+            writeIntegratedFile(installPath, text, 'producing')
         }
-
-        const text = tsCopyrightAndWarning(
-            imports.printToLines(filePath)
-                .concat(content)
-                .join('\n')
-        )
-
-        writeIntegratedFile(installPath, text, 'producing')
     })
 
     return installedToExport
