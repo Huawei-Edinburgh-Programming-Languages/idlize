@@ -19,28 +19,28 @@ import { generateSyntheticIdlNodeName } from "./peer-generation/idl/common";
 import { IDLKeywords } from "./languageSpecificKeywords";
 
 export enum IDLKind {
-    Interface,
-    Import,
-    Callback,
-    Const,
-    Property,
-    Parameter,
-    Method,
-    Callable,
-    Constructor,
-    Enum,
-    EnumMember,
-    Typedef,
-    PrimitiveType,
-    ContainerType,
-    UnspecifiedGenericType,
-    ReferenceType,
-    UnionType,
-    TypeParameterType,
-    OptionalType,
-    Version,
-    Namespace,
-    File,
+    Interface = "Interface",
+    Import = "Import",
+    Callback = "Callback",
+    Const = "Const",
+    Property = "Property",
+    Parameter = "Parameter",
+    Method = "Method",
+    Callable = "Callable",
+    Constructor = "Constructor",
+    Enum = "Enum",
+    EnumMember = "EnumMember",
+    Typedef = "Typedef",
+    PrimitiveType = "PrimitiveType",
+    ContainerType = "ContainerType",
+    UnspecifiedGenericType = "UnspecifiedGenericType",
+    ReferenceType = "ReferenceType",
+    UnionType = "UnionType",
+    TypeParameterType = "TypeParameterType",
+    OptionalType = "OptionalType",
+    Version = "Version",
+    Namespace = "Namespace",
+    File = "File",
 }
 
 export enum IDLEntity {
@@ -56,13 +56,10 @@ export enum IDLEntity {
 export enum IDLExtendedAttributes {
     Accessor = "Accessor",
     Async = "Async",
-    ArkTSType = "ArkTSType",
     CallSignature = "CallSignature",
-    CJType = "CJType",
     CommonMethod = "CommonMethod",
     Component = "Component",
     ComponentInterface = "ComponentInterface",
-    CPPType = "CPPType",
     Deprecated = "Deprecated",
     Documentation = "Documentation",
     DtsName = "DtsName",
@@ -78,7 +75,6 @@ export enum IDLExtendedAttributes {
     Protected = "Protected",
     Synthetic = "Synthetic",
     Throws = "Throws",
-    TSType = "TSType",
     TypeArguments = "TypeArguments",
     TypeParameters = "TypeParameters",
     VerbatimDts = "VerbatimDts",
@@ -607,6 +603,13 @@ export function getPackageClause(entry: IDLFile | IDLEntry): string[] {
 
 export function getPackageName(entry: IDLFile | IDLEntry): string {
     return getPackageClause(entry).join(".")
+}
+
+export function isInPackage(entry: IDLEntry | IDLFile, packageName: string, exactMatch = false) {
+    const entryPackageName = getPackageName(entry)
+    return exactMatch
+        ? entryPackageName === packageName
+        : entryPackageName.startsWith(packageName)
 }
 
 export function getNamespaceName(a: IDLEntry): string {
@@ -1211,6 +1214,15 @@ export function getSuperType(idl: IDLInterface): IDLReferenceType | undefined {
     return parent && parent !== IDLTopType ? parent : undefined
 }
 
+export function getSuperTypes(idl: IDLInterface): IDLReferenceType[] | undefined {
+    if (!idl.inheritance) return undefined
+    if (idl.inheritance[0] == IDLTopType) {
+        return idl.inheritance.length == 1 ? undefined : idl.inheritance.slice(1)
+    } else {
+        return idl.inheritance.length == 0 ? undefined : idl.inheritance
+    }
+}
+
 export function hasSuperType(idl: IDLInterface) {
     return isDefined(getSuperType(idl))
 }
@@ -1378,10 +1390,10 @@ export function forEachFunction(node: IDLNode, cb: (node: IDLFunction) => void):
 }
 
 export function asPromise(type?: IDLType): IDLContainerType | undefined {
-    if (!type) return
-    if (!isContainerType(type)) return
+    if (!type) return undefined
+    if (!isContainerType(type)) return undefined
     const container = type as IDLContainerType
-    if (!IDLContainerUtils.isPromise(container)) return
+    if (!IDLContainerUtils.isPromise(container)) return undefined
     return container
 }
 

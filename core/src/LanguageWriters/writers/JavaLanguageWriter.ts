@@ -145,7 +145,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         this.popIndent()
         this.printer.print(`}`)
     }
-    writeInterface(name: string, op: (writer: this) => void, superInterfaces?: string[]): void {
+    override writeInterface(name: string, op: (writer: this) => void, superInterfaces?: string[], generics?: string[]): void {
         let extendsClause = superInterfaces ? ` extends ${superInterfaces.join(",")}` : ''
         this.printer.print(`interface ${name}${extendsClause} {`)
         this.pushIndent()
@@ -164,8 +164,8 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         let prefix = this.makeFieldModifiersList(modifiers)
         this.printer.print(`${prefix} ${(this.getNodeName(type))} ${name}${initExpr ? ` = ${initExpr.asString()}` : ""};`)
     }
-    writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
-        this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
+    writeNativeMethodDeclaration(method: Method): void {
+        this.writeMethodDeclaration(method.name, method.signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: this) => void, superCall?: Method, modifiers?: MethodModifier[]) {
         this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} ${className}(${signature.args.map((it, index) => `${this.getNodeName(it)} ${signature.argName(index)}`).join(", ")}) {`)
@@ -176,9 +176,36 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         op(this)
         this.popIndent()
         this.printer.print(`}`)
-    }
-    writeProperty(propName: string, propType: idl.IDLType) {
-        throw new Error("writeProperty for Java is not implemented yet.")
+    } 
+    writeProperty(propName: string, propType: idl.IDLType, modifiers: FieldModifier[], getter?: { method: Method, op: () => void }, setter?: { method: Method, op: () => void }): void {
+        let isStatic = modifiers.includes(FieldModifier.STATIC)
+        let isMutable = !modifiers.includes(FieldModifier.READONLY)
+        let containerName = propName.concat("_container")
+        if (getter) {
+            if(!getter!.op) {
+                this.print(`private var ${this.getNodeName(propType)} ${containerName};`)
+            }
+            this.writeGetterImplementation(
+                new Method(propName, new MethodSignature(propType, []), isStatic ? [MethodModifier.STATIC, MethodModifier.PUBLIC] : [MethodModifier.PUBLIC]),
+                getter ? getter!.op :
+                (writer) => {
+                    writer.print(`return ${containerName}`)
+                } 
+            )
+            if (isMutable) {
+                const setSignature = new NamedMethodSignature(idl.IDLVoidType, [propType], [propName])
+                this.writeSetterImplementation(
+                    new Method(propName, setSignature, isStatic ? [MethodModifier.STATIC, MethodModifier.PUBLIC] : [MethodModifier.PUBLIC]), 
+                    setter ? setter!.op :
+                    (writer) => {
+                        writer.print(`${containerName} = ${propName};`)
+                    }
+                )
+            }
+        }
+        else {
+            this.writeMethodDeclaration(propName, new MethodSignature(propType, []))
+        }
     }
     override writeTypeDeclaration(decl: idl.IDLTypedef): void {
         throw new Error(`Type declarations do not exist in Java, use something else`)
@@ -299,7 +326,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         this.writeStatement(this.makeAssign(valueType, undefined,
             this.makeRuntimeTypeGetterCall(value), false))
     }
-    override makeEnumCast(enumName: string, _unsafe: boolean, _convertor: ArgConvertor | undefined): string {
+    override makeEnumCast(_enumEntry: idl.IDLEnum, enumName: string): string {
         return `${enumName}.value`
     }
     override castToBoolean(value: string): string { return value }

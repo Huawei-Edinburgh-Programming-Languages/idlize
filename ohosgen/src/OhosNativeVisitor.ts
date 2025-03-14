@@ -65,6 +65,8 @@ import {
     PeerMethod,
     dropSuffix,
     MaterializedClass,
+    isInIdlize,
+    isStaticMaterialized,
 } from '@idlizer/core'
 import {
     createOutArgConvertor,
@@ -126,7 +128,7 @@ class OHOSNativeVisitor {
     }
 
     private apiName(clazz: IDLInterface): string {
-        return capitalize(clazz.name)
+        return capitalize(qualifiedName(clazz, "_"))
     }
 
     makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
@@ -162,7 +164,8 @@ class OHOSNativeVisitor {
 
     private writeModifier(clazz: IDLInterface, writer: CppLanguageWriter) {
         let name = this.modifierName(clazz)
-        let handleType = this.handleType(clazz.name)
+        let handleType = this.handleType(clazz)
+        let className = qualifiedName(clazz, "_")
         let _h = this.hWriter
         let _c = writer
         _h.print(`struct ${handleType}Opaque;`)
@@ -173,7 +176,7 @@ class OHOSNativeVisitor {
         _c.print(`const static ${name} instance = {`)
         _c.pushIndent()
         _h.pushIndent()
-        if (!isGlobalScope(clazz)) {
+        if (!isGlobalScope(clazz) && !isStaticMaterialized(clazz, this.library)) {
             let ctors = [...clazz.constructors]
             if (ctors.length == 0) {
                 ctors.push(createConstructor([], undefined)) // Add empty fake constructor
@@ -185,12 +188,12 @@ class OHOSNativeVisitor {
                 let argConvertors = ctor.parameters.map(param => generateArgConvertor(this.library, param))
                 let cppArgs = this.generateCParameters(ctor, argConvertors, _h)
                 _h.print(`${handleType} (*${name})(${cppArgs});`) // TODO check
-                let implName = `${clazz.name}_${name}Impl`
+                let implName = `${className}_${name}Impl`
                 _c.print(`&${implName},`)
                 this.impls.set(implName, { params, returnType: handleType, paramsCString: cppArgs })
             })
             {
-                let destructName = `${clazz.name}_destructImpl`
+                let destructName = `${className}_destructImpl`
                 let params = [new NameType("thisPtr", handleType)]
                 _h.print(`void (*destruct)(${params.map(it => `${it.type} ${it.name}`).join(", ")});`)
                 _c.print(`&${destructName},`)
@@ -208,7 +211,7 @@ class OHOSNativeVisitor {
             let returnType = this.returnTypeConvertor.convert(adjustedSignature.returnType)
             const args = this.generateCParameters(method, adjustedSignature.convertors, _h)
             _h.print(`${returnType} (*${method.name}${overloadPostfix})(${args});`)
-            let implName = `${clazz.name}_${method.name}${overloadPostfix}Impl`
+            let implName = `${className}_${method.name}${overloadPostfix}Impl`
             _c.print(`&${implName},`)
             this.impls.set(implName, { params, returnType, paramsCString: args })
         })
@@ -242,7 +245,7 @@ class OHOSNativeVisitor {
                 let returnType = this.returnTypeConvertor.convert(adjustedSignature.returnType)
                 const args = this.generateCParameters(method, adjustedSignature.convertors, _h)
                 _h.print(`${returnType} (*${method.name})(${args});`)
-                let implName = `${clazz.name}_${method.name}Impl`
+                let implName = `${className}_${method.name}Impl`
                 _c.print(`&${implName},`)
                 this.impls.set(implName, { params, returnType, paramsCString: args })
             }
@@ -276,10 +279,10 @@ class OHOSNativeVisitor {
     }
 
     private modifierName(clazz: IDLInterface): string {
-        return this.mangleTypeName(`${clazz.name}Modifier`)
+        return this.mangleTypeName(`${qualifiedName(clazz, "_")}Modifier`)
     }
-    private handleType(name: string): string {
-        return this.mangleTypeName(`${name}Handle`)
+    private handleType(clazz: IDLInterface): string {
+        return this.mangleTypeName(`${qualifiedName(clazz, "_")}Handle`)
     }
 
     private writeImpls() {
@@ -383,7 +386,7 @@ class OHOSNativeVisitor {
 
     prepare() {
         this.library.files.forEach(file => {
-            if (file.isPredefined ||
+            if (isInIdlize(file.file) ||
                 this.library.libraryPackages?.length && !this.library.libraryPackages.includes(file.packageName()))
                 return
             linearizeNamespaceMembers(file.entries).forEach(entry => {
@@ -422,7 +425,7 @@ class ReturnTypeConvertor extends CppReturnTypeConvertor {
 class OhosBridgeCcVisitor extends BridgeCcVisitor {
     protected generateApiCall(method: PeerMethod, modifierName?: string): string {
         // TODO: may be need some translation tables?
-        let clazz = modifierName ?? dropSuffix(dropSuffix(dropSuffix(method.originalParentName, "Method"), "Attribute"), "Interface")
+        let clazz = modifierName ?? method.originalParentName
         return capitalize(clazz) + "()"
     }
 
@@ -547,7 +550,7 @@ export function suggestLibraryName(library: PeerLibrary) {
     if (library.name !== '') {
         return library.name
     }
-    let libraryName = library.files.filter(f => !f.isPredefined)[0].packageName()
+    let libraryName = library.files.filter(f => !isInIdlize(f.file))[0].packageName()
     libraryName = libraryName.replaceAll("@", "").replaceAll(".", "_").toUpperCase()
     return libraryName
 }

@@ -19,11 +19,12 @@ import * as ts from "typescript"
 
 import { LinterVisitor, toLinterString } from "./linter"
 import { LinterMessage } from "./LinterMessage"
-import { CoreConfiguration, defaultCoreConfuguration, findVersion, generate, setDefaultConfiguration } from "@idlizer/core"
+import { patchDefaultConfiguration, findVersion, generate, scanInputDirs } from "@idlizer/core"
 
 const options = program
     .option('--input-dir <path>', 'Path to input dir(s), comma separated')
     .option('--output-dir <path>', 'Path to output dir')
+    .option('-r,--recursive', 'Scan input directory recursively', false)
     .option('--input-file <name>', 'Name of file to convert, all files in input-dir if none')
     .option('--suppress-errors <suppress>', 'Error codes to suppress, comma separated, no space')
     .option('--whitelist <whitelist.json>', 'Whitelist for linter')
@@ -35,25 +36,6 @@ const defaultCompilerOptions: ts.CompilerOptions = {
     module: ts.ModuleKind.CommonJS,
     noLib: true,
     types: []
-}
-
-const defaultLinterConfiguration: CoreConfiguration = {
-    ...defaultCoreConfuguration,
-    rootComponents: [
-        "Root",
-        "ComponentRoot",
-        "CommonMethod",
-        "SecurityComponentMethod",
-        "CommonTransition",
-        "CalendarAttribute",
-        "ContainerSpanAttribute",
-    ],
-    standaloneComponents: [
-        "TextPickerDialog",
-        "TimePickerDialog",
-        "AlertDialog",
-        "CanvasPattern"
-    ]
 }
 
 function processInputOption(option: string | undefined): string[] {
@@ -95,20 +77,37 @@ function validatePaths(paths: string[], type: 'file' | 'dir'): void {
 function main() {
     console.log(`IDLize Linter version ${findVersion()}`)
 
-    setDefaultConfiguration(defaultLinterConfiguration)
+    patchDefaultConfiguration({
+        rootComponents: [
+            "Root",
+            "ComponentRoot",
+            "CommonMethod",
+            "SecurityComponentMethod",
+            "CommonTransition",
+            "CalendarAttribute",
+            "ContainerSpanAttribute",
+        ],
+        standaloneComponents: [
+            "TextPickerDialog",
+            "TimePickerDialog",
+            "AlertDialog",
+            "CanvasPattern"
+        ]
+    })
 
     const { inputDirs, inputFiles } = formatInputPaths(options)
     validatePaths(inputDirs, 'dir')
     validatePaths(inputFiles, 'file')
+    const dtsInputFiles = scanInputDirs(inputDirs).concat(inputFiles).filter(it => it.endsWith('.d.ts'))
 
     const allEntries = new Array<LinterMessage[]>()
     generate(
-        inputDirs,
-        inputFiles,
+        dtsInputFiles,
         options.outputDir,
         (sourceFile, program, compilerHost) => new LinterVisitor(sourceFile, program, compilerHost),
         {
             compilerOptions: defaultCompilerOptions,
+            recursive: options.recursive,
             onSingleFile: (entries: LinterMessage[]) => allEntries.push(entries),
             onBegin: () => { },
             onEnd: (outputDir) => {

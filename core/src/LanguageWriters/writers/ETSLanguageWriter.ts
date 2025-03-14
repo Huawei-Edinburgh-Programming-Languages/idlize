@@ -20,6 +20,7 @@ import {
     LanguageStatement,
     LanguageWriter,
     MakeCastOptions,
+    Method,
     MethodModifier,
     MethodSignature,
     NamedMethodSignature,
@@ -35,7 +36,8 @@ import {
     InterfaceConvertor,
     MaterializedClassConvertor,
     OptionConvertor,
-    UnionConvertor
+    UnionConvertor,
+    BufferConvertor
 } from "../ArgConvertors"
 import * as idl from '../../idl'
 import { convertDeclaration, IdlNameConvertor } from "../nameConvertor"
@@ -167,6 +169,16 @@ export function generateTypeCheckerName(typeName: string): string {
     return `is${typeName.replaceAll('[]', 'Brackets')}`
 }
 
+export function generateEnumToOrdinalName(typeName: string): string {
+    typeName = typeName.split(".").join("_")
+    return `${typeName}_ToOrdinal`
+}
+
+export function generateEnumFromOrdinalName(typeName: string): string {
+    typeName = typeName.split(".").join("_")
+    return `${typeName}_FromOrdinal`
+}
+
 export function makeArrayTypeCheckCall(
     valueAccessor: string,
     typeName: string,
@@ -192,12 +204,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
         return new ETSLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor, this.arrayConvertor)
     }
-    writeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
-        if (signature.returnType === IDLThisType) {
-            throw new Error('static method can not return this!')
-        }
-        this.writeMethodDeclaration(name, signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
-    }
     makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new EtsAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
@@ -213,13 +219,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.NATIVE, MethodModifier.STATIC]
     }
-    makeUnsafeCast(convertor: ArgConvertor, param: string): string {
-        if (idl.isEnum(convertor.idlType) && !param.endsWith(".value")) {
-            const isStringEnum = idl.isStringEnum(convertor.idlType)
-            return `(${param} as ${this.typeConvertor.convert(convertor.idlType)}).${isStringEnum ? 'ordinal' : 'value'}`
-        }
-        return super.makeUnsafeCast(convertor, param)
-    }
     runtimeType(param: ArgConvertor, valueType: string, value: string) {
         super.runtimeType(param, valueType, value)
     }
@@ -228,10 +227,11 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     enumFromOrdinal(value: LanguageExpression, enumEntry: idl.IDLType): LanguageExpression {
         const enumName = this.getNodeName(enumEntry)
-        return this.makeString(`${value.asString()} as ${enumName}`)
+        return this.makeMethodCall('TypeChecker', generateEnumFromOrdinalName(enumName), [this.makeString(value.asString())])
     }
-    ordinalFromEnum(value: LanguageExpression, _: idl.IDLType): LanguageExpression {
-        return this.makeCast(this.makeString(`${value.asString()}`), IDLI32Type)
+    ordinalFromEnum(value: LanguageExpression, enumEntry: idl.IDLType): LanguageExpression {
+        const enumName = this.getNodeName(enumEntry)
+        return this.makeMethodCall('TypeChecker', generateEnumToOrdinalName(enumName), [this.makeString(value.asString())])
     }
     makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => string},
                                 value: string,
@@ -265,21 +265,18 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         // ArkTS does not support - 'this.?'
         super.writeMethodCall(receiver, method, params, nullable && receiver !== "this")
     }
-    writeProperty(propName: string, propType: IDLType) {
-        throw new Error("writeProperty for ArkTS is not implemented yet.")
+    isQuickType(type: IDLType): boolean {
+        return idl.asPromise(type) == undefined
     }
-    override makeEnumCast(value: string, _unsafe: boolean, convertor: ArgConvertor | undefined): string {
-        if (convertor === undefined) {
-            throwException(`The makeEnumCast function required EnumConvertor`)
+    writeNativeMethodDeclaration(method: Method): void {
+        if (method.signature.returnType === IDLThisType) {
+            throw new Error('static method can not return this!')
         }
-        const decl = this.resolver.toDeclaration(convertor.nativeType())
-        if (!idl.isEnum(decl)) {
-            throwException(`Declaration type must be Enum`)
-        }
-        // ((value as Axis) as int) - in case when Axis was casted to Object in Map<Axis, Smth>
-        return this.makeCast(this.makeCast(this.makeString(value), convertor.idlType),
-            IDLI32Type).asString()
+        this.writeMethodDeclaration(method.name, method.signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
     }
+    //makeSerializedBufferGetter(serializer: string): LanguageExpression {
+    //    return this.makeMethodCall(serializer, `asPointer`, [])
+    //}
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string,
                               convertorIndex: number,
                               runtimeTypeIndex: number): LanguageExpression {
@@ -343,6 +340,13 @@ export class ETSLanguageWriter extends TSLanguageWriter {
                 this.getNodeName(convertor.idlType),
                 convertor.declaration.properties.filter(it => !it.isStatic).map(it => it.name),
                 duplicateMembers!,
+                this)
+        }
+        if (convertor instanceof BufferConvertor) {
+            return makeInterfaceTypeCheckerCall(value,
+                this.getNodeName(convertor.idlType),
+                [],
+                new Set(),
                 this)
         }
         if (convertor instanceof AggregateConvertor) {

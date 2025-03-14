@@ -17,6 +17,12 @@ import { FunctionCallExpression, Method, MethodModifier, NamedMethodSignature } 
 import { BlockStatement, ExpressionStatement, IfStatement, LanguageWriter, MethodSignature, NaryOpExpression,
     createConstructPeerMethod, PeerClass, PeerMethod, PeerLibrary, Language, InteropArgConvertor,
     createInteropArgConvertor, NativeModuleType, CJLanguageWriter, isStructureType, InteropReturnTypeConvertor,
+    isInIdlizeInterop,
+    TypeConvertor,
+    convertType,
+    generatorConfiguration,
+    isDirectMethod,
+    isVMContextMethod,
 } from "@idlizer/core"
 import * as idl from  '@idlizer/core/idl'
 import { NativeModule } from "../NativeModule";
@@ -31,8 +37,20 @@ class NativeModulePrinterBase {
         protected readonly language: Language,
     ) {}
 
+    tryWriteQuick(method: Method): void {
+        if (this.language != Language.ARKTS) return
+        if (isVMContextMethod(method)) return
+        if (isDirectMethod(method, this.library)) {
+            this.nativeModule.print('@ani.unsafe.Direct')
+            return
+        }
+        this.nativeModule.print('@ani.unsafe.Quick')
+        return
+    }
+
     protected printMethod(method: Method) {
-        this.nativeModule.writeNativeMethodDeclaration(method.name, method.signature)
+        this.tryWriteQuick(method)
+        this.nativeModule.writeNativeMethodDeclaration(method)
     }
 }
 
@@ -63,6 +81,7 @@ class NativeModulePredefinedVisitor extends NativeModulePrinterBase {
         )
         if (language === Language.TS) {
             function patchType(type:idl.IDLType): idl.IDLType {
+                // TODO: do we need it?
                 if (type === idl.IDLBooleanType) {
                     return idl.IDLNumberType
                 }
@@ -72,7 +91,9 @@ class NativeModulePredefinedVisitor extends NativeModulePrinterBase {
             const patchedReturnType = patchType(signature.returnType)
             signature = new NamedMethodSignature(patchedReturnType, patchedSignatureArgs, signature.argsNames, signature.defaults)
         }
-        return new Method('_' + inputMethod.name, signature)
+        let modifiers = generatorConfiguration().forceContext.includes(inputMethod.name) ?
+            [ MethodModifier.FORCE_CONTEXT ] : undefined
+        return new Method('_' + inputMethod.name, signature, modifiers)
     }
 
     visit(): void {
@@ -263,7 +284,7 @@ function writeCJNativeModuleMethod(method: Method, nativeModule: LanguageWriter,
     })
     if (nativeFunctions) {
         nativeFunctions!.pushIndent()
-        nativeFunctions!.writeNativeMethodDeclaration(nativeName, signature)
+        nativeFunctions!.writeNativeMethodDeclaration(new Method(nativeName, signature))
         nativeFunctions!.popIndent()
     }
 }
@@ -329,11 +350,9 @@ function collectNativeModuleImports(module: NativeModuleType, file: SourceFile, 
             "KFloat32ArrayPtr",
             "pointer",
             "KInteropReturnBuffer",
+            "NativeBuffer"
         ], "@koalaui/interop")
         tsFile.imports.addFeatures(["int32", "float32"], "@koalaui/common")
-        if (file.language === Language.ARKTS) {
-            tsFile.imports.addFeature('NativeBuffer', '@koalaui/interop')
-        }
         if (module === NativeModule.Generated && library.name === 'arkoala') {
             if (file.language === Language.TS)
                 tsFile.imports.addFeature('Length', './ArkUnitsInterfaces')
@@ -347,7 +366,7 @@ function printNativeModuleRegistration(language: Language, module: NativeModuleT
     switch (language) {
         case Language.TS:
             const tsFile = file as TsSourceFile
-            tsFile.imports.addFeatures(['loadNativeModuleLibrary'], '@koalaui/interop')
+            tsFile.imports.addFeatures(['loadNativeModuleLibrary', 'NativeBuffer'], '@koalaui/interop')
             tsFile.content.print("private static _isLoaded: boolean = false")
             tsFile.content.writeMethodImplementation(new Method(
                 "_LoadOnce",
@@ -476,21 +495,24 @@ export function printCJArkUIGeneratedNativeFunctions(library: PeerLibrary, modul
 }
 
 export function collectPredefinedNativeModuleEntries(library: PeerLibrary, module: NativeModuleType): idl.IDLInterface[] {
+    const interopDeclarations = library.files
+        .filter(it => isInIdlizeInterop(it.file))
+        .flatMap(it => it.file.entries.filter(idl.isInterface))
     switch (module) {
         case NativeModule.Interop:
-            return library.predefinedDeclarations.filter(it => it.name === "Interop" || it.name === "Loader")
+            return interopDeclarations.filter(it => it.name === "Interop" || it.name === "Loader")
         case NativeModule.Test:
-            return library.predefinedDeclarations.filter(it => it.name === "Test")
+            return interopDeclarations.filter(it => it.name === "Test")
         case NativeModule.ArkUI:
-            return library.predefinedDeclarations.filter(it => it.name === "Node")
+            return interopDeclarations.filter(it => it.name === "Node")
         default:
             throw new Error(`NativeModuleType.${module} is not predefined`)
     }
 }
 
-export function makeInteropSignature(method: PeerMethod, returnType: idl.IDLType | undefined, interopConvertor: InteropArgConvertor, retConvertor: InteropReturnTypeConvertor): NamedMethodSignature {
+export function makeInteropSignature(method: PeerMethod, returnType: idl.IDLType | undefined, interopConvertor: TypeConvertor<string>, retConvertor: InteropReturnTypeConvertor): NamedMethodSignature {
     const maybeReceiver: ({name: string, type: idl.IDLType})[] = method.hasReceiver()
-        ? [{ name: 'ptr', type: idl.createReferenceType('KPointer') }] : []
+        ? [{ name: 'ptr', type: idl.IDLPointerType }] : []
     let serializerArgCreated = false
     method.argAndOutConvertors.forEach(it => {
         if (it.useArray) {
@@ -501,7 +523,7 @@ export function makeInteropSignature(method: PeerMethod, returnType: idl.IDLType
         } else {
             maybeReceiver.push({
                 name: `${it.param}`,
-                type: idl.createReferenceType(interopConvertor.convert(it.interopType()))
+                type: idl.createReferenceType(convertType(interopConvertor, it.interopType()))
             })
         }
     })
@@ -547,6 +569,7 @@ function getReturnValue(type: idl.IDLType): string {
     }
 
     switch(type) {
+        case idl.IDLUnknownType :return "0"
         case idl.IDLBooleanType : return "false"
         case idl.IDLNumberType: return "1"
         case idl.IDLPointerType: return "0"

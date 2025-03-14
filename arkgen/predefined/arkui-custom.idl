@@ -129,4 +129,11 @@ interface LazyForEachOps {
 interface SystemOps {
     static pointer StartFrame();
     static void EndFrame(pointer root);
+    static void syncInstanceId(i32 instanceId);
+    static void restoreInstanceId();
+};
+
+[Entity=Class]
+interface FocusController {
+    static void requestFocus(String key);
 };

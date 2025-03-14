@@ -1,0 +1,65 @@
+build idlize-arktscgen:
+  stage: build
+  tags:
+    - idlize-ci
+    - koala-ci
+  before_script:
+    - !reference [.setup, script]
+  script:
+    - npm run compile --prefix arktscgen
+
+test arktscgen:
+  stage: test
+  tags:
+    - idlize-ci
+    - koala-ci
+  before_script:
+    - !reference [.setup, script]
+  script:
+    - npm run all --prefix arktscgen
+  needs:
+    - install panda sdk
+
+pack idlize-arktscgen:
+  extends:
+    - .npm-pack
+  variables:
+    PACKAGE_DIR: arktscgen
+  needs:
+    - build idlize-arktscgen
+
+pre-publish test arktscgen:
+  stage: pre-publish
+  tags:
+    - idlize-ci
+    - koala-ci
+  before_script:
+    - !reference [ .setup, script ]
+  script:
+    - npm run test:pack --prefix arktscgen
+  needs:
+    - build idlize-arktscgen
+    - install panda sdk
+
+publish idlize-arktscgen:
+  extends:
+    - .npm-publish
+  variables:
+    PACKAGE_DIR: arktscgen
+  dependencies:
+    - build idlize-arkgen
+
+install panda sdk:
+  stage: build
+  tags:
+    - idlize-ci
+    - koala-ci
+  before_script:
+    - !reference [ .setup, script ]
+    - cd $CI_PROJECT_DIR
+  script:
+    - PANDA_SDK_VERSION=next npm run --prefix ./external/incremental/tools/panda panda:sdk:install
+  artifacts:
+    expire_in: 1 days
+    paths:
+      - external/incremental/tools/panda/node_modules

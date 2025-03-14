@@ -22,9 +22,15 @@ import {
     defaultCompilerOptions,
     Language,
     findVersion,
-    setDefaultConfiguration,
     PeerFile,
     PeerLibrary,
+    verifyIDLLinter,
+    isDefined,
+    scanInputDirs,
+    toIDLFile,
+    setDefaultConfiguration,
+    patchDefaultConfiguration,
+    D,
 } from "@idlizer/core"
 import {
     IDLEntry,
@@ -36,20 +42,22 @@ import {
     transformMethodsAsync2ReturnPromise,
 } from "@idlizer/core/idl"
 import { IDLVisitor, loadPeerConfiguration,
-    generateTracker, IDLInteropPredefinesVisitor, IdlPeerProcessor, IDLPredefinesVisitor, loadPlugin,
+    generateTracker, IdlPeerProcessor, loadPlugin,
     SkoalaDeserializerPrinter, IdlSkoalaLibrary, IldSkoalaFile, generateIdlSkoala,
     IdlWrapperProcessor, fillSyntheticDeclarations,
-    scanPredefinedDirectory, scanNotPredefinedDirectory,
-    scanCommonPredefined,
     formatInputPaths,
     validatePaths,
-    PeerGeneratorConfiguration,
-    defaultPeerGeneratorConfiguration,
+    libohosPredefinedFiles,
+    PeerGeneratorConfigurationType,
+    PeerGeneratorConfigurationSchema,
+    peerGeneratorConfiguration,
 } from "@idlizer/libohos"
 import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./arkoala"
 import { ArkoalaPeerLibrary } from "./ArkoalaPeerLibrary"
+import { makeInteropBridges } from "./InteropBridges"
 
 const options = program
+    .option('--show-config-schema', 'Prints JSON schema for config')
     .option('--dts2test', 'Generate tests from .d.ts to .h')
     .option('--dts2peer', 'Convert .d.ts to peer drafts')
     .option('--ets2ts', 'Convert .ets to .ts')
@@ -86,27 +94,38 @@ const options = program
     .option('--default-idl-package <name>', 'Name of the default package for generated IDL')
     .option('--no-commented-code', 'Do not generate commented code in modifiers')
     .option('--enable-log', 'Enable logging')
-    .option('--options-file <path>', 'Path to generator configuration options file (appends to defaults)')
-    .option('--override-options-file <path>', 'Path to generator configuration options file (replaces defaults)')
+    .option('--options-file <path>', 'Path to generator configuration options file (appends to defaults). Use --ignore-default-config to override default options.')
+    .option('--ignore-default-config', 'Use with --options-file to override default generator configuration options.', false)
     .option('--arkts-extension <string> [.ts|.ets]', "Generated ArkTS language files extension.", ".ts")
+    .option('--interop-bridges <string>', "Generate interop bridges macros")
 
     .parse()
     .opts()
 
-let apiVersion = options.apiVersion ?? 9999
-Language.ARKTS.extension = options.arktsExtension as string
-
-setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.overrideOptionsFile))
-
-if (process.env.npm_package_version) {
-    console.log(`IDLize version ${findVersion()}`)
-}
 
 let didJob = false
 
+if (options.showConfigSchema) {
+    console.log(D.printJSONSchema(PeerGeneratorConfigurationSchema))
+    didJob = true
+}
+
+if (options.interopBridges) {
+    console.log(makeInteropBridges(options.interopBridges))
+    didJob = true
+}
+
+let apiVersion = options.apiVersion ?? 9999
+Language.ARKTS.extension = options.arktsExtension as string
+
+setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.ignoreDefaultConfig as boolean))
+
+if (process.env.npm_package_version && !options.showConfigSchema) {
+    console.log(`IDLize version ${findVersion()}`)
+}
+
 if (options.dts2skoala) {
-    setDefaultConfiguration<PeerGeneratorConfiguration>({
-        ...defaultPeerGeneratorConfiguration,
+    patchDefaultConfiguration<PeerGeneratorConfigurationType>({
         ApiVersion: apiVersion,
         TypePrefix: "",
         LibraryPrefix: "",
@@ -133,8 +152,7 @@ if (options.dts2skoala) {
     }
 
     generate(
-        inputDirs,
-        inputFiles,
+        scanInputDirs(inputDirs, '.d.ts').concat(inputFiles),
         outputDir,
         (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, skoalaLibrary),
         {
@@ -175,28 +193,32 @@ if (options.dts2skoala) {
     didJob = true
 }
 
+function arkgenPredefinedFiles(): string[] {
+    return scanInputDirs([path.join(__dirname, "../predefined")])
+}
+
 if (options.idl2peer) {
     const outDir = options.outputDir ?? "./out"
     const language = Language.fromString(options.language ?? "ts")
+    const { inputFiles, inputDirs } = formatInputPaths(options)
 
     const idlLibrary = new ArkoalaPeerLibrary(language, options.libraryPackages)
-    idlLibrary.files.push(...scanNotPredefinedDirectory(options.inputDir))
-    const { interop, root } = scanCommonPredefined()
-    interop.forEach(file => {
-        new IDLInteropPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
+    const allInputFiles = scanInputDirs(inputDirs)
+        .concat(inputFiles)
+        .concat(libohosPredefinedFiles())
+        .concat(arkgenPredefinedFiles())
+    const idlInputFiles = allInputFiles.filter(it => it.endsWith('.idl'))
+    idlInputFiles.forEach(idlFilename => {
+        idlFilename = path.resolve(idlFilename)
+        const file = toIDLFile(idlFilename)
+        const peerFile = new PeerFile(file)
+        idlLibrary.files.push(peerFile)
     })
-
-    root.forEach(file => {
-        new IDLPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
-    })
+    if (options.verifyIdl) {
+        idlLibrary.files.forEach(file => {
+            verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+        })
+    }
     new IdlPeerProcessor(idlLibrary).process()
 
     generateTarget(idlLibrary, outDir, language)
@@ -212,36 +234,23 @@ if (options.dts2peer) {
     validatePaths(inputDirs, "dir")
     validatePaths(inputFiles, "file")
 
+    const allInputFiles = scanInputDirs(inputDirs)
+        .concat(inputFiles)
+        .concat(libohosPredefinedFiles())
+        .concat(arkgenPredefinedFiles())
+    const dtsInputFiles = allInputFiles.filter(it => it.endsWith('.d.ts'))
+    const idlInputFiles = allInputFiles.filter(it => it.endsWith('.idl'))
+
     const idlLibrary = new ArkoalaPeerLibrary(lang, options.libraryPackages)
-    // collect predefined files
-    const { interop, root } = scanCommonPredefined()
-    interop.forEach(file => {
-        new IDLInteropPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
-    })
-
-    root.forEach(file => {
-        new IDLPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
-    })
-
-    scanPredefinedDirectory(__dirname, "../predefined").forEach(file => {
-        new IDLPredefinesVisitor({
-            sourceFile: file.originalFilename,
-            peerLibrary: idlLibrary,
-            peerFile: file,
-        }).visitWholeFile()
+    idlInputFiles.forEach(idlFilename => {
+        idlFilename = path.resolve(idlFilename)
+        const file = toIDLFile(idlFilename)
+        const peerFile = new PeerFile(file)
+        idlLibrary.files.push(peerFile)
     })
 
     generate(
-        inputDirs,
-        inputFiles,
+        dtsInputFiles,
         generatedPeersDir,
         (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, idlLibrary),
         {
@@ -269,6 +278,11 @@ if (options.dts2peer) {
                 idlLibrary.files.push(peerFile)
             },
             onEnd(outDir) {
+                if (options.verifyIdl) {
+                    idlLibrary.files.forEach(file => {
+                        verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+                    })
+                }
                 fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
                 peerProcessor.process()

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-
+import * as path from "path"
 import { program } from "commander"
 import * as fs from "fs"
 import {
@@ -24,6 +24,10 @@ import {
     setDefaultConfiguration,
     PeerFile,
     PeerLibrary,
+    verifyIDLLinter,
+    toIDLFile,
+    scanInputDirs,
+    D,
 } from "@idlizer/core"
 import {
     isEnum,
@@ -35,15 +39,16 @@ import {
 import { IDLVisitor, loadPeerConfiguration,
     IdlPeerProcessor,
     loadPlugin, fillSyntheticDeclarations, peerGeneratorConfiguration,
-    scanNotPredefinedDirectory,
-    scanAndVisitCommonPredefined,
     formatInputPaths,
     validatePaths,
+    libohosPredefinedFiles,
+    PeerGeneratorConfigurationSchema,
 } from "@idlizer/libohos"
 import { generateOhos } from "./ohos"
 import { suggestLibraryName } from "./OhosNativeVisitor"
 
 const options = program
+    .option('--show-config-schema', 'Prints JSON schema for config')
     .option('--dts2peer', 'Convert .d.ts to peer drafts')
     .option('--input-dir <path>', 'Path to input dir(s), comma separated')
     .option('--base-dir <path>', 'Base directories, for the purpose of packetization of IDL modules, comma separated, defaulted to --input-dir if missing')
@@ -66,8 +71,8 @@ const options = program
     .option('--use-new-ohos', 'Use new ohos generator')
     .option('--enable-log', 'Enable logging')
     .option('--split-files', 'Experimental feature to store declarations in different files for ohos generator')
-    .option('--options-file <path>', 'Path to generator configuration options file (appends to defaults)')
-    .option('--override-options-file <path>', 'Path to generator configuration options file (replaces defaults)')
+    .option('--options-file <path>', 'Path to generator configuration options file (appends to defaults). Use --ignore-default-config to override default options.')
+    .option('--ignore-default-config', 'Use with --options-file to override default generator configuration options.', false)
     .option('--arkts-extension <string> [.ts|.ets]', "Generated ArkTS language files extension.", ".ts")
     .parse()
     .opts()
@@ -77,10 +82,15 @@ let apiVersion = options.apiVersion ?? 9999
 
 options.inputFiles = processInputFiles(options.inputFiles)
 
-setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.overrideOptionsFile))
+setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.ignoreDefaultConfig as boolean))
 
-if (process.env.npm_package_version) {
+if (process.env.npm_package_version && !options.showConfigSchema) {
     console.log(`IDLize version ${findVersion()}`)
+}
+
+if (options.showConfigSchema) {
+    console.log(D.printJSONSchema(PeerGeneratorConfigurationSchema))
+    didJob = true
 }
 
 if (options.idl2peer) {
@@ -92,8 +102,21 @@ if (options.idl2peer) {
     validatePaths(inputFiles, "file")
 
     const idlLibrary = new PeerLibrary(language, libraryPackages)
-    scanAndVisitCommonPredefined(idlLibrary);
-    idlLibrary.files.push(...scanNotPredefinedDirectory(inputDirs[0]))
+    const allInputFiles = scanInputDirs(inputDirs)
+        .concat(inputFiles)
+        .concat(libohosPredefinedFiles())
+    const idlInputFiles = allInputFiles.filter(it => it.endsWith('.idl'))
+    idlInputFiles.forEach(idlFilename => {
+        idlFilename = path.resolve(idlFilename)
+        const file = toIDLFile(idlFilename)
+        const peerFile = new PeerFile(file)
+        idlLibrary.files.push(peerFile)
+    })
+    if (options.verifyIdl) {
+        idlLibrary.files.forEach(file => {
+            verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+        })
+    }
     new IdlPeerProcessor(idlLibrary).process()
 
     generateTarget(idlLibrary, outDir, language)
@@ -111,11 +134,21 @@ if (options.dts2peer) {
 
     options.docs = "all"
     const idlLibrary = new PeerLibrary(lang, libraryPackages)
-    scanAndVisitCommonPredefined(idlLibrary);
+    const allInputFiles = scanInputDirs(inputDirs)
+        .concat(inputFiles)
+        .concat(libohosPredefinedFiles())
+    const dtsInputFiles = allInputFiles.filter(it => it.endsWith('.d.ts'))
+    const idlInputFiles = allInputFiles.filter(it => it.endsWith('.idl'))
+
+    idlInputFiles.forEach(idlFilename => {
+        idlFilename = path.resolve(idlFilename)
+        const file = toIDLFile(idlFilename)
+        const peerFile = new PeerFile(file)
+        idlLibrary.files.push(peerFile)
+    })
 
     generate(
-        inputDirs,
-        inputFiles,
+        dtsInputFiles,
         generatedPeersDir,
         (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options, idlLibrary),
         {
@@ -143,6 +176,11 @@ if (options.dts2peer) {
                 idlLibrary.files.push(peerFile)
             },
             onEnd(outDir: string) {
+                if (options.verifyIdl) {
+                    idlLibrary.files.forEach(file => {
+                        verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+                    })
+                }
                 fillSyntheticDeclarations(idlLibrary)
                 const peerProcessor = new IdlPeerProcessor(idlLibrary)
                 peerProcessor.process()

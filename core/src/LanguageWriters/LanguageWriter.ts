@@ -22,6 +22,8 @@ import * as fs from "fs"
 import { NativeModuleType, RuntimeType } from "./common"
 import { ArgConvertor } from "./ArgConvertors";
 import { ReferenceResolver } from "../peer-generation/ReferenceResolver";
+import { IdlNameConvertor } from "./nameConvertor";
+import { CppInteropArgConvertor } from "./convertors/CppConvertors";
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -338,6 +340,7 @@ export enum MethodModifier {
     SETTER,
     THROWS,
     FREE, // not a member of interface/class
+    FORCE_CONTEXT, // If method implementation will need VM context, synthetic
 }
 
 export enum ClassModifier {
@@ -355,6 +358,10 @@ export class Field {
 }
 
 export class Method {
+    // Mostly for synthetic methods.
+    private static knownReferenceTypes = [
+        'KInt', 'KPointer', 'undefined' /* This one looks like a bug */
+    ]
     constructor(
         public name: string,
         public signature: MethodSignature,
@@ -451,14 +458,14 @@ export abstract class LanguageWriter {
 
     abstract writeClass(name: string, op: (writer: this) => void, superClass?: string, interfaces?: string[], generics?: string[], isDeclared?: boolean, isExport?: boolean): void
     abstract writeEnum(name: string, members: { name: string, alias?: string, stringId: string | undefined, numberId: number }[], op?: (writer: this) => void): void
-    abstract writeInterface(name: string, op: (writer: this) => void, superInterfaces?: string[], isDeclared?: boolean): void
+    abstract writeInterface(name: string, op: (writer: this) => void, superInterfaces?: string[], generics?: string[], isDeclared?: boolean): void
     abstract writeFieldDeclaration(name: string, type: idl.IDLType, modifiers: FieldModifier[]|undefined, optional: boolean, initExpr?: LanguageExpression): void
     abstract writeFunctionDeclaration(name: string, signature: MethodSignature): void
     abstract writeFunctionImplementation(name: string, signature: MethodSignature, op: (writer: this) => void): void
     abstract writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void
     abstract writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: this) => void, superCall?: Method, modifiers?: MethodModifier[]): void
     abstract writeMethodImplementation(method: Method, op: (writer: this) => void): void
-    abstract writeProperty(propName: string, propType: idl.IDLType, mutable?: boolean, getterLambda?: (writer: this) => void, setterLambda?: (writer: this) => void): void
+    abstract writeProperty(propName: string, propType: idl.IDLType, modifiers: FieldModifier[], getter?: { method: Method, op?: () => void }, setter?: { method: Method, op: () => void }): void
     abstract writeTypeDeclaration(decl: idl.IDLTypedef): void
     abstract writeConstant(constName: string, constType: idl.IDLType, constVal?: string): void;
     abstract makeAssign(variableName: string, type: idl.IDLType | undefined, expr: LanguageExpression | undefined, isDeclared: boolean, isConst?: boolean, options?:MakeAssignOptions): LanguageStatement
@@ -494,7 +501,7 @@ export abstract class LanguageWriter {
     abstract get supportedFieldModifiers(): FieldModifier[]
     abstract enumFromOrdinal(value: LanguageExpression, enumEntry: idl.IDLType): LanguageExpression
     abstract ordinalFromEnum(value: LanguageExpression, enumReference: idl.IDLType): LanguageExpression
-    abstract makeEnumCast(enumName: string, unsafe: boolean, convertor: ArgConvertor | undefined): string
+    abstract makeEnumCast(enumEntry: idl.IDLEnum, enumName: string): string
     abstract getNodeName(type: idl.IDLNode): string
     abstract fork(options?: { resolver?: ReferenceResolver }): LanguageWriter
 
@@ -652,8 +659,8 @@ export abstract class LanguageWriter {
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new ExpressionStatement(expr)
     }
-    writeNativeMethodDeclaration(name: string, signature: MethodSignature, isNative?: boolean): void {
-        this.writeMethodDeclaration(name, signature)
+    writeNativeMethodDeclaration(method: Method): void {
+        this.writeMethodDeclaration(method.name, method.signature)
     }
     writeUnsafeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
         return
@@ -698,7 +705,7 @@ export abstract class LanguageWriter {
     /**
      * TODO: replace me with {@link makeUnsafeCast_}
      */
-    makeUnsafeCast(convertor: ArgConvertor, param: string): string {
+    makeUnsafeCast(param: string): string {
         return `unsafeCast<int32>(${param})`
     }
     makeUnsafeCast_(value: LanguageExpression, type: idl.IDLType, typeOptions?: PrintHint) {
@@ -757,6 +764,9 @@ export abstract class LanguageWriter {
     }
     makeNot(expr: LanguageExpression): LanguageExpression {
         return this.makeString(`!(${expr.asString()})`)
+    }
+    makeSerializedBufferGetter(serializer: string): LanguageExpression {
+        return this.makeMethodCall(serializer, `asArray`, [])
     }
     makeEquals(args: LanguageExpression[]): LanguageExpression {
         return this.makeNaryOp("===", args)

@@ -14,9 +14,11 @@ node_modules
 /package-lock.json
 /.npmrc
 
-/libarkts-gen/.rollup.cache/
-/libarkts-gen/lib/
-/libarkts-gen/out/
+/arktscgen/.rollup.cache/
+/arktscgen/lib/
+/arktscgen/out/
+/arktscgen/build/
+*.tgz
 *.rej
 *.orig
 .DS_Store

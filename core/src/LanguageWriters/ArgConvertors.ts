@@ -16,24 +16,27 @@
 import * as idl from "../idl";
 import { Language } from "../Language";
 import {
+    BlockStatement,
+    BranchStatement,
+    ExpressionAssigner,
     LanguageExpression,
     LanguageStatement,
     LanguageWriter,
-    ExpressionAssigner,
     PrintHint,
-    BlockStatement,
-    BranchStatement,
-    StringExpression
+    StringExpression,
+    Method,
+    MethodModifier
 } from "./LanguageWriter";
 import { RuntimeType } from "./common";
-import { generatorConfiguration, generatorTypePrefix } from "../config"
+import { generatorTypePrefix } from "../config"
 import { LibraryInterface } from "../LibraryInterface";
 import { hashCodeFromString, warn } from "../util";
 import { UnionRuntimeTypeChecker } from "../peer-generation/unions";
-import { CppNameConvertor } from "./convertors/CppConvertors";
+import { CppConvertor, CppNameConvertor } from "./convertors/CppConvertors";
 import { createEmptyReferenceResolver, ReferenceResolver } from "../peer-generation/ReferenceResolver";
-import { CppConvertor } from "./convertors/CppConvertors";
 import { PrimitiveTypesInstance } from "../peer-generation/PrimitiveType";
+import { qualifiedName } from "../peer-generation/idl/common";
+import { PeerLibrary } from "../peer-generation/PeerLibrary";
 
 export interface ArgConvertor {
     param: string
@@ -52,6 +55,54 @@ export interface ArgConvertor {
     unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression|undefined
     getMembers(): string[]
     getObjectAccessor(languge: Language, value: string, args?: Record<string, string>, writer?: LanguageWriter): string
+}
+
+function isDirectConvertedType(originalType: idl.IDLType|undefined, library: PeerLibrary): boolean {
+    if (originalType == undefined) return true // TODO: is it correct?
+    if (originalType == idl.IDLInteropReturnBufferType) return false
+    if (originalType == idl.IDLThisType) return true
+    let convertor = library.typeConvertor("x", originalType, false)
+    // Resolve aliases.
+    while (convertor instanceof TypeAliasConvertor) {
+        convertor = convertor.convertor
+    }
+    // Temporary!
+    if (convertor instanceof ArrayConvertor ||
+        convertor instanceof MapConvertor ||
+        convertor instanceof CustomTypeConvertor ||
+        convertor instanceof CallbackConvertor ||
+        convertor instanceof AggregateConvertor ||
+        convertor instanceof UnionConvertor) {
+        // try { console.log(`convertor is ${convertor.constructor.name} for ${JSON.stringify(originalType)}`) } catch (e) {}
+        return false
+    }
+    let type = convertor.interopType()
+    // TODO: make 'number' be direct!
+    let result = type == idl.IDLI8Type || type == idl.IDLU8Type
+        || type == idl.IDLI16Type || type == idl.IDLU16Type
+        || type == idl.IDLI32Type || type == idl.IDLU32Type
+        || type == idl.IDLF32Type
+        || type == idl.IDLI64Type || type == idl.IDLU64Type
+        || type == idl.IDLPointerType
+        || type == idl.IDLBooleanType
+        || type == idl.IDLVoidType
+        || type == idl.IDLUndefinedType
+    // try { if (!result) console.log(`type ${JSON.stringify(type)} is not direct`) } catch (e) {}
+    return result
+}
+
+export function isVMContextMethod(method: Method): boolean {
+    return !!idl.asPromise(method.signature.returnType) ||
+        !!method.modifiers?.includes(MethodModifier.THROWS) ||
+        !!method.modifiers?.includes(MethodModifier.FORCE_CONTEXT)
+}
+
+export function isDirectMethod(method: Method, library: PeerLibrary): boolean {
+    if (isVMContextMethod(method)) return false
+    let result = isDirectConvertedType(method.signature.returnType, library) &&
+            method.signature.args.every((arg) => isDirectConvertedType(arg, library))
+    //if (!result) console.log(`method ${method.name} is not direct`)
+    return result
 }
 
 export abstract class BaseArgConvertor implements ArgConvertor {
@@ -209,14 +260,12 @@ export class EnumConvertor extends BaseArgConvertor {
             false, false, param)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
-        return writer.makeEnumCast(writer.escapeKeyword(param), false, this)
+        return writer.makeEnumCast(this.enumEntry, writer.escapeKeyword(param))
     }
     convertorSerialize(param: string, value: string, writer: LanguageWriter): void {
-        value =
-            idl.isStringEnum(this.enumEntry)
-                ? writer.ordinalFromEnum(writer.makeString(value), idl.createReferenceType(this.enumEntry)).asString()
-                : writer.makeEnumCast(value, false, this)
-        writer.writeMethodCall(`${param}Serializer`, "writeInt32", [value])
+        writer.writeMethodCall(`${param}Serializer`,
+            "writeInt32",
+            [writer.makeEnumCast(this.enumEntry, value)])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const readExpr = writer.makeMethodCall(`${deserializerName}`, "readInt32", [])
@@ -534,7 +583,9 @@ export class InterfaceConvertor extends BaseArgConvertor {
         return this.idlType
     }
     interopType(): idl.IDLType {
-        throw new Error("Must never be used")
+        // Actually shouldn't be used!
+        // throw new Error("Must never be used")
+        return idl.IDLObjectType
     }
     isPointerType(): boolean {
         return true
@@ -1006,7 +1057,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     convertorArg(param: string, writer: LanguageWriter): string {
         switch (writer.language) {
             case Language.CPP:
-                return `static_cast<${generatorTypePrefix()}${this.declaration.name}>(${param})`
+                return `static_cast<${generatorTypePrefix()}${qualifiedName(this.declaration, "_")}>(${param})`
             case Language.JAVA:
             case Language.CJ:
                 return `MaterializedBase.toPeerPtr(${param})`
@@ -1017,13 +1068,13 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         printer.writeStatement(
             printer.makeStatement(
-                printer.makeMethodCall(`${param}Serializer`, `write${this.declaration.name}`, [
+                printer.makeMethodCall(`${param}Serializer`, `write${qualifiedName(this.declaration, "_")}`, [
                     printer.makeString(value)
                 ])))
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const readStatement = writer.makeCast(
-            writer.makeMethodCall(`${deserializerName}`, `read${this.declaration.name}`, []),
+            writer.makeMethodCall(`${deserializerName}`, `read${qualifiedName(this.declaration, "_")}`, []),
             idl.createReferenceType(this.declaration)
         )
         return assigneer(readStatement)

@@ -14,6 +14,7 @@
  */
 
 import * as idl from '../../idl'
+import { isOptionalType } from '../../idl'
 import { Language } from '../../Language'
 import { IndentedPrinter } from "../../IndentedPrinter";
 import {
@@ -41,7 +42,7 @@ import {
 import { ArgConvertor } from "../ArgConvertors"
 import { IdlNameConvertor } from "../nameConvertor"
 import { RuntimeType } from "../common";
-import { throwException } from "../../util";
+import { rightmostIndexOf, throwException } from "../../util"
 import { ReferenceResolver } from "../../peer-generation/ReferenceResolver";
 import { TSKeywords } from '../../languageSpecificKeywords';
 
@@ -191,9 +192,10 @@ export class TSLanguageWriter extends LanguageWriter {
         this.popIndent()
         this.printer.print(`}`)
     }
-    writeInterface(name: string, op: (writer: this) => void, superInterfaces?: string[], isDeclared?: boolean): void {
+    override writeInterface(name: string, op: (writer: this) => void, superInterfaces?: string[], generics?: string[], isDeclared?: boolean): void {
+        const genericsClause = generics?.length ? `<${generics.join(", ")}>` : ''
         let extendsClause = superInterfaces ? ` extends ${superInterfaces.join(",")}` : ''
-        this.printer.print(`export ${isDeclared ? "declare " : ""}interface ${name}${extendsClause} {`)
+        this.printer.print(`export ${isDeclared ? "declare " : ""}interface ${name}${genericsClause}${extendsClause} {`)
         this.pushIndent()
         op(this)
         this.popIndent()
@@ -210,9 +212,11 @@ export class TSLanguageWriter extends LanguageWriter {
         this.printer.print('}')
     }
     private generateFunctionDeclaration(name: string, signature: MethodSignature): string {
-        const args = signature.args.map((it, index) =>
-            `${signature.argName(index)}${idl.isOptionalType(it) ? '?' : ''}: ${this.getNodeName(it)}`
-        )
+        const rightmostRegularParameterIndex = rightmostIndexOf(signature.args, it => !isOptionalType(it))
+        const args = signature.args.map((it, index) => {
+            const optionalToken = idl.isOptionalType(it) && index > rightmostRegularParameterIndex ? '?' : ''
+            return `${signature.argName(index)}${optionalToken}: ${this.getNodeName(it)}`
+        })
         const returnType = this.getNodeName(signature.returnType)
         return `export function ${name}(${args.join(", ")}): ${returnType}`
     }
@@ -238,7 +242,9 @@ export class TSLanguageWriter extends LanguageWriter {
         if (prefix) prefix += " "
         this.printer.print(`${prefix}${name}${optional ? "?"  : ""}: ${this.getNodeName(type)}${init}`)
     }
-    writeNativeMethodDeclaration(name: string, signature: MethodSignature, isNative?: boolean): void {
+    writeNativeMethodDeclaration(method: Method): void {
+        let name = method.name
+        let signature = method.signature
         this.writeMethodImplementation(new Method(name, signature, [MethodModifier.STATIC]), writer => {
             const selfCallExpression = writer.makeFunctionCall(
                 `this.${name}`,
@@ -275,8 +281,35 @@ export class TSLanguageWriter extends LanguageWriter {
         this.popIndent()
         this.printer.print(`}`)
     }
-    writeProperty(propName: string, propType: idl.IDLType) {
-        throw new Error("writeProperty for TS is not implemented yet.")
+    writeProperty(propName: string, propType: idl.IDLType, modifiers: FieldModifier[], getter?: { method: Method, op: () => void }, setter?: { method: Method, op: () => void }): void {
+        let isStatic = modifiers.includes(FieldModifier.STATIC)
+        let isMutable = !modifiers.includes(FieldModifier.READONLY)
+        let containerName = propName.concat("_container")
+        if (getter) {
+            if(!getter!.op) {
+                this.print(`private var ${this.getNodeName(propType)} ${containerName}`)
+            }
+            this.writeGetterImplementation(
+                new Method(propName, new MethodSignature(propType, []), isStatic ? [MethodModifier.STATIC] : []),
+                getter ? getter!.op :
+                (writer) => {
+                    writer.print(`return ${containerName}`)
+                } 
+            )
+            if (isMutable) {
+                const setSignature = new NamedMethodSignature(idl.IDLVoidType, [propType], [propName])
+                this.writeSetterImplementation(
+                    new Method(propName, setSignature, isStatic ? [MethodModifier.STATIC] : []), 
+                    setter ? setter!.op :
+                    (writer) => {
+                        writer.print(`${containerName} = ${propName}`)
+                    }
+                )
+            }
+        }
+        else {
+            this.writeFieldDeclaration(propName, propType, modifiers, idl.isOptionalType(propType))
+        }
     }
     override writeTypeDeclaration(decl: idl.IDLTypedef): void {
         const type = this.getNodeName(decl.type)
@@ -315,7 +348,7 @@ export class TSLanguageWriter extends LanguageWriter {
         const normalizedArgs = signature.args.map((it, i) =>
             idl.isOptionalType(it) && isOptional[i] ? idl.maybeUnwrapOptionalType(it) : it
         )
-        this.printer.print(`${prefix}${name}${typeParams}(${normalizedArgs.map((it, index) => `${this.escapeKeyword(signature.argName(index))}${isOptional[index] ? "?" : ""}: ${this.getNodeName(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.getNodeName(signature.returnType) : ""} ${needBracket ? "{" : ""}`)
+        this.printer.print(`${prefix}${name}${typeParams}(${normalizedArgs.map((it, index) => `${this.escapeKeyword(signature.argName(index))}${isOptional[index] ? "?" : ""}: ${this.getNodeName(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.getNodeName(signature.returnType) : ""}${needBracket ? " {" : ""}`)
     }
     makeNull(): LanguageExpression {
         return new StringExpression("undefined")
@@ -426,11 +459,12 @@ export class TSLanguageWriter extends LanguageWriter {
         }
         return value
     }
-    override makeEnumCast(enumName: string, unsafe: boolean, convertor: ArgConvertor): string {
-        if (unsafe) {
-            return this.makeUnsafeCast(convertor, enumName)
-        }
-        return enumName
+    override makeEnumCast(enumEntry: idl.IDLEnum, param: string): string {
+        // Take the ordinal value if Enum is a string, and valueOf when it is an integer
+        // Enum.valueOf() - compatible with ArkTS/TS
+        return idl.isStringEnum(enumEntry)
+            ? this.ordinalFromEnum(this.makeString(param), idl.createReferenceType(enumEntry)).asString()
+            : `${param}.valueOf()`
     }
     override castToBoolean(value: string): string { return `+${value}` }
     override makeCallIsObject(value: string): LanguageExpression {

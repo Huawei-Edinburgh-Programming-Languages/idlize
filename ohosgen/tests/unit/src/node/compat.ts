@@ -1,13 +1,46 @@
 import { callCallback, InteropNativeModule, registerNativeModuleLibraryName, loadInteropNativeModule } from "@koalaui/interop"
 import { checkArkoalaCallbacks } from "../../generated/ts/peers/CallbacksChecker";
 
+export {
+    // .d.ts
+    CONST_BOOLEAN_FALSE,
+    CONST_BOOLEAN_TRUE,
+    CONST_NUMBER_INT,
+    CONST_NUMBER_FLOAT,
+    CONST_STRING,
+    // .idl
+    IDL_CONST_BOOLEAN_FALSE,
+    IDL_CONST_BOOLEAN_TRUE,
+    IDL_CONST_NUMBER_INT,
+    IDL_CONST_NUMBER_FLOAT,
+    IDL_CONST_STRING
+
+} from "../../generated/ts"
+
+export { and_values } from "../../generated/ts"
+export { sum_numbers } from "../../generated/ts"
 export { test_buffer } from "../../generated/ts"
+export { test_materialized_classes, UtilityInterface } from "../../generated/ts"
 export {
     ForceCallbackListener,
     ForceCallbackClass,
     registerForceCallbackListener,
-    callForceCallbackListener
+    callForceCallbackListener,
+    ClassWithComplexPropertyType
 } from "../../generated/ts"
+export {
+    OrdinaryEnum,
+    IntEnum,
+    StringEnum,
+    checkOrdinaryEnums,
+    IDLOrdinaryEnum,
+    IDLIntEnum,
+    IDLStringEnum,
+    idlCheckOrdinaryEnums,
+    DataClass, DataInterface, IDLDataClass, IDLDataInterface,
+    testDataClass, testDataInterface, testIDLDataClass, testIDLDataInterface,
+    HandwrittenComponent, IdlHandwrittenComponent,
+} from '../../generated/ts'
 
 export type OHBuffer = ArrayBuffer
 
@@ -31,4 +64,39 @@ export function runEventLoop() {
     setTimeout(() => {
         finished = true
     }, 2000);
+}
+
+export function checkEQ(value1: unknown, value2: unknown, comment?: string): void {
+    if (value1 !== value2) {
+        throw new Error(comment)
+    }
+}
+
+export function checkNotEQ(value1: unknown, value2: unknown, comment?: string): void {
+    if (value1 === value2) {
+        throw new Error(comment)
+    }
+}
+
+class Test {
+    constructor(public readonly name, public readonly test: () => void) {
+    }
+}
+
+export class UnitTestsuite {
+
+    private tests: Test[] = []
+    constructor(public name: string) {
+    }
+
+    addTest(testName: string, test: () => void): void {
+        this.tests.push(new Test(testName, test))
+    }
+
+    run(): void {
+        for (const t of this.tests) {
+            console.log(`Run test: ${t.name}`)
+            t.test()
+        }
+    }
 }

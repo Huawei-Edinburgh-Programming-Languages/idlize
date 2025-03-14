@@ -32,7 +32,7 @@ import {
 import { RuntimeType } from "@idlizer/core"
 import { LanguageExpression, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter } from "@idlizer/core"
-import { peerGeneratorConfiguration} from "../PeerGeneratorConfig"
+import { peerGeneratorConfiguration} from "../../DefaultConfiguration"
 import { PrintHint } from "@idlizer/core"
 import { LibraryInterface } from "@idlizer/core"
 import { collectDeclarationTargets } from "../DeclarationTargetCollector"
@@ -503,6 +503,16 @@ export function collectProperties(decl: idl.IDLInterface, library: LibraryInterf
     const superDecl = superType ? library.resolveTypeReference(/* FIX */ superType as idl.IDLReferenceType) : undefined
     return [
         ...(superDecl ? collectProperties(superDecl as idl.IDLInterface, library) : []),
+        ...decl.properties,
+        ...collectBuilderProperties(decl, library)
+    ].filter(it => !it.isStatic && !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.CommonMethod))
+}
+
+export function collectAllProperties(decl: idl.IDLInterface, library: LibraryInterface): idl.IDLProperty[] {
+    const superTypes = idl.getSuperTypes(decl)
+    const superDecls = superTypes ? superTypes.map(t => library.resolveTypeReference(t as idl.IDLReferenceType)) : undefined
+    return [
+        ...(superDecls ? superDecls.map(decl => collectAllProperties(decl as idl.IDLInterface, library)).flat() : []),
         ...decl.properties,
         ...collectBuilderProperties(decl, library)
     ].filter(it => !it.isStatic && !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.CommonMethod))

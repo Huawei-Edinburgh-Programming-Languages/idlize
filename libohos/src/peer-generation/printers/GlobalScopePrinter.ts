@@ -23,6 +23,7 @@ import { writePeerMethod } from "./PeersPrinter"
 import { createOutArgConvertor } from "../PromiseConvertors"
 import { NativeModule } from "../NativeModule"
 import { GlobalScopePeerName, idlFreeMethodToLegacy, mangledGlobalScopeName } from "../GlobalScopeUtils"
+import { importTypeChecker } from "./TypeCheckPrinter"
 
 export function printGlobal(library: PeerLibrary): PrinterResult[] {
 
@@ -69,7 +70,7 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
 
             /* global scope peer serialize function */
             new OverloadsPrinter(library, peerMethodWriter, library.language, false)
-                .printGroupedComponentOverloads(new idl.PeerClass(new idl.PeerFile(idl.createFile([]), false), '', ''), peerMethods)
+                .printGroupedComponentOverloads(new idl.PeerClass(new idl.PeerFile(idl.createFile([])), '', ''), peerMethods)
 
             peerMethods.forEach(peerMethod => {
                 writePeerMethod(
@@ -161,15 +162,16 @@ function fillCommonImports(collector: ImportsCollector, library: PeerLibrary) {
     if (library.language === idl.Language.ARKTS) {
         collector.addFeatures(['NativeBuffer'], '@koalaui/interop')
         collector.addFeatures(['Deserializer'], './peers/Deserializer')
+        importTypeChecker(library, collector)
     }
     if (library.language === idl.Language.TS) {
         collector.addFeature('isInstanceOf', '@koalaui/interop')
-        collector.addFeatures(['isResource', 'isPadding'], '../utils')
         collector.addFeatures(['Deserializer', 'createDeserializer'], './peers/Deserializer')
     }
     if (library.name === 'arkoala') {
         collector.addFeatures(['CallbackTransformer'], './peers/CallbackTransformer')
         if (library.language === idl.Language.TS) {
+            collector.addFeatures(['isResource', 'isPadding'], '../utils')
             collector.addFeatures(['ArkUIGeneratedNativeModule'], './ArkUIGeneratedNativeModule')
         }
         if (library.language === idl.Language.ARKTS) {

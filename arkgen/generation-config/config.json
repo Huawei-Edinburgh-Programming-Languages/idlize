@@ -1,8 +1,10 @@
 {
+    "$schema": "./schema.json",
     "TypePrefix": "Ark_",
     "LibraryPrefix": "",
     "OptionalPrefix": "Opt_",
     "GenerateUnused": false,
+    "ApiVersion": 9999,
     "dumpSerialized": false,
     "ignoreMaterialized": [
         "Attribute",
@@ -15,6 +17,13 @@
         "DynamicNode"
     ],
     "forceMaterialized": [
+        "TapGestureInterface",
+        "LongPressGestureInterface",
+        "PanGestureInterface",
+        "SwipeGestureInterface",
+        "PinchGestureInterface",
+        "RotationGestureInterface",
+        "GestureGroupInterface",
         "BaseContext"
     ],
     "forceCallback": [],
@@ -248,5 +257,22 @@
             ]
         }
     },
-    "CollapseOverloadsARKTS": true
+    "patchMaterialized": {
+        "CustomDialogController.constructor": {
+            "TS": "if (value) value.builder.buildOptions.controller = this",
+            "ArkTS": "// /*TODO: API required*/ if (value) value.builder.buildOptions.controller = this"
+        }
+    },
+    "CollapseOverloadsARKTS": true,
+    "forceContext": [
+        "LoadUserView",
+        "MeasureLayoutAndDraw",
+        "MeasureNode",
+        "DrawNode",
+        "TestCallIntNoArgs",
+        "TestCallIntIntArraySum",
+        "TestCallVoidIntArrayPrefixSum",
+        "TestCallIntRecursiveCallback",
+        "TestCallIntMemory"
+    ]
 }

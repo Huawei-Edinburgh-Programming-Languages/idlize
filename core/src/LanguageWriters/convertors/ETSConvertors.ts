@@ -16,8 +16,8 @@
 import * as idl from "../../idl"
 import { Language } from "../../Language"
 import { createDeclarationNameConvertor } from "../../peer-generation/idl/IdlNameConvertor"
-import { convertDeclaration } from "../nameConvertor"
-import { TSTypeNameConvertor } from "./TSConvertors"
+import { convertDeclaration, convertType, TypeConvertor } from "../nameConvertor"
+import { TSInteropArgConvertor, TSTypeNameConvertor } from "./TSConvertors"
 
 export class ETSTypeNameConvertor extends TSTypeNameConvertor {
     convertTypeReference(type: idl.IDLReferenceType): string {
@@ -86,8 +86,6 @@ export class ETSTypeNameConvertor extends TSTypeNameConvertor {
             case idl.IDLStringType: return 'string'
             case idl.IDLFunctionType: return 'Object'
 
-            case idl.IDLBufferType: return 'NativeBuffer'
-
             case idl.IDLBigintType: return 'long'
         }
         return super.convertPrimitiveType(type)
@@ -126,3 +124,5 @@ export class ETSTypeNameConvertor extends TSTypeNameConvertor {
         return `Function${typeArgs.length - 1}<${typeArgs.join(",")}>`
     }
 }
+
+export class ETSInteropArgConvertor extends TSInteropArgConvertor {}

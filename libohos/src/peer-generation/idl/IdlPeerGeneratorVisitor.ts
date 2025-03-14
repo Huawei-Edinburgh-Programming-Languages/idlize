@@ -24,11 +24,15 @@ import {
     MethodSignature,
     generatorConfiguration,
     VoidConvertor,
-    PointerConvertor
+    PointerConvertor,
+    isInIdlizeInternal,
+    isInIdlize,
+    qualifiedName,
+    isStaticMaterialized
 } from '@idlizer/core'
 import { ArgConvertor, PeerLibrary, PeerFile, PeerClass, PeerMethod } from "@idlizer/core"
 import { createOutArgConvertor } from "../PromiseConvertors"
-import { peerGeneratorConfiguration} from "../PeerGeneratorConfig";
+import { peerGeneratorConfiguration} from "../../DefaultConfiguration";
 import { getInternalClassName, isBuilderClass, MaterializedClass, MaterializedField, MaterializedMethod } from "@idlizer/core"
 import { Field, FieldModifier, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters";
 import { BuilderClass, CUSTOM_BUILDER_CLASSES, isCustomBuilderClass, isMaterialized } from "@idlizer/core";
@@ -45,79 +49,6 @@ import * as path from "path"
  * generating serialization code. We use TS typechecker to analyze compound and union types and generate
  * universal finite automata to serialize any value of the given type.
  */
-
-interface IdlPeerGeneratorVisitorOptions {
-    sourceFile: string
-    peerFile: PeerFile
-    peerLibrary: PeerLibrary
-}
-
-const PREDEFINED_PACKAGE = 'org.openharmony.idlize.predefined'
-const PREDEFINED_PACKAGE_TYPES = `${PREDEFINED_PACKAGE}.types`
-
-export class IDLInteropPredefinesVisitor implements GenericVisitor<void> {
-    readonly peerLibrary: PeerLibrary
-    readonly peerFile: PeerFile
-
-    constructor(options: IdlPeerGeneratorVisitorOptions) {
-        this.peerLibrary = options.peerLibrary
-        this.peerFile = options.peerFile
-    }
-
-    visitWholeFile(): void {
-        idl.linearizeNamespaceMembers(this.peerFile.entries)
-            .filter(idl.isInterface)
-            .forEach(it => this.peerLibrary.predefinedDeclarations.push(it))
-    }
-}
-
-export class IDLPredefinesVisitor implements GenericVisitor<void> {
-    readonly peerLibrary: PeerLibrary
-    readonly peerFile: PeerFile
-
-    private packageName: string
-
-    constructor(options: IdlPeerGeneratorVisitorOptions) {
-        this.peerLibrary = options.peerLibrary
-        this.peerFile = options.peerFile
-        this.packageName = this.peerFile.packageName()
-    }
-
-    visitWholeFile(): void {
-        if (this.isPredefinedTypesPackage()) {
-            idl.linearizeNamespaceMembers(this.peerFile.entries).forEach(predefinedEntry => {
-                if (!predefinedEntry.extendedAttributes) {
-                    predefinedEntry.extendedAttributes = []
-                }
-                predefinedEntry.extendedAttributes!.push({ name: idl.IDLExtendedAttributes.Predefined })
-                this.peerLibrary.files.forEach(peerLibraryFile => {
-                    idl.linearizeNamespaceMembers(peerLibraryFile.entries).filter(libraryEntry => {
-                        if (libraryEntry.name !== predefinedEntry.name)
-                            return true
-                        if (!idl.isTypedef(libraryEntry))
-                            throw "Only typedefs can be replaced!"
-                        return false
-                    })
-                })
-            })
-        }
-        this.peerLibrary.files.push(this.peerFile)
-    }
-
-    private isPredefinedTypesPackage(): boolean {
-        return this.packageName === PREDEFINED_PACKAGE_TYPES
-    }
-}
-
-export function isPredefined(entry: idl.IDLEntry) {
-    return idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.Predefined)
-}
-
-export function isSystemEntry(entry: idl.IDLEntry) {
-    return idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.CPPType)
-        || idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.TSType)
-        || idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.ArkTSType)
-}
 
 function generateArgConvertor(library: PeerLibrary, param: idl.IDLParameter): ArgConvertor {
     if (!param.type) throw new Error("Type is needed")
@@ -365,17 +296,17 @@ export class IdlPeerProcessor {
         return new Method(methodName, signature, getMethodModifiers(method))
     }
 
-    private processMaterialized(decl: idl.IDLInterface, isGlobalScope = false) {
+    private processMaterialized(decl: idl.IDLInterface, isStaticMaterialized: boolean = false) {
         if (!this.library.hasInLibrary(decl)) {
             return
         }
-        const name = decl.name
-        if (this.library.materializedClasses.has(name)) {
+        const fullCName = qualifiedName(decl, "_")
+        if (this.library.materializedClasses.has(fullCName)) {
             return
         }
 
-        const isDeclInterface = idl.isInterfaceSubkind(decl) && !isGlobalScope
-        const implemenationParentName = isDeclInterface ? getInternalClassName(name) : name
+        const isDeclInterface = idl.isInterfaceSubkind(decl) && !isStaticMaterialized
+        const implemenationParentName = isDeclInterface ? getInternalClassName(decl.name) : decl.name
         let superType = idl.getSuperType(decl)
         const interfaces: idl.IDLReferenceType[] = []
         const propertiesFromInterface: idl.IDLProperty[] = []
@@ -389,8 +320,8 @@ export class IdlPeerProcessor {
         }
 
         const constructor = decl.subkind === idl.IDLInterfaceSubkind.Class ? decl.constructors[0] : undefined
-        const mConstructor = isGlobalScope ? undefined : this.makeMaterializedMethod(decl, constructor, implemenationParentName)
-        const mFinalizer = isGlobalScope ? undefined : new MaterializedMethod(name, implemenationParentName,[], idl.IDLPointerType, false,
+        const mConstructor = isStaticMaterialized ? undefined : this.makeMaterializedMethod(decl, constructor, fullCName, implemenationParentName)
+        const mFinalizer = isStaticMaterialized ? undefined : new MaterializedMethod(fullCName, implemenationParentName,[], idl.IDLPointerType, false,
             new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
         const mFields = propertiesFromInterface.concat(decl.properties)
             // TODO what to do with setter accessors? Do we need FieldModifier.WRITEONLY? For now, just skip them
@@ -398,7 +329,7 @@ export class IdlPeerProcessor {
             .map(it => this.makeMaterializedField(it))
         const mMethods = decl.methods
             // TODO: Properly handle methods with return Promise<T> type
-            .map(method => this.makeMaterializedMethod(decl, method, implemenationParentName))
+            .map(method => this.makeMaterializedMethod(decl, method, fullCName, implemenationParentName))
             .filter(it => !idl.isNamedNode(it.method.signature.returnType) || !peerGeneratorConfiguration().materialized.ignoreReturnTypes.includes(it.method.signature.returnType.name))
 
         const taggedMethods = decl.methods.filter(m => m.extendedAttributes?.find(it => it.name === idl.IDLExtendedAttributes.DtsTag))
@@ -406,30 +337,24 @@ export class IdlPeerProcessor {
         mFields.forEach(f => {
             const field = f.field
             const idlType = field.type
-            // TBD: use deserializer to get complex type from native
-            const isSimpleType = !f.argConvertor.useArray // type needs to be deserialized from the native
-            const isCallback = idl.isCallback(this.library.toDeclaration(f.argConvertor.idlType))
-            const isContainer = idl.IDLContainerUtils.isSequence(this.library.toDeclaration(f.argConvertor.idlType))
             const isStatic = field.modifiers.includes(FieldModifier.STATIC)
-            if (isSimpleType || isCallback || isContainer) {
-                const getSignature = new NamedMethodSignature(idlType, [], [])
-                const getAccessor = new MaterializedMethod(
-                    name, implemenationParentName, [], field.type, false,
-                    new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE, ...(isStatic ? [MethodModifier.STATIC]:[])]),
-                    f.outArgConvertor)
-                mMethods.push(getAccessor)
-            }
+            const getSignature = new NamedMethodSignature(idlType, [], [])
+            const getAccessor = new MaterializedMethod(
+                fullCName, implemenationParentName, [], field.type, false,
+                new Method(`get${capitalize(field.name)}`, getSignature, [MethodModifier.PRIVATE, ...(isStatic ? [MethodModifier.STATIC]:[])]),
+                f.outArgConvertor)
+            mMethods.push(getAccessor)
             const isReadOnly = field.modifiers.includes(FieldModifier.READONLY)
             if (!isReadOnly) {
                 const setSignature = new NamedMethodSignature(idl.IDLVoidType, [idlType], [field.name])
                 const setAccessor = new MaterializedMethod(
-                    name, implemenationParentName, [f.argConvertor], idl.IDLVoidType, false,
+                    fullCName, implemenationParentName, [f.argConvertor], idl.IDLVoidType, false,
                     new Method(`set${capitalize(field.name)}`, setSignature, [MethodModifier.PRIVATE, ...(isStatic ? [MethodModifier.STATIC]:[])]))
                 mMethods.push(setAccessor)
             }
         })
-        this.library.materializedClasses.set(name,
-            new MaterializedClass(decl, name, isDeclInterface, superType, interfaces, decl.typeParameters,
+        this.library.materializedClasses.set(fullCName,
+            new MaterializedClass(decl, decl.name, isDeclInterface, isStaticMaterialized, superType, interfaces, decl.typeParameters,
                 mFields, mConstructor, mFinalizer, mMethods, true, taggedMethods))
     }
 
@@ -447,7 +372,12 @@ export class IdlPeerProcessor {
             prop.isOptional)
     }
 
-    private makeMaterializedMethod(decl: idl.IDLInterface, method: idl.IDLConstructor | idl.IDLMethod | undefined, implemenationParentName: string) {
+    private makeMaterializedMethod(
+        decl: idl.IDLInterface,
+        method: idl.IDLConstructor | idl.IDLMethod | undefined,
+        originalParentName: string,
+        implemenationParentName: string,
+    ) {
         let methodName = "ctor"
         let returnType: idl.IDLType = idl.createReferenceType(decl)
         let outArgConvertor = undefined
@@ -459,13 +389,13 @@ export class IdlPeerProcessor {
         if (method === undefined) {
             // interface or class without constructors
             const ctor = new Method("ctor", new NamedMethodSignature(idl.createReferenceType(decl), [], []), [MethodModifier.STATIC])
-            return new MaterializedMethod(decl.name, implemenationParentName, [], returnType, false, ctor, outArgConvertor)
+            return new MaterializedMethod(originalParentName, implemenationParentName, [], returnType, false, ctor, outArgConvertor)
         }
 
         const methodTypeParams = idl.getExtAttribute(method, idl.IDLExtendedAttributes.TypeParameters)
         const argConvertors = method.parameters.map(param => generateArgConvertor(this.library, param))
         const signature = generateSignature(method)
-        return new MaterializedMethod(decl.name, implemenationParentName, argConvertors, returnType, false,
+        return new MaterializedMethod(originalParentName, implemenationParentName, argConvertors, returnType, false,
             new Method(methodName,
                 signature,
                 getMethodModifiers(method),
@@ -474,13 +404,8 @@ export class IdlPeerProcessor {
         )
     }
 
-    private processGlobal(decl: idl.IDLInterface) {
-        this.processMaterialized(decl, true)
-    }
-
     private ignoreDeclaration(decl: idl.IDLEntry, language: Language): boolean {
-        return idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.TSType) ||
-            idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.CPPType) ||
+        return isInIdlize(decl) ||
             peerGeneratorConfiguration().ignoreEntry(decl.name!, language)
     }
 
@@ -495,12 +420,15 @@ export class IdlPeerProcessor {
         console.log(curConfig.LibraryPrefix, curPeerConfig.LibraryPrefix)
 
         for (const dep of allDeclarations) {
-            if (peerGeneratorConfiguration().ignoreEntry(dep.name, this.library.language) || this.ignoreDeclaration(dep, this.library.language) || idl.isHandwritten(dep))
+            if (peerGeneratorConfiguration().ignoreEntry(dep.name, this.library.language) || this.ignoreDeclaration(dep, this.library.language) || idl.isHandwritten(dep) || isInIdlizeInternal(dep))
                 continue
             const isPeerDecl = idl.isInterface(dep) && isComponentDeclaration(this.library, dep)
             if (!isPeerDecl && idl.isInterface(dep) && [idl.IDLInterfaceSubkind.Class, idl.IDLInterfaceSubkind.Interface].includes(dep.subkind)) {
                 if (isBuilderClass(dep)) {
                     this.processBuilder(dep)
+                    continue
+                } else if (isStaticMaterialized(dep, this.library)) {
+                    this.processMaterialized(dep, true)
                     continue
                 } else if (isMaterialized(dep, this.library)) {
                     this.processMaterialized(dep)

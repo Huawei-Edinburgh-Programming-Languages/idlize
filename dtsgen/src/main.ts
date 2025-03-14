@@ -25,13 +25,18 @@ import {
     findVersion,
     setDefaultConfiguration,
     Language,
+    isDefined,
+    verifyIDLLinter,
+    PeerLibrary,
+    scanInputDirs,
+    PeerFile,
 } from "@idlizer/core"
 import {
     IDLFile,
     toIDLString,
     verifyIDLString
 } from "@idlizer/core/idl"
-import { formatInputPaths, validatePaths, loadPeerConfiguration, IDLVisitor } from "@idlizer/libohos"
+import { formatInputPaths, validatePaths, loadPeerConfiguration, IDLVisitor, peerGeneratorConfiguration } from "@idlizer/libohos"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -48,14 +53,15 @@ const options = program
     .option('--plugin <file>', 'File with generator\'s plugin')
     .option('--default-idl-package <name>', 'Name of the default package for generated IDL')
     .option('--enable-log', 'Enable logging')
-    .option('--options-file <path>', 'Path to generator configuration options file (appends to defaults)')
-    .option('--override-options-file <path>', 'Path to generator configuration options file (replaces defaults)')
+    .option('--options-file <path>', 'Path to generator configuration options file (appends to defaults). Use --ignore-default-config to override default options.')
+    .option('--ignore-default-config', 'Use with --options-file to override default generator configuration options.', false)
     .option('--arkts-extension <string> [.ts|.ets]', "Generated ArkTS language files extension.", ".ts")
     .parse()
     .opts()
 
 Language.ARKTS.extension = options.arktsExtension as string
-setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.overrideOptionsFile))
+
+setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.ignoreDefaultConfig as boolean))
 
 if (process.env.npm_package_version) {
     console.log(`IDLize version ${findVersion()}`)
@@ -63,13 +69,20 @@ if (process.env.npm_package_version) {
 
 let didJob = false
 
+const { inputFiles, inputDirs } = formatInputPaths(options)
+validatePaths(inputDirs, "dir")
+validatePaths(inputFiles, "file")
+
+options.docs = "all"
+const dtsInputFiles = scanInputDirs(inputDirs).concat(inputFiles)
+
 if (options.dts2idl) {
     const { inputDirs, inputFiles } = formatInputPaths(options)
     validatePaths(inputDirs, 'dir')
     validatePaths(inputFiles, 'file')
+    const idlLibrary = new PeerLibrary(Language.TS, [])
     generate(
-        inputDirs,
-        inputFiles,
+        dtsInputFiles,
         options.outputDir ?? "./idl",
         (sourceFile, program, compilerHost) => new IDLVisitor(sourceFile, program, compilerHost, options),
         {
@@ -95,11 +108,18 @@ if (options.dts2idl) {
                     fs.mkdirSync(path.dirname(outFile), { recursive: true })
                 }
                 fs.writeFileSync(outFile, generated)
-
                 if (options.verifyIdl) {
                     verifyIDLString(generated)
                 }
-            }
+                idlLibrary.files.push(new PeerFile(file))
+            },
+            onEnd(outDir: string) {
+                if (options.verifyIdl) {
+                    idlLibrary.files.forEach(file => {
+                        verifyIDLLinter(file.file, idlLibrary, peerGeneratorConfiguration().linter)
+                    })
+                }
+            },
         }
     )
     didJob = true

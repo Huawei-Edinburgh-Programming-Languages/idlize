@@ -91,11 +91,13 @@ import {
     IDLInterfaceSubkind,
     escapeIDLKeyword,
     getNamespacesPathFor,
-    IDLBigintType
+    IDLBigintType,
+    IDLDate
 } from "../idl"
 import { resolveSyntheticType, toIDLFile } from "./deserialize"
 import { Language } from "../Language"
 import { warn } from "../util"
+import { isInIdlize } from "../idlize"
 
 export class CustomPrintVisitor {
     output: string[] = []
@@ -110,7 +112,7 @@ export class CustomPrintVisitor {
             this.print(`${!isTopmost ? "" : "declare "}namespace ${namespace.name} {`);
             this.pushIndent();
         }
-        if (hasExtAttribute(node, IDLExtendedAttributes.TSType) && this.language == Language.TS) return
+        if (isInIdlize(node)) return
         if (isInterface(node)) {
             this.printInterface(node)
         } else if (isMethod(node) || isConstructor(node) || isCallable(node)) {
@@ -358,6 +360,7 @@ export class CustomPrintVisitor {
                 case IDLThisType: return "T"
                 case IDLBigintType:
                 case IDLPointerType: return "number|bigint"
+                case IDLDate: return "Date"
                 default: throw new Error(`Unknown primitive type ${DebugUtils.debugPrintType(type)}`)
             }
         }

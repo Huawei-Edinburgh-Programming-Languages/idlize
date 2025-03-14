@@ -14,10 +14,10 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { generatorConfiguration, Language, isMaterialized, isBuilderClass, throwException, LanguageExpression } from '@idlizer/core'
+import { generatorConfiguration, Language, isMaterialized, isBuilderClass, throwException, LanguageExpression, isInIdlize, isInIdlizeInternal } from '@idlizer/core'
 import { ExpressionStatement, LanguageStatement, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter, PeerLibrary } from "@idlizer/core"
-import { peerGeneratorConfiguration } from '../PeerGeneratorConfig'
+import { peerGeneratorConfiguration } from '../../DefaultConfiguration'
 import { ImportsCollector } from "../ImportsCollector"
 import {
     ArkTSBuiltTypesDependencyFilter,
@@ -426,12 +426,12 @@ class DeserializerPrinter {
                         writer.makeString('isSync'),
                         writer.makeNativeCall(NativeModule.Interop, `_CallCallbackSync`, [
                             writer.makeString(generateCallbackKindValue(target).toString()),
-                            writer.makeString(`${argsSerializer}Serializer.asArray()`),
+                            writer.makeSerializedBufferGetter(`${argsSerializer}Serializer`),
                             writer.makeString(`${argsSerializer}Serializer.length()`),
                         ]),
                         writer.makeNativeCall(NativeModule.Interop, `_CallCallback`, [
                             writer.makeString(generateCallbackKindValue(target).toString()),
-                            writer.makeString(`${argsSerializer}Serializer.asArray()`),
+                            writer.makeSerializedBufferGetter(`${argsSerializer}Serializer`),
                             writer.makeString(`${argsSerializer}Serializer.length()`),
                         ])
                     )
@@ -539,11 +539,12 @@ export function getSerializerDeclarations(library: PeerLibrary, dependencyFilter
     const seenNames = new Set<string>()
     return collectDeclarationTargets(library)
         .filter((it): it is SerializableTarget => dependencyFilter.shouldAdd(it))
-        .filter(it => !idl.isHandwritten(it))
+        .filter(it => !idl.isHandwritten(it) && !isInIdlizeInternal(it))
         .filter(it => !it.typeParameters?.length)
         .filter(it => {
-            const seen = seenNames.has(it.name!)
-            seenNames.add(it.name!)
+            const fullName = qualifiedName(it, "_")
+            const seen = seenNames.has(fullName)
+            seenNames.add(fullName)
             return !seen
         })
 }
@@ -556,6 +557,7 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
         if (!declarationPath) {
             if (destFile.language === Language.TS) {
                 collector.addFeature('Finalizable', '@koalaui/interop')
+                collector.addFeatures(["NativeBuffer"], "@koalaui/interop")
             } else {
                 collector.addFeature("TypeChecker", "#components")
                 collector.addFeatures(["KUint8ArrayPtr", "NativeBuffer", "InteropNativeModule"], "@koalaui/interop")
@@ -623,7 +625,7 @@ export function printSerializerImports(library: PeerLibrary, destFile: SourceFil
             return features
         }
         serializerDeclarations.filter(it => it.fileName)
-            .filter(it => !idl.isCallback(it) && !(library.files.find(f => f.originalFilename == it.fileName)?.isPredefined))
+            .filter(it => !idl.isCallback(it) && !isInIdlize(it))
             .flatMap(makeFeature)
             .forEach(it => collector.addFeature(it.feature, it.module))
     }

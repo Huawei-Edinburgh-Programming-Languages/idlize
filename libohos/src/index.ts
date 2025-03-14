@@ -17,7 +17,6 @@ import * as fs from 'fs'
 
 export * from './launch'
 export * from './IDLVisitor'
-export * from './IDLVisitorConfig'
 export * from "./DefaultConfiguration"
 export * from "./peer-generation/Tracker"
 export * from "./peer-generation/ImportsCollector"
@@ -53,7 +52,6 @@ export * from './peer-generation/printers/lang/Java'
 export * from './peer-generation/printers/lang/CJPrinters'
 export * from './peer-generation/printers/lang/JavaPrinters'
 export * from './peer-generation/printers/lang/JavaIdlUtils'
-export * from "./peer-generation/PeerGeneratorConfig"
 export * from './peer-generation/PromiseConvertors'
 export * from './peer-generation/idl/IdlDependenciesCollector'
 export * from './peer-generation/idl/IdlPeerGeneratorVisitor'

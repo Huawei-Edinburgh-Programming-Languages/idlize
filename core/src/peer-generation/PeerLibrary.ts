@@ -37,6 +37,7 @@ import { PeerFile } from './PeerFile'
 import { LayoutManager, LayoutManagerStrategy } from './LayoutManager'
 import { IDLLibrary, lib, query } from '../library'
 import { isMaterialized } from './isMaterialized'
+import { isInIdlizeInternal } from '../idlize'
 
 export interface GlobalScopeDeclarations {
     methods: idl.IDLMethod[]
@@ -108,8 +109,6 @@ export class PeerLibrary implements LibraryInterface {
     public get materializedToGenerate(): MaterializedClass[] {
         return Array.from(this.materializedClasses.values()).filter(it => it.needBeGenerated)
     }
-
-    public readonly predefinedDeclarations: idl.IDLInterface[] = []
 
     constructor(
         public language: Language,
@@ -194,10 +193,11 @@ export class PeerLibrary implements LibraryInterface {
 
         let pointOfViewNamespace = idl.fetchNamespaceFrom(type.parent)
 
+        // TODO: Choose what to do if `rootEntries.some(it => idl.isNamespace(it))`
+        // One of possible options - `rootEntries = rootEntries.flatMap(it => idl.isNamespace(it) ? it.members : it)` - cause error
         rootEntries ??= this.files.flatMap(it => it.entries)
         if (1 === qualifiedName.length) {
-            const predefined = rootEntries.filter(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Predefined))
-            predefined.push(...this.predefinedDeclarations)
+            const predefined = rootEntries.filter(it => isInIdlizeInternal(it))
             const found = predefined.find(it => it.name === qualifiedName[0])
             if (found)
                 return found;
@@ -281,7 +281,6 @@ export class PeerLibrary implements LibraryInterface {
                 case idl.IDLF64Type: return new NumericConvertor(param, type)
                 case idl.IDLBigintType: return new BigIntToU64Convertor(param)
                 case idl.IDLPointerType: return new PointerConvertor(param)
-
                 case idl.IDLBufferType: return new BufferConvertor(param)
                 case idl.IDLBooleanType: return new BooleanConvertor(param)
                 case idl.IDLStringType: return new StringConvertor(param)
@@ -290,12 +289,24 @@ export class PeerLibrary implements LibraryInterface {
                 case idl.IDLVoidType: return new VoidConvertor(param)
                 case idl.IDLUnknownType:
                 case idl.IDLAnyType: return new CustomTypeConvertor(param, "Any", false, "Object")
+                case idl.IDLDate: return new DateConvertor(param)
                 default: throw new Error(`Unconverted primitive ${idl.DebugUtils.debugPrintType(type)}`)
             }
         }
         if (idl.isReferenceType(type)) {
             if (isImportAttr(type))
                 return new ImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
+            // TODO: special cases for interop types.
+            switch (type.name) {
+                case 'KBoolean': return new BooleanConvertor(param)
+                case 'KInt': return new NumericConvertor(param, idl.IDLI32Type)
+                case 'KFloat': return new NumericConvertor(param, idl.IDLF32Type)
+                case 'KLong': return new NumericConvertor(param, idl.IDLI64Type)
+                case 'KDouble': return new NumericConvertor(param, idl.IDLF64Type)
+                case 'KStringPtr': return new StringConvertor(param)
+                case 'number': return new NumberConvertor(param)
+                case 'KPointer': return new PointerConvertor(param)
+            }
             const decl = this.resolveTypeReference(type)
             return this.declarationConvertor(param, type, decl)
         }

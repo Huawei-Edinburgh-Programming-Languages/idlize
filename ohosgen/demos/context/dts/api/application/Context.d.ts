@@ -18,18 +18,21 @@
  * @kit AbilityKit
  */
 
-// import { ApplicationInfo } from '../bundleManager/ApplicationInfo';
+import { ApplicationInfo } from '../bundleManager/ApplicationInfo';
 // import type { AsyncCallback } from '../@ohos.base';
 // import resmgr from '../@ohos.resourceManager';
 import BaseContext from './BaseContext';
 // import EventHub from './EventHub';
 // import ApplicationContext from './ApplicationContext';
 // import contextConstant from '../@ohos.app.ability.contextConstant';
+import ApplicationContext = require('./ApplicationContext')
+
+type ApplicationContextAlias = typeof ApplicationContext
 
 export default class Context extends BaseContext {
 
   // resourceManager: resmgr.ResourceManager;
-  // applicationInfo: ApplicationInfo;
+  applicationInfo: ApplicationInfo;
   cacheDir: string;
   tempDir: string;
   filesDir: string;
@@ -47,7 +50,7 @@ export default class Context extends BaseContext {
   createModuleContext(moduleName: string): Context;
   createModuleContext(bundleName: string, moduleName: string): Context;
   // createSystemHspModuleResourceManager(bundleName: string, moduleName: string): resmgr.ResourceManager;
-  getApplicationContext(): ApplicationContext;
+  getApplicationContext(): ApplicationContextAlias;
   // getGroupDir(dataGroupID: string, callback: AsyncCallback<string>): void;
   getGroupDir(dataGroupID: string): Promise<string>;
   // createModuleResourceManager(bundleName: string, moduleName: string): resmgr.ResourceManager;

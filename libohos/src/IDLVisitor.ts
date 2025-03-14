@@ -27,8 +27,7 @@ import {
     getOrPut
 } from "@idlizer/core"
 import { ReferenceResolver } from "@idlizer/core"
-import { IDLVisitorConfig } from "./IDLVisitorConfig"
-import { peerGeneratorConfiguration } from "./peer-generation/PeerGeneratorConfig"
+import { peerGeneratorConfiguration, IDLVisitorConfiguration } from "./DefaultConfiguration"
 
 const MaxSyntheticTypeLength = 60
 
@@ -197,7 +196,10 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             ["Float64Array", () => idl.IDLBufferType], // ["Float64Array", () => idl.createContainerType('sequence', [idl.IDLF64Type])],
             ["BigInt64Array", () => idl.IDLBufferType], // ["BigInt64Array", () => idl.createContainerType('sequence', [idl.IDLI64Type])],
             ["BigUint64Array", () => idl.IDLBufferType], // ["BigUint64Array", () => idl.createContainerType('sequence', [idl.IDLU64Type])],
+            ["Date", () => idl.IDLDate],
             ["Array", (type, name) => this.makeContainerType("sequence", type, name)],
+            ["IterableIterator", (type) => this.makeContainerType("sequence", type)],
+            ["Set", (type) => this.makeContainerType("sequence", type)],
             ["Map", (type, name) => this.makeContainerType("record", type, name)],
             ["Promise", (type, name) => this.makeContainerType("Promise", type, name)],
             ["Record", (type, name) => this.makeContainerType("record", type, name)],
@@ -285,10 +287,10 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             ts.isTypeAliasDeclaration(node) ||
             ts.isFunctionDeclaration(node)) {
             const name = identName(node.name)
-            if (name && IDLVisitorConfig.DeletedDeclarations.includes(name)) {
+            if (name && IDLVisitorConfiguration().isDeletedDeclaration(name)) {
                 return
             }
-            if (name && IDLVisitorConfig.StubbedDeclarations.includes(name)) {
+            if (name && IDLVisitorConfiguration().isStubbedDeclaration(name)) {
                 const decl = idl.createInterface(
                     name,
                     idl.IDLInterfaceSubkind.Interface,
@@ -308,10 +310,10 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                 this.file.entries.push(decl)
                 return
             }
-            if (name && IDLVisitorConfig.ReplacedDeclarations.has(name)) {
+            if (name && IDLVisitorConfiguration().getReplacedDeclaration(name)) {
                 this.file.entries.push({
                     fileName: node.getSourceFile().fileName,
-                    ...IDLVisitorConfig.ReplacedDeclarations.get(name)!,
+                    ...IDLVisitorConfiguration().getReplacedDeclaration(name)!,
                 })
                 return
             }
@@ -442,7 +444,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         const nameSuggestion = NameSuggestion.make(nameOrNull(node.name) ?? "UNDEFINED_TYPE_NAME", true)
         let extendedAttributes = this.computeDeprecatedExtendAttributes(node)
 
-        let [type, syntheticEntry] = IDLVisitorConfig.checkTypedefReplacement(node)
+        let [type, syntheticEntry] = IDLVisitorConfiguration().checkTypedefReplacement(node)
         if (syntheticEntry) this.addSyntheticType(syntheticEntry)
         if (type) {
             return idl.createTypedef(
@@ -519,7 +521,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             } else {
                 throw new Error(`Unsupported heritage: ${it.expression.getText()}: ${it.expression.kind}`)
             }
-            name = IDLVisitorConfig.checkNameReplacement(name, heritage.getSourceFile())
+            name = IDLVisitorConfiguration().checkNameReplacement(name, heritage.getSourceFile())
             return idl.createReferenceType(escapeIDLKeyword(name), this.mapTypeArgs(it.typeArguments, name))
         })
     }
@@ -613,12 +615,12 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         const childNameSuggestion = nameSuggestion.prependType()
         this.context.enter(nameSuggestion.name)
         const fileName = node.getSourceFile().fileName
-        const props = this.pickProperties(node.members, childNameSuggestion)
+        const props = this.pickProperties(nameSuggestion.name, node.members, childNameSuggestion)
             .concat(this.pickAccessors(node.members, childNameSuggestion))
-        const methods = this.pickMethods(node.members, childNameSuggestion)
+        const methods = this.pickMethods(nameSuggestion.name, node.members, childNameSuggestion)
             .concat(this.pickPropertyBindings(nameSuggestion.name, props, fileName))
         return idl.createInterface(
-            IDLVisitorConfig.checkNameReplacement(nameSuggestion.name, node.getSourceFile()),
+            IDLVisitorConfiguration().checkNameReplacement(nameSuggestion.name, node.getSourceFile()),
             idl.IDLInterfaceSubkind.Class,
             inheritance,
             node.members.filter(ts.isConstructorDeclaration).map(it => this.serializeConstructor(it as ts.ConstructorDeclaration, childNameSuggestion)),
@@ -637,16 +639,22 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         return members.filter(ts.isConstructSignatureDeclaration)
             .map(it => this.serializeConstructor(it as ts.ConstructSignatureDeclaration, nameSuggestion))
     }
-    pickProperties(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): idl.IDLProperty[] {
+    pickProperties(parentNameSuggestion: string, members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): idl.IDLProperty[] {
         const properties = members
             .filter(it => (ts.isPropertySignature(it) || ts.isPropertyDeclaration(it) || this.isCommonMethodUsedAsProperty(it) || this.isMethodUsedAsCallback(it)) && !isPrivate(it.modifiers))
             .map(it => this.serializeProperty(it, nameSuggestion))
+            .filter(it => {
+                return !IDLVisitorConfiguration().DeletedMethods.get(parentNameSuggestion)?.includes(it.name)
+            })
         return mergeSetGetProperties(properties)
     }
-    pickMethods(members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): idl.IDLMethod[] {
+    pickMethods(parentNameSuggestion: string, members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): idl.IDLMethod[] {
         return members
             .filter(it => (ts.isMethodSignature(it) || ts.isMethodDeclaration(it) || ts.isIndexSignatureDeclaration(it)) && !this.isCommonMethodUsedAsProperty(it) && !this.isMethodUsedAsCallback(it) && !isPrivate(it.modifiers))
             .map(it => this.serializeMethod(it as ts.MethodDeclaration | ts.MethodSignature, nameSuggestion))
+            .filter(it => {
+                return !IDLVisitorConfiguration().DeletedMethods.get(parentNameSuggestion)?.includes(it.name)
+            })
     }
     pickCallables(members: ReadonlyArray<ts.TypeElement>, nameSuggestion: NameSuggestion): idl.IDLCallable[] {
         return members.filter(ts.isCallSignatureDeclaration)
@@ -734,13 +742,13 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         const childNameSuggestion = nameSuggestion.prependType()
         this.context.enter(nameSuggestion.name)
         return idl.createInterface(
-            IDLVisitorConfig.checkNameReplacement(nameSuggestion.name, node.getSourceFile()),
+            IDLVisitorConfiguration().checkNameReplacement(nameSuggestion.name, node.getSourceFile()),
             idl.IDLInterfaceSubkind.Interface,
             inheritance,
             this.pickConstructors(node.members, childNameSuggestion),
             [],
-            this.pickProperties(allMembers, childNameSuggestion),
-            this.pickMethods(allMembers, childNameSuggestion),
+            this.pickProperties(nameSuggestion.name, allMembers, childNameSuggestion),
+            this.pickMethods(nameSuggestion.name, allMembers, childNameSuggestion),
             this.pickCallables(node.members, childNameSuggestion),
             this.collectTypeParameters(node.typeParameters), {
             fileName: node.getSourceFile().fileName,
@@ -766,7 +774,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     }
 
     serializeObjectType(node: ts.TypeLiteralNode, nameSuggestion: NameSuggestion, typeParameters?: ts.NodeArray<ts.TypeParameterDeclaration>): idl.IDLInterface {
-        const properties = this.pickProperties(node.members, nameSuggestion ?? NameSuggestion.make("UNDEFINED"))
+        const properties = this.pickProperties(nameSuggestion.name, node.members, nameSuggestion ?? NameSuggestion.make("UNDEFINED"))
         const syntheticName = this.synthesizeTypeLiteralName(properties)
         const selectedName = selectName(nameSuggestion, syntheticName)
         return idl.createInterface(
@@ -776,7 +784,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             this.pickConstructors(node.members, nameSuggestion),
             [],
             properties,
-            this.pickMethods(node.members, nameSuggestion),
+            this.pickMethods(selectedName, node.members, nameSuggestion),
             this.pickCallables(node.members, nameSuggestion),
             this.collectTypeParameters(typeParameters), {
             fileName: node.getSourceFile().fileName,
@@ -801,8 +809,12 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     serializeIntersectionType(node: ts.IntersectionTypeNode, nameSuggestion?: NameSuggestion): idl.IDLInterface {
         const toIDLReferenceType = (type: ts.TypeNode, index: number) => {
             const result = this.serializeType(type, nameSuggestion?.extend(`intersection${index}`))
+            if (idl.isTypeParameterType(result)) {
+                warn(`Replace type parameter ${result.name} to a dangling reference, fix it`)
+                return idl.createReferenceType(result.name)
+            }
             if (!idl.isReferenceType(result))
-                throw new Error(`Can only intersect type references`)
+                throw new Error(`Can only intersect type references, got ${type.parent.getText()}`)
             return result
         }
         const inheritance = node.types.map((it, index) => toIDLReferenceType(it, index))
@@ -1263,7 +1275,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             return idl.createReferenceType(funcType.name)
         }
         if (this.isCommonMethodUsedAsProperty(property)) {
-            let [type, syntheticEntry] = IDLVisitorConfig.checkParameterTypeReplacement(property.parameters[0])
+            let [type, syntheticEntry] = IDLVisitorConfiguration().checkParameterTypeReplacement(property.parameters[0])
             if (syntheticEntry) this.addSyntheticType(syntheticEntry)
             if (!isDefined(type)) {
                 type = this.serializeType(property.parameters[0].type, nameSuggestion?.extend(nameOrNull(property.parameters[0].name)!))
@@ -1294,7 +1306,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         }
 
         if (ts.isPropertyDeclaration(property) || ts.isPropertySignature(property)) {
-            let [type, syntheticEntry] = IDLVisitorConfig.checkPropertyTypeReplacement(property)
+            let [type, syntheticEntry] = IDLVisitorConfiguration().checkPropertyTypeReplacement(property)
             if (syntheticEntry) this.addSyntheticType(syntheticEntry)
             if (!isDefined(type)) type = this.serializeType(property.type, nameSuggestion)
 
@@ -1358,7 +1370,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         }
         const parameterName = nameOrNull(parameter.name)!
         nameSuggestion = nameSuggestion?.extend(parameterName)
-        let [type, syntheticEntry] = IDLVisitorConfig.checkParameterTypeReplacement(parameter)
+        let [type, syntheticEntry] = IDLVisitorConfiguration().checkParameterTypeReplacement(parameter)
         if (syntheticEntry) {
             this.addSyntheticType(syntheticEntry)
         }
@@ -1568,11 +1580,11 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             if (value.startsWith("0x")) {
                 return [idl.IDLNumberType, parseInt(value.substring(2), 16).toString()]
             }
-            if (parseInt(value) != undefined) {
-                return [idl.IDLNumberType, parseInt(value).toString()]
-            }
-            if (parseFloat(value) != undefined) {
+            if (!isNaN(parseFloat(value))) {
                 return [idl.IDLNumberType, parseFloat(value).toString()]
+            }
+            if (value === "true" || value === "false") {
+                return [idl.IDLBooleanType, value]
             }
             throw new Error(`Cannot infer type of ${value}`)
         }

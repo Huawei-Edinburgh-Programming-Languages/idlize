@@ -1,4 +1,5 @@
 {
+    "ApiVersion": 0,
     "TypePrefix": "",
     "LibraryPrefix": "",
     "OptionalPrefix": "Opt_",
@@ -35,5 +36,8 @@
     "dummy": {
         "ignoreMethods": {}
     },
-    "CollapseOverloadsARKTS": true
+    "CollapseOverloadsARKTS": true,
+    "linter": {
+        "checkReferencesResolved": false
+    }
 }
