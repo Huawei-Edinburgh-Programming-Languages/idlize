@@ -34,3 +34,16 @@ export function assertThrows(name: String, fn: () => void) {
         console.log(`TEST ${name} PASS`)
     }
 }
+
+export function assertMaxExecutionTime(fn: () => void,
+                                       maxTimeMs: number,
+                                       toleranceMs?: number,
+                                       message?: string) {
+    const startMs = Date.now();
+    fn();
+    const durationMs = Date.now() - startMs;
+
+    if (durationMs > maxTimeMs + (toleranceMs ?? 50)) {
+        throw new Error(message || `Execution time ${durationMs}ms exceeded limit of ${maxTimeMs}ms`);
+    }
+}

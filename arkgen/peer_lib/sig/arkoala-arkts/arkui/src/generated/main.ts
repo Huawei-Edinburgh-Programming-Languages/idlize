@@ -15,7 +15,7 @@
 import { ArkUINativeModule, TestNativeModule } from "#components"
 import { wrapCallback, callCallback, wrapSystemCallback, registerNativeModuleLibraryName, KSerializerBuffer, KBuffer } from "@koalaui/interop"
 import { deserializeAndCallCallback } from './peers/CallbackDeserializeCall.ts'
-import { assertEquals, assertThrows } from "./test_utils"
+import { assertMaxExecutionTime } from "./test_utils"
 import { ArkButtonPeer } from "@arkoala/arkui/peers/ArkButtonPeer"
 import { ArkColumnPeer } from "@arkoala/arkui/peers/ArkColumnPeer"
 import { ButtonType, LabelStyle } from '@arkoala/arkui/ArkButtonInterfaces'
@@ -69,11 +69,11 @@ function checkSerdeLength() {
     ser.writeLength("13lpx")
     ser.writeLength(14)
     const des = new Deserializer(ser.asBuffer(), ser.length())
-    checkSerdeResult("Deserializer.readLength, unit px", des.readLength(), "10px")
-    checkSerdeResult("Deserializer.readLength, unit vp", des.readLength(), "11vp")
-    checkSerdeResult("Deserializer.readLength, unit %", des.readLength(), "12%")
-    checkSerdeResult("Deserializer.readLength, unit lpx", des.readLength(), "13lpx")
-    checkSerdeResult("Deserializer.readLength, number", des.readLength(), 14)
+    assertEQ(des.readLength(), "10px", "Deserializer.readLength, unit px")
+    assertEQ(des.readLength(), "11vp", "Deserializer.readLength, unit vp")
+    assertEQ(des.readLength(), "12%", "Deserializer.readLength, unit %")
+    assertEQ(des.readLength(), "13lpx", "Deserializer.readLength, unit lpx")
+    assertEQ(des.readLength(), 14, "Deserializer.readLength, number")
     ser.release()
 }
 
@@ -82,7 +82,7 @@ function checkSerdeText() {
     const text = "test text serialization/deserialization"
     ser.writeString(text)
     const des = new Deserializer(ser.asBuffer(), ser.length())
-    checkSerdeResult("Deserializer.readString", des.readString(), text)
+    assertEQ(des.readString(), text, "Deserializer.readString")
     ser.release()
 }
 
@@ -92,9 +92,9 @@ function checkSerdePrimitive() {
     ser.writeNumber(10.5)
     ser.writeNumber(undefined)
     const des = new Deserializer(ser.asBuffer(), ser.length())
-    checkSerdeResult("Deserializer.readNumber, int", des.readNumber(), 10)
-    checkSerdeResult("Deserializer.readNumber, float", des.readNumber(), 10.5)
-    checkSerdeResult("Deserializer.readNumber, undefined", des.readNumber(), undefined)
+    assertEQ(des.readNumber(), 10, "Deserializer.readNumber, int")
+    assertEQ(des.readNumber(), 10.5, "Deserializer.readNumber, float")
+    assertEQ(des.readNumber(), undefined, "Deserializer.readNumber, undefined")
     ser.release()
 }
 
@@ -103,9 +103,10 @@ function checkSerdeCustomObject() {
     const date = new Date(2024, 11, 28)
     ser.writeCustomObject("Date", date)
     const des = new Deserializer(ser.asBuffer(), ser.length())
-    checkSerdeResult("Deserializer.readCustomObject, Date",
+    assertEQ(
         JSON.stringify(date),
-        JSON.stringify(des.readCustomObject("Date") as Date))
+        JSON.stringify(des.readCustomObject("Date") as Date),
+        "Deserializer.readCustomObject, Date")
     ser.release()
 }
 
@@ -131,12 +132,7 @@ export function checkResult(name: string, test: () => void, expected: string) {
     InteropNativeModule._StopGroupedLog(1)
     const actual = getNativeLog()
         .replaceAll(" \n", "")
-    if (actual != expected) {
-        console.log(`TEST ${name} FAIL:\n  EXPECTED "${expected}"\n  ACTUAL   "${actual}"`)
-        hasTestErrors = true
-    } else {
-        console.log(`TEST ${name} PASS`)
-    }
+    assertEQ(actual, expected, name)
 }
 
 class LabelStyleImpl implements LabelStyle {
@@ -267,11 +263,11 @@ function checkCallback() {
     const id1 = wrapCallback((args: KSerializerBuffer, length: int) => 2024)
     const id2 = wrapCallback((args: KSerializerBuffer, length: int) => 2025)
     const buffer = new KBuffer(20)
-    assertEquals("Call callback 1", 2024, callCallback(id1, buffer.buffer, 0))
-    assertEquals("Call callback 2", 2025, callCallback(id2, buffer.buffer, 0))
-    assertThrows("Call disposed callback 1", () => { callCallback(id1, buffer.buffer, 0) })
+    assertEQ("Call callback 1", 2024, callCallback(id1, buffer.buffer, 0))
+    assertEQ("Call callback 2", 2025, callCallback(id2, buffer.buffer, 0))
+    expectThrow("Call disposed callback 1", () => { callCallback(id1, buffer.buffer, 0) })
     new Array<number>(2, 4, 6, 8).forEach((it, index) => buffer.set(index as int, it as byte))
-    assertThrows("Call callback 0", () => { callCallback(0, buffer.buffer, 4) })
+    expectThrow("Call callback 0", () => { callCallback(0, buffer.buffer, 4) })
     buffer.dispose()
 }
 
@@ -334,11 +330,11 @@ function checkTwoSidesCallback() {
         )
     }
 
-    assertEquals("Callback 1 enqueued", "NOT_CALLED", callResult1)
-    assertEquals(`Callback 2 enqueued ${call2Count} times`, 0, callResult2)
+    assertEQ("NOT_CALLED", callResult1, "Callback 1 enqueued")
+    assertEQ( 0, callResult2, `Callback 2 enqueued ${call2Count} times`)
     checkArkoalaCallbacks()
-    assertEquals("Callback 1 read&called", "CALLED, value=194", callResult1)
-    assertEquals(`Callback 2 read&called ${call2Count} times`, call2Count, callResult2)
+    assertEQ( "CALLED, value=194", callResult1, "Callback 1 read&called")
+    assertEQ(call2Count, callResult2, `Callback 2 read&called ${call2Count} times`)
 }
 
 function checkTwoSidesCallbackSync() {
@@ -355,11 +351,11 @@ function checkTwoSidesCallbackSync() {
         },
     )
 
-    assertEquals("Sync Callback 1 read&called immediately", "CALLED, value=194", callResult1)
+    assertEQ("CALLED, value=194", callResult1, "Sync Callback 1 read&called immediately")
 }
 
 function checkNumberIncrement() {
-    assertEquals("Native increment", 40, InteropNativeModule._IncrementNumber(39))
+    assertEQ(40, InteropNativeModule._IncrementNumber(39), "Native increment")
 }
 
 function checkCallbackWithReturn() {
@@ -379,16 +375,18 @@ function checkCallbackWithReturn() {
         },
     )
 
-    assertEquals("Sync Callback 1 with return type read&called immediately", "CALLED, value1=true value2=false", callResult1)
+    assertEQ("CALLED, value1=true value2=false",
+        callResult1,
+        "Sync Callback 1 with return type read&called immediately")
 }
 
 function checkNativeCallback() {
     const id1 = wrapCallback((args: KSerializerBuffer, length: int): int => {
         return 123456
     })
-    assertEquals("NativeCallback without args", 123456, TestNativeModule._TestCallIntNoArgs(id1))
-    assertThrows("NativeCallback without args called again", () => { callCallback(id1, 0, 0) })
-    assertThrows("NativeCallback without args called again from native", () => { TestNativeModule._TestCallIntNoArgs(id1) })
+    assertEQ(123456, TestNativeModule._TestCallIntNoArgs(id1), "NativeCallback without args")
+    expectThrow(() => { callCallback(id1, 0, 0) }, (v: Error | Exception)=> true)
+    expectThrow(() => { TestNativeModule._TestCallIntNoArgs(id1) }, (v: Error | Exception)=> true)
 
     const id2 = wrapCallback((args: KSerializerBuffer, length: int): int => {
         const buf = new ArrayBuffer(length)
@@ -405,7 +403,7 @@ function checkNativeCallback() {
         return sum
     })
     const arr2: int[] = [100, 200, 300, -1000]
-    assertEquals("NativeCallback Int32Array sum", -400, TestNativeModule._TestCallIntIntArraySum(id2, arr2, arr2.length))
+    assertEQ(-400, TestNativeModule._TestCallIntIntArraySum(id2, arr2, arr2.length), "NativeCallback Int32Array sum")
 
     const id3 = wrapCallback((args: KSerializerBuffer, length: int): int => {
         const buf = new ArrayBuffer(length)
@@ -425,10 +423,10 @@ function checkNativeCallback() {
     })
     const arr3: int[] = [100, 200, 300, -1000]
     TestNativeModule._TestCallVoidIntArrayPrefixSum(id3, arr3, arr3.length)
-    assertEquals("NativeCallback Int32Array PrefixSum [0]", 100, arr3[0])
-    assertEquals("NativeCallback Int32Array PrefixSum [1]", 300, arr3[1])
-    assertEquals("NativeCallback Int32Array PrefixSum [2]", 600, arr3[2])
-    assertEquals("NativeCallback Int32Array PrefixSum [3]", -400, arr3[3])
+    assertEQ(100, arr3[0],"NativeCallback Int32Array PrefixSum [0]")
+    assertEQ(300, arr3[1],"NativeCallback Int32Array PrefixSum [1]")
+    assertEQ(600, arr3[2],"NativeCallback Int32Array PrefixSum [2]")
+    assertEQ(-400, arr3[3],"NativeCallback Int32Array PrefixSum [3]")
 
     const start = Date.now()
     const id4 = wrapCallback((args: KSerializerBuffer, length: int): int => {
@@ -448,7 +446,7 @@ function checkNativeCallback() {
         }
         return 1
     }, false)
-    assertEquals("NativeCallback prepare recursive callback test", id4, id3 + 1)
+    assertEQ(id4, id3 + 1, "NativeCallback prepare recursive callback test")
     const depth = 500
     const count = 100
     for (let i = 0; i < count; i++) {
@@ -466,8 +464,8 @@ function checkNativeCallback() {
             view.setUint8(i, argsBuffer.get(i));
         }
         if (i == 0) {
-            assertEquals("NativeCallback Recursive [0]", Math.ceil(depth / 2), args32[0])
-            assertEquals("NativeCallback Recursive [1]", Math.floor(depth / 2), args32[1])
+            assertEQ(Math.ceil(depth / 2), args32[0], "NativeCallback Recursive [0]")
+            assertEQ(Math.floor(depth / 2), args32[1], "NativeCallback Recursive [1]")
         }
     }
     const passed = Date.now() - start
@@ -512,36 +510,33 @@ function checkNodeAPI() {
         `measureLayoutAndDraw(0x${root.peer.ptr})`)
 }
 
-export function main(): void {
+export function main(): int {
     registerNativeModuleLibraryName("InteropNativeModule", "ArkoalaNative_ani")
     registerNativeModuleLibraryName("TestNativeModule", "ArkoalaNative_ani")
     registerNativeModuleLibraryName("ArkUINativeModule", "ArkoalaNative_ani")
     registerNativeModuleLibraryName("ArkUIGeneratedNativeModule", "ArkoalaNative_ani")
 
-    checkNumberIncrement()
-    checkCallbackWithReturn()
-    checkTwoSidesCallbackSync()
-
-    checkSerdeLength()
-    checkSerdeText()
-    checkSerdePrimitive()
-    checkSerdeCustomObject()
-
+    const suite = new ArkTestsuite("Main tests")
+    suite.addTest("Check number increment", checkNumberIncrement)
+    suite.addTest('Check number increment', checkNumberIncrement);
+    suite.addTest('Check callback with return', checkCallbackWithReturn);
+    suite.addTest('Check two sides Callback sync', checkTwoSidesCallbackSync);
+    suite.addTest('check (de)serialize length', checkSerdeLength);
+    suite.addTest('Check (de)serialize text', checkSerdeText);
+    suite.addTest('Check (de)serialize primitive', checkSerdePrimitive);
+    suite.addTest('Check (de)serialize custom object', checkSerdeCustomObject);
     // TODO: enable tests after fixing issues with arm64 panda
-	// https://rnd-gitlab-msc.huawei.com/rus-os-team/virtual-machines-and-tools/panda/-/issues/20899
-	// https://rnd-gitlab-msc.huawei.com/rus-os-team/virtual-machines-and-tools/panda/-/issues/20908
-    // checkPerf2(5 * 1000 * 1000)
-    checkPerf3(5 * 1000 * 1000)
+    // https://rnd-gitlab-msc.huawei.com/rus-os-team/virtual-machines-and-tools/panda/-/issues/20899
+    // https://rnd-gitlab-msc.huawei.com/rus-os-team/virtual-machines-and-tools/panda/-/issues/20908
+    // Test.test('Check perf', ()=> {checkPerf2(5 * 1000 * 1000)});
+    suite.addTest('Check performance', ()=>
+        assertMaxExecutionTime(()=> checkPerf3(5 * 1000 * 1000), 5000, 500)
+    );
+    suite.addTest('Check button', checkButton);
+    suite.addTest('Check callback', checkCallback);
+    suite.addTest('Check native callback', checkNativeCallback);
+    suite.addTest('Check node API', checkNodeAPI);
+    suite.addTest('Check two sides callback', checkTwoSidesCallback);
 
-    checkButton()
-
-    checkCallback()
-    checkNativeCallback()
-
-    checkNodeAPI()
-    checkTwoSidesCallback()
-
-    if (hasTestErrors) {
-        throw new Error("Tests failed!")
-    }
+    return suite.run();
 }
