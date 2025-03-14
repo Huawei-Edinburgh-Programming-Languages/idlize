@@ -2470,8 +2470,8 @@
 |*DataResubmissionHandler*| *Class* | Erokhin Ilya | done |  |  |
 |`resend`| Function | Erokhin Ilya | done |  |  |
 |`cancel`| Function | Erokhin Ilya | done |  |  |
-|*ControllerHandler*| *Class* | Erokhin Ilya | devdone |  |  |
-|`setWebController`| Function | Erokhin Ilya | devdone |  |  |
+|*ControllerHandler*| *Class* | Erokhin Ilya | done |  |  |
+|`setWebController`| Function | Erokhin Ilya | done |  |  |
 |*WebContextMenuParam*| *Class* | Erokhin Ilya | done |  |  |
 |`x`| Function | Erokhin Ilya | done |  |  |
 |`y`| Function | Erokhin Ilya | done |  |  |
