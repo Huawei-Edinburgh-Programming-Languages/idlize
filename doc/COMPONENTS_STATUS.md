@@ -2594,14 +2594,14 @@
 |`getFontSize`| Function | Erokhin Ilya | done |  |  |
 |`getFontWeight`| Function | Erokhin Ilya | done |  |  |
 |`getFontStyle`| Function | Erokhin Ilya | done |  |  |
-|*DecorationStyle*| *Class* | Tuzhilkin Ivan | testskipped |  | |
-|`getType`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`getColor`| Function | | | | |
-|`getStyle`| Function | Tuzhilkin Ivan | testskipped |  | |
-|*BaselineOffsetStyle*| *Class* | Tuzhilkin Ivan | testskipped |  | |
-|`getBaselineOffset`| Function | Tuzhilkin Ivan | testskipped |  | |
-|*LetterSpacingStyle*| *Class* | Tuzhilkin Ivan | testskipped |  | |
-|`getLetterSpacing`| Function | Tuzhilkin Ivan | testskipped |  | |
+|*DecorationStyle*| *Class* | Tuzhilkin Ivan | in progress |  | |
+|`getType`| Function | Tuzhilkin Ivan | done |  | |
+|`getColor`| Function | Tuzhilkin Ivan | in progress | | |
+|`getStyle`| Function | Tuzhilkin Ivan | done |  | |
+|*BaselineOffsetStyle*| *Class* | Tuzhilkin Ivan | done |  | |
+|`getBaselineOffset`| Function | Tuzhilkin Ivan | done |  | |
+|*LetterSpacingStyle*| *Class* | Tuzhilkin Ivan | done |  | |
+|`getLetterSpacing`| Function | Tuzhilkin Ivan | done |  | |
 |*TextShadowStyle*| *Class* |  Politov Mikhail | testskipped |  | |
 |`getTextShadow`| Function |  Politov Mikhail | testskipped | | |
 |*BackgroundColorStyle*| *Class* | Politov Mikhail | testskipped |  | |
