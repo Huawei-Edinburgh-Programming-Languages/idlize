@@ -2013,7 +2013,7 @@
 |`setTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
 |`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Maksimov Nikita | done | | empty implementation |
-|`getIntentionCode`| Function | | | | |
+|`getIntentionCode`| Function | | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`setIntentionCode`| Function | Maksimov Nikita | done | | |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
