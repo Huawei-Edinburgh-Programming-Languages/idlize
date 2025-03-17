@@ -1721,7 +1721,7 @@
 |`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
 |*CanvasGradient*| *Class* | Vadim Voronov | done |  | |
 |`addColorStop`| Function | Vadim Voronov | done |  | |
-|*CanvasPath*| *Class* | Vadim Voronov | in progress |  |  |
+|*CanvasPath*| *Class* | Vadim Voronov | testskipped |  |  |
 |`arc`| Function | Vadim Voronov | testskipped |  |  |
 |`arcTo`| Function | Vadim Voronov | testskipped |  |  |
 |`bezierCurveTo`| Function | Vadim Voronov | testskipped |  |  |
@@ -1731,11 +1731,11 @@
 |`moveTo`| Function | Vadim Voronov | testskipped |  |  |
 |`quadraticCurveTo`| Function | Vadim Voronov | testskipped |  |  |
 |`rect`| Function | Vadim Voronov | testskipped |  |  |
-|*Path2D*| *Class* | Vadim Voronov | in progress |  | |
+|*Path2D*| *Class* | Vadim Voronov | testskipped |  | |
 |`addPath`| Function | Vadim Voronov | testskipped |  | |
 |*CanvasPattern*| *Class* | Vadim Voronov | in progress |  |  |
 |`setTransform`| Function | Vadim Voronov | testskipped |  |  |
-|*ImageBitmap*| *Class* | Vadim Voronov | in progress  |  | |
+|*ImageBitmap*| *Class* | Vadim Voronov | testskipped  |  | |
 |`close`| Function | Vadim Voronov | done |  |  |
 |`getHeight`| Function | Vadim Voronov | testskipped |  |  |
 |`getWidth`| Function | Vadim Voronov | testskipped |  |  |
@@ -1824,7 +1824,7 @@
 |`setTextAlign`| Function  | Vadim Voronov | testskipped |  |   |
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextBaseline`| Function  | Vadim Voronov | testskipped |  |   |
-|*CanvasRenderingContext2D*| *Class* | Vadim Voronov | in progress |  |  |
+|*CanvasRenderingContext2D*| *Class* | Vadim Voronov | testskipped |  |  |
 |`toDataURL`| Function |Vadim Voronov| testskipped |  |  |
 |`startImageAnalyzer`| Function | Vadim Voronov | testskipped |  | |
 |`stopImageAnalyzer`| Function | Vadim Voronov| testskipped |  | |
@@ -1835,10 +1835,10 @@
 |`getHeight`| Function |Vadim Voronov| testskipped |  | |
 |`getWidth`| Function |Vadim Voronov| testskipped |  | |
 |`getCanvas`| Function |Vadim Voronov | testskipped | | |
-|*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | in progress | | |
+|*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | testskipped | | |
 |`toDataURL`| Function | Vadim Voronov | testskipped | | |
 |`transferToImageBitmap`| Function | Vadim Voronov | testskipped | |    |
-|*OffscreenCanvas*| *Class* | Vadim Voronov | in progress | | |
+|*OffscreenCanvas*| *Class* | Vadim Voronov | testskipped | | |
 |`transferToImageBitmap`| Function | Vadim Voronov | testskipped | | |
 |`getContext2d`| Function | Vadim Voronov | testskipped | | |
 |`getHeight`| Function | Vadim Voronov | testskipped | | |
@@ -2193,7 +2193,7 @@
 |`scrollToItemInGroup`| Function |Morozov Sergey | done | | |
 |`closeAllSwipeActions`| Function |Morozov Sergey | done | | |
 |`getVisibleListContentInfo`| Function |Morozov Sergey | done | | |
-|*Matrix2D*| *Class* | Vadim Voronov | in progress |  |  |
+|*Matrix2D*| *Class* | Vadim Voronov | testskipped |  |  |
 |`identity`| Function | Vadim Voronov | testskipped |  | |
 |`invert`| Function | Vadim Voronov | testskipped |  | |
 |`multiply`| Function | Vadim Voronov | deprecated |  | deprecated |
