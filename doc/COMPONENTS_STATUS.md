@@ -291,9 +291,9 @@
 |`foregroundBlurStyle`| Function | Roman Sedaikin | done |  | |
 |`focusScopeId`| Function | Dmitry A Smirnov| done |  | |
 |`focusScopePriority`| Function | Dmitry A Smirnov| done |  | |
-|`gesture`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch  |
-|`priorityGesture`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
-|`parallelGesture`| Function | Erokhin Ilya | in progress |  | testskipped on feature branch |
+|`gesture`| Function | Erokhin Ilya | testskipped |  |  |
+|`priorityGesture`| Function | Erokhin Ilya | testskipped |  |  |
+|`parallelGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`blur`| Function | Roman Sedaikin | done |  | |
 |`linearGradientBlur`| Function | Lobah Mikhail | done |  | |
 |`systemBarEffect`| Function | Lobah Mikhail | done |  | |
