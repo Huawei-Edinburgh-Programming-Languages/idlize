@@ -1,11 +1,5 @@
 package org.openharmony.arkui;
 
-/*
-package "ohos";
-import "../@ohos.graphics.drawing";
-import "../@ohos.graphics.common2D";
-import "../global/resource";
-*/
 [Entity=Interface]
 interface Size {
 
@@ -79,6 +73,20 @@ interface Frame {
     attribute number y;
     attribute number width;
     attribute number height;
+
+};
+
+[Entity=Interface]
+interface Edges {
+
+    [Optional]
+    attribute Dimension top;
+    [Optional]
+    attribute Dimension left;
+    [Optional]
+    attribute Dimension bottom;
+    [Optional]
+    attribute Dimension right;
 
 };
 
@@ -250,8 +258,8 @@ interface ShapeClip {
     void setCommandPath(CommandPath path);
 
 };
-/*
-[GlobalScope]
+
+[Entity=Class]
 interface GlobalScope_Graphics {
 
     static Edges edgeColors(number all);
@@ -260,4 +268,3 @@ interface GlobalScope_Graphics {
     static BorderRadiuses borderRadiuses(number all);
 
 };
-*/
