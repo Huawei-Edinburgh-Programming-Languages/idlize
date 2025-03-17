@@ -2157,19 +2157,19 @@
 |`onActionEnd`| Function | Morozov Sergey | in progress | | |
 |`onActionCancel`| Function | Morozov Sergey | in progress | | |
 |*SwipeGestureInterface*| *Class* | Tuzhilkin Ivan | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
-|`onAction`| Function | Tuzhilkin Ivan | in progress | | |
+|`onAction`| Function | Tuzhilkin Ivan | done | | |
 |*PinchGestureInterface*| *Class* | Tuzhilkin Ivan | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
-|`onActionStart`| Function | Tuzhilkin Ivan | in progress | | |
-|`onActionUpdate`| Function | Tuzhilkin Ivan | in progress | | |
-|`onActionEnd`| Function | Tuzhilkin Ivan | in progress | | |
-|`onActionCancel`| Function | Tuzhilkin Ivan | in progress | | |
+|`onActionStart`| Function | Tuzhilkin Ivan | done | | |
+|`onActionUpdate`| Function | Tuzhilkin Ivan | done | | |
+|`onActionEnd`| Function | Tuzhilkin Ivan | done | | |
+|`onActionCancel`| Function | Tuzhilkin Ivan | done | | |
 |*RotationGestureInterface*| *Class* | Andrey Khudenkikh | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
 |`onActionStart`| Function | Andrey Khudenkikh | devdone | | |
 |`onActionUpdate`| Function | Andrey Khudenkikh | devdone | | |
 |`onActionEnd`| Function | Andrey Khudenkikh | devdone | | |
 |`onActionCancel`| Function | Andrey Khudenkikh | devdone | | |
 |*GestureGroupInterface*| *Class* | Tuzhilkin Ivan | | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
-|`onCancel`| Function | Tuzhilkin Ivan | in progress | | |
+|`onCancel`| Function | Tuzhilkin Ivan | done | | |
 |*ScrollableTargetInfo*| *Class* | Maksimov Nikita | done |  | |
 |`isBegin`| Function | Maksimov Nikita | done |  | |
 |`isEnd`| Function | Maksimov Nikita | done |  | |
