@@ -1667,14 +1667,14 @@
 |*GlobalScope_ohos_measure_utils*| *Class* | | | | |
 |`measureText`| Function | | | | |
 |`measureTextSize`| Function | | | | |
-|*ScaleSymbolEffect*| *Class* | Andrey Khudenkikh | devdone | | |
-|`getScope`| Function | Andrey Khudenkikh | devdone | | |
-|`setScope`| Function | Andrey Khudenkikh | devdone | | |
-|`getDirection`| Function | Andrey Khudenkikh | devdone | | |
-|`setDirection`| Function | Andrey Khudenkikh | devdone | | |
-|*ReplaceSymbolEffect*| *Class* | Andrey Khudenkikh | devdone | | |
-|`getScope`| Function | Andrey Khudenkikh | devdone | | |
-|`setScope`| Function | Andrey Khudenkikh | devdone | | |
+|*ScaleSymbolEffect*| *Class* | Andrey Khudenkikh | done | | |
+|`getScope`| Function | Andrey Khudenkikh | done | | |
+|`setScope`| Function | Andrey Khudenkikh | done | | |
+|`getDirection`| Function | Andrey Khudenkikh | done | | |
+|`setDirection`| Function | Andrey Khudenkikh | done | | |
+|*ReplaceSymbolEffect*| *Class* | Andrey Khudenkikh | done | | |
+|`getScope`| Function | Andrey Khudenkikh | done | | |
+|`setScope`| Function | Andrey Khudenkikh | done | | |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | done |  | |
 |`isModifiable`| Function | Tuzhilkin Ivan | done |  | |
 |`appendChild`| Function | Tuzhilkin Ivan | done |  | |
