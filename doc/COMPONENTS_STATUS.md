@@ -2631,10 +2631,10 @@
 |`insertStyledString`| Function | Maksimov Nikita | done |  | |
 |`appendStyledString`| Function | Maksimov Nikita | done |  | |
 |*ImageAttachment*| *Class* | Evstigneev Roman | in progress | | |
-|`getValue`| Function | Evstigneev Roman | in progress | | |
+|`getValue`| Function | Evstigneev Roman | done | | |
 |`getSize`| Function | | | | |
-|`getVerticalAlign`| Function | Evstigneev Roman | in progress | | |
-|`getObjectFit`| Function | Evstigneev Roman | in progress | | |
+|`getVerticalAlign`| Function | Evstigneev Roman | done | | |
+|`getObjectFit`| Function | Evstigneev Roman | done | | |
 |`getLayoutStyle`| Function | | | | |
 |`getColorFilter`| Function | | | | |
 |*CustomSpan*| *Class* | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
