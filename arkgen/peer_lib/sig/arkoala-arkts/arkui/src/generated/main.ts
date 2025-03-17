@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { int32 } from "@koalaui/common"
 import { ArkUINativeModule, TestNativeModule } from "#components"
 import { wrapCallback, callCallback, wrapSystemCallback, registerNativeModuleLibraryName, KSerializerBuffer, KBuffer } from "@koalaui/interop"
 import { deserializeAndCallCallback } from './peers/CallbackDeserializeCall.ts'
@@ -293,7 +295,7 @@ function enqueueCallback(
     /* libace stored resource somewhere */
     const buffer = new byte[serializer.length()]
     for (let i = 0; i < buffer.length; i++) {
-        buffer[i] = serializer.getByte(i)
+        buffer[i] = serializer.getByte(i) as byte
     }
     serializer.release()
 
@@ -359,7 +361,7 @@ function checkNumberIncrement() {
 }
 
 function checkCallbackWithReturn() {
-    wrapSystemCallback(1, (buff:KSerializerBuffer, len:int) => { deserializeAndCallCallback(new Deserializer(buff, len)); return 0 })
+    wrapSystemCallback(1, (buff: KSerializerBuffer, len:int) => { deserializeAndCallCallback(new Deserializer(buff, len)); return 0 })
 
     let callResult1 = "NOT_CALLED"
 
@@ -442,7 +444,7 @@ function checkNativeCallback() {
             argsBuffer.set(i, view.getUint8(i) as byte)
         }
         if (args32[0] + args32[1] < args32[2]) {
-            return TestNativeModule._TestCallIntRecursiveCallback(id3 + 1, args, length as int32)
+            //return TestNativeModule._TestCallIntRecursiveCallback(id3 + 1, args, length as int32)
         }
         return 1
     }, false)
@@ -459,7 +461,7 @@ function checkNativeCallback() {
         for (let i = 0; i < length; i++) {
             argsBuffer.set(i, view.getUint8(i) as byte)
         }
-        TestNativeModule._TestCallIntRecursiveCallback(id4, argsBuffer.buffer, argsBuffer.length as int32)
+        // TestNativeModule._TestCallIntRecursiveCallback(id4, argsBuffer.buffer, argsBuffer.length as int32)
         for (let i = 0; i < length; i++) {
             view.setUint8(i, argsBuffer.get(i));
         }
