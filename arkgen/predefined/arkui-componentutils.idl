@@ -14,13 +14,6 @@ interface ComponentInfo {
 
 };
 [Entity=Interface]
-interface Size {
-
-    attribute number width;
-    attribute number height;
-
-};
-[Entity=Interface]
 interface Offset {
 
     attribute number x;
@@ -78,9 +71,4 @@ interface Matrix4Result {
 
 };
 
-[Entity=Class]
-interface GlobalScope_ohos_arkui_componentUtils {
-
-    static ComponentInfo getRectangleById(String id);
-
-};
+ComponentInfo getRectangleById(String id);

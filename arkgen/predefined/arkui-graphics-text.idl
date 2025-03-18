@@ -1,9 +1,13 @@
+package org.openharmony.arkui;
+
 dictionary Affinity {
 
     number UPSTREAM = 0;
     number DOWNSTREAM = 1;
 
 };
+
+interface RunMetrics {};
 
 [Entity=Interface]
 interface LineMetrics {
@@ -20,7 +24,7 @@ interface LineMetrics {
     attribute number topHeight;
     attribute record<number, RunMetrics> runMetrics;
 
-}
+};
 
 dictionary TextDirection {
 

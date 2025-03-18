@@ -25,13 +25,6 @@ interface Vector2 {
     attribute number y;
 
 };
-[Entity=Interface, TypeParameters="T"]
-interface Vector2T {
-
-    attribute T x;
-    attribute T y;
-
-};
 [Entity=Interface]
 interface Vector3 {
 
@@ -259,12 +252,7 @@ interface ShapeClip {
 
 };
 
-[Entity=Class]
-interface GlobalScope_Graphics {
-
-    static Edges edgeColors(number all);
-    static Edges edgeWidths(number all);
-    static EdgeStyles borderStyles(BorderStyle all);
-    static BorderRadiuses borderRadiuses(number all);
-
-};
+Edges edgeColors(number all);
+Edges edgeWidths(number all);
+// EdgeStyles borderStyles(BorderStyle all);
+BorderRadiuses borderRadiuses(number all);
