@@ -1604,16 +1604,16 @@
 |`setUnit`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`getValue`| Function | Samarin Sergey | in progress | | done for feature branch |
 |`setValue`| Function | Samarin Sergey | in progress | | done for feature branch |
-|*ColorMetrics*| *Class* | | | | |
-|`numeric`| Function | | | | |
-|`rgba`| Function | | | | |
-|`resourceColor`| Function | | | | |
-|`blendColor`| Function | | | | |
-|`getColor`| Function | | | | |
-|`getRed`| Function | | | | |
-|`getGreen`| Function | | | | |
-|`getBlue`| Function | | | | |
-|`getAlpha`| Function | | | | |
+|*ColorMetrics*| *Class* | Lobah Mikhail| in progress| | |
+|`numeric`| Function | Lobah Mikhail| in progress| | |
+|`rgba`| Function | Lobah Mikhail| in progress| | |
+|`resourceColor`| Function | Lobah Mikhail| in progress| | |
+|`blendColor`| Function | Lobah Mikhail| in progress| | |
+|`getColor`| Function | Lobah Mikhail| in progress| | |
+|`getRed`| Function | Lobah Mikhail| in progress| | |
+|`getGreen`| Function | Lobah Mikhail| in progress| | |
+|`getBlue`| Function | Lobah Mikhail| in progress| | |
+|`getAlpha`| Function | Lobah Mikhail| in progress| | |
 |*WebviewController*| *Class* | Politov Mikhail | done | | |
 |`initializeWebEngine`| Function | Politov Mikhail | done | | |
 |`loadUrl`| Function | Politov Mikhail | done | | |
@@ -1655,11 +1655,11 @@
 |`width`| Function | Erokhin Ilya | done | | |
 |`height`| Function | Erokhin Ilya | done | | |
 |`size`| Function | Erokhin Ilya | done | | |
-|*PathShape*| *Class* | Lobah Mikhail | in progress| | |
-|`offset`| Function | Lobah Mikhail| in progress| | |
-|`fill`| Function | Lobah Mikhail | in progress| | |
-|`position`| Function | Lobah Mikhail| in progress| | |
-|`commands`| Function | Lobah Mikhail| in progress| | |
+|*PathShape*| *Class* | Lobah Mikhail | done| | |
+|`offset`| Function | Lobah Mikhail| done| | |
+|`fill`| Function | Lobah Mikhail | done| | |
+|`position`| Function | Lobah Mikhail| done| | |
+|`commands`| Function | Lobah Mikhail| done| | |
 |*GlobalScope_ohos_font*| *Class* | Pavelyev Ivan | in progress | | done on feature branch |
 |`registerFont`| Function | Pavelyev Ivan | in progress | | done on feature branch |
 |`getSystemFontList`| Function | Pavelyev Ivan | in progress | | done on feature branch |
