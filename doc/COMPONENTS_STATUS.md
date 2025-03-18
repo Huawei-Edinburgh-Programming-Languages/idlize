@@ -1589,8 +1589,8 @@
 |`EndFrame`| Function |  |  | | |
 |`syncInstanceId`| Function | | | | |
 |`restoreInstanceId`| Function | | | | |
-|*FocusController*| *Class* | | | | |
-|`requestFocus`| Function | | | | |
+|*FocusController*| *Class* | Lobah Mikhail| in progress| | |
+|`requestFocus`| Function | Lobah Mikhail| in progress| | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | done |  | |
 |`drawRect`| Function | Dudkin Sergey | done |  | |
 |*LengthMetrics*| *Class* | Evstigneev Roman | in progress | | |
