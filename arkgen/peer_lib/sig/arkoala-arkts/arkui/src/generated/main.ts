@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { int32 } from "@koalaui/common"
+import { int32, int64 } from "@koalaui/common"
 import { ArkUINativeModule, TestNativeModule } from "#components"
 import { wrapCallback, callCallback, wrapSystemCallback, registerNativeModuleLibraryName, KSerializerBuffer, KBuffer } from "@koalaui/interop"
 import { deserializeAndCallCallback } from './peers/CallbackDeserializeCall.ts'
@@ -267,9 +267,9 @@ function checkCallback() {
     const buffer = new KBuffer(20)
     assertEQ("Call callback 1", 2024, callCallback(id1, buffer.buffer, 0))
     assertEQ("Call callback 2", 2025, callCallback(id2, buffer.buffer, 0))
-    expectThrow("Call disposed callback 1", () => { callCallback(id1, buffer.buffer, 0) })
+    expectThrow("Call disposed callback 1", () => { callCallback(id1, buffer.buffer, 0) }, (v: Error | Exception)=> true)
     new Array<number>(2, 4, 6, 8).forEach((it, index) => buffer.set(index as int, it as byte))
-    expectThrow("Call callback 0", () => { callCallback(0, buffer.buffer, 4) })
+    expectThrow("Call callback 0", () => { callCallback(0, buffer.buffer, 4) }, (v: Error | Exception)=> true)
     buffer.dispose()
 }
 
