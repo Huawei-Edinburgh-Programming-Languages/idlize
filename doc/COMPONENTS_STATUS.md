@@ -2143,19 +2143,19 @@
 |*TapGestureInterface*| *Class* | Dudkin Sergey | done | | |
 |`onAction`| Function | Dudkin Sergey | done | | |
 |*LongPressGestureInterface*| *Class* | Morozov Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
-|`onAction`| Function | Morozov Sergey | in progress | | |
-|`onActionEnd`| Function | Morozov Sergey | in progress | | |
-|`onActionCancel`| Function | Morozov Sergey |in progress | | |
+|`onAction`| Function | Morozov Sergey | done | | |
+|`onActionEnd`| Function | Morozov Sergey | done | | |
+|`onActionCancel`| Function | Morozov Sergey | done | | |
 |*PanGestureOptions*| *Class* | Politov Mikhail | blocked IDL |  | |
 |`setDirection`| Function | Politov Mikhail | done |  | |
 |`setDistance`| Function | Politov Mikhail | done |  | |
 |`setFingers`| Function | Politov Mikhail | done |  | |
 |`getDirection`| Function | Politov Mikhail | in progress |  |  |
-|*PanGestureInterface*| *Class* | Morozov Sergey | in progress | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
-|`onActionStart`| Function | Morozov Sergey | in progress | | |
-|`onActionUpdate`| Function | Morozov Sergey | in progress | | |
-|`onActionEnd`| Function | Morozov Sergey | in progress | | |
-|`onActionCancel`| Function | Morozov Sergey | in progress | | |
+|*PanGestureInterface*| *Class* | Morozov Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
+|`onActionStart`| Function | Morozov Sergey | done | | |
+|`onActionUpdate`| Function | Morozov Sergey | done | | |
+|`onActionEnd`| Function | Morozov Sergey | done | | |
+|`onActionCancel`| Function | Morozov Sergey | done | | |
 |*SwipeGestureInterface*| *Class* | Tuzhilkin Ivan | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
 |`onAction`| Function | Tuzhilkin Ivan | done | | |
 |*PinchGestureInterface*| *Class* | Tuzhilkin Ivan | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
