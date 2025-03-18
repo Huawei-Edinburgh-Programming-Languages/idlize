@@ -2140,8 +2140,8 @@
 |`setVelocityY`| Function | Samarin Sergey | done |  | |
 |`getVelocity`| Function | Samarin Sergey | in progress |  | done for feature branch |
 |`setVelocity`| Function | Samarin Sergey | blocked IDL|  | not applicable https://gitee.com/nikolay-igotti/idlize/issues/IBQEWR |
-|*TapGestureInterface*| *Class* | Dudkin Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
-|`onAction`| Function | Dudkin Sergey | in progress| | |
+|*TapGestureInterface*| *Class* | Dudkin Sergey | done | | |
+|`onAction`| Function | Dudkin Sergey | done | | |
 |*LongPressGestureInterface*| *Class* | Morozov Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
 |`onAction`| Function | Morozov Sergey | in progress | | |
 |`onActionEnd`| Function | Morozov Sergey | in progress | | |
@@ -2606,16 +2606,16 @@
 |`getTextShadow`| Function |  Politov Mikhail | testskipped | | |
 |*BackgroundColorStyle*| *Class* | Politov Mikhail | testskipped |  | |
 |`getTextBackgroundStyle`| Function | | | | |
-|*GestureStyle*| *Class* | Dudkin Sergey| in progress |  | testskipped on feature_branch|
-|*ParagraphStyle*| *Class* |Dudkin Sergey |in progress |  | |
-|`getTextAlign`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
-|`getTextIndent`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
-|`getMaxLines`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
-|`getOverflow`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
-|`getWordBreak`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
-|`getLeadingMargin`| Function | | | | |
-|*LineHeightStyle*| *Class* |Dudkin Sergey |in progress |  | |
-|`getLineHeight`| Function |Dudkin Sergey |in progress |  | testskipped on feature_branch|
+|*GestureStyle*| *Class* | Dudkin Sergey| done | | |
+|*ParagraphStyle*| *Class* |Dudkin Sergey | done |  | |
+|`getTextAlign`| Function |Dudkin Sergey | done |  | |
+|`getTextIndent`| Function |Dudkin Sergey | done |  | |
+|`getMaxLines`| Function |Dudkin Sergey | done |  | |
+|`getOverflow`| Function |Dudkin Sergey | done |  | |
+|`getWordBreak`| Function |Dudkin Sergey | done | | |
+|`getLeadingMargin`| Function |Dudkin Sergey | in progress | | |
+|*LineHeightStyle*| *Class* |Dudkin Sergey |done|  | |
+|`getLineHeight`| Function |Dudkin Sergey | done |  | |
 |*UrlStyle*| *Class* | Politov Mikhail | testskipped |  | |
 |`getUrl`| Function | Politov Mikhail | testskipped |  | |
 |*MutableStyledString*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBBYJE + |
