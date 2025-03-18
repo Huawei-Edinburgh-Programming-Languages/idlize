@@ -202,7 +202,7 @@ export class PeerPrinter extends SingleFilePrinter {
 
     private printRegular(node: IDLMethod): void {
         this.writer.writeExpressionStatement(
-            this.writer.makeString(`/** @deprecated */`)
+            this.writer.makeString(PeersConstructions.deprecated)
         )
         this.writer.writeMethodImplementation(
             makeMethod(

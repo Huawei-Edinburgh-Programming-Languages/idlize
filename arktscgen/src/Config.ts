@@ -47,8 +47,16 @@ export class Config {
         return `get`
     }
 
-    static get uselessPrefix(): string {
+    static get getterPrefix(): string {
         return `Get`
+    }
+
+    static get setterPrefix(): string {
+        return `Set`
+    }
+
+    static get isPrefix(): string {
+        return `Is`
     }
 
     static get astNodeCommonAncestor(): string {

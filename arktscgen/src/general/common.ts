@@ -17,11 +17,11 @@ import { Config } from "../Config"
 import { IDLInterface, IDLMethod, isVoidType, throwException } from "@idlizer/core"
 import { InteropConstructions } from "../constuctions/InteropConstructions"
 import { nodeType, parent } from "../utils/idl"
-import { dropPostfix, dropPrefix, pascalToCamel } from "../utils/string"
+import { pascalToCamel, withoutPostfix, withoutPrefix } from "../utils/string"
 
 export function peerMethod(name: string): string {
-    name = dropPostfix(name, Config.constPostfix)
-    name = dropPrefix(name, Config.uselessPrefix)
+    name = withoutPostfix(Config.constPostfix, name)
+    name = withoutPrefix(Config.getterPrefix, name)
     name = pascalToCamel(name)
     return name
 }
@@ -29,12 +29,12 @@ export function peerMethod(name: string): string {
 export function splitCreateOrUpdate(fullName: string): { createOrUpdate: string, rest: string } {
     if (fullName.startsWith(Config.createPrefix)) {
         const createOrUpdate = Config.createPrefix
-        const rest = dropPrefix(fullName, Config.createPrefix)
+        const rest = withoutPrefix(Config.createPrefix, fullName)
         return { createOrUpdate, rest }
     }
     if (fullName.startsWith(Config.updatePrefix)) {
         const createOrUpdate = Config.updatePrefix
-        const rest = dropPrefix(fullName, Config.updatePrefix)
+        const rest = withoutPrefix(Config.updatePrefix, fullName)
         return { createOrUpdate, rest }
     }
     throwException(`method name doesn't start neither with ${Config.createPrefix} nor with ${Config.updatePrefix}`)

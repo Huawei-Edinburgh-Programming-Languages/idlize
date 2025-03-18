@@ -34,7 +34,7 @@ import { LibraryTypeConvertor } from "../../../type-convertors/top-level/Library
 import { Typechecker } from "../../../general/Typechecker"
 import { remove } from "../../../utils/array"
 
-export class AttributeTransformer implements Transformer {
+export class PropertyTransformer implements Transformer {
     constructor(
         private file: IDLFile
     ) {}
@@ -120,7 +120,7 @@ export class AttributeTransformer implements Transformer {
                 return undefined
             })
             .filter(isDefined)
-        if (matched.length === parametersToMatch.length) {
+        if (matched.length >= parametersToMatch.length) {
             return matched
                 ?.sort((a, b) => a.index - b.index)
                 ?.map(({ method }) => method)

@@ -26,16 +26,19 @@ import { AllPeersPrinter } from "../printers/library/AllPeersPrinter"
 import { FactoryPrinter } from "../printers/library/FactoryPrinter"
 import { OptionsFilterTransformer } from "../transformers/common/filter/OptionsFilterTransformer"
 import { AddContextDeclarationTransformer } from "../transformers/common/AddContextDeclarationTransformer"
-import { MultipleDeclarationFilterTransformer } from "../transformers/common/filter/MultipleDeclarationFilterTransformer"
+import {
+    MultipleDeclarationFilterTransformer
+} from "../transformers/common/filter/MultipleDeclarationFilterTransformer"
 import { ParameterTransformer } from "../transformers/common/ParameterTransformer"
 import { TwinMergeTransformer } from "../transformers/common/TwinMergeTransformer"
 import { AstNodeFilterTransformer } from "../transformers/common/filter/AstNodeFilterTransformer"
 import { NullabilityTransformer } from "../transformers/peers/NullabilityTransformer"
-import { AttributeTransformer } from "../transformers/peers/factory/AttributeTransformer"
+import { PropertyTransformer } from "../transformers/peers/factory/PropertyTransformer"
 import { InteropTransformer } from "../transformers/interop/InteropTransformer"
 import { ConstMergeTransformer } from "../transformers/peers/ConstMergeTransformer"
 import { Transformer } from "../transformers/Transformer"
 import { UniversalCreateTransformer } from "../transformers/peers/UniversalCreateTransformer"
+import { AugmentPropertyTransformer } from "../transformers/peers/factory/AugmentPropertyTransformer";
 
 class SingleFileEmitter {
     constructor(
@@ -133,7 +136,8 @@ export class DynamicEmitter {
     }
 
     private printFactory(idl: IDLFile): void {
-        idl = this.withLog(new AttributeTransformer(idl))
+        idl = this.withLog(new PropertyTransformer(idl))
+        idl = this.withLog(new AugmentPropertyTransformer({ file: idl, augmentedProperties: new Map() }))
         this.printFile(this.factoryPrinter, idl)
     }
 

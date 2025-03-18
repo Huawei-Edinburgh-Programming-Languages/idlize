@@ -13,24 +13,9 @@
  * limitations under the License.
  */
 
-export function pascalToCamel(value: string): string {
-    return value.charAt(0).toLowerCase() + value.slice(1);
-}
+import { IDLFile, IDLInterface, IDLProperty } from "@idlizer/core"
 
-export function withoutPostfix(toDrop: string, value: string): string {
-    if (value.endsWith(toDrop)) {
-        return value.slice(0, -toDrop.length)
-    }
-    return value
-}
-
-export function withoutPrefix(toDrop: string, value: string): string {
-    if (value.startsWith(toDrop)) {
-        return value.slice(toDrop.length)
-    }
-    return value
-}
-
-export function withPrefix(value: string, prefix: string): string {
-    return `${value}${prefix}`
+export type Context = {
+    file: IDLFile,
+    augmentedProperties: Map<IDLInterface, IDLProperty[]>
 }

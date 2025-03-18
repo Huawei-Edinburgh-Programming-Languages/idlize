@@ -128,4 +128,8 @@ export class PeersConstructions {
     static callPeerMethod(iface: string, method: string): string {
         return `${iface}.${method}`
     }
+
+    static get deprecated() {
+        return `/** @deprecated */`
+    }
 }
