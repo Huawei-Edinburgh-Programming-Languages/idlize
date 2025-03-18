@@ -1227,11 +1227,11 @@
 |`format`| Function |Pavelyev Ivan| done |  |  |
 |`onDateChange`| Function |Pavelyev Ivan| done |  |  |
 |`fontColor`| Function |Pavelyev Ivan| done |  |  |
-|`fontSize`| Function |Pavelyev Ivan| testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6PK |
+|`fontSize`| Function |Pavelyev Ivan| done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6PK |
 |`fontStyle`| Function |Pavelyev Ivan| done |  |  |
 |`fontWeight`| Function |Pavelyev Ivan| done |  |  |
-|`fontFamily`| Function |Pavelyev Ivan| testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6QC |
-|`textShadow`| Function |Pavelyev Ivan| testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6PK |
+|`fontFamily`| Function |Pavelyev Ivan| done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6QC |
+|`textShadow`| Function |Pavelyev Ivan| done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6PK |
 |`fontFeature`| Function |Pavelyev Ivan| done |  |  |
 |`contentModifier`| Function |Pavelyev Ivan| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
 |`dateTimeOptions`| Function |Pavelyev Ivan| blocked IDL |  | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + |
