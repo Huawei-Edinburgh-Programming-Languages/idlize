@@ -1748,10 +1748,10 @@
 |`setAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | blocked IDL |  | |
 |`drawImage`| Function  | Vadim Voronov | testskipped |  | |
-|`beginPath`| Function  | Vadim Voronov | testskipped  |  | |
-|`clip`| Function  | Vadim Voronov | testskipped  |  |   |
-|`fill`| Function  | Vadim Voronov | testskipped  |  |   |
-|`stroke`| Function  | Vadim Voronov | testskipped  |  | |
+|`beginPath`| Function  | Vadim Voronov | done  |  | |
+|`clip`| Function  | Vadim Voronov | testskipped  |  | |
+|`fill`| Function  | Vadim Voronov | testskipped  |  | |
+|`stroke`| Function  | Vadim Voronov | done  |  | |
 |`createLinearGradient`| Function  | Vadim Voronov | testskipped | | |
 |`createPattern`| Function  | Vadim Voronov | testskipped | | |
 |`createRadialGradient`| Function  | Vadim Voronov | testskipped | |  |
@@ -1761,61 +1761,61 @@
 |`getPixelMap`| Function  | Vadim Voronov | testskipped | | |
 |`putImageData`| Function  | Vadim Voronov | testskipped   |  |  |
 |`getLineDash`| Function  | Vadim Voronov |  testskipped | |  |
-|`setLineDash`| Function  | Vadim Voronov | testskipped |  | |
-|`clearRect`| Function  | Vadim Voronov | testskipped |  | |
-|`fillRect`| Function  | Vadim Voronov | testskipped |  | |
-|`strokeRect`| Function  | Vadim Voronov | testskipped |  | |
-|`restore`| Function  | Vadim Voronov | testskipped |  | |
-|`save`| Function  | Vadim Voronov | testskipped |  | |
-|`fillText`| Function  | Vadim Voronov | testskipped |  | |
+|`setLineDash`| Function  | Vadim Voronov | done |  | |
+|`clearRect`| Function  | Vadim Voronov | done |  | |
+|`fillRect`| Function  | Vadim Voronov | done |  | |
+|`strokeRect`| Function  | Vadim Voronov | done |  | |
+|`restore`| Function  | Vadim Voronov | done |  | |
+|`save`| Function  | Vadim Voronov | done |  | |
+|`fillText`| Function  | Vadim Voronov | done |  | |
 |`measureText`| Function  | Vadim Voronov | testskipped |  |  |
-|`strokeText`| Function  | Vadim Voronov | testskipped |  | |
+|`strokeText`| Function  | Vadim Voronov | done |  | |
 |`getTransform`| Function  | Vadim Voronov | testskipped | |  |
-|`resetTransform`| Function  | Vadim Voronov | testskipped |  | |
-|`rotate`| Function  | Vadim Voronov | testskipped |  | |
-|`scale`| Function  | Vadim Voronov | testskipped |  | |
-|`setTransform`| Function  | Vadim Voronov | testskipped |  | |
-|`transform`| Function  | Vadim Voronov | testskipped |  | |
-|`translate`| Function  | Vadim Voronov | testskipped |  | |
+|`resetTransform`| Function  | Vadim Voronov | done |  | |
+|`rotate`| Function  | Vadim Voronov | done |  | |
+|`scale`| Function  | Vadim Voronov | done |  | |
+|`setTransform`| Function  | Vadim Voronov | done |  | |
+|`transform`| Function  | Vadim Voronov | done |  | |
+|`translate`| Function  | Vadim Voronov | done |  | |
 |`setPixelMap`| Function  | Vadim Voronov | testskipped |  |  |
 |`transferFromImageBitmap`| Function  | Vadim Voronov | testskipped |  | |
-|`saveLayer`| Function  | Vadim Voronov | testskipped |  | |
-|`restoreLayer`| Function  | Vadim Voronov | testskipped |  | |
-|`reset`| Function  | Vadim Voronov | testskipped |  | |
-|`getLetterSpacing`| Function | Vadim Voronov | in progress | | |
+|`saveLayer`| Function  | Vadim Voronov | done |  | |
+|`restoreLayer`| Function  | Vadim Voronov | done |  | |
+|`reset`| Function  | Vadim Voronov | done |  | |
+|`getLetterSpacing`| Function | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setLetterSpacing`| Function | Vadim Voronov |in progress | | |
 |`getGlobalAlpha`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setGlobalAlpha`| Function  | Vadim Voronov | testskipped |  | |
+|`setGlobalAlpha`| Function  | Vadim Voronov | done |  | |
 |`getGlobalCompositeOperation`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setGlobalCompositeOperation`| Function  | Vadim Voronov | testskipped |  | |
+|`setGlobalCompositeOperation`| Function  | Vadim Voronov | done |  | |
 |`getFillStyle`| Function | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setFillStyle`| Function  | Vadim Voronov | testskipped |  | |
 |`getStrokeStyle`| Function | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setStrokeStyle`| Function  | Vadim Voronov | testskipped |  | |
 |`getFilter`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setFilter`| Function  | Vadim Voronov | testskipped |  | |
+|`setFilter`| Function  | Vadim Voronov | done |  | |
 |`getImageSmoothingEnabled`| Function  | Vadim Voronov | testskipped |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setImageSmoothingEnabled`| Function  | Vadim Voronov | testskipped |  | |
+|`setImageSmoothingEnabled`| Function  | Vadim Voronov | done |  | |
 |`getImageSmoothingQuality`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setImageSmoothingQuality`| Function  | Vadim Voronov | testskipped |  |   |
 |`getLineCap`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setLineCap`| Function  | Vadim Voronov | testskipped |  |  |
 |`getLineDashOffset`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setLineDashOffset`| Function  | Vadim Voronov | testskipped |  | |
+|`setLineDashOffset`| Function  | Vadim Voronov | done |  | |
 |`getLineJoin`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setLineJoin`| Function  | Vadim Voronov | testskipped |  |   |
 |`getLineWidth`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setLineWidth`| Function  | Vadim Voronov | testskipped |  | |
+|`setLineWidth`| Function  | Vadim Voronov | done |  | |
 |`getMiterLimit`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setMiterLimit`| Function  | Vadim Voronov | testskipped |  | |
+|`setMiterLimit`| Function  | Vadim Voronov | done |  | |
 |`getShadowBlur`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setShadowBlur`| Function  | Vadim Voronov | testskipped |  | |
+|`setShadowBlur`| Function  | Vadim Voronov | done |  | |
 |`getShadowColor`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setShadowColor`| Function  | Vadim Voronov | testskipped |  | |
+|`setShadowColor`| Function  | Vadim Voronov | done |  | |
 |`getShadowOffsetX`| Function  | Vadim Voronov blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setShadowOffsetX`| Function  | Vadim Voronov | testskipped |  | |
+|`setShadowOffsetX`| Function  | Vadim Voronov | done |  | |
 |`getShadowOffsetY`| Function  | Vadim Voronov blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setShadowOffsetY`| Function  | Vadim Voronov | testskippeds |  | |
+|`setShadowOffsetY`| Function  | Vadim Voronov | done |  | |
 |`getDirection`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setDirection`| Function  | Vadim Voronov | testskipped |  |   |
 |`getFont`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
@@ -1824,7 +1824,7 @@
 |`setTextAlign`| Function  | Vadim Voronov | testskipped |  |   |
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextBaseline`| Function  | Vadim Voronov | testskipped |  |   |
-|*CanvasRenderingContext2D*| *Class* | Vadim Voronov | testskipped |  |  |
+|*CanvasRenderingContext2D*| *Class* | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`toDataURL`| Function |Vadim Voronov| testskipped |  |  |
 |`startImageAnalyzer`| Function | Vadim Voronov | testskipped |  | |
 |`stopImageAnalyzer`| Function | Vadim Voronov| testskipped |  | |
@@ -1834,7 +1834,7 @@
 |`offOnDetach`| Function | Vadim Voronov | testskipped |  |  |
 |`getHeight`| Function |Vadim Voronov| testskipped |  | |
 |`getWidth`| Function |Vadim Voronov| testskipped |  | |
-|`getCanvas`| Function |Vadim Voronov | testskipped | | |
+|`getCanvas`| Function |Vadim Voronov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | testskipped | | |
 |`toDataURL`| Function | Vadim Voronov | testskipped | | |
 |`transferToImageBitmap`| Function | Vadim Voronov | testskipped | |    |
