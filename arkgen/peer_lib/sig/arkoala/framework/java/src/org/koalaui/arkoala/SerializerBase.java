@@ -45,6 +45,9 @@ public class SerializerBase {
     public byte[] asArray() {
         return buffer.array();
     }
+    public byte[] asBuffer() {
+        return buffer.array();
+    }
     public int length() {
         return buffer.position();
     }
