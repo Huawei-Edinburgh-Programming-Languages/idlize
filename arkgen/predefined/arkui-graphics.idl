@@ -117,13 +117,13 @@ dictionary LengthUnit {
   number LPX = 4;
 };
 
-[Entity=Interface, TypeParameters="T"]
-interface SizeT {
-
-    attribute T width;
-    attribute T height;
-
-};
+// [Entity=Interface, TypeParameters="T"]
+// interface SizeT {
+//
+//     attribute T width;
+//     attribute T height;
+//
+// };
 
 dictionary LengthMetricsUnit {
 
