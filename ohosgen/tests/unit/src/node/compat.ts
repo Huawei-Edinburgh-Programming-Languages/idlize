@@ -28,7 +28,6 @@ export {
     registerForceCallbackListener,
     callForceCallbackListener,
     ClassWithComplexPropertyType,
-    TestAny
 } from "../../generated/ts"
 export {
     OrdinaryEnum,

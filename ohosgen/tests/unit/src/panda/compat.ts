@@ -29,7 +29,6 @@ export {
     registerForceCallbackListener,
     callForceCallbackListener,
     ClassWithComplexPropertyType
-    TestAny,
 } from "../../generated/arkts"
 
 export {
