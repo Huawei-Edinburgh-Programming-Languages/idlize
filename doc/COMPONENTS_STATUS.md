@@ -2164,10 +2164,10 @@
 |`onActionEnd`| Function | Tuzhilkin Ivan | done | | |
 |`onActionCancel`| Function | Tuzhilkin Ivan | done | | |
 |*RotationGestureInterface*| *Class* | Andrey Khudenkikh | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
-|`onActionStart`| Function | Andrey Khudenkikh | devdone | | |
-|`onActionUpdate`| Function | Andrey Khudenkikh | devdone | | |
-|`onActionEnd`| Function | Andrey Khudenkikh | devdone | | |
-|`onActionCancel`| Function | Andrey Khudenkikh | devdone | | |
+|`onActionStart`| Function | Andrey Khudenkikh | done | | |
+|`onActionUpdate`| Function | Andrey Khudenkikh | done | | |
+|`onActionEnd`| Function | Andrey Khudenkikh | done | | |
+|`onActionCancel`| Function | Andrey Khudenkikh | done | | |
 |*GestureGroupInterface*| *Class* | Tuzhilkin Ivan | | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
 |`onCancel`| Function | Tuzhilkin Ivan | done | | |
 |*ScrollableTargetInfo*| *Class* | Maksimov Nikita | done |  | |
