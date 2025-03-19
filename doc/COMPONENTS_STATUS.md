@@ -64,9 +64,9 @@
 |`buttonStyle`| Function |Evstigneev Roman | done |  |  |
 |`controlSize`| Function |Evstigneev Roman | done |  |  |
 |`role`| Function | Evstigneev Roman | done |  |  |
-|`fontColor`| Function | Evstigneev Roman | testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUX6D, test in progress Evstigneev Roman |
-|`fontSize`| Function | Evstigneev Roman | testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAUX6D, test in progress Evstigneev Roman |
-|`fontWeight`| Function |Evstigneev Roman | testskipped |  |https://gitee.com/openharmony/arkui_ace_engine/issues/IAUX6D, test in progress Evstigneev Roman |
+|`fontColor`| Function | Evstigneev Roman | testskipped |  | Ace issue fixed, test in progress Evstigneev Roman |
+|`fontSize`| Function | Evstigneev Roman | testskipped |  | Ace issue fixed, test in progress Evstigneev Roman |
+|`fontWeight`| Function |Evstigneev Roman | testskipped |  | Ace issue fixed, test in progress Evstigneev Roman |
 |`fontStyle`| Function |Evstigneev Roman | done |  |  |
 |`fontFamily`| Function |Evstigneev Roman | done |  |  |
 |`contentModifier`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG (+) |
@@ -89,7 +89,7 @@
 |`onSelectChange`| Function | Maksimov Nikita | done |  | |
 |`onRequestData`| Function | Maksimov Nikita | done |  | |
 |*CalendarPicker*| *Component* |Politov Mikhail | done |  |  |
-|`setCalendarPickerOptions`| Function |Politov Mikhail | testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB7RNZ |
+|`setCalendarPickerOptions`| Function |Politov Mikhail | testskipped |  | UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB7RNZ |
 |`textStyle`| Function |Politov Mikhail | done |  |  |
 |`onChange`| Function |Politov Mikhail | done |  |  |
 |`edgeAlign`| Function |Politov Mikhail | done |  |  |
@@ -176,7 +176,7 @@
 |`onTouch`| Function | Roman Sedaikin, Tuzhilkin Ivan | testskipped |  | EVENT |
 |`onKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |   |
 |`onDigitalCrown`| Function | | | | |
-|`onKeyPreIme`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | testskipped |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX  |
+|`onKeyPreIme`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |  |
 |`onKeyEventDispatch`| Function | | | | |
 |`onFocusAxisEvent`| Function | | | | |
 |`focusable`| Function | Roman Sedaikin | done |  | |
@@ -188,7 +188,7 @@
 |`groupDefaultFocus`| Function | Dmitry A Smirnov| done |  | |
 |`focusOnTouch`| Function | Dmitry A Smirnov| done |  | |
 |`focusBox`| Function | Dudkin Sergey | done |  | |
-|`animation`| Function | managed side | managed side | |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
+|`animation`| Function | managed side | managed side | |  |
 |`transition`| Function | Dmitry A Smirnov| done |  |transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`motionBlur`| Function | Dmitry A Smirnov| done |  | |
 |`brightness`| Function | Lobah Mikhail | done |  |  |
@@ -253,7 +253,7 @@
 |`key`| Function | Lobah Mikhail | done |  | |
 |`id`| Function | Erokhin Ilya | done |  |  |
 |`geometryTransition`| Function | Lobah Mikhail | done |  | |
-|`stateStyles`| Function | Dudkin Sergey | blocked IDL |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
+|`stateStyles`| Function | Dudkin Sergey | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`restoreId`| Function | Lobah Mikhail | done |  | |
 |`sphericalEffect`| Function | Lobah Mikhail | done |  | |
 |`lightUpEffect`| Function | Lobah Mikhail | done |  | |
@@ -272,8 +272,8 @@
 |`accessibilityChecked`| Function | Lobah Mikhail | done |  | |
 |`accessibilitySelected`| Function | Lobah Mikhail | done |  | |
 |`obscured`| Function |Dmitry A Smirnov | done |  | |
-|`reuseId`| Function |Dmitry A Smirnov | blocked AceEngine |  | not implemented in ace_engine|
-|`reuse`| Function |managed side | blocked IDL| | to be removed from CAPI generation |
+|`reuseId`| Function |Dmitry A Smirnov | managed side |  | not implemented in ace_engine|
+|`reuse`| Function |managed side | managed side | | to be removed from CAPI generation |
 |`renderFit`| Function | Dmitry A Smirnov| done |  | |
 |`gestureModifier`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`backgroundBrightness`| Function | Skroba Gleb | done |  | |
@@ -413,10 +413,10 @@
 |`dimension`| Function | Vadim Voronov | done |  | |
 |`allowUpdate`| Function | Vadim Voronov | done |  | |
 |`visibility`| Function | Vadim Voronov | done |  | |
-|`onAcquired`| Function | Vadim Voronov | blocked IDL |  | implemented with narrow range of ID, https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
-|`onError`| Function | Vadim Voronov | blocked IDL |  | implemented with narrow range of erroCode,https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
+|`onAcquired`| Function | Vadim Voronov | in progress |  |  |
+|`onError`| Function | Vadim Voronov | in progress |  |  |
 |`onRouter`| Function | Vadim Voronov | deprecated |  |  |
-|`onUninstall`| Function | Vadim Voronov | blocked IDL |  | implemented with narrow range of ID, https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
+|`onUninstall`| Function | Vadim Voronov | in progress |  | |
 |`onLoad`| Function | Vadim Voronov | done |  | |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done |  |  |
@@ -508,7 +508,7 @@
 |`sourceSize`| Function | Evstigneev Roman | done |  | |
 |`syncLoad`| Function | Evstigneev Roman | done |  | |
 |`colorFilter`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 (+),  DrawingColorFilter is stub on the 2.0.41, in progress for ColorFilter |
-|`copyOption`| Function | Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBEEFF (+) |
+|`copyOption`| Function | Evstigneev Roman | testskipped |  |  tests blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IBEEFF (+) |
 |`draggable`| Function | Evstigneev Roman | done |  |   |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  |    |
 |`edgeAntialiasing`| Function | Evstigneev Roman | done |  | |
@@ -1010,7 +1010,7 @@
 |`letterSpacing`| Function |Politov Mikhail | done |  |  |
 |`textCase`| Function | Politov Mikhail | done |  |  |
 |`lineHeight`| Function | Politov Mikhail | done |  |  |
-|`textShadow`| Function | Politov Mikhail | testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
+|`textShadow`| Function | Politov Mikhail | testskipped |  | test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
 |*Stack*| *Component* | Korobeinikov Evgeny | done |  |  |
 |`setStackOptions` | Function | Korobeinikov Evgeny | done |  |  |
 |`alignContent` | Function | Korobeinikov Evgeny | done |  |  |
@@ -1622,7 +1622,7 @@
 |*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | Vadim Voronov | blocked IDL | | |
 |`begin`| Function | Vadim Voronov | done | | |
 |`end`| Function | Vadim Voronov | done | | |
-|`recordInputEventTime`| Function | Vadim Voronov | blocked IDL | | implemented with UT https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
+|`recordInputEventTime`| Function | Vadim Voronov | in progress | |  |
 |*CommonShape*| *Class* | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |`offset`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |`fill`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
