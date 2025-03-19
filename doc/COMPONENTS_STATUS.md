@@ -333,8 +333,8 @@
 |`enableScrollInteraction`| Function | Samarin Sergey | done |  |  |
 |`friction`| Function | Samarin Sergey | done |  |  |
 |`onScroll`| Function | Samarin Sergey | deprecated |  |
-|`onWillScroll`| Function | Skroba Gleb | done |  |   |
-|`onDidScroll`| Function | Berezin Kirill | done |  |  |
+|`onWillScroll`| Function | Skroba Gleb | done |  | Issue with type of callback: https://gitee.com/nikolay-igotti/idlize/issues/IBB6U0 |
+|`onDidScroll`| Function | Berezin Kirill | done |  | Issue with type of callback: https://gitee.com/nikolay-igotti/idlize/issues/IBB6U0 |
 |`onReachStart`| Function | Samarin Sergey | done |  | |
 |`onReachEnd`| Function | Samarin Sergey | done |  | |
 |`onScrollStart`| Function | Samarin Sergey | done |  | |
