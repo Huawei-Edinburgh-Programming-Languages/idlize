@@ -1578,12 +1578,12 @@
 |*UnifiedData*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
 |`hasType`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 (+)|
 |`getTypes`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 (+)|
-|*LazyForEachOps*| *Class* | managed side |  | | |
-|`NeedMoreElements`| Function | managed side |  |  |
-|`OnRangeUpdate`| Function | managed side |  | | |
-|`SetCurrentIndex`| Function | managed side |  | | |
-|`Prepare`| Function | managed side |  | | |
-|`NotifyChange`| Function | | | | |
+|*LazyForEachOps*| *Class* | managed side | done | | |
+|`NeedMoreElements`| Function | managed side |done  |  |
+|`OnRangeUpdate`| Function | managed side | done | | |
+|`SetCurrentIndex`| Function | managed side | done | | |
+|`Prepare`| Function | managed side | done | | |
+|`NotifyChange`| Function |managed side |done | | |
 |*SystemOps*| *Class* | | | | |
 |`StartFrame`| Function | | | | |
 |`EndFrame`| Function |  |  | | |
