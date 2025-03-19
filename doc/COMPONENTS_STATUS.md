@@ -393,7 +393,7 @@
 |*EmbeddedComponent*| *Component* | Ekaterina Stepanova | blocked IDL |  | |
 |`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onTerminated`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`onError`| Function |Skroba Gleb | in progress |  |  |
+|`onError`| Function |Skroba Gleb | testskipped |  |  |
 |*Flex*| *Component* | Kovalev Sergey | done |  |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done |  |  |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  | UT by Evstigneev Roman |
@@ -1561,7 +1561,7 @@
 |`onReceive`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX (+) - still blocked, but ticket can be incorect after new generation|
 |`onResult`| Function | Tuzhilkin Ivan | deprecated |  | testskipped | |
 |`onRelease`| Function | Tuzhilkin Ivan | deprecated |  | testskipped | |
-|`onError`| Function | Skroba Gleb | in progress |  | |
+|`onError`| Function | Skroba Gleb | testskipped |  | |
 |`onTerminated`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`onDrawReady`| Function | | | | |
 |*LinearIndicator*| *Component* | Kovalev Sergey | done |  | depricated |
