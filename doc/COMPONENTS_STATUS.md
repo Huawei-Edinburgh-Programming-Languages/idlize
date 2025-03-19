@@ -208,7 +208,7 @@
 |`gridSpan`| Function | Lobah Mikhail | done |  |deprecated? |
 |`gridOffset`| Function | Lobah Mikhail | done |  |deprecated? |
 |`rotate`| Function | Dmitry A Smirnov| done |  | Dmitry A Smirnov|
-|`transform`| Function | Lobah Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 case 2 -- of Ark_CustomObject from type Object| |
+|`transform`| Function | Lobah Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUR61 Type `object` is converted to `ArkCustomObject` | |
 |`onAppear`| Function | Roman Sedaikin | done |  | |
 |`onDisAppear`| Function | Roman Sedaikin | done |  | |
 |`onAttach`| Function | Andrey Khudenkikh | done |  | |
@@ -296,7 +296,7 @@
 |`parallelGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`blur`| Function | Roman Sedaikin | done |  | |
 |`linearGradientBlur`| Function | Lobah Mikhail | done |  | |
-|`systemBarEffect`| Function | Lobah Mikhail | done |  | |
+|`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified | |
 |`backdropBlur`| Function | Berezin Kirill | done |  | |
 |`sharedTransition`|Function|Skroba Gleb | done |  |  |
 |`chainMode`| Function | Berezin Kirill | done |  | |
