@@ -168,7 +168,7 @@
 |`outlineColor`| Function | Skroba Gleb | done |  | |
 |`outlineRadius`| Function | Skroba Gleb | done |  | |
 |`foregroundColor`| Function | Roman Sedaikin, Erokhin Ilya | done |  | |
-|`onClick`| Function | Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | testskipped |  | EVENT |
+|`onClick`| Function | Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done |  | EVENT |
 |`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done |  | EVENT |
 |`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | done |  | UT by Vadim Voronov EVENT |
 |`hoverEffect`| Function | Roman Sedaikin | done |  | |
