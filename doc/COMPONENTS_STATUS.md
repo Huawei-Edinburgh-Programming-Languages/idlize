@@ -1692,10 +1692,10 @@
 |`getPositionToWindowWithTransform`| Function | Morozov Sergey | done | | |
 |`getFrameNodeByKey`| Function | | | | |
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
-|`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
-|`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
-|`getIsEditable`| Function | Andrey Khudenkikh | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
-|`getIsStrideAlignment`| Function | Andrey Khudenkikh | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBE98T |
+|`readPixelsToBufferSync`| Function | Andrey Khudenkikh | in progress |  |  |
+|`writeBufferToPixels`| Function | Andrey Khudenkikh | in progress |  |  |
+|`getIsEditable`| Function | Andrey Khudenkikh | in progress |  |  |
+|`getIsStrideAlignment`| Function | Andrey Khudenkikh | in progress |  |  |
 |*NavExtender*| *Class* | | | | |
 |`setUpdateStackCallback`| Function | | | | |
 |`syncStack`| Function | | | | |
