@@ -1,0 +1,4 @@
+[Entity=Class]
+interface RenderNode {
+    constructor();
+};
