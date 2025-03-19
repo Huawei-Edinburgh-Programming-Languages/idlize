@@ -2381,11 +2381,11 @@
 |*StyledStringController*| *Class* | Pavelyev Ivan | done |  | |
 |`setStyledString`| Function | Pavelyev Ivan | done |  | |
 |`getStyledString`| Function | Pavelyev Ivan | done |  | |
-|*LayoutManager*| *Class* | Andrey Khudenkikh | blocked IDL|  | |
+|*LayoutManager*| *Class* | Andrey Khudenkikh | blocked IDL|  | https://gitee.com/nikolay-igotti/idlize/issues/IBUQ4G |
 |`getLineCount`| Function | Andrey Khudenkikh | done |  | |
-|`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | blocked IDL |  | |
-|`getLineMetrics`| Function | Andrey Khudenkikh | blocked IDL |  | |
-|`getRectsForRange`| Function | Andrey Khudenkikh | blocked IDL |  | |
+|`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBUQ4G |
+|`getLineMetrics`| Function | Andrey Khudenkikh | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBUQ4G |
+|`getRectsForRange`| Function | Andrey Khudenkikh | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBUQ4G |
 |*TextMenuItemId*| *Class* | Maksimov Nikita | done |  | |
 |`of`| Function | Maksimov Nikita | done |  | |
 |`equals`| Function | Maksimov Nikita | done |  | |
