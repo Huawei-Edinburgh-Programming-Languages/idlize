@@ -1783,7 +1783,7 @@
 |`restoreLayer`| Function  | Vadim Voronov | done |  | |
 |`reset`| Function  | Vadim Voronov | done |  | |
 |`getLetterSpacing`| Function | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setLetterSpacing`| Function | Vadim Voronov |in progress | | |
+|`setLetterSpacing`| Function | Vadim Voronov | in progress | | blocked AceEngine on FB https://gitee.com/openharmony/arkui_ace_engine/issues/IBUOYL |
 |`getGlobalAlpha`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setGlobalAlpha`| Function  | Vadim Voronov | done |  | |
 |`getGlobalCompositeOperation`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
@@ -1846,9 +1846,9 @@
 |`getWidth`| Function | Vadim Voronov | testskipped| | |
 |`setWidth`| Function | Vadim Voronov | testskipped | | |
 |*DrawingRenderingContext*| *Class* | Vadim Voronov | in progress |  | |
-|`invalidate`| Function | Vadim Voronov | done |  | |
-|`getSize`| Function | | | | |
-|`getCanvas`| Function | Vadim Voronov | in progress | | |
+|`invalidate`| Function | Vadim Voronov | devdone |  | |
+|`getSize`| Function | Vadim Voronov | devdone |  | |
+|`getCanvas`| Function | Vadim Voronov | devdone | | |
 |*ICurve*| *Class* | Erokhin Ilya | done |  | |
 |`interpolate`| Function | Erokhin Ilya | done |  |  |
 |*DrawModifier*| *Class* | Erokhin Ilya | blocked IDL|  | |
