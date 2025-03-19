@@ -1593,17 +1593,17 @@
 |`requestFocus`| Function | Lobah Mikhail| in progress| | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | done |  | |
 |`drawRect`| Function | Dudkin Sergey | done |  | |
-|*LengthMetrics*| *Class* | Evstigneev Roman | in progress | | |
-|`px`| Function | Evstigneev Roman | in progress | | done for feature branch |
-|`vp`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`fp`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`percent`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`lpx`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`resource`| Function | Evstigneev Roman | in progress | | done for feature branch |
-|`getUnit`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`setUnit`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`getValue`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`setValue`| Function | Samarin Sergey | in progress | | done for feature branch |
+|*LengthMetrics*| *Class* | Evstigneev Roman | done | | |
+|`px`| Function | Evstigneev Roman | done | | |
+|`vp`| Function | Samarin Sergey | done | | |
+|`fp`| Function | Samarin Sergey | done | | |
+|`percent`| Function | Samarin Sergey | done | | |
+|`lpx`| Function | Samarin Sergey | done | | |
+|`resource`| Function | Evstigneev Roman | done | | |
+|`getUnit`| Function | Samarin Sergey | done | | |
+|`setUnit`| Function | Samarin Sergey | done | | |
+|`getValue`| Function | Samarin Sergey | done | | |
+|`setValue`| Function | Samarin Sergey | done | | |
 |*ColorMetrics*| *Class* | Lobah Mikhail| in progress| | |
 |`numeric`| Function | Lobah Mikhail| in progress| | |
 |`rgba`| Function | Lobah Mikhail| in progress| | |
@@ -1631,16 +1631,16 @@
 |`width`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |`height`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |`size`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|*RectShape*| *Class* | Samarin Sergey | in progress | | done for feature branch |
-|`offset`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`fill`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`position`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`width`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`height`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`size`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`radiusWidth`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`radiusHeight`| Function | Samarin Sergey | in progress | | done for feature branch |
-|`radius`| Function | Samarin Sergey | in progress | | done for feature branch |
+|*RectShape*| *Class* | Samarin Sergey | done | | |
+|`offset`| Function | Samarin Sergey | done | | |
+|`fill`| Function | Samarin Sergey | done | | |
+|`position`| Function | Samarin Sergey | done | | |
+|`width`| Function | Samarin Sergey | done | | |
+|`height`| Function | Samarin Sergey | done | | |
+|`size`| Function | Samarin Sergey | done | | |
+|`radiusWidth`| Function | Samarin Sergey | done | | |
+|`radiusHeight`| Function | Samarin Sergey | done | | |
+|`radius`| Function | Samarin Sergey | done | | |
 |*CircleShape*| *Class* |Dudkin Sergey |in progress | | |
 |`offset`| Function |Dudkin Sergey |in progress | | |
 |`fill`| Function | Dudkin Sergey |in progress | | |
@@ -2120,25 +2120,25 @@
 |`setRepeat`| Function | Samarin Sergey | done |  | |
 |`getFingerList`| Function | Kovalev Sergey | done | | |
 |`setFingerList`| Function | Samarin Sergey | done |  | |
-|`getOffsetX`| Function | Samarin Sergey | in progress |  | done for feature branch |
+|`getOffsetX`| Function | Samarin Sergey | done |  | |
 |`setOffsetX`| Function | Samarin Sergey | done |  | |
-|`getOffsetY`| Function | Samarin Sergey | in progress |  | done for feature branch |
+|`getOffsetY`| Function | Samarin Sergey | done |  | |
 |`setOffsetY`| Function | Samarin Sergey | done |  | |
-|`getAngle`| Function | Samarin Sergey | in progress |  | done for feature branch |
+|`getAngle`| Function | Samarin Sergey | done |  | |
 |`setAngle`| Function | Samarin Sergey | done |  | |
-|`getSpeed`| Function | Samarin Sergey | in progress|  | done for feature branch |
+|`getSpeed`| Function | Samarin Sergey | done|  | |
 |`setSpeed`| Function | Samarin Sergey | done |  | |
-|`getScale`| Function | Samarin Sergey | in progress |  | done for feature branch |
+|`getScale`| Function | Samarin Sergey | done |  | |
 |`setScale`| Function | Samarin Sergey | done |  | |
-|`getPinchCenterX`| Function | Samarin Sergey | in progress |  | done for feature branch |
+|`getPinchCenterX`| Function | Samarin Sergey | done |  | |
 |`setPinchCenterX`| Function | Samarin Sergey | done |  | |
-|`getPinchCenterY`| Function | Samarin Sergey | in progress |  | done for feature branch |
+|`getPinchCenterY`| Function | Samarin Sergey | done |  | |
 |`setPinchCenterY`| Function | Samarin Sergey | done |  | |
-|`getVelocityX`| Function | Samarin Sergey | in progress |  | done for feature branch |
+|`getVelocityX`| Function | Samarin Sergey | done |  | |
 |`setVelocityX`| Function | Samarin Sergey | done |  | |
-|`getVelocityY`| Function | Samarin Sergey | in progress |  | done for feature branch |
+|`getVelocityY`| Function | Samarin Sergey | done |  | |
 |`setVelocityY`| Function | Samarin Sergey | done |  | |
-|`getVelocity`| Function | Samarin Sergey | in progress |  | done for feature branch |
+|`getVelocity`| Function | Samarin Sergey | done |  | |
 |`setVelocity`| Function | Samarin Sergey | blocked IDL|  | not applicable https://gitee.com/nikolay-igotti/idlize/issues/IBQEWR |
 |*TapGestureInterface*| *Class* | Dudkin Sergey | done | | |
 |`onAction`| Function | Dudkin Sergey | done | | |
