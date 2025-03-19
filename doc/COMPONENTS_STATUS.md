@@ -188,7 +188,7 @@
 |`groupDefaultFocus`| Function | Dmitry A Smirnov| done |  | |
 |`focusOnTouch`| Function | Dmitry A Smirnov| done |  | |
 |`focusBox`| Function | Dudkin Sergey | done |  | |
-|`animation`| Function | managed side |  | |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
+|`animation`| Function | managed side | managed side | |https://gitee.com/nikolay-igotti/idlize/issues/IAXHJP|
 |`transition`| Function | Dmitry A Smirnov| done |  |transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`motionBlur`| Function | Dmitry A Smirnov| done |  | |
 |`brightness`| Function | Lobah Mikhail | done |  |  |
@@ -268,12 +268,12 @@
 |`accessibilityTextHint`| Function | Lobah Mikhail | done |  | |
 |`accessibilityDescription`| Function | Lobah Mikhail | done |  | |
 |`accessibilityLevel`| Function | Lobah Mikhail | done |  | |
-|`accessibilityVirtualNode`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`accessibilityVirtualNode`| Function | Lobah Mikhail | done |  |  |
 |`accessibilityChecked`| Function | Lobah Mikhail | done |  | |
 |`accessibilitySelected`| Function | Lobah Mikhail | done |  | |
 |`obscured`| Function |Dmitry A Smirnov | done |  | |
 |`reuseId`| Function |Dmitry A Smirnov | blocked AceEngine |  | not implemented in ace_engine|
-|`reuse`| Function | | | | to be removed from CAPI generation |
+|`reuse`| Function |managed side | blocked IDL| | to be removed from CAPI generation |
 |`renderFit`| Function | Dmitry A Smirnov| done |  | |
 |`gestureModifier`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`backgroundBrightness`| Function | Skroba Gleb | done |  | |
@@ -322,7 +322,7 @@
 |`fillOpacity`| Function | Evstigneev Roman | done |  |  |
 |`strokeWidth`| Function | Evstigneev Roman | done |  |  |
 |`antiAlias`| Function | Evstigneev Roman | done |  |  |
-|`strokeDashArray`| Function | Evstigneev Roman | in progress |  |https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ (+)|
+|`strokeDashArray`| Function | Evstigneev Roman | in progress |  | any object, to be handled in capi|
 |*Common*| *Component* | Maksimov Nikita | done |  | |
 |`setCommonOptions`| Function | Maksimov Nikita | done |  | |
 |*ScrollableCommonMethod*| *Component* | Samarin Sergey | blocked IDL |  |  |
@@ -2037,9 +2037,9 @@
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
 |`getTextContentRect`| Function | Morozov Sergey, SkrobaGleb | done | |
 |`getTextContentLineCount`| Function | Morozov Sergey | done |  | |
-|`addText`| Function | Morozov Sergey | | | no api in sdk on FB, on UB only | |
-|`deleteText`| Function | Morozov Sergey | | | no api in sdk on FB, on UB only | |
-|`getSelection`| Function | Morozov Sergey | | | no api in sdk on FB, on UB only | |
+|`addText`| Function | Morozov Sergey | in progress| | no api in sdk on FB, on UB only | |
+|`deleteText`| Function | Morozov Sergey | in progress| | no api in sdk on FB, on UB only | |
+|`getSelection`| Function | Morozov Sergey | in progress| | no api in sdk on FB, on UB only | |
 |*ChildrenMainSize*| *Class* | Morozov Sergey | blocked IDL |  |
 |`splice`| Function | Morozov Sergey | done |  |  |
 |`update`| Function | Morozov Sergey | done |  |  |
