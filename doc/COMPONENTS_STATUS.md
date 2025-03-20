@@ -301,7 +301,7 @@
 |`sharedTransition`|Function|Skroba Gleb | done |  |  |
 |`chainMode`| Function | Berezin Kirill | done |  | |
 |`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
-|`overlay`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder |
+|`overlay`| Function | Lobah Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the `Ark_ComponentContent ` class without stubs is required. | |
 |`blendMode`| Function | Lobah Mikhail | done |  | |
 |`advancedBlendMode`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC80Y |
 |`bindPopup`| Function | Erokhin Ilya | testskipped |  | UT in progress Morozov Sergey |
