@@ -35,7 +35,9 @@ class DTSDummyClassPeer
 };
 
 OH_DUMMY_DTSDummyClassHandle DTSDummyClass_constructImpl() {
-    return (OH_DUMMY_DTSDummyClassHandle) new DTSDummyClassPeer();
+    DTSDummyClassPeer* peer = new DTSDummyClassPeer();
+    printf("DTSDummyClass_constructImpl peer: %p\n", peer);
+    return (OH_DUMMY_DTSDummyClassHandle) peer;
 }
 void DTSDummyClass_destructImpl(OH_DUMMY_DTSDummyClassHandle thisPtr) {
 }
