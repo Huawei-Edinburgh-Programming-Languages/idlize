@@ -2586,7 +2586,7 @@
 |`fromHtml`| Function | Pavelyev Ivan | done |  | |
 |`toHtml`| Function | Pavelyev Ivan | in progress |  |  |
 |`marshalling`| Function | Pavelyev Ivan | in progress |  |  |
-|`unmarshalling`| Function | Pavelyev Ivan | done |  | |
+|`unmarshalling`| Function | Pavelyev Ivan | done |  | The method has been split and there is no implementation for `0`, but for `1`, a rework is required!!! |
 |`getLength`| Function | Pavelyev Ivan | done |  | |
 |*TextStyle_styled_string*| *Class* | Erokhin Ilya | done |  |  |
 |`getFontColor`| Function | | | | |
