@@ -216,9 +216,21 @@ export class BridgeCcVisitor {
             }
         })
         const needsContext = idl.isVMContextMethod(method.method)
-        const ctxSuffix = needsContext ? 'CTX_' : idl.isDirectMethod(method.method, this.library) ? 'DIRECT_' : ''
+        const ctxSuffix = needsContext ? 'CTX_' : this.isDirect(method) ? 'DIRECT_' : ''
         const voidSuffix = this.returnTypeConvertor.isVoid(method) ? 'V' : ''
         return `${ctxSuffix}${voidSuffix}${argumentsCount}`
+    }
+
+    /*  TODO: replace with `isDirectMethod`
+        This replacement currently breaks sanity when method.returnType != method.method.signature.returnType
+        E.g. for ScaleSymbolEffect.getScope:
+            method.returnType = Optional(TypeReference(EffectScope))
+            method.method.signature.returnType = TypeReference(EffectScope)
+    */
+    private isDirect(method: PeerMethod): boolean {
+        return isDirectConvertedType(method.returnType, this.library) &&
+                method.argAndOutConvertors.every(it =>
+                    it.useArray || isDirectConvertedType(it.interopType(), this.library))
     }
 
     private generateCParameters(method: PeerMethod): [string, string][] {
