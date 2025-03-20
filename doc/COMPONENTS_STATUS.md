@@ -1511,7 +1511,7 @@
 |`runJavaScriptOnDocumentEnd`| Function | | | | |
 |`runJavaScriptOnHeadEnd`| Function | | | | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done |  | |
-|`bindSelectionMenu`| Function | Lobah Mikhail | done |  |   |
+|`bindSelectionMenu`| Function | Lobah Mikhail | in progress |  |   |
 |*WindowScene*| *Component* | Dudkin Sergey | done |  | |
 |`setWindowSceneOptions`| Function | Dudkin Sergey | done |  | |
 |`attractionEffect`| Function | Dudkin Sergey  | done |  |  |
