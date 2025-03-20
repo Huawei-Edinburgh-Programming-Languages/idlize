@@ -140,3 +140,8 @@ interface SystemOps {
 interface FocusController {
     static void requestFocus(String key);
 };
+
+[Entity=Class]
+interface RenderNode {
+    constructor();
+};
