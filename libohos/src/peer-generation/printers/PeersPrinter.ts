@@ -475,9 +475,8 @@ export function writePeerMethod(library: PeerLibrary, printer: LanguageWriter, m
         })
         // TODO: refactor
         if (returnType != IDLVoidType) {
-            const ptr = "retval == undefined ? 0 : retval"
             const longPtr =
-                writer.language === Language.ARKTS ? `new Long(${ptr})` : `${ptr}`
+                writer.language === Language.ARKTS ? `new Long(retval)` : `retval`
             let result: LanguageStatement[] = [
                 writer.makeStatement(writer.makeString(
                     "console.log(`[managed] "+ method.originalParentName + " ctor peer: 0x${" + longPtr + ".toString(16)}`)")),
