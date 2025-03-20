@@ -34,15 +34,29 @@ class DTSDummyClassPeer
 {
 };
 
+class DTSDummyChildClassPeer
+{
+};
+
 OH_DUMMY_DTSDummyClassHandle DTSDummyClass_constructImpl() {
     DTSDummyClassPeer* peer = new DTSDummyClassPeer();
-    printf("DTSDummyClass_constructImpl peer: %p\n", peer);
+    printf("[native ] DTSDummyClass_constructImpl peer: %p\n", peer);
     return (OH_DUMMY_DTSDummyClassHandle) peer;
 }
 void DTSDummyClass_destructImpl(OH_DUMMY_DTSDummyClassHandle thisPtr) {
 }
 void DTSDummyClass_dummyImpl(OH_NativePointer thisPtr) {
     printf("Call DTS dummy impl method!\n");
+}
+
+OH_DUMMY_DTSDummyChildClassHandle DTSDummyChildClass_constructImpl() {
+    DTSDummyChildClassPeer* peer = new DTSDummyChildClassPeer();
+    printf("[native ] DTSDummyChildClass_constructImpl peer: %p\n", peer);
+    return (OH_DUMMY_DTSDummyChildClassHandle) peer;
+}
+void DTSDummyChildClass_destructImpl(OH_DUMMY_DTSDummyChildClassHandle thisPtr) {
+}
+void DTSDummyChildClass_childDummyImpl(OH_NativePointer thisPtr) {
 }
 
 /*
