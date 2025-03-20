@@ -2271,13 +2271,13 @@
 |`getCaretOffset`| Function|Dudkin Sergey| done |  | |
 |`setCaretOffset`| Function|Dudkin Sergey| done |  | |
 |`closeSelectionMenu`| Function|Dudkin Sergey| done |  | |
-|`getTypingStyle`| Function|Dmitry A Smirnov| in progress |  |  |
+|`getTypingStyle`| Function|Dmitry A Smirnov| done |  |  |
 |`setTypingStyle`| Function|Dudkin Sergey| done |  | |
 |`setSelection`| Function|Dudkin Sergey| done |  | |
 |`isEditing`| Function|Dudkin Sergey| done |  | |
 |`stopEditing`| Function|Dudkin Sergey| done |  | |
 |`getLayoutManager`| Function|Dudkin Sergey| done |  | |
-|`getPreviewText`| Function|Dmitry A Smirnov| in progress |  |  |
+|`getPreviewText`| Function|Dmitry A Smirnov| done |  |  |
 |`getCaretRect`| Function | | | | |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked IDL|  |  |
 |`addTextSpan`| Function |Dudkin Sergey, Samarin Sergey | in progress |  |  |
