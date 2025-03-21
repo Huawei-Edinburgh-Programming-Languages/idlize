@@ -1783,7 +1783,7 @@
 |`restoreLayer`| Function  | Vadim Voronov | done |  | |
 |`reset`| Function  | Vadim Voronov | done |  | |
 |`getLetterSpacing`| Function | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setLetterSpacing`| Function | Vadim Voronov | in progress | | |
+|`setLetterSpacing`| Function | Vadim Voronov | done | | |
 |`getGlobalAlpha`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setGlobalAlpha`| Function  | Vadim Voronov | done |  | |
 |`getGlobalCompositeOperation`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
