@@ -424,8 +424,3 @@ interface EdgeStyles {
     attribute BorderStyle left;
 
 };
-
-typedef Vector2 Pivot;
-typedef Vector2 Scale;
-typedef Vector2 Translation;
-typedef Vector3 Rotation;
