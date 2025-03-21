@@ -717,12 +717,12 @@
 |`setPluginComponentOptions`| Function | Evstigneev Roman | in progress |  |  |
 |`onComplete`| Function | Evstigneev Roman | done |  | |
 |`onError`| Function | Evstigneev Roman | done |  | |
-|*Polygon*| *Component* |Politov Mikhail | in progress |  | |
+|*Polygon*| *Component* |Politov Mikhail | done |  | |
 |`setPolygonOptions`| Function | Politov Mikhail | done |  | |
-|`points`| Function | Politov Mikhail | in progress |  |  |
-|*Polyline*| *Component* | Politov Mikhail | in progress |  |  |
+|`points`| Function | Politov Mikhail | done |  |  |
+|*Polyline*| *Component* | Politov Mikhail | done |  |  |
 |`setPolylineOptions`| Function | Politov Mikhail | done |  |  |
-|`points`| Function | Politov Mikhail | in progress |  |   |
+|`points`| Function | Politov Mikhail | done |  |   |
 |*Progress*| *Component* | Erokhin Ilya | blocked IDL |  | |
 |`setProgressOptions`| Function | Erokhin Ilya | done |  | deprecated for `style` property |
 |`value`| Function | Erokhin Ilya | done |  | |
