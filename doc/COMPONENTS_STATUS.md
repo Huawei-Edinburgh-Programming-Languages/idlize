@@ -2040,7 +2040,7 @@
 |`addText`| Function | Morozov Sergey | in progress| | no api in sdk on FB, on UB only | |
 |`deleteText`| Function | Morozov Sergey | in progress| | no api in sdk on FB, on UB only | |
 |`getSelection`| Function | Morozov Sergey | in progress| | no api in sdk on FB, on UB only | |
-|*ChildrenMainSize*| *Class* | Morozov Sergey | blocked IDL |  |
+|*ChildrenMainSize*| *Class* | Morozov Sergey | done |  |
 |`splice`| Function | Morozov Sergey | done |  |  |
 |`update`| Function | Morozov Sergey | done |  |  |
 |`getChildDefaultSize`| Function | Morozov Sergey | done | |
