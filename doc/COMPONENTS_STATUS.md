@@ -71,8 +71,8 @@
 |`fontFamily`| Function |Evstigneev Roman | done |  |  |
 |`contentModifier`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG (+) |
 |`labelStyle`| Function |Evstigneev Roman | done |  |  |
-|`minFontScale`| Function | Kovalev Sergey | in progress |  | |
-|`maxFontScale`| Function | Kovalev Sergey | in progress |  | |
+|`minFontScale`| Function | Kovalev Sergey | done |  | |
+|`maxFontScale`| Function | Kovalev Sergey | done |  | |
 |*Calendar*| *Component* | Maksimov Nikita | done |  |  |
 |`setCalendarOptions`| Function | Maksimov Nikita | done |  |  |
 |`showLunar`| Function | Maksimov Nikita | done |  |  |
