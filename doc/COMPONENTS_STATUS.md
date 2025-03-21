@@ -294,7 +294,7 @@
 |`gesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`priorityGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`parallelGesture`| Function | Erokhin Ilya | testskipped |  |  |
-|`blur`| Function | Roman Sedaikin | done |  | |
+|`blur`| Function | Roman Sedaikin, Erokhin Ilya | done |  | |
 |`linearGradientBlur`| Function | Lobah Mikhail | done |  | |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified | |
 |`backdropBlur`| Function | Berezin Kirill | done |  | |
