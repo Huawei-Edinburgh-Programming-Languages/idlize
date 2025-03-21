@@ -1641,13 +1641,13 @@
 |`radiusWidth`| Function | Samarin Sergey | done | | |
 |`radiusHeight`| Function | Samarin Sergey | done | | |
 |`radius`| Function | Samarin Sergey | done | | |
-|*CircleShape*| *Class* |Dudkin Sergey |in progress | | |
-|`offset`| Function |Dudkin Sergey |in progress | | |
-|`fill`| Function | Dudkin Sergey |in progress | | |
-|`position`| Function |Dudkin Sergey |in progress | | |
-|`width`| Function |Dudkin Sergey |in progress | | |
-|`height`| Function |Dudkin Sergey |in progress | | |
-|`size`| Function |Dudkin Sergey | in progress | | |
+|*CircleShape*| *Class* |Dudkin Sergey |done | | |
+|`offset`| Function |Dudkin Sergey | done | | |
+|`fill`| Function | Dudkin Sergey | done | | |
+|`position`| Function |Dudkin Sergey | done | | |
+|`width`| Function |Dudkin Sergey | done | | |
+|`height`| Function |Dudkin Sergey | done | | |
+|`size`| Function |Dudkin Sergey | done | | |
 |*EllipseShape*| *Class* | Erokhin Ilya | done | | |
 |`offset`| Function | Erokhin Ilya | done | | |
 |`fill`| Function | Erokhin Ilya | done | | |
