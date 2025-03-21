@@ -1845,10 +1845,10 @@
 |`setHeight`| Function | Vadim Voronov | testskipped | | |
 |`getWidth`| Function | Vadim Voronov | testskipped| | |
 |`setWidth`| Function | Vadim Voronov | testskipped | | |
-|*DrawingRenderingContext*| *Class* | Vadim Voronov | in progress |  | |
-|`invalidate`| Function | Vadim Voronov | devdone |  | |
-|`getSize`| Function | Vadim Voronov | devdone |  | |
-|`getCanvas`| Function | Vadim Voronov | devdone | | |
+|*DrawingRenderingContext*| *Class* | Vadim Voronov | done |  | |
+|`invalidate`| Function | Vadim Voronov | done |  | |
+|`getSize`| Function | Vadim Voronov | done |  | |
+|`getCanvas`| Function | Vadim Voronov | done | | |
 |*ICurve*| *Class* | Erokhin Ilya | done |  | |
 |`interpolate`| Function | Erokhin Ilya | done |  |  |
 |*DrawModifier*| *Class* | Erokhin Ilya | blocked IDL|  | |
