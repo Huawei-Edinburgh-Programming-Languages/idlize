@@ -1743,9 +1743,9 @@
 |`getData`| Function | | | | |
 |`getHeight`| Function | Morozov Sergey | done | | |
 |`getWidth`| Function | Morozov Sergey | done | | |
-|*RenderingContextSettings*| *Class* | Vadim Voronov | in progress | | |
-|`getAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
-|`setAntialias`| Function | Vadim Voronov | in progress | | implemented with UT on FB |
+|*RenderingContextSettings*| *Class* | Vadim Voronov | done | | |
+|`getAntialias`| Function | Vadim Voronov | done | | |
+|`setAntialias`| Function | Vadim Voronov | done | | |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | blocked IDL |  | |
 |`drawImage`| Function  | Vadim Voronov | testskipped |  | |
 |`beginPath`| Function  | Vadim Voronov | done  |  | |
