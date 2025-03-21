@@ -544,10 +544,10 @@
 |`onComplete`| Function | Politov Mikhail | done |  |  |
 |`onError`| Function | Politov Mikhail | done |  |  |
 |`alt`| Function | Politov Mikhail | done |  | |
-|*Line*|*Component*|Dudkin Sergey| blocked AceEngine|  |  |
+|*Line*|*Component*|Dudkin Sergey| in progress |  |  |
 |`setLineOptions`|Function|Dudkin Sergey| done |  |  |
-|`startPoint`|Function|Dudkin Sergey| blocked AceEngine |  | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA + |
-|`endPoint`|Function|Dudkin Sergey| blocked AceEngine |  | https://gitee.com/openharmony/interface_sdk-js/issues/IAXCBA + |
+|`startPoint`|Function|Dudkin Sergey| in progress |  |  |
+|`endPoint`|Function|Dudkin Sergey| in progress |  |  |
 |*List*|*Component*|Morozov Sergey| done |  |  |
 |`setListOptions`|Function|Morozov Sergey| done |  |  |
 |`alignListItem`|Function|Morozov Sergey| done |  |  |
@@ -955,13 +955,13 @@
 |`menuAlign` | Function | Samarin Sergey | done |  |  |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
-|*Shape*|*Component*|Dudkin Sergey| done |  |  |
+|*Shape*|*Component*|Dudkin Sergey| in progress |  |  |
 |`setShapeOptions`|Function|Samarin Sergey| testskipped |  | |
 |`viewPort`|Function|Dudkin Sergey| done |  |  |
 |`stroke`|Function|Dudkin Sergey| done |  |  |
 |`fill`|Function|Dudkin Sergey| done |  |  |
 |`strokeDashOffset`|Function|Dudkin Sergey| done |  |  |
-|`strokeDashArray`|Function|Dudkin Sergey| blocked AceEngine |  | https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ |
+|`strokeDashArray`|Function|Dudkin Sergey| in progress |  |  |
 |`strokeLineCap`|Function|Dudkin Sergey| done |  |  |
 |`strokeLineJoin`|Function|Dudkin Sergey| done |  |  |
 |`strokeMiterLimit`|Function|Dudkin Sergey| done |  |  |
@@ -969,7 +969,7 @@
 |`fillOpacity`|Function|Dudkin Sergey| done |  |  |
 |`strokeWidth`|Function|Dudkin Sergey| done |  |  |
 |`antiAlias`|Function|Dudkin Sergey| done |  |  |
-|`mesh`|Function|Dudkin Sergey| blocked AceEngine |  |  | https://gitee.com/openharmony/interface_sdk-js/issues/IAX8ZZ + |
+|`mesh`|Function|Dudkin Sergey| in progress|  |  |  |
 |*Slider*| *Component* |Morozov Sergey | blocked IDL |  |  |
 |`setSliderOptions`| Function |Morozov Sergey | done |  |  |
 |`blockColor`| Function |Morozov Sergey | done |  |  |
