@@ -909,7 +909,7 @@
 |`borderStyle`| Function |Samarin Sergey| done |  |  |
 |`borderWidth`| Function |Samarin Sergey| done |  |  |
 |`borderColor`| Function |Samarin Sergey| done |  |  |
-|`borderRadius`| Function |Samarin Sergey| done |  |  |
+|`borderRadius`| Function |Samarin Sergey| in progress |  |  |
 |`padding`| Function |Samarin Sergey| done |  |  |
 |`textIconSpace`| Function |Samarin Sergey| done |  |  |
 |`key`| Function |Samarin Sergey| done |  |  |
