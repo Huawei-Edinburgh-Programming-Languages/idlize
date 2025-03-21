@@ -2046,15 +2046,15 @@
 |`getChildDefaultSize`| Function | Morozov Sergey |in progress | done on feature branch |
 |`setChildDefaultSize`| Function | Morozov Sergey| done |  | |
 |*UICommonEvent*| *Class* | Andrey Khudenkikh | in progress | | |
-|`setOnClick`| Function | Andrey Khudenkikh | testskipped | | |
-|`setOnTouch`| Function | Andrey Khudenkikh | testskipped | | |
+|`setOnClick`| Function | Andrey Khudenkikh | devdone | | |
+|`setOnTouch`| Function | Andrey Khudenkikh | devdone | | |
 |`setOnAppear`| Function | Andrey Khudenkikh | testskipped | | |
-|`setOnDisappear`| Function | Andrey Khudenkikh | testskipped | | |
+|`setOnDisappear`| Function | Andrey Khudenkikh | devdone | | |
 |`setOnKeyEvent`| Function | Andrey Khudenkikh | in progress | | |
-|`setOnFocus`| Function | Andrey Khudenkikh | testskipped | | |
-|`setOnBlur`| Function | Andrey Khudenkikh | testskipped | | |
-|`setOnHover`| Function | Andrey Khudenkikh | testskipped | | |
-|`setOnMouse`| Function |  Andrey Khudenkikh| testskipped | | |
+|`setOnFocus`| Function | Andrey Khudenkikh | devdone | | |
+|`setOnBlur`| Function | Andrey Khudenkikh | devdone | | |
+|`setOnHover`| Function | Andrey Khudenkikh | devdone | | |
+|`setOnMouse`| Function |  Andrey Khudenkikh| devdone | | |
 |`setOnSizeChange`| Function | Andrey Khudenkikh | in progress | | |
 |`setOnVisibleAreaApproximateChange`| Function | Andrey Khudenkikh | testskipped | | |
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
