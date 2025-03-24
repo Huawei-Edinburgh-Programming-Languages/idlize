@@ -2220,38 +2220,38 @@
 |`setPathStack`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
 |`getNavDestinationId`| Function | Morozov Sergey | blocked IDL |  | |
 |`setNavDestinationId`| Function | Morozov Sergey | done |  |  |
-|*NavPathInfo*| *Class* | Skroba Gleb | in progress | | done on feature |
-|`getName`| Function | Skroba Gleb | in progress | | done on feature |
-|`setName`| Function | Skroba Gleb | in progress | | done on feature |
+|*NavPathInfo*| *Class* | Skroba Gleb | in progress | | |
+|`getName`| Function | Skroba Gleb | done | | |
+|`setName`| Function | Skroba Gleb | done | | |
 |`getParam`| Function | | | | |
-|`setParam`| Function | Skroba Gleb | in progress | | done on feature |
-|`getOnPop`| Function | Skroba Gleb | in progress | | done on feature |
-|`setOnPop`| Function | Skroba Gleb | in progress | | done on feature |
-|`getIsEntry`| Function | Skroba Gleb | in progress | | done on feature |
-|`setIsEntry`| Function | Skroba Gleb | in progress | | done on feature |
-|*NavPathStack*| *Class* | Morozov Sergey | blocked IDL |  |   |
-|`pushPath`| Function | Skroba Gleb | done |  |   |
-|`pushDestination`| Function | Morozov Sergey | in progress |  |   |
+|`setParam`| Function | Skroba Gleb | done | | |
+|`getOnPop`| Function | Skroba Gleb | done | | |
+|`setOnPop`| Function | Skroba Gleb | done | | |
+|`getIsEntry`| Function | Skroba Gleb | done | | |
+|`setIsEntry`| Function | Skroba Gleb | done | | |
+|*NavPathStack*| *Class* | Morozov Sergey |managed side|  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
+|`pushPath`| Function | Skroba Gleb | managed side|  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y , but done on C-API |
+|`pushDestination`| Function | Morozov Sergey | managed side|  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`pushPathByName`| Function | Morozov Sergey | managed side|  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
-|`pushDestinationByName`| Function | Morozov Sergey | in progress |  | | 
+|`pushDestinationByName`| Function | Morozov Sergey | managed side|  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`replacePath`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`replaceDestination`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`replacePathByName`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`removeByIndexes`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`removeByName`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`removeByNavDestinationId`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
-|`pop`| Function | Skroba Gleb | in progress |  |  
+|`pop`| Function | Skroba Gleb | managed side|  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`popToName`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`popToIndex`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`moveToTop`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`moveIndexToTop`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`clear`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
-|`getAllPathName`| Function | Morozov Sergey | in progress |  | | 
-|`getParamByIndex`| Function | Morozov Sergey | in progress |  | | 
-|`getParamByName`| Function | Morozov Sergey, Skroba Gleb | in progress |  | |
-|`getIndexByName`| Function | Morozov Sergey | in progress |  | |
+|`getAllPathName`| Function | Morozov Sergey | managed side|  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
+|`getParamByIndex`| Function | Morozov Sergey |managed side|  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
+|`getParamByName`| Function | Morozov Sergey, Skroba Gleb | managed side|  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
+|`getIndexByName`| Function | Morozov Sergey |managed side|  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`getParent`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
-|`size`| Function | Skroba Gleb | done |  |  |
+|`size`| Function | Skroba Gleb | managed side|  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y , but done on C-API |
 |`disableAnimation`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`setInterception`| Function | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |*NavigationTransitionProxy*| *Class* | Morozov Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
