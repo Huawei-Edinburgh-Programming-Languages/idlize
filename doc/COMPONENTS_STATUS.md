@@ -365,10 +365,10 @@
 |*DataPanel*| *Component* | Morozov Sergey | blocked IDL |  |  |
 |`setDataPanelOptions`| Function | Morozov Sergey | done |  |  |
 |`closeEffect`| Function | Morozov Sergey | done |  |  |
-|`valueColors`| Function |Morozov Sergey | done | |https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU|
+|`valueColors`| Function |Morozov Sergey | done | | |
 |`trackBackgroundColor`| Function |Morozov Sergey | done |  |  |
 |`strokeWidth`| Function | Morozov Sergey | done |  |  |
-|`trackShadow`| Function |Morozov Sergey | done | |https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU|
+|`trackShadow`| Function |Morozov Sergey | done | | |
 |`contentModifier`| Function | Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*DatePicker*| *Component* | Vadim Voronov | done |  |  |
 |`setDatePickerOptions`| Function | Vadim Voronov| done |  | |
