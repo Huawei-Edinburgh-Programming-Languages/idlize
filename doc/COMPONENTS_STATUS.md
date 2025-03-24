@@ -1988,11 +1988,11 @@
 |`updateProgress`| Function | Maksimov Nikita | done |  | |
 |`updateColor`| Function | Maksimov Nikita | done |  | |
 |`enableBreathingAnimation`| Function | Maksimov Nikita | done |  | |
-|*Measurable*| *Class* | | | | |
-|`measure`| Function | | | | |
-|`getMargin`| Function | | | | |
-|`getPadding`| Function | | | | |
-|`getBorderWidth`| Function | | | | |
+|*Measurable*| *Class* | Kovalev Sergey | | | |
+|`measure`| Function | Kovalev Sergey | in progress | | |
+|`getMargin`| Function |Kovalev Sergey | in progress | | |
+|`getPadding`| Function | Kovalev Sergey | in progress | | |
+|`getBorderWidth`| Function | Kovalev Sergey | in progress | | |
 |*View*| *Class* | Skroba Gleb | blocked IDL |  | |
 |`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | blocked IDL |  | |
