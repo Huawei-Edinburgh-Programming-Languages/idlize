@@ -425,7 +425,7 @@
 |`value`| Function | Maksimov Nikita | done |  | |
 |`startAngle`| Function | Maksimov Nikita | done |  | |
 |`endAngle`| Function | Maksimov Nikita | done |  | |
-|`colors`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4DU + |
+|`colors`| Function | Maksimov Nikita | devdone | | |
 |`strokeWidth`| Function | Maksimov Nikita | done |  | |
 |`description`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
 |`trackShadow`| Function | Maksimov Nikita | done |  |  |
@@ -2001,7 +2001,7 @@
 |`setType`| Function | Maksimov Nikita | done | | |
 |`getKeyCode`| Function | Maksimov Nikita | done | | |
 |`setKeyCode`| Function | Maksimov Nikita | done | | |
-|`getKeyText`| Function | Maksimov Nikita | in progress |  |  |
+|`getKeyText`| Function | Maksimov Nikita | done | | |
 |`setKeyText`| Function | Maksimov Nikita | done | | |
 |`getKeySource`| Function | Maksimov Nikita, Samarin Sergey | done | | |
 |`setKeySource`| Function | Maksimov Nikita | done | | |
@@ -2174,7 +2174,7 @@
 |`isBegin`| Function | Maksimov Nikita | done |  | |
 |`isEnd`| Function | Maksimov Nikita | done |  | |
 |*EventTargetInfo*| *Class* | Maksimov Nikita | blocked IDL |  | |
-|`getId`| Function | Maksimov Nikita | in progress |  | |
+|`getId`| Function | Maksimov Nikita | done | | |
 |*GestureRecognizer*| *Class* | Kovalev Sergey | done |  | |
 |`getTag`| Function | Kovalev Sergey | done | | |
 |`getType`| Function | Kovalev Sergey, Samarin Sergey | done |  | |
