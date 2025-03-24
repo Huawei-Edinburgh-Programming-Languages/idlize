@@ -1315,8 +1315,8 @@
 |`disappearTextStyle`|Function |Ekaterina Stepanova | done |  |  |
 |`textStyle`| Function |Ekaterina Stepanova | done |  |  |
 |`selectedTextStyle`| Function | Ekaterina Stepanova| done |  |  |
-|`disableTextStyleAnimation`| Function | | | | |
-|`defaultTextStyle`| Function | | | | |
+|`disableTextStyleAnimation`| Function | Kovalev Sergey | in progress | | |
+|`defaultTextStyle`| Function | Kovalev Sergey | in progress | | |
 |`onAccept`| Function |Ekaterina Stepanova | done |  |deprecated  |
 |`onCancel`| Function |Ekaterina Stepanova | done |  |deprecated  |
 |`onChange`| Function | Tuzhilkin Ivan| done |  |  |
@@ -1325,8 +1325,8 @@
 |`selectedIndex`| Function |Ekaterina Stepanova | done |  |  |
 |`divider`| Function |Ekaterina Stepanova | done |  |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |  |
-|`enableHapticFeedback`| Function | | | | |
-|`digitalCrownSensitivity`| Function | | | | |
+|`enableHapticFeedback`| Function | Kovalev Sergey | in progress | | |
+|`digitalCrownSensitivity`| Function | Kovalev Sergey | in progress | | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
 |*TextTimer*| *Component* |Ekaterina Stepanova| blocked IDL |  |  |
@@ -1988,11 +1988,11 @@
 |`updateProgress`| Function | Maksimov Nikita | done |  | |
 |`updateColor`| Function | Maksimov Nikita | done |  | |
 |`enableBreathingAnimation`| Function | Maksimov Nikita | done |  | |
-|*Measurable*| *Class* | Kovalev Sergey | | | |
-|`measure`| Function | Kovalev Sergey | in progress | | |
-|`getMargin`| Function |Kovalev Sergey | in progress | | |
-|`getPadding`| Function | Kovalev Sergey | in progress | | |
-|`getBorderWidth`| Function | Kovalev Sergey | in progress | | |
+|*Measurable*| *Class* | | | | |
+|`measure`| Function | | | | |
+|`getMargin`| Function | | | | |
+|`getPadding`| Function | | | | |
+|`getBorderWidth`| Function | | | | |
 |*View*| *Class* | Skroba Gleb | blocked IDL |  | |
 |`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | blocked IDL |  | |
