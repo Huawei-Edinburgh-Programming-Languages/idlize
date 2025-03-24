@@ -2638,15 +2638,15 @@
 |`unmarshalling`| Function | Pavelyev Ivan | done |  | The method has been split and there is no implementation for `0`, but for `1`, a rework is required!!! |
 |`getLength`| Function | Pavelyev Ivan | done |  | |
 |*TextStyle_styled_string*| *Class* | Erokhin Ilya | done |  |  |
-|`getFontColor`| Function | | | | |
-|`getFontFamily`| Function | Erokhin Ilya | done |  |  |
-|`getFontSize`| Function | Erokhin Ilya | done |  |  |
-|`getFontWeight`| Function | Erokhin Ilya | done |  |  |
-|`getFontStyle`| Function | Erokhin Ilya | done |  |  |
+|`getFontColor`| Function | Tuzhilkin Ivan | in progress | | |
+|`getFontFamily`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  |  |
+|`getFontSize`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  |  |
+|`getFontWeight`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  |  |
+|`getFontStyle`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  |  |
 |*DecorationStyle*| *Class* | Tuzhilkin Ivan | in progress |  | |
 |`getType`| Function | Tuzhilkin Ivan | done |  | |
 |`getColor`| Function | Tuzhilkin Ivan | in progress | | |
-|`getStyle`| Function | Tuzhilkin Ivan | done |  | |
+|`getStyle`| Function | Tuzhilkin Ivan | in progress |  | |
 |*BaselineOffsetStyle*| *Class* | Tuzhilkin Ivan | done |  | |
 |`getBaselineOffset`| Function | Tuzhilkin Ivan | done |  | |
 |*LetterSpacingStyle*| *Class* | Tuzhilkin Ivan | done |  | |
@@ -2654,15 +2654,15 @@
 |*TextShadowStyle*| *Class* |  Politov Mikhail | testskipped |  | |
 |`getTextShadow`| Function |  Politov Mikhail | testskipped | | |
 |*BackgroundColorStyle*| *Class* | Politov Mikhail | testskipped |  | |
-|`getTextBackgroundStyle`| Function | | | | |
+|`getTextBackgroundStyle`| Function | Tuzhilkin Ivan | done | | |
 |*GestureStyle*| *Class* | Dudkin Sergey| done | | |
 |*ParagraphStyle*| *Class* |Dudkin Sergey | done |  | |
-|`getTextAlign`| Function |Dudkin Sergey | done |  | |
-|`getTextIndent`| Function |Dudkin Sergey | done |  | |
-|`getMaxLines`| Function |Dudkin Sergey | done |  | |
-|`getOverflow`| Function |Dudkin Sergey | done |  | |
-|`getWordBreak`| Function |Dudkin Sergey | done | | |
-|`getLeadingMargin`| Function |Dudkin Sergey | done | | |
+|`getTextAlign`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress |  | |
+|`getTextIndent`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress |  | |
+|`getMaxLines`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress |  | |
+|`getOverflow`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress |  | |
+|`getWordBreak`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress | | |
+|`getLeadingMargin`| Function | Dudkin Sergey, Tuzhilkin Ivan | in progress | | |
 |*LineHeightStyle*| *Class* |Dudkin Sergey |done|  | |
 |`getLineHeight`| Function |Dudkin Sergey | done |  | |
 |*UrlStyle*| *Class* | Politov Mikhail | testskipped |  | |
