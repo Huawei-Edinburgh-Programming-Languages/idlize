@@ -261,12 +261,12 @@
 |`parallelGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`blur`| Function | Roman Sedaikin, Erokhin Ilya | done |  | |
 |`linearGradientBlur`| Function | Lobah Mikhail | done |  | |
-|`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified | |
+|`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
 |`backdropBlur`| Function | Berezin Kirill | done |  | |
 |`sharedTransition`|Function|Skroba Gleb | done |  |  |
 |`chainMode`| Function | Berezin Kirill | done |  | |
 |`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
-|`overlay`| Function | Lobah Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the `Ark_ComponentContent ` class without stubs is required. | |
+|`overlay`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the `Ark_ComponentContent ` class without stubs is required.|
 |`blendMode`| Function | Lobah Mikhail | done |  | |
 |`advancedBlendMode`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC80Y |
 |`bindPopup`| Function | Erokhin Ilya | testskipped |  | UT in progress Morozov Sergey |
