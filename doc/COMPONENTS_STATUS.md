@@ -1660,9 +1660,9 @@
 |`fill`| Function | Lobah Mikhail | done| | |
 |`position`| Function | Lobah Mikhail| done| | |
 |`commands`| Function | Lobah Mikhail| done| | |
-|*GlobalScope_ohos_font*| *Class* | Pavelyev Ivan | in progress | | done on feature branch |
-|`registerFont`| Function | Pavelyev Ivan | in progress | | done on feature branch |
-|`getSystemFontList`| Function | Pavelyev Ivan | in progress | | done on feature branch |
+|*GlobalScope_ohos_font*| *Class* | Pavelyev Ivan | done | | |
+|`registerFont`| Function | Pavelyev Ivan | done | | |
+|`getSystemFontList`| Function | Pavelyev Ivan | done | | |
 |`getFontByName`| Function | | | | |
 |*GlobalScope_ohos_measure_utils*| *Class* | | | | |
 |`measureText`| Function | | | | |
