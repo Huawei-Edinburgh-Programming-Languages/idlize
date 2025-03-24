@@ -106,7 +106,7 @@ class NativeModulePredefinedVisitor extends NativeModulePrinterBase {
                     continue
                 const method = this.makeInteropMethodFromIdl(idlMethod, this.language)
                 this.printMethod(method, new Method(idlMethod.name, new MethodSignature(
-                    idlMethod.returnType, idlMethod.parameters.map(it => it.type))))
+                    idlMethod.returnType, idlMethod.parameters.map(it => it.type)), method.modifiers))
             }
         }
     }
