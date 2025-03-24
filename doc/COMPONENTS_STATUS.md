@@ -2389,16 +2389,16 @@
 |*TextMenuItemId*| *Class* | Maksimov Nikita | done |  | |
 |`of`| Function | Maksimov Nikita | done |  | |
 |`equals`| Function | Maksimov Nikita | done |  | |
-|`getCUT`| Function | | | | |
-|`getCOPY`| Function | | | | |
-|`getPASTE`| Function | | | | |
-|`getSELECT_ALL`| Function | | | | |
-|`getCOLLABORATION_SERVICE`| Function | | | | |
-|`getCAMERA_INPUT`| Function | | | | |
-|`getAI_WRITER`| Function | | | | |
-|`getTRANSLATE`| Function | | | | |
-|`getSEARCH`| Function | | | | |
-|`getSHARE`| Function | | | | |
+|`getCUT`| Function | Maksimov Nikita | in progress | | |
+|`getCOPY`| Function | Maksimov Nikita | in progress | | |
+|`getPASTE`| Function | Maksimov Nikita | in progress | | |
+|`getSELECT_ALL`| Function | Maksimov Nikita | in progress | | |
+|`getCOLLABORATION_SERVICE`| Function | Maksimov Nikita | in progress | | |
+|`getCAMERA_INPUT`| Function | Maksimov Nikita | in progress | | |
+|`getAI_WRITER`| Function | Maksimov Nikita | in progress | | |
+|`getTRANSLATE`| Function | Maksimov Nikita | in progress | | |
+|`getSEARCH`| Function | Maksimov Nikita | in progress | | |
+|`getSHARE`| Function | Maksimov Nikita | in progress | | |
 |*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`onCreateMenu`| Function | Skroba Gleb | in progress |  | |
 |`onMenuItemClick`| Function | Skroba Gleb | in progress | |
