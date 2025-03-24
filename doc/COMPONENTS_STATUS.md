@@ -2662,7 +2662,7 @@
 |`getMaxLines`| Function |Dudkin Sergey | done |  | |
 |`getOverflow`| Function |Dudkin Sergey | done |  | |
 |`getWordBreak`| Function |Dudkin Sergey | done | | |
-|`getLeadingMargin`| Function |Dudkin Sergey | in progress | | |
+|`getLeadingMargin`| Function |Dudkin Sergey | done | | |
 |*LineHeightStyle*| *Class* |Dudkin Sergey |done|  | |
 |`getLineHeight`| Function |Dudkin Sergey | done |  | |
 |*UrlStyle*| *Class* | Politov Mikhail | testskipped |  | |
