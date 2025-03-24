@@ -9,8 +9,8 @@ function selectInternalsPath(): string {
 // TBD: code duplication with the ArkoalaLayout
 export function HandwrittenModule(language: Language): string {
     switch (language) {
-        case Language.TS: return "../handwritten"
-        case Language.ARKTS: return "../handwritten"
+        case Language.TS: return "../handwritten/handwritten"
+        case Language.ARKTS: return "../handwritten/handwritten"
         default: throw new Error("Not implemented")
     }
 }

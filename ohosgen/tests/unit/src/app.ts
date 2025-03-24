@@ -48,7 +48,11 @@ import {
   idlCheckStringEnums,
   testDataClass, testDataInterface, DataClass, DataInterface,
   testIDLDataClass, testIDLDataInterface, IDLDataClass, IDLDataInterface,
-  HandwrittenComponent, IdlHandwrittenComponent,
+} from '#compat'
+
+import {
+  HandwrittenComponent,
+  IdlHandwrittenComponent,
 } from '#compat'
 import { test_ret_A } from '#compat'
 
@@ -328,10 +332,13 @@ function checkNativeBuffer() {
 // */
 
 function checkHandwritten() {
-  const dtsHW: HandwrittenComponent = { id: "hw", total: 0 }
+  const dtsHW: HandwrittenComponent = { id: "hw", total: 1 }
+  assertEQ("hw", dtsHW.id)
+  assertEQ(1, dtsHW.total)
+
   const idlHW: IdlHandwrittenComponent = { name: "idl" + dtsHW.id, count: dtsHW.total + 1 }
   assertEQ("idlhw", idlHW.name)
-  assertEQ(1, idlHW.count)
+  assertEQ(2, idlHW.count)
 }
 
 interface TestObject { x: number }
@@ -458,7 +465,7 @@ export function run() {
   suite.addTest("checkReturnTypes", checkReturnTypes)
   suite.addTest("checkNativeBuffer", checkNativeBuffer)
   suite.addTest("checkThrowException", checkThrowException)
-  // suite.addTest("checkHandwritten", checkHandwritten)
+  suite.addTest("checkHandwritten", checkHandwritten)
   suite.addTest("checkContentModifier", checkContentModifier)
 
   return suite.run()
