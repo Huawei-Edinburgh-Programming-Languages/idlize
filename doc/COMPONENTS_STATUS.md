@@ -2265,7 +2265,7 @@
 |*ScrollableTargetInfo*| *Class* | Maksimov Nikita | done |  | |
 |`isBegin`| Function | Maksimov Nikita | done |  | |
 |`isEnd`| Function | Maksimov Nikita | done |  | |
-|*EventTargetInfo*| *Class* | Maksimov Nikita | blocked IDL |  | |
+|*EventTargetInfo*| *Class* | Maksimov Nikita | done |  | |
 |`getId`| Function | Maksimov Nikita | done | | |
 |*GestureRecognizer*| *Class* | Kovalev Sergey | done |  | |
 |`getTag`| Function | Kovalev Sergey | done | | |
