@@ -173,7 +173,7 @@
 |`gridSpan`| Function | Lobah Mikhail | done |  |deprecated? |
 |`gridOffset`| Function | Lobah Mikhail | done |  |deprecated? |
 |`rotate`| Function | Dmitry A Smirnov| done |  | Dmitry A Smirnov|
-|`transform`| Function | Lobah Mikhail | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUR61 Type `object` is converted to `ArkCustomObject` | |
+|`transform`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUR61 Type `object` is converted to `ArkCustomObject`|
 |`onAppear`| Function | Roman Sedaikin | done |  | |
 |`onDisAppear`| Function | Roman Sedaikin | done |  | |
 |`onAttach`| Function | Andrey Khudenkikh | done |  | |
@@ -202,7 +202,7 @@
 |`onDragLeave`| Function | Lobah Mikhail, Evstigneev Roman | done |  | EVENT |
 |`onDrop`| Function | Lobah Mikhail, Evstigneev Roman | done |  | EVENT |
 |`onDragEnd`| Function | Lobah Mikhail, Evstigneev Roman | done |  | EVENT |
-|`allowDrop`| Function | Lobah Mikhail | blocked IDL | Incorrect C-API code that corresponds to UniformDataType https://gitee.com/nikolay-igotti/idlize/issues/IBVX2X  | |
+|`allowDrop`| Function | Lobah Mikhail | blocked IDL | | Incorrect C-API code that corresponds to UniformDataType https://gitee.com/nikolay-igotti/idlize/issues/IBVX2X|
 |`draggable`| Function | Lobah Mikhail | done |  | |
 |`dragPreview`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder |
 |`onPreDrag`| Function | Lobah Mikhail | done |  | |
