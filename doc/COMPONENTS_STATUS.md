@@ -202,7 +202,7 @@
 |`onDragLeave`| Function | Lobah Mikhail, Evstigneev Roman | done |  | EVENT |
 |`onDrop`| Function | Lobah Mikhail, Evstigneev Roman | done |  | EVENT |
 |`onDragEnd`| Function | Lobah Mikhail, Evstigneev Roman | done |  | EVENT |
-|`allowDrop`| Function | Lobah Mikhail | in progress |  Ark_UniformDataType unblocked | |
+|`allowDrop`| Function | Lobah Mikhail | blocked IDL | Incorrect C-API code that corresponds to UniformDataType https://gitee.com/nikolay-igotti/idlize/issues/IBVX2X  | |
 |`draggable`| Function | Lobah Mikhail | done |  | |
 |`dragPreview`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder |
 |`onPreDrag`| Function | Lobah Mikhail | done |  | |
