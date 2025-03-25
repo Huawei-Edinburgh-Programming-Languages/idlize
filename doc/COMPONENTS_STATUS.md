@@ -1662,7 +1662,7 @@
 |*GlobalScope_ohos_font*| *Class* | Pavelyev Ivan | done | | |
 |`registerFont`| Function | Pavelyev Ivan | done | | |
 |`getSystemFontList`| Function | Pavelyev Ivan | done | | |
-|`getFontByName`| Function | | | | |
+|`getFontByName`| Function | Pavelyev Ivan | in progress | | |
 |*GlobalScope_ohos_measure_utils*| *Class* | | | | |
 |`measureText`| Function | | | | |
 |`measureTextSize`| Function | | | | |
