@@ -198,9 +198,13 @@ interface CornerRadius {
 [Entity=Interface]
 interface BorderRadiuses {
 
+    [Optional]
     attribute number topLeft;
+    [Optional]
     attribute number topRight;
+    [Optional]
     attribute number bottomLeft;
+    [Optional]
     attribute number bottomRight;
 
 };
