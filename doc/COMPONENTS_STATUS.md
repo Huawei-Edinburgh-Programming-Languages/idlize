@@ -140,10 +140,10 @@
 |`onMouse`| Function | Kovalev Sergey | done |  | EVENT |
 |`onTouch`| Function | Roman Sedaikin, Tuzhilkin Ivan | testskipped |  | EVENT |
 |`onKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |   |
-|`onDigitalCrown`| Function | Evstigneev Roman | in progress| | |
+|`onDigitalCrown`| Function | Evstigneev Roman | in progress| | feature: API not present |
 |`onKeyPreIme`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |  |
 |`onKeyEventDispatch`| Function | Lobah Mikhail| in progress| | |
-|`onFocusAxisEvent`| Function | Evstigneev Roman | in progress| | |
+|`onFocusAxisEvent`| Function | Evstigneev Roman | in progress| | feature: API not present |
 |`focusable`| Function | Roman Sedaikin | done |  | |
 |`tabStop`| Function | Lobah Mikhail| in progress| | |
 |`onFocus`| Function | Roman Sedaikin | done |  | |
@@ -229,7 +229,7 @@
 |`accessibilityDefaultFocus`| Function | Lobah Mikhail| in progress| | |
 |`accessibilityUseSamePage`| Function | Lobah Mikhail| in progress| | |
 |`accessibilityRole`| Function | Lobah Mikhail| in progress| | |
-|`onAccessibilityFocus`| Function | Evstigneev Roman | in progress| | |
+|`onAccessibilityFocus`| Function | Evstigneev Roman | in progress| | feature: API not present |
 |`accessibilityTextHint`| Function | Lobah Mikhail | done |  | |
 |`accessibilityDescription`| Function | Lobah Mikhail | done |  | |
 |`accessibilityLevel`| Function | Lobah Mikhail | done |  | |
@@ -2681,11 +2681,11 @@
 |`appendStyledString`| Function | Maksimov Nikita | done |  | |
 |*ImageAttachment*| *Class* | Evstigneev Roman | in progress | | |
 |`getValue`| Function | Evstigneev Roman | done | | |
-|`getSize`| Function | Evstigneev Roman | in progress | | |
+|`getSize`| Function | Evstigneev Roman | done | | |
 |`getVerticalAlign`| Function | Evstigneev Roman | done | | |
 |`getObjectFit`| Function | Evstigneev Roman | done | | |
-|`getLayoutStyle`| Function | Evstigneev Roman | in progress | | |
-|`getColorFilter`| Function | Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 (+),  DrawingColorFilter is stub on the 2.0.44, ColorFilter in progress |
+|`getLayoutStyle`| Function | Evstigneev Roman | done | | |
+|`getColorFilter`| Function | Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 (+),  DrawingColorFilter is stub on the 2.0.44, ColorFilter done, feature: API not present |
 |*CustomSpan*| *Class* | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onMeasure`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onDraw`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
