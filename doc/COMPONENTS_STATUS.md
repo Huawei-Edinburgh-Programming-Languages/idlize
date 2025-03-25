@@ -2685,7 +2685,7 @@
 |`getVerticalAlign`| Function | Evstigneev Roman | done | | |
 |`getObjectFit`| Function | Evstigneev Roman | done | | |
 |`getLayoutStyle`| Function | Evstigneev Roman | in progress | | |
-|`getColorFilter`| Function | Evstigneev Roman | in progress | | |
+|`getColorFilter`| Function | Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 (+),  DrawingColorFilter is stub on the 2.0.44, ColorFilter in progress |
 |*CustomSpan*| *Class* | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onMeasure`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onDraw`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
