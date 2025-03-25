@@ -1877,7 +1877,7 @@
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
 |`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
-|*MouseEvent*| *Class* | Kovalev Sergey | in progress |  | |
+|*MouseEvent*| *Class* | Kovalev Sergey | done |  | |
 |`getButton`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
 |`setButton`| Function | Kovalev Sergey | done |  | |
 |`getAction`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
