@@ -2638,15 +2638,15 @@
 |`unmarshalling`| Function | Pavelyev Ivan | done |  | The method has been split and there is no implementation for `0`, but for `1`, a rework is required!!! |
 |`getLength`| Function | Pavelyev Ivan | done |  | |
 |*TextStyle_styled_string*| *Class* | Erokhin Ilya | done |  |  |
-|`getFontColor`| Function | Tuzhilkin Ivan | in progress | | need minimal changes after new generation |
-|`getFontFamily`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  | need minimal changes after new generation |
-|`getFontSize`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  | need minimal changes after new generation |
-|`getFontWeight`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  | need minimal changes after new generation |
-|`getFontStyle`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  | need minimal changes after new generation |
+|`getFontColor`| Function | Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation |
+|`getFontFamily`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  | Return value will be changed to optional after 125 generation |
+|`getFontSize`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  | Return value will be changed to optional after 125 generation |
+|`getFontWeight`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  | Return value will be changed to optional after 125 generation |
+|`getFontStyle`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  | Return value will be changed to optional after 125 generation |
 |*DecorationStyle*| *Class* | Tuzhilkin Ivan | in progress |  | |
 |`getType`| Function | Tuzhilkin Ivan | done |  | |
-|`getColor`| Function | Tuzhilkin Ivan | in progress | | need minimal changes after new generation |
-|`getStyle`| Function | Tuzhilkin Ivan | in progress | | need minimal changes after new generation |
+|`getColor`| Function | Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation |
+|`getStyle`| Function | Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation |
 |*BaselineOffsetStyle*| *Class* | Tuzhilkin Ivan | done |  | |
 |`getBaselineOffset`| Function | Tuzhilkin Ivan | done |  | |
 |*LetterSpacingStyle*| *Class* | Tuzhilkin Ivan | done |  | |
@@ -2657,12 +2657,12 @@
 |`getTextBackgroundStyle`| Function | Tuzhilkin Ivan | done | | |
 |*GestureStyle*| *Class* | Dudkin Sergey| done | | |
 |*ParagraphStyle*| *Class* |Dudkin Sergey | done |  | |
-|`getTextAlign`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress | | need minimal changes after new generation |
-|`getTextIndent`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress | | need minimal changes after new generation |
-|`getMaxLines`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress | | need minimal changes after new generation |
-|`getOverflow`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress | | need minimal changes after new generation |
-|`getWordBreak`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress | | need minimal changes after new generation|
-|`getLeadingMargin`| Function | Dudkin Sergey, Tuzhilkin Ivan | in progress | | need minimal changes after new generation |
+|`getTextAlign`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation |
+|`getTextIndent`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation |
+|`getMaxLines`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation |
+|`getOverflow`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation |
+|`getWordBreak`| Function |Dudkin Sergey, Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation|
+|`getLeadingMargin`| Function | Dudkin Sergey, Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation |
 |*LineHeightStyle*| *Class* |Dudkin Sergey |done|  | |
 |`getLineHeight`| Function |Dudkin Sergey | done |  | |
 |*UrlStyle*| *Class* | Politov Mikhail | testskipped |  | |
