@@ -17,6 +17,7 @@ import {
 
 import { and_values } from '#compat'
 import { sum_numbers } from '#compat'
+import { sum_bigints } from '#compat'
 import { test_materialized_classes, UtilityInterface } from '#compat'
 import {
   ForceCallbackListener,
@@ -106,6 +107,14 @@ function checkNumber() {
   s = sum_numbers(2.3, 3.5)
   console.log(`sum: ${s}`)
   assertEQ(true, compareNumbers(s, 5.8))
+}
+
+function checkBigint() {
+  let s = sum_bigints(100, 200)
+  assertEQ(true, compareNumbers(s, 300))
+
+  s = sum_bigints(100, -400)
+  assertEQ(true, compareNumbers(s, -300))
 }
 
 function checkForceCallback() {
@@ -337,6 +346,7 @@ export function run() {
   suite.addTest("check_constants", check_constants)
   suite.addTest("check_booleans", check_booleans)
   suite.addTest("checkNumber", checkNumber)
+  suite.addTest("checkBigint", checkBigint)
   suite.addTest("checkForceCallback", checkForceCallback)
   suite.addTest("checkEnum", checkEnum)
   suite.addTest("checkClassWithComplexPropertyType", checkClassWithComplexPropertyType)

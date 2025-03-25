@@ -272,6 +272,12 @@ OH_Number GlobalScope_sum_numbersImpl(const OH_Number *v1, const OH_Number *v2)
     INTEROP_FATAL("Unknown args tags v1: %d, v2: %d\n", v1->tag, v2->tag);
 }
 
+// bigint
+
+OH_UInt64 GlobalScope_sum_bigintsImpl(OH_UInt64 val1, OH_UInt64 val2) {
+    return val1 + val2;
+}
+
 /// ClassWithPrimitivePropertyType real implementations
 
 struct UNIT_ClassWithPrimitivePropertyTypePeer {
