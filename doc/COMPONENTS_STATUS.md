@@ -140,10 +140,10 @@
 |`onMouse`| Function | Kovalev Sergey | done |  | EVENT |
 |`onTouch`| Function | Roman Sedaikin, Tuzhilkin Ivan | testskipped |  | EVENT |
 |`onKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |   |
-|`onDigitalCrown`| Function | Lobah Mikhail | in progress| | |
+|`onDigitalCrown`| Function | Evstigneev Roman | in progress| | |
 |`onKeyPreIme`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |  |
 |`onKeyEventDispatch`| Function | Lobah Mikhail| in progress| | |
-|`onFocusAxisEvent`| Function | Lobah Mikhail| in progress| | |
+|`onFocusAxisEvent`| Function | Evstigneev Roman | in progress| | |
 |`focusable`| Function | Roman Sedaikin | done |  | |
 |`tabStop`| Function | Lobah Mikhail| in progress| | |
 |`onFocus`| Function | Roman Sedaikin | done |  | |
@@ -229,7 +229,7 @@
 |`accessibilityDefaultFocus`| Function | Lobah Mikhail| in progress| | |
 |`accessibilityUseSamePage`| Function | Lobah Mikhail| in progress| | |
 |`accessibilityRole`| Function | Lobah Mikhail| in progress| | |
-|`onAccessibilityFocus`| Function | Lobah Mikhail| in progress| | |
+|`onAccessibilityFocus`| Function | Evstigneev Roman | in progress| | |
 |`accessibilityTextHint`| Function | Lobah Mikhail | done |  | |
 |`accessibilityDescription`| Function | Lobah Mikhail | done |  | |
 |`accessibilityLevel`| Function | Lobah Mikhail | done |  | |
