@@ -1833,7 +1833,7 @@
 |`getSLIDE_SWITCH`| Function | | | |
 |*BaseEvent*| *Class* | Politov Mikhail | blocked IDL |  | |
 |`getModifierKeyState`| Function | Politov Mikhail | done |  | |
-|`getTarget`| Function | | | | |
+|`getTarget`| Function | Politov Mikhail | done |  | |
 |`setTarget`| Function | Politov Mikhail | done |  | |
 |`getTimestamp`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
 |`setTimestamp`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
