@@ -1979,11 +1979,11 @@
 |`setIntentionCode`| Function | Maksimov Nikita | done | | |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
-|*FocusAxisEvent*| *Class* | | | | |
-|`setAxisMap`| Function | | | | |
-|`setAxisMap`| Function |  |  | | |
-|`getStopPropagation`| Function | Samarin Sergey | in progress | | feature: API not present |
-|`setStopPropagation`| Function | | done  |  | empty implementation |
+|*FocusAxisEvent*| *Class* | Evstigneev Roman | in progress | | |
+|`setAxisMap`| Function | Evstigneev Roman | in progress | | |
+|`setAxisMap`| Function | Evstigneev Roman | in progress | | |
+|`getStopPropagation`| Function | Evstigneev Roman | in progress | | feature: API not present |
+|`setStopPropagation`| Function | Evstigneev Roman | done  |  | empty implementation |
 |*ProgressMask*| *Class* | Maksimov Nikita | done |  | |
 |`updateProgress`| Function | Maksimov Nikita | done |  | |
 |`updateColor`| Function | Maksimov Nikita | done |  | |
