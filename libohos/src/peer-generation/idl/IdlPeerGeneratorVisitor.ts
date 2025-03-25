@@ -154,10 +154,26 @@ class PeersGenerator {
         if (peerGeneratorConfiguration().components.invalidAttributes.includes(peer.componentName)) {
             return
         }
-        const seenAttributes = new Set<string>()
-        clazz.properties.forEach(prop => {
-            this.processOptionAttribute(seenAttributes, prop, peer)
+        const seenMethods = new Set<string>()
+        clazz.methods.forEach(method => {
+            this.processAttributeMethod(seenMethods, method, peer)
+
         })
+        const seenFields = new Set<string>()
+        clazz.properties.forEach(prop => {
+            this.processOptionAttribute(seenFields, prop, peer)
+        })
+    }
+
+    private processAttributeMethod(seenAttributes: Set<string>, method: idl.IDLMethod, peer: PeerClass) {
+        const propName = method.name
+        if (seenAttributes.has(propName)) {
+            warn(`ignore seen method: ${propName}`)
+            return
+        }
+        seenAttributes.add(propName)
+        // const type = this.fixTypeLiteral(propName, property.type, peer)
+        peer.attributesMethods.push(method)
     }
 
     private processOptionAttribute(seenAttributes: Set<string>, property: idl.IDLProperty, peer: PeerClass) {
@@ -587,7 +603,7 @@ function initCustomBuilderClasses() {
     )
 }
 
-function getMethodModifiers(method: idl.IDLMethod | idl.IDLConstructor | idl.IDLCallable): MethodModifier[] {
+export function getMethodModifiers(method: idl.IDLMethod | idl.IDLConstructor | idl.IDLCallable): MethodModifier[] {
     const modifiers = []
     if (idl.isConstructor(method) || (idl.isMethod(method) && (method.isStatic || method.isFree)))
         modifiers.push(MethodModifier.STATIC)

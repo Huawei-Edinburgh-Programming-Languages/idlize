@@ -439,6 +439,19 @@ export function getNameWithoutQualifiersLeft(node: ts.EntityName | undefined) : 
     throw new Error("Impossible")
 }
 
+export function snakeCaseToLowCamelCase(classname: string): string {
+    return classname
+        .split('_')
+        .filter(word => word !== '')
+        .map((word, index) => {
+            if (index === 0) {
+                return word.toLowerCase();
+            }
+            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        })
+        .join('');
+}
+
 export function snakeCaseToCamelCase(input: string, tailToLowerCase: boolean = false): string {
     return input
         .split("_")
@@ -495,11 +508,9 @@ export function renameDtsToPeer(fileName: string, language: Language, withFileEx
 }
 
 export function renameDtsToComponent(fileName: string, language: Language, withFileExtension: boolean = true) {
-    const renamed = "Ark"
-        .concat(snakeCaseToCamelCase(fileName))
+    const renamed = snakeCaseToLowCamelCase(fileName)
         .replace(".d.ts", "")
         .replace(".idl", "")
-
     if (withFileExtension) {
         return renamed.concat(language.extension)
     }

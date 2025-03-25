@@ -178,11 +178,11 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         // TODO dirty stub. We are not processing interfaces methods as a
         // callbacks for now, so interfaces with methods can not be
         // deserialized in ArkTS
-        return []
-        // return [
-        //     ...this.printExtendedAttributes(idl),
-        //     indentedBy(`${idl.name}${this.printTypeParameters(idl.typeParameters)}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType)}`, 1)
-        // ]
+        // return [] // oh nooo!!!!!!!!
+        return [
+            ...this.printExtendedAttributes(idl),
+            indentedBy(`${idl.name}${this.printTypeParameters(idl.typeParameters)}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType)}`, 1)
+        ]
     }
     private printFunction(idl: idl.IDLFunction): stringOrNone[] {
         if (idl.name?.startsWith("__")) {

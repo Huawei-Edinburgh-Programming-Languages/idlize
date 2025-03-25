@@ -1473,10 +1473,11 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     isCommonMethodUsedAsProperty(member: ts.ClassElement | ts.TypeElement): member is (ts.MethodDeclaration | ts.MethodSignature) {
         let className = (ts.isClassDeclaration(member.parent)) ? identName(member.parent.name) : undefined
         let returnType = (ts.isMethodDeclaration(member) || ts.isMethodSignature(member)) ? identName(member.type) : undefined
-        return (this.options.commonToAttributes ?? true) &&
-            (ts.isMethodDeclaration(member) || ts.isMethodSignature(member)) &&
-            this.isCommonAttributeMethod(member) &&
-            member.parameters.length == 1 && (returnType == "T" || returnType == className)
+        if (this.options.commonToAttributes) {
+            return (ts.isMethodDeclaration(member) || ts.isMethodSignature(member)) &&
+                this.isCommonAttributeMethod(member) &&
+                member.parameters.length == 1 && (returnType == "T" || returnType == className)
+        } else return false
     }
     isMethodUsedAsCallback(member: ts.ClassElement | ts.TypeElement): member is (ts.MethodDeclaration | ts.MethodSignature) {
         const interfaceName = (ts.isInterfaceDeclaration(member.parent)) ? identName(member.parent.name) : undefined

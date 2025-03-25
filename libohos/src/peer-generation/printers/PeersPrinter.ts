@@ -41,6 +41,7 @@ import { createOptionalType, createReferenceType, forceAsNamedNode, IDLI32Type, 
 import { collectDeclDependencies, collectDeclItself } from "../ImportsCollectorUtils";
 import { findComponentByType } from "../ComponentsCollector";
 import { NativeModule } from "../NativeModule";
+import { getMethodModifiers } from '../idl/IdlPeerGeneratorVisitor';
 
 export function componentToPeerClass(component: string) {
     return `Ark${component}Peer`
@@ -133,6 +134,13 @@ class PeerFileVisitor {
                     field.type,
                     [],
                     true
+                )
+            }
+            for (const method of peer.attributesMethods) {
+                writer.writeMethodDeclaration(
+                    method.name,
+                    writer.makeNamedSignature(method.returnType, method.parameters),
+                    getMethodModifiers(method)
                 )
             }
         }, parent ? [parent] : undefined)

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLI32Type, IDLPointerType, IDLProperty } from "../idl"
+import { IDLI32Type, IDLMethod, IDLPointerType, IDLProperty } from "../idl"
 import { NumericConvertor, PointerConvertor } from "../LanguageWriters/ArgConvertors"
 import { PeerMethod } from "./PeerMethod"
 import { PeerFile } from "./PeerFile"
@@ -49,6 +49,7 @@ export class PeerClass implements PeerClassBase {
     originalParentFilename: string | undefined = undefined
     parentComponentName: string | undefined = undefined
     attributesFields: IDLProperty[] = []
+    attributesMethods: IDLMethod[] = []
     attributesTypes: {typeName: string, content: string}[] = []
     hasGenericType: boolean = false
 }
