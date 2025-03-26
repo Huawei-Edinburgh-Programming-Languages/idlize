@@ -19,6 +19,7 @@ export enum LayoutNodeRole {
     PEER,
     INTERFACE,
     GLOBAL,
+    COMPONENT,
 }
 
 export interface LayoutManagerStrategy {

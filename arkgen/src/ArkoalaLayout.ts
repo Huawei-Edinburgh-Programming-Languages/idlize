@@ -98,6 +98,10 @@ export class TsLayout extends CommonLayoutBase {
         return `GlobalScope`
     }
 
+    protected selectComponent(node:idl.IDLEntry): string {
+        return `Ark${node.name}`
+    }
+
     /////
 
     resolve(node: idl.IDLEntry, role: LayoutNodeRole): string {
@@ -109,6 +113,7 @@ export class TsLayout extends CommonLayoutBase {
             case LayoutNodeRole.INTERFACE: return this.selectInterface(node)
             case LayoutNodeRole.PEER: return this.selectPeer(node)
             case LayoutNodeRole.GLOBAL: return this.selectGlobal(node)
+            case LayoutNodeRole.COMPONENT: return this.selectComponent(node)
         }
     }
 }
@@ -147,7 +152,7 @@ export class JavaLayout extends CommonLayoutBase {
     private getPath(file:string):string {
         return path.join(this.packagePath, file)
     }
-    resolve(node: idl.IDLNode, role: LayoutNodeRole): string {
+    resolve(node: idl.IDLEntry, role: LayoutNodeRole): string {
         switch (role) {
             case LayoutNodeRole.INTERFACE: {
                 if (idl.isEntry(node)) {
@@ -185,6 +190,9 @@ export class JavaLayout extends CommonLayoutBase {
             case LayoutNodeRole.GLOBAL: {
                 return 'GlobalScope'
             }
+            case LayoutNodeRole.COMPONENT: {
+                return 'Ark' + node.name
+            }
         }
     }
 }
@@ -193,7 +201,7 @@ export class CJLayout extends CommonLayoutBase {
     private getPath(file:string):string {
         return path.join('.', file)
     }
-    resolve(node: idl.IDLNode, role: LayoutNodeRole): string {
+    resolve(node: idl.IDLEntry, role: LayoutNodeRole): string {
         switch (role) {
             case LayoutNodeRole.INTERFACE: {
                 if (idl.isEntry(node)) {
@@ -229,6 +237,9 @@ export class CJLayout extends CommonLayoutBase {
             }
             case LayoutNodeRole.GLOBAL: {
                 return 'GlobalScope'
+            }
+            case LayoutNodeRole.COMPONENT: {
+                return 'Ark' + node.name
             }
         }
     }
