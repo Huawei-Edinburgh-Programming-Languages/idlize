@@ -26,6 +26,7 @@ enum CallbackEventKind {
 
 const bufferSize = 4096
 const buffer = new KBuffer(bufferSize)
+ResourceHolder.register(buffer)
 const deserializer = new Deserializer(buffer.buffer, bufferSize)
 export function checkArkoalaCallbacks() {
     while (true) {

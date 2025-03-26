@@ -13,7 +13,15 @@
  * limitations under the License.
  */
 import { ArkUINativeModule, TestNativeModule } from "#components"
-import { wrapCallback, callCallback, wrapSystemCallback, registerNativeModuleLibraryName, KSerializerBuffer, KBuffer } from "@koalaui/interop"
+import {
+    wrapCallback,
+    callCallback,
+    wrapSystemCallback,
+    registerNativeModuleLibraryName,
+    KSerializerBuffer,
+    KBuffer,
+    ResourceHolder
+} from "@koalaui/interop"
 import { deserializeAndCallCallback } from './peers/CallbackDeserializeCall.ts'
 import { assertEquals, assertThrows } from "./test_utils"
 import { ArkButtonPeer } from "@arkoala/arkui/peers/ArkButtonPeer"
@@ -306,6 +314,7 @@ function enqueueCallback(
     readAndCallCallback(deserializer)
     /* libace released resource */
     InteropNativeModule._ReleaseCallbackResource(resourceId)
+    deserializer.dispose()
 }
 
 function checkTwoSidesCallback() {
@@ -470,6 +479,7 @@ function checkNativeCallback() {
             assertEquals("NativeCallback Recursive [0]", Math.ceil(depth / 2), args32[0])
             assertEquals("NativeCallback Recursive [1]", Math.floor(depth / 2), args32[1])
         }
+        argsBuffer.dispose()
     }
     const passed = Date.now() - start
     console.log(`recursive native callback: ${Math.round(passed)}ms for ${depth * count} callbacks, ${Math.round(passed / (depth * count) * 1000000)}ms per 1M callbacks`)
@@ -511,6 +521,12 @@ function checkNodeAPI() {
         `dumpTreeNode(0x${root.peer.ptr})`)
     checkResult("BasicNodeAPI measureLayoutAndDraw", () => ArkUINativeModule._MeasureLayoutAndDraw(root.peer.ptr),
         `measureLayoutAndDraw(0x${root.peer.ptr})`)
+    root.dispose()
+    child1.dispose()
+    child2.dispose()
+    child3.dispose()
+    child4.dispose()
+    child5.dispose()
 }
 
 export function main(): void {
@@ -542,6 +558,8 @@ export function main(): void {
     checkNodeAPI()
     checkTwoSidesCallback()
 
+    Serializer.releasePool();
+    ResourceHolder.disposeAll()
     if (hasTestErrors) {
         throw new Error("Tests failed!")
     }

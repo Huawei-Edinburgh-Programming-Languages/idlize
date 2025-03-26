@@ -205,6 +205,22 @@ class SerializerPrinter {
 
                     writer.writeStatement(writer.makeThrowError(("Only last serializer should be released")))
                 })
+
+                writer.writeMethodImplementation(new Method('releasePool', new MethodSignature(idl.IDLVoidType, []), [MethodModifier.PUBLIC, MethodModifier.STATIC]), writer => {
+                    writer.writeStatement(
+                    writer.makeBlock([
+                        writer.makeCondition(
+                            writer.makeEquals([
+                                writer.makeString("Serializer.pool"),
+                                writer.makeUndefined()
+                            ]),
+                            writer.makeBlock([writer.makeReturn()])
+                        ),
+                        writer.makeLoop("i", "Serializer.pool!.length", writer.makeStatement(
+                            writer.makeMethodCall("Serializer.pool![i]", "dispose", [])
+                        ))
+                    ]))
+                })
             }
             const ctorSignatures = this.writer.makeSerializerConstructorSignatures()
             if (ctorSignatures) {
