@@ -97,7 +97,10 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             const [parentRef] = component.attributeDeclaration.inheritance
             const parentDecl = this.library.resolveTypeReference(parentRef)
             if (parentDecl) {
-                const parentGeneratedPath = this.library.layout.resolve(parentDecl, LayoutNodeRole.COMPONENT)
+                const parentGeneratedPath = this.library.layout.resolve({
+                    node: parentDecl,
+                    role: LayoutNodeRole.COMPONENT
+                })
                 imports.addFeature(generateArkComponentName(peer.parentComponentName!), `./${parentGeneratedPath}`)
 
                 const parentAttributesClass = generateAttributesParentClass(peer)
