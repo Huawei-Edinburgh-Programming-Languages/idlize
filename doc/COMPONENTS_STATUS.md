@@ -2651,9 +2651,9 @@
 |`getBaselineOffset`| Function | Tuzhilkin Ivan | done |  | |
 |*LetterSpacingStyle*| *Class* | Tuzhilkin Ivan | done |  | |
 |`getLetterSpacing`| Function | Tuzhilkin Ivan | done |  | |
-|*TextShadowStyle*| *Class* |  Politov Mikhail | testskipped |  | |
-|`getTextShadow`| Function |  Politov Mikhail | testskipped | | |
-|*BackgroundColorStyle*| *Class* | Politov Mikhail | testskipped |  | |
+|*TextShadowStyle*| *Class* |  Politov Mikhail | done |  | |
+|`getTextShadow`| Function |  Politov Mikhail | done | | |
+|*BackgroundColorStyle*| *Class* | Politov Mikhail | done |  | |
 |`getTextBackgroundStyle`| Function | Tuzhilkin Ivan | done | | |
 |*GestureStyle*| *Class* | Dudkin Sergey| done | | |
 |*ParagraphStyle*| *Class* |Dudkin Sergey | done |  | |
@@ -2665,8 +2665,8 @@
 |`getLeadingMargin`| Function | Dudkin Sergey, Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation |
 |*LineHeightStyle*| *Class* |Dudkin Sergey |done|  | |
 |`getLineHeight`| Function |Dudkin Sergey | done |  | |
-|*UrlStyle*| *Class* | Politov Mikhail | testskipped |  | |
-|`getUrl`| Function | Politov Mikhail | testskipped |  | |
+|*UrlStyle*| *Class* | Politov Mikhail | done |  | |
+|`getUrl`| Function | Politov Mikhail | done |  | |
 |*MutableStyledString*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBBYJE + |
 |`replaceString`| Function | Maksimov Nikita | done |  | |
 |`insertString`| Function | Maksimov Nikita | done |  | |
