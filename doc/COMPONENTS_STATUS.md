@@ -425,7 +425,7 @@
 |`value`| Function | Maksimov Nikita | done |  | |
 |`startAngle`| Function | Maksimov Nikita | done |  | |
 |`endAngle`| Function | Maksimov Nikita | done |  | |
-|`colors`| Function | Maksimov Nikita | devdone | | |
+|`colors`| Function | Maksimov Nikita | done | | |
 |`strokeWidth`| Function | Maksimov Nikita | done |  | |
 |`description`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
 |`trackShadow`| Function | Maksimov Nikita | done |  |  |
@@ -1666,8 +1666,8 @@
 |*GlobalScope_ohos_measure_utils*| *Class* | | | | |
 |`measureText`| Function | | | | |
 |`measureTextSize`| Function | | | | |
-|*SymbolEffect*| *Class* | | | | |
-|`dummyForAccessorGenerate`| Function | | | | |
+|*SymbolEffect*| *Class* | wangtao, Maksimov Nikita | in progress | | |
+|`dummyForAccessorGenerate`| Function | wangtao, Maksimov Nikita | in progress | | |
 |*ScaleSymbolEffect*| *Class* | Andrey Khudenkikh | done | | |
 |`getScope`| Function | Andrey Khudenkikh | done | | |
 |`setScope`| Function | Andrey Khudenkikh | done | | |
@@ -2380,21 +2380,21 @@
 |`showNext`| Function | Andrey Khudenkikh | done |  |  |
 |`showPrevious`| Function |  Andrey Khudenkikh | done |  |  |
 |`changeIndex`| Function |  Andrey Khudenkikh | done |  |  |
-|*HierarchicalSymbolEffect*| *Class* | | | | |
-|`getFillStyle`| Function | | | | |
-|`setFillStyle`| Function | | | | |
-|*AppearSymbolEffect*| *Class* | | | | |
-|`getScope`| Function | | | | |
-|`setScope`| Function | | | | |
-|*DisappearSymbolEffect*| *Class* | | | | |
-|`getScope`| Function | | | | |
-|`setScope`| Function | | | | |
-|*BounceSymbolEffect*| *Class* | | | | |
-|`getScope`| Function | | | | |
-|`setScope`| Function | | | | |
-|`getDirection`| Function | | | | |
-|`setDirection`| Function | | | | |
-|*PulseSymbolEffect*| *Class* | | | | |
+|*HierarchicalSymbolEffect*| *Class* | wangtao, Maksimov Nikita | in progress | | |
+|`getFillStyle`| Function | wangtao, Maksimov Nikita | in progress | | |
+|`setFillStyle`| Function | wangtao, Maksimov Nikita | in progress | | |
+|*AppearSymbolEffect*| *Class* | wangtao, Maksimov Nikita | in progress | | |
+|`getScope`| Function | wangtao, Maksimov Nikita | in progress | | |
+|`setScope`| Function | wangtao, Maksimov Nikita | in progress | | |
+|*DisappearSymbolEffect*| *Class* | wangtao, Maksimov Nikita | in progress | | |
+|`getScope`| Function | wangtao, Maksimov Nikita | in progress | | |
+|`setScope`| Function | wangtao, Maksimov Nikita | in progress | | |
+|*BounceSymbolEffect*| *Class* | wangtao, Maksimov Nikita | in progress | | |
+|`getScope`| Function | wangtao, Maksimov Nikita | in progress | | |
+|`setScope`| Function | wangtao, Maksimov Nikita | in progress | | |
+|`getDirection`| Function | wangtao, Maksimov Nikita | in progress | | |
+|`setDirection`| Function | wangtao, Maksimov Nikita | in progress | | |
+|*PulseSymbolEffect*| *Class* | Maksimov Nikita | in progress | | |
 |*TabsController*| *Class* | Skroba Gleb | done |  | |
 |`changeIndex`| Function | Skroba Gleb | done |  | |
 |`preloadItems`| Function | Skroba Gleb | done |  | |
@@ -2438,16 +2438,16 @@
 |*TextMenuItemId*| *Class* | Maksimov Nikita | done |  | |
 |`of`| Function | Maksimov Nikita | done |  | |
 |`equals`| Function | Maksimov Nikita | done |  | |
-|`getCUT`| Function | Maksimov Nikita | in progress | | |
-|`getCOPY`| Function | Maksimov Nikita | in progress | | |
-|`getPASTE`| Function | Maksimov Nikita | in progress | | |
-|`getSELECT_ALL`| Function | Maksimov Nikita | in progress | | |
-|`getCOLLABORATION_SERVICE`| Function | Maksimov Nikita | in progress | | |
-|`getCAMERA_INPUT`| Function | Maksimov Nikita | in progress | | |
-|`getAI_WRITER`| Function | Maksimov Nikita | in progress | | |
-|`getTRANSLATE`| Function | Maksimov Nikita | in progress | | |
-|`getSEARCH`| Function | Maksimov Nikita | in progress | | |
-|`getSHARE`| Function | Maksimov Nikita | in progress | | |
+|`getCUT`| Function | Maksimov Nikita | done | | |
+|`getCOPY`| Function | Maksimov Nikita | done | | |
+|`getPASTE`| Function | Maksimov Nikita | done | | |
+|`getSELECT_ALL`| Function | Maksimov Nikita | done | | |
+|`getCOLLABORATION_SERVICE`| Function | Maksimov Nikita | done | | |
+|`getCAMERA_INPUT`| Function | Maksimov Nikita | done | | |
+|`getAI_WRITER`| Function | Maksimov Nikita | done | | |
+|`getTRANSLATE`| Function | Maksimov Nikita | done | | |
+|`getSEARCH`| Function | Maksimov Nikita | done | | |
+|`getSHARE`| Function | Maksimov Nikita | done | | |
 |*EditMenuOptions*| *Class* | Dudkin Sergey | in progress |  |  |
 |`onCreateMenu`| Function | Dudkin Sergey | in progress |  | |
 |`onMenuItemClick`| Function | Dudkin Sergey | in progress | |
