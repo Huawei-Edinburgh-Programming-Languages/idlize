@@ -1075,7 +1075,7 @@
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |  |
 |`minFontScale`| Function | Kovalev Sergey | in progress  | |
 |`maxFontScale`| Function | Kovalev Sergey | in progress  | |
-|`symbolEffect`| Function | Andrey Khudenkikh | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBRPIQ |
+|`symbolEffect`| Function | Andrey Khudenkikh, Samarin Sergey | in progress |  | testskipped for feature branch |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| done |  |  |
 |`setSymbolSpanOptions`| Function |Dmitry A Smirnov| done |  |   |
 |`fontSize`| Function |Dmitry A Smirnov| done |  |  |
