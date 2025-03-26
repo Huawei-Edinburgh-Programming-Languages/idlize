@@ -196,15 +196,11 @@ interface CornerRadius {
 };
 
 [Entity=Interface]
-interface BorderRadiuses {
+interface BorderRadiuses_graphics {
 
-    [Optional]
     attribute number topLeft;
-    [Optional]
     attribute number topRight;
-    [Optional]
     attribute number bottomLeft;
-    [Optional]
     attribute number bottomRight;
 
 };
@@ -270,6 +266,8 @@ Edges edgeColors(number all);
 Edges edgeWidths(number all);
 // EdgeStyles borderStyles(BorderStyle all);
 BorderRadiuses borderRadiuses(number all);
+
+typedef Vector2 Offset_graphics;
 
 typedef Vector2 Pivot;
 typedef Vector2 Scale;
