@@ -227,8 +227,9 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             })
         }, parentComponentClassName, [componentInterfaceName])
 
+        const componentFunction = this.library.createLanguageWriter()
         this.printComponentFunction(
-            printer,
+            componentFunction,
             componentInterfaceName,
             componentClassName,
             componentFunctionName,
@@ -242,7 +243,16 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             content: printer,
             over: {
                 node: component.attributeDeclaration,
-                role: LayoutNodeRole.COMPONENT
+                role: LayoutNodeRole.COMPONENT,
+                hint: 'component.implementation'
+            }
+        }, {
+            collector: imports,
+            content: componentFunction,
+            over: {
+                node: component.attributeDeclaration,
+                role: LayoutNodeRole.COMPONENT,
+                hint: 'component.function'
             }
         }]
     }

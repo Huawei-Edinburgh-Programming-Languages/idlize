@@ -98,7 +98,14 @@ export class TsLayout extends CommonLayoutBase {
     }
 
     protected selectComponent(node:idl.IDLEntry, hint:idl.LayoutTargetDescriptionHint = 'component.implementation'): string {
-        return `Ark${node.name}`
+        const file = idl.getFileFor(node)
+        if (!file || !file.fileName) {
+            return `Ark${node.name}`
+        }
+        const pureFileName = file.fileName
+            .replaceAll('.d.ts', '')
+            .replaceAll('.idl', '')
+        return `Ark${path.basename(pureFileName).split(/_|\./g).map(it => idl.capitalize(it))}`
     }
 
     /////
