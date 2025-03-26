@@ -1242,7 +1242,7 @@
 |`placeholderColor`| Function | Spirin Andrey | done |  |  |
 |`textOverflow`| Function | Spirin Andrey | blocked AceEngine |  |https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
 |`textIndent`| Function | Spirin Andrey | done |  |  |
-|`placeholderFont`| Function | Spirin Andrey | done |  | |
+|`placeholderFont`| Function | Spirin Andrey, Tuzhilkin Ivan | testskipped |  | |
 |`enterKeyType`| Function | Spirin Andrey | done |  |  |
 |`caretColor`| Function | Spirin Andrey | done |  |  |
 |`onEditChanged`| Function | Spirin Andrey | done |  |deprecated UT Kovalev Sergey |
