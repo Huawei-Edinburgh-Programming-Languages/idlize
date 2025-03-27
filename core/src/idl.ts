@@ -14,7 +14,7 @@
  */
 
 import * as webidl2 from "webidl2"
-import { indentedBy, isDefined, stringOrNone } from "./util";
+import { indentedBy, isDefined, stringOrNone, throwException } from "./util";
 import { generateSyntheticIdlNodeName } from "./peer-generation/idl/common";
 import { IDLKeywords } from "./languageSpecificKeywords";
 
@@ -235,6 +235,7 @@ export interface IDLMethod extends IDLFunction, IDLNamedNode {
 
 export interface IDLCallable extends IDLFunction {
     kind: IDLKind.Callable
+    returnType: IDLType
     isStatic: boolean
 }
 
@@ -474,13 +475,14 @@ function createPrimitiveType(name: string): IDLPrimitiveType {
     }
 }
 
-export function createOptionalType(element:IDLType): IDLOptionalType {
-    if (isOptionalType(element)) {
+export function createOptionalType(element:IDLType, nodeInitializer?: IDLNodeInitializer): IDLOptionalType {
+    if (isOptionalType(element) && !nodeInitializer) {
         return element
     }
     return {
         kind: IDLKind.OptionalType,
         type: element,
+        ...nodeInitializer,
         _idlNodeBrand: innerIdlSymbol,
         _idlTypeBrand: innerIdlSymbol,
     }
@@ -537,13 +539,12 @@ export type IDLNodeInitializer = {
     documentation?: string
 }
 
-export function createNamespace(name:string, extendedAttributes?: IDLExtendedAttribute[], fileName?:string): IDLNamespace {
+export function createNamespace(name:string, members?: IDLEntry[], nodeInitializer?:IDLNodeInitializer): IDLNamespace {
     return {
         kind: IDLKind.Namespace,
-        members: [],
+        members: members ?? [],
         name: name,
-        extendedAttributes,
-        fileName,
+        ...nodeInitializer,
         _idlNodeBrand: innerIdlSymbol,
         _idlEntryBrand: innerIdlSymbol,
         _idlNamedNodeBrand: innerIdlSymbol,
@@ -641,13 +642,12 @@ export function getFQName(a:IDLNode): string {
     return getQualifiedName(a, "package.namespace.name")
 }
 
-export function createVersion(value: string[], extendedAttributes?: IDLExtendedAttribute[], fileName?:string): IDLVersion {
+export function createVersion(value: string[], nodeInitializer?:IDLNodeInitializer): IDLVersion {
     return {
         kind: IDLKind.Version,
         value,
         name: "version",
-        extendedAttributes,
-        fileName,
+        ...nodeInitializer,
         _idlNodeBrand: innerIdlSymbol,
         _idlEntryBrand: innerIdlSymbol,
         _idlNamedNodeBrand: innerIdlSymbol,
@@ -664,11 +664,12 @@ export function fetchNamespaceFrom(pointOfView?: IDLNode): IDLNamespace|undefine
     return undefined
 }
 
-export function createReferenceType(name: string, typeArguments?: IDLType[]): IDLReferenceType
-export function createReferenceType(source: IDLEntry, typeArguments?: IDLType[]): IDLReferenceType
+export function createReferenceType(name: string, typeArguments?: IDLType[], nodeInitializer?:IDLNodeInitializer): IDLReferenceType
+export function createReferenceType(source: IDLEntry, typeArguments?: IDLType[], nodeInitializer?:IDLNodeInitializer): IDLReferenceType
 export function createReferenceType(
     nameOrSource: string | IDLEntry,
     typeArguments?: IDLType[],
+    nodeInitializer?:IDLNodeInitializer
 ): IDLReferenceType {
     let name: string
     if (typeof nameOrSource === 'string') {
@@ -680,17 +681,19 @@ export function createReferenceType(
         kind: IDLKind.ReferenceType,
         name,
         typeArguments,
+        ...nodeInitializer,
         _idlNodeBrand: innerIdlSymbol,
         _idlTypeBrand: innerIdlSymbol,
         _idlNamedNodeBrand: innerIdlSymbol,
     }
 }
 
-export function createUnspecifiedGenericType(name: string, typeArguments: IDLType[]): IDLUnspecifiedGenericType {
+export function createUnspecifiedGenericType(name: string, typeArguments: IDLType[], nodeInitializer?:IDLNodeInitializer): IDLUnspecifiedGenericType {
     return {
         kind: IDLKind.UnspecifiedGenericType,
         name,
         typeArguments,
+        ...nodeInitializer,
         _idlNodeBrand: innerIdlSymbol,
         _idlTypeBrand: innerIdlSymbol,
         _idlNamedNodeBrand: innerIdlSymbol,
@@ -707,35 +710,38 @@ export function entityToType(entity:IDLNode): IDLType {
     }
 }
 
-export function createContainerType(container: IDLContainerKind, element: IDLType[]): IDLContainerType {
+export function createContainerType(container: IDLContainerKind, element: IDLType[], nodeInitializer?: IDLNodeInitializer): IDLContainerType {
     return {
         kind: IDLKind.ContainerType,
         containerKind: container,
         elementType: element,
+        ...nodeInitializer,
         _idlNodeBrand: innerIdlSymbol,
         _idlTypeBrand: innerIdlSymbol,
     }
 }
 
-export function createUnionType(types: IDLType[], name?: string): IDLUnionType {
+export function createUnionType(types: IDLType[], name?: string, nodeInitializer?: IDLNodeInitializer): IDLUnionType {
     if (types.length < 2)
         throw new Error("IDLUnionType should contain at least 2 types")
     return {
         kind: IDLKind.UnionType,
         name: name ?? "Union_" + types.map(it => generateSyntheticIdlNodeName(it)).join("_"),
         types: types,
+        ...nodeInitializer,
         _idlNodeBrand: innerIdlSymbol,
         _idlTypeBrand: innerIdlSymbol,
         _idlNamedNodeBrand: innerIdlSymbol,
     }
 }
 
-export function createFile(entries: IDLEntry[], fileName?: string, packageClause: string[] = []): IDLFile {
+export function createFile(entries: IDLEntry[], fileName?: string, packageClause: string[] = [], nodeInitializer?:IDLNodeInitializer): IDLFile {
     return {
         kind: IDLKind.File,
         packageClause,
         entries: entries,
         fileName,
+        ...nodeInitializer,
         _idlNodeBrand: innerIdlSymbol,
     }
 }
@@ -962,10 +968,11 @@ export function createCallback(name: string, parameters: IDLParameter[], returnT
     }
 }
 
-export function createTypeParameterReference(name: string): IDLTypeParameterType {
+export function createTypeParameterReference(name: string, nodeInitializer?: IDLNodeInitializer): IDLTypeParameterType {
     return {
         kind: IDLKind.TypeParameterType,
         name: name,
+        ...nodeInitializer,
         _idlNodeBrand: innerIdlSymbol,
         _idlTypeBrand: innerIdlSymbol,
         _idlNamedNodeBrand: innerIdlSymbol,
@@ -994,6 +1001,343 @@ export function createConstant(name: string, type: IDLType, value: string, nodeI
         _idlNodeBrand: innerIdlSymbol,
         _idlEntryBrand: innerIdlSymbol,
         _idlNamedNodeBrand: innerIdlSymbol,
+    }
+}
+
+export function clone<T extends IDLNode>(node:T): T {
+    const make = (node:IDLNode): T => node as T
+    const get = <K>(node:T): K => node as IDLNode as K
+
+    switch (node.kind) {
+        case IDLKind.Interface: {
+            const entry = get<IDLInterface>(node)
+            return make(
+                createInterface(
+                    entry.name,
+                    entry.subkind,
+                    entry.inheritance?.map(clone),
+                    entry.constructors?.map(clone),
+                    entry.constants.map(clone),
+                    entry.properties.map(clone),
+                    entry.methods.map(clone),
+                    entry.callables.map(clone),
+                    entry.typeParameters?.map(it => it),
+                    {
+                        documentation: node.documentation,
+                        extendedAttributes: node.extendedAttributes,
+                        fileName: node.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.Import: {
+            const entry = get<IDLImport>(node)
+            return make(
+                createImport(
+                    entry.clause,
+                    entry.name,
+                    {
+                        documentation: entry.documentation,
+                        extendedAttributes: entry.extendedAttributes,
+                        fileName: entry.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.Callback: {
+            const entry = get<IDLCallback>(node)
+            return make(
+                createCallback(
+                    entry.name,
+                    entry.parameters.map(clone),
+                    clone(entry.returnType),
+                    {
+                        documentation: entry.documentation,
+                        extendedAttributes: entry.extendedAttributes,
+                        fileName: entry.fileName
+                    },
+                    entry.typeParameters
+                )
+            )
+        }
+        case IDLKind.Const: {
+            const entry = get<IDLConstant>(node)
+            return make(
+                createConstant(
+                    entry.name,
+                    clone(entry.type),
+                    entry.value,
+                    {
+                        documentation: entry.documentation,
+                        extendedAttributes: entry.extendedAttributes,
+                        fileName: entry.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.Property: {
+            const entry = get<IDLProperty>(node)
+            return make(
+                createProperty(
+                    entry.name,
+                    clone(entry.type),
+                    entry.isReadonly,
+                    entry.isStatic,
+                    entry.isOptional,
+                    {
+                        documentation: entry.documentation,
+                        extendedAttributes: entry.extendedAttributes,
+                        fileName: entry.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.Parameter: {
+            const entry = get<IDLParameter>(node)
+            return make(
+                createParameter(
+                    entry.name,
+                    clone(entry.type),
+                    entry.isOptional,
+                    entry.isVariadic,
+                    {
+                        documentation: entry.documentation,
+                        extendedAttributes: entry.extendedAttributes,
+                        fileName: entry.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.Method: {
+            const entry = get<IDLMethod>(node)
+            return make(
+                createMethod(
+                    entry.name,
+                    entry.parameters.map(clone),
+                    clone(entry.returnType),
+                    {
+                        isAsync: entry.isAsync,
+                        isFree: entry.isFree,
+                        isOptional: entry.isOptional,
+                        isStatic: entry.isStatic
+                    },
+                    {
+                        documentation: entry.documentation,
+                        extendedAttributes: entry.extendedAttributes,
+                        fileName: entry.fileName
+                    },
+                    entry.typeParameters
+                )
+            )
+        }
+        case IDLKind.Callable: {
+            const entry = get<IDLCallable>(node)
+            return make(
+                createCallable(
+                    entry.name,
+                    entry.parameters.map(clone),
+                    clone(entry.returnType),
+                    {
+                        isAsync: entry.isAsync,
+                        isStatic: entry.isStatic
+                    },
+                    {
+                        documentation: entry.documentation,
+                        extendedAttributes: entry.extendedAttributes,
+                        fileName: entry.documentation
+                    },
+                    entry.typeParameters
+                )
+            )
+        }
+        case IDLKind.Constructor: {
+            const entry = get<IDLConstructor>(node)
+            return make(
+                createConstructor(
+                    entry.parameters.map(clone),
+                    entry.returnType ? clone(entry.returnType) : undefined,
+                    {
+                        documentation: entry.documentation,
+                        extendedAttributes: entry.extendedAttributes,
+                        fileName: entry.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.Enum: {
+            const entry = get<IDLEnum>(node)
+            const cloned = createEnum(
+                entry.name,
+                entry.elements.map(clone),
+                {
+                    documentation: entry.documentation,
+                    extendedAttributes: entry.extendedAttributes,
+                    fileName: entry.fileName
+                }
+            )
+            cloned.elements.forEach(it => {
+                it.parent = cloned
+            })
+            return make(cloned)
+        }
+        case IDLKind.EnumMember: {
+            const entry = get<IDLEnumMember>(node)
+            return make(
+                createEnumMember(
+                    entry.name,
+                    entry.parent,
+                    clone(entry.type),
+                    entry.initializer,
+                    {
+                        documentation: entry.documentation,
+                        extendedAttributes: entry.extendedAttributes,
+                        fileName: entry.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.Typedef: {
+            const entry = get<IDLTypedef>(node)
+            return make(
+                createTypedef(
+                    entry.name,
+                    clone(entry.type),
+                    entry.typeParameters,
+                    {
+                        documentation: entry.documentation,
+                        extendedAttributes: entry.extendedAttributes,
+                        fileName: entry.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.PrimitiveType: {
+            return node
+        }
+        case IDLKind.ContainerType: {
+            const type = get<IDLContainerType>(node)
+            return make(
+                createContainerType(
+                    type.containerKind,
+                    type.elementType.map(clone),
+                    {
+                        documentation: type.documentation,
+                        extendedAttributes: type.extendedAttributes,
+                        fileName: type.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.UnspecifiedGenericType: {
+            const type = get<IDLUnspecifiedGenericType>(node)
+            return make(
+                createUnspecifiedGenericType(
+                    type.name,
+                    type.typeArguments.map(clone),
+                    {
+                        documentation: type.documentation,
+                        extendedAttributes: type.extendedAttributes,
+                        fileName: type.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.ReferenceType: {
+            const type = get<IDLReferenceType>(node)
+            return make(
+                createReferenceType(
+                    type.name,
+                    type.typeArguments?.map(clone),
+                    {
+                        documentation: type.documentation,
+                        extendedAttributes: type.extendedAttributes,
+                        fileName: type.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.UnionType: {
+            const type = get<IDLUnionType>(node)
+            return make(
+                createUnionType(
+                    type.types.map(clone),
+                    type.name,
+                    {
+                        documentation: type.documentation,
+                        extendedAttributes: type.extendedAttributes,
+                        fileName: type.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.TypeParameterType: {
+            const type = get<IDLTypeParameterType>(node)
+            return make(
+                createTypeParameterReference(
+                    type.name,
+                    {
+                        documentation: type.documentation,
+                        extendedAttributes: type.extendedAttributes,
+                        fileName: type.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.OptionalType: {
+            const type = get<IDLOptionalType>(node)
+            return make(
+                createOptionalType(
+                    clone(type.type),
+                    {
+                        documentation: type.documentation,
+                        extendedAttributes: type.extendedAttributes,
+                        fileName: type.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.Version: {
+            const entry = get<IDLVersion>(node)
+            return make(
+                createVersion(
+                    entry.value,
+                    {
+                        documentation: entry.documentation,
+                        extendedAttributes: entry.extendedAttributes,
+                        fileName: entry.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.Namespace: {
+            const ns = get<IDLNamespace>(node)
+            return make(
+                createNamespace(
+                    ns.name,
+                    ns.members.map(clone),
+                    {
+                        documentation: ns.documentation,
+                        extendedAttributes: ns.extendedAttributes,
+                        fileName: ns.fileName
+                    }
+                )
+            )
+        }
+        case IDLKind.File: {
+            const file = get<IDLFile>(node)
+            return make(
+                createFile(
+                    file.entries.map(clone),
+                    file.fileName,
+                    file.packageClause,
+                    {
+                        documentation: file.documentation,
+                        extendedAttributes: file.extendedAttributes,
+                        fileName: file.fileName
+                    }
+                )
+            )
+        }
     }
 }
 
