@@ -83,7 +83,11 @@ class ArkTSMapForEachStatement implements LanguageStatement {
 }
 
 export class ArkTSEnumEntityStatement implements LanguageStatement {
-    constructor(private readonly enumEntity: IDLEnum, private readonly isExport: boolean) {}
+    constructor(
+        private readonly enumEntity: IDLEnum,
+        private readonly isExport: boolean,
+        private readonly useNamespaces: boolean
+    ) {}
 
     write(writer: LanguageWriter) {
         let enumName = convertDeclaration(createDeclarationNameConvertor(Language.ARKTS), this.enumEntity)
@@ -124,9 +128,13 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
             })
 
         const nss = idl.getNamespacesPathFor(this.enumEntity)
-        nss.forEach(it => writer.pushNamespace(it.name))
+        if (this.useNamespaces) {
+            nss.forEach(it => writer.pushNamespace(it.name))
+        }
         writer.writeEnum(enumName, members)
-        nss.forEach(() => writer.popNamespace())
+        if (this.useNamespaces) {
+            nss.forEach(() => writer.popNamespace())
+        }
     }
 }
 
@@ -255,8 +263,8 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return makeInterfaceTypeCheckerCall(value, decl.name,
             decl.properties.map(it => it.name), new Set(), this)
     }
-    makeEnumEntity(enumEntity: IDLEnum, isExport: boolean): LanguageStatement {
-        return new ArkTSEnumEntityStatement(enumEntity, isExport)
+    makeEnumEntity(enumEntity: IDLEnum, isExport: boolean, useNamespaces:boolean = true): LanguageStatement {
+        return new ArkTSEnumEntityStatement(enumEntity, isExport, useNamespaces)
     }
     getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
         return super.getObjectAccessor(convertor, value, args)
