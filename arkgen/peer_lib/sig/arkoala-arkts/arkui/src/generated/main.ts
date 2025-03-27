@@ -20,7 +20,8 @@ import {
     registerNativeModuleLibraryName,
     KSerializerBuffer,
     KBuffer,
-    ResourceHolder
+    ResourceHolder,
+    Disposable
 } from "@koalaui/interop"
 import { deserializeAndCallCallback } from './peers/CallbackDeserializeCall.ts'
 import { assertEquals, assertThrows } from "./test_utils"
@@ -42,6 +43,13 @@ import { ResourceId, InteropNativeModule } from "@koalaui/interop"
 import { checkArkoalaCallbacks } from "@arkoala/arkui/peers/CallbacksChecker"
 import { int32, int8 } from "@koalaui/common"
 
+function using<T extends Disposable>(resource: T, action: (res: T) => void): void {
+    try {
+        action(resource);
+    } finally {
+        resource.dispose();
+    }
+}
 
 const testString1000 = "One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand words One Thousand";
 
@@ -274,13 +282,13 @@ function checkButton() {
 function checkCallback() {
     const id1 = wrapCallback((args: KSerializerBuffer, length: int) => 2024)
     const id2 = wrapCallback((args: KSerializerBuffer, length: int) => 2025)
-    const buffer = new KBuffer(20)
-    assertEquals("Call callback 1", 2024, callCallback(id1, buffer.buffer, 0))
-    assertEquals("Call callback 2", 2025, callCallback(id2, buffer.buffer, 0))
-    assertThrows("Call disposed callback 1", () => { callCallback(id1, buffer.buffer, 0) })
-    new Array<number>(2, 4, 6, 8).forEach((it, index) => buffer.set(index as int, it as byte))
-    assertThrows("Call callback 0", () => { callCallback(0, buffer.buffer, 4) })
-    buffer.dispose()
+    using(new KBuffer(20), (buffer: KBuffer)=> {
+        assertEquals("Call callback 1", 2024, callCallback(id1, buffer.buffer, 0))
+        assertEquals("Call callback 2", 2025, callCallback(id2, buffer.buffer, 0))
+        assertThrows("Call disposed callback 1", () => { callCallback(id1, buffer.buffer, 0) })
+        new Array<number>(2, 4, 6, 8).forEach((it, index) => buffer.set(index as int, it as byte))
+        assertThrows("Call callback 0", () => { callCallback(0, buffer.buffer, 4) })
+    })
 }
 
 function createDefaultWriteCallback(kind: CallbackKind, callback: object) {
@@ -309,12 +317,12 @@ function enqueueCallback(
     }
     serializer.release()
 
-    /* libace calls stored callback */
-    const deserializer = new Deserializer(buffer, buffer.length)
-    readAndCallCallback(deserializer)
-    /* libace released resource */
-    InteropNativeModule._ReleaseCallbackResource(resourceId)
-    deserializer.dispose()
+    using(new Deserializer(buffer, buffer.length), (deserializer: Deserializer)=> {
+        /* libace calls stored callback */
+        readAndCallCallback(deserializer)
+        /* libace released resource */
+        InteropNativeModule._ReleaseCallbackResource(resourceId)
+    })
 }
 
 function checkTwoSidesCallback() {
@@ -463,23 +471,23 @@ function checkNativeCallback() {
     const count = 100
     for (let i = 0; i < count; i++) {
         const length = 12
-        const argsBuffer = new KBuffer(length)
-        const buf = new ArrayBuffer(length)
-        const view = new DataView(buf)
-        const args32 = new Int32Array(buf)
-        args32[2] = depth
-        for (let i = 0; i < length; i++) {
-            argsBuffer.set(i, view.getUint8(i) as byte)
-        }
-        TestNativeModule._TestCallIntRecursiveCallback(id4, argsBuffer.buffer, argsBuffer.length as int32)
-        for (let i = 0; i < length; i++) {
-            view.setUint8(i, argsBuffer.get(i));
-        }
-        if (i == 0) {
-            assertEquals("NativeCallback Recursive [0]", Math.ceil(depth / 2), args32[0])
-            assertEquals("NativeCallback Recursive [1]", Math.floor(depth / 2), args32[1])
-        }
-        argsBuffer.dispose()
+        using(new KBuffer(length), (argsBuffer: KBuffer) => {
+            const buf = new ArrayBuffer(length)
+            const view = new DataView(buf)
+            const args32 = new Int32Array(buf)
+            args32[2] = depth
+            for (let i = 0; i < length; i++) {
+                argsBuffer.set(i, view.getUint8(i) as byte)
+            }
+            TestNativeModule._TestCallIntRecursiveCallback(id4, argsBuffer.buffer, argsBuffer.length as int32)
+            for (let i = 0; i < length; i++) {
+                view.setUint8(i, argsBuffer.get(i));
+            }
+            if (i == 0) {
+                assertEquals("NativeCallback Recursive [0]", Math.ceil(depth / 2), args32[0])
+                assertEquals("NativeCallback Recursive [1]", Math.floor(depth / 2), args32[1])
+            }
+        })
     }
     const passed = Date.now() - start
     console.log(`recursive native callback: ${Math.round(passed)}ms for ${depth * count} callbacks, ${Math.round(passed / (depth * count) * 1000000)}ms per 1M callbacks`)
@@ -560,6 +568,7 @@ export function main(): void {
 
     Serializer.releasePool();
     ResourceHolder.disposeAll()
+    InteropNativeModule._ReportMemLeaks()
     if (hasTestErrors) {
         throw new Error("Tests failed!")
     }
