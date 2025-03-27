@@ -105,7 +105,7 @@ export class TsLayout extends CommonLayoutBase {
         const pureFileName = file.fileName
             .replaceAll('.d.ts', '')
             .replaceAll('.idl', '')
-        return `Ark${path.basename(pureFileName).split(/_|\./g).map(it => idl.capitalize(it))}`
+        return `Ark${path.basename(pureFileName).split(/_|\./g).map(it => idl.capitalize(it)).join('')}`
     }
 
     /////
