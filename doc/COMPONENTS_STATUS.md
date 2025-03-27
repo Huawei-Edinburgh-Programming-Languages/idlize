@@ -2238,11 +2238,11 @@
 |`onAction`| Function | Morozov Sergey | done | | |
 |`onActionEnd`| Function | Morozov Sergey | done | | |
 |`onActionCancel`| Function | Morozov Sergey | done | | |
-|*PanGestureOptions*| *Class* | Politov Mikhail | blocked IDL |  | |
+|*PanGestureOptions*| *Class* | Politov Mikhail | done |  | |
 |`setDirection`| Function | Politov Mikhail | done |  | |
 |`setDistance`| Function | Politov Mikhail | done |  | |
 |`setFingers`| Function | Politov Mikhail | done |  | |
-|`getDirection`| Function | Politov Mikhail | in progress |  |  |
+|`getDirection`| Function | Dudkin Sergey | done |  |  |
 |*PanGestureInterface*| *Class* | Morozov Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
 |`onActionStart`| Function | Morozov Sergey | done | | |
 |`onActionUpdate`| Function | Morozov Sergey | done | | |
