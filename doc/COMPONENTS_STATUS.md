@@ -1936,25 +1936,25 @@
 |*PixelMapMock*| *Class* | Maksimov Nikita | done |  | |
 |`release`| Function | Maksimov Nikita | done |  | |
 |*DragEvent*| *Class* | Evstigneev Roman | in progress |  | |
-|`getDisplayX`| Function | Tuzhilkin Ivan | in progress |  | done on feature branch |
-|`getDisplayY`| Function | Tuzhilkin Ivan | in progress |  | done on feature branch |
-|`getWindowX`| Function | Evstigneev Roman | in progress |  | done on feature branch, priority |
-|`getWindowY`| Function | Evstigneev Roman | in progress |  | done on feature branch, priority |
-|`getX`| Function | Evstigneev Roman | in progress |  | done on feature branch, priority, deprecated? |
-|`getY`| Function | Evstigneev Roman | in progress |  | done on feature branch, priority, deprecated? |
+|`getDisplayX`| Function | Tuzhilkin Ivan | done | | |
+|`getDisplayY`| Function | Tuzhilkin Ivan | done | | |
+|`getWindowX`| Function | Evstigneev Roman | done | | |
+|`getWindowY`| Function | Evstigneev Roman | done | | |
+|`getX`| Function | Evstigneev Roman | done | | deprecated? |
+|`getY`| Function | Evstigneev Roman | done | | deprecated? |
 |`setData`| Function | Evstigneev Roman | done |  | |
-|`getData`| Function | Evstigneev Roman | in progress |  | done for feature branch |
-|`getSummary`| Function | Tuzhilkin Ivan | in progress |  |  |
-|`setResult`| Function | Evstigneev Roman | done |  | |
-|`getResult`| Function | Evstigneev Roman | in progress |  | done for feature branch |
-|`getPreviewRect`| Function | Evstigneev Roman | in progress |  | done for feature branch |
-|`getVelocityX`| Function | Tuzhilkin Ivan | blocked IDL |  | done for feature branch |
-|`getVelocityY`| Function | Tuzhilkin Ivan | blocked IDL |  | done for feature branch |
-|`getVelocity`| Function | Tuzhilkin Ivan | blocked IDL |  | done for feature branch |
+|`getData`| Function | Evstigneev Roman | done |  | |
+|`getSummary`| Function | Tuzhilkin Ivan | in progress |  | availavle to implement after generation 125|
+|`setResult`| Function | Evstigneev Roman | done | | |
+|`getResult`| Function | Evstigneev Roman | done | | |
+|`getPreviewRect`| Function | Evstigneev Roman | done | | |
+|`getVelocityX`| Function | Tuzhilkin Ivan | done | | |
+|`getVelocityY`| Function | Tuzhilkin Ivan | done | | |
+|`getVelocity`| Function | Tuzhilkin Ivan | done | | |
 |`getModifierKeyState`| Function | Tuzhilkin Ivan | done |  | |
-|`executeDropAnimation`| Function | Tuzhilkin Ivan | in progress |  | done for feature branch |
-|`getDragBehavior`| Function | Tuzhilkin Ivan | blocked IDL |  | done for feature branch |
-|`setDragBehavior`| Function | Tuzhilkin Ivan | done |  | |
+|`executeDropAnimation`| Function | Tuzhilkin Ivan | in progress |  | only for upstream |
+|`getDragBehavior`| Function | Tuzhilkin Ivan | done | | |
+|`setDragBehavior`| Function | Tuzhilkin Ivan | done | | |
 |`getUseCustomDropAnimation`| Function | Evstigneev Roman | done |  | priority |
 |`setUseCustomDropAnimation`| Function | Evstigneev Roman | done |  | priority |
 |*KeyEvent*| *Class* | Maksimov Nikita | blocked IDL |  |  |
