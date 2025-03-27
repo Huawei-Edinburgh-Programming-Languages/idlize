@@ -2448,9 +2448,9 @@
 |`getTRANSLATE`| Function | Maksimov Nikita | done | | |
 |`getSEARCH`| Function | Maksimov Nikita | done | | |
 |`getSHARE`| Function | Maksimov Nikita | done | | |
-|*EditMenuOptions*| *Class* | Dudkin Sergey | in progress |  |  |
-|`onCreateMenu`| Function | Dudkin Sergey | in progress |  | |
-|`onMenuItemClick`| Function | Dudkin Sergey | in progress | |
+|*EditMenuOptions*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`onCreateMenu`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`onMenuItemClick`| Function | Maksimov Nikita | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |*SubmitEvent*| *Class* | Tuzhilkin Ivan | done |  | |
 |`keepEditableState`| Function | Tuzhilkin Ivan | done |  | |
 |`getText`| Function | Tuzhilkin Ivan, Pavelyev Ivan | done |  | |
