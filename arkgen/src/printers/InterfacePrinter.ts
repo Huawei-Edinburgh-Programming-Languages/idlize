@@ -24,7 +24,8 @@ import { createLanguageWriter, LanguageWriter, PeerFile,
      NamedMethodSignature,
      isInIdlize,
      isInIdlizeInternal,
-     isInCurrentModule
+     isInCurrentModule,
+     renameDtsToComponent
 } from '@idlizer/core'
 import { ARK_CUSTOM_OBJECT, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH,
     collectAllProperties,
@@ -35,13 +36,14 @@ import { ARK_CUSTOM_OBJECT, ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH,
 } from '@idlizer/libohos'
 
 interface InterfacesVisitor {
-    getInterfaces(): Map<TargetFile, LanguageWriter>
+    getInterfaces(): Map<TargetFile, [LanguageWriter?, LanguageWriter?]>
     printInterfaces(): void
 }
 
 abstract class DefaultInterfacesVisitor implements InterfacesVisitor {
-    protected readonly interfaces: Map<TargetFile, LanguageWriter> = new Map()
-    getInterfaces(): Map<TargetFile, LanguageWriter> {
+    protected readonly interfaces: Map<TargetFile, [LanguageWriter?, LanguageWriter?]> = new Map()
+
+    getInterfaces(): Map<TargetFile, [LanguageWriter?, LanguageWriter?]> {
         return this.interfaces
     }
     abstract printInterfaces(): void
@@ -170,6 +172,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         const readonlyMod = prop.isReadonly && allowReadonly ? "readonly " : ""
         return [
             ...this.printExtendedAttributes(prop),
+            "/** @memo */",
             indentedBy(`${staticMod}${readonlyMod}${this.printPropNameWithType(prop)};`, 1)
         ]
     }
@@ -181,6 +184,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         // return [] // oh nooo!!!!!!!!
         return [
             ...this.printExtendedAttributes(idl),
+            "/** @memo */",
             indentedBy(`${idl.name}${this.printTypeParameters(idl.typeParameters)}(${this.printParameters(idl.parameters)}): ${this.convertType(idl.returnType)}`, 1)
         ]
     }
@@ -378,19 +382,20 @@ class TSInterfacesVisitor extends DefaultInterfacesVisitor {
             }
         }
         for (const [module, entries] of moduleToEntries) {
-            const writer = createLanguageWriter(this.peerLibrary.language, this.peerLibrary)
+            const importsWriter = createLanguageWriter(this.peerLibrary.language, this.peerLibrary)
             const imports = new ImportsCollector()
             for (const entry of entries) {
                 collectDeclDependencies(this.peerLibrary, entry, imports)
             }
-            this.printImports(writer, module)
-            imports.print(writer, module)
+            this.printImports(importsWriter, module)
+            imports.print(importsWriter, module)
 
+            const writer = createLanguageWriter(this.peerLibrary.language, this.peerLibrary)
             const typeConvertor = new TSDeclConvertor(writer, this.peerLibrary)
             for (const entry of entries) {
                 convertDeclaration(typeConvertor, entry)
             }
-            this.interfaces.set(new TargetFile(this.generateModuleBasename(module)), writer)
+            this.interfaces.set(new TargetFile(this.generateModuleBasename(module)), [importsWriter, writer])
         }
     }
 }
@@ -704,7 +709,7 @@ class JavaInterfacesVisitor extends DefaultInterfacesVisitor {
 
     printInterfaces() {
         const declarationConverter = new JavaDeclarationConvertor(this.peerLibrary, (declaration: JavaDeclaration) => {
-            this.interfaces.set(declaration.targetFile, declaration.writer)
+            this.interfaces.set(declaration.targetFile, [undefined, declaration.writer])
         })
         const syntheticsGenerator = new JavaSyntheticGenerator(this.peerLibrary, (entry) => {
             convertDeclaration(declarationConverter, entry)
@@ -840,19 +845,20 @@ class ArkTSInterfacesVisitor extends DefaultInterfacesVisitor {
         }
 
         for (const [module, entries] of moduleToEntries) {
-            const writer = this.peerLibrary.createLanguageWriter()
+            const importsWriter = this.peerLibrary.createLanguageWriter()
             const imports = new ImportsCollector()
             for (const entry of entries) {
                 collectDeclDependencies(this.peerLibrary, entry, imports)
             }
-            this.printImports(writer, module)
-            imports.print(writer, module)
+            this.printImports(importsWriter, module)
+            imports.print(importsWriter, module)
 
+            const writer = this.peerLibrary.createLanguageWriter()
             const typeConvertor = new ArkTSDeclConvertor(writer, this.peerLibrary)
             for (const entry of entries) {
                 convertDeclaration(typeConvertor, entry)
             }
-            this.interfaces.set(new TargetFile(this.generateModuleBasename(module)), writer)
+            this.interfaces.set(new TargetFile(this.generateModuleBasename(module)), [importsWriter, writer])
         }
     }
 }
@@ -870,7 +876,7 @@ class CJInterfacesVisitor extends DefaultInterfacesVisitor {
 
     printInterfaces() {
         const declarationConverter = new CJDeclarationConvertor(this.peerLibrary, (declaration: CJDeclaration) => {
-            this.interfaces.set(declaration.targetFile, declaration.writer)
+            this.interfaces.set(declaration.targetFile, [undefined, declaration.writer])
         })
         const onEntry = (entry: idl.IDLEntry) => {
             convertDeclaration(declarationConverter, entry)
@@ -1167,7 +1173,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
 }
 
 
-function getVisitor(peerLibrary: PeerLibrary): InterfacesVisitor | undefined {
+export function getInterfaceVisitor(peerLibrary: PeerLibrary): InterfacesVisitor | undefined {
     if (peerLibrary.language == Language.TS) {
         return new TSInterfacesVisitor(peerLibrary)
     }
@@ -1184,16 +1190,18 @@ function getVisitor(peerLibrary: PeerLibrary): InterfacesVisitor | undefined {
 }
 
 export function printInterfaces(peerLibrary: PeerLibrary): Map<TargetFile, string> {
-    const visitor = getVisitor(peerLibrary)
+    const visitor = getInterfaceVisitor(peerLibrary)
     if (!visitor) {
         return new Map()
     }
 
     visitor.printInterfaces()
     const result = new Map<TargetFile, string>()
-    for (const [key, writer] of visitor.getInterfaces()) {
-        if (writer.getOutput().length === 0) continue
-        result.set(key, tsCopyrightAndWarning(writer.getOutput().join('\n')))
+    for (const [key, [importsWriter, writer]] of visitor.getInterfaces()) {
+        if (!writer || writer?.getOutput().length === 0) continue
+        let content = importsWriter?.getOutput().join('\n') ?? ""
+        content = content.concat(writer.getOutput().join('\n'))
+        result.set(key, tsCopyrightAndWarning(content))
     }
     return result
 }

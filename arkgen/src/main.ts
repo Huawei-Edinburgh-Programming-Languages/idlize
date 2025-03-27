@@ -74,6 +74,7 @@ const options = program
     .option('--dts2skoala', 'Convert DTS to skoala definitions')
     .option('--verbose', 'Verbose processing')
     .option('--verify-idl', 'Verify produced IDL')
+    // .option('--common-to-attributes', 'Transform common attributes as IDL attributes')
     .option('--no-common-to-attributes', 'Do not transform common methods as IDL attributes')
     .option('--test-interface <name>', 'Interfaces to test (comma separated)')
     .option('--test-method <name>', 'Methods to test (comma separated)')

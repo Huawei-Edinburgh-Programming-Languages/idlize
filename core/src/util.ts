@@ -517,6 +517,18 @@ export function renameDtsToComponent(fileName: string, language: Language, withF
     return renamed
 }
 
+export function renameDtsToComponentImpl(fileName: string, language: Language, withFileExtension: boolean = true) {
+    const renamed = "Ark"
+        .concat(snakeCaseToCamelCase(fileName))
+        .replace(".d.ts", "")
+        .replace(".idl", "")
+
+    if (withFileExtension) {
+        return renamed.concat(language.extension)
+    }
+    return renamed
+}
+
 export function renameDtsToInterfaces(fileName: string, language: Language, withFileExtension: boolean = true) {
     const renamed = "Ark"
         .concat(snakeCaseToCamelCase(fileName), "Interfaces")

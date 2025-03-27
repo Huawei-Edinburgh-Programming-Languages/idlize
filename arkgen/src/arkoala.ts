@@ -60,7 +60,7 @@ import {
 import { ArkoalaInstall, LibaceInstall } from "./ArkoalaInstall"
 import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
 import { printInterfaces } from "./printers/InterfacePrinter"
-import { printComponents } from "./printers/ComponentsPrinter"
+import { printComponents, printComponentsImpl } from "./printers/ComponentsPrinter"
 import { makeJavaArkComponents } from "./printers/JavaPrinter"
 import { printStsComponents, printStsComponentsDeclarations } from "./printers/StsComponentsPrinter"
 import { arkoalaLayout, ArkTSComponentsLayout } from "./ArkoalaLayout"
@@ -172,6 +172,19 @@ export function generateArkoalaFromIdl(config: {
         })
         arkuiComponentsFiles.push(outComponentFile)
     }
+
+    const componentsImpl = printComponentsImpl(peerLibrary)
+    for (const [targetFile, componentImpl] of componentsImpl) {
+        const outComponentImplFile = arkoala.componentImpl(targetFile)
+        if (config.verbose) console.log(componentImpl)
+        writeFile(outComponentImplFile, componentImpl,{
+            onlyIntegrated: config.onlyIntegrated,
+            integrated: true,
+            message: "producing"
+        })
+        arkuiComponentsFiles.push(outComponentImplFile)
+    }
+
     const builderClasses = printBuilderClasses(peerLibrary, config.dumpSerialized)
     const builderClassFiles: string[] = []
     for (const [targetFile, builderClass] of builderClasses) {
@@ -184,6 +197,7 @@ export function generateArkoalaFromIdl(config: {
         })
     }
 
+    // todo: move interface printing to component printing
     const interfaces = printInterfaces(peerLibrary)
     for (const [targetFile, data] of interfaces) {
         const outComponentFile = arkoala.interface(targetFile)

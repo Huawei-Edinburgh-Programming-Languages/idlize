@@ -61,6 +61,10 @@ export class ArkoalaInstall extends Install {
     component(targetFile: TargetFile): string {
         return path.join(this.langDir(), targetFile.path ?? "", targetFile.name)
     }
+    componentImpl(targetFile: TargetFile): string {
+        const peerDir = this.mkdir(path.join(this.langDir(), this.lang === Language.JAVA || this.lang === Language.CJ ? '.' : 'impl'))
+        return path.join(peerDir, targetFile.path ?? "", targetFile.name)
+    }
     builderClass(targetFile: TargetFile): string {
         return path.join(this.langDir(), targetFile.path ?? "", targetFile.name)
     }
