@@ -1,0 +1,32 @@
+[Entity=Interface, TypeParameters="T"]
+interface CommonConfiguration {
+
+    attribute boolean enabled;
+    attribute [TypeArguments="T"] ContentPsevdoModifier contentModifier;
+
+};
+
+[TypeParameters="T"]
+interface ContentPsevdoModifier {
+
+    void applyContent([TypeArguments="T"] CommonConfiguration builder);
+
+};
+
+[Synthetic]
+callback Callback_Boolean_Void = void (boolean parameter);
+
+[Entity=Interface]
+interface CheckBoxConfiguration: [TypeArguments="CheckBoxConfiguration"] CommonConfiguration {
+
+    attribute String name;
+    attribute boolean selected;
+    attribute Callback_Boolean_Void triggerChange;
+
+};
+
+
+[Entity=Class]
+interface CheckBoxContentModifier : [TypeArguments="CheckBoxConfiguration"] ContentPsevdoModifier {
+    attribute boolean enable;
+};

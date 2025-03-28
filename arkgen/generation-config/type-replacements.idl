@@ -185,3 +185,11 @@ interface ListAttribute: [TypeArguments="ListAttribute"] ScrollableCommonMethod 
 /////////
 
 typedef (TextStyle_styled_string or DecorationStyle or BaselineOffsetStyle or LetterSpacingStyle or TextShadowStyle or GestureStyle or ImageAttachment or ParagraphStyle or LineHeightStyle or UrlStyle or CustomSpan or UserDataSpan or BackgroundColorStyle) StyledStringValue;
+
+
+/* the contentModifier Replacements*/
+
+[Entity=Class]
+interface CheckboxAttribute: [TypeArguments="CheckboxAttribute"] CommonMethod {
+    CheckboxAttribute contentModifier(CheckBoxContentModifier modifier);
+};
