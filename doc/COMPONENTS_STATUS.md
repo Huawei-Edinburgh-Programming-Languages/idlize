@@ -2405,7 +2405,7 @@
 |*RichEditorStyledStringController*| *Class* |Dudkin Sergey| blocked IDL |  | |
 |`setStyledString`| Function |Dudkin Sergey| done |  | |
 |`getStyledString`| Function | Maksimov Nikita | done |  | |
-|`getSelection`| Function |Dudkin Sergey| in progress |  | |
+|`getSelection`| Function |Dudkin Sergey| done |  | |
 |`onContentChanged`| Function | Dudkin Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB944G + |
 |*Scroller*| *Class* | Erokhin Ilya | done |  |  |
 |`scrollTo`| Function | Erokhin Ilya | done |  |  |
