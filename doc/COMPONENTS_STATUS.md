@@ -1736,6 +1736,68 @@
 |`writeBufferToPixels`| Function | Andrey Khudenkikh | in progress |  |  |
 |`getIsEditable`| Function | Andrey Khudenkikh | in progress |  |  |
 |`getIsStrideAlignment`| Function | Andrey Khudenkikh | in progress |  |  |
+|*RenderNode*| *Class* | | | | |
+|`appendChild`| Function | | | | |
+|`insertChildAfter`| Function | | | | |
+|`removeChild`| Function | | | | |
+|`clearChildren`| Function | | | | |
+|`getChild`| Function | | | | |
+|`getFirstChild`| Function | | | | |
+|`getNextSibling`| Function | | | | |
+|`getPreviousSibling`| Function | | | | |
+|`draw`| Function | | | | |
+|`invalidate`| Function | | | | |
+|`dispose`| Function | | | | |
+|`getBackgroundColor`| Function | | | | |
+|`setBackgroundColor`| Function | | | | |
+|`getClipToFrame`| Function | | | | |
+|`setClipToFrame`| Function | | | | |
+|`getOpacity`| Function | | | | |
+|`setOpacity`| Function | | | | |
+|`getSize`| Function | | | | |
+|`setSize`| Function | | | | |
+|`getPosition`| Function | | | | |
+|`setPosition`| Function | | | | |
+|`getFrame`| Function | | | | |
+|`setFrame`| Function | | | | |
+|`getPivot`| Function | | | | |
+|`setPivot`| Function | | | | |
+|`getScale`| Function | | | | |
+|`setScale`| Function | | | | |
+|`getTranslation`| Function | | | | |
+|`setTranslation`| Function | | | | |
+|`getRotation`| Function | | | | |
+|`setRotation`| Function | | | | |
+|`getTransform`| Function | | | | |
+|`setTransform`| Function | | | | |
+|`getShadowColor`| Function | | | | |
+|`setShadowColor`| Function | | | | |
+|`getShadowOffset`| Function | | | | |
+|`setShadowOffset`| Function | | | | |
+|`getLabel`| Function | | | | |
+|`setLabel`| Function | | | | |
+|`getShadowAlpha`| Function | | | | |
+|`setShadowAlpha`| Function | | | | |
+|`getShadowElevation`| Function | | | | |
+|`setShadowElevation`| Function | | | | |
+|`getShadowRadius`| Function | | | | |
+|`setShadowRadius`| Function | | | | |
+|`getBorderStyle`| Function | | | | |
+|`setBorderStyle`| Function | | | | |
+|`getBorderWidth`| Function | | | | |
+|`setBorderWidth`| Function | | | | |
+|`getBorderColor`| Function | | | | |
+|`setBorderColor`| Function | | | | |
+|`getBorderRadius`| Function | | | | |
+|`setBorderRadius`| Function | | | | |
+|`getShapeMask`| Function | | | | |
+|`setShapeMask`| Function | | | | |
+|`getShapeClip`| Function | | | | |
+|`setShapeClip`| Function | | | | |
+|`getMarkNodeGroup`| Function | | | | |
+|`setMarkNodeGroup`| Function | | | | |
+|`getLengthMetricsUnit`| Function | | | | |
+|`setLengthMetricsUnit`| Function | | | | |
 |*Filter*| *Class* | | | | |
 |`pixelStretch`| Function | | | | |
 |`blur`| Function | | | | |
@@ -1980,7 +2042,7 @@
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
 |*FocusAxisEvent*| *Class* | Evstigneev Roman | in progress | | |
-|`setAxisMap`| Function | Evstigneev Roman | in progress | | |
+|`getAxisMap`| Function | Evstigneev Roman | in progress | | |
 |`setAxisMap`| Function | Evstigneev Roman | in progress | | |
 |`getStopPropagation`| Function | Evstigneev Roman | in progress | | feature: API not present |
 |`setStopPropagation`| Function | Evstigneev Roman | done  |  | empty implementation |
