@@ -191,7 +191,7 @@ if (options.dts2peer) {
                 file.entries.forEach(it => {
                     transformMethodsAsync2ReturnPromise(it)
                 })
-                linkParentBack(file)
+                file = linkParentBack(file)
 
                 const peerFile = new PeerFile(file)
 

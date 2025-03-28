@@ -153,7 +153,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         this.file.fileName = this.sourceFile.fileName
         ts.forEachChild(this.sourceFile, (node) => this.visit(node))
         this.file.packageClause = this.detectPackageName(this.sourceFile)
-        idl.linkParentBack(this.file!)
+        this.file = idl.linkParentBack(this.file!)
         return this.file
     }
 
@@ -166,7 +166,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
 
         this.file.entries.unshift(...this.imports)
 
-        idl.linkParentBack(this.file!)
+        this.file = idl.linkParentBack(this.file!)
         idl.linearizeNamespaceMembers(this.file.entries).forEach(it => {
             // idl.transformMethodsReturnPromise2Async(it)
             idl.transformMethodsAsync2ReturnPromise(it)

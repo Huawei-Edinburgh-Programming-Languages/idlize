@@ -277,8 +277,18 @@ export interface IDLCallback extends IDLEntry, IDLSignature {
     returnType: IDLType
 }
 
-export function forEachChild(node: IDLNode, cbEnter: (entry: IDLNode) => void, cbLeave?: (entry: IDLNode) => void): void {
-    cbEnter(node)
+type IDLNodeVisitorVoid = (node:IDLNode) => void
+type IDLNodeVisitorValue = (node:IDLNode) => IDLNode
+
+type IDLNodeVisitor =
+      IDLNodeVisitorVoid
+    | IDLNodeVisitorValue
+
+export function forEachChild(node: IDLNode, cbEnter: IDLNodeVisitor, cbLeave?: (entry: IDLNode) => void): void {
+    const next = cbEnter(node)
+    if (next) {
+        node = next
+    }
     switch (node.kind) {
         case IDLKind.File:
             (node as IDLFile).entries.forEach((value) => forEachChild(value, cbEnter, cbLeave))
@@ -358,6 +368,107 @@ export function forEachChild(node: IDLNode, cbEnter: (entry: IDLNode) => void, c
     }
     if (cbLeave)
         cbLeave(node)
+}
+
+/** Updates tree in place! */
+function updateEachChild(node: IDLNode, op: (node:IDLNode) => IDLNode, cbLeave?: (entry: IDLNode) => void): IDLNode {
+    const old = node
+    node = op(old)
+    if (node.kind !== old.kind) {
+        throw new Error("Kinds must be the same!")
+    }
+    switch (node.kind) {
+        case IDLKind.File: {
+            const concrete = node as IDLFile
+            concrete.entries = concrete.entries.map(it => updateEachChild(it, op, cbLeave) as IDLEntry)
+            break
+        }
+        case IDLKind.Namespace: {
+            const concrete = node as IDLNamespace
+            concrete.members = concrete.members.map((it) => updateEachChild(it, op, cbLeave) as IDLEntry)
+            break
+        }
+        case IDLKind.Interface: {
+            const concrete = node as IDLInterface
+            concrete.inheritance = concrete.inheritance.map((it) => updateEachChild(it, op, cbLeave) as IDLReferenceType)
+            concrete.constructors = concrete.constructors.map((it) => updateEachChild(it, op, cbLeave) as IDLConstructor)
+            concrete.properties = concrete.properties.map((it) => updateEachChild(it, op, cbLeave) as IDLProperty)
+            concrete.methods = concrete.methods.map((it) => updateEachChild(it, op, cbLeave) as IDLMethod)
+            concrete.callables = concrete.callables.map((it) => updateEachChild(it, op, cbLeave) as IDLCallable)
+            break
+        }
+        case IDLKind.Method:
+        case IDLKind.Callable:
+        case IDLKind.Callback:
+        case IDLKind.Constructor: {
+            const concrete = node as IDLSignature
+            concrete.parameters = concrete.parameters.map((it) => updateEachChild(it, op, cbLeave) as IDLParameter)
+            if (concrete.returnType) {
+                concrete.returnType = updateEachChild(concrete.returnType, op, cbLeave) as IDLType
+            }
+            break
+        }
+        case IDLKind.UnionType: {
+            const concrete = node as IDLUnionType
+            concrete.types = concrete.types.map((it) => updateEachChild(it, op, cbLeave) as IDLType)
+            break
+        }
+        case IDLKind.OptionalType: {
+            const concrete = node as IDLOptionalType
+            concrete.type = updateEachChild(concrete.type, op, cbLeave) as IDLType
+            break
+        }
+        case IDLKind.Const: {
+            const concrete = node as IDLConstant
+            concrete.type = updateEachChild(concrete.type, op, cbLeave) as IDLType
+            break
+        }
+        case IDLKind.Enum: {
+            const concrete = node as IDLEnum
+            concrete.elements = concrete.elements.map((it) => updateEachChild(it, op, cbLeave) as IDLEnumMember)
+            break
+        }
+        case IDLKind.Property: {
+            const concrete = node as IDLProperty
+            concrete.type = updateEachChild(concrete.type, op, cbLeave) as IDLType
+            break
+        }
+        case IDLKind.Parameter: {
+            const concrete = node as IDLParameter
+            if (concrete.type)
+                concrete.type = updateEachChild(concrete.type, op, cbLeave) as IDLType
+            break
+        }
+        case IDLKind.Typedef: {
+            const concrete = node as IDLTypedef
+            concrete.type = updateEachChild(concrete.type, op, cbLeave) as IDLType
+            break
+        }
+        case IDLKind.ContainerType: {
+            const concrete = node as IDLContainerType
+            concrete.elementType = concrete.elementType.map(it => updateEachChild(it, op, cbLeave) as IDLType)
+            break
+        }
+        case IDLKind.UnspecifiedGenericType: {
+            const concrete = node as IDLUnspecifiedGenericType
+            concrete.typeArguments = concrete.typeArguments.map(it => updateEachChild(it, op, cbLeave) as IDLType)
+            break
+        }
+        case IDLKind.ReferenceType:
+        case IDLKind.TypeParameterType:
+        case IDLKind.EnumMember:
+        case IDLKind.Import:
+        case IDLKind.PrimitiveType:
+        case IDLKind.Version:
+            break
+        default: {
+            throw new Error(`Unhandled ${node.kind}`)
+        }
+    }
+    if (cbLeave) {
+        cbLeave?.(node)
+    }
+    return node
 }
 
 export function isNamedNode(type: IDLNode): type is IDLNamedNode {
@@ -551,17 +662,31 @@ export function createNamespace(name:string, members?: IDLEntry[], nodeInitializ
     }
 }
 
+function isSpecialNodes(node:IDLNode) {
+    return node === IDLTopType
+        || node === IDLObjectType
+        || isPrimitiveType(node)
+}
+
 export function linkParentBack<T extends IDLNode>(node: T): T {
     const parentStack: IDLNode[] = []
-    forEachChild(node, (node) => {
-        if (isPrimitiveType(node))
-            return
-        if (parentStack.length)
-            node.parent = parentStack[parentStack.length - 1]
+    updateEachChild(node, (node) => {
+        if (isSpecialNodes(node)) {
+            return node
+        }
+        if (parentStack.length) {
+            const top = parentStack[parentStack.length - 1]
+            if (node.parent !== undefined && node.parent !== top) {
+                node = clone(node)
+            }
+            node.parent = top
+        }
         parentStack.push(node)
+        return node
     }, (node) => {
-        if (isPrimitiveType(node))
+        if (isSpecialNodes(node)) {
             return
+        }
         parentStack.pop()
     })
     return node
@@ -620,7 +745,7 @@ export function getNamespaceName(a: IDLEntry): string {
     return getNamespacesPathFor(a).map(it => it.name).join('.')
 }
 
-export type QNPattern = 
+export type QNPattern =
     "package.namespace.name" |
     "namespace.name" |
     "name";
