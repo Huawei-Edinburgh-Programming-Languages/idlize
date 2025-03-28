@@ -1999,9 +1999,9 @@
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
 |`getTextContentRect`| Function | Morozov Sergey, SkrobaGleb | done | |
 |`getTextContentLineCount`| Function | Morozov Sergey | done |  | |
-|`addText`| Function | Morozov Sergey | in progress| | no api in sdk on FB, on UB only | |
-|`deleteText`| Function | Morozov Sergey | in progress| | no api in sdk on FB, on UB only | |
-|`getSelection`| Function | Morozov Sergey | in progress| | no api in sdk on FB, on UB only | |
+|`addText`| Function | Morozov Sergey | in progress| | done on UB, no api in sdk on FB | |
+|`deleteText`| Function | Morozov Sergey | in progress| | done on UB, no api in sdk on FB | |
+|`getSelection`| Function | Morozov Sergey | in progress| | done on UB, no api in sdk on FB | |
 |*ChildrenMainSize*| *Class* | Morozov Sergey | done |  |
 |`splice`| Function | Morozov Sergey | done |  |  |
 |`update`| Function | Morozov Sergey | done |  |  |
@@ -2041,8 +2041,8 @@
 |`close`| Function | Vadim Voronov | done |  |  |
 |`getHeight`| Function | Vadim Voronov | testskipped |  |  |
 |`getWidth`| Function | Vadim Voronov | testskipped |  |  |
-|*ImageData*| *Class* | Morozov Sergey | done | | |
-|`getData`| Function | | | | |
+|*ImageData*| *Class* | Morozov Sergey | in progress | | |
+|`getData`| Function | Morozov Sergey | in progress | | |
 |`getHeight`| Function | Morozov Sergey | done | | |
 |`getWidth`| Function | Morozov Sergey | done | | |
 |*RenderingContextSettings*| *Class* | Vadim Voronov | done | | |
