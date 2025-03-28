@@ -2057,13 +2057,13 @@
 |`getBorderWidth`| Function | | | | |
 |*View*| *Class* | Skroba Gleb | blocked IDL |  | |
 |`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|*TextContentControllerBase*| *Class* | Morozov Sergey | blocked IDL |  | |
+|*TextContentControllerBase*| *Class* | Morozov Sergey | done |  | |
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
-|`getTextContentRect`| Function | Morozov Sergey, SkrobaGleb | done | |
+|`getTextContentRect`| Function | Morozov Sergey, SkrobaGleb | done | test disabled |
 |`getTextContentLineCount`| Function | Morozov Sergey | done |  | |
-|`addText`| Function | Morozov Sergey | in progress| | done on UB, no api in sdk on FB | |
-|`deleteText`| Function | Morozov Sergey | in progress| | done on UB, no api in sdk on FB | |
-|`getSelection`| Function | Morozov Sergey | in progress| | done on UB, no api in sdk on FB | |
+|`addText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
+|`deleteText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
+|`getSelection`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
 |*ChildrenMainSize*| *Class* | Morozov Sergey | done |  |
 |`splice`| Function | Morozov Sergey | done |  |  |
 |`update`| Function | Morozov Sergey | done |  |  |
