@@ -2007,17 +2007,17 @@
 |`update`| Function | Morozov Sergey | done |  |  |
 |`getChildDefaultSize`| Function | Morozov Sergey | done | |
 |`setChildDefaultSize`| Function | Morozov Sergey| done |  | |
-|*UICommonEvent*| *Class* | Andrey Khudenkikh | in progress | | |
+|*UICommonEvent*| *Class* | Andrey Khudenkikh | testskipped | | |
 |`setOnClick`| Function | Andrey Khudenkikh | done | | |
 |`setOnTouch`| Function | Andrey Khudenkikh | done | | |
 |`setOnAppear`| Function | Andrey Khudenkikh | testskipped | | |
 |`setOnDisappear`| Function | Andrey Khudenkikh | done | | |
-|`setOnKeyEvent`| Function | Andrey Khudenkikh | in progress | | |
+|`setOnKeyEvent`| Function | Andrey Khudenkikh | testskipped | | |
 |`setOnFocus`| Function | Andrey Khudenkikh | done | | |
 |`setOnBlur`| Function | Andrey Khudenkikh | done | | |
 |`setOnHover`| Function | Andrey Khudenkikh | done | | |
 |`setOnMouse`| Function |  Andrey Khudenkikh| done | | |
-|`setOnSizeChange`| Function | Andrey Khudenkikh | in progress | | |
+|`setOnSizeChange`| Function | Andrey Khudenkikh | done | | |
 |`setOnVisibleAreaApproximateChange`| Function | Andrey Khudenkikh | testskipped | | |
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
