@@ -2006,7 +2006,7 @@
 |`getY`| Function | Evstigneev Roman | done | | deprecated? |
 |`setData`| Function | Evstigneev Roman | done |  | |
 |`getData`| Function | Evstigneev Roman | done |  | |
-|`getSummary`| Function | Tuzhilkin Ivan | in progress |  | availavle to implement after generation 125|
+|`getSummary`| Function | Skroba Gleb | in progress |  | done on draft 125 generation |
 |`setResult`| Function | Evstigneev Roman | done | | |
 |`getResult`| Function | Evstigneev Roman | done | | |
 |`getPreviewRect`| Function | Evstigneev Roman | done | | |
