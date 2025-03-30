@@ -1,32 +1,18 @@
-[Entity=Interface, TypeParameters="T"]
-interface CommonConfiguration {
-
-    attribute boolean enabled;
-    attribute [TypeArguments="T"] ContentPsevdoModifier contentModifier;
-
+[Entity=Interface]
+interface ContentModifierInternal {
+    attribute i64 contentModifierObjId;
 };
 
-[TypeParameters="T"]
-interface ContentPsevdoModifier {
-
-    void applyContent([TypeArguments="T"] CommonConfiguration builder);
-
+[Entity=Interface, TypeParameters="T"]
+interface CommonConfiguration {
+    attribute boolean enabled;
+    attribute ContentModifierInternal contentModifier;
 };
 
 [Synthetic]
-callback Callback_Boolean_Void = void (boolean parameter);
+callback CheckBoxContentBuilder = pointer (pointer parentNode, CheckBoxConfiguration config);
 
 [Entity=Interface]
-interface CheckBoxConfiguration: [TypeArguments="CheckBoxConfiguration"] CommonConfiguration {
-
-    attribute String name;
-    attribute boolean selected;
-    attribute Callback_Boolean_Void triggerChange;
-
-};
-
-
-[Entity=Class]
-interface CheckBoxContentModifier : [TypeArguments="CheckBoxConfiguration"] ContentPsevdoModifier {
-    attribute boolean enable;
+interface CheckBoxContentModifier : ContentModifierInternal {
+    attribute CheckBoxContentBuilder builder;
 };
