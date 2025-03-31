@@ -1,0 +1,30 @@
+[Entity=Interface]
+interface Resource {
+    [Optional]
+    attribute sequence<String> params;
+};
+
+[Entity=Interface]
+interface FormCallbackInfo {
+    attribute i64 id;
+};
+
+[Entity=Class]
+interface FormComponentAttribute: [TypeArguments="FormComponentAttribute"] CommonMethod {
+    FormComponentAttribute size(SizeOptions value);
+};
+
+[Entity=Class]
+interface RectAttribute: [TypeArguments="RectAttribute"] CommonShapeMethod {
+    RectAttribute radius((number or String or sequence<(number or String)>) value);
+};
+
+[Entity=Class]
+interface NavigationAttribute: [TypeArguments="NavigationAttribute"] CommonMethod {
+    [Deprecated]
+    NavigationAttribute toolBar(CustomBuilder value);
+};
+
+/////////
+
+typedef (TextStyle_styled_string or DecorationStyle or BaselineOffsetStyle or LetterSpacingStyle or TextShadowStyle or GestureStyle or ImageAttachment or ParagraphStyle or LineHeightStyle or UrlStyle or CustomSpan or UserDataSpan or BackgroundColorStyle) StyledStringValue;

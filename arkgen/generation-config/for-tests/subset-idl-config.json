@@ -1,0 +1,5 @@
+{
+    "IDLVisitor": {
+        "TypeReplacementsFilePath": "./generation-config/for-tests/subset-type-replacements.idl"
+    }
+}

@@ -79,17 +79,13 @@ interface FormCallbackInfo {
     attribute i64 id;
 };
 
-[Entity=Interface]
-interface CustomDialogControllerOptions {
-    attribute CustomDialogControllerBuilder builder;
-};
-
 /* parameterTypeReplacements */
 
 [Entity=Class]
 interface AnimatorAttribute: [TypeArguments="AnimatorAttribute"] CommonMethod {
     AnimatorAttribute motion(SpringMotion value);
 };
+
 
 [Entity=Class, TypeParameters="T"]
 interface ScrollableCommonMethod: [TypeArguments="T"] CommonMethod {
@@ -112,12 +108,6 @@ interface CommonMethod {
     T clip(optional boolean clip);
     T mask(optional ProgressMask value);
     T mask(optional ProgressMask mask);
-    T transform(TransformationMatrix value);
-};
-
-[Entity=Class]
-interface View {
-    pointer create(pointer value);
 };
 
 [Entity=Class]
@@ -168,42 +158,18 @@ interface ShapeAttribute: [TypeArguments="ShapeAttribute"] CommonMethod {
 };
 
 [Synthetic]
-callback GridAttribute_onItemDragStart_event_type = CustomBuilder (ItemDragInfo event, number itemIndex);
+callback onItemDragStart_event_type = CustomBuilder (ItemDragInfo event, number itemIndex);
 
 [Entity=Class]
 interface GridAttribute: [TypeArguments="GridAttribute"] ScrollableCommonMethod {
-    GridAttribute onItemDragStart(GridAttribute_onItemDragStart_event_type event);
-    [Deprecated]
-    GridAttribute onScroll(Callback_Number_Number_Void event);
-
-    GridAttribute onWillScroll(optional OnWillScrollCallback handler);
-    GridAttribute onDidScroll(optional OnScrollCallback handler);
+    GridAttribute onItemDragStart(onItemDragStart_event_type event);
 };
-
-[Synthetic]
-callback ListAttribute_onItemDragStart_event_type = CustomBuilder (ItemDragInfo event, number itemIndex);
 
 [Entity=Class]
 interface ListAttribute: [TypeArguments="ListAttribute"] ScrollableCommonMethod {
-    ListAttribute onItemDragStart(ListAttribute_onItemDragStart_event_type event);
+    ListAttribute onItemDragStart(onItemDragStart_event_type event);
     [Deprecated]
     ListAttribute onScroll(Callback_Number_Number_Void event);
-
-    ListAttribute onWillScroll(optional OnWillScrollCallback handler);
-    ListAttribute onDidScroll(optional OnScrollCallback handler);
-};
-
-[Synthetic]
-callback TextTimerAttribute_onTimer_event_type = void (i64 utc, i64 elapsedTime);
-
-[Entity=Class]
-interface TextTimerAttribute: [TypeArguments="TextTimerAttribute"] CommonMethod {
-    TextTimerAttribute onTimer(TextTimerAttribute_onTimer_event_type event);
-};
-
-[Entity=Class, TypeParameters="T"]
-interface Indicator {
-    T bottom(Length value);
 };
 
 [Entity=Class]
@@ -212,41 +178,7 @@ interface NavigationAttribute: [TypeArguments="NavigationAttribute"] CommonMetho
     NavigationAttribute toolBar(CustomBuilder value);
 };
 
-callback Dummy_Callback = void ();
-[Entity=Class, TypeParameters="Args extends Object[]"]
-interface WrappedBuilder {
-    constructor(Dummy_Callback builder);
-    attribute Dummy_Callback builder;
-};
 
-[Entity=Class]
-interface WaterFlowAttribute: [TypeArguments="WaterFlowAttribute"] ScrollableCommonMethod {
-    WaterFlowAttribute onWillScroll(optional OnWillScrollCallback handler);
-    WaterFlowAttribute onDidScroll(optional OnScrollCallback handler);
-};
+/////////
 
 typedef (TextStyle_styled_string or DecorationStyle or BaselineOffsetStyle or LetterSpacingStyle or TextShadowStyle or GestureStyle or ImageAttachment or ParagraphStyle or LineHeightStyle or UrlStyle or CustomSpan or UserDataSpan or BackgroundColorStyle) StyledStringValue;
-
-[Entity=Class]
-interface CanvasRenderer: CanvasPath {
-    [Optional] attribute number globalAlpha;
-    [Optional] attribute String globalCompositeOperation;
-    [Optional] attribute (String or number or CanvasGradient or CanvasPattern) fillStyle;
-    [Optional] attribute (String or number or CanvasGradient or CanvasPattern) strokeStyle;
-    [Optional] attribute String filter;
-    [Optional] attribute boolean imageSmoothingEnabled;
-    [Optional] attribute ImageSmoothingQuality imageSmoothingQuality;
-    [Optional] attribute CanvasLineCap lineCap;
-    [Optional] attribute number lineDashOffset;
-    [Optional] attribute CanvasLineJoin lineJoin;
-    [Optional] attribute number lineWidth;
-    [Optional] attribute number miterLimit;
-    [Optional] attribute number shadowBlur;
-    [Optional] attribute String shadowColor;
-    [Optional] attribute number shadowOffsetX;
-    [Optional] attribute number shadowOffsetY;
-    [Optional] attribute CanvasDirection direction;
-    [Optional] attribute String font;
-    [Optional] attribute CanvasTextAlign textAlign;
-    [Optional] attribute CanvasTextBaseline textBaseline;
-};

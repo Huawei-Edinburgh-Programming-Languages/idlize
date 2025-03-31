@@ -17,7 +17,6 @@ import {
     ConfigTypeInfer,
     D,
     identName,
-    isDefined,
     toIDLFile,
 } from "@idlizer/core";
 import * as idl from '@idlizer/core/idl'
@@ -51,7 +50,8 @@ export interface IDLVisitorConfigurationHelpers {
     TypeReplacementsFile: idl.IDLFile,
     ReplacedDeclarations: Map<string, idl.IDLEntry>
 
-    checkMethodSignatureReplacement(methods: (ts.MethodDeclaration | ts.MethodSignature)[]): [idl.IDLMethod[]?, idl.IDLEntry[]?]
+    pickPredefinedMethods(className: string, filter?: (method: idl.IDLMethod) => boolean): [idl.IDLMethod[]?, idl.IDLEntry[]?]
+    pickPredefinedProperties(className: string): [idl.IDLProperty[]?, idl.IDLEntry[]?]
 }
 
 export function groupOverloadsTS(methods: (ts.MethodDeclaration | ts.MethodSignature)[]): (ts.MethodDeclaration | ts.MethodSignature)[][] {
@@ -114,14 +114,12 @@ export function expandIDLVisitorConfig(data:IDLVisitorConfigurationSchemaType): 
             }
             return []
         },
-        checkMethodSignatureReplacement(overloadedGroup: (ts.MethodDeclaration | ts.MethodSignature)[]): [idl.IDLMethod[]?, idl.IDLEntry[]?] {
-            const rootMethod = overloadedGroup[0]
-            if (!ts.isClassDeclaration(rootMethod.parent) && !ts.isInterfaceDeclaration(rootMethod.parent)) return []
-
-            const classOrInterfaceName = identName(rootMethod.parent.name)!
-            const methodName = identName(rootMethod.name)!
+        pickPredefinedMethods(className: string, filter?: (method: idl.IDLMethod) => boolean): [idl.IDLMethod[]?, idl.IDLEntry[]?] {
             const entries: idl.IDLInterface[] = this.TypeReplacementsFile.entries.filter((it: idl.IDLEntry) => idl.isInterface(it)) as idl.IDLInterface[]
-            const result = entries.find(it => it.name === classOrInterfaceName)?.methods.filter((it: idl.IDLMethod) => it.name == methodName)
+            const result = entries.find(it => it.name === className)?.methods
+                ?.filter(it => !this.DeletedMethods.get(className)?.includes(it.name))
+                .filter(it => filter ? filter(it) : true)
+
             if (!result || !result.length) return []
 
             let syntheticEntries: idl.IDLEntry[] = []
@@ -138,7 +136,22 @@ export function expandIDLVisitorConfig(data:IDLVisitorConfigurationSchemaType): 
                 })
             }
 
-            console.log(`Replaced signature for ${classOrInterfaceName}.${methodName}(...)`)
+            // console.log(`Replaced signature for ${classOrInterfaceName}.${methodName}(...)`)
+            return [result, syntheticEntries.length ? syntheticEntries : undefined]
+        },
+        pickPredefinedProperties(className: string): [idl.IDLProperty[]?, idl.IDLEntry[]?] {
+            const entries: idl.IDLInterface[] = this.TypeReplacementsFile.entries.filter((it: idl.IDLEntry) => idl.isInterface(it)) as idl.IDLInterface[]
+            const result = entries.find(it => it.name === className)?.properties
+            
+            if (!result || !result.length) return []
+
+            let syntheticEntries: idl.IDLEntry[] = []
+            for (let idlProperty of result) {
+                if (idl.isReferenceType(idlProperty.type)) {
+                    const syntheticEntry = findSyntheticDeclaration(this.TypeReplacementsFile, idlProperty.type.name)
+                    if (syntheticEntry) syntheticEntries.push(syntheticEntry)
+                }
+            }
             return [result, syntheticEntries.length ? syntheticEntries : undefined]
         },
         checkTypedefReplacement(typedef: ts.TypeAliasDeclaration): [idl.IDLType?, idl.IDLEntry?] {

@@ -813,32 +813,50 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             .map(it => this.serializeConstructor(it as ts.ConstructSignatureDeclaration, nameSuggestion))
     }
     pickProperties(parentNameSuggestion: string, members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): idl.IDLProperty[] {
-        const properties = members
+        const [predefinedProperties, syntheticEntries] = IDLVisitorConfiguration().pickPredefinedProperties(parentNameSuggestion)
+        const [predefinedMethods, syntheticEntries_] = IDLVisitorConfiguration().pickPredefinedMethods(
+            parentNameSuggestion,
+            (it: idl.IDLMethod) =>
+                this.isMethodUsedAsProperty(members[0]?.parent, parentNameSuggestion, it)
+        )
+        let predefined: idl.IDLProperty[] = []
+        if (predefinedProperties) predefined.push(...predefinedProperties)
+        if (predefinedMethods) predefined.push(...predefinedMethods.map(it => idl.createPropertyFromMethod(it, [{ name: idl.IDLExtendedAttributes.CommonMethod }])))
+
+        let properties = members
             .filter(it => (ts.isPropertySignature(it) || ts.isPropertyDeclaration(it) || this.isCommonMethodUsedAsProperty(it) || this.isMethodUsedAsCallback(it)) && !isPrivate(it.modifiers))
+            .filter(it => !predefined?.find(m => m.name == identName(it.name)))
+            .filter(it => {
+                return !IDLVisitorConfiguration().DeletedMethods.get(parentNameSuggestion)?.includes(identName(it.name) ?? "_unknown")
+            })
             .map(it => this.isCommonMethodUsedAsProperty(it)
                 ? this.serializeCommonMethodProperty(it, nameSuggestion)
                 : this.serializeProperty(it, nameSuggestion))
-            .filter(it => {
-                return !IDLVisitorConfiguration().DeletedMethods.get(parentNameSuggestion)?.includes(it.name)
-            })
+
+        properties = properties.concat(predefined)
+
+        if (syntheticEntries) syntheticEntries.forEach(syntheticEntry => this.addSyntheticType(syntheticEntry))
+        if (syntheticEntries_) syntheticEntries_.forEach(syntheticEntry => this.addSyntheticType(syntheticEntry))
+
         return mergeSetGetProperties(properties)
     }
     pickMethods(parentNameSuggestion: string, members: ReadonlyArray<ts.TypeElement | ts.ClassElement>, nameSuggestion: NameSuggestion): idl.IDLMethod[] {
+        const [predefined, syntheticEntries] = IDLVisitorConfiguration().pickPredefinedMethods(
+            parentNameSuggestion,
+            (it: idl.IDLMethod) =>
+                !this.isMethodUsedAsProperty(members[0]?.parent, parentNameSuggestion, it)
+        )
         const methods = members
             .filter(it => (ts.isMethodSignature(it) || ts.isMethodDeclaration(it) || ts.isIndexSignatureDeclaration(it))
                 && !this.isCommonMethodUsedAsProperty(it) && !this.isMethodUsedAsCallback(it) && !isPrivate(it.modifiers))
+            .filter(it => !predefined?.find(m => m.name == identName(it.name)))
             .filter(it => {
                 return !IDLVisitorConfiguration().DeletedMethods.get(parentNameSuggestion)?.includes(nameOrNull(it.name) ?? "_unknown")
             })
-        const groupedOverloads = groupOverloadsTS(methods as (ts.MethodDeclaration | ts.MethodSignature)[])
-        const serializedMethods = groupedOverloads.flatMap(group => {
-            const [methodReplacement, syntheticEntries] = IDLVisitorConfiguration().checkMethodSignatureReplacement(group)
-            if (!methodReplacement) return group.map(method => this.serializeMethod(method, nameSuggestion))
+            .map(method => this.serializeMethod(method as ts.MethodDeclaration | ts.MethodSignature, nameSuggestion))
 
-            if (syntheticEntries) syntheticEntries.forEach(syntheticEntry => this.addSyntheticType(syntheticEntry))
-            return methodReplacement
-        })
-        return serializedMethods
+        if (syntheticEntries) syntheticEntries.forEach(syntheticEntry => this.addSyntheticType(syntheticEntry))
+        return predefined ? methods.concat(predefined) : methods
     }
     pickCallables(members: ReadonlyArray<ts.TypeElement>, nameSuggestion: NameSuggestion): idl.IDLCallable[] {
         return members.filter(ts.isCallSignatureDeclaration)
@@ -1580,6 +1598,18 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             return isCommonMethodOrSubclass(this.typeChecker, parent)
         }
         return false
+    }
+
+    private isMethodUsedAsProperty(parentDecl: ts.Node | undefined, className: string, member: idl.IDLMethod): boolean {
+        let returnType = idl.isNamedNode(member.returnType) ? member.returnType.name : undefined
+        if (member.parent && idl.isInterface(member.parent)) {
+            member.parent.inheritance
+        }
+        const isCommonAttributeMethod = (this.options.commonToAttributes ?? true) && parentDecl && ts.isClassDeclaration(parentDecl) && isCommonMethodOrSubclass(this.typeChecker, parentDecl)
+        const isCommonMethodUsedAsProperty = isCommonAttributeMethod && member.parameters.length == 1 && (returnType == "T" || returnType == className)
+        const isMethodUsedAsCallback =  generatorConfiguration().forceCallback.includes(className)
+    
+        return isCommonMethodUsedAsProperty || isMethodUsedAsCallback
     }
 
     isCommonMethodUsedAsProperty(member: ts.ClassElement | ts.TypeElement): member is (ts.MethodDeclaration | ts.MethodSignature) {

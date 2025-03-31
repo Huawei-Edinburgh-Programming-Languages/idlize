@@ -970,6 +970,20 @@ export function createProperty(
     }
 }
 
+export function createPropertyFromMethod(method: IDLMethod, additionalAttributes?: IDLExtendedAttribute[]) {
+    return createProperty(
+        method.name,
+        method.parameters[0].type,
+        false,
+        false,
+        isDefined(method.parameters[0].isOptional), 
+        {
+            documentation: method.documentation,
+            extendedAttributes: [...method.extendedAttributes || [], ...additionalAttributes || []]
+        }
+    )
+}
+
 export function createParameter(
     name: string,
     type: IDLType,
