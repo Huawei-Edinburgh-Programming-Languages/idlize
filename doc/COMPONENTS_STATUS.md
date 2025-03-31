@@ -2269,7 +2269,7 @@
 |`setAngle`| Function | Evstigneev Roman, Andrey Khudenkikh | done | | |
 |`getSpeed`| Function | Evstigneev Roman, Andrey Khudenkikh | done | | |
 |`setSpeed`| Function | Evstigneev Roman, Andrey Khudenkikh | done | | |
-|*GestureEvent*| *Class* | Samarin Sergey | blocked IDL |  | |
+|*GestureEvent*| *Class* | Samarin Sergey | done |  | |
 |`getRepeat`| Function | Samarin Sergey | done |  | |
 |`setRepeat`| Function | Samarin Sergey | done |  | |
 |`getFingerList`| Function | Kovalev Sergey | done | | |
