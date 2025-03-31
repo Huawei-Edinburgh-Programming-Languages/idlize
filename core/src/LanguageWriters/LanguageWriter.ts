@@ -253,13 +253,9 @@ export class TsEnumEntityStatement implements LanguageStatement {
     constructor(
         private readonly enumEntity: idl.IDLEnum,
         private readonly isExport: boolean,
-        private readonly printNamespaces: boolean
     ) {}
     write(writer: LanguageWriter): void {
         // writer.print(this.enumEntity.comment)
-        if (this.printNamespaces) {
-            idl.getNamespacesPathFor(this.enumEntity).forEach(it => writer.pushNamespace(it.name))
-        }
         writer.print(`${this.isExport ? "export " : ""}enum ${this.enumEntity.name} {`)
         writer.pushIndent()
         this.enumEntity.elements.forEach((member, index) => {
@@ -276,9 +272,6 @@ export class TsEnumEntityStatement implements LanguageStatement {
         })
         writer.popIndent()
         writer.print(`}`)
-        if (this.printNamespaces) {
-            idl.getNamespacesPathFor(this.enumEntity).forEach(it => writer.popNamespace())
-        }
     }
 
     private maybeQuoted(value: string|number): string {
@@ -726,8 +719,8 @@ export abstract class LanguageWriter {
     makeIsTypeCall(value: string, decl: idl.IDLInterface): LanguageExpression {
         return this.makeString(`is${decl.name}(${value})`)
     }
-    makeEnumEntity(enumEntity: idl.IDLEnum, isExport: boolean, printNamespaces: boolean = true): LanguageStatement {
-        return new TsEnumEntityStatement(enumEntity, isExport, printNamespaces)
+    makeEnumEntity(enumEntity: idl.IDLEnum, isExport: boolean): LanguageStatement {
+        return new TsEnumEntityStatement(enumEntity, isExport)
     }
     makeFieldModifiersList(modifiers: FieldModifier[] | undefined, customFieldFilter?: (field :FieldModifier) => boolean) : string {
         let allowedModifiers = this.supportedFieldModifiers

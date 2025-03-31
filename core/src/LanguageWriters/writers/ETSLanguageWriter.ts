@@ -86,7 +86,6 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
     constructor(
         private readonly enumEntity: IDLEnum,
         private readonly isExport: boolean,
-        private readonly useNamespaces: boolean
     ) {}
 
     write(writer: LanguageWriter) {
@@ -127,14 +126,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
                 return res
             })
 
-        const nss = idl.getNamespacesPathFor(this.enumEntity)
-        if (this.useNamespaces) {
-            nss.forEach(it => writer.pushNamespace(it.name))
-        }
         writer.writeEnum(enumName, members)
-        if (this.useNamespaces) {
-            nss.forEach(() => writer.popNamespace())
-        }
     }
 }
 
@@ -263,8 +255,8 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return makeInterfaceTypeCheckerCall(value, decl.name,
             decl.properties.map(it => it.name), new Set(), this)
     }
-    makeEnumEntity(enumEntity: IDLEnum, isExport: boolean, useNamespaces:boolean = true): LanguageStatement {
-        return new ArkTSEnumEntityStatement(enumEntity, isExport, useNamespaces)
+    makeEnumEntity(enumEntity: IDLEnum, isExport: boolean): LanguageStatement {
+        return new ArkTSEnumEntityStatement(enumEntity, isExport)
     }
     getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
         return super.getObjectAccessor(convertor, value, args)

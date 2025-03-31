@@ -267,7 +267,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         this.writer.print(`export declare const ${node.name} = ${node.value};`)
     }
     convertEnum(node: idl.IDLEnum): void {
-        this.writer.writeStatement(this.writer.makeEnumEntity(node, true, false))
+        this.writer.writeStatement(this.writer.makeEnumEntity(node, true))
     }
     protected extendsClause(node: idl.IDLInterface): string {
         return ''
