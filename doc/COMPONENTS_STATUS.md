@@ -202,7 +202,7 @@
 |`onDragLeave`| Function | Lobah Mikhail, Evstigneev Roman | done |  | EVENT |
 |`onDrop`| Function | Lobah Mikhail, Evstigneev Roman | done |  | EVENT |
 |`onDragEnd`| Function | Lobah Mikhail, Evstigneev Roman | done |  | EVENT |
-|`allowDrop`| Function | Lobah Mikhail | blocked IDL | | Incorrect C-API code that corresponds to UniformDataType https://gitee.com/nikolay-igotti/idlize/issues/IBVX2X|
+|`allowDrop`| Function | Lobah Mikhail | devdone | | Incorrect C-API code that corresponds to UniformDataType https://gitee.com/nikolay-igotti/idlize/issues/IBVX2X|
 |`draggable`| Function | Lobah Mikhail | done |  | |
 |`dragPreview`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder |
 |`onPreDrag`| Function | Lobah Mikhail | done |  | |
@@ -1603,16 +1603,16 @@
 |*AnimatedDrawableDescriptor*| *Class* | | | | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | done |  | |
 |`drawRect`| Function | Dudkin Sergey | done |  | |
-|*ColorMetrics*| *Class* | Lobah Mikhail| in progress| | |
-|`numeric`| Function | Lobah Mikhail| in progress| | |
-|`rgba`| Function | Lobah Mikhail| in progress| | |
-|`resourceColor`| Function | Lobah Mikhail| in progress| | |
-|`blendColor`| Function | Lobah Mikhail| in progress| | |
-|`getColor`| Function | Lobah Mikhail| in progress| | |
-|`getRed`| Function | Lobah Mikhail| in progress| | |
-|`getGreen`| Function | Lobah Mikhail| in progress| | |
-|`getBlue`| Function | Lobah Mikhail| in progress| | |
-|`getAlpha`| Function | Lobah Mikhail| in progress| | |
+|*ColorMetrics*| *Class* | Lobah Mikhail| done| | |
+|`numeric`| Function | Lobah Mikhail| done| | |
+|`rgba`| Function | Lobah Mikhail| done| | |
+|`resourceColor`| Function | Lobah Mikhail| done| | |
+|`blendColor`| Function | Lobah Mikhail| done| | |
+|`getColor`| Function | Lobah Mikhail| done| | |
+|`getRed`| Function | Lobah Mikhail| done| | |
+|`getGreen`| Function | Lobah Mikhail| done| | |
+|`getBlue`| Function | Lobah Mikhail| done| | |
+|`getAlpha`| Function | Lobah Mikhail| done| | |
 |*WebviewController*| *Class* | Politov Mikhail | done | | |
 |`initializeWebEngine`| Function | Politov Mikhail | done | | |
 |`loadUrl`| Function | Politov Mikhail | done | | |
