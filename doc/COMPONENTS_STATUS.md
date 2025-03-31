@@ -36,22 +36,22 @@
 |`enableHapticFeedback`| Function |Ekaterina Stepanova| done |  |  |
 |`alignStyle`| Function |Ekaterina Stepanova| done |  |  |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
-|*Animator*| *Component* | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`setAnimatorOptions`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`state`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`duration`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`curve`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`delay`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`fillMode`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`iterations`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`playMode`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`motion`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`onStart`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`onPause`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`onRepeat`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`onCancel`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`onFinish`| Function | Skroba Gleb | managed side |  |deprecated since 12 https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`onFrame`| Function | Skroba Gleb | managed side |  |  | deprecated since 12 https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|*Animator*| *Component* | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`setAnimatorOptions`| Function | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`state`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`duration`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`curve`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`delay`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`fillMode`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`iterations`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`playMode`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`motion`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`onStart`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`onPause`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`onRepeat`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`onCancel`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`onFinish`| Function | Skroba Gleb | managed side |  | deprecated since 12 https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`onFrame`| Function | Skroba Gleb | managed side |  | deprecated since 12 https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
 |*Badge*| *Component* |Vadim Voronov | done |  |  |
 |`setBadgeOptions`| Function |Vadim Voronov | done |  | |
 |*Blank*| *Component* | Skroba Gleb | done |  |  |
