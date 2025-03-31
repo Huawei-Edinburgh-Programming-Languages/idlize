@@ -893,7 +893,7 @@
 |`inputFilter`|Function| Evstigneev Roman | in progress |  |  |
 |`customKeyboard`|Function| Lobah Mikhail | done |  |   |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
-|*SecurityComponentMethod*| *Component* | Samarin Sergey| in progress |  |  |
+|*SecurityComponentMethod*| *Component* | Samarin Sergey| done |  |  |
 |`iconSize`| Function |Samarin Sergey| done |  |  |
 |`layoutDirection`| Function |Samarin Sergey| done |  |  |
 |`position`| Function |Samarin Sergey| done |  |  |
