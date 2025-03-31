@@ -1320,8 +1320,8 @@
 |`onAccept`| Function |Ekaterina Stepanova | done |  |deprecated  |
 |`onCancel`| Function |Ekaterina Stepanova | done |  |deprecated  |
 |`onChange`| Function | Tuzhilkin Ivan| done |  |  |
-|`onScrollStop`| Function | | | | |
-|`onEnterSelectedArea`| Function | | | | |
+|`onScrollStop`| Function | Kovalev Sergey | in progress | | |
+|`onEnterSelectedArea`| Function | Kovalev Sergey | in progress | | |
 |`selectedIndex`| Function |Ekaterina Stepanova | done |  |  |
 |`divider`| Function |Ekaterina Stepanova | done |  |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |  |
