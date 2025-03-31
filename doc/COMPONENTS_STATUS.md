@@ -909,7 +909,7 @@
 |`borderStyle`| Function |Samarin Sergey| done |  |  |
 |`borderWidth`| Function |Samarin Sergey| done |  |  |
 |`borderColor`| Function |Samarin Sergey| done |  |  |
-|`borderRadius`| Function |Samarin Sergey| devdone |  | API is present on Upstream only |
+|`borderRadius`| Function |Samarin Sergey| done |  | API is present on Upstream only |
 |`padding`| Function |Samarin Sergey| done |  |  |
 |`textIconSpace`| Function |Samarin Sergey| done |  |  |
 |`key`| Function |Samarin Sergey| done |  |  |
@@ -917,17 +917,17 @@
 |`height`| Function |Samarin Sergey| done |  |  |
 |`size`| Function |Samarin Sergey| done |  |  |
 |`constraintSize`| Function |Samarin Sergey| done |  |  |
-|`align`| Function | Samarin Sergey | devdone |  | API is present on Upstream only |
-|`alignRules`| Function | Samarin Sergey | devdone |  | API is present on Upstream only |
-|`id`| Function | Samarin Sergey | devdone |  | API is present on Upstream only |
-|`minFontScale`| Function | Samarin Sergey | devdone |  | API is present on Upstream only |
-|`maxFontScale`| Function | Samarin Sergey | devdone |  | API is present on Upstream only |
-|`maxLines`| Function | Samarin Sergey | devdone |  | API is present on Upstream only |
-|`minFontSize`| Function | Samarin Sergey | devdone |  | API is present on Upstream only |
-|`maxFontSize`| Function | Samarin Sergey | devdone |  | API is present on Upstream only |
-|`heightAdaptivePolicy`| Function | Samarin Sergey | devdone |  | API is present on Upstream only |
-|`enabled`| Function | Samarin Sergey | devdone |  | API is present on Upstream only |
-|`chainMode`| Function | Samarin Sergey | devdone |  | API is present on Upstream only |
+|`align`| Function | Samarin Sergey | done |  | API is present on Upstream only |
+|`alignRules`| Function | Samarin Sergey | done |  | API is present on Upstream only |
+|`id`| Function | Samarin Sergey | done |  | API is present on Upstream only |
+|`minFontScale`| Function | Samarin Sergey | done |  | API is present on Upstream only |
+|`maxFontScale`| Function | Samarin Sergey | done |  | API is present on Upstream only |
+|`maxLines`| Function | Samarin Sergey | done |  | API is present on Upstream only |
+|`minFontSize`| Function | Samarin Sergey | done |  | API is present on Upstream only |
+|`maxFontSize`| Function | Samarin Sergey | done |  | API is present on Upstream only |
+|`heightAdaptivePolicy`| Function | Samarin Sergey | done |  | API is present on Upstream only |
+|`enabled`| Function | Samarin Sergey | done |  | API is present on Upstream only |
+|`chainMode`| Function | Samarin Sergey | done |  | API is present on Upstream only |
 |*Select*| *Component* | Samarin Sergey | blocked IDL |  |  |
 |`setSelectOptions` | Function | Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
 |`selected` | Function | Samarin Sergey | done |  |  |
