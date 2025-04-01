@@ -1,10 +1,10 @@
 import * as idl from "@idlizer/core"
 import { Language, LayoutNodeRole, PeerClass, PeerLibrary } from "@idlizer/core";
-import { collapseSameNamedMethods, collectComponents, componentToPeerClass, ImportsCollector, PrinterResult, readLangTemplate } from "@idlizer/libohos";
+import { collapseSameNamedMethods, collectComponents, componentToPeerClass, ImportsCollector, PrinterResult, readLangTemplate, OverloadsPrinter, peerGeneratorConfiguration, groupOverloads } from "@idlizer/libohos";
 import { ArkoalaPeerLibrary } from "../ArkoalaPeerLibrary";
 import { generateArkComponentName } from "./ComponentsPrinter";
 
-function printStsComponent(library: PeerLibrary, peer: PeerClass, isDeclaration: boolean): PrinterResult {
+function printETSComponent(library: PeerLibrary, peer: PeerClass, isDeclaration: boolean): PrinterResult{
     const writer = library.createLanguageWriter(Language.ARKTS)
     const component = collectComponents(library).find(it => it.name === peer.componentName)!
     const callableMethods = peer.methods.filter(it => it.isCallSignature).map(it => it.method)
@@ -13,7 +13,7 @@ function printStsComponent(library: PeerLibrary, peer: PeerClass, isDeclaration:
     const mappedCallableParamsValues = callableMethod?.signature.args.map((_, index) => callableMethod.signature.argName(index))
     const componentClassName = generateArkComponentName(peer.componentName)
     const peerClassName = componentToPeerClass(peer.componentName)
-    writer.writeLines(readLangTemplate(isDeclaration ? "arkoala_component.d.sts" : "arkoala_component.sts", Language.ARKTS)
+    writer.writeLines(readLangTemplate(isDeclaration ? "ets_component_decl.d.ets" : "ets_component_impl.ets", Language.ARKTS)
         .replaceAll("%COMPONENT_NAME%", component.name)
         .replaceAll("%FUNCTION_PARAMETERS%", mappedCallableParams?.map(it => `${it}, `).join("") ?? "")
         .replaceAll("%COMPONENT_CLASS_NAME%", componentClassName)
@@ -26,17 +26,12 @@ function printStsComponent(library: PeerLibrary, peer: PeerClass, isDeclaration:
         },
         collector: new ImportsCollector(),
         content: writer,
+        weight: 99
     }
 }
 
-export function printStsComponents(library: PeerLibrary): PrinterResult[] {
+export function printETSDeclaration(library: PeerLibrary): PrinterResult[] {
     return library.files.flatMap<PrinterResult>(file =>
-        file.peersToGenerate.flatMap<PrinterResult>(peer =>
-            printStsComponent(library, peer, false)))
-}
-
-export function printStsComponentsDeclarations(library: PeerLibrary): PrinterResult[] {
-    return library.files.flatMap<PrinterResult>(file =>
-        file.peersToGenerate.flatMap<PrinterResult>(peer =>
-            printStsComponent(library, peer, true)))
+        file.peersToGenerate.filter(it => it.originalInterfaceName).flatMap<PrinterResult>(peer =>
+            printETSComponent(library, peer, true)))
 }

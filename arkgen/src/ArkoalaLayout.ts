@@ -50,83 +50,49 @@ export class TsLayout extends CommonLayoutBase {
         ["CallbackTransformer", "peers/CallbackTransformer"],
     ])
 
-    protected selectInterface(node: idl.IDLEntry): string {
-        if (idl.isHandwritten(node)) {
-            return HandwrittenModule(this.library.language)
-        }
-        const ns = idl.getNamespacesPathFor(node)
-        if (ns.length) {
-            return `${this.prefix}${idl.capitalize(ns[0].name)}Namespace`
-        }
-        if (idl.isSyntheticEntry(node)) {
-            return SyntheticModule
-        }
-        if (idl.isInterface(node) && !isComponentDeclaration(this.library, node)) {
-            if (idl.isBuilderClass(node)) {
-                return `${this.prefix}${toFileName(node.name)}Builder`
-            }
-            if (isMaterialized(node, this.library)) {
-                const name = node.name.endsWith('Internal') ? node.name.substring(0, node.name.length - 8) : node.name
-                return `${this.prefix}${toFileName(name)}Materialized`
-            }
-        }
-        let pureFileName = node.fileName
-            ?.replaceAll('.d.ts', '')
-            ?.replaceAll('.idl', '')
-        if (pureFileName) {
-            pureFileName = path.basename(pureFileName)
-        }
-        const entryName = pureFileName ?? node.name
-        return `${this.prefix}${toFileName(entryName)}Interfaces`
-    }
-
-    protected selectPeer(node:idl.IDLEntry): string {
-        if (idl.isInterface(node)) {
-            if (isComponentDeclaration(this.library, node)) {
-                return `peers/${this.prefix}${toFileName(node.name)}Peer`
-            }
-        }
-        return `peers/${node.name}`
-    }
-
-    protected selectGlobal(node:idl.IDLEntry): string {
-        const ns = idl.getNamespacesPathFor(node)
-        if (ns.length) {
-            return `${this.prefix}${idl.capitalize(ns[0].name)}Namespace`
-        }
-        return `GlobalScope`
-    }
-
-    protected selectComponent(node:idl.IDLEntry, hint:idl.LayoutTargetDescriptionHint = 'component.implementation'): string {
-        const file = idl.getFileFor(node)
-        if (!file || !file.fileName) {
-            return `Ark${node.name}`
-        }
-        const pureFileName = file.fileName
-            .replaceAll('.d.ts', '')
-            .replaceAll('.idl', '')
-        return `Ark${path.basename(pureFileName).split(/_|\./g).map(it => idl.capitalize(it)).join('')}`
-    }
-
-    /////
-
     resolve(target: idl.LayoutTargetDescription): string {
         if (this.tsInternalPaths.has(target.node.name))
             return this.tsInternalPaths.get(target.node.name)!
         if (target.node.name === NativeModule.Generated.name)
             return `peers/${NativeModule.Generated.name}`
-        switch (target.role) {
-            case LayoutNodeRole.INTERFACE: return this.selectInterface(target.node)
-            case LayoutNodeRole.PEER: return this.selectPeer(target.node)
-            case LayoutNodeRole.GLOBAL: return this.selectGlobal(target.node)
-            case LayoutNodeRole.COMPONENT: return this.selectComponent(target.node, target.hint)
+        if (idl.isHandwritten(target.node)) {
+            return HandwrittenModule(this.library.language)
         }
+        // if (idl.isSyntheticEntry(target.node)) {
+        //     return SyntheticModule
+        // }
+        if (idl.isInterface(target.node) && !isComponentDeclaration(this.library, target.node)) {
+            // TODO currently rollup can wrongly order some declarations if all of them will be placed in common
+            // files (button.ts, text_input.ts). So, materialized/builders were moved to ArkSmthMaterialized to resolve
+            // that problem. That is just a hack and ideal solution will be to fix dependencies graph cycles
+            if (idl.isBuilderClass(target.node)) {
+                return `${this.prefix}${toFileName(target.node.name)}Builder`
+            }
+            if (isMaterialized(target.node, this.library)) {
+                const name = target.node.name.endsWith('Internal') ? target.node.name.substring(0, target.node.name.length - 8) : target.node.name
+                return `${this.prefix}${toFileName(name)}Materialized`
+            }
+        }
+        let pureFileName = target.node.fileName
+            ?.replaceAll('.d.ts', '')
+            ?.replaceAll('.idl', '')
+        if (pureFileName) {
+            pureFileName = path.basename(pureFileName)
+        }
+        const entryName = pureFileName ?? target.node.name
+        return entryName
     }
 }
 
-export class ArkTsLayout extends TsLayout {
+class ArkTsLayout extends CommonLayoutBase {
     protected arkTSInternalPaths = new Map<string, string>([
-        ["TypeChecker", "#components"]
+        ["TypeChecker", "#components"],
+        ["Serializer", "peers/Serializer"],
+        ["Deserializer", "peers/Deserializer"],
+        ["CallbackKind", "peers/CallbackKind"],
+        ["deserializeAndCallCallback", "peers/CallbackDeserializeCall"],
+        ["checkArkoalaCallbacks", "peers/CallbacksChecker"],
+        ["CallbackTransformer", "peers/CallbackTransformer"],
     ])
     // replace point symbol inside names, but not when it is a part of path
     readonly replacePattern = /(\.)[^\.\/]/g
@@ -135,7 +101,21 @@ export class ArkTsLayout extends TsLayout {
             return `#components`
         if (this.arkTSInternalPaths.has(target.node.name))
             return this.arkTSInternalPaths.get(target.node.name)!
-        return super.resolve(target)
+
+        if (idl.isSyntheticEntry(target.node)) {
+            return SyntheticModule
+        }
+        if (idl.isHandwritten(target.node)) {
+            return HandwrittenModule(this.library.language)
+        }
+        let pureFileName = target.node.fileName
+            ?.replaceAll('.d.ts', '')
+            ?.replaceAll('.idl', '')
+        if (pureFileName) {
+            pureFileName = path.basename(pureFileName)
+        }
+        const entryName = pureFileName ?? target.node.name
+        return entryName
     }
 }
 

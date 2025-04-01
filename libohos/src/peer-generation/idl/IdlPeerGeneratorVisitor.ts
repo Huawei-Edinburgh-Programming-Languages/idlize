@@ -428,7 +428,7 @@ export class IdlPeerProcessor {
     }
 
     process(): void {
-        initCustomBuilderClasses()
+        // initCustomBuilderClasses()
         const peerGenerator = new PeersGenerator(this.library)
         for (const component of collectComponents(this.library))
             peerGenerator.generatePeer(component)
@@ -549,43 +549,43 @@ export function convertTypeToFeature(library: PeerLibrary, type: idl.IDLType): I
     return undefined
 }
 
-function initCustomBuilderClasses() {
-    function builderMethod(name: string, type: idl.IDLType): Method {
-        return new Method(name, new NamedMethodSignature(idl.IDLThisType, [type], ["value"]))
-    }
-    const decl = idl.createInterface(
-        "Indicator",
-        idl.IDLInterfaceSubkind.Class,
-        [],
-        [idl.createConstructor([], undefined)],
-        undefined,
-        undefined,
-        [
-            ...["left", "top", "right", "bottom"].map(it => idl.createMethod(it,
-                [idl.createParameter("value", idl.createReferenceType("Length"))],
-                idl.IDLThisType,
-            )),
-            ...["start", "end"].map(it => idl.createMethod(it,
-                [idl.createParameter(`value`, idl.createReferenceType("LengthMetrics"))],
-                idl.IDLThisType,
-            )),
-            idl.createMethod(`dot`, [], idl.createReferenceType(`DotIndicator`)),
-            idl.createMethod(`digit`, [], idl.createReferenceType(`DigitIndicator`)),
-        ]
-    )
-    CUSTOM_BUILDER_CLASSES.push(
-        new BuilderClass(decl, "Indicator", ["T"], false, undefined,
-            [], // fields
-            [new Method("constructor", new MethodSignature(idl.IDLVoidType, []))],
-            [
-                ...["left", "top", "right", "bottom"].map(it => builderMethod(it, idl.createReferenceType("Length"))),
-                ...["start", "end"].map(it => builderMethod(it, idl.createReferenceType("LengthMetrics"))),
-                new Method("dot", new MethodSignature(idl.createReferenceType("DotIndicator"), []), [MethodModifier.STATIC]),
-                new Method("digit", new MethodSignature(idl.createReferenceType("DigitIndicator"), []), [MethodModifier.STATIC]),
-            ]
-        )
-    )
-}
+// function initCustomBuilderClasses(library: PeerLibrary) {
+//     function builderMethod(name: string, type: idl.IDLType): Method {
+//         return new Method(name, new NamedMethodSignature(idl.IDLThisType, [type], ["value"]))
+//     }
+//     const decl = idl.createInterface(
+//         "Indicator",
+//         idl.IDLInterfaceSubkind.Class,
+//         [],
+//         [idl.createConstructor([], undefined)],
+//         undefined,
+//         undefined,
+//         [
+//             ...["left", "top", "right", "bottom"].map(it => idl.createMethod(it,
+//                 [idl.createParameter("value", idl.createReferenceType("Length"))],
+//                 idl.IDLThisType,
+//             )),
+//             ...["start", "end"].map(it => idl.createMethod(it,
+//                 [idl.createParameter(`value`, idl.createReferenceType("LengthMetrics"))],
+//                 idl.IDLThisType,
+//             )),
+//             idl.createMethod(`dot`, [], idl.createReferenceType(`DotIndicator`)),
+//             idl.createMethod(`digit`, [], idl.createReferenceType(`DigitIndicator`)),
+//         ]
+//     )
+//     CUSTOM_BUILDER_CLASSES.push(
+//         new BuilderClass(decl, "Indicator", ["T"], false, undefined,
+//             [], // fields
+//             [new Method("constructor", new MethodSignature(idl.IDLVoidType, []))],
+//             [
+//                 ...["left", "top", "right", "bottom"].map(it => builderMethod(it, idl.createReferenceType("Length"))),
+//                 ...["start", "end"].map(it => builderMethod(it, idl.createReferenceType("LengthMetrics"))),
+//                 new Method("dot", new MethodSignature(idl.createReferenceType("DotIndicator"), []), [MethodModifier.STATIC]),
+//                 new Method("digit", new MethodSignature(idl.createReferenceType("DigitIndicator"), []), [MethodModifier.STATIC]),
+//             ]
+//         )
+//     )
+// }
 
 function getMethodModifiers(method: idl.IDLMethod | idl.IDLConstructor | idl.IDLCallable): MethodModifier[] {
     const modifiers = []

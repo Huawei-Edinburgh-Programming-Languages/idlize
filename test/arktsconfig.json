@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "package": "@xml",
+        "baseUrl": ".",
+        "outDir": "out",
+        "paths": {
+            "std": [
+                "/home/leslie/test/idlize/external/incremental/tools/panda/node_modules/@panda/sdk/ets/stdlib/std"
+            ],
+            "escompat": [
+                "/home/leslie/test/idlize/external/incremental/tools/panda/node_modules/@panda/sdk/ets/stdlib/escompat"
+            ]
+        }
+    },
+    "include": ["*.ets"]
+}
