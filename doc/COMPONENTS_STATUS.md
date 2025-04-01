@@ -1320,13 +1320,13 @@
 |`onAccept`| Function |Ekaterina Stepanova | done |  |deprecated  |
 |`onCancel`| Function |Ekaterina Stepanova | done |  |deprecated  |
 |`onChange`| Function | Tuzhilkin Ivan| done |  |  |
-|`onScrollStop`| Function | Kovalev Sergey | done | | API is present on Upstream only |
+|`onScrollStop`| Function | Kovalev Sergey | in progress | | API is present on Upstream only |
 |`onEnterSelectedArea`| Function | done | in progress | | API is present on Upstream only |
 |`selectedIndex`| Function |Ekaterina Stepanova | done |  |  |
 |`divider`| Function |Ekaterina Stepanova | done |  |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |  |
-|`enableHapticFeedback`| Function | Kovalev Sergey | in progress | | |
-|`digitalCrownSensitivity`| Function | Kovalev Sergey | in progress | | |
+|`enableHapticFeedback`| Function | Kovalev Sergey | done | |  API is present on Upstream only |
+|`digitalCrownSensitivity`| Function | Kovalev Sergey | done | |  API is present on Upstream only |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
 |*TextTimer*| *Component* |Ekaterina Stepanova| blocked IDL |  |  |
