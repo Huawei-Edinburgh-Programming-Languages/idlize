@@ -1315,13 +1315,13 @@
 |`disappearTextStyle`|Function |Ekaterina Stepanova | done |  |  |
 |`textStyle`| Function |Ekaterina Stepanova | done |  |  |
 |`selectedTextStyle`| Function | Ekaterina Stepanova| done |  |  |
-|`disableTextStyleAnimation`| Function | Kovalev Sergey | in progress | | |
-|`defaultTextStyle`| Function | Kovalev Sergey | in progress | | |
+|`disableTextStyleAnimation`| Function | Kovalev Sergey | done |Upst | API is present on Upstream only |
+|`defaultTextStyle`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`onAccept`| Function |Ekaterina Stepanova | done |  |deprecated  |
 |`onCancel`| Function |Ekaterina Stepanova | done |  |deprecated  |
 |`onChange`| Function | Tuzhilkin Ivan| done |  |  |
-|`onScrollStop`| Function | Kovalev Sergey | in progress | | |
-|`onEnterSelectedArea`| Function | Kovalev Sergey | in progress | | |
+|`onScrollStop`| Function | Kovalev Sergey | done | | API is present on Upstream only |
+|`onEnterSelectedArea`| Function | done | in progress | | API is present on Upstream only |
 |`selectedIndex`| Function |Ekaterina Stepanova | done |  |  |
 |`divider`| Function |Ekaterina Stepanova | done |  |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |  |
