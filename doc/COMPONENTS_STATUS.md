@@ -2229,7 +2229,7 @@
 |`setCursor`| Function | Erokhin Ilya | done |  | |
 |`restoreDefault`| Function | Erokhin Ilya | done |  | |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`close`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBB84T |
+|`close`| Function | Tuzhilkin Ivan | in progress |  | was blocked https://gitee.com/nikolay-igotti/idlize/issues/IBB84T |
 |*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBECPG & https://gitee.com/nikolay-igotti/idlize/issues/IBGU8S + |
 |`open`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
 |`close`| Function | Maksimov Nikita | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
