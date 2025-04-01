@@ -1349,10 +1349,10 @@
 |`selectedTextStyle`| Function |Ekaterina Stepanova| done |  |  |
 |`dateTimeOptions`| Function |Ekaterina Stepanova| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onChange`| Function |Ekaterina Stepanova| done |  |  |
-|`onEnterSelectedArea`| Function | | | | |
+|`onEnterSelectedArea`| Function | Kovalev Sergey | | | |
 |`enableHapticFeedback`| Function |Ekaterina Stepanova| done |  |  |
-|`digitalCrownSensitivity`| Function | | | | |
-|`enableCascade`| Function | | | | |
+|`digitalCrownSensitivity`| Function | Kovalev Sergey | | | |
+|`enableCascade`| Function | Kovalev Sergey | | | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*Toggle*| *Component* |Morozov Sergey |blocked IDL |  |
 |`setToggleOptions`| Function |Morozov Sergey | done | unblocked since AceEngine won't fix it |
