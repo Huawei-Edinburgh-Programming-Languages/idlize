@@ -105,6 +105,7 @@ export interface IDLNode {
 export interface IDLFile extends IDLNode{
     packageClause: string[],
     entries: IDLEntry[],
+    text?: string,
     fileName?: string,
 }
 

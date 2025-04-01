@@ -29,6 +29,17 @@ import * as lib from "../library"
 import { isDefined, stringOrNone, warn } from "../util"
 import { generateSyntheticUnionName } from "../peer-generation/idl/common"
 
+export type WebIDLTokenCollection = Record<string, webidl2.Token | null | undefined>
+export type IDLTokenInfoMap = Map<unknown, WebIDLTokenCollection>
+
+function getTokens(node:webidl2.AbstractBase): WebIDLTokenCollection {
+    return (node as any).tokens
+}
+function withInfo<T>(info:IDLTokenInfoMap, from:webidl2.AbstractBase, result:T): T {
+    info.set(result, getTokens(from))
+    return result
+}
+
 const syntheticTypes = new Map<string, idl.IDLEntry>()
 
 export function addSyntheticType(name: string, type: idl.IDLEntry) {
@@ -41,46 +52,46 @@ export function resolveSyntheticType(type: idl.IDLReferenceType): idl.IDLEntry |
     return syntheticTypes.get(type.name)
 }
 
-function toIDLNode(file: string, node: webidl2.IDLRootType): idl.IDLEntry {
-    return toIDLNodeForward(file, node)
+function toIDLNode(file: string, node: webidl2.IDLRootType, info:IDLTokenInfoMap): idl.IDLEntry {
+    return toIDLNodeForward(file, node, info)
 }
 
-function toIDLNodeForward(file: string, node: webidl2.IDLRootType): idl.IDLEntry {
+function toIDLNodeForward(file: string, node: webidl2.IDLRootType, info: IDLTokenInfoMap): idl.IDLEntry {
     if (isEnum(node)) {
-        return toIDLEnum(file, node)
+        return toIDLEnum(file, node, info)
     }
     if (isImport(node)) {
-        return toIDLImport(node)
+        return toIDLImport(node, info)
     }
     if (isClass(node)) {
-        return toIDLInterface(file, node)
+        return toIDLInterface(file, node, info)
     }
     if (isInterface(node)) {
-        return toIDLInterface(file, node)
+        return toIDLInterface(file, node, info)
     }
     if (isCallback(node)) {
-        return toIDLCallback(file, node)
+        return toIDLCallback(file, node, info)
     }
     if (isTypedef(node)) {
-        return toIDLTypedef(file, node)
+        return toIDLTypedef(file, node, info)
     }
     if (isDictionary(node)) {
-        return toIDLDictionary(file, node)
+        return toIDLDictionary(file, node, info)
     }
     if (isNamespace(node)) {
-        return toIDLNamespace(file, node)
+        return toIDLNamespace(file, node, info)
     }
     if (isVersion(node)) {
-        return toIDLVersion(file, node)
+        return toIDLVersion(file, node, info)
     }
     if (isAttribute(node as webidl2.IDLNamespaceMemberType)) {
-        return toIDLProperty(file, node as webidl2.AttributeMemberType)
+        return toIDLProperty(file, node as webidl2.AttributeMemberType, info)
     }
     if (isOperation(node as webidl2.IDLNamespaceMemberType)) {
-        return toIDLMethod(file, node as webidl2.OperationMemberType, true)
+        return toIDLMethod(file, node as webidl2.OperationMemberType, true, info)
     }
     if (isConstant(node)) {
-        return toIDLConstant(file, node)
+        return toIDLConstant(file, node, info)
     }
     throw new Error(`unexpected node type: ${toString(node)}`)
 }
@@ -105,9 +116,9 @@ function isCallable(node: webidl2.IDLInterfaceMemberType): boolean {
     return node.extAttrs.some(it => it.name == "Invoke")
 }
 
-function toIDLImport(node: webidl2.ImportType): idl.IDLImport {
+function toIDLImport(node: webidl2.ImportType, info:IDLTokenInfoMap): idl.IDLImport {
     // console.log(node)
-    return idl.createImport(node.clause.split("."), node.alias||undefined)
+    return withInfo(info, node, idl.createImport(node.clause.split("."), node.alias||undefined))
 }
 
 
@@ -119,7 +130,7 @@ function interfaceSubkind(node: webidl2.InterfaceType): idl.IDLInterfaceSubkind 
     return idl.IDLInterfaceSubkind.Interface
 }
 
-function toIDLInterface(file: string, node: webidl2.InterfaceType): idl.IDLInterface {
+function toIDLInterface(file: string, node: webidl2.InterfaceType, info:IDLTokenInfoMap): idl.IDLInterface {
     const result = idl.createInterface(
         node.name,
         interfaceSubkind(node),
@@ -130,31 +141,32 @@ function toIDLInterface(file: string, node: webidl2.InterfaceType): idl.IDLInter
             const parentType = idl.createReferenceType(node.inheritance, parentTypeArgs)
             parentType.fileName = file
             if (node.inheritanceExtAttrs)
-                parentType.extendedAttributes = toExtendedAttributes(node.inheritanceExtAttrs)?.filter(it => it.name !== idl.IDLExtendedAttributes.TypeArguments)
+                parentType.extendedAttributes = toExtendedAttributes(node.inheritanceExtAttrs, info)?.filter(it => it.name !== idl.IDLExtendedAttributes.TypeArguments)
             return [parentType]
         })(),
         node.members
             .filter(isConstructor)
-            .map(it => toIDLConstructor(file, it)),
+            .map(it => toIDLConstructor(file, it, info)),
         [],
         node.members
             .filter(isAttribute)
-            .map(it => toIDLProperty(file, it)),
+            .map(it => toIDLProperty(file, it, info)),
         node.members
             .filter(isOperation)
             .filter(it => !isCallable(it))
-            .map(it => toIDLMethod(file, it)),
+            .map(it => toIDLMethod(file, it, false, info)),
         node.members
             .filter(isOperation)
             .filter(it => isCallable(it))
-            .map(it => toIDLCallable(file, it)),
+            .map(it => toIDLCallable(file, it, info)),
         findExtendedAttribute(node.extAttrs, idl.IDLExtendedAttributes.TypeParameters)?.split(","),
         {
             fileName: file,
             documentation: makeDocs(node),
-            extendedAttributes: toExtendedAttributes(node.extAttrs),
+            extendedAttributes: toExtendedAttributes(node.extAttrs, info),
         }
     )
+    info.set(result, getTokens(node))
     if (node.extAttrs.find(it => it.name === "Synthetic"))
         addSyntheticType(node.name, result)
     return result
@@ -173,7 +185,7 @@ function extractTypeArguments(file: string,
         ?.map(it => toIDLType(file, it))
 }
 
-function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extAttrs?: webidl2.ExtendedAttribute[]): idl.IDLType {
+function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extAttrs?: webidl2.ExtendedAttribute[], info?:IDLTokenInfoMap): idl.IDLType {
     if (typeof type === "string") {
         // is it IDLStringType?
         const refType = idl.createReferenceType(type)
@@ -182,16 +194,18 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
         return refType
     }
     if (type.nullable) {
-        return idl.createOptionalType(
-            toIDLType(file, { ...type, nullable: false }, extAttrs)
+        return withInfo(info ?? new Map(), type,
+            idl.createOptionalType(
+                toIDLType(file, { ...type, nullable: false }, extAttrs, info)
+            )
         )
     }
     if (isUnionTypeDescription(type)) {
         const types = type.idlType
-            .map(it => toIDLType(file, it))
+            .map(it => toIDLType(file, it, undefined, info))
             .filter(isDefined)
         const name = generateSyntheticUnionName(types)
-        return idl.createUnionType(types, name)
+        return withInfo(info ?? new Map(), type, idl.createUnionType(types, name))
     }
     if (isSingleTypeDescription(type)) {
         // must match with primitive types in idl.ts
@@ -226,20 +240,24 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
         const idlRefType = idl.createReferenceType(type.idlType)
         idlRefType.fileName = file
         idlRefType.typeArguments = extractTypeArguments(file, combinedExtAttrs, idl.IDLExtendedAttributes.TypeArguments)
-        idlRefType.extendedAttributes = toExtendedAttributes(combinedExtAttrs)
-        return idlRefType
+        idlRefType.extendedAttributes = toExtendedAttributes(combinedExtAttrs, info)
+        return withInfo(info ?? new Map(), type, idlRefType)
     }
     if (isSequenceTypeDescription(type) || isPromiseTypeDescription(type) || isRecordTypeDescription(type)) {
-        return idl.createContainerType(
-            type.generic,
-            type.idlType.map(it => toIDLType(file, it))
+        return withInfo(info ?? new Map(), type,
+            idl.createContainerType(
+                type.generic,
+                type.idlType.map(it => toIDLType(file, it, undefined, info))
+            )
         )
     }
 
     if (isUnspecifiedGenericTypeDescription(type)) {
-        return idl.createUnspecifiedGenericType(
-            type.generic,
-            type.idlType.map(it => toIDLType(file, it))
+        return withInfo(info ?? new Map(), type,
+            idl.createUnspecifiedGenericType(
+                type.generic,
+                type.idlType.map(it => toIDLType(file, it, undefined, info))
+            )
         )
     }
 
@@ -247,39 +265,39 @@ function toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extA
 }
 
 
-function toIDLCallable(file: string, node: webidl2.OperationMemberType): idl.IDLCallable {
+function toIDLCallable(file: string, node: webidl2.OperationMemberType, info:IDLTokenInfoMap): idl.IDLCallable {
     if (!node.idlType) {
         throw new Error(`method with no type ${toString(node)}`)
     }
-    const returnType = toIDLType(file, node.idlType, node.extAttrs)
+    const returnType = toIDLType(file, node.idlType, node.extAttrs, info)
     if (idl.isReferenceType(returnType)) {
         const returnTypeArgs = extractTypeArguments(file, node.extAttrs, idl.IDLExtendedAttributes.TypeArguments)
         returnType.typeArguments = returnTypeArgs
     }
-    return idl.createCallable(
+    return withInfo(info, node, idl.createCallable(
         node.name ?? "",
-        node.arguments.map(it => toIDLParameter(file, it)),
+        node.arguments.map(it => toIDLParameter(file, it, info)),
         returnType,
         {
             isStatic: node.special === "static",
             isAsync: node.async,
         }, {
             documentation: makeDocs(node),
-            extendedAttributes: toExtendedAttributes(node.extAttrs),
+            extendedAttributes: toExtendedAttributes(node.extAttrs, info),
         }, findExtendedAttribute(node.extAttrs, idl.IDLExtendedAttributes.TypeParameters)?.split(","),
-    )
+    ))
 }
 
-function toIDLMethod(file: string, node: webidl2.OperationMemberType, isFree:boolean = false): idl.IDLMethod {
+function toIDLMethod(file: string, node: webidl2.OperationMemberType, isFree:boolean = false, info?:IDLTokenInfoMap): idl.IDLMethod {
     if (!node.idlType) {
         throw new Error(`method with no type ${toString(node)}`)
     }
-    const returnType = toIDLType(file, node.idlType, node.extAttrs)
+    const returnType = toIDLType(file, node.idlType, node.extAttrs, info)
     if (idl.isReferenceType(returnType))
         returnType.typeArguments = extractTypeArguments(file, node.extAttrs, idl.IDLExtendedAttributes.TypeArguments)
-    return idl.createMethod(
+    return withInfo(info ?? new Map(), node, idl.createMethod(
         node.name ?? "",
-        node.arguments.map(it => toIDLParameter(file, it)),
+        node.arguments.map(it => toIDLParameter(file, it, info ?? new Map())),
         returnType,
         {
             isStatic: node.special === "static",
@@ -288,56 +306,56 @@ function toIDLMethod(file: string, node: webidl2.OperationMemberType, isFree:boo
             isFree
         }, {
             documentation: makeDocs(node),
-            extendedAttributes: toExtendedAttributes(node.extAttrs),
+            extendedAttributes: toExtendedAttributes(node.extAttrs, info),
         }, findExtendedAttribute(node.extAttrs, idl.IDLExtendedAttributes.TypeParameters)?.split(","),
-    )
+    ))
 }
 
-function toIDLConstructor(file: string, node: webidl2.ConstructorMemberType): idl.IDLConstructor {
-    return idl.createConstructor(
-        node.arguments.map(it => toIDLParameter(file, it)),
+function toIDLConstructor(file: string, node: webidl2.ConstructorMemberType, info:IDLTokenInfoMap): idl.IDLConstructor {
+    return withInfo(info, node, idl.createConstructor(
+        node.arguments.map(it => toIDLParameter(file, it, info)),
         undefined, {
         documentation: makeDocs(node),
-    })
+    }))
 }
 
-function toIDLParameter(file: string, node: webidl2.Argument): idl.IDLParameter {
-    return idl.createParameter(
+function toIDLParameter(file: string, node: webidl2.Argument, info:IDLTokenInfoMap): idl.IDLParameter {
+    return withInfo(info, node, idl.createParameter(
         node.name,
-        toIDLType(file, node.idlType, node.extAttrs),
+        toIDLType(file, node.idlType, node.extAttrs, info),
         node.optional,
         node.variadic, {
         fileName: file,
-    })
+    }))
 }
 
-function toIDLCallback(file: string, node: webidl2.CallbackType): idl.IDLCallback {
+function toIDLCallback(file: string, node: webidl2.CallbackType, info:IDLTokenInfoMap): idl.IDLCallback {
     const result = idl.createCallback(
         node.name,
-        node.arguments.map(it => toIDLParameter(file, it)),
-        toIDLType(file, node.idlType), {
+        node.arguments.map(it => toIDLParameter(file, it, info)),
+        toIDLType(file, node.idlType, undefined, info), {
         fileName: file,
-        extendedAttributes: toExtendedAttributes(node.extAttrs),
+        extendedAttributes: toExtendedAttributes(node.extAttrs, info),
         documentation: makeDocs(node),
     })
     if (node.extAttrs.find(it => it.name === "Synthetic"))
         addSyntheticType(node.name, result)
-    return result
+    return withInfo(info, node, result)
 }
 
-function toIDLTypedef(file: string, node: webidl2.TypedefType): idl.IDLTypedef {
-    return idl.createTypedef(
+function toIDLTypedef(file: string, node: webidl2.TypedefType, info:IDLTokenInfoMap): idl.IDLTypedef {
+    return withInfo(info, node, idl.createTypedef(
         node.name,
-        toIDLType(file, node.idlType),
+        toIDLType(file, node.idlType, undefined, info),
         findExtendedAttribute(node.extAttrs, idl.IDLExtendedAttributes.TypeParameters)?.split(","), {
-        extendedAttributes: toExtendedAttributes(node.extAttrs),
+        extendedAttributes: toExtendedAttributes(node.extAttrs, info),
         documentation: makeDocs(node),
         fileName: file,
-    })
+    }))
 }
 
-function toIDLConstant(file: string, node: webidl2.ConstantMemberType) {
-    return idl.createConstant(node.name, toIDLType(file, node.idlType), constantValue(node))
+function toIDLConstant(file: string, node: webidl2.ConstantMemberType, info:IDLTokenInfoMap) {
+    return withInfo(info, node, idl.createConstant(node.name, toIDLType(file, node.idlType, undefined, info), constantValue(node)))
 }
 
 function constantValue(node: webidl2.ConstantMemberType): string {
@@ -363,51 +381,51 @@ function constantValue(node: webidl2.ConstantMemberType): string {
     }
 }
 
-function toIDLDictionary(file: string, node: webidl2.DictionaryType): idl.IDLEnum {
+function toIDLDictionary(file: string, node: webidl2.DictionaryType, info:IDLTokenInfoMap): idl.IDLEnum {
     const result = idl.createEnum(
         node.name,
         [], {
         documentation: makeDocs(node),
-        extendedAttributes: toExtendedAttributes(node.extAttrs),
+        extendedAttributes: toExtendedAttributes(node.extAttrs, info),
         fileName: file,
     })
-    result.elements = node.members.map(it => toIDLEnumMember(file, it, result))
-    return result
+    result.elements = node.members.map(it => toIDLEnumMember(file, it, result, info))
+    return withInfo(info, node, result)
 }
 
-function toIDLNamespace(file: string, node: webidl2.NamespaceType): idl.IDLNamespace {
+function toIDLNamespace(file: string, node: webidl2.NamespaceType, info:IDLTokenInfoMap): idl.IDLNamespace {
     const namespace = idl.createNamespace(
         node.name,
         [],
         {
-            extendedAttributes: toExtendedAttributes(node.extAttrs),
+            extendedAttributes: toExtendedAttributes(node.extAttrs, info),
             fileName: file
         }
     )
-    namespace.members = node.members.map(it => toIDLNodeForward(file, it))
-    return namespace
+    namespace.members = node.members.map(it => toIDLNodeForward(file, it, info))
+    return withInfo(info, node, namespace)
 }
 
-function toIDLVersion(file: string, node: webidl2.VersionType): idl.IDLVersion {
-    return idl.createVersion(
+function toIDLVersion(file: string, node: webidl2.VersionType, info:IDLTokenInfoMap): idl.IDLVersion {
+    return withInfo(info, node, idl.createVersion(
         node.value,
         {
-            extendedAttributes: toExtendedAttributes(node.extAttrs),
+            extendedAttributes: toExtendedAttributes(node.extAttrs, info),
             fileName: file
         }
-    )
+    ))
 }
-function toIDLProperty(file: string, node: webidl2.AttributeMemberType): idl.IDLProperty {
-    return idl.createProperty(
+function toIDLProperty(file: string, node: webidl2.AttributeMemberType, info:IDLTokenInfoMap): idl.IDLProperty {
+    return withInfo(info, node, idl.createProperty(
         node.name,
-        toIDLType(file, node.idlType),
+        toIDLType(file, node.idlType, undefined, info),
         node.readonly,
         node.special === "static",
         isOptional(node), {
         documentation: makeDocs(node),
         fileName: file,
-        extendedAttributes: toExtendedAttributes(node.extAttrs)
-    })
+        extendedAttributes: toExtendedAttributes(node.extAttrs, info)
+    }))
 }
 
 function unescapeString(value: string): string {
@@ -440,7 +458,7 @@ function unescapeString(value: string): string {
     return value;
 }
 
-function toIDLEnumMember(file: string, node: webidl2.DictionaryMemberType, parent: idl.IDLEnum): idl.IDLEnumMember {
+function toIDLEnumMember(file: string, node: webidl2.DictionaryMemberType, parent: idl.IDLEnum, info:IDLTokenInfoMap): idl.IDLEnumMember {
     let initializer = undefined
     if (node.default?.type == "string") {
         initializer = unescapeString(node.default.value)
@@ -451,18 +469,18 @@ function toIDLEnumMember(file: string, node: webidl2.DictionaryMemberType, paren
     } else {
         throw new Error(`Not representable enum initializer: ${node.default}`)
     }
-    return idl.createEnumMember(
+    return withInfo(info, node, idl.createEnumMember(
         node.name,
         parent,
-        toIDLType(file, node.idlType) as idl.IDLPrimitiveType,
+        toIDLType(file, node.idlType, undefined, info) as idl.IDLPrimitiveType,
         initializer, {
-        extendedAttributes: toExtendedAttributes(node.extAttrs),
-    })
+        extendedAttributes: toExtendedAttributes(node.extAttrs, info),
+    }))
 }
 
-function toExtendedAttributes(extAttrs: webidl2.ExtendedAttribute[]): idl.IDLExtendedAttribute[] | undefined {
+function toExtendedAttributes(extAttrs: webidl2.ExtendedAttribute[], info?:IDLTokenInfoMap): idl.IDLExtendedAttribute[] | undefined {
     return extAttrs.map(it => {
-        return { name: it.name, value: toExtendedAttributeValue(it) }
+        return withInfo(info ?? new Map(), it, { name: it.name, value: toExtendedAttributeValue(it) })
     })
 }
 
@@ -483,13 +501,13 @@ function makeDocs(node: webidl2.AbstractBase): stringOrNone {
     return docs
 }
 
-function toIDLEnum(file: string, node: webidl2.EnumType): idl.IDLEnum {
+function toIDLEnum(file: string, node: webidl2.EnumType, info:IDLTokenInfoMap): idl.IDLEnum {
     const result = idl.createEnum(
         node.name,
         [], {
         fileName: file,
         documentation: makeDocs(node),
-        extendedAttributes: toExtendedAttributes(node.extAttrs),
+        extendedAttributes: toExtendedAttributes(node.extAttrs, info),
     })
     result.elements = node.values.map((it: { value: string }) => idl.createEnumMember(
         it.value,
@@ -497,7 +515,7 @@ function toIDLEnum(file: string, node: webidl2.EnumType): idl.IDLEnum {
         idl.IDLNumberType,
         undefined
     ))
-    return result
+    return withInfo(info, node, result)
 }
 
 function findExtendedAttribute(extAttrs: webidl2.ExtendedAttribute[], name: idl.IDLExtendedAttributes): stringOrNone {
@@ -505,10 +523,11 @@ function findExtendedAttribute(extAttrs: webidl2.ExtendedAttribute[], name: idl.
     return attr ? toExtendedAttributeValue(attr) : undefined
 }
 
-export function toIDLFile(fileName: string, content?: string): idl.IDLFile {
+export function toIDLFile(fileName: string, content?: string): [idl.IDLFile, IDLTokenInfoMap] {
     if (undefined === content)
         content = fs.readFileSync(fileName).toString()
     let packageClause: string[] = []
+    const info:IDLTokenInfoMap = new Map()
     const entries = webidl2.parse(content)
         .filter(it => {
             if (!it.type)
@@ -519,7 +538,8 @@ export function toIDLFile(fileName: string, content?: string): idl.IDLFile {
             }
             return true
         })
-        .map(it => toIDLNode(fileName, it))
+        .map(it => toIDLNode(fileName, it, info))
     const file = idl.createFile(entries, fileName, packageClause)
-    return idl.linkParentBack(file)
+    file.text = content
+    return [idl.linkParentBack(file), info]
 }
