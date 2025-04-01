@@ -1818,8 +1818,8 @@
 |`emitTextInputEvent`| Function | Dmitry A Smirnov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
 |*ActionSheet*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
-|*AlertDialog*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
-|`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
+|*AlertDialog*| *Class* | Ekaterina Stepanova | testskipped |  | |
+|`show`| Function | Ekaterina Stepanova | testskipped |  | UT in progress, Skroba Gleb |
 |*SpringProp*| *Class* | | | | |
 |*SpringMotion*| *Class* | | | | |
 |*FrictionMotion*| *Class* | | | | |
