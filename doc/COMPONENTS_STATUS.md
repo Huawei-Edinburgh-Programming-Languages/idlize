@@ -2398,7 +2398,7 @@
 |`updateParagraphStyle`| Function | Dudkin Sergey| done |  |  |
 |`deleteSpans`| Function |Dudkin Sergey| done |  |  |
 |`getSpans`| Function |Dudkin Sergey| done |  |  |
-|`getParagraphs`| Function |Dmitry A Smirnov, Ivan Pavelev| in progress |  | |
+|`getParagraphs`| Function |Dmitry A Smirnov, Ivan Pavelev| done |  | |
 |`getSelection`| Function |Dudkin Sergey| done |  |  |
 |`fromStyledString`| Function | Dudkin Sergey| done |  |  |
 |`toStyledString`| Function | Dudkin Sergey| done |  |  |
