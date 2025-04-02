@@ -129,7 +129,6 @@
         "Indicator",
         "AttributeModifier",
         "AnimationRange",
-        "ContentModifier",
         "SizeT",
         "PositionT",
         "Record"
