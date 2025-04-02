@@ -2041,11 +2041,11 @@
 |`setIntentionCode`| Function | Maksimov Nikita | done | | |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
-|*FocusAxisEvent*| *Class* | Evstigneev Roman | in progress | | |
-|`getAxisMap`| Function | Evstigneev Roman | in progress | | |
-|`setAxisMap`| Function | Evstigneev Roman | in progress | | |
-|`getStopPropagation`| Function | Evstigneev Roman | in progress | | feature: API not present |
-|`setStopPropagation`| Function | Evstigneev Roman | done  |  | empty implementation |
+|*FocusAxisEvent*| *Class* | Evstigneev Roman | done | | feature: API not present |
+|`setAxisMap`| Function | Evstigneev Roman | done | | feature: API not present |
+|`setAxisMap`| Function | Evstigneev Roman | done | | empty implementation, feature: API not present |
+|`getStopPropagation`| Function | Evstigneev Roman | done | | feature: API not present |
+|`setStopPropagation`| Function | Evstigneev Roman | done  |  | empty implementation, feature: API not present |
 |*ProgressMask*| *Class* | Maksimov Nikita | done |  | |
 |`updateProgress`| Function | Maksimov Nikita | done |  | |
 |`updateColor`| Function | Maksimov Nikita | done |  | |
