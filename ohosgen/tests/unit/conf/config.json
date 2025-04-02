@@ -20,7 +20,9 @@
         "ForceCallbackListener",
         "GenericInterfaceDataHandler"
     ],
-    "forceResource": [],
+    "forceResource": [
+	"ContentModifier"
+    ],
     "boundProperties": {},
     "rootComponents": [],
     "standaloneComponents": [],

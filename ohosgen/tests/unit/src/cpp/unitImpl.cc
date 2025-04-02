@@ -792,3 +792,34 @@ OH_UNIT_CheckExceptionInterface CheckExceptionClass_getInterfaceImpl(OH_UNIT_VMC
     printf("OH_UNIT_CheckExceptionClass getInterface vmContext: %p, thisPtr: %p\n", vmContext, thisPtr);
     return (OH_UNIT_CheckExceptionInterface) new OH_UNIT_CheckExceptionInterfacePeer();
 }
+
+// WrappedBuilder
+class WrappedBuilderPeer
+{
+};
+
+OH_UNIT_WrappedBuilderHandle WrappedBuilder_constructImpl(const UNIT_Callback_Args_Void* builder) {
+    return (OH_UNIT_WrappedBuilderHandle) new WrappedBuilderPeer();
+}
+
+void WrappedBuilder_destructImpl(OH_UNIT_WrappedBuilderHandle thisPtr) {
+}
+
+UNIT_Callback_Args_Void WrappedBuilder_getBuilderImpl(OH_NativePointer thisPtr) {
+    return {};
+}
+void WrappedBuilder_setBuilderImpl(OH_NativePointer thisPtr, const UNIT_Callback_Args_Void* value) {
+}
+
+class CustomComponentSamplePeer
+{
+};
+
+OH_UNIT_CustomComponentSampleHandle CustomComponentSample_constructImpl() {
+    return (OH_UNIT_CustomComponentSampleHandle) new CustomComponentSamplePeer();
+}
+void CustomComponentSample_destructImpl(OH_UNIT_CustomComponentSampleHandle thisPtr) {
+}
+OH_UNIT_CustomComponentSample CustomComponentSample_contentModifierImpl(OH_NativePointer thisPtr, const OH_Object* modifier) {
+    return {};
+}
