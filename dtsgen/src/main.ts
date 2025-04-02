@@ -117,6 +117,7 @@ if (options.lint) {
     })
     if (totalErrors > 0) {
         process.exitCode = -1
+        console.error()
         errorRecords.forEach(([fileName, errorNumber]) => {
             console.error(`${errorNumber.toString().padStart(5, ' ')} ${fileName}`)
         })
@@ -146,7 +147,7 @@ if (options.dts2idl) {
                 const basename = path.basename(sourceFile.fileName)
                 if (basename === "stdlib.d.ts")
                     return
-                
+
                 console.log('producing', basename)
                 const outFile = path.join(
                     outputDir,

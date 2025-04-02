@@ -1,8 +1,25 @@
 import { EOL } from "node:os";
 import * as idl from "../idl"
-import { convertNode, NodeConvertor } from "../LanguageWriters";
 import { ReferenceResolver } from "../peer-generation/ReferenceResolver";
 import { IDLTokenInfoMap } from "./deserialize";
+
+export enum IDLValidationDiagnosticsCode {
+    INVALID_EXTENDED_ATTRIBUTE = 1000,
+    ENUM_IS_NOT_CONSISTENT     = 1001,
+    REFERENCE_IS_NOT_RESOLVED  = 1002,
+}
+
+type IDLValidationErrorDescriptionBox = Record<IDLValidationDiagnosticsCode, string>
+
+const ENG_ErrorDescription: IDLValidationErrorDescriptionBox = {
+    [IDLValidationDiagnosticsCode.INVALID_EXTENDED_ATTRIBUTE]: "Invalid extended attribute",
+    [IDLValidationDiagnosticsCode.ENUM_IS_NOT_CONSISTENT]: "Enum includes both string and number values",
+    [IDLValidationDiagnosticsCode.REFERENCE_IS_NOT_RESOLVED]: "Can not resolve reference",
+}
+
+export const IDLValidationErrorDescription = {
+    en_EN: ENG_ErrorDescription
+}
 
 export interface IDLLinterOptions {
     validEntryAttributes: Map<idl.IDLKind, string[]>,
@@ -10,7 +27,39 @@ export interface IDLLinterOptions {
     checkReferencesResolved: boolean,
 }
 
+interface IDLLinterContextRecord {
+    typeParameters: Set<string>
+}
+class IDLLinterContext {
+
+    private stack: IDLLinterContextRecord[] = [{ typeParameters: new Set() }]
+    constructor() {}
+
+    enter(rec:IDLLinterContextRecord) {
+        this.stack.push(rec)
+    }
+    leave() {
+        this.stack.pop()
+    }
+    get current() {
+        return this.stack.at(-1)!
+    }
+
+    hasTypeParameter(name:string) {
+        for (let i = this.stack.length - 1; i >= 0; --i) {
+            if (this.stack[i].typeParameters.has(name)) {
+                return true
+            }
+        }
+        return false
+    }
+}
+
 export class IDLLinter {
+
+    protected context = new IDLLinterContext()
+    public diagnostics: IDLLinterDiagnosticsSummary[] = []
+
     constructor(
         protected file: idl.IDLFile,
         protected resolver: ReferenceResolver,
@@ -18,14 +67,23 @@ export class IDLLinter {
         protected info?: IDLTokenInfoMap
     ) {}
 
-    public errors: IDLLinterErrorSummary[] = []
+    ///
 
-    public visit(): IDLLinterErrorSummary[] {
-        this.check(this.file)
+
+    public visit(): IDLLinterDiagnosticsSummary[] {
         idl.forEachChild(this.file, node => {
+            const leave = this.enter(node)
             this.check(node)
+            return leave
         })
-        return this.errors
+        return this.diagnostics
+    }
+
+    protected enter(node:idl.IDLNode): (() => void) | undefined {
+        if (idl.isInterface(node) || idl.isTypedef(node) || idl.isMethod(node) || idl.isCallable(node)) {
+            this.context.enter({ typeParameters: new Set(node.typeParameters ?? []) })
+            return () => this.context.leave()
+        }
     }
 
     protected check(node: idl.IDLNode) {
@@ -48,7 +106,8 @@ export class IDLLinter {
                 const tokens = this.info?.get(attr)
                 const ident = tokens?.name
                 const file = idl.getFileFor(entry)
-                this.errors.push({
+                this.diagnostics.push({
+                    code: IDLValidationDiagnosticsCode.INVALID_EXTENDED_ATTRIBUTE,
                     file: file?.fileName ?? '',
                     message: `Invalid attribute '${attr.name}'`,
                     position: [ident?.position ?? 0, attr.name.length]
@@ -70,7 +129,8 @@ export class IDLLinter {
         if (hasNumber && hasString) {
             const tokens = this.info?.get(entry)
             const ident = tokens?.name
-            this.errors.push({
+            this.diagnostics.push({
+                code: IDLValidationDiagnosticsCode.ENUM_IS_NOT_CONSISTENT,
                 file: fileName ?? '',
                 message: "Enum includes both string and number values",
                 position: [
@@ -88,6 +148,9 @@ export class IDLLinter {
     protected checkReferenceResolved(reference: idl.IDLReferenceType): void {
         if (IDLLinter.builtinReferences.includes(reference.name))
             return
+        if (this.context.hasTypeParameter(reference.name)) {
+            return
+        }
         const resolved = this.resolver.resolveTypeReference(reference)
         if (resolved === undefined) {
             const parentFile = idl.getFileFor(reference)!
@@ -101,7 +164,8 @@ export class IDLLinter {
                 tokens = this.info?.get(current)
                 location = tokens?.name
             }
-            this.errors.push({
+            this.diagnostics.push({
+                code: IDLValidationDiagnosticsCode.REFERENCE_IS_NOT_RESOLVED,
                 file: parentFile.fileName ?? '',
                 message: `Can not resolve reference '${reference.name}' defined in scope '${scopeName}'`,
                 position: [location?.position ?? 0, location?.value?.length ?? 0]
@@ -110,7 +174,8 @@ export class IDLLinter {
     }
 }
 
-interface IDLLinterErrorSummary {
+interface IDLLinterDiagnosticsSummary {
+    code: IDLValidationDiagnosticsCode
     message: string
     file: string
     position: [number, number]
@@ -125,27 +190,25 @@ export class IDLLinterError extends Error {
     }
 }
 
-function printErrors(errors:IDLLinterErrorSummary[], text:string) {
+function printErrors(errors:IDLLinterDiagnosticsSummary[], text:string) {
     errors.sort((a, b) => a.position[0] - b.position[0])
     let ptr = 0
     let lines = 1
     let cols = 1
-    return EOL +
-        errors.map(error => {
-            while (ptr < error.position[0] && ptr < text.length) {
-                if (text[ptr] === '\n') {
-                    ++lines
-                    cols = 0
-                }
-                ++cols
-                ++ptr
+    return errors.map(error => {
+        while (ptr < error.position[0] && ptr < text.length) {
+            if (text[ptr] === '\n') {
+                ++lines
+                cols = 0
             }
-            let errorText = `${error.file}:${lines}:${cols} ${error.message}`
-            return errorText
-        }).join(EOL)
+            ++cols
+            ++ptr
+        }
+        return `E: IDL${error.code} ${IDLValidationErrorDescription.en_EN[error.code]} -- ${error.file}:${lines}:${cols} ${error.message}`
+    }).join(EOL)
 }
 
-function prettyPrintErrors(errors:IDLLinterErrorSummary[], text:string) {
+function prettyPrintErrors(errors:IDLLinterDiagnosticsSummary[], text:string) {
     errors.sort((a, b) => a.position[0] - b.position[0])
 
     const windowSize = 2
@@ -156,69 +219,74 @@ function prettyPrintErrors(errors:IDLLinterErrorSummary[], text:string) {
     let cols = 1
 
     let lineBuffer = ''
-    return EOL +
-        errors.map(error => {
-            while (ptr < error.position[0] && ptr < text.length) {
-                if (text[ptr] === '\n') {
-                    ++lines
-                    cols = 0
-                    while (window.length > windowSize) {
-                        window.shift()
-                    }
-                    window.push(lineBuffer)
-                    lineBuffer = ''
-                } else {
-                    if (text[ptr] !== '\r') {
-                        lineBuffer += text[ptr]
-                    }
+    return errors.map(error => {
+        while (ptr < error.position[0] && ptr < text.length) {
+            if (text[ptr] === '\n') {
+                ++lines
+                cols = 0
+                while (window.length > windowSize) {
+                    window.shift()
                 }
-
-                ++cols
-                ++ptr
+                window.push(lineBuffer)
+                lineBuffer = ''
+            } else {
+                if (text[ptr] !== '\r') {
+                    lineBuffer += text[ptr]
+                }
             }
 
-            let currentLine = lineBuffer
-            let ii = ptr
-            while (ii < text.length && text[ii] !== '\n') {
-                currentLine += text[ii]
-                ++ii
-            }
+            ++cols
+            ++ptr
+        }
 
-            let errorLine = '       '
-            ii = 0
-            while (ii < cols) {
-                errorLine += ' '
-                ++ii
-            }
-            ii = 0
-            errorLine += '\x1b[31m'
-            while (ii < error.position[1]) {
-                errorLine += '~'
-                ++ii
-            }
-            errorLine += '\x1b[0m'
+        let currentLine = lineBuffer
+        let ii = ptr
+        while (ii < text.length && text[ii] !== '\n') {
+            currentLine += text[ii]
+            ++ii
+        }
 
-            const windowLines = [...window, currentLine].map((line, i) => {
-                const idx = (lines - (window.length - i))
-                const idxText = idx.toString().padStart(5, ' ')
-                const idxColored = idx === lines
-                    ? '\x1b[1m' + idxText + '\x1b[0m'
-                    : idxText
-                return idxColored + ' | ' + line
-            })
+        let errorLine = '       '
+        ii = 0
+        while (ii < cols) {
+            errorLine += ' '
+            ++ii
+        }
+        ii = 0
+        errorLine += '\x1b[31m'
+        while (ii < error.position[1]) {
+            errorLine += '~'
+            ++ii
+        }
+        errorLine += '\x1b[0m'
 
-            let errorText = ''
-                + windowLines.join(EOL)
-                + EOL + errorLine + EOL
-                + `\x1b[31mERROR\x1b[0m: ${error.file}:${lines}:${cols} ${error.message}`
-                + EOL
-            return errorText
-        }).join(EOL)
+        const windowLines = [...window, currentLine].map((line, i) => {
+            const idx = (lines - (window.length - i))
+            const idxText = idx.toString().padStart(5, ' ')
+            const idxColored = idx === lines
+                ? '\x1b[1m' + idxText + '\x1b[0m'
+                : idxText
+            return idxColored + ' | ' + line
+        })
+
+        let errorText = ''
+            + windowLines.join(EOL)
+            + EOL + errorLine + EOL
+            + `\x1b[31mERROR\x1b[0m: IDL${error.code} ${IDLValidationErrorDescription.en_EN[error.code]}`
+            + EOL + `${error.file}:${lines}:${cols} ${error.message}`
+            + EOL
+        return errorText
+    }).join(EOL)
 }
 
 export function verifyIDLLinter(file: idl.IDLFile, resolver: ReferenceResolver, options: IDLLinterOptions, info?:IDLTokenInfoMap): true {
     const result = new IDLLinter(file, resolver, options, info).visit()
-    if (result.length)
-        throw new IDLLinterError(prettyPrintErrors(result, file.text ?? ''), result.length)
+    if (result.length) {
+        const isTTY = Boolean(process.stdout.isTTY)
+        throw new IDLLinterError(
+            isTTY ? prettyPrintErrors(result, file.text ?? '') : printErrors(result, file.text ?? ''),
+            result.length
+        )
+    }
     return true
 }
