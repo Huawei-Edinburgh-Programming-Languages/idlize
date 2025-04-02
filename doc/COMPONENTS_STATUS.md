@@ -902,7 +902,7 @@
 |`fontSize`| Function |Samarin Sergey| done |  |  |
 |`fontStyle`| Function |Samarin Sergey| done |  |  |
 |`fontWeight`| Function |Samarin Sergey| done |  |  |
-|`fontFamily`| Function |Samarin Sergey| testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB29LJ |
+|`fontFamily`| Function |Samarin Sergey| done |  |  |
 |`fontColor`| Function |Samarin Sergey| done |  |  |
 |`iconColor`| Function |Samarin Sergey| done |  |  |
 |`backgroundColor`| Function |Samarin Sergey| done |  |  |
