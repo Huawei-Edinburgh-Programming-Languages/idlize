@@ -54,6 +54,8 @@ import { test_ret_A } from '#compat'
 
 import { CheckExceptionClass, CheckExceptionInterface } from '#compat'
 
+import { CustomComponentSample } from '#compat'
+
 export function assertEQ<T1, T2>(value1: T1, value2: T2, comment?: string): void {
   checkEQ(value1, value2, comment)
 }
@@ -395,6 +397,14 @@ function checkThrowException() {
   assertEQ(true, catchException, "Exception has not been thrown!")
 }
 
+function checkContentModifier() {
+
+  console.log(`Call checkContentModifier`)
+  const customComponent = new CustomComponentSample()
+  // dummyAttribute.
+
+}
+
 export function run() {
   console.log("Run common unit tests")
 
@@ -414,6 +424,7 @@ export function run() {
   suite.addTest("checkNativeBuffer", checkNativeBuffer)
   suite.addTest("checkThrowException", checkThrowException)
   // suite.addTest("checkHandwritten", checkHandwritten)
+  suite.addTest("checkContentModifier", checkContentModifier)
 
   return suite.run()
 }
