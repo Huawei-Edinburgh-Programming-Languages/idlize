@@ -1,7 +1,6 @@
 {
     "IDLVisitor": {
         "DeletedDeclarations": [
-            "WrappedBuilder",
             "wrapBuilder",
             "IMonitorValue",
             "IMonitor",

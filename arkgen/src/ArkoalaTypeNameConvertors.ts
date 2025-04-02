@@ -21,7 +21,6 @@ export class ArkoalaTSTypeNameConvertor extends TSTypeNameConvertor {
     override convertTypeReference(type: idl.IDLReferenceType): string {
          switch (type.name) {
             case "AttributeModifier": return "AttributeModifier<object>"
-            case "WrappedBuilder": return type.name + "<any>"
             default: return super.convertTypeReference(type)
         }
     }
