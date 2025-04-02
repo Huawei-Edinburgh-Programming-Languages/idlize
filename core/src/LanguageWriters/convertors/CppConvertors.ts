@@ -47,6 +47,9 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
     }
 
     convertInterface(node: idl.IDLInterface): ConvertResult {
+        if (generatorConfiguration().forceResource.includes(node.name)) {
+            return this.make(`${generatorConfiguration().TypePrefix}${idl.IDLObjectType.name}`, true)
+        }
         switch (node.subkind) {
             case idl.IDLInterfaceSubkind.AnonymousInterface:
                 return node.name

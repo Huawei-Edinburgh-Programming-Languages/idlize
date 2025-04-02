@@ -101,6 +101,8 @@ export class StructPrinter {
                 continue
             }
             seenNames.add(nameAssigned)
+            if (idl.isInterface(target) && generatorConfiguration().forceResource.includes(target.name))
+                continue
             let isPointer = this.isPointerDeclaration(target)
             let isAccessor = idl.isInterface(target) && isMaterialized(target, this.library)
             let noBasicDecl = isAccessor || noDeclaration.includes(nameAssigned)
