@@ -41,6 +41,7 @@ import { IDLLibrary, lib, query } from '../library'
 import { isMaterialized } from './isMaterialized'
 import { isInIdlizeInternal } from '../idlize'
 import { isInCurrentModule } from './modules'
+import { generatorConfiguration } from '../config'
 
 export interface GlobalScopeDeclarations {
     methods: idl.IDLMethod[]
@@ -354,6 +355,9 @@ export class PeerLibrary implements LibraryInterface {
                 case 'KStringPtr': return new StringConvertor(param)
                 case 'number': return new NumberConvertor(param)
                 case 'KPointer': return new PointerConvertor(param)
+            }
+            if (generatorConfiguration().forceResource.includes(type.name)) {
+                return new ObjectConvertor(param)
             }
             const decl = this.resolveTypeReference(type)
             if (decl && isImportAttr(decl) || !decl && isImportAttr(type))
