@@ -1813,9 +1813,9 @@
 |`navigationCreate`| Function | | | | |
 |`setNavigationOptions`| Function | | | | |
 |`setNavDestinationNode`| Function | | | | |
-|*EventEmulator*| *Class* | Dmitry A Smirnov | blocked IDL |  |https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
-|`emitClickEvent`| Function | Dmitry A Smirnov, Maksimov Nikita | testskipped |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 + EVENT |
-|`emitTextInputEvent`| Function | Dmitry A Smirnov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDNN0 |
+|*EventEmulator*| *Class* | Dmitry A Smirnov | managed side | | |
+|`emitClickEvent`| Function | Dmitry A Smirnov, Maksimov Nikita | managed side | | |
+|`emitTextInputEvent`| Function | Dmitry A Smirnov | managed side | | |
 |*ActionSheet*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
 |`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | testskipped |  | |
