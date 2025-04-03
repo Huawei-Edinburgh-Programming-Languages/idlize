@@ -208,6 +208,13 @@ function printErrors(errors:IDLLinterDiagnosticsSummary[], text:string) {
     }).join(EOL)
 }
 
+function printErrorWithoutLocation(errors:IDLLinterDiagnosticsSummary[]) {
+    errors.sort((a, b) => a.position[0] - b.position[0])
+    return errors.map(error => {
+        return `E: IDL${error.code} ${IDLValidationErrorDescription.en_EN[error.code]} -- ${error.file} ${error.message}`
+    }).join(EOL)
+}
+
 function prettyPrintErrors(errors:IDLLinterDiagnosticsSummary[], text:string) {
     errors.sort((a, b) => a.position[0] - b.position[0])
 
@@ -283,10 +290,10 @@ export function verifyIDLLinter(file: idl.IDLFile, resolver: ReferenceResolver, 
     const result = new IDLLinter(file, resolver, options, info).visit()
     if (result.length) {
         const isTTY = Boolean(process.stdout.isTTY)
-        throw new IDLLinterError(
-            isTTY ? prettyPrintErrors(result, file.text ?? '') : printErrors(result, file.text ?? ''),
-            result.length
-        )
+        const errorMessage = info
+            ? isTTY ? prettyPrintErrors(result, file.text ?? '') : printErrors(result, file.text ?? '')
+            : printErrorWithoutLocation(result)
+        throw new IDLLinterError(errorMessage, result.length)
     }
     return true
 }
