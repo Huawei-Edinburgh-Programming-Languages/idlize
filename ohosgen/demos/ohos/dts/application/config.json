@@ -1,0 +1,14 @@
+{
+    "moduleName": "application",
+    "modules": {
+        "ohos.request": {
+            "name": "ohos.request",
+            "packages": ["ohos.request"]
+        },
+        "application": {
+            "name": "application",
+            "packages": ["application"],
+            "useFoldersLayout": true
+        }
+    }
+}

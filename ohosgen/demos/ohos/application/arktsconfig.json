@@ -1,0 +1,9 @@
+{
+    "extends": "../arktsconfig.json",
+    "compilerOptions": {
+        "package": "@application",
+        "baseUrl": ".",
+        "outDir": "build/panda/out"
+    },
+    "include": ["generated/arkts/**/*.ts"]
+}
