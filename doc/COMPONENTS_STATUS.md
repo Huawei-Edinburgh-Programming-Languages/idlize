@@ -1320,8 +1320,8 @@
 |`onAccept`| Function |Ekaterina Stepanova | done |  |deprecated  |
 |`onCancel`| Function |Ekaterina Stepanova | done |  |deprecated  |
 |`onChange`| Function | Tuzhilkin Ivan| done |  |  |
-|`onScrollStop`| Function | Kovalev Sergey | in progress | | API is present on Upstream only |
-|`onEnterSelectedArea`| Function | Kovalev Sergey | in progress | | API is present on Upstream only |
+|`onScrollStop`| Function | Kovalev Sergey | done | | API is present on Upstream only |
+|`onEnterSelectedArea`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`selectedIndex`| Function |Ekaterina Stepanova | done |  |  |
 |`divider`| Function |Ekaterina Stepanova | done |  |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |  |
