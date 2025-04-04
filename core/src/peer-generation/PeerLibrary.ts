@@ -357,7 +357,7 @@ export class PeerLibrary implements LibraryInterface {
                 case 'KPointer': return new PointerConvertor(param)
             }
             if (generatorConfiguration().forceResource.includes(type.name)) {
-                return new ObjectConvertor(param)
+                return new ObjectConvertor(param, type)
             }
             const decl = this.resolveTypeReference(type)
             if (decl && isImportAttr(decl) || !decl && isImportAttr(type))
