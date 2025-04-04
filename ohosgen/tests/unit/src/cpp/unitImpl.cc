@@ -798,6 +798,10 @@ class WrappedBuilderPeer
 {
 };
 
+OH_UNIT_WrappedBuilder GlobalScope_wrapBuilderImpl(const UNIT_Callback_Args_Void* builder) {
+    return {};
+}
+
 OH_UNIT_WrappedBuilderHandle WrappedBuilder_constructImpl(const UNIT_Callback_Args_Void* builder) {
     return (OH_UNIT_WrappedBuilderHandle) new WrappedBuilderPeer();
 }

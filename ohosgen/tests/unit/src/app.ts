@@ -54,7 +54,14 @@ import { test_ret_A } from '#compat'
 
 import { CheckExceptionClass, CheckExceptionInterface } from '#compat'
 
-import { CustomComponentSample } from '#compat'
+import {
+  ContentModifier,
+  WrappedBuilder,
+  wrapBuilder,
+  CustomComponentConfiguration,
+  CustomComponentShape,
+  CustomComponentSample,
+} from '#compat'
 
 export function assertEQ<T1, T2>(value1: T1, value2: T2, comment?: string): void {
   checkEQ(value1, value2, comment)
@@ -397,10 +404,30 @@ function checkThrowException() {
   assertEQ(true, catchException, "Exception has not been thrown!")
 }
 
+function buildCustomComponent(config: CustomComponentConfiguration): CustomComponentShape {
+  return { shapeStyle: 111 }
+}
+
+class CustomComponentStyle implements ContentModifier<CustomComponentConfiguration> {
+
+  selectedColor: number = 0
+
+  constructor(selectedColor: number) {
+    this.selectedColor = selectedColor
+  }
+
+  applyContent(): WrappedBuilder<[CustomComponentConfiguration]> {
+    return wrapBuilder(buildCustomComponent)
+  }
+}
+
 function checkContentModifier() {
 
   console.log(`Call checkContentModifier`)
   const customComponent = new CustomComponentSample()
+  const customComponentStyle = new CustomComponentStyle(123)
+  customComponent.contentModifier(customComponentStyle)
+
   // dummyAttribute.
 
 }
