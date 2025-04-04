@@ -771,7 +771,7 @@
 |*RichEditor*| *Component* | Dudkin Sergey| blocked IDL |  |  |
 |`setRichEditorOptions`| Function | Dudkin Sergey| done |  |  |
 |`onReady`| Function | Dudkin Sergey| done |  |  |
-|`onSelect`| Function | Dudkin Sergey| in progress |  | reopened because Ark_RichEditorSelection changed after generations |
+|`onSelect`| Function | Dudkin Sergey| done |  |   |
 |`onSelectionChange`| Function | Dudkin Sergey| done |  |  |
 |`aboutToIMEInput`| Function | Dudkin Sergey| done |  |  |
 |`onIMEInputComplete`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
