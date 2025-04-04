@@ -810,5 +810,5 @@ void CustomComponentSample_destructImpl(OH_UNIT_CustomComponentSampleHandle this
 }
 OH_UNIT_CustomComponentSample CustomComponentSample_contentModifierImpl(OH_NativePointer thisPtr, const OH_Object* modifier) {
     printf("native CustomComponentSample.contentModifierImpl: %d\n", modifier->resource.resourceId);
-    return {};
+    return (OH_UNIT_CustomComponentSample) thisPtr;
 }
