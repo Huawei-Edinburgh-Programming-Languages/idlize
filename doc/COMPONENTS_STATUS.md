@@ -1618,7 +1618,7 @@
 |`loadUrl`| Function | Politov Mikhail | done | | |
 |*GlobalScope_ohos_arkui_componentSnapshot*| *Class* | Dudkin Sergey| done | | |
 |`get`| Function | Dudkin Sergey | done | | |
-|*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | Vadim Voronov | blocked IDL | | |
+|*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | Vadim Voronov | done | | |
 |`begin`| Function | Vadim Voronov | done | | |
 |`end`| Function | Vadim Voronov | done | | |
 |`recordInputEventTime`| Function | Vadim Voronov | in progress | |  |
