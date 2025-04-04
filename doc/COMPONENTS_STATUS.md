@@ -1618,10 +1618,10 @@
 |`loadUrl`| Function | Politov Mikhail | done | | |
 |*GlobalScope_ohos_arkui_componentSnapshot*| *Class* | Dudkin Sergey| done | | |
 |`get`| Function | Dudkin Sergey | done | | |
-|*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | Vadim Voronov | done | | |
+|*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | Vadim Voronov | done | | blocked IDL on FB |
 |`begin`| Function | Vadim Voronov | done | | |
 |`end`| Function | Vadim Voronov | done | | |
-|`recordInputEventTime`| Function | Vadim Voronov | in progress | |  |
+|`recordInputEventTime`| Function | Vadim Voronov | done | | blocked IDL on FB https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
 |*CommonShape*| *Class* | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |`offset`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |`fill`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
