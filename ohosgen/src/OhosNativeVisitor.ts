@@ -177,7 +177,7 @@ class OHOSNativeVisitor {
     }
 
     private writeModifier(clazz: IDLInterface, writer: CppLanguageWriter) {
-        if (isForcedAsResource(clazz.name)) return
+        if (isResource(clazz.name)) return
         let name = this.modifierName(clazz)
         let handleType = this.handleType(clazz)
         let className = qualifiedName(clazz, "_", "namespace.name")
@@ -339,7 +339,7 @@ class OHOSNativeVisitor {
         _c.pushIndent()
         _c.print(`1, // version`)
         this.interfaces.forEach(it => {
-            if (!isForcedAsResource(it.name))
+            if (!isResource(it.name))
                 _c.print(`&${this.modifierName(it)}Impl,`)
         })
         _c.popIndent()
@@ -354,7 +354,7 @@ class OHOSNativeVisitor {
         _h.pushIndent()
         _h.print(`${generatorConfiguration().TypePrefix}Int32 version;`)
         this.interfaces.forEach(it => {
-            if (!isForcedAsResource(it.name))
+            if (!isResource(it.name))
                 _h.print(`const ${this.modifierName(it)}* (*${this.apiName(it)})();`)
         })
         _h.popIndent()
@@ -502,7 +502,7 @@ class OhosBridgeCcVisitor extends BridgeCcVisitor {
     }
 
     protected printMaterializedClass(clazz: MaterializedClass) {
-        if (isForcedAsResource(clazz.className)) return
+        if (isResource(clazz.className)) return
         const modifierName = "";
         for (const method of [clazz.ctor, clazz.finalizer].concat(clazz.methods)) {
             if (!method) continue
@@ -590,6 +590,6 @@ export function suggestLibraryName(library: PeerLibrary) {
     return currentModule().name.replaceAll(".", "_").toUpperCase()
 }
 
-function isForcedAsResource(name: string): boolean {
+function isResource(name: string): boolean {
     return generatorConfiguration().forceResource.includes(name)
 }

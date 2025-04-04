@@ -76,6 +76,7 @@ export class StructPrinter {
     }
 
     generateStructs(structs: LanguageWriter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
+        const typedefDeclarations = this.library.createLanguageWriter(Language.CPP)
         const enumsDeclarations = this.library.createLanguageWriter(Language.CPP)
         const forwardDeclarations = this.library.createLanguageWriter(Language.CPP)
         const concreteDeclarations = this.library.createLanguageWriter(Language.CPP)
@@ -101,8 +102,10 @@ export class StructPrinter {
                 continue
             }
             seenNames.add(nameAssigned)
-            if (idl.isInterface(target) && generatorConfiguration().forceResource.includes(target.name))
+            if (idl.isInterface(target) && generatorConfiguration().forceResource.includes(target.name)) {
+                typedefDeclarations.print(`typedef ${generatorConfiguration().TypePrefix}${idl.IDLObjectType.name} ${nameAssigned};`)
                 continue
+            }
             let isPointer = this.isPointerDeclaration(target)
             let isAccessor = idl.isInterface(target) && isMaterialized(target, this.library)
             let noBasicDecl = isAccessor || noDeclaration.includes(nameAssigned)
@@ -185,6 +188,7 @@ export class StructPrinter {
                 this.printOptionalIfNeeded(forwardDeclarations, concreteDeclarations, writeToString, target, seenNames)
             }
         }
+        structs.concat(typedefDeclarations)
         structs.concat(forwardDeclarations)
         structs.concat(enumsDeclarations)
         structs.concat(concreteDeclarations)

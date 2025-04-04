@@ -47,9 +47,6 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
     }
 
     convertInterface(node: idl.IDLInterface): ConvertResult {
-        if (generatorConfiguration().forceResource.includes(node.name)) {
-            return this.make(`${generatorConfiguration().TypePrefix}${idl.IDLObjectType.name}`, true)
-        }
         switch (node.subkind) {
             case idl.IDLInterfaceSubkind.AnonymousInterface:
                 return node.name
@@ -298,9 +295,6 @@ export class CppReturnTypeConvertor implements TypeConvertor<string> {
     }
     convertTypeReference(type: idl.IDLReferenceType): string {
         const decl = this.resolver.resolveTypeReference(type)
-        if (decl && generatorConfiguration().forceResource.includes(decl.name)) {
-            return `${generatorConfiguration().TypePrefix}${idl.IDLObjectType.name}`
-        }
         if (decl && idl.isInterface(decl) && isMaterialized(decl, this.resolver)) {
             return generatorTypePrefix() + qualifiedName(decl, "_", "namespace.name")
         }
