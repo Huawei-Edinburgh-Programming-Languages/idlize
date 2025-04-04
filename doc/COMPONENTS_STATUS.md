@@ -890,7 +890,7 @@
 |`stopBackPress`| Function | Kovalev Sergey | done |  | |
 |`onWillChange`| Function | | | | |
 |`searchButton`|Function| Evstigneev Roman | done |  |  |
-|`inputFilter`|Function| Evstigneev Roman | in progress |  |  |
+|`inputFilter`|Function| Evstigneev Roman | done |  |  |
 |`customKeyboard`|Function| Lobah Mikhail | done |  |   |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
 |*SecurityComponentMethod*| *Component* | Samarin Sergey| done |  |  |
