@@ -298,6 +298,9 @@ export class CppReturnTypeConvertor implements TypeConvertor<string> {
     }
     convertTypeReference(type: idl.IDLReferenceType): string {
         const decl = this.resolver.resolveTypeReference(type)
+        if (decl && generatorConfiguration().forceResource.includes(decl.name)) {
+            return `${generatorConfiguration().TypePrefix}${idl.IDLObjectType.name}`
+        }
         if (decl && idl.isInterface(decl) && isMaterialized(decl, this.resolver)) {
             return generatorTypePrefix() + qualifiedName(decl, "_", "namespace.name")
         }
