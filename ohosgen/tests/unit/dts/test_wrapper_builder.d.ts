@@ -13,4 +13,6 @@ declare class CustomComponentSample {
 
   contentModifier(modifier: ContentModifier): CustomComponentSample;
   // getContentModifier(): ContentModifier;
+
+  // getSample(val: any): any
 }

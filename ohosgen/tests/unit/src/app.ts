@@ -431,6 +431,13 @@ function checkContentModifier() {
   const customComponent = new CustomComponentSample()
   const customComponentStyle = new CustomComponentStyle(123)
   customComponent.contentModifier(customComponentStyle)
+  // const result = customComponent.getContentModifier()
+  // console.log(`result selectedColor: ${(result as CustomComponentStyle).selectedColor}`)
+
+  // console.log(`customComponent: $${customComponent}`)
+  // const res = customComponent.getSample("abc")
+  // console.log(`after res`)
+  // console.log(`res: ${res}`)
 }
 
 export function run() {

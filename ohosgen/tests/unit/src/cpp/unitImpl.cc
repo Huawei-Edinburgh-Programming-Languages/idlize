@@ -812,3 +812,15 @@ OH_UNIT_CustomComponentSample CustomComponentSample_contentModifierImpl(OH_Nativ
     printf("native CustomComponentSample.contentModifierImpl: %d\n", modifier->resource.resourceId);
     return (OH_UNIT_CustomComponentSample) thisPtr;
 }
+
+OH_Object CustomComponentSample_getContentModifierImpl(OH_NativePointer thisPtr) {
+    printf("CustomComponentSample_contentModifierImpl!!!\n");
+    // printf("native CustomComponentSample.contentModifierImpl: %d\n", modifier->resource.resourceId);
+    // return (OH_UNIT_CustomComponentSample) thisPtr;
+    return {};
+}
+
+OH_Object CustomComponentSample_getSampleImpl(OH_NativePointer thisPtr, const OH_Object* val) {
+    printf("getSample id: %d\n", val->resource.resourceId);
+    return *val;
+}
