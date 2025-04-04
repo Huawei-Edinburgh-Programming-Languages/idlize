@@ -1349,10 +1349,10 @@
 |`selectedTextStyle`| Function |Ekaterina Stepanova| done |  |  |
 |`dateTimeOptions`| Function |Ekaterina Stepanova| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onChange`| Function |Ekaterina Stepanova| done |  |  |
-|`onEnterSelectedArea`| Function | Kovalev Sergey | | | |
+|`onEnterSelectedArea`| Function | Kovalev Sergey | in progress | | |
 |`enableHapticFeedback`| Function |Ekaterina Stepanova| done |  |  |
-|`digitalCrownSensitivity`| Function | Kovalev Sergey | | | |
-|`enableCascade`| Function | Kovalev Sergey | | | |
+|`digitalCrownSensitivity`| Function | Kovalev Sergey | in progress | | |
+|`enableCascade`| Function | Kovalev Sergey | in progress | | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*Toggle*| *Component* |Morozov Sergey |blocked IDL |  |
 |`setToggleOptions`| Function |Morozov Sergey | done | unblocked since AceEngine won't fix it |
@@ -1381,8 +1381,8 @@
 |`onStop`| Function | Erokhin Ilya | done |  |  |
 |`enableAnalyzer`| Function | Erokhin Ilya | done |  |  |
 |`analyzerConfig`| Function | Erokhin Ilya | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
-|`surfaceBackgroundColor`| Function | | | | |
-|`enableShortcutKey`| Function | | | | |
+|`surfaceBackgroundColor`| Function | Kovalev Sergey | in progress | | |
+|`enableShortcutKey`| Function | Kovalev Sergey | in progress | | |
 |*Web*| *Component* | Erokhin Ilya | blocked IDL |  | |
 |`setWebOptions`| Function | Erokhin Ilya | blocked IDL |  | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`javaScriptAccess`| Function | Erokhin Ilya | done |  | |
