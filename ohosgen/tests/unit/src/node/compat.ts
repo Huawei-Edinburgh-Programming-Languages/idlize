@@ -58,10 +58,11 @@ export {
     ContentModifier,
     WrappedBuilder,
     wrapBuilder,
+    CommonConfiguration,
     CustomComponentConfiguration,
     CustomComponentShape,
     CustomComponentSample,
-} from 'generated/ts'
+} from '../../generated/ts'
 
 export type OHBuffer = ArrayBuffer
 export type OHAny = any

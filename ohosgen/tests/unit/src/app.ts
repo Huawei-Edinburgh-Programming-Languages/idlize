@@ -58,6 +58,7 @@ import {
   ContentModifier,
   WrappedBuilder,
   wrapBuilder,
+  CommonConfiguration,
   CustomComponentConfiguration,
   CustomComponentShape,
   CustomComponentSample,
@@ -404,11 +405,14 @@ function checkThrowException() {
   assertEQ(true, catchException, "Exception has not been thrown!")
 }
 
-function buildCustomComponent(config: CustomComponentConfiguration): CustomComponentShape {
-  return { shapeStyle: 111 }
+function buildCustomComponent(config: CommonConfiguration): void {
+  const customConf = config as CustomComponentConfiguration
+  console.log(`Build custom component`)
+  console.log(`custom conf name: ${customConf.name}, selected: ${customConf.selected}`)
+  // { shapeStyle: 111 }
 }
 
-class CustomComponentStyle implements ContentModifier<CustomComponentConfiguration> {
+class CustomComponentStyle implements ContentModifier {
 
   selectedColor: number = 0
 
@@ -416,7 +420,7 @@ class CustomComponentStyle implements ContentModifier<CustomComponentConfigurati
     this.selectedColor = selectedColor
   }
 
-  applyContent(): WrappedBuilder<[CustomComponentConfiguration]> {
+  applyContent(): WrappedBuilder {
     return wrapBuilder(buildCustomComponent)
   }
 }
@@ -427,9 +431,6 @@ function checkContentModifier() {
   const customComponent = new CustomComponentSample()
   const customComponentStyle = new CustomComponentStyle(123)
   customComponent.contentModifier(customComponentStyle)
-
-  // dummyAttribute.
-
 }
 
 export function run() {
