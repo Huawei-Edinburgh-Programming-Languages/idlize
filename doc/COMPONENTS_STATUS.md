@@ -1732,10 +1732,10 @@
 |`transformPoint`| Function | | | | |
 |`setPolyToPoly`| Function | | | | |
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
-|`readPixelsToBufferSync`| Function | Andrey Khudenkikh | in progress |  |  |
-|`writeBufferToPixels`| Function | Andrey Khudenkikh | in progress |  |  |
-|`getIsEditable`| Function | Andrey Khudenkikh | in progress |  |  |
-|`getIsStrideAlignment`| Function | Andrey Khudenkikh | in progress |  |  |
+|`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
+|`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
+|`getIsEditable`| Function | Andrey Khudenkikh | blocked |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
+|`getIsStrideAlignment`| Function | Andrey Khudenkikh | blocked |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
 |*RenderNode*| *Class* | Morozov Sergey | in progress | | |
 |`appendChild`| Function | Morozov Sergey | in progress | | |
 |`insertChildAfter`| Function | Morozov Sergey | in progress | | |
@@ -1880,7 +1880,7 @@
 |`drawContent`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`drawFront`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`invalidate`| Function | Erokhin Ilya | done |  | |
-|*TransitionEffect*| *Class* | Andrey Khudenkikh | done |  | |
+|*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress |  | |
 |`translate`| Function | Andrey Khudenkikh | done |  | |
 |`rotate`| Function | Andrey Khudenkikh | done |  | |
 |`scale`| Function | Andrey Khudenkikh | done |  | |
@@ -1889,10 +1889,10 @@
 |`asymmetric`| Function | Andrey Khudenkikh | done |  | |
 |`animation`| Function | Andrey Khudenkikh | done |  | |
 |`combine`| Function | Andrey Khudenkikh | done |  | |
-|`getIDENTITY`| Function | | | |
-|`getOPACITY`| Function | | | | |
-|`getSLIDE`| Function | | | | |
-|`getSLIDE_SWITCH`| Function | | | |
+|`getIDENTITY`| Function | in progress | | |
+|`getOPACITY`| Function | in progress | | | |
+|`getSLIDE`| Function | in progress | | | |
+|`getSLIDE_SWITCH`| Function | in progress | | |
 |*BaseEvent*| *Class* | Politov Mikhail | blocked IDL |  | |
 |`getModifierKeyState`| Function | Politov Mikhail | done |  | |
 |`getTarget`| Function | Politov Mikhail | done |  | |
