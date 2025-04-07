@@ -286,7 +286,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     detectPackageName(sourceFile: ts.SourceFile): string[] {
         let relativeFileName: string = ""
         for (const baseDir of this.baseDirs) {
-            const rel = path.normalize(path.relative(baseDir, sourceFile.fileName))
+            const rel = path.normalize(path.relative(path.resolve(baseDir), sourceFile.fileName))
             if (rel.startsWith("..")) {
                 continue
             }
@@ -296,7 +296,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         if (!relativeFileName)
             console.warn("Unable to resolve relative dts file path for `" + sourceFile.fileName + "`, check your --base-dir parameter")
 
-        if (this.detectFileType() === 'global') {
+        if (this.detectFileType() === 'global' && relativeFileName !== '') {
             relativeFileName = path.dirname(relativeFileName)
         }
         return relativeFileName.replace(/[@#]/g, '').replace(/\.d\.[a-zA-Z]+$/, '').split(/[\/\.]/)
@@ -564,7 +564,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                     clause = [...clause, ...target.split(".")]
                 if (!clause.length)
                     throw new Error("Empty import type clause is not allowed...")
-                dst.name = clause.join(".")
+                dst.name = clause.filter(x => x.length).join(".")
                 dst.typeArguments = this.mapTypeArgs(src.typeArguments, dst.name)
 
                 const found = this.predefinedTypeResolver?.resolveTypeReference(dst)
