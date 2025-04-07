@@ -1075,7 +1075,7 @@
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |  |
 |`minFontScale`| Function | Kovalev Sergey | in progress  | |
 |`maxFontScale`| Function | Kovalev Sergey | in progress  | |
-|`symbolEffect`| Function | Andrey Khudenkikh, Samarin Sergey | in progress |  | testskipped |
+|`symbolEffect`| Function | Andrey Khudenkikh, Samarin Sergey | in progress |  | testskipped for feature branch |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| done |  |  |
 |`setSymbolSpanOptions`| Function |Dmitry A Smirnov| done |  |   |
 |`fontSize`| Function |Dmitry A Smirnov| done |  |  |
@@ -1113,7 +1113,7 @@
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
 |*TabContent*| *Component* | Evstigneev Roman | blocked IDL |  |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |  |
-|`tabBar`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | in progress | modifier and UT for CustomNodeBuilder done Lobah Mikhail. `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB ; `IndicatorStyle` issue: https://gitee.com/nikolay-igotti/idlize/issues/IB74L4 ; `LabelStyle` issue: https://gitee.com/nikolay-igotti/idlize/issues/IB764R |  |
+|`tabBar`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | modifier and UT for CustomNodeBuilder done Lobah Mikhail. `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB ; `IndicatorStyle` issue: https://gitee.com/nikolay-igotti/idlize/issues/IB74L4 ; `LabelStyle` issue: https://gitee.com/nikolay-igotti/idlize/issues/IB764R |  |
 |`onWillShow`| Function |Evstigneev Roman | done |  |  |
 |`onWillHide`| Function |Evstigneev Roman | done |  |  |
 |*Text*| *Component* | Samarin Sergey | blocked IDL |  | |
