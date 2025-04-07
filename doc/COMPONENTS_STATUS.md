@@ -2691,12 +2691,12 @@
 |`offSyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
 |*StyledString*| *Class* | Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`getString`| Function | Pavelyev Ivan | done |  | |
-|`getStyles`| Function | Pavelyev Ivan | in progress |  | |
+|`getStyles`| Function | Politov Mikhail | done |  | |
 |`equals`| Function | Pavelyev Ivan | done |  | |
 |`subStyledString`| Function | Pavelyev Ivan | done |  | |
 |`fromHtml`| Function | Pavelyev Ivan | done |  | |
 |`toHtml`| Function | Pavelyev Ivan | done |  |  |
-|`marshalling`| Function | Pavelyev Ivan | in progress |  |  |
+|`marshalling`| Function | Politov Mikhail | blocked | done on FB, marshalling0 is blocked by https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |  |
 |`unmarshalling`| Function | Pavelyev Ivan | done |  | The method has been split and there is no implementation for `0`, but for `1`, a rework is required!!! |
 |`getLength`| Function | Pavelyev Ivan | done |  | |
 |*TextStyle_styled_string*| *Class* | Erokhin Ilya | done |  |  |
