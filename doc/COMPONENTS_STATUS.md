@@ -202,7 +202,7 @@
 |`onDragLeave`| Function | Lobah Mikhail, Evstigneev Roman | done |  | EVENT |
 |`onDrop`| Function | Lobah Mikhail, Evstigneev Roman | done |  | EVENT |
 |`onDragEnd`| Function | Lobah Mikhail, Evstigneev Roman | done |  | EVENT |
-|`allowDrop`| Function | Lobah Mikhail | devdone | | Incorrect C-API code that corresponds to UniformDataType https://gitee.com/nikolay-igotti/idlize/issues/IBVX2X|
+|`allowDrop`| Function | Lobah Mikhail | in progress | | Incorrect C-API code that corresponds to UniformDataType https://gitee.com/nikolay-igotti/idlize/issues/IBVX2X|
 |`draggable`| Function | Lobah Mikhail | done |  | |
 |`dragPreview`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder |
 |`onPreDrag`| Function | Lobah Mikhail | done |  | |
@@ -226,12 +226,12 @@
 |`accessibilityGroup`| Function | Lobah Mikhail | done |  | |
 |`accessibilityText`| Function | Lobah Mikhail | done |  | |
 |`accessibilityNextFocusId`| Function | Lobah Mikhail| in progress| | |
-|`accessibilityDefaultFocus`| Function | Lobah Mikhail| in progress| | |
+|`accessibilityDefaultFocus`| Function | Lobah Mikhail| blocked| | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00|
 |`accessibilityUseSamePage`| Function | Lobah Mikhail| in progress| | |
 |`accessibilityRole`| Function | Lobah Mikhail| in progress| | |
 |`onAccessibilityFocus`| Function | Evstigneev Roman | done | | feature: API not present |
 |`accessibilityTextHint`| Function | Lobah Mikhail | done |  | |
-|`accessibilityDescription`| Function | Lobah Mikhail | done |  | |
+|`accessibilityDescription`| Function | Lobah Mikhail| in progress| | |
 |`accessibilityLevel`| Function | Lobah Mikhail | done |  | |
 |`accessibilityVirtualNode`| Function | Lobah Mikhail | done |  |  |
 |`accessibilityChecked`| Function | Lobah Mikhail | done |  | |
