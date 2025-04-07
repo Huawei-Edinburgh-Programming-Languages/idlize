@@ -407,8 +407,8 @@
 |`enableAnimation`| Function | Politov Mikhail | done |  |  |
 |`autoHalfFold`| Function | Politov Mikhail | done |  |  |
 |*FormComponent*| *Component* | Vadim Voronov | blocked IDL |  |  |
-|`setFormComponentOptions`| Function | Vadim Voronov | done |  |   |
-|`size`| Function | Vadim Voronov | testskipped |  | blocked AceEngine implemented with tests, empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
+|`setFormComponentOptions`| Function | Vadim Voronov | blocked IDL | | Opt_Want/CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`size`| Function | Vadim Voronov | blocked AceEngine |  | implemented with tests, empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`moduleName`| Function | Vadim Voronov | done |  | |
 |`dimension`| Function | Vadim Voronov | done |  | |
 |`allowUpdate`| Function | Vadim Voronov | done |  | |
