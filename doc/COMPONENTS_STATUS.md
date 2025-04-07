@@ -415,7 +415,7 @@
 |`visibility`| Function | Vadim Voronov | done |  | |
 |`onAcquired`| Function | Vadim Voronov | in progress |  |  |
 |`onError`| Function | Vadim Voronov | in progress |  |  |
-|`onRouter`| Function | Vadim Voronov | deprecated |  |  |
+|`onRouter`| Function | Vadim Voronov | in porogress |  |  |
 |`onUninstall`| Function | Vadim Voronov | in progress |  | |
 |`onLoad`| Function | Vadim Voronov | done |  | |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |  |
