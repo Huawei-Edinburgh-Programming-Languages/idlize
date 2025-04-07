@@ -1325,8 +1325,8 @@
 |`selectedIndex`| Function |Ekaterina Stepanova | done |  |  |
 |`divider`| Function |Ekaterina Stepanova | done |  |  |
 |`gradientHeight`| Function | Ekaterina Stepanova| done |  |  |
-|`enableHapticFeedback`| Function | Kovalev Sergey | done | |  API is present on Upstream only |
-|`digitalCrownSensitivity`| Function | Kovalev Sergey | done | |  API is present on Upstream only |
+|`enableHapticFeedback`| Function | Kovalev Sergey | done | | API is present on Upstream only |
+|`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
 |*TextTimer*| *Component* |Ekaterina Stepanova| blocked IDL |  |  |
@@ -1349,10 +1349,10 @@
 |`selectedTextStyle`| Function |Ekaterina Stepanova| done |  |  |
 |`dateTimeOptions`| Function |Ekaterina Stepanova| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`onChange`| Function |Ekaterina Stepanova| done |  |  |
-|`onEnterSelectedArea`| Function | Kovalev Sergey | in progress | | |
+|`onEnterSelectedArea`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`enableHapticFeedback`| Function |Ekaterina Stepanova| done |  |  |
-|`digitalCrownSensitivity`| Function | Kovalev Sergey | in progress | | |
-|`enableCascade`| Function | Kovalev Sergey | in progress | | |
+|`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | API is present on Upstream only |
+|`enableCascade`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*Toggle*| *Component* |Morozov Sergey |blocked IDL |  |
 |`setToggleOptions`| Function |Morozov Sergey | done | unblocked since AceEngine won't fix it |
