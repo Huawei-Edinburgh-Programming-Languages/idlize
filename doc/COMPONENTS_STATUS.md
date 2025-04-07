@@ -1737,67 +1737,67 @@
 |`getIsEditable`| Function | Andrey Khudenkikh | in progress |  |  |
 |`getIsStrideAlignment`| Function | Andrey Khudenkikh | in progress |  |  |
 |*RenderNode*| *Class* | Morozov Sergey | in progress | | |
-|`appendChild`| Function | Morozov Sergey | | | |
-|`insertChildAfter`| Function | Morozov Sergey | | | |
-|`removeChild`| Function | Morozov Sergey | | | |
-|`clearChildren`| Function | Morozov Sergey | | | |
-|`getChild`| Function | Morozov Sergey | | | |
-|`getFirstChild`| Function | Morozov Sergey | | | |
-|`getNextSibling`| Function | Morozov Sergey | | | |
-|`getPreviousSibling`| Function | Morozov Sergey | | | |
-|`draw`| Function | Morozov Sergey | | | |
-|`invalidate`| Function | Morozov Sergey | | | |
-|`dispose`| Function | Morozov Sergey | | | |
-|`getBackgroundColor`| Function | Morozov Sergey | | | |
-|`setBackgroundColor`| Function | Morozov Sergey | | | |
-|`getClipToFrame`| Function | Morozov Sergey | | | |
-|`setClipToFrame`| Function | Morozov Sergey | | | |
-|`getOpacity`| Function | Morozov Sergey | | | |
-|`setOpacity`| Function | Morozov Sergey | | | |
-|`getSize`| Function | Morozov Sergey | | | |
-|`setSize`| Function | Morozov Sergey | | | |
-|`getPosition`| Function | Morozov Sergey | | | |
-|`setPosition`| Function | Morozov Sergey | | | |
-|`getFrame`| Function | Morozov Sergey | | | |
-|`setFrame`| Function | Morozov Sergey | | | |
-|`getPivot`| Function | Morozov Sergey | | | |
-|`setPivot`| Function | Morozov Sergey | | | |
-|`getScale`| Function | Morozov Sergey | | | |
-|`setScale`| Function | Morozov Sergey | | | |
-|`getTranslation`| Function | Morozov Sergey | | | |
-|`setTranslation`| Function | Morozov Sergey | | | |
-|`getRotation`| Function | Morozov Sergey | | | |
-|`setRotation`| Function | Morozov Sergey | | | |
-|`getTransform`| Function | Morozov Sergey | | | |
-|`setTransform`| Function | Morozov Sergey | | | |
-|`getShadowColor`| Function | Morozov Sergey | | | |
-|`setShadowColor`| Function | Morozov Sergey | | | |
-|`getShadowOffset`| Function | Morozov Sergey | | | |
-|`setShadowOffset`| Function | Morozov Sergey | | | |
-|`getLabel`| Function | Morozov Sergey | | | |
-|`setLabel`| Function | Morozov Sergey | | | |
-|`getShadowAlpha`| Function | Morozov Sergey | | | |
-|`setShadowAlpha`| Function | Morozov Sergey | | | |
-|`getShadowElevation`| Function | Morozov Sergey | | | |
-|`setShadowElevation`| Function | Morozov Sergey | | | |
-|`getShadowRadius`| Function | Morozov Sergey | | | |
-|`setShadowRadius`| Function | Morozov Sergey | | | |
-|`getBorderStyle`| Function | Morozov Sergey | | | |
-|`setBorderStyle`| Function | Morozov Sergey | | | |
-|`getBorderWidth`| Function | Morozov Sergey | | | |
-|`setBorderWidth`| Function | Morozov Sergey | | | |
-|`getBorderColor`| Function | Morozov Sergey | | | |
-|`setBorderColor`| Function | Morozov Sergey | | | |
-|`getBorderRadius`| Function | Morozov Sergey | | | |
-|`setBorderRadius`| Function | Morozov Sergey | | | |
-|`getShapeMask`| Function | Morozov Sergey | | | |
-|`setShapeMask`| Function | Morozov Sergey | | | |
-|`getShapeClip`| Function | Morozov Sergey | | | |
-|`setShapeClip`| Function | Morozov Sergey | | | |
-|`getMarkNodeGroup`| Function | Morozov Sergey | | | |
-|`setMarkNodeGroup`| Function | Morozov Sergey | | | |
-|`getLengthMetricsUnit`| Function | Morozov Sergey | | | |
-|`setLengthMetricsUnit`| Function | Morozov Sergey | | | |
+|`appendChild`| Function | Morozov Sergey | in progress | | |
+|`insertChildAfter`| Function | Morozov Sergey | in progress | | |
+|`removeChild`| Function | Morozov Sergey | in progress | | |
+|`clearChildren`| Function | Morozov Sergey | in progress | | |
+|`getChild`| Function | Morozov Sergey | in progress | | |
+|`getFirstChild`| Function | Morozov Sergey | in progress | | |
+|`getNextSibling`| Function | Morozov Sergey | in progress | | |
+|`getPreviousSibling`| Function | Morozov Sergey | in progress | | |
+|`draw`| Function | Morozov Sergey | in progress | | |
+|`invalidate`| Function | Morozov Sergey | in progress | | |
+|`dispose`| Function | Morozov Sergey | in progress | | |
+|`getBackgroundColor`| Function | Morozov Sergey | in progress | | |
+|`setBackgroundColor`| Function | Morozov Sergey | in progress | | |
+|`getClipToFrame`| Function | Morozov Sergey | in progress | | |
+|`setClipToFrame`| Function | Morozov Sergey | in progress | | |
+|`getOpacity`| Function | Morozov Sergey | in progress | | |
+|`setOpacity`| Function | Morozov Sergey | in progress | | |
+|`getSize`| Function | Morozov Sergey | in progress | | |
+|`setSize`| Function | Morozov Sergey | in progress | | |
+|`getPosition`| Function | Morozov Sergey | in progress | | |
+|`setPosition`| Function | Morozov Sergey | in progress | | |
+|`getFrame`| Function | Morozov Sergey | in progress | | |
+|`setFrame`| Function | Morozov Sergey | in progress | | |
+|`getPivot`| Function | Morozov Sergey | in progress | | |
+|`setPivot`| Function | Morozov Sergey | in progress | | |
+|`getScale`| Function | Morozov Sergey | in progress | | |
+|`setScale`| Function | Morozov Sergey | in progress | | |
+|`getTranslation`| Function | Morozov Sergey | in progress | | |
+|`setTranslation`| Function | Morozov Sergey | in progress | | |
+|`getRotation`| Function | Morozov Sergey | in progress | | |
+|`setRotation`| Function | Morozov Sergey | in progress | | |
+|`getTransform`| Function | Morozov Sergey | in progress | | |
+|`setTransform`| Function | Morozov Sergey | in progress | | |
+|`getShadowColor`| Function | Morozov Sergey | in progress | | |
+|`setShadowColor`| Function | Morozov Sergey | in progress | | |
+|`getShadowOffset`| Function | Morozov Sergey | in progress | | |
+|`setShadowOffset`| Function | Morozov Sergey | in progress | | |
+|`getLabel`| Function | Morozov Sergey | in progress | | |
+|`setLabel`| Function | Morozov Sergey | in progress | | |
+|`getShadowAlpha`| Function | Morozov Sergey | in progress | | |
+|`setShadowAlpha`| Function | Morozov Sergey | in progress | | |
+|`getShadowElevation`| Function | Morozov Sergey | in progress | | |
+|`setShadowElevation`| Function | Morozov Sergey | in progress | | |
+|`getShadowRadius`| Function | Morozov Sergey | in progress | | |
+|`setShadowRadius`| Function | Morozov Sergey | in progress | | |
+|`getBorderStyle`| Function | Morozov Sergey | in progress | | |
+|`setBorderStyle`| Function | Morozov Sergey | in progress | | |
+|`getBorderWidth`| Function | Morozov Sergey | in progress | | |
+|`setBorderWidth`| Function | Morozov Sergey | in progress | | |
+|`getBorderColor`| Function | Morozov Sergey | in progress | | |
+|`setBorderColor`| Function | Morozov Sergey | in progress | | |
+|`getBorderRadius`| Function | Morozov Sergey | in progress | | |
+|`setBorderRadius`| Function | Morozov Sergey | in progress | | |
+|`getShapeMask`| Function | Morozov Sergey | in progress | | |
+|`setShapeMask`| Function | Morozov Sergey | in progress | | |
+|`getShapeClip`| Function | Morozov Sergey | in progress | | |
+|`setShapeClip`| Function | Morozov Sergey | in progress | | |
+|`getMarkNodeGroup`| Function | Morozov Sergey | in progress | | |
+|`setMarkNodeGroup`| Function | Morozov Sergey | in progress | | |
+|`getLengthMetricsUnit`| Function | Morozov Sergey | in progress | | |
+|`setLengthMetricsUnit`| Function | Morozov Sergey | in progress | | |
 |*Filter*| *Class* | | | | |
 |`pixelStretch`| Function | | | | |
 |`blur`| Function | | | | |
