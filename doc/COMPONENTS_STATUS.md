@@ -1736,68 +1736,68 @@
 |`writeBufferToPixels`| Function | Andrey Khudenkikh | in progress |  |  |
 |`getIsEditable`| Function | Andrey Khudenkikh | in progress |  |  |
 |`getIsStrideAlignment`| Function | Andrey Khudenkikh | in progress |  |  |
-|*RenderNode*| *Class* | | | | |
-|`appendChild`| Function | | | | |
-|`insertChildAfter`| Function | | | | |
-|`removeChild`| Function | | | | |
-|`clearChildren`| Function | | | | |
-|`getChild`| Function | | | | |
-|`getFirstChild`| Function | | | | |
-|`getNextSibling`| Function | | | | |
-|`getPreviousSibling`| Function | | | | |
-|`draw`| Function | | | | |
-|`invalidate`| Function | | | | |
-|`dispose`| Function | | | | |
-|`getBackgroundColor`| Function | | | | |
-|`setBackgroundColor`| Function | | | | |
-|`getClipToFrame`| Function | | | | |
-|`setClipToFrame`| Function | | | | |
-|`getOpacity`| Function | | | | |
-|`setOpacity`| Function | | | | |
-|`getSize`| Function | | | | |
-|`setSize`| Function | | | | |
-|`getPosition`| Function | | | | |
-|`setPosition`| Function | | | | |
-|`getFrame`| Function | | | | |
-|`setFrame`| Function | | | | |
-|`getPivot`| Function | | | | |
-|`setPivot`| Function | | | | |
-|`getScale`| Function | | | | |
-|`setScale`| Function | | | | |
-|`getTranslation`| Function | | | | |
-|`setTranslation`| Function | | | | |
-|`getRotation`| Function | | | | |
-|`setRotation`| Function | | | | |
-|`getTransform`| Function | | | | |
-|`setTransform`| Function | | | | |
-|`getShadowColor`| Function | | | | |
-|`setShadowColor`| Function | | | | |
-|`getShadowOffset`| Function | | | | |
-|`setShadowOffset`| Function | | | | |
-|`getLabel`| Function | | | | |
-|`setLabel`| Function | | | | |
-|`getShadowAlpha`| Function | | | | |
-|`setShadowAlpha`| Function | | | | |
-|`getShadowElevation`| Function | | | | |
-|`setShadowElevation`| Function | | | | |
-|`getShadowRadius`| Function | | | | |
-|`setShadowRadius`| Function | | | | |
-|`getBorderStyle`| Function | | | | |
-|`setBorderStyle`| Function | | | | |
-|`getBorderWidth`| Function | | | | |
-|`setBorderWidth`| Function | | | | |
-|`getBorderColor`| Function | | | | |
-|`setBorderColor`| Function | | | | |
-|`getBorderRadius`| Function | | | | |
-|`setBorderRadius`| Function | | | | |
-|`getShapeMask`| Function | | | | |
-|`setShapeMask`| Function | | | | |
-|`getShapeClip`| Function | | | | |
-|`setShapeClip`| Function | | | | |
-|`getMarkNodeGroup`| Function | | | | |
-|`setMarkNodeGroup`| Function | | | | |
-|`getLengthMetricsUnit`| Function | | | | |
-|`setLengthMetricsUnit`| Function | | | | |
+|*RenderNode*| *Class* | Morozov Sergey | | | |
+|`appendChild`| Function | Morozov Sergey | | | |
+|`insertChildAfter`| Function | Morozov Sergey | | | |
+|`removeChild`| Function | Morozov Sergey | | | |
+|`clearChildren`| Function | Morozov Sergey | | | |
+|`getChild`| Function | Morozov Sergey | | | |
+|`getFirstChild`| Function | Morozov Sergey | | | |
+|`getNextSibling`| Function | Morozov Sergey | | | |
+|`getPreviousSibling`| Function | Morozov Sergey | | | |
+|`draw`| Function | Morozov Sergey | | | |
+|`invalidate`| Function | Morozov Sergey | | | |
+|`dispose`| Function | Morozov Sergey | | | |
+|`getBackgroundColor`| Function | Morozov Sergey | | | |
+|`setBackgroundColor`| Function | Morozov Sergey | | | |
+|`getClipToFrame`| Function | Morozov Sergey | | | |
+|`setClipToFrame`| Function | Morozov Sergey | | | |
+|`getOpacity`| Function | Morozov Sergey | | | |
+|`setOpacity`| Function | Morozov Sergey | | | |
+|`getSize`| Function | Morozov Sergey | | | |
+|`setSize`| Function | Morozov Sergey | | | |
+|`getPosition`| Function | Morozov Sergey | | | |
+|`setPosition`| Function | Morozov Sergey | | | |
+|`getFrame`| Function | Morozov Sergey | | | |
+|`setFrame`| Function | Morozov Sergey | | | |
+|`getPivot`| Function | Morozov Sergey | | | |
+|`setPivot`| Function | Morozov Sergey | | | |
+|`getScale`| Function | Morozov Sergey | | | |
+|`setScale`| Function | Morozov Sergey | | | |
+|`getTranslation`| Function | Morozov Sergey | | | |
+|`setTranslation`| Function | Morozov Sergey | | | |
+|`getRotation`| Function | Morozov Sergey | | | |
+|`setRotation`| Function | Morozov Sergey | | | |
+|`getTransform`| Function | Morozov Sergey | | | |
+|`setTransform`| Function | Morozov Sergey | | | |
+|`getShadowColor`| Function | Morozov Sergey | | | |
+|`setShadowColor`| Function | Morozov Sergey | | | |
+|`getShadowOffset`| Function | Morozov Sergey | | | |
+|`setShadowOffset`| Function | Morozov Sergey | | | |
+|`getLabel`| Function | Morozov Sergey | | | |
+|`setLabel`| Function | | Morozov Sergey | | |
+|`getShadowAlpha`| Function | Morozov Sergey | | | |
+|`setShadowAlpha`| Function | Morozov Sergey | | | |
+|`getShadowElevation`| Function | Morozov Sergey | | | |
+|`setShadowElevation`| Function | Morozov Sergey | | | |
+|`getShadowRadius`| Function | Morozov Sergey | | | |
+|`setShadowRadius`| Function | Morozov Sergey | | | |
+|`getBorderStyle`| Function | Morozov Sergey | | | |
+|`setBorderStyle`| Function | Morozov Sergey | | | |
+|`getBorderWidth`| Function | Morozov Sergey | | | |
+|`setBorderWidth`| Function | Morozov Sergey | | | |
+|`getBorderColor`| Function | Morozov Sergey | | | |
+|`setBorderColor`| Function | Morozov Sergey | | | |
+|`getBorderRadius`| Function | Morozov Sergey | | | |
+|`setBorderRadius`| Function | Morozov Sergey | | | |
+|`getShapeMask`| Function | Morozov Sergey | | | |
+|`setShapeMask`| Function | Morozov Sergey | | | |
+|`getShapeClip`| Function | Morozov Sergey | | | |
+|`setShapeClip`| Function | Morozov Sergey | | | |
+|`getMarkNodeGroup`| Function | Morozov Sergey | | | |
+|`setMarkNodeGroup`| Function | Morozov Sergey | | | |
+|`getLengthMetricsUnit`| Function | Morozov Sergey | | | |
+|`setLengthMetricsUnit`| Function | Morozov Sergey | | | |
 |*Filter*| *Class* | | | | |
 |`pixelStretch`| Function | | | | |
 |`blur`| Function | | | | |
