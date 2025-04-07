@@ -368,7 +368,7 @@
 |`valueColors`| Function |Morozov Sergey | done | | |
 |`trackBackgroundColor`| Function |Morozov Sergey | done |  |  |
 |`strokeWidth`| Function | Morozov Sergey | done |  |  |
-|`trackShadow`| Function |Morozov Sergey | done | | test disabled, https://gitee.com/openharmony/arkui_ace_engine/issues/IBVDFV |
+|`trackShadow`| Function |Morozov Sergey | testskipped | | https://gitee.com/openharmony/arkui_ace_engine/issues/IBVDFV |
 |`contentModifier`| Function | Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |*DatePicker*| *Component* | Vadim Voronov | done |  |  |
 |`setDatePickerOptions`| Function | Vadim Voronov| done |  | |
