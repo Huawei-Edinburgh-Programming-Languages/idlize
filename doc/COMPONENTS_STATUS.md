@@ -796,8 +796,8 @@
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done |  |  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done |  |  |
 |`barState`| Function | Dudkin Sergey| done |  |  |
-|`maxLength`| Function | | | | |
-|`maxLines`| Function | | | | |
+|`maxLength`| Function | Lobah Mikhail| in progress| | |
+|`maxLines`| Function | Lobah Mikhail| in progress| | |
 |`bindSelectionMenu`| Function | Dmitry A Smirnov| done |  |  |
 |`customKeyboard`| Function | Dmitry A Smirnov| done |  |  |
 |`placeholder`| Function | Dudkin Sergey| done |  |  |
@@ -1052,7 +1052,7 @@
 |`customContentTransition`| Function | Skroba Gleb | done |  | |
 |`onContentDidScroll`| Function | Skroba Gleb| done |  | |
 |`indicatorInteractive`| Function | Skroba Gleb| done |  |  |
-|`pageFlipMode`| Function | | | | |
+|`pageFlipMode`| Function | Lobah Mikhail| in progress| | |
 |`displayArrow`| Function | Skroba Gleb| done |  |  |
 |`displayCount`| Function |Skroba Gleb | done |  |  |
 |`prevMargin`| Function | Skroba Gleb| done |  |  |
@@ -1107,7 +1107,7 @@
 |`customContentTransition`| Function | Dudkin Sergey | done |  |  |
 |`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | done |  |  |
 |`barBackgroundEffect`| Function | Tuzhilkin Ivan | done |  | |
-|`pageFlipMode`| Function | | | | |
+|`pageFlipMode`| Function | Lobah Mikhail| in progress| | |
 |`onContentWillChange`| Function | Dudkin Sergey | done |  | |
 |`barModeScrollable`| Function | Tuzhilkin Ivan | done |  | |
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
@@ -1569,12 +1569,12 @@
 |`indicatorStyle`| Function | Kovalev Sergey | done |  | depricated |
 |`indicatorLoop`| Function | Kovalev Sergey | done |  | depricated |
 |`onChange`| Function | Kovalev Sergey | done |  | depricated |
-|*AnimationExtender*| *Class* | | | | |
-|`SetClipRect`| Function | | | | |
-|`OpenImplicitAnimation`| Function | | | | |
-|`CloseImplicitAnimation`| Function | | | | |
-|`StartDoubleAnimation`| Function | | | | |
-|`AnimationTranslate`| Function | | | | |
+|*AnimationExtender*| *Class* | Lobah Mikhail| in progress| | |
+|`SetClipRect`| Function | Lobah Mikhail| in progress| | |
+|`OpenImplicitAnimation`| Function | Lobah Mikhail| in progress| | |
+|`CloseImplicitAnimation`| Function | Lobah Mikhail| in progress| | |
+|`StartDoubleAnimation`| Function | Lobah Mikhail| in progress| | |
+|`AnimationTranslate`| Function | Lobah Mikhail| in progress| | |
 |*UnifiedData*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
 |`hasType`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 (+)|
 |`getTypes`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY , https://gitee.com/nikolay-igotti/idlize/issues/IBDHH7 (+)|
