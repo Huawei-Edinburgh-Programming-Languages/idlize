@@ -408,7 +408,7 @@
 |`autoHalfFold`| Function | Politov Mikhail | done |  |  |
 |*FormComponent*| *Component* | Vadim Voronov | blocked IDL |  |  |
 |`setFormComponentOptions`| Function | Vadim Voronov | done |  |   |
-|`size`| Function | Vadim Voronov | testskipped |  | implemented with tests, empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
+|`size`| Function | Vadim Voronov | testskipped |  | blocked AceEngine implemented with tests, empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`moduleName`| Function | Vadim Voronov | done |  | |
 |`dimension`| Function | Vadim Voronov | done |  | |
 |`allowUpdate`| Function | Vadim Voronov | done |  | |
