@@ -1736,7 +1736,7 @@
 |`writeBufferToPixels`| Function | Andrey Khudenkikh | in progress |  |  |
 |`getIsEditable`| Function | Andrey Khudenkikh | in progress |  |  |
 |`getIsStrideAlignment`| Function | Andrey Khudenkikh | in progress |  |  |
-|*RenderNode*| *Class* | Morozov Sergey | | | |
+|*RenderNode*| *Class* | Morozov Sergey | in progress | | |
 |`appendChild`| Function | Morozov Sergey | | | |
 |`insertChildAfter`| Function | Morozov Sergey | | | |
 |`removeChild`| Function | Morozov Sergey | | | |
@@ -1775,7 +1775,7 @@
 |`getShadowOffset`| Function | Morozov Sergey | | | |
 |`setShadowOffset`| Function | Morozov Sergey | | | |
 |`getLabel`| Function | Morozov Sergey | | | |
-|`setLabel`| Function | | Morozov Sergey | | |
+|`setLabel`| Function | Morozov Sergey | | | |
 |`getShadowAlpha`| Function | Morozov Sergey | | | |
 |`setShadowAlpha`| Function | Morozov Sergey | | | |
 |`getShadowElevation`| Function | Morozov Sergey | | | |
