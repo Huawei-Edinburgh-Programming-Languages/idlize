@@ -176,6 +176,10 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                 hasImportOrExport = true
                 return node // stop iteration
             }
+            if (ts.isExportAssignment(node)) {
+                hasImportOrExport = true
+                return node // stop iteration
+            }
         })
         this.sourceFileTypeDetected = hasImportOrExport ? 'module' : 'global'
         return this.sourceFileTypeDetected
@@ -298,6 +302,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
 
         if (this.detectFileType() === 'global' && relativeFileName !== '') {
             relativeFileName = path.dirname(relativeFileName)
+        }
+        if (relativeFileName === '.') {
+            return ['']
         }
         return relativeFileName.replace(/[@#]/g, '').replace(/\.d\.[a-zA-Z]+$/, '').split(/[\/\.]/)
     }
