@@ -1703,18 +1703,18 @@
 |`setUnit`| Function | Samarin Sergey | done | | |
 |`getValue`| Function | Samarin Sergey | done | | |
 |`setValue`| Function | Samarin Sergey | done | | |
-|*ShapeMask*| *Class* | | | | |
-|`setRectShape`| Function | | | | |
-|`setRoundRectShape`| Function | | | | |
-|`setCircleShape`| Function | | | | |
-|`setOvalShape`| Function | | | | |
-|`setCommandPath`| Function | | | | |
-|`getFillColor`| Function | | | | |
-|`setFillColor`| Function | | | | |
-|`getStrokeColor`| Function | | | | |
-|`setStrokeColor`| Function | | | | |
-|`getStrokeWidth`| Function | | | | |
-|`setStrokeWidth`| Function | | | | |
+|*ShapeMask*| *Class* | Vadim Voronov | | | |
+|`setRectShape`| Function | Vadim Voronov | | | |
+|`setRoundRectShape`| Function | Vadim Voronov | | | |
+|`setCircleShape`| Function | Vadim Voronov | | | |
+|`setOvalShape`| Function | Vadim Voronov | | | |
+|`setCommandPath`| Function | Vadim Voronov | | | |
+|`getFillColor`| Function | Vadim Voronov | | | |
+|`setFillColor`| Function | Vadim Voronov | | | |
+|`getStrokeColor`| Function | Vadim Voronov | | | |
+|`setStrokeColor`| Function | Vadim Voronov | | | |
+|`getStrokeWidth`| Function | Vadim Voronov | | | |
+|`setStrokeWidth`| Function | Vadim Voronov | | | |
 |*ShapeClip*| *Class* | Andrey Khudenkikh | in progress | | |
 |`setRectShape`| Function | Andrey Khudenkikh | in progress | | |
 |`setRoundRectShape`| Function | Andrey Khudenkikh | in progress | | |
