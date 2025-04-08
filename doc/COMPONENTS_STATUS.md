@@ -1715,12 +1715,12 @@
 |`setStrokeColor`| Function | | | | |
 |`getStrokeWidth`| Function | | | | |
 |`setStrokeWidth`| Function | | | | |
-|*ShapeClip*| *Class* | | | | |
-|`setRectShape`| Function | | | | |
-|`setRoundRectShape`| Function | | | | |
-|`setCircleShape`| Function | | | | |
-|`setOvalShape`| Function | | | | |
-|`setCommandPath`| Function | | | | |
+|*ShapeClip*| *Class* | Andrey Khudenkikh | in progress | | |
+|`setRectShape`| Function | Andrey Khudenkikh | in progress | | |
+|`setRoundRectShape`| Function | Andrey Khudenkikh | in progress | | |
+|`setCircleShape`| Function | Andrey Khudenkikh | in progress | | |
+|`setOvalShape`| Function | Andrey Khudenkikh | in progress | | |
+|`setCommandPath`| Function | Andrey Khudenkikh | in progress | | |
 |*Matrix4Transit*| *Class* | Samarin Sergey | in progress | | API is present on Upstream only |
 |`copy`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
 |`invert`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
