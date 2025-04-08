@@ -992,7 +992,7 @@
 |`minResponsiveDistance`| Function |Morozov Sergey | done |  |  |
 |`contentModifier`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`slideRange`| Function | Morozov Sergey | done |  |  |
-|`digitalCrownSensitivity`| Function | | | | |
+|`digitalCrownSensitivity`| Function | Kovalev Sergey | in progress | | |
 |`showTips`| Function |Morozov Sergey | done |  |  |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
 |*BaseSpan*| *Component* |Politov Mikhail | done |  |  |
