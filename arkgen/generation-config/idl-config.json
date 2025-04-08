@@ -3,6 +3,7 @@
         "DeletedDeclarations": [
             "WrappedBuilder",
             "ContentModifier",
+            "CommonConfiguration",
             "wrapBuilder",
             "IMonitorValue",
             "IMonitor",

@@ -612,7 +612,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                 throw new Error(`Unsupported heritage: ${it.expression.getText()}: ${it.expression.kind}`)
             }
             name = IDLVisitorConfiguration().checkNameReplacement(name, heritage.getSourceFile())
-            return idl.createReferenceType(escapeIDLKeyword(name), this.mapTypeArgs(it.typeArguments, name))
+            const typeArgs = peerGeneratorConfiguration().ignoreTypeParameters(name)
+                ? undefined : this.mapTypeArgs(it.typeArguments, name)
+            return idl.createReferenceType(escapeIDLKeyword(name), typeArgs)
         })
     }
 
@@ -851,6 +853,8 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         const inheritance = this.serializeInheritance(node.heritageClauses)
         const childNameSuggestion = nameSuggestion.prependType()
         this.context.enter(nameSuggestion.name)
+        const typeParemeters = peerGeneratorConfiguration().ignoreTypeParameters(name)
+            ? undefined : this.collectTypeParameters(node.typeParameters)
         return idl.createInterface(
             IDLVisitorConfiguration().checkNameReplacement(nameSuggestion.name, node.getSourceFile()),
             idl.IDLInterfaceSubkind.Interface,
@@ -860,7 +864,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             this.pickProperties(nameSuggestion.name, allMembers, childNameSuggestion),
             this.pickMethods(nameSuggestion.name, allMembers, childNameSuggestion),
             this.pickCallables(node.members, childNameSuggestion),
-            this.collectTypeParameters(node.typeParameters), {
+            typeParemeters, {
             fileName: node.getSourceFile().fileName,
             extendedAttributes: this.computeComponentExtendedAttributes(node),
             documentation: getDocumentation(this.sourceFile, node, this.options.docs)
