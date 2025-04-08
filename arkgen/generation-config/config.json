@@ -30,7 +30,9 @@
     "forceCallback": [
 	    "EditMenuOptions"
     ],
-    "forceResource": [],
+    "forceResource": [
+	    "ContentModifier"
+    ],
     "boundProperties": {
         "Checkbox": [
             "select"
@@ -225,6 +227,10 @@
             "testTupleNumberStringEnum",
             "testTupleOptional",
             "testTupleUnion"
+        ],
+        "ignoreTypeParameters": [
+            "ContentModifier",
+            "CommonConfiguration"
         ],
         "invalidAttributes": [
             "ScrollableCommonMethod"

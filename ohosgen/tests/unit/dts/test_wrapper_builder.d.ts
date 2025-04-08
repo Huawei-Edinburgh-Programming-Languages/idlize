@@ -11,7 +11,7 @@ declare interface CustomComponentConfiguration extends CommonConfiguration {
 
 declare class CustomComponentSample {
 
-  contentModifier(modifier: ContentModifier): CustomComponentSample;
+  contentModifier(modifier: ContentModifier<CustomComponentConfiguration>): CustomComponentSample;
   // getContentModifier(): ContentModifier;
 
   // getSample(val: any): any
