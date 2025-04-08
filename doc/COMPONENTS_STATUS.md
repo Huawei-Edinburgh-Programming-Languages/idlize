@@ -376,7 +376,7 @@
 |`disappearTextStyle`| Function | Vadim Voronov| done |  |  |
 |`textStyle`| Function |Vadim Voronov | done |  |  |
 |`selectedTextStyle`| Function |Vadim Voronov | done |  |  |
-|`onChange`| Function | Vadim Voronov| done |  |deprecated?  |
+|`onChange`| Function | Vadim Voronov| done |  | deprecated since API10 replaced by onDateChange |
 |`onDateChange`| Function |Vadim Voronov | done |  | |
 |`digitalCrownSensitivity`| Function | Vadim Voronov | done |  | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
@@ -1703,18 +1703,18 @@
 |`setUnit`| Function | Samarin Sergey | done | | |
 |`getValue`| Function | Samarin Sergey | done | | |
 |`setValue`| Function | Samarin Sergey | done | | |
-|*ShapeMask*| *Class* | Vadim Voronov | | | |
-|`setRectShape`| Function | Vadim Voronov | | | |
-|`setRoundRectShape`| Function | Vadim Voronov | | | |
-|`setCircleShape`| Function | Vadim Voronov | | | |
-|`setOvalShape`| Function | Vadim Voronov | | | |
-|`setCommandPath`| Function | Vadim Voronov | | | |
-|`getFillColor`| Function | Vadim Voronov | | | |
-|`setFillColor`| Function | Vadim Voronov | | | |
-|`getStrokeColor`| Function | Vadim Voronov | | | |
-|`setStrokeColor`| Function | Vadim Voronov | | | |
-|`getStrokeWidth`| Function | Vadim Voronov | | | |
-|`setStrokeWidth`| Function | Vadim Voronov | | | |
+|*ShapeMask*| *Class* | Vadim Voronov | in progress | | |
+|`setRectShape`| Function | Vadim Voronov | in progress | | |
+|`setRoundRectShape`| Function | Vadim Voronov | in progress | | |
+|`setCircleShape`| Function | Vadim Voronov | in progress | | |
+|`setOvalShape`| Function | Vadim Voronov | in progress | | |
+|`setCommandPath`| Function | Vadim Voronov | in progress | | |
+|`getFillColor`| Function | Vadim Voronov | in progress | | |
+|`setFillColor`| Function | Vadim Voronov | in progress | | |
+|`getStrokeColor`| Function | Vadim Voronov | in progress | | |
+|`setStrokeColor`| Function | Vadim Voronov | in progress | | |
+|`getStrokeWidth`| Function | Vadim Voronov | in progress | | |
+|`setStrokeWidth`| Function | Vadim Voronov | in progress | | |
 |*ShapeClip*| *Class* | Andrey Khudenkikh | in progress | | |
 |`setRectShape`| Function | Andrey Khudenkikh | in progress | | |
 |`setRoundRectShape`| Function | Andrey Khudenkikh | in progress | | |
