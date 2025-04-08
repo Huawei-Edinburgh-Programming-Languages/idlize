@@ -1882,17 +1882,17 @@
 |`invalidate`| Function | Erokhin Ilya | done |  | |
 |*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress |  | |
 |`translate`| Function | Andrey Khudenkikh | done |  | |
-|`rotate`| Function | Andrey Khudenkikh | done |  | |
-|`scale`| Function | Andrey Khudenkikh | done |  | |
-|`opacity`| Function | Andrey Khudenkikh | done |  | |
-|`move`| Function | Andrey Khudenkikh | done |  | |
-|`asymmetric`| Function | Andrey Khudenkikh | done |  | |
-|`animation`| Function | Andrey Khudenkikh | done |  | |
-|`combine`| Function | Andrey Khudenkikh | done |  | |
-|`getIDENTITY`| Function | in progress | | |
-|`getOPACITY`| Function | in progress | | | |
-|`getSLIDE`| Function | in progress | | | |
-|`getSLIDE_SWITCH`| Function | in progress | | |
+|`rotate`| Function | Andrey Khudenkikh | done | | |
+|`scale`| Function | Andrey Khudenkikh | done | | |
+|`opacity`| Function | Andrey Khudenkikh | done | | |
+|`move`| Function | Andrey Khudenkikh | done | | |
+|`asymmetric`| Function | Andrey Khudenkikh | done | | |
+|`animation`| Function | Andrey Khudenkikh | done | | |
+|`combine`| Function | Andrey Khudenkikh | done | | |
+|`getIDENTITY`| Function | Andrey Khudenkikh | in progress | | |
+|`getOPACITY`| Function | Andrey Khudenkikh | in progress | | |
+|`getSLIDE`| Function | Andrey Khudenkikh | in progress | | |
+|`getSLIDE_SWITCH`| Function | Andrey Khudenkikh | in progress | | |
 |*BaseEvent*| *Class* | Politov Mikhail | blocked IDL |  | |
 |`getModifierKeyState`| Function | Politov Mikhail | done |  | |
 |`getTarget`| Function | Politov Mikhail | done |  | |
