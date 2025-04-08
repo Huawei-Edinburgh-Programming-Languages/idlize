@@ -950,7 +950,7 @@
 |`controlSize` | Function | Samarin Sergey | done |  |  |
 |`menuItemContentModifier` | Function | Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
 |`divider` | Function | Samarin Sergey | done |  |  |
-|`textModifier`| Function | Samarin Sergey | in progress |  | |
+|`textModifier`| Function | Samarin Sergey | managed side |  | |
 |`arrowModifier`| Function | Samarin Sergey | in progress |  | |
 |`menuAlign` | Function | Samarin Sergey | done |  |  |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
@@ -1721,16 +1721,16 @@
 |`setCircleShape`| Function | | | | |
 |`setOvalShape`| Function | | | | |
 |`setCommandPath`| Function | | | | |
-|*Matrix4Transit*| *Class* | | | | |
-|`copy`| Function | | | | |
-|`invert`| Function | | | | |
-|`combine`| Function | | | | |
-|`translate`| Function | | | | |
-|`scale`| Function | | | | |
-|`skew`| Function | | | | |
-|`rotate`| Function | | | | |
-|`transformPoint`| Function | | | | |
-|`setPolyToPoly`| Function | | | | |
+|*Matrix4Transit*| *Class* | Samarin Sergey | in progress | | API is present on Upstream only |
+|`copy`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
+|`invert`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
+|`combine`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
+|`translate`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
+|`scale`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
+|`skew`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
+|`rotate`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
+|`transformPoint`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
+|`setPolyToPoly`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
 |`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
 |`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
