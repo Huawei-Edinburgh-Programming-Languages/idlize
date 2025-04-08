@@ -2111,7 +2111,7 @@
 |`getAntialias`| Function | Vadim Voronov | done | | |
 |`setAntialias`| Function | Vadim Voronov | done | | |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | blocked IDL |  | |
-|`drawImage`| Function  | Vadim Voronov | testskipped |  | |
+|`drawImage`| Function  | Vadim Voronov | done |  | |
 |`beginPath`| Function  | Vadim Voronov | done  |  | |
 |`clip`| Function  | Vadim Voronov | done  |  | |
 |`fill`| Function  | Vadim Voronov | done  |  | |
@@ -2124,7 +2124,7 @@
 |`getImageData`| Function  | Vadim Voronov | done | | |
 |`getPixelMap`| Function  | Vadim Voronov | done | | |
 |`putImageData`| Function  | Vadim Voronov | done   |  |  |
-|`getLineDash`| Function  | Vadim Voronov |  testskipped | |  |
+|`getLineDash`| Function  | Vadim Voronov |  done | |  |
 |`setLineDash`| Function  | Vadim Voronov | done |  | |
 |`clearRect`| Function  | Vadim Voronov | done |  | |
 |`fillRect`| Function  | Vadim Voronov | done |  | |
@@ -2132,7 +2132,7 @@
 |`restore`| Function  | Vadim Voronov | done |  | |
 |`save`| Function  | Vadim Voronov | done |  | |
 |`fillText`| Function  | Vadim Voronov | done |  | |
-|`measureText`| Function  | Vadim Voronov | testskipped |  |  |
+|`measureText`| Function  | Vadim Voronov | done |  |  |
 |`strokeText`| Function  | Vadim Voronov | done |  | |
 |`getTransform`| Function  | Vadim Voronov | done | |  |
 |`resetTransform`| Function  | Vadim Voronov | done |  | |
@@ -2153,9 +2153,9 @@
 |`getGlobalCompositeOperation`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setGlobalCompositeOperation`| Function  | Vadim Voronov | done |  | |
 |`getFillStyle`| Function | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setFillStyle`| Function  | Vadim Voronov | testskipped |  | |
+|`setFillStyle`| Function  | Vadim Voronov | done |  | |
 |`getStrokeStyle`| Function | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setStrokeStyle`| Function  | Vadim Voronov | testskipped |  | |
+|`setStrokeStyle`| Function  | Vadim Voronov | done |  | |
 |`getFilter`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setFilter`| Function  | Vadim Voronov | done |  | |
 |`getImageSmoothingEnabled`| Function  | Vadim Voronov | done |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
