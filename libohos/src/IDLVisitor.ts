@@ -1209,11 +1209,10 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                 return this.makeQualifiedName(type)
             }
             const typeMapper = this.TypeMapper.get(typeName)
-            const typeArgs = peerGeneratorConfiguration().ignoreTypeParameters(typeName)
-                ? undefined : this.mapTypeArgs(type.typeArguments, typeName)
             return typeMapper
                 ? typeMapper(type, nameSuggestion)
-                : idl.createReferenceType(typeName, typeArgs);
+                : idl.createReferenceType(typeName, peerGeneratorConfiguration().ignoreTypeParameters(typeName)
+                    ? undefined : this.mapTypeArgs(type.typeArguments, typeName));
         }
         if (ts.isThisTypeNode(type)) {
             return idl.createReferenceType("this")
