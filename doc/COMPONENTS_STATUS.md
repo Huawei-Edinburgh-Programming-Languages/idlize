@@ -1403,7 +1403,7 @@
 |`wideViewModeAccess`| Function | Erokhin Ilya | done |  |deprecated |
 |`overviewModeAccess`| Function | Erokhin Ilya | done |  | |
 |`overScrollMode`| Function | Erokhin Ilya | done |  | |
-|`blurOnKeyboardHideMode`| Function | | | | |
+|`blurOnKeyboardHideMode`| Function | Vadim Voronov | | | |
 |`textZoomAtio`| Function | Erokhin Ilya | done |  |deprecated |
 |`textZoomRatio`| Function | Erokhin Ilya | done |  | |
 |`databaseAccess`| Function | Erokhin Ilya | done |  | |
@@ -1504,12 +1504,12 @@
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done |  | |
 |`editMenuOptions`| Function | Erokhin Ilya, Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enableHapticFeedback`| Function | Erokhin Ilya | done |  | |
-|`enableFollowSystemFontWeight`| Function | | | | |
-|`enableWebAVSession`| Function | | | | |
-|`optimizeParserBudget`| Function | | | | |
-|`runJavaScriptOnDocumentStart`| Function | | | | |
-|`runJavaScriptOnDocumentEnd`| Function | | | | |
-|`runJavaScriptOnHeadEnd`| Function | | | | |
+|`enableFollowSystemFontWeight`| Function | Vadim Voronov | | | |
+|`enableWebAVSession`| Function | Vadim Voronov  | | | |
+|`optimizeParserBudget`| Function | Vadim Voronov  | | | |
+|`runJavaScriptOnDocumentStart`| Function | Vadim Voronov  | | | |
+|`runJavaScriptOnDocumentEnd`| Function | Vadim Voronov  | | | |
+|`runJavaScriptOnHeadEnd`| Function | Vadim Voronov  | | | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done |  | |
 |`bindSelectionMenu`| Function | Lobah Mikhail | in progress |  |   |
 |*WindowScene*| *Component* | Dudkin Sergey | done |  | |
