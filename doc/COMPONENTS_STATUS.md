@@ -2228,8 +2228,8 @@
 |`px2lpx`| Function | Erokhin Ilya | done |  | |
 |`setCursor`| Function | Erokhin Ilya | done |  | |
 |`restoreDefault`| Function | Erokhin Ilya | done |  | |
-|*ContextMenu*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`close`| Function | Tuzhilkin Ivan | in progress |  | was blocked https://gitee.com/nikolay-igotti/idlize/issues/IBB84T |
+|*ContextMenu*| *Class* | Tuzhilkin Ivan | testskipped |  | |
+|`close`| Function | Tuzhilkin Ivan | testskipped | | can checked only on e2e|
 |*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBECPG & https://gitee.com/nikolay-igotti/idlize/issues/IBGU8S + |
 |`open`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
 |`close`| Function | Maksimov Nikita | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
@@ -2294,35 +2294,35 @@
 |`setVelocityY`| Function | Samarin Sergey | done |  | |
 |`getVelocity`| Function | Samarin Sergey | done |  | |
 |`setVelocity`| Function | Samarin Sergey | blocked IDL|  | not applicable https://gitee.com/nikolay-igotti/idlize/issues/IBQEWR |
-|*TapGestureInterface*| *Class* | Dudkin Sergey | done | | |
+|*TapGestureInterface*| *Class* | Dudkin Sergey | done | | wait new generation for feature_branch, to merge CTOR impl |
 |`onAction`| Function | Dudkin Sergey | done | | |
-|*LongPressGestureInterface*| *Class* | Morozov Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
+|*LongPressGestureInterface*| *Class* | Morozov Sergey | done | | wait new generation for feature_branch, to merge CTOR impl |
 |`onAction`| Function | Morozov Sergey | done | | |
 |`onActionEnd`| Function | Morozov Sergey | done | | |
 |`onActionCancel`| Function | Morozov Sergey | done | | |
-|*PanGestureOptions*| *Class* | Politov Mikhail | done |  | |
+|*PanGestureOptions*| *Class* | Politov Mikhail | done | | wait new generation for feature_branch, to merge CTOR impl |
 |`setDirection`| Function | Politov Mikhail | done |  | |
 |`setDistance`| Function | Politov Mikhail | done |  | |
 |`setFingers`| Function | Politov Mikhail | done |  | |
 |`getDirection`| Function | Dudkin Sergey | done |  |  |
-|*PanGestureInterface*| *Class* | Morozov Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
+|*PanGestureInterface*| *Class* | Morozov Sergey | done | | wait new generation for feature_branch, to merge CTOR impl |
 |`onActionStart`| Function | Morozov Sergey | done | | |
 |`onActionUpdate`| Function | Morozov Sergey | done | | |
 |`onActionEnd`| Function | Morozov Sergey | done | | |
 |`onActionCancel`| Function | Morozov Sergey | done | | |
-|*SwipeGestureInterface*| *Class* | Tuzhilkin Ivan | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
+|*SwipeGestureInterface*| *Class* | Tuzhilkin Ivan | done | | wait new generation for feature_branch, to merge CTOR impl |
 |`onAction`| Function | Tuzhilkin Ivan | done | | |
-|*PinchGestureInterface*| *Class* | Tuzhilkin Ivan | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
+|*PinchGestureInterface*| *Class* | Tuzhilkin Ivan | done | | wait new generation for feature_branch, to merge CTOR impl |
 |`onActionStart`| Function | Tuzhilkin Ivan | done | | |
 |`onActionUpdate`| Function | Tuzhilkin Ivan | done | | |
 |`onActionEnd`| Function | Tuzhilkin Ivan | done | | |
 |`onActionCancel`| Function | Tuzhilkin Ivan | done | | |
-|*RotationGestureInterface*| *Class* | Andrey Khudenkikh | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
+|*RotationGestureInterface*| *Class* | Andrey Khudenkikh | done | | wait new generation for feature_branch, to merge CTOR impl |
 |`onActionStart`| Function | Andrey Khudenkikh | done | | |
 |`onActionUpdate`| Function | Andrey Khudenkikh | done | | |
 |`onActionEnd`| Function | Andrey Khudenkikh | done | | |
 |`onActionCancel`| Function | Andrey Khudenkikh | done | | |
-|*GestureGroupInterface*| *Class* | Tuzhilkin Ivan | | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBSL6X |
+|*GestureGroupInterface*| *Class* | Tuzhilkin Ivan | done | | wait new generation for feature_branch, to merge CTOR impl |
 |`onCancel`| Function | Tuzhilkin Ivan | done | | |
 |*ScrollableTargetInfo*| *Class* | Maksimov Nikita | done |  | |
 |`isBegin`| Function | Maksimov Nikita | done |  | |
