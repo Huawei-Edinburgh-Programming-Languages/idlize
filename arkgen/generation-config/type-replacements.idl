@@ -84,6 +84,11 @@ interface CustomDialogControllerOptions {
     attribute CustomBuilder builder;
 };
 
+[Entity=Class]
+interface CustomDialogController {
+    constructor(CustomDialogControllerOptions value, pointer ownerFrameNode);
+};
+
 /* parameterTypeReplacements */
 
 [Entity=Class]
