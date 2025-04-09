@@ -1526,7 +1526,7 @@
 |*SideBarContainer*| *Component* |Dmitry A Smirnov|in progress|  |
 |`setSideBarContainerOptions`| Function |Dmitry A Smirnov| done |  |  |
 |`showSideBar`| Function |Dmitry A Smirnov| done |  |  |
-|`controlButton`| Function |Dmitry A Smirnov| in progress |  | default values https://gitee.com/openharmony/arkui_ace_engine/issues/IAW40V |
+|`controlButton`| Function |Dmitry A Smirnov| done |  | need submit to FB |
 |`showControlButton`| Function |Dmitry A Smirnov| done |  |  |
 |`onChange`| Function |Dmitry A Smirnov| done |  |  |
 |`sideBarWidth`| Function |Dmitry A Smirnov| done |  |  |
