@@ -1504,12 +1504,12 @@
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done |  | |
 |`editMenuOptions`| Function | Erokhin Ilya, Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enableHapticFeedback`| Function | Erokhin Ilya | done |  | |
-|`enableFollowSystemFontWeight`| Function | Vadim Voronov | | | |
-|`enableWebAVSession`| Function | Vadim Voronov  | | | |
-|`optimizeParserBudget`| Function | Vadim Voronov  | | | |
-|`runJavaScriptOnDocumentStart`| Function | Vadim Voronov  | | | |
-|`runJavaScriptOnDocumentEnd`| Function | Vadim Voronov  | | | |
-|`runJavaScriptOnHeadEnd`| Function | Vadim Voronov  | | | |
+|`enableFollowSystemFontWeight`| Function | Vadim Voronov | in progress | | |
+|`enableWebAVSession`| Function | Vadim Voronov  | in progress | | |
+|`optimizeParserBudget`| Function | Vadim Voronov  | in progress | | |
+|`runJavaScriptOnDocumentStart`| Function | Vadim Voronov  | in progress | | |
+|`runJavaScriptOnDocumentEnd`| Function | Vadim Voronov  | in progress | | |
+|`runJavaScriptOnHeadEnd`| Function | Vadim Voronov  | in progress | | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done |  | |
 |`bindSelectionMenu`| Function | Lobah Mikhail | in progress |  |   |
 |*WindowScene*| *Component* | Dudkin Sergey | done |  | |
