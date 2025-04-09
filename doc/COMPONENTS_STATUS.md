@@ -1663,9 +1663,9 @@
 |`registerFont`| Function | Pavelyev Ivan | done | | |
 |`getSystemFontList`| Function | Pavelyev Ivan | done | | |
 |`getFontByName`| Function | Pavelyev Ivan | in progress | | |
-|*GlobalScope_ohos_measure_utils*| *Class* | | | | |
-|`measureText`| Function | | | | |
-|`measureTextSize`| Function | | | | |
+|*GlobalScope_ohos_measure_utils*| *Class* | Dudkin Sergey | in progress | | |
+|`measureText`| Function | Dudkin Sergey | in progress | | |
+|`measureTextSize`| Function | Dudkin Sergey | in progress | | |
 |*SymbolEffect*| *Class* | wangtao, Maksimov Nikita | in progress | | |
 |`dummyForAccessorGenerate`| Function | wangtao, Maksimov Nikita | in progress | | |
 |*ScaleSymbolEffect*| *Class* | Andrey Khudenkikh | done | | |
