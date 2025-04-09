@@ -792,7 +792,7 @@
 |`onDidChange`| Function | Dudkin Sergey| done |  |  |
 |`onCut`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
 |`onCopy`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
-|`editMenuOptions`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done |  |  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done |  |  |
 |`barState`| Function | Dudkin Sergey| done |  |  |
@@ -883,7 +883,7 @@
 |`onDidInsert`|Function| Evstigneev Roman | done |  |  |
 |`onWillDelete`|Function| Skroba Gleb | done |  |   |
 |`onDidDelete`|Function| Evstigneev Roman | done |  |  |
-|`editMenuOptions`|Function| Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`|Function| Maksimov Nikita, Pavelyev Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enablePreviewText`|Function| Evstigneev Roman | done |  |  |
 |`enableHapticFeedback`|Function|Evstigneev Roman| done |  |  |
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
@@ -1156,7 +1156,7 @@
 |`onMarqueeStateChange`| Function | Samarin Sergey | done |  | |
 |`privacySensitive`| Function |Samarin Sergey | done |  |  |
 |`textSelectable`| Function |Samarin Sergey | done |  |  |
-|`editMenuOptions`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`halfLeading`| Function |Samarin Sergey | done |  |  |
 |`enableHapticFeedback`| Function |Samarin Sergey | done |  |  |
 |`selection`| Function |Samarin Sergey | done |  | |
@@ -1211,7 +1211,7 @@
 |`onDidInsert`|Function|Tuzhilkin Ivan| done |  |  |
 |`onWillDelete`|Function| Skroba Gleb | done |  |   |
 |`onDidDelete`|Function|Tuzhilkin Ivan| done |  |  |
-|`editMenuOptions`|Function| Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`|Function| Maksimov Nikita, Pavelyev Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enablePreviewText`|Function|Tuzhilkin Ivan| done |  |  |
 |`enableHapticFeedback`|Function|Tuzhilkin Ivan| done |  | |
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
@@ -1297,7 +1297,7 @@
 |`onDidInsert`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`onWillDelete`| Function | Skroba Gleb | done |  |   |
 |`onDidDelete`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
-|`editMenuOptions`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |  |
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
@@ -1502,7 +1502,7 @@
 |`onInterceptKeyboardAttach`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
 |`onAdsBlocked`| Function | Erokhin Ilya | done |  | |
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done |  | |
-|`editMenuOptions`| Function | Erokhin Ilya, Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`enableHapticFeedback`| Function | Erokhin Ilya | done |  | |
 |`enableFollowSystemFontWeight`| Function | Vadim Voronov | in progress | | |
 |`enableWebAVSession`| Function | Vadim Voronov  | in progress | | |
@@ -2398,7 +2398,7 @@
 |`updateParagraphStyle`| Function | Dudkin Sergey| done |  |  |
 |`deleteSpans`| Function |Dudkin Sergey| done |  |  |
 |`getSpans`| Function |Dudkin Sergey| done |  |  |
-|`getParagraphs`| Function |Dmitry A Smirnov, Ivan Pavelev| done |  | |
+|`getParagraphs`| Function |Dmitry A Smirnov, Ivan Pavelyev| done |  | |
 |`getSelection`| Function |Dudkin Sergey| done |  |  |
 |`fromStyledString`| Function | Dudkin Sergey| done |  |  |
 |`toStyledString`| Function | Dudkin Sergey| done |  |  |
