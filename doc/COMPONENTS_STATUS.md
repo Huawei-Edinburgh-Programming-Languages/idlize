@@ -211,7 +211,7 @@
 |`radialGradient`| Function | Erokhin Ilya | done |  |  |
 |`motionPath`| Function | Lobah Mikhail | done |  | |
 |`shadow`| Function | Roman Sedaikin | done |  | |
-|`clip`| Function | Dudkin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAW4RH deprecated partially |
+|`clip`| Function | Dudkin Sergey | done |  |  |
 |`clipShape`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`mask`| Function | Maksimov Nikita | done |  |deprecated |
 |`maskShape`| Function |Tuzhilkin Ivan| in progress |  | testskipped on feature branch |
