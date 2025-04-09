@@ -1983,8 +1983,8 @@
 |`setWindowX`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
 |`getWindowY`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
 |`setWindowY`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
-|*TouchEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`getHistoricalPoints`| Function | Tuzhilkin Ivan | blocked IDL |  | implementation and UT are ready, but correct behavior is blocked https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
+|*TouchEvent*| *Class* | Tuzhilkin Ivan | done |  | |
+|`getHistoricalPoints`| Function | Tuzhilkin Ivan | done |  | wait new generation on feature_branch  |
 |`getType`| Function | Tuzhilkin Ivan, Samarin Sergey | done |  | |
 |`setType`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |`getTouches`| Function | Tuzhilkin Ivan | done | | |
