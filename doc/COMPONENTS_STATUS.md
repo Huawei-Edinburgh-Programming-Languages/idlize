@@ -142,10 +142,10 @@
 |`onKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |   |
 |`onDigitalCrown`| Function | Evstigneev Roman | done | | feature: API not present |
 |`onKeyPreIme`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |  |
-|`onKeyEventDispatch`| Function | Lobah Mikhail| in progress| | |
+|`onKeyEventDispatch`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocusAxisEvent`| Function | Evstigneev Roman | done | | feature: API not present |
 |`focusable`| Function | Roman Sedaikin | done |  | |
-|`tabStop`| Function | Lobah Mikhail| in progress| | |
+|`tabStop`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocus`| Function | Roman Sedaikin | done |  | |
 |`onBlur`| Function | Roman Sedaikin | done |  | |
 |`tabIndex`| Function | Dmitry A Smirnov| done |  | |
@@ -225,10 +225,10 @@
 |`pixelStretchEffect`| Function | Lobah Mikhail | done |  | |
 |`accessibilityGroup`| Function | Lobah Mikhail | done |  | |
 |`accessibilityText`| Function | Lobah Mikhail | done |  | |
-|`accessibilityNextFocusId`| Function | Lobah Mikhail| in progress| | |
+|`accessibilityNextFocusId`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`accessibilityDefaultFocus`| Function | Lobah Mikhail| blocked| | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00|
-|`accessibilityUseSamePage`| Function | Lobah Mikhail| in progress| | |
-|`accessibilityRole`| Function | Lobah Mikhail| in progress| | |
+|`accessibilityUseSamePage`| Function | Lobah Mikhail| done| | Not exists on FB|
+|`accessibilityRole`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onAccessibilityFocus`| Function | Evstigneev Roman | done | | feature: API not present |
 |`accessibilityTextHint`| Function | Lobah Mikhail | done |  | |
 |`accessibilityDescription`| Function | Lobah Mikhail| in progress| | |
