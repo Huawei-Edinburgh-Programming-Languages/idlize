@@ -788,7 +788,7 @@
 |`onEditingChange`| Function | Dudkin Sergey| done |  |  |
 |`enterKeyType`| Function | Dudkin Sergey| done |  |  |
 |`onSubmit`| Function | Dudkin Sergey, Evstigneev Roman | done |  |  |
-|`onWillChange`| Function | Dudkin Sergey| testskipped |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4G70, reopened beacuse Ark_RichEditorChangeValue changed after generations |
+|`onWillChange`| Function | Dudkin Sergey| done |  |  |
 |`onDidChange`| Function | Dudkin Sergey| done |  |  |
 |`onCut`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
 |`onCopy`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
