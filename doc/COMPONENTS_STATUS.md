@@ -413,10 +413,10 @@
 |`dimension`| Function | Vadim Voronov | done |  | |
 |`allowUpdate`| Function | Vadim Voronov | done |  | |
 |`visibility`| Function | Vadim Voronov | done |  | |
-|`onAcquired`| Function | Vadim Voronov | in progress |  | blocked IDL on FB https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
-|`onError`| Function | Vadim Voronov | in progress |  | on FB testskipped |
+|`onAcquired`| Function | Vadim Voronov | done |  | blocked IDL on FB https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
+|`onError`| Function | Vadim Voronov | done |  | on FB testskipped |
 |`onRouter`| Function | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBVX2X, on FB https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
-|`onUninstall`| Function | Vadim Voronov | in progress |  | blocked IDL on FB https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
+|`onUninstall`| Function | Vadim Voronov | done |  | blocked IDL on FB https://gitee.com/nikolay-igotti/idlize/issues/IB8I7X |
 |`onLoad`| Function | Vadim Voronov | done |  | |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done |  |  |
