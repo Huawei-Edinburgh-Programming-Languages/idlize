@@ -2671,9 +2671,9 @@
 |`getXComponentSurfaceRect`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`setXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`getXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`onSurfaceCreated`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
-|`onSurfaceChanged`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
-|`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9OV + |
+|`onSurfaceCreated`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`onSurfaceChanged`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`startImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`stopImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped |  | |
 |*WaterFlowSections*| *Class* | Kovalev Sergey | in progress |  | |
