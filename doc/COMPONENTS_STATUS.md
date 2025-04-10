@@ -1897,8 +1897,8 @@
 |`getModifierKeyState`| Function | Politov Mikhail | done |  | |
 |`getTarget`| Function | Politov Mikhail | done |  | |
 |`setTarget`| Function | Politov Mikhail | done |  | |
-|`getTimestamp`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
-|`setTimestamp`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
+|`getTimestamp`| Function | Politov Mikhail | in progress|  |  |
+|`setTimestamp`| Function | Politov Mikhail | in progress |  |  |
 |`getSource`| Function | Tuzzhilkin Ivan | done |  | |
 |`setSource`| Function | Politov Mikhail | done |  | |
 |`getAxisHorizontal`| Function | Politov Mikhail | done |  | |
@@ -2033,8 +2033,8 @@
 |`setDeviceId`| Function | Maksimov Nikita | done | | |
 |`getMetaKey`| Function | Maksimov Nikita | done | | |
 |`setMetaKey`| Function | Maksimov Nikita | done | | |
-|`getTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
-|`setTimestamp`| Function | Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBKP3E |
+|`getTimestamp`| Function | Maksimov Nikita | in progress | |  |
+|`setTimestamp`| Function | Maksimov Nikita | in progress | |  |
 |`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Maksimov Nikita | done | | empty implementation |
 |`getIntentionCode`| Function |Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
@@ -2230,7 +2230,7 @@
 |`restoreDefault`| Function | Erokhin Ilya | done |  | |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | testskipped |  | |
 |`close`| Function | Tuzhilkin Ivan | testskipped | | can checked only on e2e|
-|*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBECPG & https://gitee.com/nikolay-igotti/idlize/issues/IBGU8S + |
+|*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBECPG |
 |`open`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
 |`close`| Function | Maksimov Nikita | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
 |*LinearGradient*| *Class* | Morozov Sergey | done | | |
