@@ -1381,8 +1381,8 @@
 |`onStop`| Function | Erokhin Ilya | done |  |  |
 |`enableAnalyzer`| Function | Erokhin Ilya | done |  |  |
 |`analyzerConfig`| Function | Erokhin Ilya | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
-|`surfaceBackgroundColor`| Function | Kovalev Sergey | in progress | | |
-|`enableShortcutKey`| Function | Kovalev Sergey | in progress | | |
+|`surfaceBackgroundColor`| Function | Kovalev Sergey | done | | |
+|`enableShortcutKey`| Function | Kovalev Sergey | done | | |
 |*Web*| *Component* | Erokhin Ilya | blocked IDL |  | |
 |`setWebOptions`| Function | Erokhin Ilya | blocked IDL |  | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`javaScriptAccess`| Function | Erokhin Ilya | done |  | |
