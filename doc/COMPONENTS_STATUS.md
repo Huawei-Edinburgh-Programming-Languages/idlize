@@ -231,7 +231,7 @@
 |`accessibilityRole`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onAccessibilityFocus`| Function | Evstigneev Roman | done | | feature: API not present |
 |`accessibilityTextHint`| Function | Lobah Mikhail | done |  | |
-|`accessibilityDescription`| Function | Lobah Mikhail| in progress| | |
+|`accessibilityDescription`| Function | Lobah Mikhail| done| | |
 |`accessibilityLevel`| Function | Lobah Mikhail | done |  | |
 |`accessibilityVirtualNode`| Function | Lobah Mikhail | done |  |  |
 |`accessibilityChecked`| Function | Lobah Mikhail | done |  | |
@@ -796,8 +796,8 @@
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done |  |  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done |  |  |
 |`barState`| Function | Dudkin Sergey| done |  |  |
-|`maxLength`| Function | Lobah Mikhail| in progress| | not exists on FB|
-|`maxLines`| Function | Lobah Mikhail| in progress| | not exists on FB|
+|`maxLength`| Function | Lobah Mikhail| done| | not exists on FB|
+|`maxLines`| Function | Lobah Mikhail| done| | not exists on FB|
 |`bindSelectionMenu`| Function | Dmitry A Smirnov| done |  |  |
 |`customKeyboard`| Function | Dmitry A Smirnov| done |  |  |
 |`placeholder`| Function | Dudkin Sergey| done |  |  |
@@ -1052,7 +1052,7 @@
 |`customContentTransition`| Function | Skroba Gleb | done |  | |
 |`onContentDidScroll`| Function | Skroba Gleb| done |  | |
 |`indicatorInteractive`| Function | Skroba Gleb| done |  |  |
-|`pageFlipMode`| Function | Lobah Mikhail| in progress| | Not exists on FB|
+|`pageFlipMode`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`displayArrow`| Function | Skroba Gleb| done |  |  |
 |`displayCount`| Function |Skroba Gleb | done |  |  |
 |`prevMargin`| Function | Skroba Gleb| done |  |  |
@@ -1107,7 +1107,7 @@
 |`customContentTransition`| Function | Dudkin Sergey | done |  |  |
 |`barBackgroundBlurStyle`| Function | Tuzhilkin Ivan | done |  |  |
 |`barBackgroundEffect`| Function | Tuzhilkin Ivan | done |  | |
-|`pageFlipMode`| Function | Lobah Mikhail| in progress| | Not exists on FB|
+|`pageFlipMode`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onContentWillChange`| Function | Dudkin Sergey | done |  | |
 |`barModeScrollable`| Function | Tuzhilkin Ivan | done |  | |
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
