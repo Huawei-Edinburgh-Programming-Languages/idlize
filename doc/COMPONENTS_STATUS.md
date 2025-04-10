@@ -986,7 +986,7 @@
 |`trackBorderRadius`| Function |Morozov Sergey | done |  |  |
 |`selectedBorderRadius`| Function |Morozov Sergey | done |  |  |
 |`blockSize`| Function |Morozov Sergey | done |  |  |
-|`blockStyle`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBLDH2 |
+|`blockStyle`| Function |Morozov Sergey | blocked IDL |  | TBD |
 |`stepSize`| Function |Morozov Sergey | done |  |  |
 |`sliderInteractionMode`| Function |Morozov Sergey | done |  |  |
 |`minResponsiveDistance`| Function |Morozov Sergey | done |  |  |
