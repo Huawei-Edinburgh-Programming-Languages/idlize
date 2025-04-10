@@ -87,6 +87,7 @@ export interface PeerGeneratorConfigurationExtension {
     ignoreTypeParameters(name: string): boolean
     isHandWritten(component: string): boolean
     isKnownParametrized(name: string | undefined): boolean
+    isResource(name: string | undefined): boolean
     isShouldReplaceThrowingError(name: string): boolean
     noDummyGeneration(component: string, method?: string): boolean
 
@@ -117,6 +118,9 @@ function expandPeerGeneratorConfiguration(data: PeerGeneratorConfigurationType):
         },
         isKnownParametrized(name: string | undefined): boolean {
             return name != undefined && this.parameterized.includes(name)
+        },
+        isResource(name: string | undefined): boolean {
+            return name != undefined && this.forceResource.includes(name)
         },
         isShouldReplaceThrowingError(name: string): boolean {
             for (const ignore of this.components.replaceThrowErrorReturn) {

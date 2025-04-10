@@ -76,6 +76,8 @@ export class StructPrinter {
     }
 
     generateStructs(structs: LanguageWriter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
+        const DEF_RESOURCE = `${generatorConfiguration().TypePrefix}${idl.IDLObjectType.name}`
+        const DEF_OPT_RESOURCE = `${generatorConfiguration().OptionalPrefix}${idl.IDLObjectType.name}`
         const typedefDeclarations = this.library.createLanguageWriter(Language.CPP)
         const enumsDeclarations = this.library.createLanguageWriter(Language.CPP)
         const forwardDeclarations = this.library.createLanguageWriter(Language.CPP)
@@ -103,7 +105,9 @@ export class StructPrinter {
             }
             seenNames.add(nameAssigned)
             if (idl.isInterface(target) && generatorConfiguration().forceResource.includes(target.name)) {
-                typedefDeclarations.print(`typedef ${generatorConfiguration().TypePrefix}${idl.IDLObjectType.name} ${nameAssigned};`)
+                typedefDeclarations.print(`typedef ${DEF_RESOURCE} ${nameAssigned};`)
+                // idl.createOptionalType(...)
+                typedefDeclarations.print(`typedef ${DEF_OPT_RESOURCE} ${generatorConfiguration().OptionalPrefix}${target.name};`)
                 continue
             }
             let isPointer = this.isPointerDeclaration(target)
@@ -188,8 +192,8 @@ export class StructPrinter {
                 this.printOptionalIfNeeded(forwardDeclarations, concreteDeclarations, writeToString, target, seenNames)
             }
         }
-        structs.concat(typedefDeclarations)
         structs.concat(forwardDeclarations)
+        structs.concat(typedefDeclarations)
         structs.concat(enumsDeclarations)
         structs.concat(concreteDeclarations)
         // TODO: hack, remove me!
