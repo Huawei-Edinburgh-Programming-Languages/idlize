@@ -21,7 +21,7 @@ const paths = {
     arktscgen: `.`,
     build: `./build`,
     unpacked: `./build/libarkts`,
-    libarkts: `../external/arkoala-arkts/libarkts/`
+    libarkts: `../external/ui2abc/libarkts/`
 }
 
 export function assertNoUncommitedChanges() {
