@@ -1235,7 +1235,7 @@
 |`fillOpacity`|Function|Dudkin Sergey| done |  |  |
 |`strokeWidth`|Function|Dudkin Sergey| done |  |  |
 |`antiAlias`|Function|Dudkin Sergey| done |  |  |
-|`mesh`|Function|ILya Erokhin| done|  |  |  |
+|`mesh`|Function|Erokhin Ilya| done|  |  |  |
 |*Slider*| *Component* |Morozov Sergey | blocked IDL |  |  |
 |`constructor`| Function |Morozov Sergey | done |  |  |
 |`setSliderOptions`| Function |Morozov Sergey | done |  |  |
