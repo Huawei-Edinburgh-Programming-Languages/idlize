@@ -104,6 +104,7 @@ export class PeerPrinter extends SingleFilePrinter {
 
     private printBody(): void {
         this.printConstructor()
+        this.printCreate()
         this.printMethods()
     }
 
@@ -142,6 +143,35 @@ export class PeerPrinter extends SingleFilePrinter {
                         [
                             this.writer.makeString(PeersConstructions.pointerParameter)
                         ]
+                    )
+                )
+            },
+            undefined,
+            [MethodModifier.PROTECTED]
+        )
+    }
+
+    private printCreate(): void {
+        this.writer.writeMethodImplementation(
+            new Method(
+                PeersConstructions.create.name,
+                new MethodSignature(
+                    createReferenceType(
+                        this.node.name
+                    ),
+                    [createReferenceType(PeersConstructions.create.parameter.type)],
+                    undefined,
+                    undefined,
+                    [PeersConstructions.create.parameter.name]
+                ),
+                [MethodModifier.PUBLIC, MethodModifier.STATIC]
+            ),
+            () => {
+                this.writer.writeStatement(
+                    this.writer.makeReturn(
+                        this.writer.makeString(
+                            PeersConstructions.create.body(this.node.name)
+                        )
                     )
                 )
             }
@@ -313,7 +343,7 @@ export class PeerPrinter extends SingleFilePrinter {
         const qualified = `${this.importer.withEnumImport(Config.nodeTypeAttribute)}.${enumValue}`
         this.writer.writeExpressionStatements(
             this.writer.makeString(`if (!nodeByType.has(${qualified})) {`),
-            this.writer.makeString(`    nodeByType.set(${qualified}, ${this.node.name})`),
+            this.writer.makeString(`    nodeByType.set(${qualified}, ${this.node.name}.${PeersConstructions.create.name})`),
             this.writer.makeString(`}`)
         )
     }

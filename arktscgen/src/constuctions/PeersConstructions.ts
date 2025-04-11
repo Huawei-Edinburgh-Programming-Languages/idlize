@@ -56,6 +56,17 @@ export class PeersConstructions {
         }
     }
 
+    static get create() {
+        return {
+            name: `create`,
+            parameter: {
+                name: `pointer`,
+                type: `KNativePointer`
+            },
+            body: (name: string) => `NodeCache.cached(pointer, pointer => new ${name}(pointer))`
+        }
+    }
+
     static get unpackNullable(): string {
         return `unpackNode`
     }
@@ -125,7 +136,7 @@ export class PeersConstructions {
     }
 
     static newOf(iface: string): string {
-        return `new ${iface}`
+        return `${iface}.create`
     }
 
     static callPeerMethod(iface: string, method: string): string {

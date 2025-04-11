@@ -25,7 +25,8 @@ import {
     KNativePointer,
     nodeByType,
     ArktsObject,
-    unpackString
+    unpackString,
+    NodeCache
 } from "../../reexport-for-generated"
 
 %GENERATED_PART%
