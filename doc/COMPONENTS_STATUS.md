@@ -383,7 +383,7 @@
 |`fillOpacity`| Function | Evstigneev Roman | done |  |  |
 |`strokeWidth`| Function | Evstigneev Roman | done |  |  |
 |`antiAlias`| Function | Evstigneev Roman | done |  |  |
-|`strokeDashArray`| Function | Ilya Erokhin | done|  | |
+|`strokeDashArray`| Function | Erokhin Ilya| done|  | |
 |*ScrollableCommonMethod*| *Component* | Samarin Sergey | blocked IDL |  |  |
 |`constructor`| Function |Samarin Sergey | blocked IDL |  |  |
 |`scrollBar`| Function | Samarin Sergey | done |  |  |
@@ -1227,7 +1227,7 @@
 |`stroke`|Function|Dudkin Sergey| done |  |  |
 |`fill`|Function|Dudkin Sergey| done |  |  |
 |`strokeDashOffset`|Function|Dudkin Sergey| done |  |  |
-|`strokeDashArray`|Function|Ilya Erokhin| done |  |  |
+|`strokeDashArray`|Function|Erokhin Ilya| done |  |  |
 |`strokeLineCap`|Function|Dudkin Sergey| done |  |  |
 |`strokeLineJoin`|Function|Dudkin Sergey| done |  |  |
 |`strokeMiterLimit`|Function|Dudkin Sergey| done |  |  |
@@ -2103,7 +2103,7 @@
 |`setOvalShape`| Function | Andrey Khudenkikh | done | | |
 |`setCommandPath`| Function | Andrey Khudenkikh | done | | |
 |*Matrix4Transit*| *Class* | Samarin Sergey | in progress | | API is present on Upstream only |
-|`ctor`| Function |in progress | | API is present on Upstream only |
+|`ctor`| Function |Samarin Sergey | in progress | API is present on Upstream only |
 |`copy`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
 |`invert`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
 |`combine`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
