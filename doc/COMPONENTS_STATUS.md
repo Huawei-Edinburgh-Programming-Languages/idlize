@@ -1667,7 +1667,7 @@
 |`measureText`| Function | Dudkin Sergey | in progress | | |
 |`measureTextSize`| Function | Dudkin Sergey | in progress | | |
 |*SymbolEffect*| *Class* | wangtao, Maksimov Nikita | in progress | | |
-|`dummyForAccessorGenerate`| Function | wangtao, Maksimov Nikita | in progress | | |
+|`dummyForAccessorGenerate`| Function | wangtao, Maksimov Nikita | done | | empty implementation |
 |*ScaleSymbolEffect*| *Class* | Andrey Khudenkikh | done | | |
 |`getScope`| Function | Andrey Khudenkikh | done | | |
 |`setScope`| Function | Andrey Khudenkikh | done | | |
@@ -1893,7 +1893,7 @@
 |`getOPACITY`| Function | Andrey Khudenkikh | in progress | | |
 |`getSLIDE`| Function | Andrey Khudenkikh | in progress | | |
 |`getSLIDE_SWITCH`| Function | Andrey Khudenkikh | in progress | | |
-|*BaseEvent*| *Class* | Politov Mikhail | blocked IDL |  | |
+|*BaseEvent*| *Class* | Politov Mikhail | in progress |  | |
 |`getModifierKeyState`| Function | Politov Mikhail | done |  | |
 |`getTarget`| Function | Politov Mikhail | done |  | |
 |`setTarget`| Function | Politov Mikhail | done |  | |
@@ -1915,8 +1915,8 @@
 |`setSourceTool`| Function | Politov Mikhail | done |  | |
 |`getDeviceId`| Function | Politov Mikhail | done |  | |
 |`setDeviceId`| Function | Politov Mikhail | done |  | |
-|`getTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
-|`setTargetDisplayId`| Function | Politov Mikhail | in progress |  | |
+|`getTargetDisplayId`| Function | Maksimov Nikita | in progress |  | |
+|`setTargetDisplayId`| Function | Maksimov Nikita | in progress |  | |
 |*ClickEvent*| *Class* | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
 |`getDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
 |`setDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
@@ -2019,7 +2019,7 @@
 |`setDragBehavior`| Function | Tuzhilkin Ivan | done | | |
 |`getUseCustomDropAnimation`| Function | Evstigneev Roman | done |  | priority |
 |`setUseCustomDropAnimation`| Function | Evstigneev Roman | done |  | priority |
-|*KeyEvent*| *Class* | Maksimov Nikita | blocked IDL |  |  |
+|*KeyEvent*| *Class* | Maksimov Nikita | done |  |  |
 |`getModifierKeyState`| Function | Maksimov Nikita | done | | |
 |`getType`| Function | Maksimov Nikita, Samarin Sergey | done |  | |
 |`setType`| Function | Maksimov Nikita | done | | |
