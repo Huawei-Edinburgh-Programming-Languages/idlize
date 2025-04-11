@@ -299,7 +299,7 @@
 |`accessibilityText0`| Function | Lobah Mikhail | done |  | |
 |`accessibilityText1`| Function |Lobah Mikhail | done |  | |
 |`accessibilityNextFocusId`| Function | Lobah Mikhail| done| | Not exists on FB|
-|`accessibilityDefaultFocus`| Function | Lobah Mikhail| blocked| | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00|
+|`accessibilityDefaultFocus`| Function | Lobah Mikhail| blocked IDL | | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00|
 |`accessibilityUseSamePage`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`accessibilityScrollTriggerable`| Function | | |
 |`accessibilityRole`| Function | Lobah Mikhail| done| | Not exists on FB|
@@ -3335,8 +3335,8 @@
 |`subStyledString`| Function | Pavelyev Ivan | done |  | |
 |`fromHtml`| Function | Pavelyev Ivan | done |  | |
 |`toHtml`| Function | Pavelyev Ivan | done |  |  |
-|`marshalling0`| Function | Politov Mikhail | blocked | done on FB, marshalling0 is blocked by https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |  |
-|`marshalling1`| Function | Politov Mikhail | blocked | done on FB, marshalling0 is blocked by https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |  |
+|`marshalling0`| Function | Politov Mikhail | blocked IDL | done on FB, marshalling0 is blocked by https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |  |
+|`marshalling1`| Function | Politov Mikhail | blocked IDL | done on FB, marshalling0 is blocked by https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |  |
 |`unmarshalling0`| Function | Pavelyev Ivan | done |  | The method has been split and there is no implementation for `0`, but for `1`, a rework is required!!! |
 |`unmarshalling1`| Function | Pavelyev Ivan | in progress |  | The method has been split and there is no implementation for `0`, but for `1`, a rework is required!!! |
 |`getLength`| Function | Pavelyev Ivan | done |  | |
