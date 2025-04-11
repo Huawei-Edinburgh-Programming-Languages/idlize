@@ -1704,11 +1704,11 @@
 |`getValue`| Function | Samarin Sergey | done | | |
 |`setValue`| Function | Samarin Sergey | done | | |
 |*ShapeMask*| *Class* | Vadim Voronov | in progress | | |
-|`setRectShape`| Function | Vadim Voronov | in progress | | |
-|`setRoundRectShape`| Function | Vadim Voronov | in progress | | |
-|`setCircleShape`| Function | Vadim Voronov | in progress | | |
-|`setOvalShape`| Function | Vadim Voronov | in progress | | |
-|`setCommandPath`| Function | Vadim Voronov | in progress | | |
+|`setRectShape`| Function | Vadim Voronov | done | | |
+|`setRoundRectShape`| Function | Vadim Voronov | done | | |
+|`setCircleShape`| Function | Vadim Voronov | done | | |
+|`setOvalShape`| Function | Vadim Voronov | done | | |
+|`setCommandPath`| Function | Vadim Voronov | done | | |
 |`getFillColor`| Function | Vadim Voronov | in progress | | |
 |`setFillColor`| Function | Vadim Voronov | in progress | | |
 |`getStrokeColor`| Function | Vadim Voronov | in progress | | |
