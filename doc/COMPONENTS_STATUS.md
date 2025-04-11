@@ -712,7 +712,7 @@
 |`autoReset`| Function | Dmitry A Smirnov| done |  |  |
 |`onDotConnect`| Function | Dmitry A Smirnov| done |  |  |
 |`activateCircleStyle`| Function | Dmitry A Smirnov| done |  | |
-|`skipUnselectedPoint`| Function | Kovalev Sergey | in progress| | |
+|`skipUnselectedPoint`| Function | Dmitry A Smirnov | in progress| | |
 |*PluginComponent*| *Component* | Evstigneev Roman | in progress |  | |
 |`setPluginComponentOptions`| Function | Evstigneev Roman | in progress |  |  |
 |`onComplete`| Function | Evstigneev Roman | done |  | |
