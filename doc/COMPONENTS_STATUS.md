@@ -1731,7 +1731,7 @@
 |*GlobalScope_ohos_measure_utils*| *Class* | Dudkin Sergey | in progress | | |
 |`measureText`| Function | Dudkin Sergey | in progress | | |
 |`measureTextSize`| Function | Dudkin Sergey | in progress | | |
-|*SymbolEffect*| *Class* | wangtao, Maksimov Nikita | in progress | | |
+|*SymbolEffect*| *Class* | wangtao, Maksimov Nikita | done | | |
 |`dummyForAccessorGenerate`| Function | wangtao, Maksimov Nikita | done | | empty implementation |
 |*ScaleSymbolEffect*| *Class* | Andrey Khudenkikh | done | | |
 |`getScope`| Function | Andrey Khudenkikh | done | | |
@@ -2617,21 +2617,21 @@
 |`showNext`| Function | Andrey Khudenkikh | done |  |  |
 |`showPrevious`| Function | Andrey Khudenkikh | done |  |  |
 |`changeIndex`| Function | Andrey Khudenkikh | done |  |  |
-|*HierarchicalSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|`getFillStyle`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|`setFillStyle`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|*AppearSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|`getScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|`setScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|*DisappearSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|`getScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|`setScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|*BounceSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|`getScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|`setScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|`getDirection`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|`setDirection`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | in progress | | |
-|*PulseSymbolEffect*| *Class* | Maksimov Nikita | in progress | | |
+|*HierarchicalSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|`getFillStyle`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|`setFillStyle`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|*AppearSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|`getScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|`setScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|*DisappearSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|`getScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|`setScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|*BounceSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|`getScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|`setScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|`getDirection`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|`setDirection`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|*PulseSymbolEffect*| *Class* | Maksimov Nikita | done | | |
 |*TabsController*| *Class* | Skroba Gleb | done |  | |
 |`changeIndex`| Function | Skroba Gleb | done |  | |
 |`preloadItems`| Function | Skroba Gleb | done |  | |
