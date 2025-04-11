@@ -383,7 +383,7 @@
 |`fillOpacity`| Function | Evstigneev Roman | done |  |  |
 |`strokeWidth`| Function | Evstigneev Roman | done |  |  |
 |`antiAlias`| Function | Evstigneev Roman | done |  |  |
-|`strokeDashArray`| Function | Ilya Erokhin | in progress |  | any object, to be handled in capi|
+|`strokeDashArray`| Function | Ilya Erokhin | done|  | |
 |*ScrollableCommonMethod*| *Component* | Samarin Sergey | blocked IDL |  |  |
 |`constructor`| Function |Samarin Sergey | blocked IDL |  |  |
 |`scrollBar`| Function | Samarin Sergey | done |  |  |
@@ -707,9 +707,9 @@
 |`columnsTemplate`| Function | | | | |
 |*Line*|*Component*|Dudkin Sergey| in progress |  |  |
 |`constructor`| Function |Dudkin Sergey| done |  |  |
-|`setLineOptions`|Function|Dudkin Sergey| done |  |  |
-|`startPoint`|Function|Dudkin Sergey| in progress |  |  |
-|`endPoint`|Function|Dudkin Sergey| in progress |  |  |
+|`setLineOptions`|Function|Dudkin Sergey| in progress |  |  |
+|`startPoint`|Function|Dudkin Sergey| done |  |  |
+|`endPoint`|Function|Dudkin Sergey| done |  |  |
 |*List*|*Component*|Morozov Sergey| done |  |  |
 |`constructor`| Function |Morozov Sergey| done |  |  |
 |`setListOptions`|Function|Morozov Sergey| done |  |  |
@@ -1227,7 +1227,7 @@
 |`stroke`|Function|Dudkin Sergey| done |  |  |
 |`fill`|Function|Dudkin Sergey| done |  |  |
 |`strokeDashOffset`|Function|Dudkin Sergey| done |  |  |
-|`strokeDashArray`|Function|Ilya Erokhin| in progress |  |  |
+|`strokeDashArray`|Function|Ilya Erokhin| done |  |  |
 |`strokeLineCap`|Function|Dudkin Sergey| done |  |  |
 |`strokeLineJoin`|Function|Dudkin Sergey| done |  |  |
 |`strokeMiterLimit`|Function|Dudkin Sergey| done |  |  |
@@ -1235,7 +1235,7 @@
 |`fillOpacity`|Function|Dudkin Sergey| done |  |  |
 |`strokeWidth`|Function|Dudkin Sergey| done |  |  |
 |`antiAlias`|Function|Dudkin Sergey| done |  |  |
-|`mesh`|Function|ILya Erokhin| in progress|  |  |  |
+|`mesh`|Function|ILya Erokhin| done|  |  |  |
 |*Slider*| *Component* |Morozov Sergey | blocked IDL |  |  |
 |`constructor`| Function |Morozov Sergey | done |  |  |
 |`setSliderOptions`| Function |Morozov Sergey | done |  |  |
@@ -1356,8 +1356,8 @@
 |`fontWeight`| Function |Andrey Khudenkikh | done |  |  |
 |`effectStrategy`| Function |Andrey Khudenkikh | done |  |  |
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |  |
-|`minFontScale`| Function | Kovalev Sergey | in progress  | |
-|`maxFontScale`| Function | Kovalev Sergey | in progress  | |
+|`minFontScale`| Function | Kovalev Sergey | done  | |
+|`maxFontScale`| Function | Kovalev Sergey | done  | |
 |`symbolEffect0`| Function |Andrey Khudenkikh, Samarin Sergey | in progress |  | testskipped for feature branch |
 |`symbolEffect1`| Function |Andrey Khudenkikh, Samarin Sergey | in progress |  | testskipped for feature branch |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| done |  |  |
@@ -1859,8 +1859,8 @@
 |`onDestroy`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`enableAnalyzer`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`enableSecure`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`hdrBrightness`| Function | | | | |
-|`enableTransparentLayer`| Function | | | | |
+|`hdrBrightness`| Function | Tuzhilkin Ivan | testskipped | | supported only on UPSTREAM now |
+|`enableTransparentLayer`| Function | Tuzhilkin Ivan | testskipped | | supported only on UPSTREAM now |
 |*SideBarContainer*| *Component* |Dmitry A Smirnov|in progress|  |
 |`constructor`| Function |Dmitry A Smirnov| done |  |  |
 |`setSideBarContainerOptions`| Function |Dmitry A Smirnov| done |  |  |
@@ -2095,13 +2095,13 @@
 |`setStrokeColor`| Function | Vadim Voronov | in progress | | API is present on Upstream only |
 |`getStrokeWidth`| Function | Vadim Voronov | in progress | | API is present on Upstream only |
 |`setStrokeWidth`| Function | Vadim Voronov | in progress | | API is present on Upstream only |
-|*ShapeClip*| *Class* | Andrey Khudenkikh | in progress | | |
-|`ctor`| Function | Andrey Khudenkikh | in progress | | |
-|`setRectShape`| Function | Andrey Khudenkikh | in progress | | |
-|`setRoundRectShape`| Function | Andrey Khudenkikh | in progress | | |
-|`setCircleShape`| Function | Andrey Khudenkikh | in progress | | |
-|`setOvalShape`| Function | Andrey Khudenkikh | in progress | | |
-|`setCommandPath`| Function | Andrey Khudenkikh | in progress | | |
+|*ShapeClip*| *Class* | Andrey Khudenkikh | done | | |
+|`ctor`| Function | Andrey Khudenkikh | done | | |
+|`setRectShape`| Function | Andrey Khudenkikh | done | | |
+|`setRoundRectShape`| Function | Andrey Khudenkikh | done | | |
+|`setCircleShape`| Function | Andrey Khudenkikh | done | | |
+|`setOvalShape`| Function | Andrey Khudenkikh | done | | |
+|`setCommandPath`| Function | Andrey Khudenkikh | done | | |
 |*Matrix4Transit*| *Class* | Samarin Sergey | in progress | | API is present on Upstream only |
 |`ctor`| Function |in progress | | API is present on Upstream only |
 |`copy`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
@@ -2239,10 +2239,10 @@
 |`asymmetric`| Function | Andrey Khudenkikh | done | | |
 |`animation`| Function | Andrey Khudenkikh | done | | |
 |`combine`| Function | Andrey Khudenkikh | done | | |
-|`getIDENTITY`| Function | Andrey Khudenkikh | in progress | | |
-|`getOPACITY`| Function | Andrey Khudenkikh | in progress | | |
-|`getSLIDE`| Function | Andrey Khudenkikh | in progress | | |
-|`getSLIDE_SWITCH`| Function | Andrey Khudenkikh | in progress | | |
+|`getIDENTITY`| Function | Andrey Khudenkikh | done | | |
+|`getOPACITY`| Function | Andrey Khudenkikh | done | | |
+|`getSLIDE`| Function | Andrey Khudenkikh | done | | |
+|`getSLIDE_SWITCH`| Function | Andrey Khudenkikh | done | | |
 |*BaseEvent*| *Class* | Politov Mikhail | in progress |  | |
 |`ctor`| Function |Politov Mikhail | done |  | |
 |`getModifierKeyState`| Function | Politov Mikhail | done |  | |
@@ -3342,16 +3342,16 @@
 |`getLength`| Function | Pavelyev Ivan | done |  | |
 |*TextStyle_styled_string*| *Class* | Erokhin Ilya | done |  |  |
 |`ctor`| Function | Erokhin Ilya | done |  |  |
-|`getFontColor`| Function | Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation |
-|`getFontFamily`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  | Return value will be changed to optional after 125 generation |
-|`getFontSize`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  | Return value will be changed to optional after 125 generation |
-|`getFontWeight`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  | Return value will be changed to optional after 125 generation |
-|`getFontStyle`| Function | Erokhin Ilya, Tuzhilkin Ivan | in progress |  | Return value will be changed to optional after 125 generation |
+|`getFontColor`| Function | Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
+|`getFontFamily`| Function | Erokhin Ilya, Tuzhilkin Ivan | done |  | FB: Return value will be changed to optional after 125 generation |
+|`getFontSize`| Function | Erokhin Ilya, Tuzhilkin Ivan | done |  | FB: Return value will be changed to optional after 125 generation |
+|`getFontWeight`| Function | Erokhin Ilya, Tuzhilkin Ivan | done |  | FB: Return value will be changed to optional after 125 generation |
+|`getFontStyle`| Function | Erokhin Ilya, Tuzhilkin Ivan | done |  | FB: Return value will be changed to optional after 125 generation |
 |*DecorationStyle*| *Class* | Tuzhilkin Ivan | in progress |  | |
 |`ctor`| Function |Tuzhilkin Ivan | done |  | |
 |`getType`| Function | Tuzhilkin Ivan | done |  | |
-|`getColor`| Function | Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation |
-|`getStyle`| Function | Tuzhilkin Ivan | in progress | | Return value will be changed to optional after 125 generation |
+|`getColor`| Function | Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
+|`getStyle`| Function | Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
 |*BaselineOffsetStyle*| *Class* | Tuzhilkin Ivan | done |  | |
 |`ctor`| Function |  Tuzhilkin Ivan | done |  | |
 |`getBaselineOffset`| Function | Tuzhilkin Ivan | done |  | |
