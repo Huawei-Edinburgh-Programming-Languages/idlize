@@ -1911,7 +1911,7 @@
 |`onTerminated`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`onDrawReady`| Function | | | | |
 |*LinearIndicator*| *Component* | Kovalev Sergey | done |  | depricated |
-|`constructor`| Function |Function | Kovalev Sergey | done |  | depricated |
+|`constructor`| Function |Kovalev Sergey | done |  | depricated |
 |`setLinearIndicatorOptions`| Function | Kovalev Sergey | done |  | depricated |
 |`indicatorStyle`| Function | Kovalev Sergey | done |  | depricated |
 |`indicatorLoop`| Function | Kovalev Sergey | done |  | depricated |
@@ -2886,7 +2886,7 @@
 |`ctor`| Function | | |
 |`getAngle`| Function | | |
 |*PanRecognizer*| *Class* | Politov Mikhail | done |  | |
-|`ctor`| Function |Function | Politov Mikhail | done |  | |
+|`ctor`| Function |Politov Mikhail | done |  | |
 |`getPanGestureOptions`| Function | Politov Mikhail | done |  | |
 |`getDirection`| Function | | |
 |`getDistance`| Function | | |
@@ -2897,7 +2897,7 @@
 |`setOnDidScroll`| Function | | |
 |`setOnScrollIndex`| Function | | |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked AceEngine |  | |
-|`ctor`| Function | Function |Vadim Voronov|  blocked AceEngine |  | done for feature branch, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
+|`ctor`| Function | Vadim Voronov|  blocked AceEngine |  | done for feature branch, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked AceEngine |  | done for feature branch, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
 |*UIListEvent*| *Class* | | |
 |`ctor`| Function | | |
