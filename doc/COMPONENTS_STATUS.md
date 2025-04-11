@@ -1703,18 +1703,18 @@
 |`setUnit`| Function | Samarin Sergey | done | | |
 |`getValue`| Function | Samarin Sergey | done | | |
 |`setValue`| Function | Samarin Sergey | done | | |
-|*ShapeMask*| *Class* | Vadim Voronov | in progress | | |
-|`setRectShape`| Function | Vadim Voronov | done | | |
-|`setRoundRectShape`| Function | Vadim Voronov | done | | |
-|`setCircleShape`| Function | Vadim Voronov | done | | |
-|`setOvalShape`| Function | Vadim Voronov | done | | |
-|`setCommandPath`| Function | Vadim Voronov | done | | |
-|`getFillColor`| Function | Vadim Voronov | in progress | | |
-|`setFillColor`| Function | Vadim Voronov | in progress | | |
-|`getStrokeColor`| Function | Vadim Voronov | in progress | | |
-|`setStrokeColor`| Function | Vadim Voronov | in progress | | |
-|`getStrokeWidth`| Function | Vadim Voronov | in progress | | |
-|`setStrokeWidth`| Function | Vadim Voronov | in progress | | |
+|*ShapeMask*| *Class* | Vadim Voronov | in progress | | API is present on Upstream only  |
+|`setRectShape`| Function | Vadim Voronov | done | | API is present on Upstream only  |
+|`setRoundRectShape`| Function | Vadim Voronov | done | | API is present on Upstream only  |
+|`setCircleShape`| Function | Vadim Voronov | done | | API is present on Upstream only  |
+|`setOvalShape`| Function | Vadim Voronov | done | | API is present on Upstream only  |
+|`setCommandPath`| Function | Vadim Voronov | done | | API is present on Upstream only |
+|`getFillColor`| Function | Vadim Voronov | in progress | | API is present on Upstream only |
+|`setFillColor`| Function | Vadim Voronov | in progress | | API is present on Upstream only |
+|`getStrokeColor`| Function | Vadim Voronov | in progress | | API is present on Upstream only |
+|`setStrokeColor`| Function | Vadim Voronov | in progress | | API is present on Upstream only |
+|`getStrokeWidth`| Function | Vadim Voronov | in progress | | API is present on Upstream only |
+|`setStrokeWidth`| Function | Vadim Voronov | in progress | | API is present on Upstream only |
 |*ShapeClip*| *Class* | Andrey Khudenkikh | in progress | | |
 |`setRectShape`| Function | Andrey Khudenkikh | in progress | | |
 |`setRoundRectShape`| Function | Andrey Khudenkikh | in progress | | |
