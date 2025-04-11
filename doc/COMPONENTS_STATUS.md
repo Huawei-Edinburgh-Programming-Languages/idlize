@@ -773,7 +773,7 @@
 |`enableLoading`|Function| Samarin Sergey | done |  |  |
 |`contentModifier`|Function| Samarin Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
 |*LocationButton*| *Component* |Samarin Sergey| done |  |  |
-|`constructor`| Function |amarin Sergey| done |  |  |
+|`constructor`| Function |Samarin Sergey| done |  |  |
 |`setLocationButtonOptions0`| Function |Samarin Sergey| done |  |deprecated: icon, text, buttonType  |
 |`setLocationButtonOptions1`| Function |Samarin Sergey| done |  |deprecated: icon, text, buttonType  |
 |`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan | testskipped |  |   |
@@ -1691,7 +1691,7 @@
 |`switchStyle`| Function | Morozov Sergey| done |  |  |
 |`_onChangeEvent_isOn`| Function | Erokhin Ilya | done |  | |
 |*Video*| *Component* | Erokhin Ilya | blocked AceEngine|  |  |
-|`constructor`| Function |blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`constructor`| Function |Erokhin Ilya | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`setVideoOptions`| Function | Erokhin Ilya | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`muted`| Function | Erokhin Ilya | done |  |  |
 |`autoPlay`| Function | Erokhin Ilya | done |  |  |
@@ -1713,7 +1713,7 @@
 |`surfaceBackgroundColor`| Function | Kovalev Sergey | done | | |
 |`enableShortcutKey`| Function | Kovalev Sergey | done | | |
 |*Web*| *Component* | Erokhin Ilya | blocked IDL |  | |
-|`constructor`| Function |blocked IDL |  | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`constructor`| Function |Erokhin Ilya | blocked IDL |  | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`setWebOptions`| Function | Erokhin Ilya | blocked IDL |  | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
 |`javaScriptAccess`| Function | Erokhin Ilya | done |  | |
 |`fileAccess`| Function | Erokhin Ilya | done |  | |
@@ -3140,7 +3140,7 @@
 |`pause`| Function | Erokhin Ilya | done |  |  |
 |`stop`| Function | Erokhin Ilya | done |  |  |
 |`setCurrentTime0`| Function | Erokhin Ilya | done |  |  |
-|`setCurrentTime1`| Function |rokhin Ilya | done |  |  |
+|`setCurrentTime1`| Function |Erokhin Ilya | done |  |  |
 |`requestFullscreen`| Function | Erokhin Ilya | done |  |  |
 |`exitFullscreen`| Function | Erokhin Ilya | done |  |  |
 |`reset`| Function | Erokhin Ilya | done |  |  |
@@ -3403,7 +3403,7 @@
 |`getLayoutStyle`| Function | Evstigneev Roman | done | | |
 |`getColorFilter`| Function | Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB0Y72 (+),  DrawingColorFilter is stub on the 2.0.44, ColorFilter done, feature: API not present |
 |*CustomSpan*| *Class* | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`ctor`| Function |blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`ctor`| Function |Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onMeasure`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`onDraw`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`invalidate`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
