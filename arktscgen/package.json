@@ -8,10 +8,13 @@
     "lib/*.js",
     "templates/*",
     "./build/libarkts-copy/src",
+    "./build/libarkts-copy/src-host",
     "./build/libarkts-copy/native",
     "./build/libarkts-copy/generator",
     "./build/libarkts-copy/package.json",
     "./build/libarkts-copy/tsconfig.json",
+    "./build/libarkts-copy/rollup.es2panda.mjs",
+    "./build/libarkts-copy/rollup.lib.mjs",
     "!./build/libarkts-copy/src/generated",
     "!./build/libarkts-copy/native/src/generated",
     "!./build/libarkts-copy/native/build"
