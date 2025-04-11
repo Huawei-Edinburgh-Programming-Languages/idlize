@@ -15,6 +15,7 @@
     "./build/libarkts-copy/tsconfig.json",
     "./build/libarkts-copy/rollup.es2panda.mjs",
     "./build/libarkts-copy/rollup.lib.mjs",
+    "./build/libarkts-copy/tsconfig.host.json",
     "!./build/libarkts-copy/src/generated",
     "!./build/libarkts-copy/native/src/generated",
     "!./build/libarkts-copy/native/build"
