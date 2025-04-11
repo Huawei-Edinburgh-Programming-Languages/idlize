@@ -212,7 +212,7 @@
 |`useShadowBatching1`| Function | Lobah Mikhail | done |  | |
 |`useEffect0`| Function |Lobah Mikhail | done |  | |
 |`useEffect1`| Function |Lobah Mikhail | done |  | |
-|`useEffect2`| Function ||Lobah Mikhail | done |  | |
+|`useEffect2`| Function |Lobah Mikhail | done |  | |
 |`renderGroup0`| Function |Lobah Mikhail | done  | |
 |`renderGroup1`| Function | Lobah Mikhail | done  | |
 |`freeze0`| Function | Lobah Mikhail | done |  | |
@@ -462,7 +462,7 @@
 |`resizeable`| Function | Dmitry A Smirnov| done |  |  |
 |`divider`| Function | Dmitry A Smirnov| done |  |  |
 |*Component3D*| *Component* |Kovalev Sergey | blocked IDL |  | |
-|`constructor`| Function |Function |Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD (+) |
+|`constructor`| Function |Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD (+) |
 |`setComponent3DOptions`| Function |Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD (+) |
 |`environment`| Function |Kovalev Sergey | done |  |  |
 |`shader`| Function |Kovalev Sergey | done |  |  |
@@ -472,7 +472,7 @@
 |`renderHeight`| Function |Kovalev Sergey | done |  |  |
 |`customRender`| Function |Kovalev Sergey | done |  |  |
 |*ContainerSpan*| *Component* | Tuzhilkin Ivan| done |  |  |
-|`constructor`| Function | Function |Tuzhilkin Ivan| done |  |  |
+|`constructor`| Function | Tuzhilkin Ivan| done |  |  |
 |`setContainerSpanOptions`| Function |Tuzhilkin Ivan| done |  |  |
 |`textBackgroundStyle`| Function |Tuzhilkin Ivan| done |  |  |
 |*Counter*| *Component* | Erokhin Ilya | done |  |  |
@@ -483,7 +483,7 @@
 |`enableDec`| Function | Erokhin Ilya | done |  |  |
 |`enableInc`| Function | Erokhin Ilya | done |  |  |
 |*DataPanel*| *Component* | Morozov Sergey | blocked IDL |  |  |
-|`constructor`| Function |Function | Morozov Sergey | done |  |  |
+|`constructor`| Function |Morozov Sergey | done |  |  |
 |`setDataPanelOptions`| Function | Morozov Sergey | done |  |  |
 |`closeEffect`| Function | Morozov Sergey | done |  |  |
 |`valueColors`| Function |Morozov Sergey | done | | |
@@ -534,7 +534,7 @@
 |`constructor`| Function | Evstigneev Roman | done |  |  |
 |`setFlowItemOptions`| Function | Evstigneev Roman | done |  |  |
 |*FolderStack*| *Component* | Politov Mikhail | done |  |  |
-|`constructor`| Function | Function | Politov Mikhail | done |  |  |
+|`constructor`| Function | Politov Mikhail | done |  |  |
 |`setFolderStackOptions`| Function | Politov Mikhail | done |  |  |
 |`alignContent`| Function | Politov Mikhail | done |  |  |
 |`onFolderStateChange`| Function | Politov Mikhail | done |  |  |
@@ -558,7 +558,7 @@
 |`constructor`| Function |Dmitry A Smirnov| done |  |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done |  |  |
 |*Gauge*| *Component* | Maksimov Nikita | blocked IDL |  |  |
-|`constructor`| Function |Function | Maksimov Nikita | done |  | |
+|`constructor`| Function | Maksimov Nikita | done |  | |
 |`setGaugeOptions`| Function | Maksimov Nikita | done |  | |
 |`value`| Function | Maksimov Nikita | done |  | |
 |`startAngle`| Function | Maksimov Nikita | done |  | |
@@ -817,7 +817,7 @@
 |`constructor`| Function |Morozov Sergey | done |  |  |
 |`setMenuItemGroupOptions`| Function | Dmitry A Smirnov | done |  |   |
 |*NavDestination*| *Component* |Kovalev Sergey | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
-|`constructor`| Function |ovalev Sergey | done |  |   |
+|`constructor`| Function |Kovalev Sergey | done |  |   |
 |`setNavDestinationOptions`| Function |Kovalev Sergey | done |  |   |
 |`hideTitleBar0`| Function |Kovalev Sergey | done |  |   |
 |`hideTitleBar`| Function |Kovalev Sergey | done |  |   |
@@ -895,7 +895,7 @@
 |`setPathOptions`| Function | Skroba Gleb | done |  |  |
 |`commands`| Function | Skroba Gleb | done |  |  |
 |*PatternLock*| *Component* | Dmitry A Smirnov| in progress |  |  |
-|`constructor`| Function |Function | Dmitry A Smirnov| done |  |  |
+|`constructor`| Function | Dmitry A Smirnov| done |  |  |
 |`setPatternLockOptions`| Function | Dmitry A Smirnov| done |  |  |
 |`sideLength`| Function | Dmitry A Smirnov| done |  |  |
 |`circleRadius`| Function | Dmitry A Smirnov| done |  |  |
