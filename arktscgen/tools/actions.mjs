@@ -40,7 +40,7 @@ export function assertEqualVersions() {
     const libarkts = readPackageJson(paths.libarkts)
 
     if (generator.version !== libarkts.config["gen_version"]) {
-        throw new Error(`Different versions: generator ${generator.version}, libarkts: ${libarkts.version}`)
+        throw new Error(`Different versions: generator ${generator.version}, libarkts: ${libarkts.config["gen_version"]}`)
     }
 }
 
