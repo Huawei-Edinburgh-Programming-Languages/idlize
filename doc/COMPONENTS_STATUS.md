@@ -1897,8 +1897,8 @@
 |`getModifierKeyState`| Function | Politov Mikhail | done |  | |
 |`getTarget`| Function | Politov Mikhail | done |  | |
 |`setTarget`| Function | Politov Mikhail | done |  | |
-|`getTimestamp`| Function | Politov Mikhail | in progress|  |  |
-|`setTimestamp`| Function | Politov Mikhail | in progress |  |  |
+|`getTimestamp`| Function | Politov Mikhail | done |  |  |
+|`setTimestamp`| Function | Politov Mikhail | done |  |  |
 |`getSource`| Function | Tuzzhilkin Ivan | done |  | |
 |`setSource`| Function | Politov Mikhail | done |  | |
 |`getAxisHorizontal`| Function | Politov Mikhail | done |  | |
@@ -2033,11 +2033,11 @@
 |`setDeviceId`| Function | Maksimov Nikita | done | | |
 |`getMetaKey`| Function | Maksimov Nikita | done | | |
 |`setMetaKey`| Function | Maksimov Nikita | done | | |
-|`getTimestamp`| Function | Maksimov Nikita | in progress | |  |
-|`setTimestamp`| Function | Maksimov Nikita | in progress | |  |
+|`getTimestamp`| Function | Maksimov Nikita | done | |  |
+|`setTimestamp`| Function | Maksimov Nikita | done | |  |
 |`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Maksimov Nikita | done | | empty implementation |
-|`getIntentionCode`| Function |Maksimov Nikita | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`getIntentionCode`| Function |Maksimov Nikita | done | | |
 |`setIntentionCode`| Function | Maksimov Nikita | done | | |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
