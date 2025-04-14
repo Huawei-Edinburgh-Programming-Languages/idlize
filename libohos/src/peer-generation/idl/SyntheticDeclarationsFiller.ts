@@ -56,10 +56,8 @@ class ImportsStubsGenerator extends DependenciesCollector {
         super(library)
     }
 
-    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
-        const decl = this.library.resolveTypeReference(type) ?? this.synthesizedEntries.get(type.name)
-        if (!decl || idl.isTypedef(decl) && idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.Import)) {
-            const syntheticName = type.name.replaceAll(".", "_")
+    private makeFakeDeclaration(name:string) {
+        const syntheticName = name.replaceAll(".", "_")
             this.synthesizedEntries.set(syntheticName, idl.createInterface(
                 syntheticName,
                 idl.IDLInterfaceSubkind.Interface,
@@ -71,12 +69,25 @@ class ImportsStubsGenerator extends DependenciesCollector {
                 undefined,
                 undefined,
                 {
-                    fileName: decl?.fileName ?? 'generator_synthetic.d.ts',
-                    // extendedAttributes: [{ name: idl.IDLExtendedAttributes.Synthetic }]
+                    fileName: 'generator_synthetic.d.ts',
+                    extendedAttributes: [{ name: idl.IDLExtendedAttributes.Synthetic }]
                 },
             ))
+    }
+
+    convertTypeReferenceAsImport(type: idl.IDLReferenceType, importClause: string): idl.IDLEntry[] {
+        const decl = this.library.resolveTypeReference(type) ?? this.synthesizedEntries.get(type.name)
+        if (!decl) {
+            this.makeFakeDeclaration(type.name)
         }
         return super.convertTypeReferenceAsImport(type, importClause)
+    }
+    convertTypeReference(type: idl.IDLReferenceType): idl.IDLEntry[] {
+        const decl = this.library.resolveTypeReference(type) ?? this.synthesizedEntries.get(type.name)
+        if (!decl) {
+            this.makeFakeDeclaration(type.name)
+        }
+        return super.convertTypeReference(type)
     }
 }
 
