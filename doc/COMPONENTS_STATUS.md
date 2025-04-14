@@ -2899,7 +2899,7 @@
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked AceEngine |  | |
 |`ctor`| Function | Vadim Voronov|  blocked AceEngine |  | done for feature branch, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked AceEngine |  | done for feature branch, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
-|*UIListEvent*| *Class* | | |
+|*UIListEvent*| *Class* | | | | |
 |`ctor`| Function | | | | |
 |`setOnWillScroll`| Function | | | | |
 |`setOnDidScroll`| Function | | | | |
@@ -2945,7 +2945,7 @@
 |`ctor`| Function |Dmitry A Smirnov| done |  |  |
 |`reset`| Function |Dmitry A Smirnov| done |  |  |
 |`setChallengeResult`| Function |Dmitry A Smirnov| done |  |  |
-|*VirtualScrollOptions*| *Class* | | |
+|*VirtualScrollOptions*| *Class* | | | | |
 |`ctor`| Function | | | | |
 |`onLazyLoading`| Function | | | | |
 |`onTotalCount`| Function | | | | |
@@ -2986,7 +2986,7 @@
 |`getStyledString`| Function | Maksimov Nikita | done |  | |
 |`getSelection`| Function |Dudkin Sergey| done |  | |
 |`onContentChanged`| Function | Dudkin Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB944G + |
-|*UIScrollEvent*| *Class* | | |
+|*UIScrollEvent*| *Class* | | | | |
 |`ctor`| Function | | | | |
 |`setOnWillScroll`| Function | | | | |
 |`setOnDidScroll`| Function | | | | |
@@ -3314,7 +3314,7 @@
 |`update`| Function | Kovalev Sergey | done |  | |
 |`values`| Function | Kovalev Sergey | in progress|  |  |
 |`length`| Function | Kovalev Sergey | done |  | |
-|*UIWaterFlowEvent*| *Class* | | |
+|*UIWaterFlowEvent*| *Class* | | | | |
 |`ctor`| Function | | | | |
 |`setOnWillScroll`| Function | | | | |
 |`setOnDidScroll`| Function | | | | |
