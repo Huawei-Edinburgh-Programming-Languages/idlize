@@ -2506,18 +2506,18 @@
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`ctor`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
-|*NavPathInfo*| *Class* | Skroba Gleb | in progress | |  |
+|*NavPathInfo*| *Class* | Skroba Gleb | managed side | | done in C-API as workarond, the managed side support is planned , https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`ctor`| Function | Skroba Gleb | done | |  |
 |`getName`| Function | Skroba Gleb | done | |  |
 |`setName`| Function | Skroba Gleb | done | |  |
-|`getParam`| Function | | | | |
+|`getParam`| Function | | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`setParam`| Function | Skroba Gleb | done | |  |
 |`getOnPop`| Function | Skroba Gleb | done | |  |
 |`setOnPop`| Function | Skroba Gleb | done | |  |
 |`getIsEntry`| Function | Skroba Gleb | done | |  |
 |`setIsEntry`| Function | Skroba Gleb | done | |  |
-|`getNavDestinationId`| Function | | | | |
-|`setNavDestinationId`| Function | | | | |
+|`getNavDestinationId`| Function | | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
+|`setNavDestinationId`| Function | | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |*NavPathStack*| *Class* | Morozov Sergey | managed side |  |   |
 |`ctor`| Function | Skroba Gleb | done |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
 |`pushPath0`| Function | Skroba Gleb | done |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y |
