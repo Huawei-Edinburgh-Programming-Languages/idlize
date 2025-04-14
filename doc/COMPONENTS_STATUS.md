@@ -402,7 +402,7 @@
 |`flingSpeedLimit`| Function | Samarin Sergey | done |  |  |
 |`clipContent`| Function | Evstigneev Roman | in progress |  |  |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | in progress | | |
-|`backToTop`| Function | | | | |
+|`backToTop`| Function | Kovalev Sergey | in progress | | |
 |`edgeEffect`| Function | Samarin Sergey | done |  | |
 |`fadingEdge`| Function | Samarin Sergey | done |  | |
 |*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | done |  |
@@ -1261,7 +1261,7 @@
 |`contentModifier`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG |
 |`slideRange`| Function | Morozov Sergey | done |  |  |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | in progress | | |
-|`enableHapticFeedback`| Function | | | | |
+|`enableHapticFeedback`| Function | Kovalev Sergey | in progress | | |
 |`showTips`| Function |Morozov Sergey | done |  |  |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
 |*BaseSpan*| *Component* |Politov Mikhail | done |  |  |
