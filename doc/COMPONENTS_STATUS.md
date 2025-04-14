@@ -138,10 +138,10 @@
 |`backgroundEffect1`| Function | Skroba Gleb | done |  |  |
 |`backgroundImageResizable`| Function | Skroba Gleb | done |  | |
 |`foregroundEffect`| Function | Skroba Gleb | done |  |  |
-|`visualEffect`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBOT08 |
-|`backgroundFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`foregroundFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`compositingFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`visualEffect`| Function | Skroba Gleb | in progress | | |
+|`backgroundFilter`| Function | Skroba Gleb | in progress | | |
+|`foregroundFilter`| Function | Skroba Gleb | in progress | | |
+|`compositingFilter`| Function | Skroba Gleb | in progress | | |
 |`opacity0`| Function |Roman Sedaikin | done |  | |
 |`opacity1`| Function | Roman Sedaikin | done |  | |
 |`border`| Function | Roman Sedaikin | done |  | |
