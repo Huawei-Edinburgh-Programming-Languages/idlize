@@ -1854,7 +1854,7 @@
 |`setXComponentOptions0`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
 |`setXComponentOptions1`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
 |`setXComponentOptions2`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
-|`setXComponentOptions3`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
+|`setXComponentOptions3`| Function | Tuzhilkin Ivan | in progress |  | API exist only on master |
 |`onLoad`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS (+) |
 |`onDestroy`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`enableAnalyzer`| Function | Tuzhilkin Ivan | testskipped |  | |
