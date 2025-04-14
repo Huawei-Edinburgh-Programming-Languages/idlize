@@ -2897,8 +2897,8 @@
 |`setOnDidScroll`| Function | | | | |
 |`setOnScrollIndex`| Function | | | | |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked AceEngine |  | |
-|`ctor`| Function | Vadim Voronov|  blocked AceEngine |  | done for feature branch, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
-|`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked AceEngine |  | done for feature branch, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
+|`ctor`| Function | Vadim Voronov|  blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
+|`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
 |*UIListEvent*| *Class* | | | | |
 |`ctor`| Function | | | | |
 |`setOnWillScroll`| Function | | | | |
