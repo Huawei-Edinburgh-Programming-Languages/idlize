@@ -1850,7 +1850,7 @@
 |`setWindowSceneOptions`| Function | Dudkin Sergey | done |  | |
 |`attractionEffect`| Function | Dudkin Sergey  | done |  |  |
 |*XComponent*| *Component* | Tuzhilkin Ivan | blocked IDL |  | |
-|`constructor`| Function | | | | |
+|`constructor`| Function |Tuzhilkin Ivan |done | | |
 |`setXComponentOptions0`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
 |`setXComponentOptions1`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
 |`setXComponentOptions2`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
@@ -2293,7 +2293,7 @@
 |`getPreventDefault`| Function | Samarin Sergey | done | | |
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`ctor`| Function | | | | |
+|`ctor`| Function |Tuzhilkin Ivan |done | | |
 |`getX`| Function | | | | |
 |`setX`| Function | | | | |
 |`getY`| Function | | | | |
