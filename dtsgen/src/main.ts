@@ -101,7 +101,6 @@ function main() {
             resolver.files.push(result[0])
             return result
         })
-        fillSyntheticDeclarations(resolver)
         let totalErrors = 0
         const errorRecords: [string, number][] = []
         files.forEach(([file, info]) => {
@@ -150,9 +149,18 @@ function main() {
             {
                 compilerOptions: defaultCompilerOptions,
                 onSingleFile: (file: IDLFile, outputDir, sourceFile, isAux) => {
-                    const basename = path.basename(sourceFile.fileName)
-                    if (basename === "stdlib.d.ts")
+                    let fileName = sourceFile.fileName
+                    baseDirs.forEach(dir => {
+                        const nextFileName = path.relative(path.resolve(dir), sourceFile.fileName)
+                        if (nextFileName.length < fileName.length) {
+                            fileName = nextFileName
+                        }
+                    })
+                    const fileBaseName = path.basename(sourceFile.fileName)
+                    if (fileBaseName === "stdlib.d.ts")
                         return
+
+                    const basename = fileName.replace(/^\.*(\/|\\)/, '').replaceAll(path.sep, '.')
 
                     console.log('producing', basename)
                     const outFile = path.join(

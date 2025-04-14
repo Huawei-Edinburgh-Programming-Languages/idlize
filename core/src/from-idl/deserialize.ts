@@ -39,8 +39,9 @@ function getTokens(node:webidl2.AbstractBase): WebIDLTokenCollection {
 const syntheticTypes = new Map<string, idl.IDLEntry>()
 
 export function addSyntheticType(name: string, type: idl.IDLEntry) {
-    if (syntheticTypes.has(name))
-        warn(`duplicate synthetic type name "${name}"`) ///throw?
+    if (syntheticTypes.has(name)) {
+        warn(`duplicate synthetic type name "${name}"`)
+    }
     syntheticTypes.set(name, type)
 } // check
 
@@ -49,6 +50,9 @@ export function resolveSyntheticType(type: idl.IDLReferenceType): idl.IDLEntry |
 }
 
 class IDLDeserializer {
+
+    private namespacePathNames: string[] = []
+    private currentPackage: string[] = []
 
     constructor(
         private info: IDLTokenInfoMap
@@ -59,6 +63,9 @@ class IDLDeserializer {
     withInfo<T>(from:webidl2.AbstractBase, result:T): T {
         this.info.set(result, getTokens(from))
         return result
+    }
+    setPackage(pkg:string[]) {
+        this.currentPackage = pkg
     }
 
     ///
@@ -145,7 +152,7 @@ class IDLDeserializer {
                 .filter(isOperation)
                 .filter(it => this.isCallable(it))
                 .map(it => this.toIDLCallable(file, it)),
-                this.findExtendedAttribute(node.extAttrs, idl.IDLExtendedAttributes.TypeParameters)?.split(","),
+            this.findExtendedAttribute(node.extAttrs, idl.IDLExtendedAttributes.TypeParameters)?.split(","),
             {
                 fileName: file,
                 documentation: this.makeDocs(node),
@@ -153,8 +160,10 @@ class IDLDeserializer {
             }
         )
         this.info.set(result, getTokens(node))
-        if (node.extAttrs.find(it => it.name === "Synthetic"))
-            addSyntheticType(node.name, result)
+        if (node.extAttrs.find(it => it.name === "Synthetic")) {
+            const fqName = this.currentPackage.concat(this.namespacePathNames).concat([node.name]).join('.')
+            addSyntheticType(fqName, result)
+        }
         return result
     }
     toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extAttrs?: webidl2.ExtendedAttribute[]): idl.IDLType {
@@ -302,8 +311,10 @@ class IDLDeserializer {
             extendedAttributes: this.toExtendedAttributes(node.extAttrs),
             documentation: this.makeDocs(node),
         })
-        if (node.extAttrs.find(it => it.name === "Synthetic"))
-            addSyntheticType(node.name, result)
+        if (node.extAttrs.find(it => it.name === "Synthetic")) {
+            const fqName = this.currentPackage.concat(this.namespacePathNames).concat([node.name]).join('.')
+            addSyntheticType(fqName, result)
+        }
         return this.withInfo(node, result)
     }
     toIDLTypedef(file: string, node: webidl2.TypedefType): idl.IDLTypedef {
@@ -339,7 +350,9 @@ class IDLDeserializer {
                 fileName: file
             }
         )
+        this.namespacePathNames.push(node.name)
         namespace.members = node.members.map(it => this.toIDLNodeForward(file, it))
+        this.namespacePathNames.pop()
         return this.withInfo(node, namespace)
     }
     toIDLVersion(file: string, node: webidl2.VersionType): idl.IDLVersion {
@@ -520,6 +533,7 @@ export function toIDLFile(fileName: string, content?: string): [idl.IDLFile, IDL
                 return false
             if (deserializer.isPackage(it)) {
                 packageClause = it.clause.split(".")
+                deserializer.setPackage(packageClause)
                 return false
             }
             return true
