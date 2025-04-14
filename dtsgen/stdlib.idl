@@ -1,0 +1,12 @@
+
+interface Function {};
+interface Point {};
+interface Error {};
+interface Transferable {};
+
+// looks like bugs
+interface TextModifier {};
+
+// stub, not yet implemented
+[TypeParameters="T"]
+interface Partial {};
