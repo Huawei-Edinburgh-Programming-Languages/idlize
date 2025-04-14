@@ -1358,8 +1358,8 @@
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |  |
 |`minFontScale`| Function | Kovalev Sergey | done  | |
 |`maxFontScale`| Function | Kovalev Sergey | done  | |
-|`symbolEffect0`| Function |Andrey Khudenkikh, Samarin Sergey | in progress |  | testskipped for feature branch |
-|`symbolEffect1`| Function |Andrey Khudenkikh, Samarin Sergey | in progress |  | testskipped for feature branch |
+|`symbolEffect0`| Function |Andrey Khudenkikh, Samarin Sergey | testskipped |  |  |
+|`symbolEffect1`| Function |Andrey Khudenkikh, Samarin Sergey | testskipped |  |  |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| done |  |  |
 |`constructor`| Function |Dmitry A Smirnov| done |  |  |
 |`setSymbolSpanOptions`| Function |Dmitry A Smirnov| done |  |   |
