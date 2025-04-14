@@ -405,10 +405,10 @@
 |`backToTop`| Function | Kovalev Sergey | in progress | | |
 |`edgeEffect`| Function | Samarin Sergey | done |  | |
 |`fadingEdge`| Function | Samarin Sergey | done |  | |
-|*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | done |  |
+|*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  |
 |`constructor`| Function |Vadim Voronov, Evstigneev Roman | done |  |
-|`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | in progress |  |  |
-|`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | in progress |  |  |
+|`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | testskipped |  |  |
+|`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onReady`| Function |Vadim Voronov | done |  |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked IDL |  |  |
