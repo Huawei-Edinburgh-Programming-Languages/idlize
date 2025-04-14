@@ -1536,7 +1536,7 @@
 |`textShadow`| Function |Pavelyev Ivan| done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6PK |
 |`fontFeature`| Function |Pavelyev Ivan| done |  |  |
 |`contentModifier`| Function |Pavelyev Ivan| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
-|`dateTimeOptions`| Function |Pavelyev Ivan| in progress |  |  |
+|`dateTimeOptions`| Function |Politov Mikhail| in progress |  |  |
 |*TextInput*| *Component* | Spirin Andrey | in progress |  |  |
 |`constructor`| Function | Spirin Andrey | done |  | |
 |`setTextInputOptions`| Function | Spirin Andrey | done |  | |
@@ -1671,7 +1671,7 @@
 |`textStyle1`| Function |Ekaterina Stepanova| done |  |  |
 |`selectedTextStyle0`| Function |Ekaterina Stepanova| done |  |  |
 |`selectedTextStyle1`| Function |Ekaterina Stepanova| done |  |  |
-|`dateTimeOptions`| Function |Ekaterina Stepanova| in progress |  | |
+|`dateTimeOptions0`| Function |Ekaterina Stepanova| in progress |  | |
 |`dateTimeOptions1`| Function |Ekaterina Stepanova| in progress |  | |
 |`onChange0`| Function |Ekaterina Stepanova| done |  |  |
 |`onChange1`| Function |Ekaterina Stepanova| done |  |  |
@@ -2036,7 +2036,7 @@
 |*GlobalScope_ohos_font*| *Class* | Pavelyev Ivan | done | | |
 |`registerFont`| Function | Pavelyev Ivan | done | | |
 |`getSystemFontList`| Function | Pavelyev Ivan | done | | |
-|`getFontByName`| Function | Pavelyev Ivan | in progress | | |
+|`getFontByName`| Function | Pavelyev Ivan | done | | |
 |*GlobalScope_ohos_measure_utils*| *Class* | Dudkin Sergey | in progress | | |
 |`measureText`| Function | Dudkin Sergey | in progress | | |
 |`measureTextSize`| Function | Dudkin Sergey | in progress | | |
