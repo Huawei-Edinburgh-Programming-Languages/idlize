@@ -42,7 +42,7 @@
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*Animator*| *Component* | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
 |`constructor`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
-|`setAnimatorOptions`| Function | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
+|`setAnimatorOptions`| Function | managed side | managed side | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
 |`state`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
 |`duration`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
 |`curve`| Function | Skroba Gleb | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IB2ATJ |
@@ -509,7 +509,7 @@
 |`enableHapticFeedback`| Function | | | | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*Divider*| *Component* | Tuzhilkin Ivan | done |  |  |
-|`constructor`| Function | Tuzhilkin Ivan | | | |
+|`constructor`| Function | Tuzhilkin Ivan |done | | |
 |`setDividerOptions`| Function | Tuzhilkin Ivan| done |  |  |
 |`vertical`| Function | Tuzhilkin Ivan | done |  |  |
 |`color`| Function | Tuzhilkin Ivan | done |  |  |
@@ -853,7 +853,7 @@
 |`ignoreLayoutSafeArea`| Function |Kovalev Sergey | done |  |   |
 |`enableStatusBar`| Function | | | | |
 |*NavRouter*| *Component* |Evstigneev Roman | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y (+) |
-|`constructor`| Function |  managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y (+) |
+|`constructor`| Function |  managed side | managed side | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y (+) |
 |`setNavRouterOptions0`| Function |Evstigneev Roman| managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF (+) |
 |`setNavRouterOptions1`| Function |Evstigneev Roman| managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAY4Y, https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF (+) |
 |`onStateChange`| Function |Evstigneev Roman | done |  |deprecated  |
