@@ -2464,9 +2464,9 @@
 |`getBorderWidth`| Function | | | | |
 |`getUniqueId`| Function | | | | |
 |`setUniqueId`| Function | | | | |
-|*View*| *Class* | Skroba Gleb | blocked IDL |  | |
-|`ctor`| Function |Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|*View*| *Class* | Skroba Gleb | in progress |  | |
+|`ctor`| Function |Skroba Gleb | in progress |  | |
+|`create`| Function | Skroba Gleb | in progress |  | |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | done |  | |
 |`ctor`| Function | Dudkin Sergey | done |  |  |
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
