@@ -2338,7 +2338,7 @@
 |`setRawDeltaY`| Function | Kovalev Sergey | done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
 |`getPressedButtons`| Function | Kovalev Sergey | done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
 |`setPressedButtons`| Function |Kovalev Sergey| done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
-|*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | blocked IDL |  | |
+|*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | done |  | |
 |`ctor`| Function |Pavelyev Ivan, Samarin Sergey | done |  | |
 |`getType`| Function | Pavelyev Ivan, Samarin Sergey | done |  | |
 |`setType`| Function | Pavelyev Ivan | done |  | |
