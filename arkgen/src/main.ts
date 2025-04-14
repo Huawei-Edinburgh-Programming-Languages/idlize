@@ -235,6 +235,7 @@ if (options.idl2peer) {
             verifyIDLLinter(file, idlLibrary, peerGeneratorConfiguration().linter)
         })
     }
+    fillSyntheticDeclarations(idlLibrary)
     new IdlPeerProcessor(idlLibrary).process()
 
     generateTarget(idlLibrary, outDir, language)

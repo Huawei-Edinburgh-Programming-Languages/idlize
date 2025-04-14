@@ -248,43 +248,6 @@ export class PeerLibrary implements LibraryInterface {
                     return result
             }
         }
-
-        // TODO: remove the next block after namespaces out of quarantine
-        {
-            const povAsReadableString = pov
-                ? `'${idl.getFQName(pov)}'`
-                : "[root]"
-
-            // retry from root
-            pov = undefined
-            const resolveds: idl.IDLNode[] = []
-            for (let file of this.files) {
-                result = resolveNamedNode([...file.packageClause, ...target], pov, corpus)
-                if (result && idl.isEntry(result)) {
-                    // too much spam
-                    // console.warn(`WARNING: Type reference '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
-                    resolveds.push(result)
-                }
-            }
-
-            // and from each namespace
-            const traverseNamespaces = (entry: idl.IDLEntry) => {
-                if (entry && idl.isNamespace(entry) && entry.members.length) {
-                    const resolved = resolveNamedNode([...idl.getNamespacesPathFor(entry).map(it => it.name), ...target], pov, corpus)
-                    if (resolved) {
-                        console.warn(`WARNING: Name '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some namespace: '${idl.getNamespacesPathFor(resolved).map(obj => obj.name).join(".")}'`)
-                        resolveds.push(resolved)
-                    }
-                    entry.members.forEach(traverseNamespaces)
-                }
-            }
-            this.files.forEach(file => file.entries.forEach(traverseNamespaces))
-
-            for (const resolved of resolveds)
-                if (idl.isEntry(resolved))
-                    return resolved
-        }// end of block to remove
-
         return undefined
     }
 

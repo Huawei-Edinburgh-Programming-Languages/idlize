@@ -25,7 +25,6 @@ import {
 } from "./webidl2-utils"
 import { toString } from "./toString"
 import * as idl from "../idl"
-import * as lib from "../library"
 import { isDefined, stringOrNone, warn } from "../util"
 import { generateSyntheticUnionName } from "../peer-generation/idl/common"
 
@@ -53,6 +52,7 @@ class IDLDeserializer {
 
     private namespacePathNames: string[] = []
     private currentPackage: string[] = []
+    private genericsScopes: Set<string>[] = []
 
     constructor(
         private info: IDLTokenInfoMap
@@ -66,6 +66,28 @@ class IDLDeserializer {
     }
     setPackage(pkg:string[]) {
         this.currentPackage = pkg
+    }
+
+    ///
+
+    sanitizeTypeParameter(param:string): string {
+        const extendsIdx = param.indexOf('extends')
+        if (extendsIdx !== -1) {
+            return param.substring(0, extendsIdx).trim()
+        }
+        const eqIdx = param.indexOf('=')
+        if (eqIdx !== -1) {
+            return param.substring(0, eqIdx).trim()
+        }
+        return param
+    }
+
+    extractGenerics(extAttrs:webidl2.ExtendedAttribute[]): Set<string> {
+        return new Set(
+            this.findExtendedAttribute(extAttrs, idl.IDLExtendedAttributes.TypeParameters)
+                ?.split(",")
+                ?.map(it => this.sanitizeTypeParameter(it))
+        )
     }
 
     ///
@@ -124,6 +146,8 @@ class IDLDeserializer {
         return idl.IDLInterfaceSubkind.Interface
     }
     toIDLInterface(file: string, node: webidl2.InterfaceType): idl.IDLInterface {
+        const generics = this.extractGenerics(node.extAttrs)
+        this.genericsScopes.push(generics)
         const result = idl.createInterface(
             node.name,
             this.interfaceSubkind(node),
@@ -159,6 +183,7 @@ class IDLDeserializer {
                 extendedAttributes: this.toExtendedAttributes(node.extAttrs),
             }
         )
+        this.genericsScopes.pop()
         this.info.set(result, getTokens(node))
         if (node.extAttrs.find(it => it.name === "Synthetic")) {
             const fqName = this.currentPackage.concat(this.namespacePathNames).concat([node.name]).join('.')
@@ -218,9 +243,15 @@ class IDLDeserializer {
                 case idl.IDLSerializerBuffer.name: return idl.IDLSerializerBuffer
             }
             const combinedExtAttrs = (type.extAttrs ?? []).concat(extAttrs ?? [])
-            const idlRefType = idl.createReferenceType(type.idlType)
+            let idlRefType: idl.IDLType
+            if (this.genericsScopes.some(it => it.has(type.idlType))) {
+                idlRefType = idl.createTypeParameterReference(type.idlType)
+            } else {
+                const ref = idl.createReferenceType(type.idlType)
+                ref.typeArguments = this.extractTypeArguments(file, combinedExtAttrs, idl.IDLExtendedAttributes.TypeArguments)
+                idlRefType = ref
+            }
             idlRefType.fileName = file
-            idlRefType.typeArguments = this.extractTypeArguments(file, combinedExtAttrs, idl.IDLExtendedAttributes.TypeArguments)
             idlRefType.extendedAttributes = this.toExtendedAttributes(combinedExtAttrs)
             return this.withInfo(type, idlRefType)
         }
@@ -246,12 +277,14 @@ class IDLDeserializer {
         if (!node.idlType) {
             throw new Error(`method with no type ${toString(node)}`)
         }
+        const generics = this.extractGenerics(node.extAttrs)
+        this.genericsScopes.push(generics)
         const returnType = this.toIDLType(file, node.idlType, node.extAttrs)
         if (idl.isReferenceType(returnType)) {
             const returnTypeArgs = this.extractTypeArguments(file, node.extAttrs, idl.IDLExtendedAttributes.TypeArguments)
             returnType.typeArguments = returnTypeArgs
         }
-        return this.withInfo(node, idl.createCallable(
+        const result = this.withInfo(node, idl.createCallable(
             node.name ?? "",
             node.arguments.map(it => this.toIDLParameter(file, it)),
             returnType,
@@ -263,15 +296,19 @@ class IDLDeserializer {
                 extendedAttributes: this.toExtendedAttributes(node.extAttrs),
             }, this.findExtendedAttribute(node.extAttrs, idl.IDLExtendedAttributes.TypeParameters)?.split(","),
         ))
+        this.genericsScopes.pop()
+        return result
     }
     toIDLMethod(file: string, node: webidl2.OperationMemberType, isFree:boolean = false): idl.IDLMethod {
         if (!node.idlType) {
             throw new Error(`method with no type ${toString(node)}`)
         }
+        const generics = this.extractGenerics(node.extAttrs)
+        this.genericsScopes.push(generics)
         const returnType = this.toIDLType(file, node.idlType, node.extAttrs)
         if (idl.isReferenceType(returnType))
             returnType.typeArguments = this.extractTypeArguments(file, node.extAttrs, idl.IDLExtendedAttributes.TypeArguments)
-        return this.withInfo(node, idl.createMethod(
+        const result = this.withInfo(node, idl.createMethod(
             node.name ?? "",
             node.arguments.map(it => this.toIDLParameter(file, it ?? new Map())),
             returnType,
@@ -285,6 +322,8 @@ class IDLDeserializer {
                 extendedAttributes: this.toExtendedAttributes(node.extAttrs),
             }, this.findExtendedAttribute(node.extAttrs, idl.IDLExtendedAttributes.TypeParameters)?.split(","),
         ))
+        this.genericsScopes.pop()
+        return result
     }
     toIDLConstructor(file: string, node: webidl2.ConstructorMemberType): idl.IDLConstructor {
         return this.withInfo(node, idl.createConstructor(
@@ -318,7 +357,9 @@ class IDLDeserializer {
         return this.withInfo(node, result)
     }
     toIDLTypedef(file: string, node: webidl2.TypedefType): idl.IDLTypedef {
-        return this.withInfo(node, idl.createTypedef(
+        const generics = this.extractGenerics(node.extAttrs)
+        this.genericsScopes.push(generics)
+        const result = this.withInfo(node, idl.createTypedef(
             node.name,
             this.toIDLType(file, node.idlType, undefined),
             this.findExtendedAttribute(node.extAttrs, idl.IDLExtendedAttributes.TypeParameters)?.split(","), {
@@ -326,6 +367,8 @@ class IDLDeserializer {
             documentation: this.makeDocs(node),
             fileName: file,
         }))
+        this.genericsScopes.pop()
+        return result
     }
     toIDLConstant(file: string, node: webidl2.ConstantMemberType) {
         return this.withInfo(node, idl.createConstant(node.name, this.toIDLType(file, node.idlType, undefined), this.constantValue(node)))

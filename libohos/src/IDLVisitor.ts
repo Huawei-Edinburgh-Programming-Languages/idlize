@@ -213,25 +213,6 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                 it.extendedAttributes.push({ name: idl.IDLExtendedAttributes.DefaultExport })
             }
         })
-        idl.forEachChild(this.file!, it => {
-            if (idl.isReferenceType(it) && idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Import)) {
-                const originalRef = it.name
-                if (this.predefinedTypeResolver) {
-                    const found = this.predefinedTypeResolver.resolveTypeReference(it)
-                    if (!found) {
-                        it.name = it.name.replaceAll(/(^|\.)default(\.|$)/g, "") // try to drop dts-specific alias 'default'
-                        if (!this.predefinedTypeResolver.resolveTypeReference(it)) {
-                            if (it.parent && idl.isTypedef(it.parent)) // try to use name from enclosing typedef
-                                it.name = it.parent.name
-                            if (!this.predefinedTypeResolver.resolveTypeReference(it)) {
-                                it.name = originalRef
-                                console.error('Set is not closed: found unresolved reference', it.name)
-                            }
-                        }
-                    }
-                }
-            }
-        })
         return this.file!
     }
 
