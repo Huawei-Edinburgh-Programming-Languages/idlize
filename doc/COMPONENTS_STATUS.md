@@ -2202,8 +2202,8 @@
 |*EventEmulator*| *Class* | Dmitry A Smirnov | managed side | | |
 |`emitClickEvent`| Function | Dmitry A Smirnov, Maksimov Nikita | managed side | | |
 |`emitTextInputEvent`| Function | Dmitry A Smirnov | managed side | | |
-|*ActionSheet*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
-|`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
+|*ActionSheet*| *Class* | Ekaterina Stepanova | testskipped |  | |
+|`show`| Function | Ekaterina Stepanova | testskipped |  | UT in progress, Skroba Gleb |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | testskipped |  | |
 |`show`| Function | Ekaterina Stepanova | testskipped |  | UT in progress, Skroba Gleb |
 |*SpringProp*| *Class* | | | | |
@@ -2218,8 +2218,8 @@
 |`ctor`| Function | Maksimov Nikita | done |  |  |
 |`backToToday`| Function | Maksimov Nikita | done |  |  |
 |`goTo`| Function | Maksimov Nikita | done |  |  |
-|*CalendarPickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
-|`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
+|*CalendarPickerDialog*| *Class* | Ekaterina Stepanova | testskipped |  | |
+|`show`| Function | Ekaterina Stepanova | testskipped |  | UT in progress, Skroba Gleb |
 |*ICurve*| *Class* | Erokhin Ilya | done |  | |
 |`ctor`| Function |Erokhin Ilya | done |  |  |
 |`interpolate`| Function | Erokhin Ilya | done |  |  |
@@ -2738,8 +2738,8 @@
 |`close`| Function | Maksimov Nikita | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
 |*LinearGradient*| *Class* | Morozov Sergey | done | | |
 |`ctor`| Function | Morozov Sergey | done | | |
-|*DatePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
-|`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
+|*DatePickerDialog*| *Class* | Ekaterina Stepanova | testskipped |  | |
+|`show`| Function | Ekaterina Stepanova | testskipped |  | UT in progress, Skroba Gleb |
 |*BaseGestureEvent*| *Class* | Maksimov Nikita | done |  | |
 |`ctor`| Function |Maksimov Nikita | done |  | |
 |`getFingerList`| Function | Kovalev Sergey | done | | |
@@ -3125,15 +3125,15 @@
 |`caretPosition`| Function | Spirin Andrey | done |  |  |
 |`setTextSelection`| Function | Spirin Andrey | done |  |  |
 |`stopEditing`| Function |  Spirin Andrey | done |  |  |
-|*TextPickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL |  | |
-|`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
+|*TextPickerDialog*| *Class* | Ekaterina Stepanova | done |  | |
+|`show`| Function | Ekaterina Stepanova | done |  |  |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |  |
 |`ctor`| Function |Ekaterina Stepanova| done |  |  |
 |`start`| Function |Ekaterina Stepanova| done |  |  |
 |`pause`| Function |Ekaterina Stepanova| done |  |  |
 |`reset`| Function |Ekaterina Stepanova| done |  |  |
-|*TimePickerDialog*| *Class* | Ekaterina Stepanova | blocked IDL|  | |
-|`show`| Function | Ekaterina Stepanova | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBHHWA |
+|*TimePickerDialog*| *Class* | Ekaterina Stepanova | done |  | |
+|`show`| Function | Ekaterina Stepanova | done |  |  |
 |*VideoController*| *Class* | Erokhin Ilya | done |  |  |
 |`ctor`| Function |Erokhin Ilya | done |  |  |
 |`start`| Function | Erokhin Ilya | done |  |  |
