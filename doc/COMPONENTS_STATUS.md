@@ -1850,7 +1850,7 @@
 |`setWindowSceneOptions`| Function | Dudkin Sergey | done |  | |
 |`attractionEffect`| Function | Dudkin Sergey  | done |  |  |
 |*XComponent*| *Component* | Tuzhilkin Ivan | blocked IDL |  | |
-|`constructor`| Function |Tuzhilkin Ivan |done | | |
+|`constructor`| Function |Tuzhilkin Ivan | testskipped | | |
 |`setXComponentOptions0`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
 |`setXComponentOptions1`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
 |`setXComponentOptions2`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
@@ -2293,19 +2293,19 @@
 |`getPreventDefault`| Function | Samarin Sergey | done | | |
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`ctor`| Function |Tuzhilkin Ivan |done | | |
-|`getX`| Function | | | | |
-|`setX`| Function | | | | |
-|`getY`| Function | | | | |
-|`setY`| Function | | | | |
-|`getWindowX`| Function | | | | |
-|`setWindowX`| Function | | | | |
-|`getWindowY`| Function | | | | |
-|`setWindowY`| Function | | | | |
-|`getDisplayX`| Function | | | | |
-|`setDisplayX`| Function | | | | |
-|`getDisplayY`| Function | | | | |
-|`setDisplayY`| Function | | | | |
+|`ctor`| Function | Tuzhilkin Ivan | testskipped | | |
+|`getX`| Function | Tuzhilkin Ivan | in progress | | |
+|`setX`| Function | Tuzhilkin Ivan | in progress | | |
+|`getY`| Function | Tuzhilkin Ivan | in progress | | |
+|`setY`| Function | Tuzhilkin Ivan | in progress | | |
+|`getWindowX`| Function | Tuzhilkin Ivan | in progress | | |
+|`setWindowX`| Function | Tuzhilkin Ivan | in progress | | |
+|`getWindowY`| Function | Tuzhilkin Ivan | in progress | | |
+|`setWindowY`| Function | Tuzhilkin Ivan | in progress | | |
+|`getDisplayX`| Function | Tuzhilkin Ivan | in progress | | |
+|`setDisplayX`| Function | Tuzhilkin Ivan | in progress | | |
+|`getDisplayY`| Function | Tuzhilkin Ivan | in progress | | |
+|`setDisplayY`| Function | Tuzhilkin Ivan | in progress | | |
 |`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |*MouseEvent*| *Class* | Kovalev Sergey | done |  | |
