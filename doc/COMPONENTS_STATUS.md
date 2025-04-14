@@ -2436,7 +2436,7 @@
 |`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Maksimov Nikita | done | | empty implementation |
 |`getIntentionCode`| Function |Maksimov Nikita | done | | |
-|`setIntentionCode`| Function | Maksimov Nikita | done | | |
+|`setIntentionCode`| Function | Maksimov Nikita | done | |  KeyEventAccessor::SetIntentionCodeImpl doesn't have sense. |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
 |`getIsNumLockOn`| Function | | | | |
