@@ -2868,7 +2868,7 @@
 |`isValid`| Function | Kovalev Sergey | done |  | |
 |`getFingerCount`| Function | | | | |
 |`isFingerCountLimit`| Function | | | | |
-|*TapRecognizer*| *Class* | | |
+|*TapRecognizer*| *Class* | | | | |
 |`ctor`| Function | | | | |
 |`getTapCount`| Function | | | | |
 |*LongPressRecognizer*| *Class* | | |
