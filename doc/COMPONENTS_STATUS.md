@@ -1536,7 +1536,7 @@
 |`textShadow`| Function |Pavelyev Ivan| done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6PK |
 |`fontFeature`| Function |Pavelyev Ivan| done |  |  |
 |`contentModifier`| Function |Pavelyev Ivan| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
-|`dateTimeOptions`| Function |Pavelyev Ivan| blocked IDL |  | Ark_CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX + |
+|`dateTimeOptions`| Function |Pavelyev Ivan| in progress |  |  |
 |*TextInput*| *Component* | Spirin Andrey | in progress |  |  |
 |`constructor`| Function | Spirin Andrey | done |  | |
 |`setTextInputOptions`| Function | Spirin Andrey | done |  | |
@@ -1671,8 +1671,8 @@
 |`textStyle1`| Function |Ekaterina Stepanova| done |  |  |
 |`selectedTextStyle0`| Function |Ekaterina Stepanova| done |  |  |
 |`selectedTextStyle1`| Function |Ekaterina Stepanova| done |  |  |
-|`dateTimeOptions`| Function |Ekaterina Stepanova| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
-|`dateTimeOptions1`| Function |Ekaterina Stepanova| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX |
+|`dateTimeOptions`| Function |Ekaterina Stepanova| in progress |  | |
+|`dateTimeOptions1`| Function |Ekaterina Stepanova| in progress |  | |
 |`onChange0`| Function |Ekaterina Stepanova| done |  |  |
 |`onChange1`| Function |Ekaterina Stepanova| done |  |  |
 |`onEnterSelectedArea`| Function | Kovalev Sergey | done | | API is present on Upstream only |
