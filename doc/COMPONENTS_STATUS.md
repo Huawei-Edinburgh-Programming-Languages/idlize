@@ -1011,7 +1011,7 @@
 |`onDidChange`| Function | Dudkin Sergey| done |  |  |
 |`onCut`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
 |`onCopy`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
-|`editMenuOptions`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`| Function | Pavelyev Ivan | done |  |  |
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done |  |  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done |  |  |
 |`barState`| Function | Dudkin Sergey| done |  |  |
@@ -1116,7 +1116,7 @@
 |`onDidInsert`|Function| Evstigneev Roman | done |  |  |
 |`onWillDelete`|Function| Skroba Gleb | done |  |   |
 |`onDidDelete`|Function| Evstigneev Roman | done |  |  |
-|`editMenuOptions`|Function| Maksimov Nikita, Pavelyev Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`|Function| Pavelyev Ivan | done |  |  |
 |`enablePreviewText`|Function| Evstigneev Roman | done |  |  |
 |`enableHapticFeedback`|Function|Evstigneev Roman| done |  |  |
 |`autoCapitalizationMode`| Function | | | | |
@@ -1453,7 +1453,7 @@
 |`onMarqueeStateChange`| Function | Samarin Sergey | done |  | |
 |`privacySensitive`| Function |Samarin Sergey | done |  |  |
 |`textSelectable`| Function |Samarin Sergey | done |  |  |
-|`editMenuOptions`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`| Function | Pavelyev Ivan | done |  |  |
 |`halfLeading`| Function |Samarin Sergey | done |  |  |
 |`enableHapticFeedback`| Function |Samarin Sergey | done |  |  |
 |`selection`| Function |Samarin Sergey | done |  | |
@@ -1510,7 +1510,7 @@
 |`onDidInsert`|Function|Tuzhilkin Ivan| done |  |  |
 |`onWillDelete`|Function| Skroba Gleb | done |  |   |
 |`onDidDelete`|Function|Tuzhilkin Ivan| done |  |  |
-|`editMenuOptions`|Function| Maksimov Nikita, Pavelyev Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`|Function| Pavelyev Ivan | done |  |  |
 |`enablePreviewText`|Function|Tuzhilkin Ivan| done |  |  |
 |`enableHapticFeedback`|Function|Tuzhilkin Ivan| done |  | |
 |`autoCapitalizationMode`| Function | | | | |
@@ -1601,7 +1601,7 @@
 |`onDidInsert`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`onWillDelete`| Function | Skroba Gleb | done |  |   |
 |`onDidDelete`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
-|`editMenuOptions`| Function | Maksimov Nikita, Pavelyev Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`| Function | Pavelyev Ivan | done |  |  |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |  |
 |`autoCapitalizationMode`| Function | | | | |
@@ -1832,7 +1832,7 @@
 |`onInterceptKeyboardAttach`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
 |`onAdsBlocked`| Function | Erokhin Ilya | done |  | |
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done |  | |
-|`editMenuOptions`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
+|`editMenuOptions`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |  |
 |`enableHapticFeedback`| Function | Erokhin Ilya | done |  | |
 |`enableFollowSystemFontWeight`| Function | Vadim Voronov | in progress | | |
 |`enableWebAVSession`| Function | Vadim Voronov  | in progress | | |
@@ -2268,8 +2268,8 @@
 |`setSourceTool`| Function | Politov Mikhail | done |  | |
 |`getDeviceId`| Function | Politov Mikhail | done |  | |
 |`setDeviceId`| Function | Politov Mikhail | done |  | |
-|`getTargetDisplayId`| Function | Maksimov Nikita | in progress |  | |
-|`setTargetDisplayId`| Function | Maksimov Nikita | in progress |  | |
+|`getTargetDisplayId`| Function | Maksimov Nikita | done |  | |
+|`setTargetDisplayId`| Function | Maksimov Nikita | done |  | |
 |*ClickEvent*| *Class* | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
 |`ctor`| Function |Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
 |`getDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
@@ -3382,7 +3382,7 @@
 |`ctor`| Function | Politov Mikhail | done |  | |
 |`getUrl`| Function | Politov Mikhail | done |  | |
 |*MutableStyledString*| *Class* | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBBYJE + |
-|`ctor`| Function |Maksimov Nikita | done |  | |
+|`ctor`| Function |Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBBYJE + |
 |`replaceString`| Function | Maksimov Nikita | done |  | |
 |`insertString`| Function | Maksimov Nikita | done |  | |
 |`removeString`| Function | Maksimov Nikita | done |  | |
