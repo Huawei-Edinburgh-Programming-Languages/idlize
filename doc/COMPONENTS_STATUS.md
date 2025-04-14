@@ -1733,7 +1733,7 @@
 |`wideViewModeAccess`| Function | Erokhin Ilya | done |  |deprecated |
 |`overviewModeAccess`| Function | Erokhin Ilya | done |  | |
 |`overScrollMode`| Function | Erokhin Ilya | done |  | |
-|`blurOnKeyboardHideMode`| Function | Vadim Voronov | | | |
+|`blurOnKeyboardHideMode`| Function | Vadim Voronov | in progress | | |
 |`textZoomAtio`| Function | Erokhin Ilya | done |  |deprecated |
 |`textZoomRatio`| Function | Erokhin Ilya | done |  | |
 |`databaseAccess`| Function | Erokhin Ilya | done |  | |
