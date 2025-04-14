@@ -2871,7 +2871,7 @@
 |*TapRecognizer*| *Class* | | | | |
 |`ctor`| Function | | | | |
 |`getTapCount`| Function | | | | |
-|*LongPressRecognizer*| *Class* | | |
+|*LongPressRecognizer*| *Class* | | | | |
 |`ctor`| Function | | | | |
 |`isRepeat`| Function | | | | |
 |`getDuration`| Function | | | | |
@@ -2882,7 +2882,7 @@
 |*PinchRecognizer*| *Class* | | | | |
 |`ctor`| Function | | | | |
 |`getDistance`| Function | | | | |
-|*RotationRecognizer*| *Class* | | |
+|*RotationRecognizer*| *Class* | | | | |
 |`ctor`| Function | | | | |
 |`getAngle`| Function | | | | |
 |*PanRecognizer*| *Class* | Politov Mikhail | done |  | |
