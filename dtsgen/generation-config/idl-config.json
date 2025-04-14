@@ -31,6 +31,9 @@
             "ScrollableCommonMethod": [
                 "onWillScroll",
                 "onDidScroll"
+            ],
+            "WrappedBuilder": [
+                "constructor"
             ]
         },
         "StubbedDeclarations": [
@@ -52,6 +55,10 @@
             "styled_string.d.ts" : [
                 ["TextStyle", "TextStyle_styled_string"]
             ]
+        },
+        "ForceDefaultExport": {
+            "application.AbilityFirstFrameStateObserver": "AbilityFirstFrameStateObserver",
+            "application.AbilityFirstFrameStateData": "AbilityFirstFrameStateData"
         },
         "TypeReplacementsFilePath": "./generation-config/type-replacements.idl"
     }

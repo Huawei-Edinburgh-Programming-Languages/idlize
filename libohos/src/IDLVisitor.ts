@@ -208,8 +208,11 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         idl.linearizeNamespaceMembers(this.file.entries).forEach(it => {
             idl.transformMethodsReturnPromise2Async(it)
             //idl.transformMethodsAsync2ReturnPromise(it)
-            if (this.defaultExport && this.defaultExport === idl.getQualifiedName(it, "namespace.name")) {
-                it.extendedAttributes ||= []
+            if (
+                this.defaultExport && this.defaultExport === idl.getQualifiedName(it, "namespace.name")
+                || IDLVisitorConfiguration().ForceDefaultExport.get(this.file.packageClause.join('.')) === it.name
+            ) {
+                it.extendedAttributes ??= []
                 it.extendedAttributes.push({ name: idl.IDLExtendedAttributes.DefaultExport })
             }
         })
@@ -756,7 +759,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             IDLVisitorConfiguration().checkNameReplacement(nameSuggestion.name, node.getSourceFile()),
             idl.IDLInterfaceSubkind.Class,
             inheritance,
-            node.members.filter(ts.isConstructorDeclaration).map(it => this.serializeConstructor(it as ts.ConstructorDeclaration, childNameSuggestion)),
+            IDLVisitorConfiguration().DeletedMethods.get(nameSuggestion.name)?.includes('constructor') 
+                ? []
+                : node.members.filter(ts.isConstructorDeclaration).map(it => this.serializeConstructor(it as ts.ConstructorDeclaration, childNameSuggestion)),
             [],
             props,
             methods,
@@ -768,7 +773,10 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         })
     }
 
-    pickConstructors(members: ReadonlyArray<ts.TypeElement>, nameSuggestion: NameSuggestion): idl.IDLConstructor[] {
+    pickConstructors(parentNameSuggestion: string, members: ReadonlyArray<ts.TypeElement>, nameSuggestion: NameSuggestion): idl.IDLConstructor[] {
+        if (IDLVisitorConfiguration().DeletedMethods.get(parentNameSuggestion)?.includes('constructor')) {
+            return []
+        }
         return members.filter(ts.isConstructSignatureDeclaration)
             .map(it => this.serializeConstructor(it as ts.ConstructSignatureDeclaration, nameSuggestion))
     }
@@ -891,7 +899,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             IDLVisitorConfiguration().checkNameReplacement(nameSuggestion.name, node.getSourceFile()),
             idl.IDLInterfaceSubkind.Interface,
             inheritance,
-            this.pickConstructors(node.members, childNameSuggestion),
+            this.pickConstructors(nameSuggestion.name, node.members, childNameSuggestion),
             [],
             this.pickProperties(nameSuggestion.name, allMembers, childNameSuggestion),
             this.pickMethods(nameSuggestion.name, allMembers, childNameSuggestion),
@@ -927,7 +935,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             selectedName,
             idl.IDLInterfaceSubkind.AnonymousInterface,
             [],
-            this.pickConstructors(node.members, nameSuggestion),
+            this.pickConstructors(selectedName, node.members, nameSuggestion),
             [],
             properties,
             this.pickMethods(selectedName, node.members, nameSuggestion),

@@ -36,6 +36,9 @@
             "ScrollableCommonMethod": [
                 "onWillScroll",
                 "onDidScroll"
+            ],
+            "WrappedBuilder": [
+                "constructor"
             ]
         },
         "StubbedDeclarations": [

@@ -241,6 +241,7 @@ export class PeerLibrary implements LibraryInterface {
                 ["idlize", "stdlib"],
                 ["org", "openharmony", "idlize", "predefined"],
                 ["org", "openharmony", "arkui"],
+                ["internal", "component", "ets"]
             ]
             for (const stdScope of stdScopes) {
                 result = resolveNamedNode([...stdScope, ...target], undefined, corpus)
