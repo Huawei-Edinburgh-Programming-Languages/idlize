@@ -3335,8 +3335,8 @@
 |`subStyledString`| Function | Pavelyev Ivan | done |  | |
 |`fromHtml`| Function | Pavelyev Ivan | done |  | |
 |`toHtml`| Function | Pavelyev Ivan | done |  |  |
-|`marshalling0`| Function | Politov Mikhail | blocked IDL | done on FB, marshalling0 is blocked by https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |  |
-|`marshalling1`| Function | Politov Mikhail | blocked IDL | done on FB, marshalling0 is blocked by https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |  |
+|`marshalling0`| Function | Politov Mikhail | done | |  |
+|`marshalling1`| Function | Politov Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`unmarshalling0`| Function | Pavelyev Ivan | done |  | The method has been split and there is no implementation for `0`, but for `1`, a rework is required!!! |
 |`unmarshalling1`| Function | Pavelyev Ivan | in progress |  | The method has been split and there is no implementation for `0`, but for `1`, a rework is required!!! |
 |`getLength`| Function | Pavelyev Ivan | done |  | |
