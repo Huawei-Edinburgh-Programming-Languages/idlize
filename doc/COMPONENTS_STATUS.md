@@ -640,7 +640,7 @@
 |*Image*| *Component* | Evstigneev Roman | blocked IDL |  |  |
 |`constructor`| Function |Berezin Kirill | done |  |  |
 |`setImageOptions0`| Function | Berezin Kirill | done |  |  |
-|`setImageOptions1`| Function |Berezin Kirill | done |  |  |
+|`setImageOptions1`| Function |Berezin Kirill | in progress |  | blocked by DrawableDescriptor  |
 |`setImageOptions2`| Function |Berezin Kirill | blocked IDL |  | SetImageOptions2 unavailable https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`alt`| Function | Evstigneev Roman | done |  | UT done Lobah Mikhail   |
 |`matchTextDirection`| Function | Evstigneev Roman | done |  | |
@@ -789,9 +789,9 @@
 |`onStart`| Function | Andrey Khudenkikh| done |  |  |
 |`onBounce`| Function |Andrey Khudenkikh | done |  |  |
 |`onFinish`| Function |Andrey Khudenkikh | done |  |  |
-|*MediaCachedImage*| *Component* | Skroba Gleb | blocked IDL |  | |
-|`constructor`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX, https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
-|`setMediaCachedImageOptions`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SX, https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
+|*MediaCachedImage*| *Component* | Skroba Gleb | in progress |  | |
+|`constructor`| Function | Skroba Gleb | in progress |  |  |
+|`setMediaCachedImageOptions`| Function | Skroba Gleb | in progress |  | blocked by DrawableDescriptor  |
 |*Menu*|*Component*|Morozov Sergey| done |  |  |
 |`constructor`| Function |Morozov Sergey| done |  |  |
 |`setMenuOptions`| Function |Morozov Sergey| done |  |  |
