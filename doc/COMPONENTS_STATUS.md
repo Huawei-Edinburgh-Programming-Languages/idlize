@@ -2465,7 +2465,7 @@
 |`setUniqueId`| Function |managed side |managed side | | |
 |*View*| *Class* | Skroba Gleb | in progress |  | |
 |`ctor`| Function |Skroba Gleb | in progress |  | |
-|`create`| Function | Skroba Gleb | in progress |  | |
+|`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | done |  | |
 |`ctor`| Function | Dudkin Sergey | done |  |  |
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
