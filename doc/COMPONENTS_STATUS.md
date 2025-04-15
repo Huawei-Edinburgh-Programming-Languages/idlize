@@ -570,8 +570,8 @@
 |`indicator`| Function | Maksimov Nikita | done |  |  |
 |`privacySensitive`| Function | Maksimov Nikita | done |  ||
 |`contentModifier`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG + |
-|*Grid*|*Component*| Erokhin Ilya | in progress |  |  |
-|`constructor`| Function |Erokhin Ilya | in progress |  | |
+|*Grid*|*Component*| Erokhin Ilya | done |  |  |
+|`constructor`| Function |Erokhin Ilya | done |  | |
 |`setGridOptions`|Function| Erokhin Ilya | done |  | |
 |`columnsTemplate`|Function| Erokhin Ilya | done |  |  |
 |`rowsTemplate`|Function| Erokhin Ilya | done |  |  |
