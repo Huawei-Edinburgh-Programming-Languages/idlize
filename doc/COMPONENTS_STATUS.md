@@ -1601,7 +1601,7 @@
 |`onDidInsert`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`onWillDelete`| Function | Skroba Gleb | done |  |   |
 |`onDidDelete`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
-|`editMenuOptions`| Function | Pavelyev Ivan, Lobah Mikhail| in progress|  |  |
+|`editMenuOptions`| Function | Pavelyev Ivan| done|  |  |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |  |
 |`autoCapitalizationMode`| Function | | | | |
