@@ -705,9 +705,9 @@
 |`constructor`| Function | | | | |
 |`setLazyVGridLayoutOptions`| Function | | | | |
 |`columnsTemplate`| Function | | | | |
-|*Line*|*Component*|Dudkin Sergey| in progress |  |  |
+|*Line*|*Component*|Dudkin Sergey| done |  |  |
 |`constructor`| Function |Dudkin Sergey| done |  |  |
-|`setLineOptions`|Function|Dudkin Sergey| in progress |  |  |
+|`setLineOptions`|Function|Dudkin Sergey| done |  |  |
 |`startPoint`|Function|Dudkin Sergey| done |  |  |
 |`endPoint`|Function|Dudkin Sergey| done |  |  |
 |*List*|*Component*|Morozov Sergey| done |  |  |
