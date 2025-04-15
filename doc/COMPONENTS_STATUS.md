@@ -111,7 +111,7 @@
 |`edgeAlign0`| Function | Politov Mikhail | done |  |  |
 |`edgeAlign1`| Function |Politov Mikhail | done |  |  |
 |*CommonMethod*|*Component*|Skroba Gleb,Erokhin Ilya | in progress |  |  |
-|`constructor`| Function |Skroba Gleb |done |  | |
+|`constructor`| Function |Skroba Gleb |done |  | empty implementation, functional is supported by managed side |
 |`width0`| Function |Roman Sedaikin | done |  | |
 |`width1`| Function |Roman Sedaikin | done |  | |
 |`height0`| Function |Roman Sedaikin | done |  | |
@@ -371,8 +371,8 @@
 |*Common*| *Component* | Maksimov Nikita | done |  | |
 |`constructor`| Function |Maksimov Nikita | done |  | |
 |`setCommonOptions`| Function | Maksimov Nikita | done |  | |
-|*CommonShapeMethod*|*Component*|Skroba Gleb| in progress |  |  |
-|`constructor`| Function |Skroba Gleb| in progress |  |  |
+|*CommonShapeMethod*|*Component*|Skroba Gleb| done |  |  |
+|`constructor`| Function |Skroba Gleb| done |  | empty implementation, functional is supported by managed side |
 |`stroke`|Function| Skroba Gleb | done |  |  |
 |`fill`|Function| Skroba Gleb | done |  |  |
 |`strokeDashOffset`| Function | Evstigneev Roman | done |  |  |
