@@ -1634,7 +1634,7 @@
 |`onChange0`| Function | Tuzhilkin Ivan| done |  |  |
 |`onChange1`| Function |Tuzhilkin Ivan| done |  |  |
 |`onScrollStop0`| Function | Kovalev Sergey | done | API is present on Upstream only |
-|`onScrollStop`| Function | Kovalev Sergey | in progress | | API is present on Upstream only |
+|`onScrollStop1`| Function | Kovalev Sergey | in progress | | API is present on Upstream only |
 |`onEnterSelectedArea`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`selectedIndex0`| Function |Ekaterina Stepanova | done |  |  |
 |`selectedIndex1`| Function |Ekaterina Stepanova | done |  |  |
