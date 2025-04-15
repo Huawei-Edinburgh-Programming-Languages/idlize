@@ -1671,8 +1671,8 @@
 |`textStyle1`| Function |Ekaterina Stepanova| done |  |  |
 |`selectedTextStyle0`| Function |Ekaterina Stepanova| done |  |  |
 |`selectedTextStyle1`| Function |Ekaterina Stepanova| done |  |  |
-|`dateTimeOptions0`| Function |Ekaterina Stepanova| in progress |  | |
-|`dateTimeOptions1`| Function |Ekaterina Stepanova| in progress |  | |
+|`dateTimeOptions0`| Function |Politov Mikhail| in progress |  | |
+|`dateTimeOptions1`| Function |Politov Mikhail| in progress |  | |
 |`onChange0`| Function |Ekaterina Stepanova| done |  |  |
 |`onChange1`| Function |Ekaterina Stepanova| done |  |  |
 |`onEnterSelectedArea`| Function | Kovalev Sergey | done | | API is present on Upstream only |
