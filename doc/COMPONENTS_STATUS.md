@@ -2461,7 +2461,7 @@
 |`getMargin`| Function | managed side| managed side| | |
 |`getPadding`| Function | managed side| managed side| | |
 |`getBorderWidth`| Function |managed side |managed side | | |
-|`getUniqueId`| Function |manged side |managed side | | |
+|`getUniqueId`| Function |managed side |managed side | | |
 |`setUniqueId`| Function |managed side |managed side | | |
 |*View*| *Class* | Skroba Gleb | in progress |  | |
 |`ctor`| Function |Skroba Gleb | in progress |  | |
