@@ -2191,7 +2191,6 @@
 |`distort`| Function | | | | |
 |*VisualEffect*| *Class* | | | | |
 |`backgroundColorBlender`| Function | | | | |
-|`backgroundColorBlender`| Function |  |  | | |
 |*NavExtender*| *Class* | | | | |
 |`setUpdateStackCallback`| Function | | | | |
 |`syncStack`| Function | | | | |
@@ -2206,14 +2205,14 @@
 |`show`| Function | Ekaterina Stepanova | testskipped |  | UT in progress, Skroba Gleb |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | testskipped |  | |
 |`show`| Function | Ekaterina Stepanova | testskipped |  | UT in progress, Skroba Gleb |
-|*SpringProp*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|*SpringMotion*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|*FrictionMotion*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|*ScrollMotion*| *Class* | | | | |
-|`ctor`| Function | | | | |
+|*SpringProp*| *Class* |managed side | managed side| | |
+|`ctor`| Function |managed side |managed side | | |
+|*SpringMotion*| *Class* |managed side |managed side | | |
+|`ctor`| Function |managed side |managed side | | |
+|*FrictionMotion*| *Class* |managed side | managedi side| | |
+|`ctor`| Function |managed side |managed side | | |
+|*ScrollMotion*| *Class* |managed side | managed side| | |
+|`ctor`| Function |managed side | managed side| | |
 |*CalendarController*| *Class* | Maksimov Nikita | done |  |  |
 |`ctor`| Function | Maksimov Nikita | done |  |  |
 |`backToToday`| Function | Maksimov Nikita | done |  |  |
@@ -2250,7 +2249,7 @@
 |`setTarget`| Function | Politov Mikhail | done |  | |
 |`getTimestamp`| Function | Politov Mikhail | done |  |  |
 |`setTimestamp`| Function | Politov Mikhail | done |  |  |
-|`getSource`| Function | Tuzzhilkin Ivan | done |  | |
+|`getSource`| Function | Tuzhilkin Ivan | done |  | |
 |`setSource`| Function | Politov Mikhail | done |  | |
 |`getAxisHorizontal`| Function | Politov Mikhail | done |  | |
 |`setAxisHorizontal`| Function | Politov Mikhail | done |  | |
