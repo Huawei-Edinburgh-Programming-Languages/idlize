@@ -3098,9 +3098,9 @@
 |*LayoutManager*| *Class* | Andrey Khudenkikh | in progress|  |  |
 |`ctor`| Function | Andrey Khudenkikh | done |  | |
 |`getLineCount`| Function | Andrey Khudenkikh | done |  | |
-|`getGlyphPositionAtCoordinate`| Function | Andrey Khudenkikh | in progress |  |  |
-|`getLineMetrics`| Function | Andrey Khudenkikh | in progress |  |  |
-|`getRectsForRange`| Function | Andrey Khudenkikh | in progress |  |  |
+|`getGlyphPositionAtCoordinate`| Function | Vadim Voronov | in progress |  |  |
+|`getLineMetrics`| Function | Vadim Voronov | in progress |  |  |
+|`getRectsForRange`| Function | Vadim Voronov | in progress |  |  |
 |*TextMenuItemId*| *Class* | Maksimov Nikita | done |  | |
 |`ctor`| Function |Maksimov Nikita | done |  | |
 |`of`| Function | Maksimov Nikita | done |  | |
