@@ -1543,7 +1543,7 @@
 |`type`| Function | Spirin Andrey | done |  |  |
 |`contentType`| Function | Spirin Andrey | done |  |  |
 |`placeholderColor`| Function | Spirin Andrey | done |  |  |
-|`textOverflow`| Function | Spirin Andrey | blocked AceEngine |  |https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
+|`textOverflow`| Function | Spirin Andrey, Lobah Mikhail| in progress|  |https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
 |`textIndent`| Function | Spirin Andrey | done |  |  |
 |`placeholderFont`| Function | Spirin Andrey, Tuzhilkin Ivan | testskipped |  | |
 |`enterKeyType`| Function | Spirin Andrey | done |  |  |
@@ -1578,7 +1578,7 @@
 |`underlineColor`| Function | Spirin Andrey | done |  |  |
 |`selectionMenuHidden`| Function | Spirin Andrey | done |  |  |
 |`barState`| Function | Spirin Andrey | done |  |  |
-|`maxLines`| Function | Spirin Andrey | testskipped  |  |
+|`maxLines`| Function | Spirin Andrey, Lobah Mikhail| in progress|  |
 |`wordBreak`| Function | Spirin Andrey | done |  |  |
 |`lineBreakStrategy`| Function | Spirin Andrey | done |  |  |
 |`cancelButton`| Function | Spirin Andrey, Andrey Khudenkikh | done |  |  |
@@ -1601,18 +1601,18 @@
 |`onDidInsert`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`onWillDelete`| Function | Skroba Gleb | done |  |   |
 |`onDidDelete`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
-|`editMenuOptions`| Function | Pavelyev Ivan | done |  |  |
+|`editMenuOptions`| Function | Pavelyev Ivan, Lobah Mikhail| in progress|  |  |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |  |
 |`autoCapitalizationMode`| Function | | | | |
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
 |`ellipsisMode`| Function |  Kovalev Sergey| done |  | |
 |`stopBackPress`| Function | Kovalev Sergey | done |  | |
-|`onWillChange`| Function | | | | |
+|`onWillChange`| Function | Lobah Mikhail| in progress| | |
 |`keyboardAppearance`| Function | | | | |
 |`inputFilter`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`customKeyboard`| Function | Lobah Mikhail | done |  |   |
-|`showCounter`| Function | Spirin Andrey | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
+|`showCounter`| Function | Spirin Andrey, Lobah Mikhail| in progress| | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`_onChangeEvent_text`| Function | Erokhin Ilya | done |  | |
 |*TextPicker*| *Component* |Ekaterina Stepanova | in progress |  |  |
 |`constructor`| Function | Tuzhilkin Ivan| done |  |   |
