@@ -2455,14 +2455,14 @@
 |`updateProgress`| Function | Maksimov Nikita | done |  | |
 |`updateColor`| Function | Maksimov Nikita | done |  | |
 |`enableBreathingAnimation`| Function | Maksimov Nikita | done |  | |
-|*Measurable*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`measure`| Function | | | | |
-|`getMargin`| Function | | | | |
-|`getPadding`| Function | | | | |
-|`getBorderWidth`| Function | | | | |
-|`getUniqueId`| Function | | | | |
-|`setUniqueId`| Function | | | | |
+|*Measurable*| *Class* | managed side| managed side| |part of CustomComponent |
+|`ctor`| Function |managed side | managed side| | |
+|`measure`| Function |managed side | managed side| | |
+|`getMargin`| Function | managed side| managed side| | |
+|`getPadding`| Function | managed side| managed side| | |
+|`getBorderWidth`| Function |managed side |managed side | | |
+|`getUniqueId`| Function |manged side |managed side | | |
+|`setUniqueId`| Function |managed side |managed side | | |
 |*View*| *Class* | Skroba Gleb | in progress |  | |
 |`ctor`| Function |Skroba Gleb | in progress |  | |
 |`create`| Function | Skroba Gleb | in progress |  | |
