@@ -60,23 +60,6 @@ export function addCoreDevel() {
     writePackageJson(paths.arktscgen, generator)
 }
 
-export function pack() {
-    run(paths.arktscgen, `npm pack --pack-destination ./build`)
-}
-
-export function testPacked() {
-    run(
-        paths.idlize,
-        [
-            `npx --yes ./arktscgen/build/idlizer-arktscgen-*.tgz`,
-            `--panda-sdk-path ./external/incremental/tools/panda/node_modules/@panda/sdk`,
-            `--output-dir ./arktscgen/build`,
-        ].join(' ')
-    )
-    run(paths.unpacked, `npm i`)
-    run(paths.unpacked, `npm run compile`)
-}
-
 export function publish() {
     run(paths.arktscgen, `npm publish --tag next`)
 }
@@ -90,7 +73,7 @@ export function withCoreDevelDropped(action) {
     }
 }
 
-export function testAll() {
+export function test() {
     run(paths.arktscgen, `npm run test:all`)
 }
 

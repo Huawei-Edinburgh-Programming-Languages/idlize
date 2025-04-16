@@ -18,17 +18,11 @@ import {
     assertEqualVersions,
     assertNoUncommitedChanges,
     incrementVersions,
-    pack,
     publish,
-    testAll,
-    testPacked,
+    test,
     withCoreDevelDropped,
     withCurrentSubmodule
 } from "./actions.mjs"
-
-program
-    .command('test-pack')
-    .action(packAndTest)
 
 program
     .command('release <part>')
@@ -36,15 +30,10 @@ program
 
 program.parse()
 
-function packAndTest() {
-    withCoreDevelDropped(pack)
-    testPacked()
-}
-
 function release(part) {
     assertNoUncommitedChanges()
     assertEqualVersions()
-    withCurrentSubmodule(testAll)
+    withCurrentSubmodule(test)
     assertNoUncommitedChanges()
     incrementVersions(part)
     withCoreDevelDropped(publish)

@@ -6,19 +6,7 @@
   "bin": "lib/index.js",
   "files": [
     "lib/*.js",
-    "templates/*",
-    "./build/libarkts-copy/src",
-    "./build/libarkts-copy/src-host",
-    "./build/libarkts-copy/native",
-    "./build/libarkts-copy/generator",
-    "./build/libarkts-copy/package.json",
-    "./build/libarkts-copy/tsconfig.json",
-    "./build/libarkts-copy/rollup.es2panda.mjs",
-    "./build/libarkts-copy/rollup.lib.mjs",
-    "./build/libarkts-copy/tsconfig.host.json",
-    "!./build/libarkts-copy/src/generated",
-    "!./build/libarkts-copy/native/src/generated",
-    "!./build/libarkts-copy/native/build"
+    "templates/*"
   ],
   "license": "Apache-2.0",
   "keywords": [],
@@ -47,10 +35,7 @@
     "external:clean": "rimraf ../external/ui2abc/libarkts/src/generated/peers",
     "external:generate": "npm run compile && node . --panda-sdk-path ../external/incremental/tools/panda/node_modules/@panda/sdk/ --output-dir ../external/ui2abc/ --options-file ../external/ui2abc/libarkts/generator/options.json5 --debug --no-initialize",
     "all": "npm run compile && npm run external:clean && npm run external:generate && npm run external:test",
-    "prepack": "npm run compile && mkdir -p ./build && cp -r ../external/ui2abc/libarkts ./build/libarkts-copy",
-    "postpack": "rimraf ./build/libarkts-copy",
-    "test:pack": "node ./tools/main.mjs test-pack",
-    "test:all": "npm run all && npm run test:pack",
+    "prepack": "npm run compile",
     "release:patch": "node ./tools/main.mjs release patch",
     "release:minor": "node ./tools/main.mjs release minor",
     "release:major": "node ./tools/main.mjs release major"
