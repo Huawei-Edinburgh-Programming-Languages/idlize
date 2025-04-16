@@ -40,9 +40,8 @@ import {
     toIDLString,
     verifyIDLString
 } from "@idlizer/core/idl"
-import { formatInputPaths, validatePaths, loadPeerConfiguration, peerGeneratorConfiguration, fillSyntheticDeclarations } from "@idlizer/libohos"
+import { formatInputPaths, validatePaths, loadPeerConfiguration, peerGeneratorConfiguration, fillSyntheticDeclarations, IDLVisitor } from "@idlizer/libohos"
 import { runPreprocessor } from "./preprocessor"
-import { IDL2DTSVisitor } from "./dts2idl"
 
 const options = program
     .option('--dts2idl', 'Convert .d.ts to IDL definitions')
@@ -147,7 +146,7 @@ function main() {
             dtsAuxInputFiles,
             options.outputDir ?? "./idl",
             path.resolve(__dirname, "..", "stdlib.d.ts"),
-            (sourceFile, program, compilerHost) => new IDL2DTSVisitor(baseDirs, sourceFile, program, compilerHost, options),
+            (sourceFile, program, compilerHost) => new IDLVisitor(baseDirs, sourceFile, program, compilerHost, options).goNewMode(),
             {
                 compilerOptions: defaultCompilerOptions,
                 onSingleFile: (file: IDLFile, outputDir, sourceFile, isAux) => {
