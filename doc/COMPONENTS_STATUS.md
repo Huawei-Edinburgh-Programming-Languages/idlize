@@ -1940,32 +1940,32 @@
 |`getResourceId`| Function | | | | |
 |*FocusController*| *Class* | Lobah Mikhail| in progress| | |
 |`requestFocus`| Function | Lobah Mikhail| in progress| | |
-|*DrawableDescriptor*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`getPixelMap`| Function | | | | |
-|*LayeredDrawableDescriptor*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`getForeground`| Function | | | | |
-|`getBackground`| Function | | | | |
-|`getMask`| Function | | | | |
-|`getMaskClipPath`| Function | | | | |
-|*PixelMapDrawableDescriptor*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|*AnimatedDrawableDescriptor*| *Class* | | | | |
-|`ctor`| Function | | | | |
+|*DrawableDescriptor*| *Class* | Evstigneev Roman | in progress | | |
+|`ctor`| Function | Evstigneev Roman | in progress | | |
+|`getPixelMap`| Function | Evstigneev Roman | in progress | | |
+|*LayeredDrawableDescriptor*| *Class* | Evstigneev Roman | in progress | | |
+|`ctor`| Function | Evstigneev Roman | in progress | | |
+|`getForeground`| Function | Evstigneev Roman | in progress | | |
+|`getBackground`| Function | Evstigneev Roman | in progress | | |
+|`getMask`| Function | Evstigneev Roman | in progress | | |
+|`getMaskClipPath`| Function | Evstigneev Roman | in progress | | |
+|*PixelMapDrawableDescriptor*| *Class* | Evstigneev Roman | in progress | | |
+|`ctor`| Function | Evstigneev Roman | in progress | | |
+|*AnimatedDrawableDescriptor*| *Class* | Evstigneev Roman | in progress | | |
+|`ctor`| Function | Evstigneev Roman | in progress | | |
 |*ColorFilter*| *Class* | Evstigneev Roman | done | |  |
-|`ctor`| Function | | | | |
-|`createBlendModeColorFilter0`| Function | | | | |
-|`createBlendModeColorFilter1`| Function | | | | |
-|`createComposeColorFilter`| Function | | | | |
-|`createLinearToSRGBGamma`| Function | | | | |
-|`createSRGBGammaToLinear`| Function | | | | |
-|`createLumaColorFilter`| Function | | | | |
-|`createMatrixColorFilter`| Function | | | | |
-|*Lattice*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`createImageLattice0`| Function | | | | |
-|`createImageLattice1`| Function | | | | |
+|`ctor`| Function |Evstigneev Roman | in progress| | |
+|`createBlendModeColorFilter0`| Function |Evstigneev Roman |in progress | | |
+|`createBlendModeColorFilter1`| Function |Evstigneev Roman |in progress | | |
+|`createComposeColorFilter`| Function |Evstigneev Roman |in progress | | |
+|`createLinearToSRGBGamma`| Function |Evstigneev Roman |in progress | | |
+|`createSRGBGammaToLinear`| Function |Evstigneev Roman | in progress| | |
+|`createLumaColorFilter`| Function |Evstigneev Roman | |in progress | |
+|`createMatrixColorFilter`| Function |Evstigneev Roman | in progress| | |
+|*Lattice*| *Class* |Evstigneev Roman | in progress| | |
+|`ctor`| Function |Evstigneev Roman | in progress| | |
+|`createImageLattice0`| Function |Evstigneev Roman | in progress| | |
+|`createImageLattice1`| Function |Evstigneev Roman |in progress | | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | done |  | |
 |`ctor`| Function | Dudkin Sergey | done |  | |
 |`drawRect`| Function | Dudkin Sergey | done |  | |
