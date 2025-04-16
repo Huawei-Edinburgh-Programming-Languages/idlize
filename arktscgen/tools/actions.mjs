@@ -74,7 +74,7 @@ export function withCoreDevelDropped(action) {
 }
 
 export function test() {
-    run(paths.arktscgen, `npm run test:all`)
+    run(paths.arktscgen, `npm run all`)
 }
 
 export function incrementVersions(part) {
