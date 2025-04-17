@@ -2209,7 +2209,7 @@
 |`ctor`| Function |managed side |managed side | | |
 |*SpringMotion*| *Class* |managed side |managed side | | |
 |`ctor`| Function |managed side |managed side | | |
-|*FrictionMotion*| *Class* |managed side | managedi side| | |
+|*FrictionMotion*| *Class* |managed side | managed side| | |
 |`ctor`| Function |managed side |managed side | | |
 |*ScrollMotion*| *Class* |managed side | managed side| | |
 |`ctor`| Function |managed side | managed side| | |
