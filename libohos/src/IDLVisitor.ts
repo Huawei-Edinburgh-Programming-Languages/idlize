@@ -498,8 +498,9 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         if (!ts.isImportDeclaration(node))
             return
 
+        const moduleString = node.moduleSpecifier.getText(node.getSourceFile()).replaceAll(/['"]/g, "")
         const [modulePackageClause, sibling] = this.getModulePackageClause(
-            node.moduleSpecifier.getText(node.getSourceFile()).replaceAll(/['"]/g, ""),
+            moduleString,
             '###',
             siblings)
 
@@ -541,6 +542,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                 for (const element of namedBindings.elements) {
                     const aliasName = element.name.getText()
                     const targetEntityName = element.propertyName?.getText() || aliasName
+                    const [modulePackageClause] = this.getModulePackageClause(moduleString, targetEntityName, siblings)
                     this.pushImportFor(node, [...modulePackageClause, ...targetEntityName.split(".")], aliasName)
                 }
             }

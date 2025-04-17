@@ -6,7 +6,11 @@ interface Transferable {};
 
 // looks like bugs
 interface TextModifier {};
+interface BusinessError {};
+callback OnHoverCallback = void ();
+callback MenuCallback = void ();
 
 // stub, not yet implemented
-[TypeParameters="T"]
-interface Partial {};
+[TypeParameters="T"] interface Partial {};
+[TypeParameters="T"] interface Readonly {};
+[TypeParameters="T"] interface ReadonlyArray {};

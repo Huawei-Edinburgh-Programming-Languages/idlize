@@ -498,7 +498,7 @@ class IDLDeserializer {
         let value = this.toExtendedAttributeValue(attr)!
         return value
             ?.split(",")  // TODO need real parsing here. What about "<T, Map<K, Callback<K,R>>, U>"
-            ?.map(it => this.toIDLType(file, webidl2.parseType(it, file)))
+            ?.map(it => this.toIDLType(file, webidl2.parseType(it, file) ?? it))
     }
     constantValue(node: webidl2.ConstantMemberType): string {
         switch (node.value.type) {
