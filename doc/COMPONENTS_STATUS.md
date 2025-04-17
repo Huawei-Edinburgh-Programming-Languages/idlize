@@ -1382,9 +1382,9 @@
 |`animationMode`| Function | Tuzhilkin Ivan | done |  |  |
 |`edgeEffect`| Function | Tuzhilkin Ivan | done |  |  |
 |`onChange`| Function | Tuzhilkin Ivan | done |  |  |
-|`onSelected`| Function |Erokhin Ilya |in progress | | |
+|`onSelected`| Function |Erokhin Ilya | done | | |
 |`onTabBarClick`| Function | Tuzhilkin Ivan | done |  |  |
-|`onUnselected`| Function |Erokhin Ilya |in progress | | |
+|`onUnselected`| Function |Erokhin Ilya | done | | |
 |`onAnimationStart`| Function | Tuzhilkin Ivan | done |  |  |
 |`onAnimationEnd`| Function | Tuzhilkin Ivan | done |  |  |
 |`onGestureSwipe`| Function | Tuzhilkin Ivan | done |  |  |
@@ -1400,7 +1400,7 @@
 |`pageFlipMode`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onContentWillChange`| Function | Dudkin Sergey | done |  | |
 |`barModeScrollable`| Function | Tuzhilkin Ivan | done |  | |
-|`cachedMaxCount`| Function | Erokhin Ilya|in progress | | |
+|`cachedMaxCount`| Function | Erokhin Ilya| done | | |
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
 |*TabContent*| *Component* | Evstigneev Roman | blocked IDL |  |  |
 |`construct`| Function | Evstigneev Roman | done |  |  |
@@ -1798,7 +1798,7 @@
 |`horizontalScrollBarAccess`| Function | Erokhin Ilya | done |  | |
 |`verticalScrollBarAccess`| Function | Erokhin Ilya | done |  | |
 |`onTouchIconUrlReceived`| Function | Erokhin Ilya | done |  | |
-|`onFaviconReceived`| Function | Erokhin Ilya | in progress |  |  |
+|`onFaviconReceived`| Function | Erokhin Ilya | done |  |  |
 |`onPageVisible`| Function | Erokhin Ilya | done |  | |
 |`onDataResubmitted`| Function | Erokhin Ilya | done |  | |
 |`pinchSmooth`| Function | Erokhin Ilya | done |  | |
