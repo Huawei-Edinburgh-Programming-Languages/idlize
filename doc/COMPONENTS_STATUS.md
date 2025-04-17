@@ -1909,7 +1909,7 @@
 |`onRelease`| Function | Tuzhilkin Ivan | deprecated |  | testskipped | |
 |`onError`| Function | Skroba Gleb | testskipped |  | |
 |`onTerminated`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`onDrawReady`| Function | Tuzhilkin Ivan| |in progress | |
+|`onDrawReady`| Function | Tuzhilkin Ivan| in progress | | |
 |*LinearIndicator*| *Component* | Kovalev Sergey | done |  | depricated |
 |`construct`| Function |Kovalev Sergey | done |  | depricated |
 |`setLinearIndicatorOptions`| Function | Kovalev Sergey | done |  | depricated |
@@ -1960,7 +1960,7 @@
 |`createComposeColorFilter`| Function |Evstigneev Roman |in progress | | |
 |`createLinearToSRGBGamma`| Function |Evstigneev Roman |in progress | | |
 |`createSRGBGammaToLinear`| Function |Evstigneev Roman | in progress| | |
-|`createLumaColorFilter`| Function |Evstigneev Roman | |in progress | |
+|`createLumaColorFilter`| Function |Evstigneev Roman | in progress | | |
 |`createMatrixColorFilter`| Function |Evstigneev Roman | in progress| | |
 |*Lattice*| *Class* |Evstigneev Roman | in progress| | |
 |`ctor`| Function |Evstigneev Roman | in progress| | |
@@ -2368,8 +2368,8 @@
 |`setPreventDefault`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |*AxisEvent*| *Class* | Tuzhilkin Ivan | in progress | | |
 |`ctor`| Function | Tuzhilkin Ivan | in progress| | |
-|`getHorizontalAxisValue`| Tuzhilkin Ivan | in progress| | |
-|`getVerticalAxisValue`| Tuzhilkin Ivan | in progress| | |
+|`getHorizontalAxisValue`| Function | Tuzhilkin Ivan | in progress| | |
+|`getVerticalAxisValue`| Function | Tuzhilkin Ivan | in progress| | |
 |`getAction`| Function | Tuzhilkin Ivan | in progress| | |
 |`setAction`| Function | Tuzhilkin Ivan | in progress| | |
 |`getDisplayX`| Function | Tuzhilkin Ivan | in progress| | |
