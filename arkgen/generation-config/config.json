@@ -178,6 +178,9 @@
             "CommonTransition"
         ],
         "ignoreEntry": [
+            "Callback",
+            "ErrorCallback",
+            "AsyncCallback",
             "Optional",
             "AppStorage",
             "DataChangeListener",
@@ -190,7 +193,6 @@
             "LocalStorage",
             "PersistentStorage",
             "PositionT",
-            "SizeT",
             "Storage",
             "SubscribedAbstractProperty",
             "SyncedPropertyOneWay",
