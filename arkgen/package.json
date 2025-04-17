@@ -66,6 +66,7 @@
     "check:subset:run": "npm run rollup:host:subset && npm run compile:native-node-host-ts-subset && node out/ts-subset/lib/main.js",
     "check:peers:idl": "npm run setup-out -C .. -- --out arkgen/out/ts-peers  --template ts_peers && npm run idl2peer:compile && npm run compile:native-node-host-full && node tools/check-headers.mjs && node out/ts-peers/lib/main.js",
     "check:peers:run": "npm run check:peers:idl",
+    "check:peers:closed:subset": "npm run compile && npm run setup-out -C .. -- --out=arkgen/out/idl-ts-peers --template=ts_peers && node . --idl2peer --input-dir ../dtsgen/out --output-dir out/idl-ts-peers/generated && cd out/idl-ts-peers && tsc -p .",
     "test:subset": "npm run check:subset && mocha ./out/ts-subset/build/tests/subset/unit/",
     "check:subset:fuzz": "npm run compile && npm run check:subset && node . --dts2test --base-dir ./,./tests/subset --input-dir ./tests/subset/ets,./tests/subset/api --output-dir ./out/ts-subset/generated/fuzz && npm run compile:native-node-host-ts-subset && tsc -p ./out/ts-subset && node ./out/ts-subset/generated/fuzz",
     "check:arkts:subset:tsc": "npm run compile && npm run setup-out -C .. -- --out arkgen/out/arkts-subset-tsc --template arkts_subset_tsc && npm run make:arkts:subset:tsc && cd out/arkts-subset-tsc && npm run compile",

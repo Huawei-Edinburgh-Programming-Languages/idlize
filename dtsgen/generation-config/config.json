@@ -48,6 +48,18 @@
             "packages": [""]
         }
     },
+    "forceCallback": {
+        "EditMenuOptions": [],
+        "XComponentController": [
+            "onSurfaceCreated",
+            "onSurfaceChanged",
+            "onSurfaceDestroyed"
+        ],
+        "CustomSpan": [
+            "onMeasure",
+            "onDraw"
+        ]
+    },
 
     "globalPackages": [
         "idlize.stdlib",

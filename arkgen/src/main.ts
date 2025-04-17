@@ -220,7 +220,6 @@ if (options.idl2peer) {
     const allInputFiles = scanInputDirs(inputDirs)
         .concat(inputFiles)
         .concat(libohosPredefinedFiles())
-        .concat(arkgenPredefinedFiles())
     const idlInputFiles = allInputFiles.filter(it => it.endsWith('.idl'))
     idlInputFiles.forEach(idlFilename => {
         idlFilename = path.resolve(idlFilename)

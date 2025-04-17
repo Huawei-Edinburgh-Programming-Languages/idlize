@@ -58,6 +58,10 @@ export class TsLayout extends CommonLayoutBase {
         if (idl.isHandwritten(target.node)) {
             return HandwrittenModule(this.library.language)
         }
+        const ns = idl.getNamespacesPathFor(target.node)
+        if (ns.length > 0) {
+            return `NS_${ns[0].name}`
+        }
         // if (idl.isSyntheticEntry(target.node)) {
         //     return SyntheticModule
         // }
@@ -67,10 +71,6 @@ export class TsLayout extends CommonLayoutBase {
             // that problem. That is just a hack and ideal solution will be to fix dependencies graph cycles
             if (idl.isBuilderClass(target.node)) {
                 return `${this.prefix}${toFileName(target.node.name)}Builder`
-            }
-            if (isMaterialized(target.node, this.library)) {
-                // to fix rollup
-                return `AllMaterialized`
             }
         }
         let pureFileName = target.node.fileName
