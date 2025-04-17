@@ -1,6 +1,6 @@
 {
   "name": "@idlizer/arktscgen",
-  "version": "2.1.4+devel",
+  "version": "3.8.0",
   "description": "",
   "main": "lib/index.js",
   "bin": "lib/index.js",
@@ -49,6 +49,7 @@
     "test:all": "npm run all && npm run test:pack",
     "release:patch": "node ./tools/main.mjs release patch",
     "release:minor": "node ./tools/main.mjs release minor",
-    "release:major": "node ./tools/main.mjs release major"
+    "release:major": "node ./tools/main.mjs release major",
+    "next": "npm run compile && node . --panda-sdk-path ./input --output-dir ../external/ui2abc/ --options-file ../external/ui2abc/libarkts/generator/options.json5 --debug --no-initialize && npm run external:test"
   }
 }
