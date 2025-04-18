@@ -485,11 +485,8 @@ export function camelCaseToUpperSnakeCase(input: string) {
         .join('_')
 }
 
-export function snakeToLowCamelNode(node: idl.IDLEntry): string {
-    if (!node.fileName) {
-        throw new Error("Invalid Convert")
-    }
-    const classname = path.basename(node.fileName).replace(".idl", "").replace(".d.ts", "")
+export function snakeToLowCamel(name: string): string {
+    const classname = path.basename(name).replace(".idl", "").replace(".d.ts", "")
     return classname
         .split('_')
         .filter(word => word !== '')

@@ -27,7 +27,8 @@ import {
     qualifiedName,
     LayoutNodeRole,
     CustomTypeConvertor,
-    ArgumentModifier
+    ArgumentModifier,
+    createOptionalType
 } from '@idlizer/core'
 import { ImportsCollector } from "../ImportsCollector"
 import {
@@ -157,10 +158,10 @@ class PeerFileVisitor {
         const peerClass = componentToPeerClass(peer.componentName)
         const signature = new NamedMethodSignature(
             createReferenceType(peerClass),
-            [createReferenceType('ComponentBase'), IDLI32Type],
+            [idl.createOptionalType(createReferenceType('ComponentBase')), IDLI32Type],
             ['component', 'flags'],
             [undefined, '0'],
-            [[ArgumentModifier.OPTIONAL], undefined]
+            // [ArgumentModifier.OPTIONAL, undefined]
         )
         writer.writeMethodImplementation(new Method('create', signature, [MethodModifier.STATIC, MethodModifier.PUBLIC]), (writer) => {
             const peerId = 'peerId'
@@ -544,7 +545,7 @@ function makeDeserializerInstance(returnValName: string, language: Language) {
     if (language === Language.TS) {
         return `new Deserializer(${returnValName}.buffer, ${returnValName}.byteLength)`
     } else if (language === Language.ARKTS) {
-        return `new Deserializer(${returnValName}, ${returnValName}.length)`
+        return `new Deserializer(${returnValName}, ${returnValName}.length as int32)`
     } else if (language === Language.JAVA) {
         return `new Deserializer(${returnValName}, ${returnValName}.length)`
     } else if (language === Language.CJ) {

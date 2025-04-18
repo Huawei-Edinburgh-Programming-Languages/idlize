@@ -32,7 +32,8 @@ import {
     CJLanguageWriter,
     PeerMethod,
     isInIdlizeStdlib,
-    removePoints
+    removePoints,
+    isCommonMethod
 } from '@idlizer/core'
 import { PrinterFunction, PrinterResult } from '../LayoutManager'
 import { peerGeneratorConfiguration } from '../../DefaultConfiguration'
@@ -45,6 +46,11 @@ import { collectJavaImports } from './lang/JavaIdlUtils'
 import { printJavaImports } from './lang/JavaPrinters'
 import { collectAllProperties } from './StructPrinter'
 import { TargetFile } from './TargetFile'
+// import { findComponentByDeclaration } from '../ComponentsCollector'
+// import { collectPeers } from '../PeersCollector'
+// import { componentToAttributesInterface, componentToUIAttributesInterface } from './PeersPrinter'
+// import { groupOverloads, collapseIdlPeerMethods } from './OverloadsPrinter'
+// import { generateAttributeModifierSignature } from './ComponentsPrinter'
 export interface InterfacesVisitor {
     printInterfaces(): PrinterResult[]
 }

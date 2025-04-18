@@ -14,7 +14,7 @@
  */
 
 import * as path from 'node:path'
-import { isMaterialized, Language, LayoutManagerStrategy, LayoutNodeRole, PeerLibrary } from '@idlizer/core'
+import { isMaterialized, Language, LayoutManagerStrategy, LayoutNodeRole, PeerLibrary, snakeToLowCamel } from '@idlizer/core'
 import * as idl from '@idlizer/core'
 import { isComponentDeclaration, NativeModule } from '@idlizer/libohos'
 
@@ -111,6 +111,7 @@ class ArkTsLayout extends CommonLayoutBase {
             ?.replaceAll('.idl', '')
         if (pureFileName) {
             pureFileName = path.basename(pureFileName)
+            return snakeToLowCamel(pureFileName)
         }
         const entryName = pureFileName ?? target.node.name
         return entryName

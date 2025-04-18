@@ -63,7 +63,7 @@ import {
 import { ArkoalaInstall, LibaceInstall } from "./ArkoalaInstall"
 import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
 import { createInterfacePrinter } from "./printers/ArkoalaInterfacePrinter"
-import { printComponents, printComponentsDeclarations } from "./printers/ComponentsPrinter"
+import { printComponents, printComponentsDeclarations, printComponentsFunction } from "./printers/ComponentsPrinter"
 import { makeJavaArkComponents } from "./printers/JavaPrinter"
 import { arkoalaLayout, ArkTSComponentsLayout } from "./ArkoalaLayout"
 import { printETSDeclaration } from "./printers/StsComponentsPrinter"
@@ -195,7 +195,7 @@ export function generateArkoalaFromIdl(config: {
         return []
     }
     const installedFiles = install(
-        selectOutDir(arkoala, peerLibrary.language),
+        arkoala.arktsComponentDir,
         peerLibrary,
         [
             createMaterializedPrinter(config.dumpSerialized),
@@ -217,7 +217,7 @@ export function generateArkoalaFromIdl(config: {
 
     if (peerLibrary.language === Language.ARKTS) {
         install(
-            selectOutDir(arkoala, peerLibrary.language),
+            arkoala.arktsComponentDir,
             peerLibrary,
             [
                 createGeneratedNativeModulePrinter(NativeModule.Generated),
@@ -226,19 +226,14 @@ export function generateArkoalaFromIdl(config: {
             ],
             { customLayout: new LayoutManager(new ArkTSComponentsLayout(peerLibrary)) }
         )
-        if (peerLibrary.useMemoM3) {
-            install(
-                arkoala.arktsSdkDir,
-                peerLibrary,
-                [
-                    createInterfacePrinter(true),
-                    printComponentsDeclarations,
-                ],
-                {
-                    isDeclared: true,
-                }
-            )
-        }
+        // install(
+        //     arkoala.arktsComponentDir,
+        //     peerLibrary,
+        //     [
+        //         createInterfacePrinter(true),
+        //         printComponentsFunction,
+        //     ],
+        // )
     }
 
 

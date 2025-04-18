@@ -95,14 +95,17 @@ interface ComponentFileVisitor {
     visit(): PrinterResult[]
 }
 
+interface ComponentGenerateOptions {
+    isDeclared: boolean,
+    printFunctionOnly: boolean,
+}
+
 class TSComponentFileVisitor implements ComponentFileVisitor {
 
     constructor(
         protected readonly library: PeerLibrary,
         protected readonly file: idl.IDLFile,
-        protected readonly options: {
-            isDeclared: boolean,
-        }
+        protected readonly options: ComponentGenerateOptions
     ) { }
 
     private overloadsPrinter(printer:LanguageWriter) {
@@ -112,6 +115,10 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
     visit(): PrinterResult[] {
         const result: PrinterResult[] = []
         collectPeersForFile(this.library, this.file).forEach(peer => {
+            if (this.options.printFunctionOnly) {
+                result.push(...this.printComponentFunction(peer))
+                return
+            }
             if (!this.options.isDeclared)
                 result.push(...this.printComponent(peer))
             result.push(...this.printComponentFunction(peer))
@@ -124,6 +131,16 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
         imports.addFeatures(['int32', 'float32'], '@koalaui/common')
         imports.addFeatures(["KStringPtr", "KBoolean"], "@koalaui/interop")
         imports.addFeature('UICommonBase', '../handwritten')
+        if (this.options.printFunctionOnly) {
+            const module = this.library.layout.resolve({
+                node: component.attributeDeclaration,
+                role: LayoutNodeRole.COMPONENT
+            })
+            const componentClassImplName = generateArkComponentName(peer.componentName)
+            const peerClassName = componentToPeerClass(peer.componentName)
+            imports.addFeatures([componentClassImplName, peerClassName], `../generated/${module}`);
+            imports.addFeatures(["NodeAttach", "remember"], "@koalaui/runtime")
+        }
         collectDeclItself(this.library, idl.createReferenceType('AttributeModifier'), imports)
         if (!this.options.isDeclared) {
             imports.addFeatures(["RuntimeType", "runtimeType"], "@koalaui/interop")
@@ -259,7 +276,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
                     hint: 'component.function'
                 }
             }]
-        const declaredPostrix = this.options.isDeclared ? "decl_" : ""
+        const declaredPostrix = this.options.isDeclared && !this.options.printFunctionOnly ? "decl_" : ""
         const stagePostfix = this.library.useMemoM3 ? "m3" : "m1"
         let paramsList = mappedCallableParams?.join(", ")
         if (paramsList) paramsList += ","
@@ -481,9 +498,7 @@ class ComponentsVisitor {
 
     constructor(
         private readonly peerLibrary: PeerLibrary,
-        private options: {
-            isDeclared: boolean
-        }
+        private options: ComponentGenerateOptions
     ) { }
 
     printComponents(): PrinterResult[] {
@@ -514,7 +529,11 @@ class ComponentsVisitor {
 }
 
 export function printComponents(peerLibrary: PeerLibrary): PrinterResult[] {
-    return new ComponentsVisitor(peerLibrary, { isDeclared: false }).printComponents()
+    // TODO: support other output languages
+    if (![Language.TS, Language.ARKTS, Language.JAVA].includes(peerLibrary.language))
+        return []
+
+    return new ComponentsVisitor(peerLibrary, { isDeclared: false, printFunctionOnly: false }).printComponents()
 }
 
 export function printComponentsDeclarations(peerLibrary: PeerLibrary): PrinterResult[] {
@@ -522,5 +541,13 @@ export function printComponentsDeclarations(peerLibrary: PeerLibrary): PrinterRe
     if (![Language.TS, Language.ARKTS, Language.JAVA].includes(peerLibrary.language))
         return []
 
-    return new ComponentsVisitor(peerLibrary, { isDeclared: true }).printComponents()
+    return new ComponentsVisitor(peerLibrary, { isDeclared: true, printFunctionOnly: false }).printComponents()
+}
+
+export function printComponentsFunction(peerLibrary: PeerLibrary): PrinterResult[] {
+    // TODO: support other output languages
+    if (![Language.TS, Language.ARKTS, Language.JAVA].includes(peerLibrary.language))
+        return []
+
+    return new ComponentsVisitor(peerLibrary, { isDeclared: true, printFunctionOnly: true }).printComponents()
 }

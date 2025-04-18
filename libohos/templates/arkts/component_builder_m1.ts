@@ -1,10 +1,10 @@
 /** @memo */
-export function Ark%COMPONENT_NAME%(
+export function %COMPONENT_NAME%(
     /** @memo */
     style: ((attributes: %COMPONENT_ATTRIBUTE_NAME%) => void) | undefined,
-    /** @memo */
-    content_: (() => void) | undefined,
     %FUNCTION_PARAMETERS%
+    /** @memo */
+    content_?: (() => void) | undefined,
 ): void {
     const receiver = remember(() => {
         return new %COMPONENT_CLASS_NAME%()
