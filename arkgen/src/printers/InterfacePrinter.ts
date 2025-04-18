@@ -161,7 +161,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         const declaredPrefix = this.isDeclared ? "declare " : ""
         const superType = idl.getSuperType(idlInterface)
         const extendsClause = superType ? `extends ${componentToAttributesInterface(superType.name)} ` : ""
-        const UIExtendsClause = superType ? `extends ${componentToUIAttributesInterface(superType.name)} ` : ""
+        const UIExtendsClause = superType ? `extends ${componentToUIAttributesInterface(superType.name)} ` : "extends UICommonBase "
         printer.print(`export ${declaredPrefix}interface ${componentToAttributesInterface(idlInterface.name)} ${extendsClause}{`)
         uiPrinter.print(`export ${declaredPrefix}interface ${componentToUIAttributesInterface(idlInterface.name)} ${UIExtendsClause}{`)
         printer.pushIndent()
