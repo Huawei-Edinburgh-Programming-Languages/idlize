@@ -824,3 +824,19 @@ OH_Object CustomComponentSample_getSampleImpl(OH_NativePointer thisPtr, const OH
     printf("getSample id: %d\n", val->resource.resourceId);
     return *val;
 }
+
+// Injector
+
+class DTSHelloInjectorPeer
+{
+};
+
+OH_UNIT_DTSHelloInjectorHandle DTSHelloInjector_constructImpl() {
+    return (OH_UNIT_DTSHelloInjectorHandle) new DTSHelloInjectorPeer();
+}
+void DTSHelloInjector_destructImpl(OH_UNIT_DTSHelloInjectorHandle thisPtr) {
+}
+void DTSHelloInjector_helloImpl(OH_NativePointer thisPtr) {
+    printf("DTS Hello injector: native\n");
+}
+

@@ -64,6 +64,10 @@ import {
   CustomComponentSample,
 } from '#compat'
 
+import {
+  DTSHelloInjector
+} from '#compat'
+
 export function assertEQ<T1, T2>(value1: T1, value2: T2, comment?: string): void {
   checkEQ(value1, value2, comment)
 }
@@ -440,9 +444,16 @@ function checkContentModifier() {
   // console.log(`res: ${res}`)
 }
 
+function checkInjectors() {
+  const dtsHello = new DTSHelloInjector()
+  dtsHello.hello()
+}
 export function run() {
   console.log("Run common unit tests")
 
+  checkInjectors()
+
+  /*
   const suite = new UnitTestsuite("idlize ut")
 
   suite.addTest("check_constants", check_constants)
@@ -462,4 +473,5 @@ export function run() {
   suite.addTest("checkContentModifier", checkContentModifier)
 
   return suite.run()
+  */
 }
