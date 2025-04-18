@@ -407,7 +407,7 @@
 |`fadingEdge`| Function | Samarin Sergey | done |  | |
 |*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  |
 |`construct`| Function |Vadim Voronov, Evstigneev Roman | done |  |
-|`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | testskipped |  |  |
+|`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | in progress |  |  |
 |`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onReady`| Function |Vadim Voronov | done |  |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |  |
@@ -506,7 +506,7 @@
 |`onDateChange`| Function |Vadim Voronov | done |  | |
 |`onDateChange1`| Function |Vadim Voronov | done |  | |
 |`digitalCrownSensitivity`| Function | Vadim Voronov | done |  | |
-|`enableHapticFeedback`| Function | | | | |
+|`enableHapticFeedback`| Function | Vadim Voronov | in progress | | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*Divider*| *Component* | Tuzhilkin Ivan | done |  |  |
 |`construct`| Function | Tuzhilkin Ivan |done | | |
@@ -2583,7 +2583,7 @@
 |`addPath`| Function | Vadim Voronov | testskipped |  | |
 |*CanvasPattern*| *Class* | Vadim Voronov | in progress |  |  |
 |`ctor`| Function |Vadim Voronov | testskipped |  |  |
-|`setTransform`| Function | Vadim Voronov | testskipped |  |  |
+|`setTransform`| Function | Vadim Voronov | in progress |  |  |
 |*ImageBitmap*| *Class* | Vadim Voronov | testskipped  |  | |
 |`ctor`| Function | Vadim Voronov | done |  |  |
 |`close`| Function | Vadim Voronov | done |  |  |
@@ -3094,12 +3094,12 @@
 |`ctor`| Function |Pavelyev Ivan | done |  | |
 |`setStyledString`| Function | Pavelyev Ivan | done |  | |
 |`getStyledString`| Function | Pavelyev Ivan | done |  | |
-|*LayoutManager*| *Class* | Andrey Khudenkikh | in progress|  |  |
+|*LayoutManager*| *Class* | Andrey Khudenkikh, Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`ctor`| Function | Andrey Khudenkikh | done |  | |
 |`getLineCount`| Function | Andrey Khudenkikh | done |  | |
-|`getGlyphPositionAtCoordinate`| Function | Vadim Voronov | in progress |  |  |
-|`getLineMetrics`| Function | Vadim Voronov | in progress |  |  |
-|`getRectsForRange`| Function | Vadim Voronov | in progress |  |  |
+|`getGlyphPositionAtCoordinate`| Function | Vadim Voronov | done |  |  |
+|`getLineMetrics`| Function | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`getRectsForRange`| Function | Vadim Voronov | done |  |  |
 |*TextMenuItemId*| *Class* | Maksimov Nikita | done |  | |
 |`ctor`| Function |Maksimov Nikita | done |  | |
 |`of`| Function | Maksimov Nikita | done |  | |
