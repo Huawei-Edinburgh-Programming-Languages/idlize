@@ -94,29 +94,19 @@ std::array<Ark_Int64, MAX_NODE_TYPE> measureNodeDelay = {};
 std::array<Ark_Int64, MAX_NODE_TYPE> layoutNodeDelay = {};
 std::array<Ark_Int64, MAX_NODE_TYPE> drawNodeDelay = {};
 
-void CheckType(GENERATED_Ark_NodeType type) {
-    if (type >= MAX_NODE_TYPE) {
-        INTEROP_FATAL("Error: GENERATED_Ark_NodeType value is too big, change MAX_NODE_TYPE accordingly");
-    }
-}
-
 void SetCreateNodeDelay(GENERATED_Ark_NodeType type, Ark_Int64 nanoseconds) {
-    CheckType(type);
     createNodeDelay[type] = nanoseconds;
 }
 
 void SetMeasureNodeDelay(GENERATED_Ark_NodeType type, Ark_Int64 nanoseconds) {
-    CheckType(type);
     measureNodeDelay[type] = nanoseconds;
 }
 
 void SetLayoutNodeDelay(GENERATED_Ark_NodeType type, Ark_Int64 nanoseconds) {
-    CheckType(type);
     layoutNodeDelay[type] = nanoseconds;
 }
 
 void SetDrawNodeDelay(GENERATED_Ark_NodeType type, Ark_Int64 nanoseconds) {
-    CheckType(type);
     drawNodeDelay[type] = nanoseconds;
 }
 
@@ -376,7 +366,6 @@ namespace OHOS::Ace::NG {
 namespace GeneratedBridge {
 
 Ark_NodeHandle CreateNode(GENERATED_Ark_NodeType type, Ark_Int32 id, Ark_Int32 flags) {
-    TreeNodeDelays::CheckType(type);
     TreeNodeDelays::busyWait(TreeNodeDelays::createNodeDelay[type]);
     TreeNode *node = new TreeNode("node", id, flags);
     node->setCustomIntData(type);

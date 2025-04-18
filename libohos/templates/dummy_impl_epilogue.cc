@@ -87,7 +87,7 @@ const GenericServiceAPI* GetServiceAPI()
 EXTERN_C IDLIZE_API_EXPORT const OH_AnyAPI* %CPP_PREFIX%GetArkAnyAPI(
     %CPP_PREFIX%Ark_APIVariantKind kind, int version)
 {
-    switch (kind) {
+    switch (static_cast<int>(kind)) {
         case %CPP_PREFIX%FULL:
             if (version == %CPP_PREFIX%ARKUI_FULL_API_VERSION)   {
                 return reinterpret_cast<const OH_AnyAPI*>(%CPP_PREFIX%GetFullAPI());
