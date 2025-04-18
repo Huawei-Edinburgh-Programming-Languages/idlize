@@ -1212,9 +1212,9 @@
 |`arrowModifier`| Function | Samarin Sergey | in progress |  | |
 |`optionTextModifier`| Function | | | | |
 |`selectedOptionTextModifier`| Function | | | | |
-|`dividerStyle`| Function | | | | |
-|`avoidance`| Function | | | | |
-|`menuOutline`| Function | | | | |
+|`dividerStyle`| Function | | | | API is not present|
+|`avoidance`| Function | | | | | API is not present
+|`menuOutline`| Function | | | | | API is not present
 |`menuAlign0` | Function | Samarin Sergey | done |  |  |
 |`menuAlign1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
