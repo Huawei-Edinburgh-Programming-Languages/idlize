@@ -1177,7 +1177,7 @@
 |`font1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
 |`fontColor0` | Function | Samarin Sergey | done |  |  |
 |`fontColor1`| Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`selectedOptionBgColor0`| Function | | | | |
+|`selectedOptionBgColor0`| Function | Samarin Sergey | done |  |  |
 |`selectedOptionBgColor1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
 |`selectedOptionFont0` | Function | Samarin Sergey | done |  |  |
 |`selectedOptionFont1`| Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
@@ -1197,7 +1197,7 @@
 |`arrowPosition1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
 |`optionWidth0` | Function | Samarin Sergey | done |  |  |
 |`optionWidth1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`optionHeight0`| Function | | done | | |
+|`optionHeight0`| Function | Dmitry A Smirnov | done | | |
 |`optionHeight1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only, https://gitee.com/openharmony/arkui_ace_engine/issues/IC201O |
 |`menuBackgroundColor0` | Function | Samarin Sergey | done |  |  |
 |`menuBackgroundColor1`| Function | Dmitry A Smirnov | done |  | API is present on Upstream only, https://gitee.com/openharmony/arkui_ace_engine/issues/IC201O |
@@ -1209,12 +1209,12 @@
 |`menuItemContentModifier1` | Function | Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`divider` | Function | Samarin Sergey | done |  |  |
 |`textModifier`| Function | Samarin Sergey | managed side |  | |
-|`arrowModifier`| Function | Samarin Sergey | in progress |  | |
-|`optionTextModifier`| Function | | | | |
-|`selectedOptionTextModifier`| Function | | | | |
-|`dividerStyle`| Function | | | | API is not present|
-|`avoidance`| Function | | | | | API is not present
-|`menuOutline`| Function | | | | | API is not present
+|`arrowModifier`| Function | Maksimov Nikita | in progress | | |
+|`optionTextModifier`| Function | Maksimov Nikita | in progress | | |
+|`selectedOptionTextModifier`| Function | Maksimov Nikita | in progress | | |
+|`dividerStyle`| Function | Maksimov Nikita | in progress | | API is not present |
+|`avoidance`| Function | Maksimov Nikita | in progress | | API is not present |
+|`menuOutline`| Function | Maksimov Nikita | in progress | | API is not present |
 |`menuAlign0` | Function | Samarin Sergey | done |  |  |
 |`menuAlign1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
@@ -2261,8 +2261,8 @@
 |`setTiltX`| Function | Politov Mikhail | done |  | |
 |`getTiltY`| Function | Politov Mikhail | done |  | |
 |`setTiltY`| Function | Politov Mikhail | done |  | |
-|`getRollAngle`| Function | | | | |
-|`setRollAngle`| Function | | | | |
+|`getRollAngle`| Function | Maksimov Nikita | in progress | | |
+|`setRollAngle`| Function | Maksimov Nikita | in progress | | |
 |`getSourceTool`| Function | Tuzhilkin Ivan | done |  | |
 |`setSourceTool`| Function | Politov Mikhail | done |  | |
 |`getDeviceId`| Function | Politov Mikhail | done |  | |
@@ -2438,12 +2438,12 @@
 |`setIntentionCode`| Function | Maksimov Nikita | done | |  KeyEventAccessor::SetIntentionCodeImpl doesn't have sense. |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
-|`getIsNumLockOn`| Function | | | | |
-|`setIsNumLockOn`| Function | | | | |
-|`getIsCapsLockOn`| Function | | | | |
-|`setIsCapsLockOn`| Function | | | | |
-|`getIsScrollLockOn`| Function | | | | |
-|`setIsScrollLockOn`| Function | | | | |
+|`getIsNumLockOn`| Function | Maksimov Nikita | in progress | | |
+|`setIsNumLockOn`| Function | Maksimov Nikita | in progress | | |
+|`getIsCapsLockOn`| Function | Maksimov Nikita | in progress | | |
+|`setIsCapsLockOn`| Function | Maksimov Nikita | in progress | | |
+|`getIsScrollLockOn`| Function | Maksimov Nikita | in progress | | |
+|`setIsScrollLockOn`| Function | Maksimov Nikita | in progress | | |
 |*FocusAxisEvent*| *Class* | Evstigneev Roman | done | | feature: API not present |
 |`ctor`| Function | | | | |
 |`getAxisMap`| Function | | | | |
@@ -3336,7 +3336,7 @@
 |`toHtml`| Function | Pavelyev Ivan | done |  |  |
 |`marshalling0`| Function | Politov Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`marshalling1`| Function | Politov Mikhail | done | | |
-|`unmarshalling0`| Function | Pavelyev Ivan | in progress |  | The method has been split and there is no implementation for `0`, but for `1`, a rework is required!!! |
+|`unmarshalling0`| Function | Pavelyev Ivan | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`unmarshalling1`| Function | Pavelyev Ivan | done | | |
 |`getLength`| Function | Pavelyev Ivan | done |  | |
 |*TextStyle_styled_string*| *Class* | Erokhin Ilya | done |  |  |
