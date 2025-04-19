@@ -1,11 +1,8 @@
 import { int32 } from "@koalaui/common"
 import { pointer } from "@koalaui/interop"
-import { Finalizable } from "@koalaui/interop"
+import { NativePeerNode } from "./NativePeerNode"
 import { IncrementalNode } from "@koalaui/runtime"
-import { ArkUINativeModule } from "@koalaui/arkoala"
-
-export class NativePeerNode extends Finalizable {
-}
+import { ArkUINativeModule } from "./generated/ArkUINativeModule"
 
 const PeerNodeType = 11
 const InitialID = 999
