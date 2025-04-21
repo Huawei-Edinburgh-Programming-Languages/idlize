@@ -139,9 +139,9 @@
 |`backgroundImageResizable`| Function | Skroba Gleb | done |  | |
 |`foregroundEffect`| Function | Skroba Gleb | done |  |  |
 |`visualEffect`| Function | Skroba Gleb | in progress | | |
-|`backgroundFilter`| Function | Skroba Gleb | in progress | | |
-|`foregroundFilter`| Function | Skroba Gleb | in progress | | |
-|`compositingFilter`| Function | Skroba Gleb | in progress | | |
+|`backgroundFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`foregroundFilter`| Function | Skroba Gleb |  blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`compositingFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`opacity0`| Function |Roman Sedaikin | done |  | |
 |`opacity1`| Function | Roman Sedaikin | done |  | |
 |`border`| Function | Roman Sedaikin | done |  | |
@@ -2182,13 +2182,13 @@
 |`setMarkNodeGroup`| Function | Morozov Sergey | in progress | | |
 |`getLengthMetricsUnit`| Function | Morozov Sergey | in progress | | |
 |`setLengthMetricsUnit`| Function | Morozov Sergey | in progress | | |
-|*Filter*| *Class* |Evstigneev Roman |in progress | | |
-|`ctor`| Function |Evstigneev Roman |in progress | | |
-|`pixelStretch`| Function |Evstigneev Roman |in progress | | |
-|`blur`| Function |Evstigneev Roman |in progress | | |
-|`waterRipple`| Function |Evstigneev Roman |in progress | | |
-|`flyInFlyOutEffect`| Function |Evstigneev Roman |in progress | | |
-|`distort`| Function |Evstigneev Roman |in progress | | |
+|*Filter*| *Class* |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`ctor`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`pixelStretch`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`blur`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`waterRipple`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`flyInFlyOutEffect`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`distort`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |*VisualEffect*| *Class* | | | | |
 |`backgroundColorBlender`| Function | | | | |
 |*NavExtender*| *Class* |managed side |managed side | | |
