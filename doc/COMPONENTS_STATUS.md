@@ -165,7 +165,7 @@
 |`onClick0`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done |  | EVENT |
 |`onClick1`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done |  | EVENT |
 |`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done |  | EVENT |
-|`onHoverMove`| Function | | | | |
+|`onHoverMove`| Function | Tuzhilkin Ivan | in progress | | |
 |`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | done |  | UT by Vadim Voronov EVENT |
 |`hoverEffect`| Function | Roman Sedaikin | done |  | |
 |`onMouse`| Function | Kovalev Sergey | done |  | EVENT |
@@ -176,9 +176,9 @@
 |`onKeyPreIme`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |  |
 |`onKeyEventDispatch`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocusAxisEvent`| Function | Evstigneev Roman | done | | feature: API not present |
-|`onAxisEvent`| Function | | | | |
+|`onAxisEvent`| Function | Tuzhilkin Ivan | in progress | | |
 |`focusable`| Function | Roman Sedaikin | done |  | |
-|`nextFocus`| Function | | | | |
+|`nextFocus`| Function | Tuzhilkin Ivan | in progress | | |
 |`tabStop`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocus`| Function | Roman Sedaikin | done |  | |
 |`onBlur`| Function | Roman Sedaikin | done |  | |
@@ -284,7 +284,7 @@
 |`maskShape1`| Function |Tuzhilkin Ivan| in progress |  | testskipped on feature branch |
 |`key`| Function | Lobah Mikhail | done |  | |
 |`id`| Function | Erokhin Ilya | done |  |  |
-|`geometryTransition0`| Function | | | | |
+|`geometryTransition0`| Function | Tuzhilkin Ivan | in progress | | |
 |`geometryTransition1`| Function | Lobah Mikhail | done |  | |
 |`stateStyles`| Function | Dudkin Sergey | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`restoreId`| Function | Lobah Mikhail | done |  | |
@@ -301,7 +301,7 @@
 |`accessibilityNextFocusId`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`accessibilityDefaultFocus`| Function | Lobah Mikhail| blocked IDL | | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00|
 |`accessibilityUseSamePage`| Function | Lobah Mikhail| done| | Not exists on FB|
-|`accessibilityScrollTriggerable`| Function | | | | |
+|`accessibilityScrollTriggerable`| Function | Tuzhilkin Ivan | in progress | | |
 |`accessibilityRole`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onAccessibilityFocus`| Function | Evstigneev Roman | done | | feature: API not present |
 |`accessibilityTextHint`| Function | Lobah Mikhail | done |  | |
@@ -326,13 +326,13 @@
 |`monopolizeEvents`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |`onTouchIntercept`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done |  | EVENT |
 |`onSizeChange`| Function | Dmitry A Smirnov| done |  | |
-|`accessibilityFocusDrawLevel`| Function | | | | |
+|`accessibilityFocusDrawLevel`| Function | Tuzhilkin Ivan | in progress | | |
 |`customProperty`| Function | Dmitry A Smirnov| in progress |  | need clrify bridge implementation|
 |`expandSafeArea`| Function | Dmitry A Smirnov| done |  |  |
 |`background`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
 |`backgroundImage0`| Function | Erokhin Ilya | done |  | |
 |`backgroundImage1`| Function | Erokhin Ilya | done |  | |
-|`backgroundBlurStyle0`| Function | | | | |
+|`backgroundBlurStyle0`| Function | Tuzhilkin Ivan | in progress | | |
 |`backgroundBlurStyle`| Function | Skroba Gleb | done |  |  |
 |`foregroundBlurStyle0`| Function | Roman Sedaikin | done |  | |
 |`foregroundBlurStyle1`| Function |Roman Sedaikin | done |  | |
@@ -356,7 +356,7 @@
 |`blendMode0`| Function | Lobah Mikhail | done |  | |
 |`blendMode1`| Function |Lobah Mikhail | done |  | |
 |`advancedBlendMode`| Function | Erokhin Ilya |in progress |  |  |
-|`bindTips`| Function | | | | |
+|`bindTips`| Function | Tuzhilkin Ivan | in progress | | |
 |`bindPopup`| Function | Erokhin Ilya | done |  | fixes of issues were provided by our team, https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL2K, https://gitee.com/openharmony/arkui_ace_engine/issues/IBY31B |
 |`bindMenu0`| Function | Erokhin Ilya | blocked IDL |  | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`bindMenu1`| Function | Erokhin Ilya | blocked IDL |  | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
@@ -366,7 +366,7 @@
 |`bindContentCover1`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |`bindSheet`| Function | Erokhin Ilya | testskipped |  | UT in progress Vadim Voronov |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done |  | |
-|`onVisibleAreaApproximateChange`| Function | | | | |
+|`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | in progress | | |
 |`keyboardShortcut`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |*Common*| *Component* | Maksimov Nikita | done |  | |
 |`construct`| Function |Maksimov Nikita | done |  | |
