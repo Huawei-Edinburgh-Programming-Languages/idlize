@@ -1940,19 +1940,19 @@
 |`getResourceId`| Function |managed side |managed side | | |
 |*FocusController*| *Class* | Lobah Mikhail| in progress| | |
 |`requestFocus`| Function | Lobah Mikhail| in progress| | |
-|*DrawableDescriptor*| *Class* | Evstigneev Roman | in progress | | |
-|`ctor`| Function | Evstigneev Roman | in progress | | |
-|`getPixelMap`| Function | Evstigneev Roman | in progress | | |
+|*DrawableDescriptor*| *Class* | Evstigneev Roman | done | | |
+|`ctor`| Function | Evstigneev Roman | done | | |
+|`getPixelMap`| Function | Evstigneev Roman | done | | |
 |*LayeredDrawableDescriptor*| *Class* | Evstigneev Roman | in progress | | |
-|`ctor`| Function | Evstigneev Roman | in progress | | |
-|`getForeground`| Function | Evstigneev Roman | in progress | | |
-|`getBackground`| Function | Evstigneev Roman | in progress | | |
-|`getMask`| Function | Evstigneev Roman | in progress | | |
+|`ctor`| Function | Evstigneev Roman | done | | |
+|`getForeground`| Function | Evstigneev Roman | done | | |
+|`getBackground`| Function | Evstigneev Roman | done | | |
+|`getMask`| Function | Evstigneev Roman | done | | |
 |`getMaskClipPath`| Function | Evstigneev Roman | in progress | | |
-|*PixelMapDrawableDescriptor*| *Class* | Evstigneev Roman | in progress | | |
-|`ctor`| Function | Evstigneev Roman | in progress | | |
-|*AnimatedDrawableDescriptor*| *Class* | Evstigneev Roman | in progress | | |
-|`ctor`| Function | Evstigneev Roman | in progress | | |
+|*PixelMapDrawableDescriptor*| *Class* | Evstigneev Roman | done | | |
+|`ctor`| Function | Evstigneev Roman | done | | |
+|*AnimatedDrawableDescriptor*| *Class* | Evstigneev Roman | done | | |
+|`ctor`| Function | Evstigneev Roman | done | | |
 |*ColorFilter*| *Class* | Evstigneev Roman | done | |  |
 |`ctor`| Function |Evstigneev Roman | in progress| | |
 |`createBlendModeColorFilter0`| Function |Evstigneev Roman |in progress | | |
