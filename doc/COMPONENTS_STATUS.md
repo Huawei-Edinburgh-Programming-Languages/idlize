@@ -2366,28 +2366,28 @@
 |`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |`getPreventDefault`| Function | Samarin Sergey | done | | |
 |`setPreventDefault`| Function | Tuzhilkin Ivan | done |  | empty implementation |
-|*AxisEvent*| *Class* | Tuzhilkin Ivan | in progress | | |
-|`ctor`| Function | Tuzhilkin Ivan | in progress| | |
-|`getHorizontalAxisValue`| Function | Tuzhilkin Ivan | in progress| | |
-|`getVerticalAxisValue`| Function | Tuzhilkin Ivan | in progress| | |
-|`getAction`| Function | Tuzhilkin Ivan | in progress| | |
-|`setAction`| Function | Tuzhilkin Ivan | in progress| | |
-|`getDisplayX`| Function | Tuzhilkin Ivan | in progress| | |
-|`setDisplayX`| Function | Tuzhilkin Ivan | in progress| | |
-|`getDisplayY`| Function | Tuzhilkin Ivan | in progress| | |
-|`setDisplayY`| Function | Tuzhilkin Ivan | in progress| | |
-|`getWindowX`| Function | Tuzhilkin Ivan | in progress| | |
-|`setWindowX`| Function | Tuzhilkin Ivan | in progress| | |
-|`getWindowY`| Function | Tuzhilkin Ivan | in progress| | |
-|`setWindowY`| Function | Tuzhilkin Ivan | in progress| | |
-|`getX`| Function | Tuzhilkin Ivan | in progress| | |
-|`setX`| Function | Tuzhilkin Ivan | in progress| | |
-|`getY`| Function | Tuzhilkin Ivan | in progress| | |
-|`setY`| Function | Tuzhilkin Ivan | in progress| | |
-|`getScrollStep`| Function | Tuzhilkin Ivan | in progress| | |
-|`setScrollStep`| Function | Tuzhilkin Ivan | in progress| | |
-|`getPropagation`| Function | Tuzhilkin Ivan | in progress| | |
-|`setPropagation`| Function | Tuzhilkin Ivan | in progress| | |
+|*AxisEvent*| *Class* | Tuzhilkin Ivan | done | | |
+|`ctor`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`getHorizontalAxisValue`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`getVerticalAxisValue`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`getAction`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`setAction`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`getDisplayX`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`setDisplayX`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`getDisplayY`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`setDisplayY`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`getWindowX`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`setWindowX`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`getWindowY`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`setWindowY`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`getX`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`setX`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`getY`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`setY`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`getScrollStep`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`setScrollStep`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`getPropagation`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
+|`setPropagation`| Function | Tuzhilkin Ivan | done | | empty implementation, need cherry-pick to FB |
 |*PixelMapMock*| *Class* | Maksimov Nikita | done |  | |
 |`ctor`| Function |Maksimov Nikita | done |  | |
 |`release`| Function | Maksimov Nikita | done |  | |
