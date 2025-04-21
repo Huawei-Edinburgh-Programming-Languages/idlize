@@ -401,8 +401,8 @@
 |`onScrollStop`| Function | Samarin Sergey | done |  | |
 |`flingSpeedLimit`| Function | Samarin Sergey | done |  |  |
 |`clipContent`| Function | Evstigneev Roman | in progress |  |  |
-|`digitalCrownSensitivity`| Function | Kovalev Sergey | in progress | | |
-|`backToTop`| Function | Kovalev Sergey | in progress | | |
+|`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | |
+|`backToTop`| Function | Kovalev Sergey | in progress | done | |
 |`edgeEffect`| Function | Samarin Sergey | done |  | |
 |`fadingEdge`| Function | Samarin Sergey | done |  | |
 |*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  |
