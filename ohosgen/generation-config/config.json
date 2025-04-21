@@ -40,6 +40,9 @@
     "dummy": {
         "ignoreMethods": {}
     },
+    "managed": {
+        "handwrittenMethods": {}
+    },
     "CollapseOverloadsARKTS": false,
     "moduleName": "ohos",
     "modules": {

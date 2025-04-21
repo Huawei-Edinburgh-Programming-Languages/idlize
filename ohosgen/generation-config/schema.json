@@ -216,6 +216,9 @@
                     ],
                     "type": "object"
                 },
+                "managed": {
+                    "handwrittenMethods": {}
+                },
                 "materialized": {
                     "additionalProperties": false,
                     "properties": {

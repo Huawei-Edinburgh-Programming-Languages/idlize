@@ -43,6 +43,9 @@
     "dummy": {
         "ignoreMethods": {}
     },
+    "managed": {
+        "handwrittenMethods": {}
+    },
     "CollapseOverloadsARKTS": true,
     "constants": {
     }

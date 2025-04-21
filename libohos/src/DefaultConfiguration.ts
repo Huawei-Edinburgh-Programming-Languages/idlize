@@ -59,6 +59,9 @@ export const PeerGeneratorConfigurationSchema = D.combine(
         dummy: D.object({
             ignoreMethods: D.map(D.string(), T.stringArray())
         }),
+        managed: D.object({
+            handwrittenMethods: D.map(D.string(), T.stringArray())
+        }),
         materialized: D.object({
             ignoreReturnTypes: T.stringArray(),
         }),
@@ -86,6 +89,7 @@ export interface PeerGeneratorConfigurationExtension {
     ignoreMethod(name: string, language: Language): boolean
     ignoreTypeParameters(name: string): boolean
     isHandWritten(component: string): boolean
+    isHandWrittenManagedMethod(component: string, method: string): boolean
     isKnownParametrized(name: string | undefined): boolean
     isResource(name: string | undefined): boolean
     isShouldReplaceThrowingError(name: string): boolean
@@ -115,6 +119,11 @@ function expandPeerGeneratorConfiguration(data: PeerGeneratorConfigurationType):
         },
         isHandWritten(component: string): boolean {
             return this.components.handWritten.concat(this.components.custom).includes(component)
+        },
+        isHandWrittenManagedMethod(component: string, method: string): boolean {
+            const comp = this.managed.handwrittenMethods.get(component)
+            if (!comp) return false
+            return comp.includes(method)
         },
         isKnownParametrized(name: string | undefined): boolean {
             return name != undefined && this.parameterized.includes(name)

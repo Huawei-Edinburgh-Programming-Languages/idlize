@@ -216,6 +216,24 @@
                     ],
                     "type": "object"
                 },
+                "managed": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "handwrittenMethods": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "required": [
+                        "handwrittenMethods"
+                    ],
+                    "type": "object"
+                },
                 "materialized": {
                     "additionalProperties": false,
                     "properties": {
@@ -345,6 +363,7 @@
                 "cppPrefix",
                 "components",
                 "dummy",
+                "managed",
                 "materialized",
                 "serializer",
                 "CollapseOverloadsARKTS",

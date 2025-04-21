@@ -14,6 +14,8 @@
  */
 
 import * as idl from '@idlizer/core/idl'
+import * as fs from "fs"
+import * as path from "path"
 import {
     Language, isCommonMethod,
     LanguageWriter, PeerClass, PeerLibrary,
@@ -179,6 +181,13 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
         return this.library.useMemoM3 ? `@memo` : `/** @memo */`
     }
 
+    readHandWrittenMethodsTemplate(componentName: string): string | undefined {
+        if (fs.existsSync(path.join(__dirname, `../templates/handwritten_base/${componentName}.ts`))) {
+            return fs.readFileSync(path.join(__dirname, `../templates/handwritten_base/${componentName}.ts`), 'utf8')
+        }
+        return undefined
+    }
+
     private printComponent(peer: PeerClass): PrinterResult[] {
 
         const component = findComponentByType(this.library, idl.createReferenceType(peer.originalClassName!))!
@@ -206,8 +215,18 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
                     )
                 )
             )
+
+            const handWrittenMethods = this.readHandWrittenMethodsTemplate(peer.componentName)
+            if (handWrittenMethods) {
+                printer.writeLines(handWrittenMethods)
+            }
+
             const filteredMethods = peer.methods.filter(it =>
-                !peerGeneratorConfiguration().ignoreMethod(it.overloadedName, this.library.language))
+                !peerGeneratorConfiguration().ignoreMethod(it.overloadedName, this.library.language)
+            )
+            .filter(it => 
+                !peerGeneratorConfiguration().isHandWrittenManagedMethod(peer.componentName, it.overloadedName)
+            )
             for (const grouped of groupOverloads(filteredMethods))
                 this.overloadsPrinter(printer).printGroupedComponentOverloads(peer, grouped)
             // todo stub until we can process AttributeModifier

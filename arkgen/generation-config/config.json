@@ -270,6 +270,16 @@
             ]
         }
     },
+    "managed": {
+        "handwrittenMethods": {
+            "CommonMethod": [
+                "gesture",
+                "priorityGesture",
+                "parallelGesture"
+            ]
+        }
+        
+    },
     "patchMaterialized": {},
     "CollapseOverloadsARKTS": true,
     "forceContext": [
