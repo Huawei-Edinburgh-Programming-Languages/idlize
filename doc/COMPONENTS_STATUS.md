@@ -1260,8 +1260,8 @@
 |`minResponsiveDistance`| Function |Morozov Sergey | done |  |  |
 |`contentModifier`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`slideRange`| Function | Morozov Sergey | done |  |  |
-|`digitalCrownSensitivity`| Function | Kovalev Sergey | in progress | | |
-|`enableHapticFeedback`| Function | Kovalev Sergey | in progress | | |
+|`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | |
+|`enableHapticFeedback`| Function | Kovalev Sergey | done | | |
 |`showTips`| Function |Morozov Sergey | done |  |  |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
 |*BaseSpan*| *Component* |Politov Mikhail | done |  |  |
