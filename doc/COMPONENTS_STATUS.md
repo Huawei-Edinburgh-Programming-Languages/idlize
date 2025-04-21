@@ -2804,7 +2804,7 @@
 |`getVelocityY`| Function | Samarin Sergey | done |  | |
 |`setVelocityY`| Function | Samarin Sergey | done |  | |
 |`getVelocity`| Function | Samarin Sergey | done |  | |
-|`setVelocity`| Function | Samarin Sergey, Lobah Mikhail | done|  | not applicable https://gitee.com/nikolay-igotti/idlize/issues/IBQEWR |
+|`setVelocity`| Function | Lobah Mikhail | done|  |  |
 |*TapGestureInterface*| *Class* | Dudkin Sergey | done | | wait new generation for feature_branch, to merge CTOR impl |
 |`ctor`| Function | Dudkin Sergey | done | | |
 |`onAction`| Function | Dudkin Sergey | done | | |
