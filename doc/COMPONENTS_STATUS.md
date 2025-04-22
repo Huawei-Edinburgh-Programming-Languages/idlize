@@ -2731,10 +2731,10 @@
 |`restoreDefault`| Function | Erokhin Ilya | done |  | |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | testskipped |  | |
 |`close`| Function | Tuzhilkin Ivan | testskipped | | can checked only on e2e|
-|*CustomDialogController*| *Class* | Maksimov Nikita | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBECPG |
-|`ctor`| Function |Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
-|`open`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
-|`close`| Function | Maksimov Nikita | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IBECPG + |
+|*CustomDialogController*| *Class* | Maksimov Nikita | in progress |  | |
+|`ctor`| Function |Maksimov Nikita, Skroba Gleb | in progress |  |  |
+|`open`| Function | Maksimov Nikita | testskipped |  |  |
+|`close`| Function | Maksimov Nikita | testskipped |  |   |
 |*LinearGradient*| *Class* | Morozov Sergey | done | | |
 |`ctor`| Function | Morozov Sergey | done | | |
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | testskipped |  | |
