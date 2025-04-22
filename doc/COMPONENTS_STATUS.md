@@ -1543,7 +1543,7 @@
 |`type`| Function | Spirin Andrey | done |  |  |
 |`contentType`| Function | Spirin Andrey | done |  |  |
 |`placeholderColor`| Function | Spirin Andrey | done |  |  |
-|`textOverflow`| Function | Spirin Andrey, Lobah Mikhail| in progress|  |https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
+|`textOverflow`| Function | Spirin Andrey, Lobah Mikhail| done|  |https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
 |`textIndent`| Function | Spirin Andrey | done |  |  |
 |`placeholderFont`| Function | Spirin Andrey, Tuzhilkin Ivan | testskipped |  | |
 |`enterKeyType`| Function | Spirin Andrey | done |  |  |
@@ -1578,7 +1578,7 @@
 |`underlineColor`| Function | Spirin Andrey | done |  |  |
 |`selectionMenuHidden`| Function | Spirin Andrey | done |  |  |
 |`barState`| Function | Spirin Andrey | done |  |  |
-|`maxLines`| Function | Spirin Andrey, Lobah Mikhail| in progress|  |
+|`maxLines`| Function | Spirin Andrey, Lobah Mikhail| done| |
 |`wordBreak`| Function | Spirin Andrey | done |  |  |
 |`lineBreakStrategy`| Function | Spirin Andrey | done |  |  |
 |`cancelButton`| Function | Spirin Andrey, Andrey Khudenkikh | done |  |  |
@@ -1608,11 +1608,11 @@
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
 |`ellipsisMode`| Function |  Kovalev Sergey| done |  | |
 |`stopBackPress`| Function | Kovalev Sergey | done |  | |
-|`onWillChange`| Function | Lobah Mikhail| in progress| | |
+|`onWillChange`| Function | Lobah Mikhail| done| | |
 |`keyboardAppearance`| Function | | | | |
 |`inputFilter`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`customKeyboard`| Function | Lobah Mikhail | done |  |   |
-|`showCounter`| Function | Spirin Andrey, Lobah Mikhail| in progress| | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
+|`showCounter`| Function | Spirin Andrey, Lobah Mikhail| done| | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`_onChangeEvent_text`| Function | Erokhin Ilya | done |  | |
 |*TextPicker*| *Component* |Ekaterina Stepanova | in progress |  |  |
 |`construct`| Function | Tuzhilkin Ivan| done |  |   |
@@ -1844,7 +1844,7 @@
 |`enableDataDetector`| Function | | | | |
 |`dataDetectorConfig`| Function | | | | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done |  | |
-|`bindSelectionMenu`| Function | Lobah Mikhail | in progress |  |   |
+|`bindSelectionMenu`| Function | Lobah Mikhail| in progress |  |   |
 |*WindowScene*| *Component* | Dudkin Sergey | done |  | |
 |`construct`| Function |Dudkin Sergey | done |  | |
 |`setWindowSceneOptions`| Function | Dudkin Sergey | done |  | |
@@ -1938,8 +1938,8 @@
 |`syncInstanceId`| Function |managed side |managed side | | |
 |`restoreInstanceId`| Function |managed side |managed side | | |
 |`getResourceId`| Function |managed side |managed side | | |
-|*FocusController*| *Class* | Lobah Mikhail| in progress| | |
-|`requestFocus`| Function | Lobah Mikhail| in progress| | |
+|*FocusController*| *Class* | Lobah Mikhail| done| | |
+|`requestFocus`| Function | Lobah Mikhail| done| | |
 |*DrawableDescriptor*| *Class* | Evstigneev Roman | done | | |
 |`ctor`| Function | Evstigneev Roman | done | | |
 |`getPixelMap`| Function | Evstigneev Roman | done | | |
