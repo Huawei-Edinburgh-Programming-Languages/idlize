@@ -1659,8 +1659,8 @@
 |`textShadow`| Function |Ekaterina Stepanova| blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2SZK |
 |`contentModifier`| Function |Ekaterina Stepanova| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*TimePicker*| *Component* | Ekaterina Stepanova| blocked IDL |  |  |
-|`construct`| Function |Ekaterina Stepanova| in progress |  |  |
-|`setTimePickerOptions`| Function |Ekaterina Stepanova| in progress |  |  |
+|`construct`| Function |Politov Mikhail| done |  |  |
+|`setTimePickerOptions`| Function |Politov Mikhail| done |  |  |
 |`useMilitaryTime0`| Function |Ekaterina Stepanova| done |  |  |
 |`useMilitaryTime1`| Function |Ekaterina Stepanova| done |  |  |
 |`loop0`| Function |Ekaterina Stepanova| done |  |  |
