@@ -240,3 +240,17 @@ interface CanvasRenderer: CanvasPath {
     [Optional] attribute CanvasTextAlign textAlign;
     [Optional] attribute CanvasTextBaseline textBaseline;
 };
+
+[Synthetic]
+callback XComponentController_onSurfaceCreated_type = void (String surfaceId);
+[Synthetic]
+callback XComponentController_onSurfaceChanged_type = void (String surfaceId, SurfaceRect rect);
+[Synthetic]
+callback XComponentController_onSurfaceDestroyed_type = void (String surfaceId);
+
+[Entity=Class]
+interface XComponentController {
+    void onSurfaceCreated(XComponentController_onSurfaceCreated_type callback);
+    void onSurfaceChanged(XComponentController_onSurfaceChanged_type callback);
+    void onSurfaceDestroyed(XComponentController_onSurfaceDestroyed_type callback);
+};
