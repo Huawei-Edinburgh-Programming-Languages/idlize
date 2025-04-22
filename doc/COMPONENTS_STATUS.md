@@ -2938,7 +2938,7 @@
 |`setPathInfo`| Function | Morozov Sergey | managed side |  | , https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
 |`getPathStack`| Function | managed side| managed side| | |
 |`setPathStack`| Function | Morozov Sergey | managed side |  | , https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
-|`getNavDestinationId`| Function | Morozov Sergey | blocked IDL |  | |
+|`getNavDestinationId`| Function | managed side | managed side |  | |
 |`setNavDestinationId`| Function | Morozov Sergey | done |  |  |
 |*PatternLockController*| *Class* |Dmitry A Smirnov| done |  |  |
 |`ctor`| Function |Dmitry A Smirnov| done |  |  |
