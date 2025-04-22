@@ -277,9 +277,9 @@
 |`clip2`| Function | Dudkin Sergey | done |  |  |
 |`clipShape0`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`clipShape1`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`mask0`| Function | Maksimov Nikita | done |  |deprecated |
-|`mask1`| Function | Maksimov Nikita | done |  |deprecated |
-|`mask2`| Function | Maksimov Nikita | done |  |deprecated |
+|`mask0`| Function | Maksimov Nikita | done |  | |
+|`mask1`| Function | Maksimov Nikita, Tuzhilkin Ivan | in progress |  | |
+|`mask2`| Function | Maksimov Nikita, Tuzhilkin Ivan | in progress |  |deprecated |
 |`maskShape0`| Function |Tuzhilkin Ivan| in progress |  | testskipped on feature branch |
 |`maskShape1`| Function |Tuzhilkin Ivan| in progress |  | testskipped on feature branch |
 |`key`| Function | Lobah Mikhail | done |  | |
