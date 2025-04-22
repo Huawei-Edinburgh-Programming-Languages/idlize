@@ -2887,9 +2887,9 @@
 |*PanRecognizer*| *Class* | Politov Mikhail | done |  | |
 |`ctor`| Function |Politov Mikhail | done |  | |
 |`getPanGestureOptions`| Function | Politov Mikhail | done |  | |
-|`getDirection`| Function | | | | |
-|`getDistance`| Function | | | | |
-|`getDistanceMap`| Function | | | | |
+|`getDirection`| Function | | | | wait new generation of 126 on upstream_branch |
+|`getDistance`| Function | | | | wait new generation of 126 on upstream_branch |
+|`getDistanceMap`| Function | | | | wait new generation of 126 on upstream_branch |
 |*UIGridEvent*| *Class* | | | | |
 |`ctor`| Function | | | | |
 |`setOnWillScroll`| Function | | | | |
