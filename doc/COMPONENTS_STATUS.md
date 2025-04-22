@@ -3014,7 +3014,7 @@
 |`changeIndex0`| Function | Skroba Gleb | done |  |  |
 |`changeIndex1`| Function | Skroba Gleb | done |  |  |
 |`finishAnimation`| Function | Skroba Gleb | done |  |  |
-|`preloadItems`| Function | Skroba Gleb| in progress| | |
+|`preloadItems`| Function | Skroba Gleb| done | | |
 |*SwiperContentTransitionProxy*| *Class* | Skroba Gleb | done | | |
 |`ctor`| Function |Skroba Gleb | done | | |
 |`finishTransition`| Function | Skroba Gleb | done | | |
