@@ -51,7 +51,7 @@ public class InteropNativeModule {
 
     // loader
     static native int     _LoadVirtualMachine(int arg0, String arg1, String arg2);
-    static native boolean _RunApplication(int arg0, int arg1);
+    static native String  _RunApplication(int arg0, int arg1);
     static native long    _StartApplication(String appUrl, String appParams);
     static native String  _EmitEvent(int type, int target, int arg0, int arg1);
     static native int     _CallForeignVM(long context, int kind, byte[] data, int length);

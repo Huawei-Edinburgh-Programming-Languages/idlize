@@ -43,8 +43,8 @@ export class Application {
         console.log("start")
         return InteropNativeModule._GetStringFinalizer()
     }
-    enter(arg0: int32, arg1: int32, foreignContext: pointer): boolean {
-        return true
+    enter(arg0: int32, arg1: int32, foreignContext: pointer): string {
+        return "0"
     }
     static createApplication(appUrl: string, params: string, useNativeLog: boolean): Application {
         registerNativeModuleLibraryName("InteropNativeModule", "ArkoalaNative_ani")
