@@ -407,7 +407,7 @@
 |`fadingEdge`| Function | Samarin Sergey | done |  | |
 |*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  |
 |`construct`| Function |Vadim Voronov, Evstigneev Roman | done |  |
-|`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | in progress |  |  |
+|`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | done |  |  |
 |`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onReady`| Function |Vadim Voronov | done |  |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |  |
@@ -506,7 +506,7 @@
 |`onDateChange`| Function |Vadim Voronov | done |  | |
 |`onDateChange1`| Function |Vadim Voronov | done |  | |
 |`digitalCrownSensitivity`| Function | Vadim Voronov | done |  | |
-|`enableHapticFeedback`| Function | Vadim Voronov | in progress | | |
+|`enableHapticFeedback`| Function | Vadim Voronov | done | | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*Divider*| *Component* | Tuzhilkin Ivan | done |  |  |
 |`construct`| Function | Tuzhilkin Ivan |done | | |
@@ -2581,9 +2581,9 @@
 |*Path2D*| *Class* | Vadim Voronov | testskipped |  | |
 |`ctor`| Function |Vadim Voronov | testskipped |  | |
 |`addPath`| Function | Vadim Voronov | testskipped |  | |
-|*CanvasPattern*| *Class* | Vadim Voronov | in progress |  |  |
-|`ctor`| Function |Vadim Voronov | testskipped |  |  |
-|`setTransform`| Function | Vadim Voronov | in progress |  |  |
+|*CanvasPattern*| *Class* | Vadim Voronov | done |  |  |
+|`ctor`| Function |Vadim Voronov | done |  |  |
+|`setTransform`| Function | Vadim Voronov | done |  |  |
 |*ImageBitmap*| *Class* | Vadim Voronov | testskipped  |  | |
 |`ctor`| Function | Vadim Voronov | done |  |  |
 |`close`| Function | Vadim Voronov | done |  |  |
@@ -2915,8 +2915,8 @@
 |`identity`| Function | Vadim Voronov | testskipped |  | |
 |`invert`| Function | Vadim Voronov | testskipped |  | |
 |`multiply`| Function | Vadim Voronov | deprecated |  | deprecated |
-|`rotate0`| Function | Vadim Voronov | testskipped |  | rotate0 deprecated, rotate1 in progress |
-|`rotate1`| Function | Vadim Voronov | testskipped |  | rotate0 deprecated, rotate1 in progress |
+|`rotate0`| Function | Vadim Voronov | testskipped |  | deprecated |
+|`rotate1`| Function | Vadim Voronov | testskipped |  |  |
 |`translate`| Function | Vadim Voronov | testskipped |  | |
 |`scale`| Function | Vadim Voronov | testskipped |  | |
 |`getScaleX`| Function | Vadim Voronov | testskipped |  | |
