@@ -1804,9 +1804,9 @@
 |`pinchSmooth`| Function | Erokhin Ilya | done |  | |
 |`allowWindowOpenMethod`| Function | Erokhin Ilya | done |  | |
 |`onAudioStateChanged`| Function | Erokhin Ilya | done |  | |
-|`onFirstContentfulPaint`| Function | Erokhin Ilya | done |  | need i64 , https://gitee.com/nikolay-igotti/idlize/issues/IC36BZ |
-|`onFirstMeaningfulPaint`| Function | Erokhin Ilya | done |  | need i64 , https://gitee.com/nikolay-igotti/idlize/issues/IC36BZ |
-|`onLargestContentfulPaint`| Function | Erokhin Ilya | done |  | need i64 , https://gitee.com/nikolay-igotti/idlize/issues/IC36BZ |
+|`onFirstContentfulPaint`| Function | Erokhin Ilya | blocked IDL |  | need i64 , https://gitee.com/nikolay-igotti/idlize/issues/IC36BZ |
+|`onFirstMeaningfulPaint`| Function | Erokhin Ilya | blocked IDL |  | need i64 , https://gitee.com/nikolay-igotti/idlize/issues/IC36BZ |
+|`onLargestContentfulPaint`| Function | Erokhin Ilya | blocked IDL |  | need i64 , https://gitee.com/nikolay-igotti/idlize/issues/IC36BZ |
 |`onLoadIntercept`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
 |`onControllerAttached`| Function | Erokhin Ilya | done |  | |
 |`onOverScroll`| Function | Erokhin Ilya | done |  | |
