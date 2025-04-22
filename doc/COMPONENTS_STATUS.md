@@ -667,7 +667,7 @@
 |`onFinish`| Function | Evstigneev Roman | done |  | |
 |`enableAnalyzer`| Function | Evstigneev Roman | done |  | |
 |`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (+) |
-|`resizable`| Function | Evstigneev Roman | in progress|  | |
+|`resizable`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY | |
 |`privacySensitive`| Function | Evstigneev Roman | done |  | |
 |`enhancedImageQuality`| Function | Erokhin Ilya | done |  |  |
 |`orientation`| Function | Samarin Sergey | done |  | |
@@ -1962,10 +1962,10 @@
 |`createSRGBGammaToLinear`| Function |Evstigneev Roman | in progress| | |
 |`createLumaColorFilter`| Function |Evstigneev Roman | in progress | | |
 |`createMatrixColorFilter`| Function |Evstigneev Roman | in progress| | |
-|*Lattice*| *Class* |Evstigneev Roman | in progress| | |
-|`ctor`| Function |Evstigneev Roman | in progress| | |
-|`createImageLattice0`| Function |Evstigneev Roman | in progress| | |
-|`createImageLattice1`| Function |Evstigneev Roman |in progress | | |
+|*Lattice*| *Class* |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY | |
+|`ctor`| Function |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY | |
+|`createImageLattice0`| Function |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY | |
+|`createImageLattice1`| Function |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY | |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | done |  | |
 |`ctor`| Function | Dudkin Sergey | done |  | |
 |`drawRect`| Function | Dudkin Sergey | done |  | |
