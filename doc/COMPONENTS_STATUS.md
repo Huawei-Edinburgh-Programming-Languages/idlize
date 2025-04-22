@@ -332,8 +332,8 @@
 |`background`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
 |`backgroundImage0`| Function | Erokhin Ilya | done |  | |
 |`backgroundImage1`| Function | Erokhin Ilya | done |  | |
-|`backgroundBlurStyle0`| Function | Tuzhilkin Ivan | in progress | | |
-|`backgroundBlurStyle`| Function | Skroba Gleb | done |  |  |
+|`backgroundBlurStyle0`| Function | Skroba Gleb | done | | |
+|`backgroundBlurStyle1`| Function | Tuzhilkin Ivan | in progress | | |
 |`foregroundBlurStyle0`| Function | Roman Sedaikin | done |  | |
 |`foregroundBlurStyle1`| Function |Roman Sedaikin | done |  | |
 |`focusScopeId0`| Function | Dmitry A Smirnov| done |  | |
