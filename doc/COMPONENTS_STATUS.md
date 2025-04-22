@@ -910,10 +910,10 @@
 |`onDotConnect`| Function | Dmitry A Smirnov| done |  |  |
 |`activateCircleStyle`| Function | Dmitry A Smirnov| done |  | |
 |`skipUnselectedPoint`| Function | Dmitry A Smirnov | done| | need merge to fb|
-|*PluginComponent*| *Component* | Evstigneev Roman | in progress |  | |
-|`construct`| Function |Evstigneev Roman | in progress |  |  |
-|`setPluginComponentOptions`| Function | Evstigneev Roman | in progress |  |  |
-|`onComplete`| Function | Evstigneev Roman | done |  | |
+|*PluginComponent*| *Component* | Evstigneev Roman | done |  | |
+|`construct`| Function |Evstigneev Roman | done |  |  |
+|`setPluginComponentOptions`| Function | Evstigneev Roman | done |  |  need merge to fb |
+|`onComplete`| Function | Evstigneev Roman | done | | |
 |`onError`| Function | Evstigneev Roman | done |  | |
 |*Polygon*| *Component* |Politov Mikhail | done |  | |
 |`construct`| Function |Politov Mikhail | done |  | |
