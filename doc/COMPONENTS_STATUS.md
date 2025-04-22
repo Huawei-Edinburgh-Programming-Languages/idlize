@@ -178,7 +178,7 @@
 |`onFocusAxisEvent`| Function | Evstigneev Roman | done | | feature: API not present |
 |`onAxisEvent`| Function | Tuzhilkin Ivan | in progress | | |
 |`focusable`| Function | Roman Sedaikin | done |  | |
-|`nextFocus`| Function | Tuzhilkin Ivan | in progress | | |
+|`nextFocus`| Function | Politov Mikhail | in progress | | |
 |`tabStop`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocus`| Function | Roman Sedaikin | done |  | |
 |`onBlur`| Function | Roman Sedaikin | done |  | |
