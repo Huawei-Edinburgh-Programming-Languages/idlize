@@ -25,6 +25,8 @@ import {
     generateSyntheticUnionName, generateSyntheticIdlNodeName, generateSyntheticFunctionName,
     collapseTypes, isCommonMethodOrSubclass, generatorConfiguration,
     getOrPut, findRealDeclarations,
+    filterRedundantMethodsOverloads,
+    filterRedundantAttributesOverloads,
 } from "@idlizer/core"
 import { ReferenceResolver } from "@idlizer/core"
 import { peerGeneratorConfiguration, IDLVisitorConfiguration } from './DefaultConfiguration'
@@ -795,8 +797,8 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
                 ? []
                 : node.members.filter(ts.isConstructorDeclaration).map(it => this.serializeConstructor(it as ts.ConstructorDeclaration, childNameSuggestion)),
             [],
-            props,
-            methods,
+            filterRedundantAttributesOverloads(props),
+            filterRedundantMethodsOverloads(methods),
             [],
             this.collectTypeParameters(node.typeParameters), {
             extendedAttributes: this.computeComponentExtendedAttributes(node),
@@ -935,8 +937,8 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             inheritance,
             this.pickConstructors(nameSuggestion.name, node.members, childNameSuggestion),
             [],
-            this.pickProperties(nameSuggestion.name, allMembers, childNameSuggestion),
-            this.pickMethods(nameSuggestion.name, allMembers, childNameSuggestion),
+            filterRedundantAttributesOverloads(this.pickProperties(nameSuggestion.name, allMembers, childNameSuggestion)),
+            filterRedundantMethodsOverloads(this.pickMethods(nameSuggestion.name, allMembers, childNameSuggestion)),
             this.pickCallables(node.members, childNameSuggestion),
             typeParemeters, {
             fileName: node.getSourceFile().fileName,
