@@ -216,17 +216,17 @@
 |`renderGroup0`| Function |Lobah Mikhail | done  | |
 |`renderGroup1`| Function | Lobah Mikhail | done  | |
 |`freeze0`| Function | Lobah Mikhail | done |  | |
-|`freeze1`| Function |Lobah Mikhail | done |  | |
+|`freeze1`| Function | Dmitry A Smirnov | done |  | |
 |`translate0`| Function | Erokhin Ilya | done |  |  |
 |`translate1`| Function | Erokhin Ilya | done |  |  |
 |`scale0`| Function | Erokhin Ilya | done |  |  |
-|`scale1`| Function |Erokhin Ilya | done |  |  |
+|`scale1`| Function | Dmitry A Smirnov | done |  |  |
 |`gridSpan`| Function | Lobah Mikhail | done |  |deprecated? |
 |`gridOffset`| Function | Lobah Mikhail | done |  |deprecated? |
-|`rotate0`| Function | Dmitry A Smirnov| done |  | Dmitry A Smirnov|
-|`rotate1`| Function |Dmitry A Smirnov| done |  | Dmitry A Smirnov|
+|`rotate0`| Function | Dmitry A Smirnov | done |  | Dmitry A Smirnov|
+|`rotate1`| Function | Dmitry A Smirnov | done |  | Dmitry A Smirnov|
 |`transform0`| Function |Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUR61 Type `object` is converted to `ArkCustomObject`|
-|`transform1`| Function |Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUR61 Type `object` is converted to `ArkCustomObject`|
+|`transform1`| Function | Dmitry A Smirnov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUR61 Type `object` is converted to `ArkCustomObject`|
 |`onAppear`| Function | Roman Sedaikin | done |  | |
 |`onDisAppear`| Function | Roman Sedaikin | done |  | |
 |`onAttach`| Function | Andrey Khudenkikh | done |  | |
@@ -250,7 +250,7 @@
 |`alignRules1`| Function | Dmitry A Smirnov| done |  | |
 |`aspectRatio`| Function | Roman Sedaikin | done |  | |
 |`clickEffect0`| Function | Lobah Mikhail | done |  | |
-|`clickEffect1`| Function | Lobah Mikhail | done |  | |
+|`clickEffect1`| Function | Dmitry A Smirnov | done |  | |
 |`onDragStart`| Function | Skroba Gleb, Evstigneev Roman | done |  | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now. |
 |`onDragEnter`| Function | Lobah Mikhail, Evstigneev Roman | done |  |  |
 |`onDragMove`| Function | Lobah Mikhail, Evstigneev Roman | done |  |  |
@@ -264,19 +264,19 @@
 |`dragPreview1`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder |
 |`onPreDrag`| Function | Lobah Mikhail | done |  | |
 |`linearGradient0`| Function |Roman Sedaikin | done |  | |
-|`linearGradient1`| Function | Roman Sedaikin | done |  | |
+|`linearGradient1`| Function | Dmitry A Smirnov | done |  | |
 |`sweepGradient0`| Function |Roman Sedaikin | done |  | |
-|`sweepGradient1`| Function | Roman Sedaikin | done |  | |
+|`sweepGradient1`| Function | Dmitry A Smirnov | done |  | |
 |`radialGradient0`| Function |Erokhin Ilya | done |  |  |
-|`radialGradient1`| Function | Erokhin Ilya | done |  |  |
+|`radialGradient1`| Function | Dmitry A Smirnov | done |  |  |
 |`motionPath`| Function | Lobah Mikhail | done |  | |
 |`shadow0`| Function |Roman Sedaikin | done |  | |
-|`shadow1`| Function | Roman Sedaikin | done |  | |
+|`shadow1`| Function | Dmitry A Smirnov | done |  | |
 |`clip0`| Function | Dudkin Sergey | done |  |  |
 |`clip1`| Function | Dudkin Sergey | done |  |  |
 |`clip2`| Function | Dudkin Sergey | done |  |  |
 |`clipShape0`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`clipShape1`| Function | Tuzhilkin Ivan | testskipped |  | |
+|`clipShape1`| Function | Dmitry A Smirnov | testskipped |  | |
 |`mask0`| Function | Maksimov Nikita | done |  | |
 |`mask1`| Function | Maksimov Nikita, Tuzhilkin Ivan | in progress |  | |
 |`mask2`| Function | Maksimov Nikita, Tuzhilkin Ivan | in progress |  |deprecated |
@@ -289,11 +289,11 @@
 |`stateStyles`| Function | Dudkin Sergey | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`restoreId`| Function | Lobah Mikhail | done |  | |
 |`sphericalEffect0`| Function | Lobah Mikhail | done |  | |
-|`sphericalEffect1`| Function | Lobah Mikhail | done |  | |
+|`sphericalEffect1`| Function | Dmitry A Smirnov | done |  | |
 |`lightUpEffect0`| Function | Lobah Mikhail | done |  | |
-|`lightUpEffect1`| Function | Lobah Mikhail | done |  | |
+|`lightUpEffect1`| Function | Dmitry A Smirnov | done |  | |
 |`pixelStretchEffect0`| Function | Lobah Mikhail | done |  | |
-|`pixelStretchEffect1`| Function | Lobah Mikhail | done |  | |
+|`pixelStretchEffect1`| Function | Dmitry A Smirnov | done |  | |
 |`accessibilityGroup0`| Function |Lobah Mikhail | done |  | |
 |`accessibilityGroup1`| Function | Lobah Mikhail | done |  | |
 |`accessibilityText0`| Function | Lobah Mikhail | done |  | |
@@ -318,7 +318,7 @@
 |`renderFit1`| Function | Dmitry A Smirnov| done |  | |
 |`gestureModifier`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`backgroundBrightness0`| Function | Skroba Gleb | done |  | |
-|`backgroundBrightness1`| Function |Skroba Gleb | done |  | |
+|`backgroundBrightness1`| Function | Dmitry A Smirnov | done |  | |
 |`onGestureJudgeBegin`| Function | Skroba Gleb, Maksimov Nikita | done |  | UT by Vadim Voronov  |
 |`onGestureRecognizerJudgeBegin0`| Function | Skroba Gleb, Maksimov Nikita | done |  | UT by Vadim Voronov  |
 |`onGestureRecognizerJudgeBegin1`| Function | Skroba Gleb, Maksimov Nikita | done |  | UT by Vadim Voronov  |
@@ -335,7 +335,7 @@
 |`backgroundBlurStyle0`| Function | Skroba Gleb | done | | |
 |`backgroundBlurStyle1`| Function | Tuzhilkin Ivan | in progress | | |
 |`foregroundBlurStyle0`| Function | Roman Sedaikin | done |  | |
-|`foregroundBlurStyle1`| Function |Roman Sedaikin | done |  | |
+|`foregroundBlurStyle1`| Function | Dmitry A Smirnov | done |  | |
 |`focusScopeId0`| Function | Dmitry A Smirnov| done |  | |
 |`focusScopeId1`| Function | Dmitry A Smirnov| done |  | |
 |`focusScopePriority`| Function | Dmitry A Smirnov| done |  | |
@@ -345,16 +345,16 @@
 |`blur0`| Function | Roman Sedaikin, Erokhin Ilya | done |  | |
 |`blur1`| Function |Roman Sedaikin, Erokhin Ilya | done |  | |
 |`linearGradientBlur0`| Function |Lobah Mikhail | done |  | |
-|`linearGradientBlur1`| Function | Lobah Mikhail | done |  | |
+|`linearGradientBlur1`| Function | Dmitry A Smirnov | done |  | |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
 |`backdropBlur0`| Function | Berezin Kirill | done |  | |
-|`backdropBlur1`| Function |Berezin Kirill | done |  | |
+|`backdropBlur1`| Function | Dmitry A Smirnov | done |  | |
 |`sharedTransition`|Function|Skroba Gleb | done |  |  |
 |`chainMode`| Function | Berezin Kirill | done |  | |
 |`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
 |`overlay`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the `Ark_ComponentContent ` class without stubs is required.|
 |`blendMode0`| Function | Lobah Mikhail | done |  | |
-|`blendMode1`| Function |Lobah Mikhail | done |  | |
+|`blendMode1`| Function | Dmitry A Smirnov | done |  | |
 |`advancedBlendMode`| Function | Erokhin Ilya |in progress |  |  |
 |`bindTips`| Function | Tuzhilkin Ivan | in progress | | |
 |`bindPopup`| Function | Erokhin Ilya | done |  | fixes of issues were provided by our team, https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL2K, https://gitee.com/openharmony/arkui_ace_engine/issues/IBY31B |
