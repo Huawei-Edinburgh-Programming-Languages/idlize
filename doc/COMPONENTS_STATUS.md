@@ -402,7 +402,7 @@
 |`flingSpeedLimit`| Function | Samarin Sergey | done |  |  |
 |`clipContent`| Function | Evstigneev Roman | done |  |  |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | |
-|`backToTop`| Function | Kovalev Sergey | in progress | done | |
+|`backToTop`| Function | Kovalev Sergey | done |  | |
 |`edgeEffect`| Function | Samarin Sergey | done |  | |
 |`fadingEdge`| Function | Samarin Sergey | done |  | |
 |*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  |
