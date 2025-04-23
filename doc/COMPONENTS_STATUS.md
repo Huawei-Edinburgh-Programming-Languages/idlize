@@ -284,8 +284,8 @@
 |`maskShape1`| Function |Tuzhilkin Ivan| in progress |  | testskipped on feature branch |
 |`key`| Function | Lobah Mikhail | done |  | |
 |`id`| Function | Erokhin Ilya | done |  |  |
-|`geometryTransition0`| Function | Lobah Mikhail | testskipped | | testskipped due to aceEngine issue |
-|`geometryTransition1`| Function | Lobah Mikhail | testskipped | | testskipped due to aceEngine issue |
+|`geometryTransition0`| Function | Lobah Mikhail | testskipped | | testskipped due to aceEngine issue https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
+|`geometryTransition1`| Function | Lobah Mikhail | testskipped | | testskipped due to aceEngine issue https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
 |`stateStyles`| Function | Dudkin Sergey | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`restoreId`| Function | Lobah Mikhail | done |  | |
 |`sphericalEffect0`| Function | Lobah Mikhail | done |  | |
@@ -1844,7 +1844,7 @@
 |`enableDataDetector`| Function | | | | |
 |`dataDetectorConfig`| Function | | | | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done |  | |
-|`bindSelectionMenu`| Function | Lobah Mikhail| in progress |  |   |
+|`bindSelectionMenu`| Function | Lobah Mikhail| in progress| | |
 |*WindowScene*| *Component* | Dudkin Sergey | done |  | |
 |`construct`| Function |Dudkin Sergey | done |  | |
 |`setWindowSceneOptions`| Function | Dudkin Sergey | done |  | |
