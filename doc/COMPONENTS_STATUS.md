@@ -1733,7 +1733,7 @@
 |`wideViewModeAccess`| Function | Erokhin Ilya | done |  |deprecated |
 |`overviewModeAccess`| Function | Erokhin Ilya | done |  | |
 |`overScrollMode`| Function | Erokhin Ilya | done |  | |
-|`blurOnKeyboardHideMode`| Function | Vadim Voronov | in progress | | |
+|`blurOnKeyboardHideMode`| Function | Vadim Voronov | done | | |
 |`textZoomAtio`| Function | Erokhin Ilya | done |  |deprecated |
 |`textZoomRatio`| Function | Erokhin Ilya | done |  | |
 |`databaseAccess`| Function | Erokhin Ilya | done |  | |
@@ -1834,12 +1834,12 @@
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done |  | |
 |`editMenuOptions`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |  |
 |`enableHapticFeedback`| Function | Erokhin Ilya | done |  | |
-|`enableFollowSystemFontWeight`| Function | Vadim Voronov | in progress | | |
-|`enableWebAVSession`| Function | Vadim Voronov  | in progress | | |
-|`optimizeParserBudget`| Function | Vadim Voronov  | in progress | | |
-|`runJavaScriptOnDocumentStart`| Function | Vadim Voronov  | in progress | | |
-|`runJavaScriptOnDocumentEnd`| Function | Vadim Voronov  | in progress | | |
-|`runJavaScriptOnHeadEnd`| Function | Vadim Voronov  | in progress | | |
+|`enableFollowSystemFontWeight`| Function | Vadim Voronov | done | | |
+|`enableWebAVSession`| Function | Vadim Voronov  | done | | |
+|`optimizeParserBudget`| Function | Vadim Voronov  | done | | |
+|`runJavaScriptOnDocumentStart`| Function | Vadim Voronov  | done | | |
+|`runJavaScriptOnDocumentEnd`| Function | Vadim Voronov  | done | | |
+|`runJavaScriptOnHeadEnd`| Function | Vadim Voronov  | done | | |
 |`nativeEmbedOptions`| Function | | | | |
 |`enableDataDetector`| Function | | | | |
 |`dataDetectorConfig`| Function | | | | |
