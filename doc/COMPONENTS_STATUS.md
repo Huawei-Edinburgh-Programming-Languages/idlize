@@ -138,7 +138,7 @@
 |`backgroundEffect1`| Function | Skroba Gleb | done |  |  |
 |`backgroundImageResizable`| Function | Skroba Gleb | done |  | |
 |`foregroundEffect`| Function | Skroba Gleb | done |  |  |
-|`visualEffect`| Function | Skroba Gleb | blocked IDL | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3?from=project-issue |
+|`visualEffect`| Function | Skroba Gleb | blocked IDL | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
 |`backgroundFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
 |`foregroundFilter`| Function | Skroba Gleb |  blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3  |
 |`compositingFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3  |
@@ -2189,8 +2189,8 @@
 |`waterRipple`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`flyInFlyOutEffect`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`distort`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
-|*VisualEffect*| *Class* | | | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3?from=project-issue |
-|`backgroundColorBlender`| Function | | | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3?from=project-issue |
+|*VisualEffect*| *Class* | | | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
+|`backgroundColorBlender`| Function | | | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
 |*NavExtender*| *Class* |managed side |managed side | | |
 |`setUpdateStackCallback`| Function |managed side |managed side | | |
 |`syncStack`| Function |managed side |managed side | | |
