@@ -400,7 +400,7 @@
 |`onScrollStart`| Function | Samarin Sergey | done |  | |
 |`onScrollStop`| Function | Samarin Sergey | done |  | |
 |`flingSpeedLimit`| Function | Samarin Sergey | done |  |  |
-|`clipContent`| Function | Evstigneev Roman | in progress |  |  |
+|`clipContent`| Function | Evstigneev Roman | done |  |  |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | |
 |`backToTop`| Function | Kovalev Sergey | in progress | done | |
 |`edgeEffect`| Function | Samarin Sergey | done |  | |
