@@ -1405,7 +1405,7 @@
 |*TabContent*| *Component* | Evstigneev Roman | blocked IDL |  |  |
 |`construct`| Function | Evstigneev Roman | done |  |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |  |
-|`tabBar0`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |  |
+|`tabBar0`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | done | |  |
 |`tabBar1`| Function |Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |  |
 |`tabBar2`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |  |
 |`onWillShow`| Function |Evstigneev Roman | done |  |  |
