@@ -138,10 +138,10 @@
 |`backgroundEffect1`| Function | Skroba Gleb | done |  |  |
 |`backgroundImageResizable`| Function | Skroba Gleb | done |  | |
 |`foregroundEffect`| Function | Skroba Gleb | done |  |  |
-|`visualEffect`| Function | Skroba Gleb | in progress | | |
-|`backgroundFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
-|`foregroundFilter`| Function | Skroba Gleb |  blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
-|`compositingFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`visualEffect`| Function | Skroba Gleb | blocked IDL | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3?from=project-issue |
+|`backgroundFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
+|`foregroundFilter`| Function | Skroba Gleb |  blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3  |
+|`compositingFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3  |
 |`opacity0`| Function |Roman Sedaikin | done |  | |
 |`opacity1`| Function | Roman Sedaikin | done |  | |
 |`border`| Function | Roman Sedaikin | done |  | |
@@ -2182,15 +2182,15 @@
 |`setMarkNodeGroup`| Function | Morozov Sergey | in progress | | |
 |`getLengthMetricsUnit`| Function | Morozov Sergey | in progress | | |
 |`setLengthMetricsUnit`| Function | Morozov Sergey | in progress | | |
-|*Filter*| *Class* |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|*Filter*| *Class* |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
 |`ctor`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`pixelStretch`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`blur`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`waterRipple`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`flyInFlyOutEffect`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`distort`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
-|*VisualEffect*| *Class* | | | | |
-|`backgroundColorBlender`| Function | | | | |
+|*VisualEffect*| *Class* | | | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3?from=project-issue |
+|`backgroundColorBlender`| Function | | | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3?from=project-issue |
 |*NavExtender*| *Class* |managed side |managed side | | |
 |`setUpdateStackCallback`| Function |managed side |managed side | | |
 |`syncStack`| Function |managed side |managed side | | |
