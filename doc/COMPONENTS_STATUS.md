@@ -2686,16 +2686,16 @@
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextBaseline`| Function  | Vadim Voronov | done |  |   |
 |*CanvasRenderingContext2D*| *Class* | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
-|`ctor`| Function |Vadim Voronov| testskipped |  |  |
-|`toDataURL`| Function |Vadim Voronov| testskipped |  |  |
-|`startImageAnalyzer`| Function | Vadim Voronov | testskipped |  | |
-|`stopImageAnalyzer`| Function | Vadim Voronov| testskipped |  | |
-|`onOnAttach`| Function | Vadim Voronov | testskipped |  |  |
-|`offOnAttach`| Function | Vadim Voronov | testskipped |  |  |
-|`onOnDetach`| Function | Vadim Voronov | testskipped |  | |
-|`offOnDetach`| Function | Vadim Voronov | testskipped |  |  |
-|`getHeight`| Function |Vadim Voronov| testskipped |  | |
-|`getWidth`| Function |Vadim Voronov| testskipped |  | |
+|`ctor`| Function |Vadim Voronov| done |  |  |
+|`toDataURL`| Function |Vadim Voronov| done |  |  |
+|`startImageAnalyzer`| Function | Vadim Voronov | done |  | |
+|`stopImageAnalyzer`| Function | Vadim Voronov| done |  | |
+|`onOnAttach`| Function | Vadim Voronov | done |  |  |
+|`offOnAttach`| Function | Vadim Voronov | done |  |  |
+|`onOnDetach`| Function | Vadim Voronov | done |  | |
+|`offOnDetach`| Function | Vadim Voronov | done |  |  |
+|`getHeight`| Function |Vadim Voronov| done |  | |
+|`getWidth`| Function |Vadim Voronov| done |  | |
 |`getCanvas`| Function |Vadim Voronov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | testskipped | | |
 |`ctor`| Function |Vadim Voronov | testskipped | | |
@@ -2910,27 +2910,27 @@
 |`scrollToItemInGroup`| Function |Morozov Sergey | done | | |
 |`closeAllSwipeActions`| Function |Morozov Sergey | done | | |
 |`getVisibleListContentInfo`| Function |Morozov Sergey | done | | |
-|*Matrix2D*| *Class* | Vadim Voronov | testskipped |  |  |
-|`ctor`| Function |  Vadim Voronov | testskipped |  | |
-|`identity`| Function | Vadim Voronov | testskipped |  | |
-|`invert`| Function | Vadim Voronov | testskipped |  | |
+|*Matrix2D*| *Class* | Vadim Voronov | done |  |  |
+|`ctor`| Function |  Vadim Voronov | done |  | |
+|`identity`| Function | Vadim Voronov | done |  | |
+|`invert`| Function | Vadim Voronov | done |  | |
 |`multiply`| Function | Vadim Voronov | deprecated |  | deprecated |
-|`rotate0`| Function | Vadim Voronov | testskipped |  | deprecated |
-|`rotate1`| Function | Vadim Voronov | testskipped |  |  |
-|`translate`| Function | Vadim Voronov | testskipped |  | |
-|`scale`| Function | Vadim Voronov | testskipped |  | |
-|`getScaleX`| Function | Vadim Voronov | testskipped |  | |
-|`setScaleX`| Function | Vadim Voronov | testskipped |  | |
-|`getRotateY`| Function | Vadim Voronov | testskipped |  | |
-|`setRotateY`| Function | Vadim Voronov | testskipped |  | |
-|`getRotateX`| Function | Vadim Voronov | testskipped |  | |
-|`setRotateX`| Function | Vadim Voronov | testskipped |  | |
-|`getScaleY`| Function | Vadim Voronov | testskipped |  | |
-|`setScaleY`| Function | Vadim Voronov | testskipped |  | |
-|`getTranslateX`| Function | Vadim Voronov | testskipped |  | |
-|`setTranslateX`| Function | Vadim Voronov | testskipped |  | |
-|`getTranslateY`| Function | Vadim Voronov | testskipped |  | |
-|`setTranslateY`| Function | Vadim Voronov | testskipped |  | |
+|`rotate0`| Function | Vadim Voronov | deprecated |  | deprecated |
+|`rotate1`| Function | Vadim Voronov | done |  |  |
+|`translate`| Function | Vadim Voronov | done |  | |
+|`scale`| Function | Vadim Voronov | done |  | |
+|`getScaleX`| Function | Vadim Voronov | done |  | |
+|`setScaleX`| Function | Vadim Voronov | done |  | |
+|`getRotateY`| Function | Vadim Voronov | done |  | |
+|`setRotateY`| Function | Vadim Voronov | done |  | |
+|`getRotateX`| Function | Vadim Voronov | done |  | |
+|`setRotateX`| Function | Vadim Voronov | done |  | |
+|`getScaleY`| Function | Vadim Voronov | done |  | |
+|`setScaleY`| Function | Vadim Voronov | done |  | |
+|`getTranslateX`| Function | Vadim Voronov | done |  | |
+|`setTranslateX`| Function | Vadim Voronov | done |  | |
+|`getTranslateY`| Function | Vadim Voronov | done |  | |
+|`setTranslateY`| Function | Vadim Voronov | done |  | |
 |*NavDestinationContext*| *Class* | Morozov Sergey | managed side |  |  |
 |`ctor`| Function |Morozov Sergey | managed side |  |  |
 |`getConfigInRouteMap`| Function | Morozov Sergey | managed side |  |  |
