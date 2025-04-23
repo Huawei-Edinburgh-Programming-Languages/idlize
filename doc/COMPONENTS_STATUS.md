@@ -2967,7 +2967,7 @@
 |`getCaretRect`| Function | | | | |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked IDL|  |  |
 |`ctor`| Function |Dudkin Sergey| done |  |  |
-|`addTextSpan`| Function |Dudkin Sergey, Samarin Sergey | in progress |  |  |
+|`addTextSpan`| Function |Dudkin Sergey, Samarin Sergey | testskipped |  |  |
 |`addImageSpan`| Function |Dudkin Sergey, Maksimov Nikita, Tuzhilkin Ivan, Samarin Sergey, Erokhin Ilya| done |  |  |
 |`addBuilderSpan`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail |
 |`addSymbolSpan`| Function | Dudkin Sergey| done |  |  |
