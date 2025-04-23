@@ -789,9 +789,9 @@
 |`onStart`| Function | Andrey Khudenkikh| done |  |  |
 |`onBounce`| Function |Andrey Khudenkikh | done |  |  |
 |`onFinish`| Function |Andrey Khudenkikh | done |  |  |
-|*MediaCachedImage*| *Component* | Skroba Gleb | in progress |  | |
-|`construct`| Function | Skroba Gleb | in progress |  |  |
-|`setMediaCachedImageOptions`| Function | Skroba Gleb | in progress |  | blocked by DrawableDescriptor  |
+|*MediaCachedImage*| *Component* | Skroba Gleb, Evstigneev Roman | done |  | |
+|`construct`| Function | Skroba Gleb, Evstigneev Roman | done |  |  |
+|`setMediaCachedImageOptions`| Function | Skroba Gleb, Evstigneev Roman | done |  |   |
 |*Menu*|*Component*|Morozov Sergey| done |  |  |
 |`construct`| Function |Morozov Sergey| done |  |  |
 |`setMenuOptions`| Function |Morozov Sergey| done |  |  |
