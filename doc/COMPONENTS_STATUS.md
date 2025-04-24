@@ -1209,12 +1209,12 @@
 |`menuItemContentModifier1` | Function | Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`divider` | Function | Samarin Sergey | done |  |  |
 |`textModifier`| Function | Samarin Sergey | managed side |  | |
-|`arrowModifier`| Function | Maksimov Nikita | in progress | | |
-|`optionTextModifier`| Function | Maksimov Nikita | in progress | | |
-|`selectedOptionTextModifier`| Function | Maksimov Nikita | in progress | | |
-|`dividerStyle`| Function | Maksimov Nikita | in progress | | API is not present |
-|`avoidance`| Function | Maksimov Nikita | in progress | | API is not present |
-|`menuOutline`| Function | Maksimov Nikita | in progress | | API is not present |
+|`arrowModifier`| Function | Maksimov Nikita, Evstigneev Roman | in progress | | |
+|`optionTextModifier`| Function | Maksimov Nikita, Evstigneev Roman | in progress | | |
+|`selectedOptionTextModifier`| Function | Maksimov Nikita, Evstigneev Roman | in progress | | |
+|`dividerStyle`| Function | Maksimov Nikita, Evstigneev Roman | in progress | | API is not present |
+|`avoidance`| Function | Maksimov Nikita, Evstigneev Roman | in progress | | API is not present |
+|`menuOutline`| Function | Maksimov Nikita, Evstigneev Roman | in progress | | API is not present |
 |`menuAlign0` | Function | Samarin Sergey | done |  |  |
 |`menuAlign1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
