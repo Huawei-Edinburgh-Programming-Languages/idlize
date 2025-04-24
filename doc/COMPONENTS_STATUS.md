@@ -3327,7 +3327,7 @@
 |`offAsyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`offSyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
 |*StyledString*| *Class* | Pavelyev Ivan | blocked IDL |  |  |
-|`ctor`| Function |Pavelyev Ivan | done |  | |
+|`ctor`| Function | Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`getString`| Function | Pavelyev Ivan | done |  | |
 |`getStyles`| Function | Politov Mikhail | done |  | |
 |`equals`| Function | Pavelyev Ivan | done |  | |
