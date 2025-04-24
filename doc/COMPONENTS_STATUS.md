@@ -451,7 +451,7 @@
 |*Column*| *Component* | Politov Mikhail | done |  |  |
 |`construct`| Function | Politov Mikhail | done |  |  |
 |`setColumnOptions0`| Function | Politov Mikhail | done |  |  |
-|`setColumnOptions1`| Function | Politov Mikhail | done |  |  |
+|`setColumnOptions1`| Function | Dudkin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IC3NZW |
 |`alignItems`| Function | Politov Mikhail | done |  |  |
 |`justifyContent`| Function | Politov Mikhail | done |  |  |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  | UT by Evstigneev Roman |
