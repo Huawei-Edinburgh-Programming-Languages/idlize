@@ -65,6 +65,10 @@ export {
     CustomComponentSample,
 } from '../../generated/arkts'
 
+export {
+    checkUnionType
+} '../../generated/arkts'
+
 export type OHBuffer = NativeBuffer
 export type OHAny = object
 

@@ -856,3 +856,24 @@ OH_UNIT_generics_YHandle generics_Y_constructImpl() {
 }
 void generics_Y_destructImpl(OH_UNIT_generics_YHandle thisPtr) {
 }
+
+// Check type
+OH_Boolean GlobalScope_checkUnionTypeImpl(const OH_Number* step, const OH_UNIT_DTSUnionType* value) {
+
+    int s = step->i32;
+    OH_UNIT_DTSUnionType v = *value;
+    OH_Boolean OH_FALSE = (OH_Boolean) 0;
+    OH_Boolean OH_TRUE = (OH_Boolean) 1;
+
+    if (s == 1) {
+        switch(value->selector) {
+            case 1: if (v.value1.tag == INTEROP_TAG_INT32 && v.value1.i32 == 123) return OH_TRUE;
+            case 2: if (v.value2 == OH_FALSE) return OH_TRUE;
+            default: INTEROP_FATAL("Not correct GlobalScope_checkUnionTypeImpl argument value");
+        }
+    }
+
+    // return OH_UNIT_DTSUnionType
+    // return {.selector = 1, .value1 = {.tag = INTEROP_TAG_INT32, .i32 = 456} };
+    INTEROP_FATAL("Unknown step: %d", s);
+}
