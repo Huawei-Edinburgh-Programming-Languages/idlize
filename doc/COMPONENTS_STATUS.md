@@ -1322,9 +1322,9 @@
 |`disableSwipe`| Function | Skroba Gleb| done |  |  |
 |`curve`| Function | Skroba Gleb| done |  |  |
 |`onChange`| Function | Skroba Gleb| done |  |  |
-|`onSelected`| Function | Pavelyev Ivan | in progress | | |
+|`onSelected`| Function | Pavelyev Ivan | done | | |
 |`indicatorStyle`| Function | Skroba Gleb| done |  |deprecated?  |
-|`onUnselected`| Function | Pavelyev Ivan | in progress | | |
+|`onUnselected`| Function | Pavelyev Ivan | done | | |
 |`onAnimationStart`| Function | Skroba Gleb| done |  |  |
 |`onAnimationEnd`| Function | Skroba Gleb | done |  |  |
 |`onGestureSwipe`| Function | Skroba Gleb | done |  |  |
@@ -1333,7 +1333,7 @@
 |`onContentDidScroll`| Function | Skroba Gleb| done |  | |
 |`indicatorInteractive`| Function | Skroba Gleb| done |  |  |
 |`pageFlipMode`| Function | Lobah Mikhail| done| | Not exists on FB|
-|`onContentWillScroll`| Function | Pavelyev Ivan | in progress | | |
+|`onContentWillScroll`| Function | Pavelyev Ivan | done | | |
 |`displayArrow`| Function | Skroba Gleb| done |  |  |
 |`displayCount`| Function |Skroba Gleb | done |  |  |
 |`prevMargin`| Function | Skroba Gleb| done |  |  |
