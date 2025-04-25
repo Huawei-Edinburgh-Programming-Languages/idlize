@@ -13,40 +13,46 @@
  * limitations under the License.
  */
 
-import { IDLFile, IDLLibrary, IDLMethod, Language, PeerLibrary } from "@idlizer/core"
+import { capitalize, IDLFile, IDLLibrary, IDLMethod, Language, PeerLibrary } from "@idlizer/core"
 import * as arkts from "@koalaui/libarkts"
 import * as idl from "@idlizer/core/idl"
-import * as path from "path"
-import * as fs from "fs"
+import * as path from "node:path"
+import * as fs from "node:fs"
 
-function processFile(outDir: string, file: string) {
+function processFile(outDir: string, baseDir:string, file: string) {
     console.log(`Processing ${file}`)
-        let input = fs.readFileSync(file).toString()
-        //let module = arkts.createETSModuleFromSource(input, arkts.Es2pandaContextState.ES2PANDA_STATE_PARSED)
-        arkts.arktsGlobal.filePath = file
-        arkts.arktsGlobal.config = arkts.Config.create([
-            '_',
-            '--arktsconfig',
-            path.resolve(__dirname, "..", "config.json"),
-            file,
-            '--extension',
-            'ets',
-            '--stdlib',
-            path.join(process.env.PANDA_SDK_PATH as string, 'ets', 'stdlib'),
-            '--output',
-            'a.abc'
-        ]).peer
-        arkts.arktsGlobal.compilerContext = arkts.Context.createFromString(input)
-        arkts.proceedToState(arkts.Es2pandaContextState.ES2PANDA_STATE_PARSED)
-        const script = arkts.createETSModuleFromContext()
-        let idlVisitor = new IDLVisitor(file)
-        idlVisitor.visitor(script)
-        let idlFile = idlVisitor.toIDLFile()
-        let outFile = path.join(outDir, path.basename(file).replace(".d.ets", ".idl"))
-        fs.writeFileSync(outFile, idl.toIDLString(idlFile, {}), "utf-8")
+    let input = fs.readFileSync(file).toString()
+    //let module = arkts.createETSModuleFromSource(input, arkts.Es2pandaContextState.ES2PANDA_STATE_PARSED)
+    arkts.arktsGlobal.filePath = file
+    arkts.arktsGlobal.config = arkts.Config.create([
+        '_',
+        '--arktsconfig',
+        path.resolve(__dirname, "..", "config.json"),
+        file,
+        '--extension',
+        'ets',
+        '--stdlib',
+        path.join(process.env.PANDA_SDK_PATH as string, 'ets', 'stdlib'),
+        '--output',
+        'a.abc'
+    ]).peer
+    arkts.arktsGlobal.compilerContext = arkts.Context.createFromString(input)
+    arkts.proceedToState(arkts.Es2pandaContextState.ES2PANDA_STATE_PARSED)
+    const script = arkts.createETSModuleFromContext()
+    let idlVisitor = new IDLVisitor(baseDir, file)
+    idlVisitor.visitor(script)
+    const idlFile = idlVisitor.toIDLFile()
+    const fileRelativePath = path.relative(baseDir, file)
+    const outFile = path.join(outDir, fileRelativePath.replace(".d.ets", ".idl"))
+    const outFileDir = path.dirname(outFile)
+    if (!fs.existsSync(outFileDir)) {
+        fs.mkdirSync(outFileDir, { recursive: true })
+    }
+    fs.writeFileSync(outFile, idl.toIDLString(idlFile, {}), "utf-8")
+    console.log(`... saved to ${outFile}`)
 }
 
-export function generateFromSts(inputFiles: string[], outDir: string): PeerLibrary {
+export function generateFromSts(inputFiles: string[], baseDir:string, outDir: string): PeerLibrary {
     if (!process.env.PANDA_SDK_PATH) {
         process.env.PANDA_SDK_PATH = path.resolve(__dirname, "../../node_modules/@panda/sdk")
     }
@@ -57,7 +63,7 @@ export function generateFromSts(inputFiles: string[], outDir: string): PeerLibra
     let result = new PeerLibrary(Language.ARKTS)
     inputFiles.forEach(file => {
         try {
-            processFile(outDir, file)
+            processFile(outDir, baseDir, file)
         } catch (e: any) {
             console.log(e)
             if (e.trace)
@@ -73,19 +79,56 @@ class IDLVisitor extends arkts.AbstractVisitor {
     //writer = new IDLLanguageWriter()
     entries: idl.IDLEntry[] = []
     fileName: string
+    packageClause: string[] = []
 
-    constructor(fileName: string) {
+    private defaultExportName?: string
+
+    private detectPackageNameByPath(fileName:string): string[] {
+        return path.relative(this.basePath, fileName)
+            .replaceAll('.d.ets', '')
+            .replaceAll('.idl', '')
+            .split(path.sep)
+            .map(it => it.replaceAll('@', ''))
+            .map(it => it.split('-').map((it, i) => i === 0 ? it : capitalize(it)).join('')) // kebab-case to camelCase
+            .filter(it => it.length && it !== '.' && it !== '..')
+    }
+
+    constructor(
+        protected basePath:string,
+        protected originalFileName: string,
+    ) {
         super()
-        this.fileName = fileName.replace(".d.ets", ".idl")
+        this.fileName = this.originalFileName.replace(".d.ets", ".idl")
+        this.packageClause = this.detectPackageNameByPath(this.originalFileName)
     }
     visitor(node: arkts.AstNode): arkts.AstNode {
+
+        if (arkts.hasModifierFlag(node, arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_DEFAULT_EXPORT)) {
+            if (arkts.isInterfaceDecl(node)) {
+                this.defaultExportName = node.id!.name
+            }
+            if (arkts.isTSInterfaceDeclaration(node)) {
+                this.defaultExportName = node.id!.name
+            }
+            if (arkts.isTSModuleDeclaration(node)) {
+                this.defaultExportName = (node.name as arkts.Identifier).name // not sure about this
+            }
+        }
+        if (arkts.isExportDefaultDeclaration(node)) {
+            if (arkts.isIdentifier(node.decl)) {
+                this.defaultExportName = node.decl.name
+            }
+        }
+
+        //////////////////
+
         if (arkts.isScriptFunction(node)) {
             return this.visitScriptFunction(node)
         }
         if (arkts.isClassDeclaration(node)) {
             return this.visitClassDeclaration(node)
         }
-        if (arkts.isInterfaceDecl(node)) {
+        if (arkts.isInterfaceDecl(node) || arkts.isTSInterfaceDeclaration(node)) {
             return this.visitInterfaceDeclaration(node)
         }
         if (arkts.isImportDeclaration(node)) {
@@ -94,6 +137,12 @@ class IDLVisitor extends arkts.AbstractVisitor {
         if (arkts.isTSEnumDeclaration(node)) {
             return this.visitEnumDeclaration(node)
         }
+        if (arkts.isTSTypeAliasDeclaration(node)) {
+            return this.visitTSTypeAliasDeclaration(node)
+        }
+
+        //////////////////
+
         return this.visitEachChild(node)
     }
 
@@ -113,8 +162,35 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     visitImportDeclaration(node: arkts.ImportDeclaration): arkts.ImportDeclaration {
-        this.entries.push(idl.createImport([`"${node.source!.str}"`]))
+        const currentFileBaseDir = path.dirname(this.originalFileName)
+        const importFilePath = path.normalize(path.join(currentFileBaseDir, node.source!.str))
+        const importedPackageClause = this.detectPackageNameByPath(importFilePath)
+        node.specifiers.forEach(spec => {
+            if (arkts.isImportSpecifier(spec)) {
+                const imported = spec.imported!
+                const local = spec.local ?? imported
+                this.entries.push(idl.createImport([...importedPackageClause, imported.name], local.name))
+            }
+            if (arkts.isImportDefaultSpecifier(spec)) {
+                this.entries.push(idl.createImport([...importedPackageClause, 'default'], spec.local!.name))
+            }
+            if (arkts.isImportNamespaceSpecifier(spec)) {
+                this.entries.push(idl.createImport([...importedPackageClause, 'default'], spec.local!.name))
+            }
+        })
         return node
+    }
+
+    visitTSTypeAliasDeclaration(declaration: arkts.TSTypeAliasDeclaration): arkts.TSTypeAliasDeclaration {
+        this.entries.push(idl.createTypedef(
+            declaration.id!.name,
+            this.serializeType(declaration.typeAnnotation),
+            undefined,
+            {
+                fileName: this.fileName
+            })
+        )
+        return declaration
     }
 
     visitScriptFunction(node: arkts.ScriptFunction): arkts.ScriptFunction {
@@ -128,10 +204,31 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
     visitClassDeclaration(declaration: arkts.ClassDeclaration): arkts.ClassDeclaration {
         const name = declaration.definition!.ident!.name
+        const definition = declaration.definition!
+        const inheritance: idl.IDLReferenceType[] = []
+        if (definition.super) {
+            const sup = this.serializeType(definition.super)
+            if (!idl.isReferenceType(sup)) {
+                throw new Error("Expected reference type")
+            }
+            inheritance.push(sup)
+        }
+        if (definition.implements.length) {
+            if (inheritance.length === 0) {
+                inheritance.push(idl.IDLTopType)
+            }
+            definition.implements.forEach(int => {
+                const type = this.serializeType(int.expr)
+                if (!idl.isReferenceType(type)) {
+                    throw new Error("Expected reference type")
+                }
+                inheritance.push(type)
+            })
+        }
         this.entries.push(idl.createInterface(
             name,
             idl.IDLInterfaceSubkind.Class,
-            [], // inneritance
+            inheritance,
             [], // ctors
             undefined, // constants
             declaration.definition!.body.filter(arkts.isClassProperty).map(it => this.serializeClassProperty(it)),
@@ -140,17 +237,28 @@ class IDLVisitor extends arkts.AbstractVisitor {
             [], // type parameters
             {
                 fileName:this.fileName,
+                extendedAttributes: [{ name: idl.IDLExtendedAttributes.Entity, value: idl.IDLEntity.Class }]
             }
         ))
         return declaration
     }
 
-    visitInterfaceDeclaration(declaration: arkts.InterfaceDecl): arkts.InterfaceDecl {
+    visitInterfaceDeclaration(declaration: arkts.InterfaceDecl | arkts.TSInterfaceDeclaration): arkts.InterfaceDecl | arkts.TSInterfaceDeclaration {
         const name = declaration.id!.name
+        const inheritance: idl.IDLReferenceType[] = []
+        if (declaration.extends.length) {
+            declaration.extends.forEach(int => {
+                const type = this.serializeType(int.expr)
+                if (!idl.isReferenceType(type)) {
+                    throw new Error("Expected reference type")
+                }
+                inheritance.push(type)
+            })
+        }
         this.entries.push(idl.createInterface(
             name,
             idl.IDLInterfaceSubkind.Interface,
-            [], // inneritance
+            inheritance,
             [], // ctors
             undefined, // constants
             declaration.body!.getChildren().filter(arkts.isClassProperty).map(it => this.serializeClassProperty(it)),
@@ -174,28 +282,34 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     serializeClassProperty(property: arkts.ClassProperty): idl.IDLProperty {
-        return idl.createProperty((property.key as arkts.Identifier).name,
-            this.serializeType(property.typeAnnotation!))
+        const prop = idl.createProperty((property.key as arkts.Identifier).name, this.serializeType(property.typeAnnotation!))
+        if (arkts.hasModifierFlag(property, arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_OPTIONAL)) {
+            prop.extendedAttributes ??= []
+            prop.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Optional })
+        }
+        return prop
     }
 
-    serializeType(type: arkts.TypeNode|undefined): idl.IDLType {
+    serializeType(type: arkts.AstNode|undefined): idl.IDLType {
         if (!type) return idl.IDLVoidType
         if (arkts.isTSAnyKeyword(type))
             return idl.IDLAnyType
+        if (arkts.isTSThisType(type))
+            return idl.IDLThisType
         if (arkts.isETSUndefinedType(type))
             return idl.IDLUndefinedType
+        if (arkts.isETSStringLiteralType(type))
+            return idl.IDLStringType
         if (arkts.isETSNullType(type))
             return idl.IDLUndefinedType
         if (arkts.isTSArrayType(type))
             return idl.createContainerType('sequence', [this.serializeType((type as arkts.TSArrayType).elementType)])
         if (arkts.isETSUnionType(type))
             return idl.createUnionType((type as arkts.ETSUnionType).types.map((it) => this.serializeType(it)))
-        if (arkts.isETSTypeReference(type))
-            return idl.createReferenceType((type as arkts.ETSTypeReference).baseName!.name)
-        if (arkts.isETSTypeReference(type))
-            return idl.createReferenceType((type as arkts.ETSTypeReference).baseName!.name)
         if (arkts.isETSPrimitiveType(type))
             return this.serializePrimitive((type as arkts.ETSPrimitiveType).primitiveType)
+        if (arkts.isETSTypeReference(type))
+            return idl.createReferenceType((type as arkts.ETSTypeReference).baseName!.name)
         if (arkts.isETSFunctionType(type)) {
             const funcType = this.serializeFunctionType(type as arkts.ETSFunctionType)
             if (!this.seenTypes.has(funcType.name)) {
@@ -203,6 +317,14 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 this.addSyntheticType(funcType)
             }
             return idl.createReferenceType(funcType.name)
+        }
+        if (arkts.isETSTuple(type)) {
+            const tupleType = this.serializeTupleType(type)
+            if (!this.seenTypes.has(tupleType.name)) {
+                this.seenTypes.add(tupleType.name)
+                this.addSyntheticType(tupleType)
+            }
+            return idl.createReferenceType(tupleType.name)
         }
         throw new Error(`Failed type conversion for ${type ? this.printNode(type) : "undefined"}`)
     }
@@ -236,6 +358,29 @@ class IDLVisitor extends arkts.AbstractVisitor {
         return result
     }
 
+    serializeTupleType(type:arkts.ETSTuple): idl.IDLInterface {
+        const properties = type.tupleTypeAnnotationsList.map(it => {
+            return this.serializeType(it)
+        })
+        return idl.createInterface(
+            'Tuple_' + properties.map(it => idl.printType(it)).join('_') /* bad mangling, fixme */,
+            idl.IDLInterfaceSubkind.Tuple,
+            [], [], [],
+            properties.map((it, idx) => {
+                return idl.createProperty(`value${idx}`, it)
+            })
+            , [], [],
+            undefined,
+            {
+                fileName: this.fileName,
+                extendedAttributes: [
+                    { name: idl.IDLExtendedAttributes.Synthetic },
+                    { name: idl.IDLExtendedAttributes.Entity, value: idl.IDLEntity.Tuple }
+                ]
+            }
+        )
+    }
+
     makeFunctionTypeName(type: arkts.ETSFunctionType): string {
         return `Callback_${type.params.map(it => {
             let param = it as arkts.ETSParameterExpression
@@ -243,12 +388,26 @@ class IDLVisitor extends arkts.AbstractVisitor {
         }).map(it => idl.printType(it.type)).join("_")}`
     }
 
-    addSyntheticType(entry: idl.IDLCallback) {
+    addSyntheticType(entry: idl.IDLEntry) {
         this.entries.push(entry)
     }
 
+    markDefaultExport() {
+        if (this.defaultExportName) {
+            this.entries.forEach(entry => {
+                if (entry.name === this.defaultExportName) {
+                    entry.extendedAttributes ??= []
+                    entry.extendedAttributes.push({
+                        name: idl.IDLExtendedAttributes.DefaultExport
+                    })
+                }
+            })
+        }
+    }
+
     toIDLFile(): IDLFile {
-        return idl.createFile(this.entries)
+        this.markDefaultExport()
+        return idl.linkParentBack(idl.createFile(this.entries, this.fileName, this.packageClause))
     }
 }
 
