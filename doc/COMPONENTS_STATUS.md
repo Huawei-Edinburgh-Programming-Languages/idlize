@@ -2865,8 +2865,8 @@
 |`getState`| Function | Kovalev Sergey | done |  | |
 |`getEventTargetInfo`| Function | Maksimov Nikita | done |  | |
 |`isValid`| Function | Kovalev Sergey | done |  | |
-|`getFingerCount`| Function | Pavelyev Ivan | in progress | | |
-|`isFingerCountLimit`| Function | Pavelyev Ivan | in progress | | |
+|`getFingerCount`| Function | Pavelyev Ivan | done | | |
+|`isFingerCountLimit`| Function | Pavelyev Ivan | done | | |
 |*TapRecognizer*| *Class* | | | | |
 |`ctor`| Function | | | | |
 |`getTapCount`| Function | | | | |
