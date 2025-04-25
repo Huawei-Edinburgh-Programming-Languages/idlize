@@ -65,8 +65,8 @@ export {
 } from '../../generated/ts'
 
 export {
-  checkUnionType
-} from '../../generated/ts'
+    testLength
+} from "../../generated/ts"
 
 export type OHBuffer = ArrayBuffer
 export type OHAny = any

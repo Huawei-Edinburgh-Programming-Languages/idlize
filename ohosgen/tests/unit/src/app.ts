@@ -65,7 +65,7 @@ import {
 } from '#compat'
 
 import {
-  checkUnionType
+  testLength
 } from '#compat'
 
 export function assertEQ<T1, T2>(value1: T1, value2: T2, comment?: string): void {
@@ -223,10 +223,15 @@ function checkDataTestResult(msg: string, expected: DataInterface,
   assertEQ(expected.propObject[2].slice(6), actualObject[2])
 }
 
-function checkType() {
-    let res = checkUnionType(1, false)
+function checkLength() {
+    let res = testLength(1, "length")
     assertEQ(true, res)
-    res = checkUnionType(1, 123)
+    res = testLength(1, 123)
+    assertEQ(true, res)
+
+    res = testLength(2, "")
+    assertEQ(true, res)
+    res = testLength(2, 456.789)
     assertEQ(true, res)
 }
 
@@ -474,7 +479,7 @@ export function run() {
   suite.addTest("checkBigInt", checkBigInt)
   suite.addTest("checkForceCallback", checkForceCallback)
   suite.addTest("checkEnum", checkEnum)
-  suite.addTest("checkType", checkType)
+  suite.addTest("checkLength", checkLength)
   suite.addTest("checkClassWithComplexPropertyType", checkClassWithComplexPropertyType)
   suite.addTest("checkDataInterfaces", checkDataInterfaces)
   suite.addTest("checkStaticMaterialized", checkStaticMaterialized)
