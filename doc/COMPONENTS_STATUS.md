@@ -107,7 +107,7 @@
 |`textStyle1`| Function |Politov Mikhail | done |  |  |
 |`onChange0`| Function |Politov Mikhail | done |  |  |
 |`onChange1`| Function | Politov Mikhail | done |  |  |
-|`markToday`| Function | | | | |
+|`markToday`| Function | Samarin Sergey | in progress | | |
 |`edgeAlign0`| Function | Politov Mikhail | done |  |  |
 |`edgeAlign1`| Function |Politov Mikhail | done |  |  |
 |*CommonMethod*|*Component*|Skroba Gleb,Erokhin Ilya | in progress |  |  |
@@ -648,7 +648,7 @@
 |`fillColor0`| Function | Evstigneev Roman | done |  | |
 |`fillColor1`| Function |Evstigneev Roman | done |  | |
 |`objectFit`| Function |Berezin Kirill| done |  | |
-|`imageMatrix`| Function | | | | |
+|`imageMatrix`| Function | Samarin Sergey | in progress | | |
 |`objectRepeat`| Function | Evstigneev Roman | done |  | |
 |`autoResize`| Function | Evstigneev Roman | done |  |   |
 |`renderMode`| Function | Evstigneev Roman | done |  | |
@@ -682,7 +682,7 @@
 |`preDecode`| Function | Pavelyev Ivan | done |  | deprecated |
 |`fillMode`| Function | Pavelyev Ivan | done |  | |
 |`iterations`| Function | Pavelyev Ivan | done |  | |
-|`monitorInvisibleArea`| Function | | | | |
+|`monitorInvisibleArea`| Function | Samarin Sergey | in progress | | |
 |`onStart`| Function | Pavelyev Ivan | done |  | |
 |`onPause`| Function | Pavelyev Ivan | done |  | |
 |`onRepeat`| Function | Pavelyev Ivan | done |  | |
@@ -732,7 +732,7 @@
 |`friction`|Function|Morozov Sergey| done |  |  |
 |`childrenMainSize`|Function|Morozov Sergey| done |  |  |
 |`maintainVisibleContentPosition`|Function|Morozov Sergey| done |  |  |
-|`stackFromEnd`| Function | | | | |
+|`stackFromEnd`| Function | Samarin Sergey | in progress | | |
 |`onScroll`|Function|Morozov Sergey| done |  |deprecated  |
 |`onScrollIndex`|Function|Morozov Sergey| done |  |  |
 |`onScrollVisibleContentChange`|Function|Morozov Sergey| done |  |  |
@@ -821,7 +821,7 @@
 |`setNavDestinationOptions`| Function |Kovalev Sergey | done |  |   |
 |`hideTitleBar0`| Function |Kovalev Sergey | done |  |   |
 |`hideTitleBar`| Function |Kovalev Sergey | done |  |   |
-|`hideBackButton`| Function | | | | |
+|`hideBackButton`| Function | Samarin Sergey | in progress | | |
 |`onShown`| Function |Kovalev Sergey | done |  |  |
 |`onHidden`| Function |Kovalev Sergey | done |  |   |
 |`onBackPressed`| Function |Dudkin Sergey | done |  |  |
