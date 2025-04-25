@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { capitalize, IDLFile, IDLLibrary, IDLMethod, Language, PeerLibrary } from "@idlizer/core"
+import { capitalize, generateSyntheticFunctionName, generateSyntheticIdlNodeName, IDLFile, IDLLibrary, IDLMethod, Language, PeerLibrary } from "@idlizer/core"
 import * as arkts from "@koalaui/libarkts"
 import * as idl from "@idlizer/core/idl"
 import * as path from "node:path"
@@ -113,6 +113,9 @@ class IDLVisitor extends arkts.AbstractVisitor {
             if (arkts.isTSModuleDeclaration(node)) {
                 this.defaultExportName = (node.name as arkts.Identifier).name // not sure about this
             }
+            if (arkts.isETSModule(node)) {
+                this.defaultExportName = node.ident?.name
+            }
         }
         if (arkts.isExportDefaultDeclaration(node)) {
             if (arkts.isIdentifier(node.decl)) {
@@ -140,10 +143,30 @@ class IDLVisitor extends arkts.AbstractVisitor {
         if (arkts.isTSTypeAliasDeclaration(node)) {
             return this.visitTSTypeAliasDeclaration(node)
         }
+        if (arkts.isFunctionDeclaration(node)) {
+            return this.visitFunctionDeclaration(node)
+        }
+        if (arkts.isETSModule(node) && node.ident?.name !== 'ETSGLOBAL') {
+            return this.visitETSModule(node)
+        }
 
         //////////////////
 
         return this.visitEachChild(node)
+    }
+
+    visitETSModule(node:arkts.ETSModule):arkts.ETSModule {
+        const old = this.entries
+        this.entries = []
+        this.visitEachChild(node)
+        const members = this.entries
+        this.entries = old
+        this.entries.push(idl.createNamespace(
+            node.ident!.name,
+            members,
+            { fileName: this.fileName }
+        ))
+        return node
     }
 
     visitEnumDeclaration(node: arkts.TSEnumDeclaration): arkts.TSEnumDeclaration {
@@ -178,6 +201,19 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 this.entries.push(idl.createImport([...importedPackageClause, 'default'], spec.local!.name))
             }
         })
+        return node
+    }
+
+    visitFunctionDeclaration(node:arkts.FunctionDeclaration): arkts.FunctionDeclaration {
+        const func = node.function
+        this.entries.push(idl.createMethod(
+            func.id!.name,
+            func.params.map(it => {
+                const param = it as arkts.ETSParameterExpression
+                return idl.createParameter(param.name, this.serializeType(param.typeAnnotation))
+            }),
+            this.serializeType(func.returnTypeAnnotation)
+        ))
         return node
     }
 
@@ -346,13 +382,16 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     serializeFunctionType(type: arkts.ETSFunctionType): idl.IDLCallback {
-        let result = idl.createCallback(
-            this.makeFunctionTypeName(type),
-            type.params.map(it => {
-                let param = it as arkts.ETSParameterExpression
-                return idl.createParameter(param.name, this.serializeType(param.typeAnnotation!))
-            }),
-            this.serializeType(type.returnType))
+        const parameters = type.params.map(it => {
+            let param = it as arkts.ETSParameterExpression
+            return idl.createParameter(param.name, this.serializeType(param.typeAnnotation!))
+        })
+        const returnType = this.serializeType(type.returnType)
+        const result = idl.createCallback(
+            generateSyntheticFunctionName(parameters, returnType, arkts.hasModifierFlag(type, arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_ASYNC)),
+            parameters,
+            returnType
+        )
         result.extendedAttributes ??= []
         result.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Synthetic })
         return result
@@ -363,7 +402,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
             return this.serializeType(it)
         })
         return idl.createInterface(
-            'Tuple_' + properties.map(it => idl.printType(it)).join('_') /* bad mangling, fixme */,
+            'Tuple_' + properties.map(it => generateSyntheticIdlNodeName(it)).join('_') /* bad mangling, fixme */,
             idl.IDLInterfaceSubkind.Tuple,
             [], [], [],
             properties.map((it, idx) => {
@@ -379,13 +418,6 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 ]
             }
         )
-    }
-
-    makeFunctionTypeName(type: arkts.ETSFunctionType): string {
-        return `Callback_${type.params.map(it => {
-            let param = it as arkts.ETSParameterExpression
-            return idl.createParameter(param.name, this.serializeType(param.typeAnnotation!))
-        }).map(it => idl.printType(it.type)).join("_")}`
     }
 
     addSyntheticType(entry: idl.IDLEntry) {
