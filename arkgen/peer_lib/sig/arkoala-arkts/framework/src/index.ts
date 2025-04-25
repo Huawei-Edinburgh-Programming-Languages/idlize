@@ -5,6 +5,7 @@ export * from "./generated/ArkUINativeModuleEmpty"
 export * from "./generated/TestNativeModule"
 export * from "./generated/TestNativeModuleEmpty"
 export * from "./Events"
+export * from "./PeerEvents"
 export * from "./PeerNode"
 export * from "./NativePeerNode"
 

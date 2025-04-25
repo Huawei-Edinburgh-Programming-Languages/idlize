@@ -68,9 +68,18 @@ import { arkoalaLayout, ArkTSComponentsLayout } from "./ArkoalaLayout"
 import { printETSDeclaration } from "./printers/StsComponentsPrinter"
 import {platform} from "node:os";
 
-const External = path.join(__dirname, '../../external')
-const PeerLib = path.join(__dirname, '../peer_lib')
-const ExternalJson = path.join(PeerLib, 'external.json')
+export const PeerLib = path.join(__dirname, '../peer_lib')
+export const ExternalJson = path.join(PeerLib, 'external.json')
+
+const ExternalData = JSON.parse(fs.readFileSync(ExternalJson).toString())
+if (!ExternalData) throw new Error(`Cannot parse ${ExternalJson}`)
+
+export const External = path.join(PeerLib, ExternalData.path)
+export const ExternalSubset = path.join(PeerLib, ExternalData.subsetPath)
+
+function currentExternal() {
+    return fs.existsSync(ExternalSubset) ? ExternalSubset : External
+}
 
 export function generateLibaceFromIdl(config: {
     libaceDestination: string | undefined,
@@ -108,20 +117,17 @@ export function generateLibaceFromIdl(config: {
         fs.writeFileSync(libace.mesonBuild, mesonBuildFile(mesonBuild))
     }
 
-    copyToLibace(External, libace)
+    copyToLibace(currentExternal(), libace)
 }
 
 function copyArkoalaFiles(config: {
     onlyIntegrated: boolean | undefined
 }, arkoala: ArkoalaInstall) {
-    const data = JSON.parse(fs.readFileSync(ExternalJson).toString())
-    if (!data) throw new Error(`Cannot parse ${ExternalJson}`)
-
     if (config.onlyIntegrated) {
-        copyToArkoala(path.join(PeerLib, "sig"), arkoala, data.onlyIntegrated);
+        copyToArkoala(path.join(PeerLib, "sig"), arkoala, ExternalData.onlyIntegrated);
         return
     }
-    copyToArkoala(External, arkoala, data.subset);
+    copyToArkoala(currentExternal(), arkoala, ExternalData.subset);
     copyToArkoala(path.join(PeerLib, "sig"), arkoala);
 }
 

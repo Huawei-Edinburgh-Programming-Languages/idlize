@@ -1,5 +1,7 @@
 {
     "name": "external",
+    "path": "../../external",
+    "subsetPath": "./external",
     "subset": [
         "arkoala-arkts/arkui/src/NativePeerNode.ts",
         "arkoala-arkts/arkui/src/PeerNode.ts",
@@ -58,10 +60,13 @@
         "arkoala-arkts/framework/src/PeerLayout.ts",
         "arkoala-arkts/framework/src/PeerNode.ts",
         "arkoala-arkts/framework/src/WebResourceRequest.ts",
+        "arkoala-arkts/framework/native/src/arkoala-macros.h",
         "arkoala/arkui/src/stub.d.ts",
         "arkoala/arkui/src/test_data.ts",
         "arkoala/arkui/src/test_utils.ts",
+        "arkoala/arkui/src/ArkGesture.ts",
         "arkoala/arkui/src/ComponentBase.ts",
+        "arkoala/arkui/src/Events.ts",
         "arkoala/arkui/src/PeerNode.ts",
         "arkoala/arkui/src/NativePeerNode.ts",
         "arkoala/arkui/src/peer_events_checker.ts",
