@@ -216,11 +216,11 @@
 |`renderGroup0`| Function |Lobah Mikhail | done  | |
 |`renderGroup1`| Function | Lobah Mikhail | done  | |
 |`freeze0`| Function | Lobah Mikhail | done |  | |
-|`freeze1`| Function | Dmitry A Smirnov | done |  | |
+|`freeze1`| Function | Dmitry A Smirnov | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP not in json|
 |`translate0`| Function | Erokhin Ilya | done |  |  |
 |`translate1`| Function | Erokhin Ilya | done |  |  |
 |`scale0`| Function | Erokhin Ilya | done |  |  |
-|`scale1`| Function | Dmitry A Smirnov | done |  |  |
+|`scale1`| Function | Dmitry A Smirnov | done |  |  https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values|
 |`gridSpan`| Function | Lobah Mikhail | done |  |deprecated? |
 |`gridOffset`| Function | Lobah Mikhail | done |  |deprecated? |
 |`rotate0`| Function | Dmitry A Smirnov | done |  | Dmitry A Smirnov|
@@ -264,11 +264,11 @@
 |`dragPreview1`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder |
 |`onPreDrag`| Function | Lobah Mikhail | done |  | |
 |`linearGradient0`| Function |Roman Sedaikin | done |  | |
-|`linearGradient1`| Function | Dmitry A Smirnov | done |  | |
+|`linearGradient1`| Function | Dmitry A Smirnov | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values|
 |`sweepGradient0`| Function |Roman Sedaikin | done |  | |
-|`sweepGradient1`| Function | Dmitry A Smirnov | done |  | |
+|`sweepGradient1`| Function | Dmitry A Smirnov | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values,no rotation attribute in json, does not reset to default values in invalid cases|
 |`radialGradient0`| Function |Erokhin Ilya | done |  |  |
-|`radialGradient1`| Function | Dmitry A Smirnov | done |  |  |
+|`radialGradient1`| Function | Dmitry A Smirnov | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values |
 |`motionPath`| Function | Lobah Mikhail | done |  | |
 |`shadow0`| Function |Roman Sedaikin | done |  | |
 |`shadow1`| Function | Dmitry A Smirnov | done |  | |
