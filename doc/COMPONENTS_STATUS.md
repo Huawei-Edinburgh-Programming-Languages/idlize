@@ -1339,15 +1339,15 @@
 |`prevMargin`| Function | Skroba Gleb| done |  |  |
 |`nextMargin`| Function | Skroba Gleb | done |  |  |
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
-|*IndicatorComponent*| *Component* | Andrey Khudenkikh | done |  |  |
-|`construct`| Function |Andrey Khudenkikh | done |  |  |
+|*IndicatorComponent*| *Component* | Skroba Gleb | in progress |  |  |
+|`construct`| Function | Skroba Gleb | in progress |  |  |
 |`setIndicatorComponentOptions`| Function | Andrey Khudenkikh | done |  |  |
-|`initialIndex`| Function | Andrey Khudenkikh | done |  |  |
-|`count`| Function | Andrey Khudenkikh | done |  |  |
-|`style`| Function |  Andrey Khudenkikh | done |  |  |
-|`loop`| Function |  Andrey Khudenkikh | done |  |  |
-|`vertical`| Function | Andrey Khudenkikh | done |  |  |
-|`onChange`| Function | Andrey Khudenkikh | done |  |  |
+|`initialIndex`| Function | Skroba Gleb | in progress |  |  |
+|`count`| Function | Skroba Gleb | in progress |  |  |
+|`style`| Function | Skroba Gleb | in progress |  |  |
+|`loop`| Function | Skroba Gleb | in progress |  |  |
+|`vertical`| Function | Skroba Gleb | in progress |  |  |
+|`onChange`| Function | Skroba Gleb | in progress |  |  |
 |*SymbolGlyph*| *Component* |Andrey Khudenkikh | blocked IDL |  |  |
 |`construct`| Function |Andrey Khudenkikh | done |  |  |
 |`setSymbolGlyphOptions`| Function |Andrey Khudenkikh | done |  |  |
@@ -3026,11 +3026,11 @@
 |`setPosition`| Function | Skroba Gleb | done | | |
 |`getMainAxisLength`| Function | Skroba Gleb | done | | |
 |`setMainAxisLength`| Function | Skroba Gleb | done | | |
-|*IndicatorComponentController*| *Class* | Andrey Khudenkikh | done |  |  |
-|`ctor`| Function | Andrey Khudenkikh | done |  |  |
-|`showNext`| Function | Andrey Khudenkikh | done |  |  |
-|`showPrevious`| Function | Andrey Khudenkikh | done |  |  |
-|`changeIndex`| Function | Andrey Khudenkikh | done |  |  |
+|*IndicatorComponentController*| *Class* | Skroba Gleb | in progress |  |  |
+|`ctor`| Function | Skroba Gleb | in progress |  |  |
+|`showNext`| Function | Skroba Gleb | in progress |  |  |
+|`showPrevious`| Function | Skroba Gleb | in progress |  |  |
+|`changeIndex`| Function | Skroba Gleb | in progress |  |  |
 |*HierarchicalSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
 |`ctor`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
 |`getFillStyle`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
