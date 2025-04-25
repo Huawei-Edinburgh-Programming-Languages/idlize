@@ -15,8 +15,8 @@
 import nodeResolve from "@rollup/plugin-node-resolve"
 import typescript from "@rollup/plugin-typescript"
 import commonjs from '@rollup/plugin-commonjs'
-import * as path from "path";
-import * as fs from "fs";
+import * as path from "node:path";
+import * as fs from "node:fs";
 
 /** @type {import("rollup").RollupOptions} */
 export default {
