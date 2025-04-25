@@ -26,6 +26,7 @@ import { ArkSideBarContainerComponent } from "@arkoala/arkui/generated/sidebar"
 import { ArkTabContentPeer } from "@arkoala/arkui/generated/tab_content"
 import { SubTabBarStyle } from "@arkoala/arkui/generated/ArkSubTabBarStyleBuilder"
 import { BottomTabBarStyle } from "@arkoala/arkui/generated/ArkBottomTabBarStyleBuilder"
+import { ArkMarqueePeer } from "@arkoala/arkui/generated/marquee"
 // TBD: It needs to be possible to use CanvasRenderingContext2D without import
 import { CanvasRenderingContext2D, CanvasRenderingContext2DInternal } from "@arkoala/arkui/generated"
 import { startPerformanceTest } from "@arkoala/arkui/test_performance"
@@ -526,6 +527,20 @@ function checkTabContent() {
     stopNativeTest(CALL_GROUP_LOG)
 }
 
+function checkLength() {
+    startNativeTest(checkTabContent.name, CALL_GROUP_LOG)
+
+    const peer = ArkMarqueePeer.create()
+    checkResult("Length int", () => peer.fontSizeAttribute(123),
+        `fontSize({.selector=1, .value1={.tag=102, .i32=123}})`)
+    checkResult("Length float", () => peer.fontSizeAttribute(456.789),
+        `fontSize({.selector=1, .value1={.tag=103, .f32=456.789}})`)
+    checkResult("Length string", () => peer.fontSizeAttribute("abcdefgh"),
+        `fontSize({.selector=0, .value0={.chars="abcdefgh", .length=7}})`)
+
+    stopNativeTest(CALL_GROUP_LOG)
+}
+
 // Remove it when it is possible to use CanvasRenderingContext2D
 // without explicitly importing it
 export function unsafeCast<T>(value: unknown): T {
@@ -714,6 +729,7 @@ function main() {
     checkNativeCallback()
 
     checkTabContent()
+    checkLength()
     checkCanvasRenderingContext2D()
 
     if (recordCallLog)
