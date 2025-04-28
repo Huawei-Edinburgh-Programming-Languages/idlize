@@ -1517,8 +1517,8 @@
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
 |`ellipsisMode`| Function | Kovalev Sergey | done |  | |
 |`stopBackPress`| Function | Kovalev Sergey | done |  | |
-|`onWillChange`| Function | | | | |
-|`keyboardAppearance`| Function | | | | |
+|`onWillChange`| Function | Erokhin Ilya | in progress | | |
+|`keyboardAppearance`| Function | Erokhin Ilya | in progress | | |
 |`inputFilter`|Function|Tuzhilkin Ivan| done |  | |
 |`showCounter`|Function|Tuzhilkin Ivan| done |  |   |
 |`customKeyboard`|Function| Erokhin Ilya | done |  | UT by Vadim Voronov  |
