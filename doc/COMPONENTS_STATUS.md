@@ -2445,8 +2445,8 @@
 |`getIsScrollLockOn`| Function | Maksimov Nikita | in progress | | |
 |`setIsScrollLockOn`| Function | Maksimov Nikita | in progress | | |
 |*FocusAxisEvent*| *Class* | Evstigneev Roman | done | | feature: API not present |
-|`ctor`| Function | | | | |
-|`getAxisMap`| Function | | | | |
+|`ctor`| Function | Evstigneev Roman | done | | |
+|`getAxisMap`| Function | Evstigneev Roman | done | | |
 |`setAxisMap`| Function | Evstigneev Roman | done | | empty implementation, feature: API not present |
 |`getStopPropagation`| Function | Evstigneev Roman | done | | feature: API not present |
 |`setStopPropagation`| Function | Evstigneev Roman | done  |  | empty implementation, feature: API not present |
