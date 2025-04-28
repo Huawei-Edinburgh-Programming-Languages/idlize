@@ -284,8 +284,8 @@
 |`maskShape1`| Function |Tuzhilkin Ivan| in progress |  | testskipped on feature branch |
 |`key`| Function | Lobah Mikhail | done |  | |
 |`id`| Function | Erokhin Ilya | done |  |  |
-|`geometryTransition0`| Function | Lobah Mikhail | testskipped | | testskipped due to aceEngine issue https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
-|`geometryTransition1`| Function | Lobah Mikhail | testskipped | | testskipped due to aceEngine issue https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
+|`geometryTransition0`| Function | Lobah Mikhail | done | | testskipped due to aceEngine issue https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
+|`geometryTransition1`| Function | Lobah Mikhail | done | | testskipped due to aceEngine issue https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
 |`stateStyles`| Function | Dudkin Sergey | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`restoreId`| Function | Lobah Mikhail | done |  | |
 |`sphericalEffect0`| Function | Lobah Mikhail | done |  | |
