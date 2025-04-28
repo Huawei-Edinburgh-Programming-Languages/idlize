@@ -2820,7 +2820,7 @@
 |`setDistance`| Function | Politov Mikhail | done |  | |
 |`setFingers`| Function | Politov Mikhail | done |  | |
 |`getDirection`| Function | Dudkin Sergey | done |  |  |
-|`getDistance`| Function | | | | |
+|`getDistance`| Function | Erokhin Ilya | in progress | | |
 |*PanGestureInterface*| *Class* | Morozov Sergey | done | | wait new generation for feature_branch, to merge CTOR impl |
 |`ctor`| Function | Morozov Sergey | done | | |
 |`onActionStart`| Function | Morozov Sergey | done | | |
