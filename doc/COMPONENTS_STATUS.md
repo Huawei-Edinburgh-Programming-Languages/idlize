@@ -2102,17 +2102,17 @@
 |`setCircleShape`| Function | Andrey Khudenkikh | done | | |
 |`setOvalShape`| Function | Andrey Khudenkikh | done | | |
 |`setCommandPath`| Function | Andrey Khudenkikh | done | | |
-|*Matrix4Transit*| *Class* | Samarin Sergey | in progress | | |
-|`ctor`| Function |Samarin Sergey | in progress | done for Upstream |
-|`copy`| Function | Samarin Sergey | in progress | | done for Upstream |
-|`invert`| Function | Samarin Sergey | in progress | | done for Upstream |
-|`combine`| Function | Samarin Sergey | in progress | | done for Upstream |
-|`translate`| Function | Samarin Sergey | in progress | | done for Upstream |
-|`scale`| Function | Samarin Sergey | in progress | | done for Upstream |
-|`skew`| Function | Samarin Sergey | in progress | | done for Upstream |
-|`rotate`| Function | Samarin Sergey | in progress | | done for Upstream |
-|`transformPoint`| Function | Samarin Sergey | in progress | | done for Upstream |
-|`setPolyToPoly`| Function | Samarin Sergey | in progress | | testskipped for Upstream |
+|*Matrix4Transit*| *Class* | Samarin Sergey | testskipped | | |
+|`ctor`| Function |Samarin Sergey | done | |
+|`copy`| Function | Samarin Sergey | done | | |
+|`invert`| Function | Samarin Sergey | done | | |
+|`combine`| Function | Samarin Sergey | done | | |
+|`translate`| Function | Samarin Sergey | done | | |
+|`scale`| Function | Samarin Sergey | done | | |
+|`skew`| Function | Samarin Sergey | done | | |
+|`rotate`| Function | Samarin Sergey | done | | |
+|`transformPoint`| Function | Samarin Sergey | done | | |
+|`setPolyToPoly`| Function | Samarin Sergey | testskipped | | |
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
 |`ctor`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
 |`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
