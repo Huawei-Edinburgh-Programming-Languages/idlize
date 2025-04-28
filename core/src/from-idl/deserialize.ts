@@ -346,18 +346,24 @@ class IDLDeserializer {
         }))
     }
     toIDLCallback(file: string, node: webidl2.CallbackType): idl.IDLCallback {
+        const generics = this.extractGenerics(node.extAttrs)
+        this.genericsScopes.push(generics)
         const result = idl.createCallback(
             node.name,
             node.arguments.map(it => this.toIDLParameter(file, it)),
-            this.toIDLType(file, node.idlType, undefined), {
-            fileName: file,
-            extendedAttributes: this.toExtendedAttributes(node.extAttrs),
-            documentation: this.makeDocs(node),
-        })
+            this.toIDLType(file, node.idlType, undefined),
+            {
+                fileName: file,
+                extendedAttributes: this.toExtendedAttributes(node.extAttrs),
+                documentation: this.makeDocs(node),
+            },
+            this.findExtendedAttribute(node.extAttrs, idl.IDLExtendedAttributes.TypeParameters)?.split(",")
+        )
         if (node.extAttrs.find(it => it.name === "Synthetic")) {
             const fqName = this.currentPackage.concat(this.namespacePathNames).concat([node.name]).join('.')
             addSyntheticType(fqName, result)
         }
+        this.genericsScopes.pop()
         return this.withInfo(node, result)
     }
     toIDLTypedef(file: string, node: webidl2.TypedefType): idl.IDLTypedef {
@@ -366,11 +372,12 @@ class IDLDeserializer {
         const result = this.withInfo(node, idl.createTypedef(
             node.name,
             this.toIDLType(file, node.idlType, undefined),
-            this.findExtendedAttribute(node.extAttrs, idl.IDLExtendedAttributes.TypeParameters)?.split(","), {
-            extendedAttributes: this.toExtendedAttributes(node.extAttrs),
-            documentation: this.makeDocs(node),
-            fileName: file,
-        }))
+            this.findExtendedAttribute(node.extAttrs, idl.IDLExtendedAttributes.TypeParameters)?.split(","),
+            {
+                extendedAttributes: this.toExtendedAttributes(node.extAttrs),
+                documentation: this.makeDocs(node),
+                fileName: file,
+            }))
         this.genericsScopes.pop()
         return result
     }
@@ -432,7 +439,8 @@ class IDLDeserializer {
         } else if (node.default == null) {
             initializer = undefined
         } else {
-            throw new Error(`Not representable enum initializer: ${node.default}`)
+            console.error(file)
+            throw new Error(`Not representable enum initializer: ${JSON.stringify(node.default)}`)
         }
         return this.withInfo(node, idl.createEnumMember(
             node.name,
