@@ -1609,7 +1609,7 @@
 |`ellipsisMode`| Function |  Kovalev Sergey| done |  | |
 |`stopBackPress`| Function | Kovalev Sergey | done |  | |
 |`onWillChange`| Function | Lobah Mikhail| done| | |
-|`keyboardAppearance`| Function | | | | |
+|`keyboardAppearance`| Function | Erokhin Ilya | in progress | | |
 |`inputFilter`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`customKeyboard`| Function | Lobah Mikhail | done |  |   |
 |`showCounter`| Function | Spirin Andrey, Lobah Mikhail| done| | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
