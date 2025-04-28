@@ -492,6 +492,30 @@ class IDLDeserializer {
 
     ///
 
+    splitTypeArguments(line:string): string[] {
+        let buffer: string = ""
+        let brackets: number = 0
+        const result: string[] = []
+        for (const letter of line) {
+            if (letter === ',' && brackets === 0) {
+                result.push(buffer)
+                buffer = ''
+                continue
+            }
+            if (letter === '<') {
+                brackets += 1
+            }
+            if (letter === '>') {
+                brackets -= 1
+            }
+            buffer += letter
+        }
+        if (buffer.length) {
+            result.push(buffer)
+        }
+        return result
+    }
+
     extractTypeArguments(file: string,
         extAttrs: webidl2.ExtendedAttribute[] | undefined,
         attribute: idl.IDLExtendedAttributes
@@ -500,9 +524,8 @@ class IDLDeserializer {
         if (!attr)
             return undefined
         let value = this.toExtendedAttributeValue(attr)!
-        return value
-            ?.split(",")  // TODO need real parsing here. What about "<T, Map<K, Callback<K,R>>, U>"
-            ?.map(it => this.toIDLType(file, webidl2.parseType(it, file) ?? it))
+        return this.splitTypeArguments(value)
+            ?.map(it => this.toIDLType(file, webidl2.parseType(it.replaceAll('\'', '"'), file) ?? it))
     }
     constantValue(node: webidl2.ConstantMemberType): string {
         switch (node.value.type) {
