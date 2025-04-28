@@ -1940,19 +1940,19 @@
 |`getResourceId`| Function |managed side |managed side | | |
 |*FocusController*| *Class* | Lobah Mikhail| done| | |
 |`requestFocus`| Function | Lobah Mikhail| done| | |
-|*DrawableDescriptor*| *Class* | Evstigneev Roman | done | | |
-|`ctor`| Function | Evstigneev Roman | done | | |
-|`getPixelMap`| Function | Evstigneev Roman | done | | |
-|*LayeredDrawableDescriptor*| *Class* | Evstigneev Roman | in progress | | |
-|`ctor`| Function | Evstigneev Roman | done | | |
-|`getForeground`| Function | Evstigneev Roman | done | | |
-|`getBackground`| Function | Evstigneev Roman | done | | |
-|`getMask`| Function | Evstigneev Roman | done | | |
-|`getMaskClipPath`| Function | Evstigneev Roman | in progress | | |
-|*PixelMapDrawableDescriptor*| *Class* | Evstigneev Roman | done | | |
-|`ctor`| Function | Evstigneev Roman | done | | |
-|*AnimatedDrawableDescriptor*| *Class* | Evstigneev Roman | done | | |
-|`ctor`| Function | Evstigneev Roman | done | | |
+|*DrawableDescriptor*| *Class* | Evstigneev Roman | done | | need cherry-pick to FB |
+|`ctor`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
+|`getPixelMap`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
+|*LayeredDrawableDescriptor*| *Class* | Evstigneev Roman | done | | need cherry-pick to FB |
+|`ctor`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
+|`getForeground`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
+|`getBackground`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
+|`getMask`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
+|`getMaskClipPath`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
+|*PixelMapDrawableDescriptor*| *Class* | Evstigneev Roman | done | | need cherry-pick to FB |
+|`ctor`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
+|*AnimatedDrawableDescriptor*| *Class* | Evstigneev Roman | done | | need cherry-pick to FB |
+|`ctor`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
 |*ColorFilter*| *Class* | Evstigneev Roman | done | |  |
 |`ctor`| Function |Evstigneev Roman | in progress| | |
 |`createBlendModeColorFilter0`| Function |Evstigneev Roman |in progress | | |
