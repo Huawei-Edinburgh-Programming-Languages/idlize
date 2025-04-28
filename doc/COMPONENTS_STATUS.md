@@ -2120,20 +2120,20 @@
 |`getIsEditable`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
 |`getIsStrideAlignment`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
 |*RenderNode*| *Class* | Morozov Sergey | in progress | | |
-|`ctor`| Function | Morozov Sergey | in progress | | |
-|`appendChild`| Function | Morozov Sergey | in progress | | |
-|`insertChildAfter`| Function | Morozov Sergey | in progress | | |
-|`removeChild`| Function | Morozov Sergey | in progress | | |
-|`clearChildren`| Function | Morozov Sergey | in progress | | |
-|`getChild`| Function | Morozov Sergey | in progress | | |
-|`getFirstChild`| Function | Morozov Sergey | in progress | | |
-|`getNextSibling`| Function | Morozov Sergey | in progress | | |
-|`getPreviousSibling`| Function | Morozov Sergey | in progress | | |
-|`draw`| Function | Morozov Sergey | in progress | | |
-|`invalidate`| Function | Morozov Sergey | in progress | | |
-|`dispose`| Function | Morozov Sergey | in progress | | |
-|`getBackgroundColor`| Function | Morozov Sergey | in progress | | |
-|`setBackgroundColor`| Function | Morozov Sergey | in progress | | |
+|`ctor`| Function | Morozov Sergey | done | | done on Upstream |
+|`appendChild`| Function | Morozov Sergey | done | | done on Upstream |
+|`insertChildAfter`| Function | Morozov Sergey | done | | done on Upstream |
+|`removeChild`| Function | Morozov Sergey | done | | done on Upstream |
+|`clearChildren`| Function | Morozov Sergey | done | | done on Upstream |
+|`getChild`| Function | Morozov Sergey | done | | done on Upstream |
+|`getFirstChild`| Function | Morozov Sergey | done | | done on Upstream |
+|`getNextSibling`| Function | Morozov Sergey | done | | done on Upstream |
+|`getPreviousSibling`| Function | Morozov Sergey | done | | done on Upstream |
+|`draw`| Function | Morozov Sergey | managed side | | |
+|`invalidate`| Function | Morozov Sergey | testskipped | | done on Upstream |
+|`dispose`| Function | Morozov Sergey | done | | done on Upstream |
+|`getBackgroundColor`| Function | Morozov Sergey | done | | done on Upstream |
+|`setBackgroundColor`| Function | Morozov Sergey | done | | done on Upstream |
 |`getClipToFrame`| Function | Morozov Sergey | in progress | | |
 |`setClipToFrame`| Function | Morozov Sergey | in progress | | |
 |`getOpacity`| Function | Morozov Sergey | in progress | | |
@@ -2142,8 +2142,8 @@
 |`setSize`| Function | Morozov Sergey | in progress | | |
 |`getPosition`| Function | Morozov Sergey | in progress | | |
 |`setPosition`| Function | Morozov Sergey | in progress | | |
-|`getFrame`| Function | Morozov Sergey | in progress | | |
-|`setFrame`| Function | Morozov Sergey | in progress | | |
+|`getFrame`| Function | Morozov Sergey | done | | done on Upstream |
+|`setFrame`| Function | Morozov Sergey | done | | done on Upstream |
 |`getPivot`| Function | Morozov Sergey | in progress | | |
 |`setPivot`| Function | Morozov Sergey | in progress | | |
 |`getScale`| Function | Morozov Sergey | in progress | | |
@@ -2158,8 +2158,8 @@
 |`setShadowColor`| Function | Morozov Sergey | in progress | | |
 |`getShadowOffset`| Function | Morozov Sergey | in progress | | |
 |`setShadowOffset`| Function | Morozov Sergey | in progress | | |
-|`getLabel`| Function | Morozov Sergey | in progress | | |
-|`setLabel`| Function | Morozov Sergey | in progress | | |
+|`getLabel`| Function | Morozov Sergey | done | | done on Upstream |
+|`setLabel`| Function | Morozov Sergey | done | | done on Upstream |
 |`getShadowAlpha`| Function | Morozov Sergey | in progress | | |
 |`setShadowAlpha`| Function | Morozov Sergey | in progress | | |
 |`getShadowElevation`| Function | Morozov Sergey | in progress | | |
