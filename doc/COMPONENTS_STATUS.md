@@ -1017,8 +1017,8 @@
 |`barState`| Function | Dudkin Sergey| done |  |  |
 |`maxLength`| Function | Lobah Mikhail| done| | not exists on FB|
 |`maxLines`| Function | Lobah Mikhail| done| | not exists on FB|
-|`keyboardAppearance`| Function | Dudkin Sergey|in progress | | |
-|`stopBackPress`| Function | Dudkin Sergey| in progress| | |
+|`keyboardAppearance`| Function | Dudkin Sergey|done | | needs merging to FB|
+|`stopBackPress`| Function | Dudkin Sergey| done | | needs merging to FB|
 |`bindSelectionMenu`| Function | Dmitry A Smirnov| done |  |  |
 |`customKeyboard`| Function | Dmitry A Smirnov| done |  |  |
 |`placeholder`| Function | Dudkin Sergey| done |  |  |
