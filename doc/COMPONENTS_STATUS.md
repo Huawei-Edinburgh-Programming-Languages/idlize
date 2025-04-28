@@ -2287,8 +2287,8 @@
 |`setX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
 |`setY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getHand`| Function | in progress | Samarin Sergey | | |
-|`setHand`| Function | in progress | Samarin Sergey | | |
+|`getHand`| Function | Samarin Sergey | in progress | | |
+|`setHand`| Function | Samarin Sergey | in progress | | |
 |`getPreventDefault`| Function | Samarin Sergey | done | | |
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | done |  | |
