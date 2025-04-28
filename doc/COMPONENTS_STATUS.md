@@ -2102,17 +2102,17 @@
 |`setCircleShape`| Function | Andrey Khudenkikh | done | | |
 |`setOvalShape`| Function | Andrey Khudenkikh | done | | |
 |`setCommandPath`| Function | Andrey Khudenkikh | done | | |
-|*Matrix4Transit*| *Class* | Samarin Sergey | in progress | | API is present on Upstream only |
-|`ctor`| Function |Samarin Sergey | testskipped | API is present on Upstream only |
-|`copy`| Function | Samarin Sergey | testskipped | | API is present on Upstream only |
-|`invert`| Function | Samarin Sergey | testskipped | | API is present on Upstream only |
-|`combine`| Function | Samarin Sergey | testskipped | | API is present on Upstream only |
-|`translate`| Function | Samarin Sergey | testskipped | | API is present on Upstream only |
-|`scale`| Function | Samarin Sergey | testskipped | | API is present on Upstream only |
-|`skew`| Function | Samarin Sergey | testskipped | | API is present on Upstream only |
-|`rotate`| Function | Samarin Sergey | testskipped | | API is present on Upstream only |
-|`transformPoint`| Function | Samarin Sergey | testskipped | | API is present on Upstream only |
-|`setPolyToPoly`| Function | Samarin Sergey | in progress | | API is present on Upstream only |
+|*Matrix4Transit*| *Class* | Samarin Sergey | in progress | | |
+|`ctor`| Function |Samarin Sergey | in progress | done for Upstream |
+|`copy`| Function | Samarin Sergey | in progress | | done for Upstream |
+|`invert`| Function | Samarin Sergey | in progress | | done for Upstream |
+|`combine`| Function | Samarin Sergey | in progress | | done for Upstream |
+|`translate`| Function | Samarin Sergey | in progress | | done for Upstream |
+|`scale`| Function | Samarin Sergey | in progress | | done for Upstream |
+|`skew`| Function | Samarin Sergey | in progress | | done for Upstream |
+|`rotate`| Function | Samarin Sergey | in progress | | done for Upstream |
+|`transformPoint`| Function | Samarin Sergey | in progress | | done for Upstream |
+|`setPolyToPoly`| Function | Samarin Sergey | in progress | | testskipped for Upstream |
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
 |`ctor`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
 |`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
