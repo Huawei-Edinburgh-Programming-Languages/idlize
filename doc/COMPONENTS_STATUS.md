@@ -821,11 +821,11 @@
 |`setNavDestinationOptions`| Function |Kovalev Sergey | done |  |   |
 |`hideTitleBar0`| Function |Kovalev Sergey | done |  |   |
 |`hideTitleBar`| Function |Kovalev Sergey | done |  |   |
-|`hideBackButton`| Function | Samarin Sergey | in progress | | |
+|`hideBackButton`| Function | managed side | managed side | | |
 |`onShown`| Function |Kovalev Sergey | done |  |  |
 |`onHidden`| Function |Kovalev Sergey | done |  |   |
 |`onBackPressed`| Function |Dudkin Sergey | done |  |  |
-|`onResult`| Function | | | | |
+|`onResult`| Function | managed side | managed side | | |
 |`mode`| Function |Kovalev Sergey | done |  |   |
 |`backButtonIcon0`| Function |Kovalev Sergey | managed side |  | |
 |`backButtonIcon1`| Function |Kovalev Sergey | managed side |  |  |
@@ -2287,8 +2287,8 @@
 |`setX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
 |`setY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getHand`| Function | | | | |
-|`setHand`| Function | | | | |
+|`getHand`| Function | in progress | Samarin Sergey | | |
+|`setHand`| Function | in progress | Samarin Sergey | | |
 |`getPreventDefault`| Function | Samarin Sergey | done | | |
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | done |  | |
