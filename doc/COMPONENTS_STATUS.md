@@ -107,7 +107,7 @@
 |`textStyle1`| Function |Politov Mikhail | done |  |  |
 |`onChange0`| Function |Politov Mikhail | done |  |  |
 |`onChange1`| Function | Politov Mikhail | done |  |  |
-|`markToday`| Function | Samarin Sergey | in progress | | |
+|`markToday`| Function | Samarin Sergey | done | | |
 |`edgeAlign0`| Function | Politov Mikhail | done |  |  |
 |`edgeAlign1`| Function |Politov Mikhail | done |  |  |
 |*CommonMethod*|*Component*|Skroba Gleb,Erokhin Ilya | in progress |  |  |
@@ -648,7 +648,7 @@
 |`fillColor0`| Function | Evstigneev Roman | done |  | |
 |`fillColor1`| Function |Evstigneev Roman | done |  | |
 |`objectFit`| Function |Berezin Kirill| done |  | |
-|`imageMatrix`| Function | Samarin Sergey | in progress | | |
+|`imageMatrix`| Function | Samarin Sergey | done | | |
 |`objectRepeat`| Function | Evstigneev Roman | done |  | |
 |`autoResize`| Function | Evstigneev Roman | done |  |   |
 |`renderMode`| Function | Evstigneev Roman | done |  | |
@@ -682,7 +682,7 @@
 |`preDecode`| Function | Pavelyev Ivan | done |  | deprecated |
 |`fillMode`| Function | Pavelyev Ivan | done |  | |
 |`iterations`| Function | Pavelyev Ivan | done |  | |
-|`monitorInvisibleArea`| Function | Samarin Sergey | in progress | | |
+|`monitorInvisibleArea`| Function | Samarin Sergey | done | | |
 |`onStart`| Function | Pavelyev Ivan | done |  | |
 |`onPause`| Function | Pavelyev Ivan | done |  | |
 |`onRepeat`| Function | Pavelyev Ivan | done |  | |
@@ -732,7 +732,7 @@
 |`friction`|Function|Morozov Sergey| done |  |  |
 |`childrenMainSize`|Function|Morozov Sergey| done |  |  |
 |`maintainVisibleContentPosition`|Function|Morozov Sergey| done |  |  |
-|`stackFromEnd`| Function | Samarin Sergey | in progress | | |
+|`stackFromEnd`| Function | Samarin Sergey | done | | |
 |`onScroll`|Function|Morozov Sergey| done |  |deprecated  |
 |`onScrollIndex`|Function|Morozov Sergey| done |  |  |
 |`onScrollVisibleContentChange`|Function|Morozov Sergey| done |  |  |
@@ -2287,7 +2287,7 @@
 |`setX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
 |`setY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getHand`| Function | Samarin Sergey | in progress | | |
+|`getHand`| Function | Samarin Sergey | done | | |
 |`setHand`| Function | Samarin Sergey | in progress | | |
 |`getPreventDefault`| Function | Samarin Sergey | done | | |
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
