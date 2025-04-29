@@ -2474,8 +2474,8 @@
 |`addText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
 |`deleteText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
 |`getSelection`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
-|`clearPreviewText`| Function | Lobah Mikhail| in progress| | |
-|`getText`| Function | Lobah Mikhail| in progress| | |
+|`clearPreviewText`| Function | Lobah Mikhail| | | not generated on Upstream|
+|`getText`| Function | Lobah Mikhail| | | not generated on Upstream|
 |*ChildrenMainSize*| *Class* | Morozov Sergey | done |  |
 |`ctor`| Function |Morozov Sergey | done |  |  |
 |`splice`| Function | Morozov Sergey | done |  |  |
@@ -2867,23 +2867,23 @@
 |`isValid`| Function | Kovalev Sergey | done |  | |
 |`getFingerCount`| Function | Pavelyev Ivan | done | | |
 |`isFingerCountLimit`| Function | Pavelyev Ivan | done | | |
-|*TapRecognizer*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`getTapCount`| Function | | | | |
-|*LongPressRecognizer*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`isRepeat`| Function | | | | |
-|`getDuration`| Function | | | | |
-|*SwipeRecognizer*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`getVelocityThreshold`| Function | | | | |
-|`getDirection`| Function | | | | |
-|*PinchRecognizer*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`getDistance`| Function | | | | |
-|*RotationRecognizer*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`getAngle`| Function | | | | |
+|*TapRecognizer*| *Class* | Lobah Mikhail| in progress| | |
+|`ctor`| Function | Lobah Mikhail| in progress| | |
+|`getTapCount`| Function | Lobah Mikhail| in progress| | |
+|*LongPressRecognizer*| *Class* | Lobah Mikhail| in progress| | |
+|`ctor`| Function | Lobah Mikhail| in progress| | |
+|`isRepeat`| Function | Lobah Mikhail| in progress| | |
+|`getDuration`| Function | Lobah Mikhail| in progress| | |
+|*SwipeRecognizer*| *Class* | Lobah Mikhail| in progress| | |
+|`ctor`| Function | Lobah Mikhail| in progress| | |
+|`getVelocityThreshold`| Function | Lobah Mikhail| in progress| | |
+|`getDirection`| Function | Lobah Mikhail| in progress| | |
+|*PinchRecognizer*| *Class* | Lobah Mikhail| in progress| | |
+|`ctor`| Function | Lobah Mikhail| in progress| | |
+|`getDistance`| Function | Lobah Mikhail| in progress| | |
+|*RotationRecognizer*| *Class* | Lobah Mikhail| in progress| | |
+|`ctor`| Function | Lobah Mikhail| in progress| | |
+|`getAngle`| Function | Lobah Mikhail| in progress| | |
 |*PanRecognizer*| *Class* | Politov Mikhail | done |  | |
 |`ctor`| Function |Politov Mikhail | done |  | |
 |`getPanGestureOptions`| Function | Politov Mikhail | done |  | |
