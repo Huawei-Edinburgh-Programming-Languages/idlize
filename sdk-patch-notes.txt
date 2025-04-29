@@ -1,0 +1,34 @@
+sdk-patched-arkts/api/arkui/ButtonModifier.d.ets
+    Button -> button
+sdk-patched-arkts/api/arkui/CheckboxGroupModifier.d.ets
+    CheckboxGroup -> checkboxgroup
+sdk-patched-arkts/api/arkui/CheckboxModifier.d.ets
+    Checkbox -> checkbox
+sdk-patched-arkts/api/arkui/GridItemModifier.d.ets
+    griditem -> gridItem
+sdk-patched-arkts/api/arkui/ListItemGroupModifier.d.ets
+    ListItemGroup -> listItemGroup
+sdk-patched-arkts/api/arkui/ListItemModifier.d.ets
+    ListItem -> listItem
+sdk-patched-arkts/api/arkui/ListModifier.d.ets
+    ListItem -> listItem
+sdk-patched-arkts/api/arkui/MenuItemModifier.d.ets
+    MenuItem -> menuItem
+sdk-patched-arkts/api/arkui/MenuModifier.d.ets
+    Menu -> menu
+sdk-patched-arkts/api/arkui/NavRouterModifier.d.ets
+    File not exists! ./component/navRoute
+sdk-patched-arkts/api/arkui/NavigatorModifier.d.ets
+    File not exists! ./component/navigator
+sdk-patched-arkts/api/arkui/PanelModifier.d.ets:22:32
+    File not exists! ./component/panel
+sdk-patched-arkts/api/arkui/RadioModifier.d.ets
+    Radio -> radio
+sdk-patched-arkts/api/arkui/RatingModifier.d.ets
+    Rating -> rating
+sdk-patched-arkts/api/arkui/SelectModifier.d.ets
+    Select -> select
+sdk-patched-arkts/api/arkui/SliderModifier.d.ets
+    Slider -> slider
+sdk-patched-arkts/api/arkui/ToggleModifier.d.ets
+    Toggle -> toggle
