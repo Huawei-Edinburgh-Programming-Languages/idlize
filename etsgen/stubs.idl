@@ -14,12 +14,6 @@ interface IntentionCode {};
 interface DrawableDescriptor {};
 
 interface Error {};
-[TypeParameters="T"]
-callback Function0 = void (T arg);
-[TypeParameters="T"]
-interface IterableIterator {};
-[TypeParameters="T"]
-interface ReadonlyArray {};
 
 interface ParticleModifier {};
 interface ParticleAttribute {};

@@ -115,6 +115,17 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
     private defaultExportName?: string
     private typeParamsStack: Set<string>[] = []
+    private readonly TypeMapper =
+        new Map<string, (type: arkts.ETSTypeReference) => idl.IDLType>([
+            ["IterableIterator", (type: arkts.ETSTypeReference) => {
+                const typeParams = type.part?.typeParams?.params.map(it => this.serializeType(it))
+                return idl.createContainerType('sequence', [typeParams![0]])
+            }],
+            ["ReadonlyArray", (type: arkts.ETSTypeReference) => {
+                const typeParams = type.part?.typeParams?.params.map(it => this.serializeType(it))
+                return idl.createContainerType('sequence', [typeParams![0]])
+            }],
+        ])
 
     private detectPackageNameByPath(fileName: string): string[] {
         if (this.importPathMap.has(fileName)) {
@@ -502,6 +513,22 @@ class IDLVisitor extends arkts.AbstractVisitor {
         return prop
     }
 
+    private static etsFunctionTypeReferencePattern = new RegExp(/^Function[0-9]+$/g)
+    maybeSerializeETSFunctionReference(type: arkts.ETSTypeReference): idl.IDLCallback | undefined {
+        let name = type.baseName!.name
+        if (!IDLVisitor.etsFunctionTypeReferencePattern.test(name)) return undefined
+        const typeArgs = type.part?.typeParams?.params.map(it => this.serializeType(it))
+        const parameters = typeArgs?.slice(0, -1).map((it, index) => idl.createParameter(`value${index}`, it)) ?? []
+        const returnType = typeArgs?.[-1] ?? idl.IDLVoidType
+        const callback = idl.createCallback(
+            generateSyntheticFunctionName(parameters, returnType, arkts.hasModifierFlag(type, arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_ASYNC)),
+            parameters,
+            returnType,
+            { fileName: this.fileName },
+        )
+        return callback
+    }
+
     serializeType(type: arkts.AstNode | undefined): idl.IDLType {
         if (!type) return idl.IDLVoidType
         if (arkts.isTSAnyKeyword(type))
@@ -540,6 +567,14 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 this.typeParameterFound(name)
                 return idl.createTypeParameterReference(name)
             }
+            let etsCallback: idl.IDLCallback | undefined
+            if (etsCallback = this.maybeSerializeETSFunctionReference(type)) {
+                if (!this.seenTypes.has(etsCallback.name)) {
+                    this.seenTypes.add(etsCallback.name)
+                    this.addSyntheticType(etsCallback)
+                }
+                return idl.createReferenceType(etsCallback.name)
+            }
             const typeArgs = type.part?.typeParams?.params.map(it => this.serializeType(it))
             // special cases //
             switch (name) {
@@ -557,6 +592,8 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 case 'Boolean': return idl.IDLBooleanType
                 case 'Int32Array': return idl.createContainerType('sequence', [idl.IDLI32Type])
             }
+            if (this.TypeMapper.has(name))
+                return this.TypeMapper.get(name)!(type)
             return idl.createReferenceType(name, typeArgs)
         }
         if (arkts.isETSFunctionType(type)) {
