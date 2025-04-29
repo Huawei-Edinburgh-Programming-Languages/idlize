@@ -147,18 +147,36 @@ class IDLDeserializer {
     toIDLInterface(file: string, node: webidl2.InterfaceType): idl.IDLInterface {
         const generics = this.extractGenerics(node.extAttrs)
         this.genericsScopes.push(generics)
+        const subkind = this.interfaceSubkind(node)
         const result = idl.createInterface(
             node.name,
-            this.interfaceSubkind(node),
+            subkind,
             (()=>{
                 if (!node.inheritance)
                     return []
-                const parentTypeArgs = this.extractTypeArguments(file, node.inheritanceExtAttrs ?? [], idl.IDLExtendedAttributes.TypeArguments)
-                const parentType = idl.createReferenceType(node.inheritance, parentTypeArgs)
-                parentType.fileName = file
-                if (node.inheritanceExtAttrs)
-                    parentType.extendedAttributes = this.toExtendedAttributes(node.inheritanceExtAttrs)?.filter(it => it.name !== idl.IDLExtendedAttributes.TypeArguments)
-                return [parentType]
+                const implementations: idl.IDLReferenceType[] = []
+                let extension: idl.IDLReferenceType | undefined = undefined
+                node.inheritance.forEach(it => {
+                    const attributes = it.extAttrs
+                    const parentTypeArgs = this.extractTypeArguments(file, attributes ?? [], idl.IDLExtendedAttributes.TypeArguments)
+                    const attrs = this.toExtendedAttributes(attributes ?? [])?.filter(it => it.name !== idl.IDLExtendedAttributes.TypeArguments)
+                    const baseClass = attrs?.find(it => it.name === idl.IDLExtendedAttributes.Extends)
+                    const ref = idl.createReferenceType(it.inheritance, parentTypeArgs, {
+                        extendedAttributes: attrs
+                    })
+                    if (baseClass) {
+                        extension = ref
+                    } else {
+                        implementations.push(ref)
+                    }
+                })
+                if (subkind === idl.IDLInterfaceSubkind.Class && extension === undefined) {
+                    extension = idl.IDLTopType
+                }
+                if (extension) {
+                    return [extension, ...implementations]
+                }
+                return implementations
             })(),
             node.members
                 .filter(isConstructor)

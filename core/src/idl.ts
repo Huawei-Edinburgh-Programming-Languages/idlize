@@ -65,6 +65,7 @@ export enum IDLExtendedAttributes {
     DtsName = "DtsName",
     DtsTag = "DtsTag",
     Entity = "Entity",
+    Extends = "Extends",
     Import = "Import",
     DefaultExport = "DefaultExport",
     IndexSignature = "IndexSignature",
@@ -1680,10 +1681,33 @@ export function printScoped(idl: IDLEntry): PrintedLine[] {
     throw new Error(`Unexpected scoped: ${idl.kind} ${idl.name}`)
 }
 
+function printInterfaceInherit(idl: IDLInterface): string {
+    if (idl.inheritance.length === 0) {
+        return ""
+    }
+    const inheritance = idl.inheritance
+    const types: string[] = []
+    if (idl.subkind === IDLInterfaceSubkind.Class) {
+        if (inheritance[0] !== IDLTopType) {
+            const ref = clone(inheritance[0])
+            ref.extendedAttributes?.push({
+                name: IDLExtendedAttributes.Extends
+            })
+            types.push(`${printType(ref)}`)
+            inheritance.shift()
+        }
+    }
+    inheritance.forEach(type => {
+        types.push(printType(type))
+    })
+
+    return ": " + types.join(', ')
+}
+
 export function printInterface(idl: IDLInterface): PrintedLine[] {
     return [
         ...printExtendedAttributes(idl, 0),
-        `interface ${idl.name}${hasSuperType(idl) ? ": " + printType(idl.inheritance[0]) : ""} {`,
+        `interface ${idl.name}${printInterfaceInherit(idl)} {`,
         // TODO: type system hack!
     ]
         .concat(printedIndentInc)
