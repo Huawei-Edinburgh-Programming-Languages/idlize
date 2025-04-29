@@ -269,7 +269,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     visitFunctionDeclaration(node: arkts.FunctionDeclaration): arkts.FunctionDeclaration {
-        const func = node.function
+        const func = node.function!
         const { set:paramsSet, parameters } = this.extractTypeParameters(func.typeParams)
         this.withTypeParamContext(paramsSet, () => {
             this.entries.push(idl.createMethod(
@@ -412,11 +412,11 @@ class IDLVisitor extends arkts.AbstractVisitor {
         const { set:paramsSet, parameters } = this.extractTypeParameters((method.value as arkts.FunctionExpression).function?.typeParams)
         return this.withTypeParamContext(paramsSet, () => {
             return idl.createMethod(method.id!.name,
-                method.function.params.map(it => {
+                method.function!.params.map(it => {
                     let param = it as arkts.ETSParameterExpression
                     return idl.createParameter(param.name, this.serializeType(param.typeAnnotation))
                 }),
-                this.serializeType(method.function.returnTypeAnnotation!),
+                this.serializeType(method.function!.returnTypeAnnotation!),
                 undefined /* todo: methodInitilizer */,
                 undefined /* todo: nodeInitilizer */,
                 parameters
