@@ -412,15 +412,10 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 })
             }
 
-            const { properties, methods, hasMemoAnnotation } = this.processBody(declaration.definition?.body)
+            const { properties, methods } = this.processBody(declaration.definition?.body)
             const attrs: idl.IDLExtendedAttribute[] = [
                 { name: idl.IDLExtendedAttributes.Entity, value: idl.IDLEntity.Class }
             ]
-            if (hasMemoAnnotation) {
-                attrs.push({
-                    name: idl.IDLExtendedAttributes.Component
-                })
-            }
             this.entries.push(idl.createInterface(
                 name,
                 idl.IDLInterfaceSubkind.Class,
@@ -454,13 +449,8 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     inheritance.push(type)
                 })
             }
-            const { properties, methods, hasMemoAnnotation } = this.processBody(declaration.body?.getChildren())
+            const { properties, methods } = this.processBody(declaration.body?.getChildren())
             const attrs: idl.IDLExtendedAttribute[] = []
-            if (hasMemoAnnotation) {
-                attrs.push({
-                    name: idl.IDLExtendedAttributes.Component
-                })
-            }
             this.entries.push(idl.createInterface(
                 name,
                 idl.IDLInterfaceSubkind.Interface,
@@ -750,7 +740,25 @@ class IDLVisitor extends arkts.AbstractVisitor {
         /* arkgen specialization */
         const componentInterface = this.entries.find(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.ComponentInterface))
         if (componentInterface) {
-            this.entries = this.entries.filter(it => it.name !== componentInterface.name || it === componentInterface)
+            if (!idl.isInterface(componentInterface)) {
+                throw new Error("ComponentInterface must be interface!")
+            }
+            const componentAttributeRef = componentInterface.callables.at(0)?.returnType
+            if (!componentAttributeRef || !idl.isReferenceType(componentAttributeRef)) {
+                throw new Error("No component attribute found!")
+            }
+            const processedEntries: idl.IDLEntry[] = []
+            this.entries.forEach(entry => {
+                if (entry.name === componentInterface.name && entry !== componentInterface) {
+                    return
+                }
+                if (entry.name === componentAttributeRef.name) {
+                    entry.extendedAttributes ??= []
+                    entry.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Component })
+                }
+                processedEntries.push(entry)
+            })
+            this.entries = processedEntries
         }
     }
 
