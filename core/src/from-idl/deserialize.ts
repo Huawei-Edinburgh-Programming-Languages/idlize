@@ -135,7 +135,6 @@ class IDLDeserializer {
         throw new Error(`unexpected node type: ${toString(node)}`)
     }
     toIDLImport(node: webidl2.ImportType): idl.IDLImport {
-        // console.log(node)
         return this.withInfo(node, idl.createImport(node.clause.split("."), node.alias||undefined))
     }
     interfaceSubkind(node: webidl2.InterfaceType): idl.IDLInterfaceSubkind {
@@ -439,8 +438,7 @@ class IDLDeserializer {
         } else if (node.default == null) {
             initializer = undefined
         } else {
-            console.error(file)
-            throw new Error(`Not representable enum initializer: ${JSON.stringify(node.default)}`)
+            throw new Error(`Not representable enum initializer: ${JSON.stringify(node.default)}. Found in ${file}`)
         }
         return this.withInfo(node, idl.createEnumMember(
             node.name,

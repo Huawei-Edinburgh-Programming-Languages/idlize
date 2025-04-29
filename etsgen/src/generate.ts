@@ -343,14 +343,28 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     inheritance.push(type)
                 })
             }
+            const properties: idl.IDLProperty[] = []
+            const method: idl.IDLMethod[] = []
+            declaration.definition?.body.forEach(member => {
+                if (arkts.isClassProperty(member)) {
+                    properties.push(this.serializeClassProperty(member))
+                    return
+                }
+                if (arkts.isMethodDefinition(member)) {
+                    method.push(this.serializeMethod(member))
+                    return
+                }
+                console.error(member)
+                throw new Error("Unhandled member!")
+            })
             this.entries.push(idl.createInterface(
                 name,
                 idl.IDLInterfaceSubkind.Class,
                 inheritance,
                 [], // ctors
                 undefined, // constants
-                declaration.definition!.body.filter(arkts.isClassProperty).map(it => this.serializeClassProperty(it)),
-                declaration.definition!.body.filter(arkts.isMethodDefinition).map(it => this.serializeMethod(it)),
+                properties,
+                method,
                 [], // callables
                 parameters,
                 {
