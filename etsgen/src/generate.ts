@@ -115,17 +115,6 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
     private defaultExportName?: string
     private typeParamsStack: Set<string>[] = []
-    private readonly TypeMapper =
-        new Map<string, (type: arkts.ETSTypeReference) => idl.IDLType>([
-            ["IterableIterator", (type: arkts.ETSTypeReference) => {
-                const typeParams = type.part?.typeParams?.params.map(it => this.serializeType(it))
-                return idl.createContainerType('sequence', [typeParams![0]])
-            }],
-            ["ReadonlyArray", (type: arkts.ETSTypeReference) => {
-                const typeParams = type.part?.typeParams?.params.map(it => this.serializeType(it))
-                return idl.createContainerType('sequence', [typeParams![0]])
-            }],
-        ])
 
     private detectPackageNameByPath(fileName: string): string[] {
         if (this.importPathMap.has(fileName)) {
@@ -321,13 +310,16 @@ class IDLVisitor extends arkts.AbstractVisitor {
                         },
                         {
                             extendedAttributes: [
-                                { name: idl.IDLExtendedAttributes.CallSignature }
+                                { name: idl.IDLExtendedAttributes.CallSignature },
                             ]
                         }
                     )],
                     method.typeParameters,
                     {
-                        fileName: this.fileName
+                        fileName: this.fileName,
+                        extendedAttributes: [
+                            { name: idl.IDLExtendedAttributes.ComponentInterface },
+                        ]
                     }
                 ))
             } else {
@@ -591,9 +583,9 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 case 'Uint8ClampedArray': return idl.IDLBufferType
                 case 'Boolean': return idl.IDLBooleanType
                 case 'Int32Array': return idl.createContainerType('sequence', [idl.IDLI32Type])
+                case 'IterableIterator': return idl.createContainerType('sequence', typeArgs ?? [] /* better check here? */)
+                case 'ReadonlyArray': return idl.createContainerType('sequence', typeArgs ?? [] /* better check here? */)
             }
-            if (this.TypeMapper.has(name))
-                return this.TypeMapper.get(name)!(type)
             return idl.createReferenceType(name, typeArgs)
         }
         if (arkts.isETSFunctionType(type)) {
@@ -754,8 +746,17 @@ class IDLVisitor extends arkts.AbstractVisitor {
         }
     }
 
+    postprocessEntires() {
+        /* arkgen specialization */
+        const componentInterface = this.entries.find(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.ComponentInterface))
+        if (componentInterface) {
+            this.entries = this.entries.filter(it => it.name !== componentInterface.name || it === componentInterface)
+        }
+    }
+
     toIDLFile(): IDLFile {
         this.markDefaultExport()
+        this.postprocessEntires()
         return idl.linkParentBack(idl.createFile(this.entries, this.fileName, this.packageClause))
     }
 }
