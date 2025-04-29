@@ -165,7 +165,7 @@
 |`onClick0`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done |  | EVENT |
 |`onClick1`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done |  | EVENT |
 |`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done |  | EVENT |
-|`onHoverMove`| Function | Tuzhilkin Ivan | in progress | | |
+|`onHoverMove`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | done |  | UT by Vadim Voronov EVENT |
 |`hoverEffect`| Function | Roman Sedaikin | done |  | |
 |`onMouse`| Function | Kovalev Sergey | done |  | EVENT |
@@ -176,7 +176,7 @@
 |`onKeyPreIme`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |  |
 |`onKeyEventDispatch`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocusAxisEvent`| Function | Evstigneev Roman | done | | feature: API not present |
-|`onAxisEvent`| Function | Tuzhilkin Ivan | in progress | | |
+|`onAxisEvent`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`focusable`| Function | Roman Sedaikin | done |  | |
 |`nextFocus`| Function | Politov Mikhail | in progress | | |
 |`tabStop`| Function | Lobah Mikhail| done| | Not exists on FB|
@@ -278,10 +278,10 @@
 |`clipShape0`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`clipShape1`| Function | Dmitry A Smirnov | testskipped |  | |
 |`mask0`| Function | Maksimov Nikita | done |  | |
-|`mask1`| Function | Maksimov Nikita, Tuzhilkin Ivan | in progress |  | |
-|`mask2`| Function | Maksimov Nikita, Tuzhilkin Ivan | in progress |  |deprecated |
-|`maskShape0`| Function |Tuzhilkin Ivan| in progress |  | testskipped on feature branch |
-|`maskShape1`| Function |Tuzhilkin Ivan| in progress |  | testskipped on feature branch |
+|`mask1`| Function | Maksimov Nikita, Tuzhilkin Ivan | done |  | WRONG_OVERRIDE, `mask1` is duplicate of `mask0`, need cherry-pick to feature_branch |
+|`mask2`| Function | Maksimov Nikita, Tuzhilkin Ivan | done |  | WRONG_OVERRIDE, deprecated, empty implementation, need cherry-pick to feature_branch |
+|`maskShape0`| Function |Tuzhilkin Ivan| done |  | need cherry-pick to feature_branch |
+|`maskShape1`| Function |Tuzhilkin Ivan| done |  | need cherry-pick to feature_branch |
 |`key`| Function | Lobah Mikhail | done |  | |
 |`id`| Function | Erokhin Ilya | done |  |  |
 |`geometryTransition0`| Function | Lobah Mikhail | done | | testskipped due to aceEngine issue https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
@@ -301,7 +301,7 @@
 |`accessibilityNextFocusId`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`accessibilityDefaultFocus`| Function | Lobah Mikhail| blocked IDL | | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00|
 |`accessibilityUseSamePage`| Function | Lobah Mikhail| done| | Not exists on FB|
-|`accessibilityScrollTriggerable`| Function | Tuzhilkin Ivan | in progress | | |
+|`accessibilityScrollTriggerable`| Function | Tuzhilkin Ivan | done | | WRONG_GENERATION: parameter should be Opt, need cherry-pick to feature_branch |
 |`accessibilityRole`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onAccessibilityFocus`| Function | Evstigneev Roman | done | | feature: API not present |
 |`accessibilityTextHint`| Function | Lobah Mikhail | done |  | |
@@ -326,14 +326,14 @@
 |`monopolizeEvents`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |`onTouchIntercept`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done |  | EVENT |
 |`onSizeChange`| Function | Dmitry A Smirnov| done |  | |
-|`accessibilityFocusDrawLevel`| Function | Tuzhilkin Ivan | in progress | | |
+|`accessibilityFocusDrawLevel`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`customProperty`| Function | Dmitry A Smirnov| in progress |  | need clrify bridge implementation|
 |`expandSafeArea`| Function | Dmitry A Smirnov| done |  |  |
 |`background`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
 |`backgroundImage0`| Function | Erokhin Ilya | done |  | |
 |`backgroundImage1`| Function | Erokhin Ilya | done |  | |
 |`backgroundBlurStyle0`| Function | Skroba Gleb | done | | |
-|`backgroundBlurStyle1`| Function | Tuzhilkin Ivan | in progress | | |
+|`backgroundBlurStyle1`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`foregroundBlurStyle0`| Function | Roman Sedaikin | done |  | |
 |`foregroundBlurStyle1`| Function | Dmitry A Smirnov | done |  | |
 |`focusScopeId0`| Function | Dmitry A Smirnov| done |  | |
@@ -366,7 +366,7 @@
 |`bindContentCover1`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |`bindSheet`| Function | Erokhin Ilya | testskipped |  | UT in progress Vadim Voronov |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done |  | |
-|`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | in progress | | |
+|`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`keyboardShortcut`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |*Common*| *Component* | Maksimov Nikita | done |  | |
 |`construct`| Function |Maksimov Nikita | done |  | |
