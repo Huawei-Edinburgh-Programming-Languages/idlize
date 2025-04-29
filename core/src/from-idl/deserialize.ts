@@ -493,7 +493,7 @@ class IDLDeserializer {
         return node.type === 'import'
     }
     isCallable(node: webidl2.IDLInterfaceMemberType): boolean {
-        return node.extAttrs.some(it => it.name == "Invoke")
+        return node.extAttrs.some(it => it.name == idl.IDLExtendedAttributes.CallSignature)
     }
 
     ///

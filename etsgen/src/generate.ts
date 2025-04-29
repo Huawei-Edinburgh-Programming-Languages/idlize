@@ -272,7 +272,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         const func = node.function!
         const { set:paramsSet, parameters } = this.extractTypeParameters(func.typeParams)
         this.withTypeParamContext(paramsSet, () => {
-            this.entries.push(idl.createMethod(
+            const method = idl.createMethod(
                 func.id!.name,
                 func.params.map(it => {
                     const param = it as arkts.ETSParameterExpression
@@ -289,7 +289,39 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     fileName: this.fileName,
                 },
                 parameters
-            ))
+            )
+            /* arkgen specialization */
+            if (node.annotations.find(it => arkts.isIdentifier(it.expr) && it.expr.name === "ComponentBuilder")) {
+                this.entries.push(idl.createInterface(
+                    method.name + 'Interface',
+                    idl.IDLInterfaceSubkind.Interface,
+                    [],
+                    [],
+                    [],
+                    [],
+                    [],
+                    [idl.createCallable(
+                        "invoke",
+                        method.parameters.slice(0, method.parameters.length - 1),
+                        method.returnType,
+                        {
+                            isAsync: method.isAsync,
+                            isStatic: method.isStatic
+                        },
+                        {
+                            extendedAttributes: [
+                                { name: idl.IDLExtendedAttributes.CallSignature }
+                            ]
+                        }
+                    )],
+                    method.typeParameters,
+                    {
+                        fileName: this.fileName
+                    }
+                ))
+            } else {
+                this.entries.push(method)
+            }
         })
         return node
     }
@@ -318,6 +350,39 @@ class IDLVisitor extends arkts.AbstractVisitor {
         return `${" ".repeat(4 * this.indentation) + node.constructor.name} ${name}`
     }
 
+    private processBody(members:readonly arkts.AstNode[] | undefined) {
+        let hasMemoAnnotation = false
+        const properties: idl.IDLProperty[] = []
+        const methods: idl.IDLMethod[] = []
+
+        members?.forEach(member => {
+            if (arkts.isClassProperty(member)) {
+                properties.push(this.serializeClassProperty(member))
+                const found = member.annotations.find(ann => arkts.isIdentifier(ann.expr) && ann.expr.name === 'memo')
+                if (found) {
+                    hasMemoAnnotation = true
+                }
+                return
+            }
+            if (arkts.isMethodDefinition(member)) {
+                methods.push(this.serializeMethod(member))
+                const found = member.function!.annotations.find(ann => arkts.isIdentifier(ann.expr) && ann.expr.name === 'memo')
+                if (found) {
+                    hasMemoAnnotation = true
+                }
+                return
+            }
+            console.error(member)
+            throw new Error("Unhandled member!")
+        })
+
+        return {
+            properties,
+            methods,
+            hasMemoAnnotation,
+        }
+    }
+
     visitClassDeclaration(declaration: arkts.ClassDeclaration): arkts.ClassDeclaration {
         const name = declaration.definition!.ident!.name
         const definition = declaration.definition!
@@ -343,20 +408,16 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     inheritance.push(type)
                 })
             }
-            const properties: idl.IDLProperty[] = []
-            const method: idl.IDLMethod[] = []
-            declaration.definition?.body.forEach(member => {
-                if (arkts.isClassProperty(member)) {
-                    properties.push(this.serializeClassProperty(member))
-                    return
-                }
-                if (arkts.isMethodDefinition(member)) {
-                    method.push(this.serializeMethod(member))
-                    return
-                }
-                console.error(member)
-                throw new Error("Unhandled member!")
-            })
+
+            const { properties, methods, hasMemoAnnotation } = this.processBody(declaration.definition?.body)
+            const attrs: idl.IDLExtendedAttribute[] = [
+                { name: idl.IDLExtendedAttributes.Entity, value: idl.IDLEntity.Class }
+            ]
+            if (hasMemoAnnotation) {
+                attrs.push({
+                    name: idl.IDLExtendedAttributes.Component
+                })
+            }
             this.entries.push(idl.createInterface(
                 name,
                 idl.IDLInterfaceSubkind.Class,
@@ -364,12 +425,12 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 [], // ctors
                 undefined, // constants
                 properties,
-                method,
+                methods,
                 [], // callables
                 parameters,
                 {
                     fileName: this.fileName,
-                    extendedAttributes: [{ name: idl.IDLExtendedAttributes.Entity, value: idl.IDLEntity.Class }]
+                    extendedAttributes: attrs.length === 0 ? undefined : attrs
                 }
             ))
         })
@@ -390,18 +451,26 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     inheritance.push(type)
                 })
             }
+            const { properties, methods, hasMemoAnnotation } = this.processBody(declaration.body?.getChildren())
+            const attrs: idl.IDLExtendedAttribute[] = []
+            if (hasMemoAnnotation) {
+                attrs.push({
+                    name: idl.IDLExtendedAttributes.Component
+                })
+            }
             this.entries.push(idl.createInterface(
                 name,
                 idl.IDLInterfaceSubkind.Interface,
                 inheritance,
                 [], // ctors
                 undefined, // constants
-                declaration.body!.getChildren().filter(arkts.isClassProperty).map(it => this.serializeClassProperty(it)),
-                declaration.body!.getChildren().filter(arkts.isMethodDefinition).map(it => this.serializeMethod(it)),
+                properties,
+                methods,
                 [], // callables
                 parameters,
                 {
                     fileName: this.fileName,
+                    extendedAttributes: attrs.length === 0 ? undefined : attrs
                 }
             ))
         })

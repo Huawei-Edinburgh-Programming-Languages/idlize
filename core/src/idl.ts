@@ -1032,7 +1032,7 @@ export function createCallable(
     parameters: IDLParameter[],
     returnType: IDLType,
     callableInitializer: IDLCallableInitializer,
-    nodeInitializer: IDLNodeInitializer,
+    nodeInitializer?: IDLNodeInitializer,
     typeParameters: string[] = []
 ): IDLCallable {
     return {
