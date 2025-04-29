@@ -1517,8 +1517,8 @@
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
 |`ellipsisMode`| Function | Kovalev Sergey | done |  | |
 |`stopBackPress`| Function | Kovalev Sergey | done |  | |
-|`onWillChange`| Function | Erokhin Ilya | in progress | | |
-|`keyboardAppearance`| Function | Erokhin Ilya | in progress | | |
+|`onWillChange`| Function | Erokhin Ilya | done | | |
+|`keyboardAppearance`| Function | Erokhin Ilya | done | | |
 |`inputFilter`|Function|Tuzhilkin Ivan| done |  | |
 |`showCounter`|Function|Tuzhilkin Ivan| done |  |   |
 |`customKeyboard`|Function| Erokhin Ilya | done |  | UT by Vadim Voronov  |
@@ -1609,7 +1609,7 @@
 |`ellipsisMode`| Function |  Kovalev Sergey| done |  | |
 |`stopBackPress`| Function | Kovalev Sergey | done |  | |
 |`onWillChange`| Function | Lobah Mikhail| done| | |
-|`keyboardAppearance`| Function | Erokhin Ilya | in progress | | |
+|`keyboardAppearance`| Function | Erokhin Ilya | done | | |
 |`inputFilter`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`customKeyboard`| Function | Lobah Mikhail | done |  |   |
 |`showCounter`| Function | Spirin Andrey, Lobah Mikhail| done| | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
@@ -1713,8 +1713,8 @@
 |`surfaceBackgroundColor`| Function | Kovalev Sergey | done | | |
 |`enableShortcutKey`| Function | Kovalev Sergey | done | | |
 |*Web*| *Component* | Erokhin Ilya | blocked IDL |  | |
-|`construct`| Function |Erokhin Ilya | in progress |  |  |
-|`setWebOptions`| Function | Erokhin Ilya | in progress |  |  |
+|`construct`| Function |Erokhin Ilya | done |  |  |
+|`setWebOptions`| Function | Erokhin Ilya | done |  |  |
 |`javaScriptAccess`| Function | Erokhin Ilya | done |  | |
 |`fileAccess`| Function | Erokhin Ilya | done |  | |
 |`onlineImageAccess`| Function | Erokhin Ilya | done |  | |
@@ -2820,7 +2820,7 @@
 |`setDistance`| Function | Politov Mikhail | done |  | |
 |`setFingers`| Function | Politov Mikhail | done |  | |
 |`getDirection`| Function | Dudkin Sergey | done |  |  |
-|`getDistance`| Function | Erokhin Ilya | in progress | | |
+|`getDistance`| Function | Erokhin Ilya | done | | |
 |*PanGestureInterface*| *Class* | Morozov Sergey | done | | wait new generation for feature_branch, to merge CTOR impl |
 |`ctor`| Function | Morozov Sergey | done | | |
 |`onActionStart`| Function | Morozov Sergey | done | | |
