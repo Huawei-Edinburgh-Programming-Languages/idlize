@@ -60,10 +60,6 @@
             "packages": [""]
         }
     },
-    "forceCallback": {
-
-    },
-
     "globalPackages": [
         "idlize.stdlib",
         "org.openharmony.idlize.predefined",
