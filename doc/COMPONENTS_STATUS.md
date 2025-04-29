@@ -2069,7 +2069,7 @@
 |`dispose`| Function | Tuzhilkin Ivan | done |  | |
 |`getOpacity`| Function | Morozov Sergey | done | | |
 |`getPositionToWindowWithTransform`| Function | Morozov Sergey | done | | |
-|`getFrameNodeByKey`| Function | | | | |
+|`getFrameNodeByKey`| Function | Lobah Mikhail| in progress| | |
 |*LengthMetrics*| *Class* | Evstigneev Roman | done | | |
 |`ctor`| Function |Evstigneev Roman | done | | |
 |`px`| Function | Evstigneev Roman | done | | |
@@ -2474,8 +2474,8 @@
 |`addText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
 |`deleteText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
 |`getSelection`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
-|`clearPreviewText`| Function | | | | |
-|`getText`| Function | | | | |
+|`clearPreviewText`| Function | Lobah Mikhail| in progress| | |
+|`getText`| Function | Lobah Mikhail| in progress| | |
 |*ChildrenMainSize*| *Class* | Morozov Sergey | done |  |
 |`ctor`| Function |Morozov Sergey | done |  |  |
 |`splice`| Function | Morozov Sergey | done |  |  |
@@ -2495,13 +2495,13 @@
 |`setOnMouse`| Function |  Andrey Khudenkikh| done | | |
 |`setOnSizeChange`| Function | Andrey Khudenkikh | done | | |
 |`setOnVisibleAreaApproximateChange`| Function | Andrey Khudenkikh | testskipped | | |
-|*UIScrollableCommonEvent*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`setOnReachStart`| Function | | | | |
-|`setOnReachEnd`| Function | | | | |
-|`setOnScrollStart`| Function | | | | |
-|`setOnScrollStop`| Function | | | | |
-|`setOnScrollFrameBegin`| Function | | | | |
+|*UIScrollableCommonEvent*| *Class* | Lobah Mikhail| in progress| | |
+|`ctor`| Function | Lobah Mikhail| in progress| | |
+|`setOnReachStart`| Function | Lobah Mikhail| in progress| | |
+|`setOnReachEnd`| Function | Lobah Mikhail| in progress| | |
+|`setOnScrollStart`| Function | Lobah Mikhail| in progress| | |
+|`setOnScrollStop`| Function | Lobah Mikhail| in progress| | |
+|`setOnScrollFrameBegin`| Function | Lobah Mikhail| in progress| | |
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`ctor`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
