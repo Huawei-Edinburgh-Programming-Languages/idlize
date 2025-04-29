@@ -1816,7 +1816,7 @@
 |`javaScriptOnDocumentStart`| Function | Erokhin Ilya | testskipped |  | UT in progress Andrey Khudenkikh |
 |`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | testskipped |  | UT in progress Andrey Khudenkikh |
 |`layoutMode`| Function | Erokhin Ilya | done |  | |
-|`nestedScroll`| Function | Erokhin Ilya | testskipped |  | UT in progress Sergey Dudkin |
+|`nestedScroll`| Function | Erokhin Ilya, Dudkin Sergey | done |  |  |
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | done |  | |
 |`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya, Andrey Khudenkikh | done |  | |
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | done |  | |
