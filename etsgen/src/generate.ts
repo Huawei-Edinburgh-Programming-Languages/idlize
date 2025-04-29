@@ -376,6 +376,9 @@ class IDLVisitor extends arkts.AbstractVisitor {
             importString = importFilePath
         }
         const importedPackageClause = this.detectPackageNameByPath(importString)
+        if (importedPackageClause.join('.') === this.packageClause.join('.')) {
+            return node
+        }
         node.specifiers.forEach(spec => {
             if (arkts.isImportSpecifier(spec)) {
                 const imported = spec.imported!
