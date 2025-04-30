@@ -1310,7 +1310,7 @@
 |`autoPlay1`| Function | Skroba Gleb| done |  |  |
 |`interval`| Function | Skroba Gleb| done |  |  |
 |`indicator0`| Function |  Skroba Gleb| done |  |  |
-|`indicator1`| Function | Skroba Gleb| in progress |  |  |
+|`indicator1`| Function | Skroba Gleb| done |  |  |
 |`loop`| Function | Skroba Gleb| done |  |  |
 |`duration`| Function | Skroba Gleb | done |  |  |
 |`vertical`| Function | Skroba Gleb | done |  |  |
