@@ -1844,7 +1844,7 @@
 |`enableDataDetector`| Function | | | | |
 |`dataDetectorConfig`| Function | | | | |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done |  | |
-|`bindSelectionMenu`| Function | Lobah Mikhail| in progress| | |
+|`bindSelectionMenu`| Function | Lobah Mikhail| done| | |
 |*WindowScene*| *Component* | Dudkin Sergey | done |  | |
 |`construct`| Function |Dudkin Sergey | done |  | |
 |`setWindowSceneOptions`| Function | Dudkin Sergey | done |  | |
@@ -2867,9 +2867,9 @@
 |`isValid`| Function | Kovalev Sergey | done |  | |
 |`getFingerCount`| Function | Pavelyev Ivan | done | | |
 |`isFingerCountLimit`| Function | Pavelyev Ivan | done | | |
-|*TapRecognizer*| *Class* | Lobah Mikhail| in progress| | |
-|`ctor`| Function | Lobah Mikhail| in progress| | |
-|`getTapCount`| Function | Lobah Mikhail| in progress| | |
+|*TapRecognizer*| *Class* | Lobah Mikhail| done| | |
+|`ctor`| Function | Lobah Mikhail| done| | |
+|`getTapCount`| Function | Lobah Mikhail| done| | |
 |*LongPressRecognizer*| *Class* | Lobah Mikhail| in progress| | |
 |`ctor`| Function | Lobah Mikhail| in progress| | |
 |`isRepeat`| Function | Lobah Mikhail| in progress| | |
@@ -2881,9 +2881,9 @@
 |*PinchRecognizer*| *Class* | Lobah Mikhail| in progress| | |
 |`ctor`| Function | Lobah Mikhail| in progress| | |
 |`getDistance`| Function | Lobah Mikhail| in progress| | |
-|*RotationRecognizer*| *Class* | Lobah Mikhail| in progress| | |
-|`ctor`| Function | Lobah Mikhail| in progress| | |
-|`getAngle`| Function | Lobah Mikhail| in progress| | |
+|*RotationRecognizer*| *Class* | Lobah Mikhail| done| | |
+|`ctor`| Function | Lobah Mikhail| done| | |
+|`getAngle`| Function | Lobah Mikhail| done| | |
 |*PanRecognizer*| *Class* | Politov Mikhail | done |  | |
 |`ctor`| Function |Politov Mikhail | done |  | |
 |`getPanGestureOptions`| Function | Politov Mikhail | done |  | |
