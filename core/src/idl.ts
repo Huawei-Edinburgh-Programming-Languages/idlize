@@ -1690,6 +1690,7 @@ function printInterfaceInherit(idl: IDLInterface): string {
     if (idl.subkind === IDLInterfaceSubkind.Class) {
         if (inheritance[0] !== IDLTopType) {
             const ref = clone(inheritance[0])
+            ref.extendedAttributes ??= []
             ref.extendedAttributes?.push({
                 name: IDLExtendedAttributes.Extends
             })
