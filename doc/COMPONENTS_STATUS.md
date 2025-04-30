@@ -2119,7 +2119,7 @@
 |`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
 |`getIsEditable`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
 |`getIsStrideAlignment`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
-|*RenderNode*| *Class* | Morozov Sergey | in progress | | |
+|*RenderNode*| *Class* | Morozov Sergey | in progress | | done on Upstream |
 |`ctor`| Function | Morozov Sergey | done | | done on Upstream |
 |`appendChild`| Function | Morozov Sergey | done | | done on Upstream |
 |`insertChildAfter`| Function | Morozov Sergey | done | | done on Upstream |
@@ -2134,54 +2134,54 @@
 |`dispose`| Function | Morozov Sergey | done | | done on Upstream |
 |`getBackgroundColor`| Function | Morozov Sergey | done | | done on Upstream |
 |`setBackgroundColor`| Function | Morozov Sergey | done | | done on Upstream |
-|`getClipToFrame`| Function | Morozov Sergey | in progress | | |
-|`setClipToFrame`| Function | Morozov Sergey | in progress | | |
-|`getOpacity`| Function | Morozov Sergey | in progress | | |
-|`setOpacity`| Function | Morozov Sergey | in progress | | |
-|`getSize`| Function | Morozov Sergey | in progress | | |
-|`setSize`| Function | Morozov Sergey | in progress | | |
-|`getPosition`| Function | Morozov Sergey | in progress | | |
-|`setPosition`| Function | Morozov Sergey | in progress | | |
+|`getClipToFrame`| Function | Morozov Sergey | done | | done on Upstream |
+|`setClipToFrame`| Function | Morozov Sergey | done | | done on Upstream |
+|`getOpacity`| Function | Morozov Sergey | done | | done on Upstream |
+|`setOpacity`| Function | Morozov Sergey | done | | done on Upstream |
+|`getSize`| Function | Morozov Sergey | done | | done on Upstream |
+|`setSize`| Function | Morozov Sergey | done | | done on Upstream |
+|`getPosition`| Function | Morozov Sergey | done | | done on Upstream |
+|`setPosition`| Function | Morozov Sergey | done | | done on Upstream |
 |`getFrame`| Function | Morozov Sergey | done | | done on Upstream |
 |`setFrame`| Function | Morozov Sergey | done | | done on Upstream |
-|`getPivot`| Function | Morozov Sergey | in progress | | |
-|`setPivot`| Function | Morozov Sergey | in progress | | |
-|`getScale`| Function | Morozov Sergey | in progress | | |
-|`setScale`| Function | Morozov Sergey | in progress | | |
-|`getTranslation`| Function | Morozov Sergey | in progress | | |
-|`setTranslation`| Function | Morozov Sergey | in progress | | |
-|`getRotation`| Function | Morozov Sergey | in progress | | |
-|`setRotation`| Function | Morozov Sergey | in progress | | |
-|`getTransform`| Function | Morozov Sergey | in progress | | |
-|`setTransform`| Function | Morozov Sergey | in progress | | |
-|`getShadowColor`| Function | Morozov Sergey | in progress | | |
-|`setShadowColor`| Function | Morozov Sergey | in progress | | |
-|`getShadowOffset`| Function | Morozov Sergey | in progress | | |
-|`setShadowOffset`| Function | Morozov Sergey | in progress | | |
+|`getPivot`| Function | Morozov Sergey | done | | done on Upstream |
+|`setPivot`| Function | Morozov Sergey | done | | done on Upstream |
+|`getScale`| Function | Morozov Sergey | done | | done on Upstream |
+|`setScale`| Function | Morozov Sergey | done | | done on Upstream |
+|`getTranslation`| Function | Morozov Sergey | done | | done on Upstream |
+|`setTranslation`| Function | Morozov Sergey | done | | done on Upstream |
+|`getRotation`| Function | Morozov Sergey | done | | done on Upstream |
+|`setRotation`| Function | Morozov Sergey | done | | done on Upstream |
+|`getTransform`| Function | Morozov Sergey | done | | done on Upstream |
+|`setTransform`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShadowColor`| Function | Morozov Sergey | done | | done on Upstream |
+|`setShadowColor`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShadowOffset`| Function | Morozov Sergey | done | | done on Upstream 
+|`setShadowOffset`| Function | Morozov Sergey | done | | done on Upstream |
 |`getLabel`| Function | Morozov Sergey | done | | done on Upstream |
 |`setLabel`| Function | Morozov Sergey | done | | done on Upstream |
-|`getShadowAlpha`| Function | Morozov Sergey | in progress | | |
-|`setShadowAlpha`| Function | Morozov Sergey | in progress | | |
-|`getShadowElevation`| Function | Morozov Sergey | in progress | | |
-|`setShadowElevation`| Function | Morozov Sergey | in progress | | |
-|`getShadowRadius`| Function | Morozov Sergey | in progress | | |
-|`setShadowRadius`| Function | Morozov Sergey | in progress | | |
-|`getBorderStyle`| Function | Morozov Sergey | in progress | | |
-|`setBorderStyle`| Function | Morozov Sergey | in progress | | |
-|`getBorderWidth`| Function | Morozov Sergey | in progress | | |
-|`setBorderWidth`| Function | Morozov Sergey | in progress | | |
-|`getBorderColor`| Function | Morozov Sergey | in progress | | |
-|`setBorderColor`| Function | Morozov Sergey | in progress | | |
-|`getBorderRadius`| Function | Morozov Sergey | in progress | | |
-|`setBorderRadius`| Function | Morozov Sergey | in progress | | |
-|`getShapeMask`| Function | Morozov Sergey | in progress | | |
-|`setShapeMask`| Function | Morozov Sergey | in progress | | |
-|`getShapeClip`| Function | Morozov Sergey | in progress | | |
-|`setShapeClip`| Function | Morozov Sergey | in progress | | |
-|`getMarkNodeGroup`| Function | Morozov Sergey | in progress | | |
-|`setMarkNodeGroup`| Function | Morozov Sergey | in progress | | |
-|`getLengthMetricsUnit`| Function | Morozov Sergey | in progress | | |
-|`setLengthMetricsUnit`| Function | Morozov Sergey | in progress | | |
+|`getShadowAlpha`| Function | Morozov Sergey | done | | done on Upstream |
+|`setShadowAlpha`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShadowElevation`| Function | Morozov Sergey | done | | done on Upstream |
+|`setShadowElevation`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShadowRadius`| Function | Morozov Sergey | done | | done on Upstream |
+|`setShadowRadius`| Function | Morozov Sergey | done | | done on Upstream |
+|`getBorderStyle`| Function | Morozov Sergey | done | | done on Upstream |
+|`setBorderStyle`| Function | Morozov Sergey | done | | done on Upstream |
+|`getBorderWidth`| Function | Morozov Sergey | done | | done on Upstream |
+|`setBorderWidth`| Function | Morozov Sergey | done | | done on Upstream |
+|`getBorderColor`| Function | Morozov Sergey | done | | done on Upstream |
+|`setBorderColor`| Function | Morozov Sergey | done | | done on Upstream |
+|`getBorderRadius`| Function | Morozov Sergey | done | | done on Upstream |
+|`setBorderRadius`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShapeMask`| Function | Morozov Sergey | testskipped | | |
+|`setShapeMask`| Function | Morozov Sergey | testskipped | | |
+|`getShapeClip`| Function | Morozov Sergey | testskipped | | |
+|`setShapeClip`| Function | Morozov Sergey | testskipped | | |
+|`getMarkNodeGroup`| Function | Morozov Sergey | done | | done on Upstream |
+|`setMarkNodeGroup`| Function | Morozov Sergey | done | | done on Upstream |
+|`getLengthMetricsUnit`| Function | Morozov Sergey | done | | done on Upstream |
+|`setLengthMetricsUnit`| Function | Morozov Sergey | done | | done on Upstream |
 |*Filter*| *Class* |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
 |`ctor`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`pixelStretch`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
