@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { capitalize, generateSyntheticFunctionName, generateSyntheticIdlNodeName, IDLFile, IDLLibrary, IDLMethod, Language, PeerLibrary, throwException } from "@idlizer/core"
+import { capitalize, collapseTypes, generateSyntheticFunctionName, generateSyntheticIdlNodeName, IDLFile, IDLLibrary, IDLMethod, Language, PeerLibrary, throwException } from "@idlizer/core"
 import * as arkts from "@koalaui/libarkts"
 import * as idl from "@idlizer/core/idl"
 import * as path from "node:path"
@@ -625,7 +625,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         if (arkts.isTSArrayType(type))
             return idl.createContainerType('sequence', [this.serializeType((type as arkts.TSArrayType).elementType)])
         if (arkts.isETSUnionType(type))
-            return idl.createUnionType((type as arkts.ETSUnionType).types.map((it) => this.serializeType(it)))
+            return collapseTypes((type as arkts.ETSUnionType).types.map((it) => this.serializeType(it)))
         if (arkts.isETSPrimitiveType(type))
             return this.serializePrimitive((type as arkts.ETSPrimitiveType).primitiveType)
         if (arkts.isETSTypeReference(type)) {

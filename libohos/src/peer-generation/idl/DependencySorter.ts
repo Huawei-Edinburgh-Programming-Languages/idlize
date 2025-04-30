@@ -163,8 +163,6 @@ export class DependencySorter {
 
     addDepExactly(declaration: idl.IDLNode) {
         declaration = this.cachedTransformer.transofrm(declaration)
-        if (this.dependencies.has(declaration)) return
-        this.dependencies.add(declaration)
         this.fillDependencies(declaration)
         // if (seen.size > 0) console.log(`${name}: depends on ${Array.from(seen.keys()).join(",")}`)
     }
@@ -195,7 +193,9 @@ export class DependencySorter {
     getToposorted(): idl.IDLNode[] {
         let result = new Set<idl.IDLNode>
         const namer = this.library.createTypeNameConvertor(Language.CPP)
-        let input = sorted([...this.dependencies], it => namer.convert(it))
+        const filteredDependencies = Array.from(this.dependencies)
+            .filter(it => it !== idl.IDLThisType)
+        let input = sorted([...filteredDependencies], it => namer.convert(it))
         while (input.length) {
             let broken: idl.IDLNode[] = []
             let processed = 0
