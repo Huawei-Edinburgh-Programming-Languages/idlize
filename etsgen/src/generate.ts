@@ -55,7 +55,11 @@ function processFile(outDir: string, baseDir: string, file: string): IDLSuperFil
     if (!fs.existsSync(outFileDir)) {
         fs.mkdirSync(outFileDir, { recursive: true })
     }
-    fs.writeFileSync(outFile, idl.toIDLString(idlFile.file, {}), 'utf8')
+    if (idlFile.file.entries.length) {
+        fs.writeFileSync(outFile, idl.toIDLString(idlFile.file, {}), 'utf8')
+    } else {
+        idlFile.skipped = true
+    }
     idlFile.writeFilePath = outFile
     return idlFile
 }
@@ -75,7 +79,7 @@ export function generateFromSts(inputFiles: string[], baseDir: string, outDir: s
             doJob(file, () => {
                 const idlFile = processFile(outDir, baseDir, file)
                 library.push(idlFile)
-                return idlFile.writeFilePath
+                return idlFile
             })
         } catch (e: any) {
             console.log(e)
@@ -96,7 +100,7 @@ export function generateFromSts(inputFiles: string[], baseDir: string, outDir: s
                 fs.mkdirSync(outFileDir, { recursive: true })
             }
             fs.writeFileSync(fileName, idl.toIDLString(file.file, {}), 'utf8')
-            return fileName
+            return file
         })
     })
     return new PeerLibrary(Language.ARKTS)
@@ -158,11 +162,15 @@ function adjustImports(library:IDLSuperFile[]): IDLSuperFile[] {
 
 function processLogger(amount: number) {
     let done = 1
-    return (fileName: string, op: () => string) => {
+    return (fileName: string, op: () => IDLSuperFile) => {
         console.log(`[ ${done.toString()}/${amount.toString()} ] Processing ${fileName}`)
         try {
             const outFile = op()
-            console.log(`  ... saved to ${outFile}`)
+            if (outFile.skipped) {
+                console.log(`  ... skipped (file is empty)`)
+            } else {
+                console.log(`  ... saved to ${outFile.writeFilePath}`)
+            }
         } catch (ex: unknown) {
             console.log(`  ... failed`)
             throw ex
@@ -177,6 +185,7 @@ interface IDLSuperFile {
     generatedFileName: string
     writeFilePath: string
     file: IDLFile
+    skipped: boolean
     exports: Map<string, string>
 }
 
@@ -851,6 +860,31 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     postprocessEntires() {
+        /* remove synthetic duplicates */
+        function removeDuplicatedByScope(entries:idl.IDLEntry[]): idl.IDLEntry[] {
+            const namesCount = new Map<string, number>()
+            const result:idl.IDLEntry[] = []
+            entries.forEach(entry => {
+                namesCount.set(entry.name, (namesCount.get(entry.name) ?? 0) + 1)
+            })
+            entries.forEach(entry => {
+                if (idl.isNamespace(entry)) {
+                    entry.members = removeDuplicatedByScope(entry.members)
+                    return
+                }
+                const count = namesCount.get(entry.name)!
+                if (count > 1) {
+                    if (idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.Synthetic)) {
+                        result.push(entry)
+                    }
+                } else {
+                    result.push(entry)
+                }
+            })
+            return result
+        }
+        this.entries = removeDuplicatedByScope(this.entries)
+
         /* arkgen specialization */
         const componentInterface = this.entries.find(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.ComponentInterface))
         if (componentInterface) {
@@ -887,6 +921,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
             originalFileName: this.originalFileName,
             generatedFileName: this.fileName,
             writeFilePath: this.fileName,
+            skipped: false,
             file: this.toIDLFile(),
             exports: this.fileReExports,
         }
