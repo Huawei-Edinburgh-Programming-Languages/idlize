@@ -917,16 +917,35 @@ class IDLVisitor extends arkts.AbstractVisitor {
             if (!idl.isInterface(componentInterface)) {
                 throw new Error("ComponentInterface must be interface!")
             }
-            const componentAttributeRef = componentInterface.callables.at(0)?.returnType
-            if (!componentAttributeRef || !idl.isReferenceType(componentAttributeRef)) {
+            const componentUIAttributeRef = componentInterface.callables.at(0)?.returnType
+            if (!componentUIAttributeRef || !idl.isReferenceType(componentUIAttributeRef)) {
                 throw new Error("No component attribute found!")
+            }
+            if (!componentUIAttributeRef.name.startsWith("UI")) {
+                throw new Error("Expecting component attribute to be started with UI like UICommonMethod. If it is not match this criteria, please ensure SDK is correct")
+            }
+            const componentUIAttributeName = componentUIAttributeRef.name
+            const componentAttributeName = componentUIAttributeRef.name.slice(2)
+            if (componentUIAttributeRef.name.startsWith("UI")) {
+                componentInterface.callables.forEach(it => it.returnType = idl.createReferenceType(
+                    componentAttributeName,
+                    componentUIAttributeRef.typeArguments,
+                    {
+                        documentation: componentUIAttributeRef.documentation,
+                        extendedAttributes: componentUIAttributeRef.extendedAttributes,
+                        fileName: componentUIAttributeRef.fileName
+                    }
+                ))
             }
             const processedEntries: idl.IDLEntry[] = []
             this.entries.forEach(entry => {
                 if (entry.name === componentInterface.name && entry !== componentInterface) {
                     return
                 }
-                if (entry.name === componentAttributeRef.name) {
+                if (entry.name === componentUIAttributeName) {
+                    return
+                }
+                if (entry.name === componentAttributeName) {
                     entry.extendedAttributes ??= []
                     entry.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Component })
                 }
