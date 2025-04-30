@@ -452,6 +452,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         let hasMemoAnnotation = false
         const properties: idl.IDLProperty[] = []
         const methods: idl.IDLMethod[] = []
+        const constructors: idl.IDLConstructor[] = []
 
         members?.forEach(member => {
             if (arkts.isClassProperty(member)) {
@@ -463,7 +464,11 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 return
             }
             if (arkts.isMethodDefinition(member)) {
-                methods.push(this.serializeMethod(member))
+                const serializedMethod = this.serializeMethod(member)
+                if (idl.isConstructor(serializedMethod))
+                    constructors.push(serializedMethod)
+                else
+                    methods.push(serializedMethod)
                 const found = member.function!.annotations.find(ann => arkts.isIdentifier(ann.expr) && ann.expr.name === 'memo')
                 if (found) {
                     hasMemoAnnotation = true
@@ -476,6 +481,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
         return {
             properties,
+            constructors,
             methods,
             hasMemoAnnotation,
         }
@@ -507,7 +513,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 })
             }
 
-            const { properties, methods } = this.processBody(declaration.definition?.body)
+            const { properties, methods, constructors } = this.processBody(declaration.definition?.body)
             const attrs: idl.IDLExtendedAttribute[] = [
                 { name: idl.IDLExtendedAttributes.Entity, value: idl.IDLEntity.Class }
             ]
@@ -515,7 +521,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 name,
                 idl.IDLInterfaceSubkind.Class,
                 inheritance,
-                [], // ctors
+                constructors, // ctors
                 undefined, // constants
                 properties,
                 methods,
@@ -544,13 +550,13 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     inheritance.push(type)
                 })
             }
-            const { properties, methods } = this.processBody(declaration.body?.getChildren())
+            const { properties, methods, constructors } = this.processBody(declaration.body?.getChildren())
             const attrs: idl.IDLExtendedAttribute[] = []
             this.entries.push(idl.createInterface(
                 name,
                 idl.IDLInterfaceSubkind.Interface,
                 inheritance,
-                [], // ctors
+                constructors, // ctors
                 undefined, // constants
                 properties,
                 methods,
@@ -565,18 +571,31 @@ class IDLVisitor extends arkts.AbstractVisitor {
         return declaration
     }
 
-    serializeMethod(method: arkts.MethodDefinition): IDLMethod {
-        const { set:paramsSet, parameters } = this.extractTypeParameters((method.value as arkts.FunctionExpression).function?.typeParams)
+    serializeMethod(method: arkts.MethodDefinition): IDLMethod | idl.IDLConstructor {
+        const { set:paramsSet, parameters:typeParameters } = this.extractTypeParameters((method.value as arkts.FunctionExpression).function?.typeParams)
         return this.withTypeParamContext(paramsSet, () => {
+            const parameters = method.function!.params.map(it => {
+                let param = it as arkts.ETSParameterExpression
+                return idl.createParameter(param.name, this.serializeType(param.typeAnnotation))
+            })
+            const returnType = this.serializeType(method.function!.returnTypeAnnotation!)
+            if (method.id!.name === 'constructor') {
+                return idl.createConstructor(
+                    parameters,
+                    returnType,
+                )
+            }
             return idl.createMethod(method.id!.name,
-                method.function!.params.map(it => {
-                    let param = it as arkts.ETSParameterExpression
-                    return idl.createParameter(param.name, this.serializeType(param.typeAnnotation))
-                }),
-                this.serializeType(method.function!.returnTypeAnnotation!),
-                undefined /* todo: methodInitilizer */,
+                parameters,
+                returnType,
+                {
+                    isStatic: !!(method.modifierFlags & arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_STATIC),
+                    isAsync: false,
+                    isFree: false,
+                    isOptional: false,
+                },
                 undefined /* todo: nodeInitilizer */,
-                parameters
+                typeParameters
             )
         })
     }
