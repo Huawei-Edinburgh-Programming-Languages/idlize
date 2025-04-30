@@ -1,3 +1,17 @@
+diff --git a/api/@internal/component/ets/xcomponent.d.ts b/api/@internal/component/ets/xcomponent.d.ts
+index 06f38f200..227d10a95 100644
+--- a/api/@internal/component/ets/xcomponent.d.ts
++++ b/api/@internal/component/ets/xcomponent.d.ts
+@@ -229,7 +229,8 @@ declare class XComponentController {
+    * @since arkts {'1.1':'12','1.2':'20'}
+    * @arkts 1.1&1.2
+    */
+-  getXComponentSurfaceRotation(): Required<SurfaceRotationOptions>;
++  // type Required does not exists
++  getXComponentSurfaceRotation(): SurfaceRotationOptions;
+ 
+   /**
+    * Called after the surface is first created.
 diff --git a/api/arkui/ButtonModifier.d.ts b/api/arkui/ButtonModifier.d.ts
 index d91f7ea8d..a25c4c25e 100644
 --- a/api/arkui/ButtonModifier.d.ts
@@ -77,18 +91,20 @@ index b165d0d10..8e7fa974a 100644
  /*** endif */
  
 diff --git a/api/arkui/ListModifier.d.ts b/api/arkui/ListModifier.d.ts
-index 937062f7a..783342690 100644
+index 937062f7a..2e19ae449 100644
 --- a/api/arkui/ListModifier.d.ts
 +++ b/api/arkui/ListModifier.d.ts
-@@ -19,7 +19,7 @@
+@@ -19,8 +19,9 @@
   */
  
  /*** if arkts 1.2 */
 -import { ListItemAttribute } from './component/ListItem';
 +import { ListItemAttribute } from './component/listItem';
  import { AttributeModifier } from './component/common';
++import { ListAttribute } from './component/list'
  /*** endif */
  
+ /**
 diff --git a/api/arkui/MenuItemModifier.d.ts b/api/arkui/MenuItemModifier.d.ts
 index 2b9b25a23..ed366d1a9 100644
 --- a/api/arkui/MenuItemModifier.d.ts
@@ -229,6 +245,25 @@ index 75d34cf8f..506205258 100644
 +  // applyDisabledAttribute: undefined | ((instance: PanelAttribute) => void);
 +  // applySelectedAttribute: undefined | ((instance: PanelAttribute) => void);
  }
+diff --git a/api/arkui/QRCodeModifier.d.ts b/api/arkui/QRCodeModifier.d.ts
+index dfafaad3d..5f387f14c 100644
+--- a/api/arkui/QRCodeModifier.d.ts
++++ b/api/arkui/QRCodeModifier.d.ts
+@@ -21,6 +21,7 @@
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+ import { QRCodeAttribute } from './component/qrcode'
++import { CounterAttribute } from './component/counter'
+ /*** endif */
+ 
+ /**
+@@ -117,4 +118,4 @@ export declare class QRCodeModifier extends QRCodeAttribute implements Attribute
+    * @arkts 1.2
+    */
+   applySelectedAttribute: undefined | ((instance: CounterAttribute) => void);
+-}
+\ No newline at end of file
++}
 diff --git a/api/arkui/RadioModifier.d.ts b/api/arkui/RadioModifier.d.ts
 index 173274fce..066d2caa1 100644
 --- a/api/arkui/RadioModifier.d.ts
@@ -401,6 +436,96 @@ index acd2d9663..e9d7c9e02 100644
  /*** endif */
  
  /*** if arkts 1.2 */
+diff --git a/api/arkui/RichEditorModifier.d.ts b/api/arkui/RichEditorModifier.d.ts
+index 30f1e8249..7acc87de7 100644
+--- a/api/arkui/RichEditorModifier.d.ts
++++ b/api/arkui/RichEditorModifier.d.ts
+@@ -20,7 +20,6 @@
+ 
+ 
+ 
+-
+ /**
+  * Defines RichEditor Modifier
+  *
+@@ -30,41 +29,42 @@
+  * @atomicservice
+  * @since 12
+ */
+-export declare class RichEditorModifier extends RichEditorAttribute implements AttributeModifier<RichEditorAttribute> {
++// no imports, two same declarations
++// export declare class RichEditorModifier extends RichEditorAttribute implements AttributeModifier<RichEditorAttribute> {
+ 
+-  /**
+-   * Defines the normal update attribute function.
+-   * 
+-   * @param { RichEditorAttribute } instance
+-   * @syscap SystemCapability.ArkUI.ArkUI.Full
+-   * @crossplatform
+-   * @atomicservice
+-   * @since 12
+-   */
+-  applyNormalAttribute?(instance: RichEditorAttribute): void;
+-}
++//   /**
++//    * Defines the normal update attribute function.
++//    * 
++//    * @param { RichEditorAttribute } instance
++//    * @syscap SystemCapability.ArkUI.ArkUI.Full
++//    * @crossplatform
++//    * @atomicservice
++//    * @since 12
++//    */
++//   applyNormalAttribute?(instance: RichEditorAttribute): void;
++// }
+ 
+-/**
+- * Defines RichEditor Modifier
+- *
+- * @extends RichEditorAttribute
+- * @implements AttributeModifier
+- * @syscap SystemCapability.ArkUI.ArkUI.Full
+- * @atomicservice
+- * @since 20
+- * @arkts 1.2
+-*/
+-export declare class RichEditorModifier extends RichEditorAttribute implements AttributeModifier<RichEditorAttribute> {
++// /**
++//  * Defines RichEditor Modifier
++//  *
++//  * @extends RichEditorAttribute
++//  * @implements AttributeModifier
++//  * @syscap SystemCapability.ArkUI.ArkUI.Full
++//  * @atomicservice
++//  * @since 20
++//  * @arkts 1.2
++// */
++// export declare class RichEditorModifier extends RichEditorAttribute implements AttributeModifier<RichEditorAttribute> {
+ 
+-  /**
+-   * Defines the normal update attribute function.
+-   * 
+-   * @type { ?((instance: RichEditorAttribute) => void) }
+-   * @syscap SystemCapability.ArkUI.ArkUI.Full
+-   * @crossplatform
+-   * @atomicservice
+-   * @since 20
+-   * @arkts 1.2
+-   */
+-  applyNormalAttribute?: ((instance: RichEditorAttribute) => void);
+-}
++//   /**
++//    * Defines the normal update attribute function.
++//    * 
++//    * @type { ?((instance: RichEditorAttribute) => void) }
++//    * @syscap SystemCapability.ArkUI.ArkUI.Full
++//    * @crossplatform
++//    * @atomicservice
++//    * @since 20
++//    * @arkts 1.2
++//    */
++//   applyNormalAttribute?: ((instance: RichEditorAttribute) => void);
++// }
 diff --git a/api/arkui/SelectModifier.d.ts b/api/arkui/SelectModifier.d.ts
 index 42f355237..c2ededdda 100644
 --- a/api/arkui/SelectModifier.d.ts

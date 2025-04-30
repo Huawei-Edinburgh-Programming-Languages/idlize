@@ -4,4 +4,5 @@ package ohos.window;
 namespace window {
     interface WindowStatusType {};
     interface SystemBarStyle {};
+    interface Orientation {};
 };
