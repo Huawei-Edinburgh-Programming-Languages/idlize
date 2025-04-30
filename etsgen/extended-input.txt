@@ -3,3 +3,4 @@
 ../sdk-patched-arkts/api/@ohos.graphics.text.d.ets
 ../sdk-patched-arkts/api/@ohos.graphics.drawing.d.ets
 ../sdk-patched-arkts/api/@ohos.graphics.common2D.d.ets
+../sdk-patched-arkts/api/@ohos.arkui.node.d.ets

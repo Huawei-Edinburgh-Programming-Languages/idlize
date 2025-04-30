@@ -19,7 +19,7 @@ import * as idl from "@idlizer/core/idl"
 import * as path from "node:path"
 import * as fs from "node:fs"
 
-function processFile(outDir: string, baseDir: string, file: string) {
+function processFile(outDir: string, baseDir: string, file: string): [string, IDLSuperFile] {
     let input = fs.readFileSync(file).toString()
     //let module = arkts.createETSModuleFromSource(input, arkts.Es2pandaContextState.ES2PANDA_STATE_PARSED)
     const configPath = path.resolve(__dirname, "..", "config.json")
@@ -48,15 +48,15 @@ function processFile(outDir: string, baseDir: string, file: string) {
     const script = arkts.createETSModuleFromContext()
     let idlVisitor = new IDLVisitor(baseDir, file, pathMap)
     idlVisitor.visitor(script)
-    const idlFile = idlVisitor.toIDLFile()
+    const idlFile = idlVisitor.toIDLSuperFile()
     const fileRelativePath = path.relative(baseDir, file)
     const outFile = path.join(outDir, fileRelativePath.replace(".d.ets", ".idl"))
     const outFileDir = path.dirname(outFile)
     if (!fs.existsSync(outFileDir)) {
         fs.mkdirSync(outFileDir, { recursive: true })
     }
-    fs.writeFileSync(outFile, idl.toIDLString(idlFile, {}), "utf-8")
-    return outFile
+    fs.writeFileSync(outFile, idl.toIDLString(idlFile.file, {}), 'utf8')
+    return [outFile, idlFile]
 }
 
 export function generateFromSts(inputFiles: string[], baseDir: string, outDir: string): PeerLibrary {
@@ -67,12 +67,14 @@ export function generateFromSts(inputFiles: string[], baseDir: string, outDir: s
         fs.mkdirSync(outDir, { recursive: true })
     }
     console.log(`Use Panda from ${process.env.PANDA_SDK_PATH}`)
-    let result = new PeerLibrary(Language.ARKTS)
     const doJob = processLogger(inputFiles.length)
+    const library: [string, IDLSuperFile][] = []
     inputFiles.forEach(file => {
         try {
             doJob(file, () => {
-                return processFile(outDir, baseDir, file)
+                const [ outFilePath, idlFile ] = processFile(outDir, baseDir, file)
+                library.push([outFilePath, idlFile])
+                return outFilePath
             })
         } catch (e: any) {
             console.log(e)
@@ -82,7 +84,74 @@ export function generateFromSts(inputFiles: string[], baseDir: string, outDir: s
             // throw e
         }
     })
-    return result
+    console.log('Adjusting imports...')
+    const adjusted = adjustImports(library)
+    const doAdjustJob = processLogger(adjusted.length)
+    adjusted.forEach(([fileName, file]) => {
+        doAdjustJob(fileName, () => {
+            const outFileDir = path.dirname(fileName)
+            if (!fs.existsSync(outFileDir)) {
+                fs.mkdirSync(outFileDir, { recursive: true })
+            }
+            fs.writeFileSync(fileName, idl.toIDLString(file.file, {}), 'utf8')
+            return fileName
+        })
+    })
+    return new PeerLibrary(Language.ARKTS)
+}
+
+function adjustImports(library:[string, IDLSuperFile][]): [string, IDLSuperFile][] {
+    const map = new Map<string, IDLSuperFile[]>()
+    library.forEach(([,file]) => {
+        const pkg = file.file.packageClause.join('.')
+        if (!map.has(pkg)) {
+            map.set(pkg, [])
+        }
+        map.get(pkg)!.push(file)
+    })
+
+    const updatedFiles:[string, IDLSuperFile][] = []
+    library.forEach(([fileName,file]) => {
+        let adjusted = false
+        file.file.entries.forEach(entry => {
+            if (!idl.isImport(entry)) {
+                return
+            }
+            if (entry.name === "" || entry.clause.length < 2) {
+                return
+            }
+
+            const fileClause = entry.clause.slice(0, entry.clause.length - 1)
+            let fileClauseString = fileClause.join('.')
+            let fileExportName = entry.clause.at(-1)!
+
+            let oldFileClauseString = ''
+            while (oldFileClauseString !== fileClauseString) {
+                const referencedFiles = map.get(fileClauseString)
+                if (!referencedFiles) {
+                    break
+                }
+                oldFileClauseString = fileClauseString
+                for (const refFile of referencedFiles) {
+                    if (refFile.exports.has(fileExportName)) {
+                        const clause = refFile.exports.get(fileExportName)!.split('.')
+                        if (clause.length < 2) {
+                            return
+                        }
+                        fileClauseString = clause.slice(0, clause.length - 1).join('.')
+                        fileExportName = clause.at(-1)!
+                        adjusted = true
+                        break
+                    }
+                }
+            }
+            entry.clause = [...fileClauseString.split('.'), fileExportName]
+        })
+        if (adjusted) {
+            updatedFiles.push([fileName, file])
+        }
+    })
+    return updatedFiles
 }
 
 function processLogger(amount: number) {
@@ -101,6 +170,11 @@ function processLogger(amount: number) {
     }
 }
 
+interface IDLSuperFile {
+    file: IDLFile
+    exports: Map<string, string>
+}
+
 interface ExtractTypeParameterInfo {
     set: Set<string>
     parameters: string[] | undefined,
@@ -115,6 +189,8 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
     private defaultExportName?: string
     private typeParamsStack: Set<string>[] = []
+
+    private fileReExports: Map<string, string> = new Map()
 
     private detectPackageNameByPath(fileName: string): string[] {
         if (this.importPathMap.has(fileName)) {
@@ -160,6 +236,20 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 const [ spec ] = node.specifiers
                 this.defaultExportName = spec.local!.name
             }
+        }
+        if (arkts.isETSReExportDeclaration(node)) {
+            let importString = node.eTSImportDeclarations!.source!.str
+            if (importString.startsWith('.')) {
+                const currentFileBaseDir = path.dirname(this.originalFileName)
+                const importFilePath = path.normalize(path.join(currentFileBaseDir, importString))
+                importString = importFilePath
+            }
+            const importedPackageClause = this.detectPackageNameByPath(importString)
+            node.eTSImportDeclarations!.specifiers.forEach(spec => {
+                if (arkts.isImportSpecifier(spec)) {
+                    this.fileReExports.set(spec.local!.name, [...importedPackageClause, spec.imported!.name].join('.'))
+                }
+            })
         }
         if (arkts.isExportDefaultDeclaration(node)) {
             if (arkts.isIdentifier(node.decl)) {
@@ -766,6 +856,13 @@ class IDLVisitor extends arkts.AbstractVisitor {
         this.markDefaultExport()
         this.postprocessEntires()
         return idl.linkParentBack(idl.createFile(this.entries, this.fileName, this.packageClause))
+    }
+
+    toIDLSuperFile(): IDLSuperFile {
+        return {
+            file: this.toIDLFile(),
+            exports: this.fileReExports
+        }
     }
 }
 

@@ -1,7 +1,5 @@
-interface Content {};
 interface CustomTheme {};
 
-interface NodeController {};
 interface UIContext {};
 interface GestureControl {};
 

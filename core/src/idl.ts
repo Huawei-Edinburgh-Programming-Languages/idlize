@@ -873,7 +873,7 @@ export function createFile(entries: IDLEntry[], fileName?: string, packageClause
 export function createImport(clause: string[], name?: string, nodeInitializer?: IDLNodeInitializer): IDLImport {
     return {
         kind: IDLKind.Import,
-        name: name || "",
+        name: name ?? "",
         clause,
         ...nodeInitializer,
         _idlNodeBrand: innerIdlSymbol,
