@@ -82,7 +82,7 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
                         ? w.makeReturn(call)
                         : w.makeStatement(call)
                     w.writeStatement(statement)
-                })
+                }, method.methods[0].typeParameters)
             })
 
             /* global scope peer serialize function */

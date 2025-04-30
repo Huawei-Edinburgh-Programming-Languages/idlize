@@ -619,19 +619,33 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     private static etsFunctionTypeReferencePattern = new RegExp(/^Function[0-9]+$/g)
-    maybeSerializeETSFunctionReference(type: arkts.ETSTypeReference): idl.IDLCallback | undefined {
+    private static isFunctionTypeReference(name:string) {
+        return IDLVisitor.etsFunctionTypeReferencePattern.test(name)
+            || name === 'Callback'
+    }
+
+    maybeSerializeETSFunctionReference(type: arkts.ETSTypeReference): [idl.IDLCallback, string[]] | undefined {
         let name = type.baseName!.name
-        if (!IDLVisitor.etsFunctionTypeReferencePattern.test(name)) return undefined
-        const typeArgs = type.part?.typeParams?.params.map(it => this.serializeType(it))
-        const parameters = typeArgs?.slice(0, -1).map((it, index) => idl.createParameter(`value${index}`, it)) ?? []
-        const returnType = typeArgs?.[-1] ?? idl.IDLVoidType
+        if (!IDLVisitor.isFunctionTypeReference(name)) return undefined
+        const [typeArgs, trappedParams] = this.useTypeParametersTrap(() => {
+            const typeArgs = type.part?.typeParams?.params.map(it => this.serializeType(it))
+            return typeArgs
+        })
+        const orderedTrappedParams = Array.from(trappedParams)
+        const returnType = name === 'Callback' ? idl.IDLVoidType : typeArgs?.at(-1) ?? idl.IDLVoidType
+        let paramsTypes = name === 'Callback' ? typeArgs : typeArgs?.slice(0, -1)
+        if (paramsTypes?.length === 1 && paramsTypes[0] === idl.IDLVoidType) {
+            paramsTypes = []
+        }
+        const parameters = paramsTypes?.map((it, index) => idl.createParameter(`value${index}`, it)) ?? []
         const callback = idl.createCallback(
             generateSyntheticFunctionName(parameters, returnType, arkts.hasModifierFlag(type, arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_ASYNC)),
             parameters,
             returnType,
             { fileName: this.fileName },
+            orderedTrappedParams.length === 0 ? undefined : orderedTrappedParams,
         )
-        return callback
+        return [callback, orderedTrappedParams]
     }
 
     serializeType(type: arkts.AstNode | undefined): idl.IDLType {
@@ -672,13 +686,20 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 this.typeParameterFound(name)
                 return idl.createTypeParameterReference(name)
             }
-            let etsCallback: idl.IDLCallback | undefined
-            if (etsCallback = this.maybeSerializeETSFunctionReference(type)) {
+            const mbEtsCallback = this.maybeSerializeETSFunctionReference(type)
+            if (mbEtsCallback) {
+                const [etsCallback, args] = mbEtsCallback
                 if (!this.seenTypes.has(etsCallback.name)) {
                     this.seenTypes.add(etsCallback.name)
                     this.addSyntheticType(etsCallback)
                 }
-                return idl.createReferenceType(etsCallback.name)
+                return idl.createReferenceType(
+                    etsCallback.name,
+                    args.length === 0 ? undefined : args.map(it => {
+                        this.typeParameterFound(it)
+                        return idl.createTypeParameterReference(it)
+                    })
+                )
             }
             const typeArgs = type.part?.typeParams?.params.map(it => this.serializeType(it))
             // special cases //

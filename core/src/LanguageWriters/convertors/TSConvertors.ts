@@ -15,6 +15,7 @@
 
 import * as idl from '../../idl'
 import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
+import { zip } from '../../util'
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from '../nameConvertor'
 
 export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConvertor {
@@ -97,7 +98,7 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
         if (decl) {
             if (idl.isSyntheticEntry(decl)) {
                 if (idl.isCallback(decl)) {
-                    return this.mapCallback(decl)
+                    return this.mapCallback(decl, type.typeArguments)
                 }
                 const entity = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Entity)
                 if (entity) {
@@ -183,8 +184,26 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
     protected processTupleType(idlProperty: idl.IDLProperty): idl.IDLProperty {
         return idlProperty
     }
-    protected mapCallback(decl: idl.IDLCallback): string {
-        const params = decl.parameters.map(it =>
+    protected mapCallback(decl: idl.IDLCallback, args?:idl.IDLType[]): string {
+        const subst = new Map()
+        if (args && decl.typeParameters) {
+            for (let i = 0; i < args.length && i < decl.typeParameters.length; ++i) {
+                subst.set(decl.typeParameters[i], args[i])
+            }
+        }
+        const parameters = decl.parameters.map(it => {
+            if (!idl.isTypeParameterType(it.type)) {
+                return it
+            }
+            const record = subst.get(it.type.name)
+            if (!record) {
+                return it
+            }
+            const param = idl.clone(it)
+            param.type = record
+            return param
+        })
+        const params = parameters.map(it =>
             `${it.isVariadic ? "..." : ""}${it.name}${it.isOptional ? "?" : ""}: ${this.convert(it.type!)}${it.isVariadic ? "[]" : ""}`)
         return `((${params.join(", ")}) => ${this.convert(decl.returnType)})`
     }

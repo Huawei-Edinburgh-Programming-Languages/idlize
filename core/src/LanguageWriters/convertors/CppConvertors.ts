@@ -141,6 +141,7 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
     }
     convertPrimitiveType(type: idl.IDLPrimitiveType): ConvertResult {
         switch (type) {
+            case idl.IDLThisType: // maybe fix it in another level?
             case idl.IDLVoidType: return this.make('void', true)
             case idl.IDLI8Type: return this.make(`Int8`)
             case idl.IDLU8Type: return this.make(`UInt8`)
