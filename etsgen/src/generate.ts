@@ -19,7 +19,7 @@ import * as idl from "@idlizer/core/idl"
 import * as path from "node:path"
 import * as fs from "node:fs"
 
-function processFile(outDir: string, baseDir: string, file: string): [string, IDLSuperFile] {
+function processFile(outDir: string, baseDir: string, file: string): IDLSuperFile {
     let input = fs.readFileSync(file).toString()
     //let module = arkts.createETSModuleFromSource(input, arkts.Es2pandaContextState.ES2PANDA_STATE_PARSED)
     const configPath = path.resolve(__dirname, "..", "config.json")
@@ -56,7 +56,8 @@ function processFile(outDir: string, baseDir: string, file: string): [string, ID
         fs.mkdirSync(outFileDir, { recursive: true })
     }
     fs.writeFileSync(outFile, idl.toIDLString(idlFile.file, {}), 'utf8')
-    return [outFile, idlFile]
+    idlFile.writeFilePath = outFile
+    return idlFile
 }
 
 export function generateFromSts(inputFiles: string[], baseDir: string, outDir: string): PeerLibrary {
@@ -68,13 +69,13 @@ export function generateFromSts(inputFiles: string[], baseDir: string, outDir: s
     }
     console.log(`Use Panda from ${process.env.PANDA_SDK_PATH}`)
     const doJob = processLogger(inputFiles.length)
-    const library: [string, IDLSuperFile][] = []
+    const library: IDLSuperFile[] = []
     inputFiles.forEach(file => {
         try {
             doJob(file, () => {
-                const [ outFilePath, idlFile ] = processFile(outDir, baseDir, file)
-                library.push([outFilePath, idlFile])
-                return outFilePath
+                const idlFile = processFile(outDir, baseDir, file)
+                library.push(idlFile)
+                return idlFile.writeFilePath
             })
         } catch (e: any) {
             console.log(e)
@@ -87,7 +88,8 @@ export function generateFromSts(inputFiles: string[], baseDir: string, outDir: s
     console.log('Adjusting imports...')
     const adjusted = adjustImports(library)
     const doAdjustJob = processLogger(adjusted.length)
-    adjusted.forEach(([fileName, file]) => {
+    adjusted.forEach(file => {
+        const fileName = file.writeFilePath
         doAdjustJob(fileName, () => {
             const outFileDir = path.dirname(fileName)
             if (!fs.existsSync(outFileDir)) {
@@ -100,9 +102,9 @@ export function generateFromSts(inputFiles: string[], baseDir: string, outDir: s
     return new PeerLibrary(Language.ARKTS)
 }
 
-function adjustImports(library:[string, IDLSuperFile][]): [string, IDLSuperFile][] {
+function adjustImports(library:IDLSuperFile[]): IDLSuperFile[] {
     const map = new Map<string, IDLSuperFile[]>()
-    library.forEach(([,file]) => {
+    library.forEach(file => {
         const pkg = file.file.packageClause.join('.')
         if (!map.has(pkg)) {
             map.set(pkg, [])
@@ -110,8 +112,8 @@ function adjustImports(library:[string, IDLSuperFile][]): [string, IDLSuperFile]
         map.get(pkg)!.push(file)
     })
 
-    const updatedFiles:[string, IDLSuperFile][] = []
-    library.forEach(([fileName,file]) => {
+    const updatedFiles:IDLSuperFile[] = []
+    library.forEach((file) => {
         let adjusted = false
         file.file.entries.forEach(entry => {
             if (!idl.isImport(entry)) {
@@ -148,7 +150,7 @@ function adjustImports(library:[string, IDLSuperFile][]): [string, IDLSuperFile]
             entry.clause = [...fileClauseString.split('.'), fileExportName]
         })
         if (adjusted) {
-            updatedFiles.push([fileName, file])
+            updatedFiles.push(file)
         }
     })
     return updatedFiles
@@ -171,6 +173,9 @@ function processLogger(amount: number) {
 }
 
 interface IDLSuperFile {
+    originalFileName: string
+    generatedFileName: string
+    writeFilePath: string
     file: IDLFile
     exports: Map<string, string>
 }
@@ -860,8 +865,11 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
     toIDLSuperFile(): IDLSuperFile {
         return {
+            originalFileName: this.originalFileName,
+            generatedFileName: this.fileName,
+            writeFilePath: this.fileName,
             file: this.toIDLFile(),
-            exports: this.fileReExports
+            exports: this.fileReExports,
         }
     }
 }
