@@ -17,7 +17,9 @@
         "RotationGestureHandler",
         "SwipeGestureHandler",
         "TapGestureHandler",
-        "UIGestureEvent"
+        "UIGestureEvent",
+        "MenuItemConfiguration",
+        "WrappedBuilder"
     ],
     "forceMaterialized": [
         "TapGestureInterface",
@@ -175,7 +177,8 @@
             "ISinglePropertyChangeSubscriber",
             "PageTransitionEnterInterface",
             "PageTransitionExitInterface",
-            "CommonTransition"
+            "CommonTransition",
+            "wrapBuilder"
         ],
         "ignoreEntry": [
             "Optional",
