@@ -653,7 +653,7 @@
 |`autoResize`| Function | Evstigneev Roman | done |  |   |
 |`renderMode`| Function | Evstigneev Roman | done |  | |
 |`dynamicRangeMode`| Function | Evstigneev Roman | testskipped |  | test blocked by aceEngine https://gitee.com/openharmony/arkui_ace_engine/issues/IB1IEY, test in progress Evstgneev Roman |
-|`hdrBrightness`| Function | | | | |
+|`hdrBrightness`| Function | | | | no such API in generation 125 |
 |`interpolation`| Function | Evstigneev Roman | done |  | |
 |`sourceSize`| Function | Evstigneev Roman | done |  | |
 |`syncLoad`| Function | Evstigneev Roman | done |  | |
@@ -697,14 +697,14 @@
 |`onComplete`| Function | Politov Mikhail | done |  |  |
 |`onError`| Function | Politov Mikhail | done |  |  |
 |`alt`| Function | Politov Mikhail | done |  | |
-|*LazyGridLayout*| *Component* | | | | |
-|`construct`| Function | | | | |
-|`rowsGap`| Function | | | | |
-|`columnsGap`| Function | | | | |
-|*LazyVGridLayout*| *Component* | | | | |
-|`construct`| Function | | | | |
-|`setLazyVGridLayoutOptions`| Function | | | | |
-|`columnsTemplate`| Function | | | | |
+|*LazyGridLayout*| *Component* | | | | no such API in generation 125 |
+|`construct`| Function | | | | no such API in generation 125 |
+|`rowsGap`| Function | | | | no such API in generation 125 |
+|`columnsGap`| Function | | | | no such API in generation 125 |
+|*LazyVGridLayout*| *Component* | | | | no such API in generation 125 |
+|`construct`| Function | | | | no such API in generation 125 |
+|`setLazyVGridLayoutOptions`| Function | | | | no such API in generation 125 |
+|`columnsTemplate`| Function | | | | no such API in generation 125 |
 |*Line*|*Component*|Dudkin Sergey| done |  |  |
 |`construct`| Function |Dudkin Sergey| done |  |  |
 |`setLineOptions`|Function|Dudkin Sergey| done |  |  |
@@ -977,7 +977,7 @@
 |`pullToRefresh`| Function |Politov Mikhail | done |  |  |
 |`onOffsetChange`| Function |Politov Mikhail | done |  | |
 |`pullDownRatio`| Function |Politov Mikhail | done |  |  |
-|`maxPullDownDistance`| Function | | | | |
+|`maxPullDownDistance`| Function | | | | no such API in generation 125 |
 |`_onChangeEvent_refreshing`| Function | Erokhin Ilya | done |  | |
 |*RelativeContainer*| *Component* | Dmitry A Smirnov | done |  |  |
 |`construct`| Function |Dmitry A Smirnov | done |  |  |
@@ -1119,7 +1119,7 @@
 |`editMenuOptions`|Function| Pavelyev Ivan | done |  |  |
 |`enablePreviewText`|Function| Evstigneev Roman | done |  |  |
 |`enableHapticFeedback`|Function|Evstigneev Roman| done |  |  |
-|`autoCapitalizationMode`| Function | | | | |
+|`autoCapitalizationMode`| Function | | | | no such API in generation 125 |
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
 |`stopBackPress`| Function | Kovalev Sergey | done |  | |
 |`onWillChange`| Function | Kovalev Sergey| in progress| | |
@@ -1513,7 +1513,7 @@
 |`editMenuOptions`|Function| Pavelyev Ivan | done |  |  |
 |`enablePreviewText`|Function|Tuzhilkin Ivan| done |  |  |
 |`enableHapticFeedback`|Function|Tuzhilkin Ivan| done |  | |
-|`autoCapitalizationMode`| Function | | | | |
+|`autoCapitalizationMode`| Function | | | | no such API in generation 125 |
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
 |`ellipsisMode`| Function | Kovalev Sergey | done |  | |
 |`stopBackPress`| Function | Kovalev Sergey | done |  | |
@@ -1604,7 +1604,7 @@
 |`editMenuOptions`| Function | Pavelyev Ivan| done|  |  |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |  |
 |`enableHapticFeedback`| Function | Spirin Andrey | done |  |  |
-|`autoCapitalizationMode`| Function | | | | |
+|`autoCapitalizationMode`| Function | | | | no such API in generation 125 |
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
 |`ellipsisMode`| Function |  Kovalev Sergey| done |  | |
 |`stopBackPress`| Function | Kovalev Sergey | done |  | |
@@ -1840,9 +1840,9 @@
 |`runJavaScriptOnDocumentStart`| Function | Vadim Voronov  | done | | |
 |`runJavaScriptOnDocumentEnd`| Function | Vadim Voronov  | done | | |
 |`runJavaScriptOnHeadEnd`| Function | Vadim Voronov  | done | | |
-|`nativeEmbedOptions`| Function | | | | |
-|`enableDataDetector`| Function | | | | |
-|`dataDetectorConfig`| Function | | | | |
+|`nativeEmbedOptions`| Function | | | | no such API in generation 125 |
+|`enableDataDetector`| Function | | | | no such API in generation 125 |
+|`dataDetectorConfig`| Function | | | | no such API in generation 125 |
 |`registerNativeEmbedRule`| Function | Erokhin Ilya | done |  | |
 |`bindSelectionMenu`| Function | Lobah Mikhail| done| | |
 |*WindowScene*| *Component* | Dudkin Sergey | done |  | |
@@ -2890,20 +2890,20 @@
 |`getDirection`| Function | | | | wait new generation of 126 on upstream_branch |
 |`getDistance`| Function | | | | wait new generation of 126 on upstream_branch |
 |`getDistanceMap`| Function | | | | wait new generation of 126 on upstream_branch |
-|*UIGridEvent*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`setOnWillScroll`| Function | | | | |
-|`setOnDidScroll`| Function | | | | |
-|`setOnScrollIndex`| Function | | | | |
+|*UIGridEvent*| *Class* | | | | no such API in generation 125 |
+|`ctor`| Function | | | | no such API in generation 125 |
+|`setOnWillScroll`| Function | | | | no such API in generation 125 |
+|`setOnDidScroll`| Function | | | | no such API in generation 125 |
+|`setOnScrollIndex`| Function | | | | no such API in generation 125 |
 |*ImageAnalyzerController*| *Class* |Vadim Voronov|  blocked AceEngine |  | |
 |`ctor`| Function | Vadim Voronov|  blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
 |`getImageAnalyzerSupportTypes`| Function |Vadim Voronov|  blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBPTCE |
-|*UIListEvent*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`setOnWillScroll`| Function | | | | |
-|`setOnDidScroll`| Function | | | | |
-|`setOnScrollIndex`| Function | | | | |
-|`setOnScrollVisibleContentChange`| Function | | | | |
+|*UIListEvent*| *Class* | | | | no such API in generation 125 |
+|`ctor`| Function | | | | no such API in generation 125 |
+|`setOnWillScroll`| Function | | | | no such API in generation 125 |
+|`setOnDidScroll`| Function | | | | no such API in generation 125 |
+|`setOnScrollIndex`| Function | | | | no such API in generation 125 |
+|`setOnScrollVisibleContentChange`| Function | | | | no such API in generation 125 |
 |*ListScroller*| *Class* |Morozov Sergey | done|  |  |
 |`ctor`| Function | Morozov Sergey | done | | |
 |`getItemRectInGroup`| Function |Morozov Sergey | done | | |
@@ -2985,10 +2985,10 @@
 |`getStyledString`| Function | Maksimov Nikita | done |  | |
 |`getSelection`| Function |Dudkin Sergey| done |  | |
 |`onContentChanged`| Function | Dudkin Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB944G + |
-|*UIScrollEvent*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`setOnWillScroll`| Function | | | | |
-|`setOnDidScroll`| Function | | | | |
+|*UIScrollEvent*| *Class* | | | | no such API in generation 125 |
+|`ctor`| Function | | | | no such API in generation 125 |
+|`setOnWillScroll`| Function | | | | no such API in generation 125 |
+|`setOnDidScroll`| Function | | | | no such API in generation 125 |
 |*Scroller*| *Class* | Erokhin Ilya | done |  |  |
 |`ctor`| Function | Erokhin Ilya | done |  |  |
 |`scrollTo`| Function | Erokhin Ilya | done |  |  |
@@ -3313,11 +3313,11 @@
 |`update`| Function | Kovalev Sergey | done |  | |
 |`values`| Function | Kovalev Sergey | done |  |  |
 |`length`| Function | Kovalev Sergey | done |  | |
-|*UIWaterFlowEvent*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`setOnWillScroll`| Function | | | | |
-|`setOnDidScroll`| Function | | | | |
-|`setOnScrollIndex`| Function | | | | |
+|*UIWaterFlowEvent*| *Class* | | | | no such API in generation 125 |
+|`ctor`| Function | | | | no such API in generation 125 |
+|`setOnWillScroll`| Function | | | | no such API in generation 125 |
+|`setOnDidScroll`| Function | | | | no such API in generation 125 |
+|`setOnScrollIndex`| Function | | | | no such API in generation 125 |
 |*UIExtensionProxy*| *Class* | Tuzhilkin Ivan | blocked IDL|  | |
 |`ctor`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`send`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
@@ -3373,7 +3373,7 @@
 |`getOverflow`| Function |Dudkin Sergey, Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
 |`getWordBreak`| Function |Dudkin Sergey, Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation|
 |`getLeadingMargin`| Function | Dudkin Sergey, Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
-|`getParagraphSpacing`| Function | | | | |
+|`getParagraphSpacing`| Function | | | | no such API in generation 125 |
 |*LineHeightStyle*| *Class* |Dudkin Sergey |done|  | |
 |`ctor`| Function |Dudkin Sergey |done|  | |
 |`getLineHeight`| Function |Dudkin Sergey | done |  | |
