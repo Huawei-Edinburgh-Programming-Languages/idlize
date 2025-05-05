@@ -139,7 +139,7 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
             case idl.IDLFunctionType: return 'Function'
 
             case idl.IDLUnknownType:
-            case idl.IDLCustomObjectType: return 'unknown'
+            case idl.IDLCustomObjectType: return 'any'
             case idl.IDLThisType: return 'this'
             case idl.IDLAnyType: return 'any'
             case idl.IDLUndefinedType: return 'undefined'

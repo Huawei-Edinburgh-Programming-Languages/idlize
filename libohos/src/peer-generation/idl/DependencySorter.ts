@@ -189,6 +189,7 @@ export class DependencySorter {
         }
     }
 
+    // Algorithm is broken! And it is not Khan's algorithm anymore!
     // Kahn's algorithm.
     getToposorted(): idl.IDLNode[] {
         let result = new Set<idl.IDLNode>
@@ -215,6 +216,9 @@ export class DependencySorter {
                 console.warn("DependencySorter dependencies end")
                 //throw new Error("unsatisfeable dependencies detected")
 
+                broken.forEach(it => {
+                    result.add(it)
+                })
                 break
             }
             input = broken

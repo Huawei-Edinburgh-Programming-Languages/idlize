@@ -18,8 +18,9 @@ import * as arkts from "@koalaui/libarkts"
 import * as idl from "@idlizer/core/idl"
 import * as path from "node:path"
 import * as fs from "node:fs"
+import { ETSVisitorConfig } from "./config"
 
-function processFile(outDir: string, baseDir: string, file: string): IDLSuperFile {
+function processFile(outDir: string, baseDir: string, file: string, config:ETSVisitorConfig): IDLSuperFile {
     let input = fs.readFileSync(file).toString()
     //let module = arkts.createETSModuleFromSource(input, arkts.Es2pandaContextState.ES2PANDA_STATE_PARSED)
     const configPath = path.resolve(__dirname, "..", "config.json")
@@ -46,7 +47,7 @@ function processFile(outDir: string, baseDir: string, file: string): IDLSuperFil
     arkts.arktsGlobal.compilerContext = arkts.Context.createFromString(input)
     arkts.proceedToState(arkts.Es2pandaContextState.ES2PANDA_STATE_PARSED)
     const script = arkts.createETSModuleFromContext()
-    let idlVisitor = new IDLVisitor(baseDir, file, pathMap)
+    let idlVisitor = new IDLVisitor(baseDir, file, pathMap, config)
     idlVisitor.visitor(script)
     const idlFile = idlVisitor.toIDLSuperFile()
     const fileRelativePath = path.relative(baseDir, file)
@@ -64,7 +65,14 @@ function processFile(outDir: string, baseDir: string, file: string): IDLSuperFil
     return idlFile
 }
 
-export function generateFromSts(inputFiles: string[], baseDir: string, outDir: string): PeerLibrary {
+export interface GenerateFromSTSContext {
+    inputFiles: string[]
+    baseDir: string
+    outDir: string
+    config: ETSVisitorConfig
+}
+
+export function generateFromSts({inputFiles, baseDir, outDir, config}:GenerateFromSTSContext): PeerLibrary {
     if (!process.env.PANDA_SDK_PATH) {
         process.env.PANDA_SDK_PATH = path.resolve(__dirname, "../../node_modules/@panda/sdk")
     }
@@ -77,7 +85,7 @@ export function generateFromSts(inputFiles: string[], baseDir: string, outDir: s
     inputFiles.forEach(file => {
         try {
             doJob(file, () => {
-                const idlFile = processFile(outDir, baseDir, file)
+                const idlFile = processFile(outDir, baseDir, file, config)
                 library.push(idlFile)
                 return idlFile
             })
@@ -222,7 +230,8 @@ class IDLVisitor extends arkts.AbstractVisitor {
     constructor(
         protected basePath: string,
         protected originalFileName: string,
-        protected importPathMap: Map<string, string>
+        protected importPathMap: Map<string, string>,
+        protected config: ETSVisitorConfig,
     ) {
         super()
         this.fileName = this.originalFileName.replace(".d.ets", ".idl")
@@ -457,7 +466,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         return `${" ".repeat(4 * this.indentation) + node.constructor.name} ${name}`
     }
 
-    private processBody(members:readonly arkts.AstNode[] | undefined) {
+    private processBody(scopeName:string, members:readonly arkts.AstNode[] | undefined) {
         let hasMemoAnnotation = false
         const properties: idl.IDLProperty[] = []
         const methods: idl.IDLMethod[] = []
@@ -473,6 +482,9 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 return
             }
             if (arkts.isMethodDefinition(member)) {
+                if (this.shouldNotProcessMember(scopeName, member.id!.name)) {
+                    return
+                }
                 const serializedMethod = this.serializeMethod(member)
                 if (idl.isConstructor(serializedMethod))
                     constructors.push(serializedMethod)
@@ -522,7 +534,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 })
             }
 
-            const { properties, methods, constructors } = this.processBody(declaration.definition?.body)
+            const { properties, methods, constructors } = this.processBody(name, declaration.definition?.body)
             const attrs: idl.IDLExtendedAttribute[] = [
                 { name: idl.IDLExtendedAttributes.Entity, value: idl.IDLEntity.Class }
             ]
@@ -559,7 +571,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     inheritance.push(type)
                 })
             }
-            const { properties, methods, constructors } = this.processBody(declaration.body?.getChildren())
+            const { properties, methods, constructors } = this.processBody(name, declaration.body?.getChildren())
             const attrs: idl.IDLExtendedAttribute[] = []
             this.entries.push(idl.createInterface(
                 name,
@@ -819,6 +831,10 @@ class IDLVisitor extends arkts.AbstractVisitor {
             }
         )
         return [result, orderedTypeParameters]
+    }
+
+    private shouldNotProcessMember(scopeName:string, entryName:string): boolean {
+        return this.config.DeletedMethods.get(scopeName)?.includes(entryName) ?? false
     }
 
     addSyntheticType(entry: idl.IDLEntry) {

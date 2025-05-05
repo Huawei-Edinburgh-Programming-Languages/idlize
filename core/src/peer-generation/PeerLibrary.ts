@@ -189,7 +189,7 @@ export class PeerLibrary implements LibraryInterface {
         return this.targetNameConvertorInstance.convert(type)
     }
 
-    private referenceCache: Map<idl.IDLReferenceType, idl.IDLEntry> | undefined
+    private referenceCache: Map<idl.IDLReferenceType, idl.IDLEntry | undefined> | undefined
     public enableCache() {
         this.referenceCache = new Map()
     }
@@ -221,8 +221,8 @@ export class PeerLibrary implements LibraryInterface {
         }
         if (result && (idl.isImport(result) || idl.isNamespace(result)))
             result = undefined
-        if (result)
-            this.referenceCache?.set(type, result)
+
+        this.referenceCache?.set(type, result)
         return result
     }
 
