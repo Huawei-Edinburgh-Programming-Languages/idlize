@@ -2964,7 +2964,7 @@
 |`stopEditing`| Function|Dudkin Sergey| done |  | |
 |`getLayoutManager`| Function|Dudkin Sergey| done |  | |
 |`getPreviewText`| Function|Dmitry A Smirnov| done |  |  |
-|`getCaretRect`| Function | Erokhin Ilya | in progress | | |
+|`getCaretRect`| Function | Erokhin Ilya | done | | |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked IDL|  |  |
 |`ctor`| Function |Dudkin Sergey| done |  |  |
 |`addTextSpan`| Function |Dudkin Sergey, Samarin Sergey | testskipped |  | tests are partially ready, but not all fields inside arguments' structs are tested yet |
