@@ -2288,7 +2288,7 @@
 |`getY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
 |`setY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |`getHand`| Function | Samarin Sergey | done | | |
-|`setHand`| Function | Samarin Sergey | in progress | | |
+|`setHand`| Function | Samarin Sergey | done | | request to delete the interface from CAPI: https://gitee.com/nikolay-igotti/idlize/issues/IC5IO9 |
 |`getPreventDefault`| Function | Samarin Sergey | done | | |
 |`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | done |  | |
@@ -2410,7 +2410,7 @@
 |`getVelocity`| Function | Tuzhilkin Ivan | done | | |
 |`getModifierKeyState`| Function | Tuzhilkin Ivan | done |  | |
 |`executeDropAnimation`| Function | Tuzhilkin Ivan | in progress |  | only for upstream |
-|`startDataLoading`| Function | | | | |
+|`startDataLoading`| Function | Samarin Sergey | in progress | | |
 |`getDragBehavior`| Function | Tuzhilkin Ivan | done | | |
 |`setDragBehavior`| Function | Tuzhilkin Ivan | done | | |
 |`getUseCustomDropAnimation`| Function | Evstigneev Roman | done |  | priority |
