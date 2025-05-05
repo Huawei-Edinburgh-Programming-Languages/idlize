@@ -632,8 +632,8 @@ class IDLVisitor extends arkts.AbstractVisitor {
             return typeArgs
         })
         const orderedTrappedParams = Array.from(trappedParams)
-        const returnType = name === 'Callback' ? idl.IDLVoidType : typeArgs?.at(-1) ?? idl.IDLVoidType
-        let paramsTypes = name === 'Callback' ? typeArgs : typeArgs?.slice(0, -1)
+        const returnType = name === 'Callback' ? idl.IDLVoidType : typeArgs?.at(1) ?? idl.IDLVoidType
+        let paramsTypes = name === 'Callback' ? [typeArgs!.at(0)!] : typeArgs?.slice(0, -1)
         if (paramsTypes?.length === 1 && paramsTypes[0] === idl.IDLVoidType) {
             paramsTypes = []
         }
