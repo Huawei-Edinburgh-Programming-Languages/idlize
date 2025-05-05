@@ -881,6 +881,30 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     postprocessEntires() {
+        /* arkgen specialization */
+        const componentInterface = this.entries.find(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.ComponentInterface))
+        if (componentInterface) {
+            if (!idl.isInterface(componentInterface)) {
+                throw new Error("ComponentInterface must be interface!")
+            }
+            const componentAttributeRef = componentInterface.callables.at(0)?.returnType
+            if (!componentAttributeRef || !idl.isReferenceType(componentAttributeRef)) {
+                throw new Error("No component attribute found!")
+            }
+            const processedEntries: idl.IDLEntry[] = []
+            this.entries.forEach(entry => {
+                if (entry.name === componentInterface.name && entry !== componentInterface) {
+                    return
+                }
+                if (entry.name === componentAttributeRef.name) {
+                    entry.extendedAttributes ??= []
+                    entry.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Component })
+                }
+                processedEntries.push(entry)
+            })
+            this.entries = processedEntries
+        }
+
         /* remove synthetic duplicates */
         function removeDuplicatedByScope(entries:idl.IDLEntry[]): idl.IDLEntry[] {
             const namesCount = new Map<string, number>()
@@ -905,30 +929,6 @@ class IDLVisitor extends arkts.AbstractVisitor {
             return result
         }
         this.entries = removeDuplicatedByScope(this.entries)
-
-        /* arkgen specialization */
-        const componentInterface = this.entries.find(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.ComponentInterface))
-        if (componentInterface) {
-            if (!idl.isInterface(componentInterface)) {
-                throw new Error("ComponentInterface must be interface!")
-            }
-            const componentAttributeRef = componentInterface.callables.at(0)?.returnType
-            if (!componentAttributeRef || !idl.isReferenceType(componentAttributeRef)) {
-                throw new Error("No component attribute found!")
-            }
-            const processedEntries: idl.IDLEntry[] = []
-            this.entries.forEach(entry => {
-                if (entry.name === componentInterface.name && entry !== componentInterface) {
-                    return
-                }
-                if (entry.name === componentAttributeRef.name) {
-                    entry.extendedAttributes ??= []
-                    entry.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Component })
-                }
-                processedEntries.push(entry)
-            })
-            this.entries = processedEntries
-        }
     }
 
     toIDLFile(): IDLFile {
