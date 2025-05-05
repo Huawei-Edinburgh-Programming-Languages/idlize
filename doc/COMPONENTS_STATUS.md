@@ -2944,14 +2944,14 @@
 |`ctor`| Function |Dmitry A Smirnov| done |  |  |
 |`reset`| Function |Dmitry A Smirnov| done |  |  |
 |`setChallengeResult`| Function |Dmitry A Smirnov| done |  |  |
-|*VirtualScrollOptions*| *Class* | | | | |
-|`ctor`| Function | | | | |
-|`onLazyLoading`| Function | | | | |
-|`onTotalCount`| Function | | | | |
-|`getTotalCount`| Function | | | | |
-|`setTotalCount`| Function | | | | |
-|`getReusable`| Function | | | | |
-|`setReusable`| Function | | | | |
+|*VirtualScrollOptions*| *Class* | Andrey Khudenkikh | in progress | | |
+|`ctor`| Function | Andrey Khudenkikh | in progress | | |
+|`onLazyLoading`| Function | Andrey Khudenkikh | in progress | | |
+|`onTotalCount`| Function | Andrey Khudenkikh | in progress | | |
+|`getTotalCount`| Function | Andrey Khudenkikh | in progress | | |
+|`setTotalCount`| Function | Andrey Khudenkikh | in progress | | |
+|`getReusable`| Function | Andrey Khudenkikh | in progress | | |
+|`setReusable`| Function | Andrey Khudenkikh | in progress | | |
 |*RichEditorBaseController*| *Class*|Dudkin Sergey| blocked IDL|  | |
 |`ctor`| Function|Dudkin Sergey| done |  | |
 |`getCaretOffset`| Function|Dudkin Sergey| done |  | |
