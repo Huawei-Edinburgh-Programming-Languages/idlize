@@ -178,7 +178,7 @@
 |`onFocusAxisEvent`| Function | Evstigneev Roman | done | | feature: API not present |
 |`onAxisEvent`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`focusable`| Function | Roman Sedaikin | done |  | |
-|`nextFocus`| Function | Politov Mikhail | in progress | | |
+|`nextFocus`| Function | Politov Mikhail | done | | done on upstream |
 |`tabStop`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocus`| Function | Roman Sedaikin | done |  | |
 |`onBlur`| Function | Roman Sedaikin | done |  | |
@@ -2884,9 +2884,9 @@
 |*RotationRecognizer*| *Class* | Lobah Mikhail| done| | |
 |`ctor`| Function | Lobah Mikhail| done| | |
 |`getAngle`| Function | Lobah Mikhail| done| | |
-|*PanRecognizer*| *Class* | Politov Mikhail | done |  | |
-|`ctor`| Function |Politov Mikhail | done |  | |
-|`getPanGestureOptions`| Function | Politov Mikhail | done |  | |
+|*PanRecognizer*| *Class* | Politov Mikhail | done |  | done on upstream |
+|`ctor`| Function |Politov Mikhail | done |  | done on upstream |
+|`getPanGestureOptions`| Function | Politov Mikhail | done |  | done on upstream |
 |`getDirection`| Function | | | | wait new generation of 126 on upstream_branch |
 |`getDistance`| Function | | | | wait new generation of 126 on upstream_branch |
 |`getDistanceMap`| Function | | | | wait new generation of 126 on upstream_branch |
