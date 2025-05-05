@@ -103,7 +103,7 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
                 const entity = idl.getExtAttribute(decl, idl.IDLExtendedAttributes.Entity)
                 if (entity) {
                     const isTuple = entity === idl.IDLEntity.Tuple
-                    return this.productType(decl as idl.IDLInterface, isTuple, !isTuple)
+                    return this.productType(decl as idl.IDLInterface, type.typeArguments, isTuple, !isTuple)
                 }
             }
 
@@ -184,34 +184,51 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
     protected processTupleType(idlProperty: idl.IDLProperty): idl.IDLProperty {
         return idlProperty
     }
-    protected mapCallback(decl: idl.IDLCallback, args?:idl.IDLType[]): string {
+    protected createTypeSubstitution(parameters:string[] | undefined, args:idl.IDLType[] | undefined): Map<string, idl.IDLType> {
         const subst = new Map()
-        if (args && decl.typeParameters) {
-            for (let i = 0; i < args.length && i < decl.typeParameters.length; ++i) {
-                subst.set(decl.typeParameters[i], args[i])
+        if (args && parameters) {
+            for (let i = 0; i < args.length && i < parameters.length; ++i) {
+                subst.set(parameters[i], args[i])
             }
         }
+        return subst
+    }
+    protected applySubstitution(subst:Map<string, idl.IDLType>, type:idl.IDLType): idl.IDLType {
+        if (idl.isContainerType(type)) {
+            return idl.createContainerType(type.containerKind, type.elementType.map(it => this.applySubstitution(subst, it)))
+        }
+        if (idl.isReferenceType(type)) {
+            return idl.createReferenceType(type.name, type.typeArguments?.map(it => this.applySubstitution(subst, it)))
+        }
+        if (idl.isTypeParameterType(type)) {
+            const record = subst.get(type.name)
+            if (record) {
+                return record
+            }
+        }
+        return type
+    }
+    protected mapCallback(decl: idl.IDLCallback, args?:idl.IDLType[]): string {
+        const subst = this.createTypeSubstitution(decl.typeParameters, args)
         const parameters = decl.parameters.map(it => {
-            if (!idl.isTypeParameterType(it.type)) {
-                return it
-            }
-            const record = subst.get(it.type.name)
-            if (!record) {
-                return it
-            }
             const param = idl.clone(it)
-            param.type = record
+            param.type = this.applySubstitution(subst, param.type)
             return param
         })
         const params = parameters.map(it =>
             `${it.isVariadic ? "..." : ""}${it.name}${it.isOptional ? "?" : ""}: ${this.convert(it.type!)}${it.isVariadic ? "[]" : ""}`)
         return `((${params.join(", ")}) => ${this.convert(decl.returnType)})`
     }
-
-    protected productType(decl: idl.IDLInterface, isTuple: boolean, includeFieldNames: boolean): string {
+    protected productType(decl: idl.IDLInterface, args:idl.IDLType[] | undefined, isTuple: boolean, includeFieldNames: boolean): string {
+        const subst = this.createTypeSubstitution(decl.typeParameters, args)
         const name = `${isTuple ? "[" : "{"
             } ${decl.properties
                 .map(it => isTuple ? this.processTupleType(it) : it)
+                .map(it => {
+                    const prop = idl.clone(it)
+                    prop.type = this.applySubstitution(subst, prop.type)
+                    return prop
+                })
                 .map(it => {
                     const type = this.convert(it.type)
                     return it.isOptional
