@@ -3306,12 +3306,12 @@
 |`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
 |`startImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`stopImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped |  | |
-|*WaterFlowSections*| *Class* | Kovalev Sergey | in progress |  | |
+|*WaterFlowSections*| *Class* | Kovalev Sergey | done |  | |
 |`ctor`| Function |Kovalev Sergey | done |  | |
 |`splice`| Function | Kovalev Sergey | done |  | |
 |`push`| Function | Kovalev Sergey | done |  | |
 |`update`| Function | Kovalev Sergey | done |  | |
-|`values`| Function | Kovalev Sergey | in progress|  |  |
+|`values`| Function | Kovalev Sergey | done |  |  |
 |`length`| Function | Kovalev Sergey | done |  | |
 |*UIWaterFlowEvent*| *Class* | | | | |
 |`ctor`| Function | | | | |
