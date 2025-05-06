@@ -130,7 +130,7 @@
 | SideBarContainer.test.ets | Daryina Olga|
 | Slider.test.ets | |
 | Span.test.ets | |
-| Stack.test.ets | |
+| Stack.test.ets | Pisanov Nikolay |
 | Stepper.test.ets | |
 | Swiper.test.ets | |
 | SymbolGlyph.test.ets | |
