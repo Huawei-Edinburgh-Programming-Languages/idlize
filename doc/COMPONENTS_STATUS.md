@@ -356,7 +356,7 @@
 |`blendMode0`| Function | Lobah Mikhail | done |  | |
 |`blendMode1`| Function | Dmitry A Smirnov | done |  | |
 |`advancedBlendMode`| Function | Erokhin Ilya |in progress |  |  |
-|`bindTips`| Function | Tuzhilkin Ivan | in progress | | |
+|`bindTips`| Function | Tuzhilkin Ivan | in progress | | only for generation > 125|
 |`bindPopup`| Function | Erokhin Ilya | done |  | fixes of issues were provided by our team, https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL2K, https://gitee.com/openharmony/arkui_ace_engine/issues/IBY31B |
 |`bindMenu0`| Function | Erokhin Ilya | blocked IDL |  | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`bindMenu1`| Function | Erokhin Ilya | blocked IDL |  | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
@@ -1854,7 +1854,7 @@
 |`setXComponentOptions0`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
 |`setXComponentOptions1`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
 |`setXComponentOptions2`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
-|`setXComponentOptions3`| Function | Tuzhilkin Ivan | in progress |  | API exist only on master |
+|`setXComponentOptions3`| Function | Tuzhilkin Ivan | in progress |  | only for generation > 125 |
 |`onLoad`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS (+) |
 |`onDestroy`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`enableAnalyzer`| Function | Tuzhilkin Ivan | testskipped |  | |
@@ -1909,7 +1909,7 @@
 |`onRelease`| Function | Tuzhilkin Ivan | deprecated |  | testskipped | |
 |`onError`| Function | Skroba Gleb | testskipped |  | |
 |`onTerminated`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`onDrawReady`| Function | Tuzhilkin Ivan| in progress | | |
+|`onDrawReady`| Function | | | | can be implemented on 125 generation |
 |*LinearIndicator*| *Component* | Kovalev Sergey | done |  | depricated |
 |`construct`| Function |Kovalev Sergey | done |  | depricated |
 |`setLinearIndicatorOptions`| Function | Kovalev Sergey | done |  | depricated |
@@ -2409,7 +2409,7 @@
 |`getVelocityY`| Function | Tuzhilkin Ivan | done | | |
 |`getVelocity`| Function | Tuzhilkin Ivan | done | | |
 |`getModifierKeyState`| Function | Tuzhilkin Ivan | done |  | |
-|`executeDropAnimation`| Function | Tuzhilkin Ivan | in progress |  | only for upstream |
+|`executeDropAnimation`| Function | | | | can be implemented on 125 generation |
 |`startDataLoading`| Function | Samarin Sergey | in progress | | |
 |`getDragBehavior`| Function | Tuzhilkin Ivan | done | | |
 |`setDragBehavior`| Function | Tuzhilkin Ivan | done | | |
