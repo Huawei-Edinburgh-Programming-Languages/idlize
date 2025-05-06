@@ -1,18 +1,18 @@
 | FILE | responsible |
 | --------- | -------- |
-| AlphabetIndexer.test.ets | |
-| AspectRatio.test.ets | |
+| AlphabetIndexer.test.ets | Porodin Alexander|
+| AspectRatio.test.ets | Porodin Alexander|
 | AttachDetach.test.ets | |
 | BackgroundBlurEffects.test.ets | |
 | Badge.test.ets | |
-| BaseSpan.test.ets | |
-| Blank.test.ets | |
+| BaseSpan.test.ets | Porodin Alexander|
+| Blank.test.ets | Porodin Alexander|
 | Button.test.ets | Tuzhilkin Ivan |
-| CalendarPicker.test.ets | |
+| CalendarPicker.test.ets | Porodin Alexander|
 | Canvas.test.ets | |
 | Checkbox.test.ets | |
 | CheckboxGroup.test.ets | |
-| Circle.test.ets | |
+| Circle.test.ets | Porodin Alexander|
 | Click.test.ets | |
 | ClickEffect.test.ets | |
 | Column.test.ets | |
@@ -111,7 +111,7 @@
 | Polyline.test.ets | |
 | Progress.test.ets | |
 | QRCode.test.ets | |
-| Radio.test.ets | |
+| Radio.test.ets | Porodin Alexander|
 | Rating.test.ets |Daryina Olga |
 | Refresh.test.ets | |
 | RelativeContainer.test.ets | |
