@@ -2551,16 +2551,16 @@
 |`size`| Function | Skroba Gleb | done |  |  |
 |`disableAnimation`| Function | Morozov Sergey | managed side |  |  |
 |`setInterception`| Function | Morozov Sergey | managed side |  |  |
-|`getPathStack`| Function | | | | |
-|`setPathStack`| Function | | | | |
+|`getPathStack`| Function | managed side | managed side | | |
+|`setPathStack`| Function | managed side | managed side | | |
 |*NavigationTransitionProxy*| *Class* | Morozov Sergey | managed side |  |  |
 |`ctor`| Function |Morozov Sergey | done |  |  |
 |`finishTransition`| Function | Morozov Sergey | done |  |  |
 |`cancelTransition`| Function | Morozov Sergey | done |  |  |
 |`updateTransition`| Function | Morozov Sergey | done |  |  |
-|`getFrom`| Function | | | | |
+|`getFrom`| Function | managed side | managed side | | |
 |`setFrom`| Function | Morozov Sergey | managed side |  | , https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
-|`getTo`| Function | | | | |
+|`getTo`| Function | managed side | managed side | | |
 |`setTo`| Function | Morozov Sergey | managed side |  | , https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
 |`getIsInteractive`| Function | Morozov Sergey | done |  |  |
 |`setIsInteractive`| Function | Morozov Sergey | done |  |  |
