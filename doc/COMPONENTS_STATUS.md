@@ -362,8 +362,8 @@
 |`bindMenu1`| Function | Erokhin Ilya | blocked IDL |  | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`bindContextMenu0`| Function | Erokhin Ilya, Evstigneev Roman | done |  | |
 |`bindContextMenu1`| Function | Erokhin Ilya, Evstigneev Roman | done |  | |
-|`bindContentCover0`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
-|`bindContentCover1`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
+|`bindContentCover0`| Function | Erokhin Ilya | done | test blocked(blocked IDL) | UT by Vadim Voronov |
+|`bindContentCover1`| Function | Erokhin Ilya | done | test blocked(blocked IDL) | UT by Vadim Voronov |
 |`bindSheet`| Function | Erokhin Ilya | testskipped |test blocked  | UT in progress Vadim Voronov |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done |  | |
 |`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
