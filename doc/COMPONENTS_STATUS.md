@@ -1,4 +1,4 @@
-| Component | Function | Owner | Status (done=merged **with** UT, testskipped=merged **without** UT, blocked=blocked by IDL)|  |issue/comment|
+| Component | Function | Owner | Status (done=merged **with** UT, testskipped=merged **without** UT, blocked=blocked by IDL)| verification status |issue/comment|
 | --------- | -------- | ----- | ------ |------|------|
 |*Root*| *Component* | Tuzhilkin Ivan | testskipped | | implementation is created early by Nikolay Pisanov |
 |`construct`| Function | Tuzhilkin Ivan | testskipped | | implementation is created early by Nikolay Pisanov |
