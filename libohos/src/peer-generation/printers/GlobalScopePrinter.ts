@@ -164,14 +164,14 @@ function fillCommonImports(collector: ImportsCollector, library: PeerLibrary) {
         'wrapCallback',
         'KPointer',
         'toPeerPtr',
+        'MaterializedBase',
+        'NativeBuffer'
     ], '@koalaui/interop')
-    collector.addFeatures(['MaterializedBase'], '@koalaui/interop')
     collector.addFeatures(['unsafeCast'], '@koalaui/common')
     collectDeclItself(library, idl.createReferenceType('Serializer'), collector)
     collectDeclItself(library, idl.createReferenceType('CallbackKind'), collector)
     collector.addFeatures(['int32', 'float32'], '@koalaui/common')
     if (library.language === idl.Language.ARKTS) {
-        collector.addFeatures(['NativeBuffer'], '@koalaui/interop')
         collectDeclItself(library, idl.createReferenceType('Deserializer'), collector)
         importTypeChecker(library, collector)
     }
