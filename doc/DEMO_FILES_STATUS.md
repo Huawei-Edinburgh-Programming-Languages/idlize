@@ -26,7 +26,7 @@
 | CommonBindSheet.test.ets | Ilya Erokhin|
 | CommonBlendMode.test.ets | |
 | CommonBlur.test.ets | |
-| CommonBorder.test.ets | |
+| CommonBorder.test.ets | Pisanov Nikolay |
 | CommonBorderImage.test.ets | |
 | CommonClipMaskAnimation.test.ets | |
 | CommonClipMaskShape.test.ets | |
