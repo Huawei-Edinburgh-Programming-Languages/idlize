@@ -17,12 +17,12 @@
 | ClickEffect.test.ets | |
 | Column.test.ets | |
 | ColumnSplit.test.ets | |
-| CommonAccessibility.test.ets | |
-| CommonAnimateTo.test.ets | |
-| CommonBackdropBlur.test.ets | |
-| CommonBackgroundBrightness.test.ets | |
+| CommonAccessibility.test.ets | Pisanov Nikolay |
+| CommonAnimateTo.test.ets | Pisanov Nikolay |
+| CommonBackdropBlur.test.ets | Pisanov Nikolay |
+| CommonBackgroundBrightness.test.ets | Pisanov Nikolay |
 | CommonBindContentCover.test.ets | Evstigneev Roman|
-| CommonBindPopup.test.ets | |
+| CommonBindPopup.test.ets | Pisanov Nikolay |
 | CommonBindSheet.test.ets | Ilya Erokhin|
 | CommonBlendMode.test.ets | Pisanov Nikolay |
 | CommonBlur.test.ets | Pisanov Nikolay |
