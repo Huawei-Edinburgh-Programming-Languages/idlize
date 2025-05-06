@@ -1,0 +1,3 @@
+package application.BaseContext;
+
+interface BaseContext {};
