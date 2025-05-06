@@ -364,7 +364,7 @@
 |`bindContextMenu1`| Function | Erokhin Ilya, Evstigneev Roman | done |  | |
 |`bindContentCover0`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |`bindContentCover1`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
-|`bindSheet`| Function | Erokhin Ilya | testskipped |  | UT in progress Vadim Voronov, test blocked |
+|`bindSheet`| Function | Erokhin Ilya | testskipped |test blocked  | UT in progress Vadim Voronov |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done |  | |
 |`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`keyboardShortcut`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
