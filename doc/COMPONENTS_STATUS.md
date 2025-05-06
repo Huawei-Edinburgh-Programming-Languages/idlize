@@ -1212,9 +1212,9 @@
 |`arrowModifier`| Function | Maksimov Nikita, Evstigneev Roman | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
 |`optionTextModifier`| Function | Maksimov Nikita, Evstigneev Roman | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
 |`selectedOptionTextModifier`| Function | Maksimov Nikita, Evstigneev Roman | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
-|`dividerStyle`| Function | Maksimov Nikita, Evstigneev Roman | in progress | | API is not present |
-|`avoidance`| Function | Maksimov Nikita, Evstigneev Roman | in progress | | API is not present |
-|`menuOutline`| Function | Maksimov Nikita, Evstigneev Roman | in progress | | API is not present |
+|`dividerStyle`| Function | Evstigneev Roman | in progress | | API is not present |
+|`avoidance`| Function | Evstigneev Roman | in progress | | API is not present |
+|`menuOutline`| Function | Evstigneev Roman | in progress | | API is not present |
 |`menuAlign0` | Function | Samarin Sergey | done |  |  |
 |`menuAlign1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
@@ -2261,8 +2261,8 @@
 |`setTiltX`| Function | Politov Mikhail | done |  | |
 |`getTiltY`| Function | Politov Mikhail | done |  | |
 |`setTiltY`| Function | Politov Mikhail | done |  | |
-|`getRollAngle`| Function | Maksimov Nikita | in progress | | |
-|`setRollAngle`| Function | Maksimov Nikita | in progress | | |
+|`getRollAngle`| Function | | in progress | | |
+|`setRollAngle`| Function | | in progress | | |
 |`getSourceTool`| Function | Tuzhilkin Ivan | done |  | |
 |`setSourceTool`| Function | Politov Mikhail | done |  | |
 |`getDeviceId`| Function | Politov Mikhail | done |  | |
@@ -2438,12 +2438,12 @@
 |`setIntentionCode`| Function | Maksimov Nikita | done | |  KeyEventAccessor::SetIntentionCodeImpl doesn't have sense. |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
-|`getIsNumLockOn`| Function | Maksimov Nikita | in progress | | |
-|`setIsNumLockOn`| Function | Maksimov Nikita | in progress | | |
-|`getIsCapsLockOn`| Function | Maksimov Nikita | in progress | | |
-|`setIsCapsLockOn`| Function | Maksimov Nikita | in progress | | |
-|`getIsScrollLockOn`| Function | Maksimov Nikita | in progress | | |
-|`setIsScrollLockOn`| Function | Maksimov Nikita | in progress | | |
+|`getIsNumLockOn`| Function | | in progress | | |
+|`setIsNumLockOn`| Function | | in progress | | |
+|`getIsCapsLockOn`| Function | | in progress | | |
+|`setIsCapsLockOn`| Function | | in progress | | |
+|`getIsScrollLockOn`| Function | | in progress | | |
+|`setIsScrollLockOn`| Function | | in progress | | |
 |*FocusAxisEvent*| *Class* | Evstigneev Roman | done | | feature: API not present |
 |`ctor`| Function | Evstigneev Roman | done | | |
 |`getAxisMap`| Function | Evstigneev Roman | done | | |
@@ -2731,7 +2731,7 @@
 |`restoreDefault`| Function | Erokhin Ilya | done |  | |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | testskipped |  | |
 |`close`| Function | Tuzhilkin Ivan | testskipped | | can checked only on e2e|
-|*CustomDialogController*| *Class* | Maksimov Nikita | in progress |  | |
+|*CustomDialogController*| *Class* | Maksimov Nikita, Skroba Gleb | in progress |  | |
 |`ctor`| Function |Maksimov Nikita, Skroba Gleb | in progress |  |  |
 |`open`| Function | Maksimov Nikita | testskipped |  |  |
 |`close`| Function | Maksimov Nikita | testskipped |  |   |
