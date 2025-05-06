@@ -31,9 +31,11 @@ import { injectPatch } from '../common';
 
 function collapseReturnTypes(types: idl.IDLType[], language?: Language) {
     let returnType: idl.IDLType = collapseTypes(types)
-    if (idl.isUnionType(returnType) && language && (language == Language.ARKTS || language == Language.TS)) {
-        let newTypes = returnType.types.map(it => idl.isVoidType(it) ? idl.IDLUndefinedType : it)
-        returnType = idl.createUnionType(newTypes)
+    if (idl.isUnionType(returnType) &&
+        (language == Language.ARKTS || language == Language.TS) &&
+        returnType.types.find(idl.isVoidType))
+    {
+        return idl.IDLAnyType
     }
     return returnType
 }
