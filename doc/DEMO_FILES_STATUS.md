@@ -21,9 +21,9 @@
 | CommonAnimateTo.test.ets | |
 | CommonBackdropBlur.test.ets | |
 | CommonBackgroundBrightness.test.ets | |
-| CommonBindContentCover.test.ets | |
+| CommonBindContentCover.test.ets | Evstigneev Roman|
 | CommonBindPopup.test.ets | |
-| CommonBindSheet.test.ets | |
+| CommonBindSheet.test.ets | Ilya Erokhin|
 | CommonBlendMode.test.ets | |
 | CommonBlur.test.ets | |
 | CommonBorder.test.ets | |
@@ -136,7 +136,7 @@
 | SymbolGlyph.test.ets | |
 | SymbolSpan.test.ets | |
 | Tabs.test.ets | |
-| Text.test.ets | |
+| Text.test.ets | Ilya Erokhin|
 | TextArea.test.ets | |
 | TextClock.test.ets | |
 | TextInput.test.ets | |
