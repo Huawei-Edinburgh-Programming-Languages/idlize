@@ -1,5 +1,5 @@
-| FILE | responsible | |
-|  --------- | -------- |
+| FILE | responsible |
+| --------- | -------- |
 | AlphabetIndexer.test.ets | |
 | AspectRatio.test.ets | |
 | AttachDetach.test.ets | |
@@ -72,7 +72,7 @@
 | ForegroundBlurStyle.test.ets | |
 | ForegroundColor.test.ets | |
 | ForegroundEffect.test.ets | |
-| FormLink.test.ets | |
+| FormLink.test.ets | Daryina Olga |
 | Gauge.test.ets | |
 | Grid.test.ets | |
 | GridCol.test.ets | |
@@ -87,7 +87,7 @@
 | Image4.test.ets | |
 | ImageAnimator.test.ets | |
 | ImageSpan.test.ets | |
-| Line.test.ets | |
+| Line.test.ets | Daryina Olga|
 | List.test.ets | |
 | ListItem.test.ets | |
 | ListItemGroup.test.ets | |
@@ -103,31 +103,31 @@
 | Navigator.test.ets | |
 | NestedScroll.test.ets | |
 | OnAreaChange.test.ets | |
-| Panel.test.ets | |
+| Panel.test.ets |Daryina Olga |
 | PasteButton.test.ets | |
-| Path.test.ets | |
+| Path.test.ets |Daryina Olga |
 | PatternLock.test.ets | |
 | Polygon.test.ets | |
 | Polyline.test.ets | |
 | Progress.test.ets | |
 | QRCode.test.ets | |
 | Radio.test.ets | |
-| Rating.test.ets | |
+| Rating.test.ets |Daryina Olga |
 | Refresh.test.ets | |
 | RelativeContainer.test.ets | |
 | RenderGroup.test.ets | |
 | RequestFocusFocusable.test.ets | |
 | RichEditor.test.ets | |
 | RichText.test.ets | |
-| Row.test.ets | |
-| RowSplit.test.ets | |
+| Row.test.ets | Daryina Olga|
+| RowSplit.test.ets | Daryina Olga|
 | Scroll.test.ets | |
 | ScrollBar.test.ets | |
 | ScrollableCommonMethod.test.ets | |
 | Search.test.ets | |
 | Select.test.ets | |
 | Shape.test.ets | |
-| SideBarContainer.test.ets | |
+| SideBarContainer.test.ets | Daryina Olga|
 | Slider.test.ets | |
 | Span.test.ets | |
 | Stack.test.ets | |
