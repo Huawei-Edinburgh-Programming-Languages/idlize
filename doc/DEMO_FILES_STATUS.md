@@ -135,7 +135,7 @@
 | Swiper.test.ets | |
 | SymbolGlyph.test.ets | |
 | SymbolSpan.test.ets | |
-| Tabs.test.ets | |
+| Tabs.test.ets | Skroba Gleb |
 | Text.test.ets | Ilya Erokhin|
 | TextArea.test.ets | |
 | TextClock.test.ets | |
