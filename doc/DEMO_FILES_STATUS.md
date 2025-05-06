@@ -24,13 +24,13 @@
 | CommonBindContentCover.test.ets | Evstigneev Roman|
 | CommonBindPopup.test.ets | |
 | CommonBindSheet.test.ets | Ilya Erokhin|
-| CommonBlendMode.test.ets | |
-| CommonBlur.test.ets | |
+| CommonBlendMode.test.ets | Pisanov Nikolay |
+| CommonBlur.test.ets | Pisanov Nikolay |
 | CommonBorder.test.ets | Pisanov Nikolay |
-| CommonBorderImage.test.ets | |
-| CommonClipMaskAnimation.test.ets | |
-| CommonClipMaskShape.test.ets | |
-| CommonColorGradient.test.ets | |
+| CommonBorderImage.test.ets | Pisanov Nikolay |
+| CommonClipMaskAnimation.test.ets | Pisanov Nikolay |
+| CommonClipMaskShape.test.ets | Pisanov Nikolay |
+| CommonColorGradient.test.ets | Pisanov Nikolay |
 | CommonCustomProperty.test.ets | |
 | CommonDirectionAlign.test.ets | |
 | CommonDraggableDragPreviewOptionsOnDragStartEnd.test.ets | |
