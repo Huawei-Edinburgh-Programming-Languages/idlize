@@ -7,7 +7,7 @@
 | Badge.test.ets | |
 | BaseSpan.test.ets | |
 | Blank.test.ets | |
-| Button.test.ets | |
+| Button.test.ets | Tuzhilkin Ivan |
 | CalendarPicker.test.ets | |
 | Canvas.test.ets | |
 | Checkbox.test.ets | |
