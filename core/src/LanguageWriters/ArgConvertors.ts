@@ -31,7 +31,7 @@ import { RuntimeType } from "./common";
 import { generatorConfiguration, generatorTypePrefix } from "../config"
 import { LibraryInterface } from "../LibraryInterface";
 import { hashCodeFromString, warn } from "../util";
-import { UnionRuntimeTypeChecker } from "../peer-generation/unions";
+import { flattenUnionType, UnionRuntimeTypeChecker } from "../peer-generation/unions";
 import { CppConvertor, CppNameConvertor } from "./convertors/CppConvertors";
 import { createEmptyReferenceResolver, ReferenceResolver } from "../peer-generation/ReferenceResolver";
 import { PrimitiveTypesInstance } from "../peer-generation/PrimitiveType";
@@ -1068,11 +1068,11 @@ export class UnionConvertor extends BaseArgConvertor { //
             return { expr, stmt }
         })
         statements.push(writer.makeMultiBranchCondition(branches, writer.makeThrowError(`One of the branches for ${bufferName} has to be chosen through deserialisation.`)))
-        statements.push(assigneer(writer.makeCast(writer.makeString(bufferName), this.type)))
+        statements.push(assigneer(writer.makeCast(writer.makeString(bufferName), this.nativeType())))
         return new BlockStatement(statements, false)
     }
     nativeType(): idl.IDLType {
-        return this.type
+        return flattenUnionType(this.library, this.type)
     }
     interopType(): idl.IDLType {
         throw new Error("Union")

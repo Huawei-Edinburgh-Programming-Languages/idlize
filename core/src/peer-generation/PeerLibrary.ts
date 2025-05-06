@@ -475,12 +475,12 @@ export class PeerLibrary implements LibraryInterface {
             case idl.IDLVoidType: return idl.IDLVoidType
             case idl.IDLUndefinedType: return idl.IDLUndefinedType
             case idl.IDLUnknownType: return ArkCustomObject
-            case idl.IDLObjectType: return ArkCustomObject
+            // case idl.IDLObjectType: return ArkCustomObject
         }
         const typeName = idl.isNamedNode(type) ? type.name : undefined
         switch (typeName) {
             case "object":
-            case "Object": return ArkCustomObject
+            case "Object": return idl.IDLObjectType
         }
         if (idl.isReferenceType(type)) {
             // TODO: remove all this!

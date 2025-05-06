@@ -5,7 +5,6 @@
         "RepeatInterface",
         "WrappedBuilder",
         "ContentModifier",
-        "CommonConfiguration",
         "wrapBuilder",
         "IMonitorValue",
         "IMonitor",

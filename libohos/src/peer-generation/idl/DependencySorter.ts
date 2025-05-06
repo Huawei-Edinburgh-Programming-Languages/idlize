@@ -20,7 +20,7 @@ import { flattenUnionType, maybeTransformManagedCallback } from "@idlizer/core";
 
 class SorterDependenciesCollector implements NodeConvertor<idl.IDLNode[]> {
     constructor(
-        public library: LibraryInterface, 
+        public library: LibraryInterface,
         private doUnionFlattening: boolean)
     {}
 
@@ -189,7 +189,6 @@ export class DependencySorter {
         }
     }
 
-    // Algorithm is broken! And it is not Khan's algorithm anymore!
     // Kahn's algorithm.
     getToposorted(): idl.IDLNode[] {
         let result = new Set<idl.IDLNode>
@@ -219,7 +218,6 @@ export class DependencySorter {
                 broken.forEach(it => {
                     result.add(it)
                 })
-                break
             }
             input = broken
         }

@@ -1452,6 +1452,16 @@ export function clone<T extends IDLNode>(node:T): T {
     }
 }
 
+export function hasTypeParameters(entry:IDLEntry): boolean {
+    let foundTypeParameter = false
+    forEachChild(entry, n => {
+        if (isTypeParameterType(n)) {
+            foundTypeParameter = true
+        }
+    })
+    return foundTypeParameter
+}
+
 export function escapeIDLKeyword(name: string): string {
     return name + (IDLKeywords.has(name) ? "_" : "")
 }

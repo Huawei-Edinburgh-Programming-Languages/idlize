@@ -370,6 +370,9 @@ class DeserializeCallbacksVisitor {
                     writer.print(`switch (kind) {`)
                     writer.pushIndent()
                     for (const callback of callbacks) {
+                        if (this.isGenericCallback(callback)) {
+                            continue
+                        }
                         const args = writer.language === Language.CPP
                             ? [`vmContext`, `thisArray`, `thisLength`]
                             : [`thisDeserializer`]

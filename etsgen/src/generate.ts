@@ -327,7 +327,11 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     visitEnumDeclaration(node: arkts.TSEnumDeclaration): arkts.TSEnumDeclaration {
-        let result = idl.createEnum(node.key!.name, [], {})
+        const name = node.key!.name
+        if (this.config.DeletedDeclarations.includes(name)) {
+            return node
+        }
+        let result = idl.createEnum(name, [], {})
         result.elements =
             node.members.map(it => {
                 let element = (it as arkts.TSEnumMember)
@@ -510,6 +514,9 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
     visitClassDeclaration(declaration: arkts.ClassDeclaration): arkts.ClassDeclaration {
         const name = declaration.definition!.ident!.name
+        if (this.config.DeletedDeclarations.includes(name)) {
+            return declaration
+        }
         const definition = declaration.definition!
         const { set:paramsSet, parameters } = this.extractTypeParameters(definition.typeParams)
         this.withTypeParamContext(paramsSet, () => {
@@ -559,6 +566,9 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
     visitInterfaceDeclaration(declaration: arkts.InterfaceDecl | arkts.TSInterfaceDeclaration): arkts.InterfaceDecl | arkts.TSInterfaceDeclaration {
         const name = declaration.id!.name
+        if (this.config.DeletedDeclarations.includes(name)) {
+            return declaration
+        }
         const { set:paramsSet, parameters } = this.extractTypeParameters(declaration.typeParams)
         this.withTypeParamContext(paramsSet, () => {
             const inheritance: idl.IDLReferenceType[] = []
@@ -625,7 +635,11 @@ class IDLVisitor extends arkts.AbstractVisitor {
         const prop = idl.createProperty((property.key as arkts.Identifier).name, this.serializeType(property.typeAnnotation!))
         if (arkts.hasModifierFlag(property, arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_OPTIONAL)) {
             prop.extendedAttributes ??= []
+            prop.isOptional = true
             prop.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Optional })
+        }
+        if (arkts.hasModifierFlag(property, arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_STATIC)) {
+            prop.isStatic = true
         }
         return prop
     }
@@ -916,6 +930,36 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 if (entry.name === componentAttributeRef.name) {
                     entry.extendedAttributes ??= []
                     entry.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Component })
+                    if (idl.isInterface(entry)) {
+                        const methods:idl.IDLMethod[] = []
+                        const properties: idl.IDLProperty[] = []
+                        entry.methods.forEach(method => {
+                            if (method.isStatic) {
+                                methods.push(method)
+                                return
+                            }
+                            if (method.returnType === idl.IDLThisType && method.parameters.length === 1) {
+                                properties.push(
+                                    idl.createProperty(
+                                        method.name,
+                                        method.parameters[0].type,
+                                        false,
+                                        false,
+                                        false,
+                                        {
+                                            extendedAttributes: (method.extendedAttributes ?? []).concat({ name: idl.IDLExtendedAttributes.CommonMethod }),
+                                            documentation: method.documentation,
+                                            fileName: method.fileName
+                                        }
+                                    )
+                                )
+                                return
+                            }
+                            methods.push(method)
+                        })
+                        entry.methods = methods
+                        entry.properties = properties.concat(entry.properties)
+                    }
                 }
                 processedEntries.push(entry)
             })

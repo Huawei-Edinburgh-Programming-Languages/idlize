@@ -210,7 +210,7 @@ class IDLDeserializer {
         }
         return result
     }
-    toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extAttrs?: webidl2.ExtendedAttribute[]): idl.IDLType {
+    toIDLType(file: string, type: webidl2.IDLTypeDescription | string, extAttrs?: webidl2.ExtendedAttribute[], suggestedName?:string): idl.IDLType {
         if (typeof type === "string") {
             // is it IDLStringType?
             const refType = idl.createReferenceType(type)
@@ -233,7 +233,7 @@ class IDLDeserializer {
                 types = types.filter(it => it !== idl.IDLUndefinedType)
                 return this.withInfo(type, idl.createOptionalType(collapseTypes(types)))
             }
-            const name = generateSyntheticUnionName(types)
+            const name = suggestedName ?? generateSyntheticUnionName(types)
             return this.withInfo(type, idl.createUnionType(types, name))
         }
         if (isSingleTypeDescription(type)) {
@@ -390,7 +390,7 @@ class IDLDeserializer {
         this.enterGenericScope(generics)
         const result = this.withInfo(node, idl.createTypedef(
             node.name,
-            this.toIDLType(file, node.idlType, undefined),
+            this.toIDLType(file, node.idlType, undefined, node.name),
             generics,
             {
                 extendedAttributes: this.toExtendedAttributes(node.extAttrs),

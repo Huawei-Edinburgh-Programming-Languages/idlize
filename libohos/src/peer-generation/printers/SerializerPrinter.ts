@@ -314,6 +314,9 @@ class DeserializerPrinter {
     }
 
     private generateCallbackDeserializer(target: idl.IDLCallback): void {
+        if (idl.hasTypeParameters(target)) {
+            return
+        }
         this.continuationValueHolders.add(target.returnType)
         if (this.writer.language === Language.CPP)
             // callbacks in native are just CallbackResource while in managed we need to convert them to
