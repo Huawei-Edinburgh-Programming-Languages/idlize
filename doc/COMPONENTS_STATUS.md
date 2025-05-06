@@ -2261,8 +2261,8 @@
 |`setTiltX`| Function | Politov Mikhail | done |  | |
 |`getTiltY`| Function | Politov Mikhail | done |  | |
 |`setTiltY`| Function | Politov Mikhail | done |  | |
-|`getRollAngle`| Function | | in progress | | |
-|`setRollAngle`| Function | | in progress | | |
+|`getRollAngle`| Function | | | | |
+|`setRollAngle`| Function | | | | |
 |`getSourceTool`| Function | Tuzhilkin Ivan | done |  | |
 |`setSourceTool`| Function | Politov Mikhail | done |  | |
 |`getDeviceId`| Function | Politov Mikhail | done |  | |
@@ -2438,12 +2438,12 @@
 |`setIntentionCode`| Function | Maksimov Nikita | done | |  KeyEventAccessor::SetIntentionCodeImpl doesn't have sense. |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
-|`getIsNumLockOn`| Function | | in progress | | |
-|`setIsNumLockOn`| Function | | in progress | | |
-|`getIsCapsLockOn`| Function | | in progress | | |
-|`setIsCapsLockOn`| Function | | in progress | | |
-|`getIsScrollLockOn`| Function | | in progress | | |
-|`setIsScrollLockOn`| Function | | in progress | | |
+|`getIsNumLockOn`| Function | | | | |
+|`setIsNumLockOn`| Function | | | | |
+|`getIsCapsLockOn`| Function | | | | |
+|`setIsCapsLockOn`| Function | | | | |
+|`getIsScrollLockOn`| Function | | | | |
+|`setIsScrollLockOn`| Function | | | | |
 |*FocusAxisEvent*| *Class* | Evstigneev Roman | done | | feature: API not present |
 |`ctor`| Function | Evstigneev Roman | done | | |
 |`getAxisMap`| Function | Evstigneev Roman | done | | |
