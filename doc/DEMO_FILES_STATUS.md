@@ -1,155 +1,156 @@
-|FILE | responsible | |
-|AlphabetIndexer.test.ets| |
-|AspectRatio.test.ets| |
-|AttachDetach.test.ets| |
-|BackgroundBlurEffects.test.ets| |
-|Badge.test.ets| |
-|BaseSpan.test.ets| |
-|Blank.test.ets| |
-|Button.test.ets| |
-|CalendarPicker.test.ets| |
-|Canvas.test.ets| |
-|Checkbox.test.ets| |
-|CheckboxGroup.test.ets| |
-|Circle.test.ets| |
-|Click.test.ets| |
-|ClickEffect.test.ets| |
-|Column.test.ets| |
-|ColumnSplit.test.ets| |
-|CommonAccessibility.test.ets| |
-|CommonAnimateTo.test.ets| |
-|CommonBackdropBlur.test.ets| |
-|CommonBackgroundBrightness.test.ets| |
-|CommonBindContentCover.test.ets| |
-|CommonBindPopup.test.ets| |
-|CommonBindSheet.test.ets| |
-|CommonBlendMode.test.ets| |
-|CommonBlur.test.ets| |
-|CommonBorder.test.ets| |
-|CommonBorderImage.test.ets| |
-|CommonClipMaskAnimation.test.ets| |
-|CommonClipMaskShape.test.ets| |
-|CommonColorGradient.test.ets| |
-|CommonCustomProperty.test.ets| |
-|CommonDirectionAlign.test.ets| |
-|CommonDraggableDragPreviewOptionsOnDragStartEnd.test.ets| |
-|CommonDrawModifier.test.ets| |
-|CommonGeometryTransition.test.ets| |
-|CommonHitTestBehavior.test.ets| |
-|CommonLayoutWeight.test.ets| |
-|CommonLinearGradientBlur.test.ets| |
-|CommonMotionPath.test.ets| |
-|CommonObscured.test.ets| |
-|CommonOnChildTouchTest.test.ets| |
-|CommonOnVisibleAreaChange.test.ets| |
-|CommonOutline.test.ets| |
-|CommonOverlay.test.ets| |
-|CommonPart1.test.ets| |
-|CommonPart2.test.ets| |
-|CommonPixelRound.test.ets| |
-|CommonPositionOffsetMarkAnchor.test.ets| |
-|CommonRenderFit.test.ets| |
-|CommonSafeArea.test.ets| |
-|CommonSphericalEffectLightUpPixelStretch.test.ets| |
-|CommonSystemBarEffect.test.ets| |
-|CommonTouchAble.test.ets| |
-|Component3D.test.ets| |
-|ContainerSpan.test.ets| |
-|Counter.test.ets| |
-|CustomComponentBox.test.ets| |
-|DataPanel.test.ets| |
-|DatePicker.test.ets| |
-|DisplayPriority.test.ets| |
-|Divider.test.ets| |
-|EffectComponent.test.ets| |
-|Ellipse.test.ets| |
-|Flex.test.ets| |
-|FlexCommonAttributes.test.ets| |
-|FocusStopFocuBox.test.ets| |
-|FocusTraversalGroup.test.ets| |
-|FocusTraversalToComponentsEffect.test.ets| |
-|ForegroundBlurStyle.test.ets| |
-|ForegroundColor.test.ets| |
-|ForegroundEffect.test.ets| |
-|FormLink.test.ets| |
-|Gauge.test.ets| |
-|Grid.test.ets| |
-|GridCol.test.ets| |
-|GridContainerCommonAttributes.test.ets| |
-|GridItem.test.ets| |
-|GridRow.test.ets| |
-|HoverEvent.test.ets| |
-|HyperLink.test.ets| |
-|Image.test.ets| |
-|Image2.test.ets| |
-|Image3ColorFilter.test.ets| |
-|Image4.test.ets| |
-|ImageAnimator.test.ets| |
-|ImageSpan.test.ets| |
-|Line.test.ets| |
-|List.test.ets| |
-|ListItem.test.ets| |
-|ListItemGroup.test.ets| |
-|LoadingProgress.test.ets| |
-|LocationButton.test.ets| |
-|Marquee.test.ets| |
-|Menu.test.ets| |
-|MenuItem.test.ets| |
-|MenuItemGroup.test.ets| |
-|MotionBlur.test.ets| |
-|NavDestination.test.ets| |
-|Navigation.test.ets| |
-|Navigator.test.ets| |
-|NestedScroll.test.ets| |
-|OnAreaChange.test.ets| |
-|Panel.test.ets| |
-|PasteButton.test.ets| |
-|Path.test.ets| |
-|PatternLock.test.ets| |
-|Polygon.test.ets| |
-|Polyline.test.ets| |
-|Progress.test.ets| |
-|QRCode.test.ets| |
-|Radio.test.ets| |
-|Rating.test.ets| |
-|Refresh.test.ets| |
-|RelativeContainer.test.ets| |
-|RenderGroup.test.ets| |
-|RequestFocusFocusable.test.ets| |
-|RichEditor.test.ets| |
-|RichText.test.ets| |
-|Row.test.ets| |
-|RowSplit.test.ets| |
-|Scroll.test.ets| |
-|ScrollBar.test.ets| |
-|ScrollableCommonMethod.test.ets| |
-|Search.test.ets| |
-|Select.test.ets| |
-|Shape.test.ets| |
-|SideBarContainer.test.ets| |
-|Slider.test.ets| |
-|Span.test.ets| |
-|Stack.test.ets| |
-|Stepper.test.ets| |
-|Swiper.test.ets| |
-|SymbolGlyph.test.ets| |
-|SymbolSpan.test.ets| |
-|Tabs.test.ets| |
-|Text.test.ets| |
-|TextArea.test.ets| |
-|TextClock.test.ets| |
-|TextInput.test.ets| |
-|TextPicker.test.ets| |
-|TextTimer.test.ets| |
-|TimePicker.test.ets| |
-|Toggle.test.ets| |
-|TransformRotateScaleTranslate.test.ets| |
-|TransitionEffect.test.ets| |
-|UseShadowBatching.test.ets| |
-|Video.test.ets| |
-|Visibility.test.ets| |
-|WaterFlow.test.ets| |
-|WaterFlowDataSource.ets| |
-|Web.test.ets| |
-|XComponent.test.ets| |
-|ZIndex.test.ets| |
+| FILE | responsible | |
+|  --------- | -------- |
+| AlphabetIndexer.test.ets | |
+| AspectRatio.test.ets | |
+| AttachDetach.test.ets | |
+| BackgroundBlurEffects.test.ets | |
+| Badge.test.ets | |
+| BaseSpan.test.ets | |
+| Blank.test.ets | |
+| Button.test.ets | |
+| CalendarPicker.test.ets | |
+| Canvas.test.ets | |
+| Checkbox.test.ets | |
+| CheckboxGroup.test.ets | |
+| Circle.test.ets | |
+| Click.test.ets | |
+| ClickEffect.test.ets | |
+| Column.test.ets | |
+| ColumnSplit.test.ets | |
+| CommonAccessibility.test.ets | |
+| CommonAnimateTo.test.ets | |
+| CommonBackdropBlur.test.ets | |
+| CommonBackgroundBrightness.test.ets | |
+| CommonBindContentCover.test.ets | |
+| CommonBindPopup.test.ets | |
+| CommonBindSheet.test.ets | |
+| CommonBlendMode.test.ets | |
+| CommonBlur.test.ets | |
+| CommonBorder.test.ets | |
+| CommonBorderImage.test.ets | |
+| CommonClipMaskAnimation.test.ets | |
+| CommonClipMaskShape.test.ets | |
+| CommonColorGradient.test.ets | |
+| CommonCustomProperty.test.ets | |
+| CommonDirectionAlign.test.ets | |
+| CommonDraggableDragPreviewOptionsOnDragStartEnd.test.ets | |
+| CommonDrawModifier.test.ets | |
+| CommonGeometryTransition.test.ets | |
+| CommonHitTestBehavior.test.ets | |
+| CommonLayoutWeight.test.ets | |
+| CommonLinearGradientBlur.test.ets | |
+| CommonMotionPath.test.ets | |
+| CommonObscured.test.ets | |
+| CommonOnChildTouchTest.test.ets | |
+| CommonOnVisibleAreaChange.test.ets | |
+| CommonOutline.test.ets | |
+| CommonOverlay.test.ets | |
+| CommonPart1.test.ets | |
+| CommonPart2.test.ets | |
+| CommonPixelRound.test.ets | |
+| CommonPositionOffsetMarkAnchor.test.ets | |
+| CommonRenderFit.test.ets | |
+| CommonSafeArea.test.ets | |
+| CommonSphericalEffectLightUpPixelStretch.test.ets | |
+| CommonSystemBarEffect.test.ets | |
+| CommonTouchAble.test.ets | |
+| Component3D.test.ets | |
+| ContainerSpan.test.ets | |
+| Counter.test.ets | |
+| CustomComponentBox.test.ets | |
+| DataPanel.test.ets | |
+| DatePicker.test.ets | |
+| DisplayPriority.test.ets | |
+| Divider.test.ets | |
+| EffectComponent.test.ets | |
+| Ellipse.test.ets | |
+| Flex.test.ets | |
+| FlexCommonAttributes.test.ets | |
+| FocusStopFocuBox.test.ets | |
+| FocusTraversalGroup.test.ets | |
+| FocusTraversalToComponentsEffect.test.ets | |
+| ForegroundBlurStyle.test.ets | |
+| ForegroundColor.test.ets | |
+| ForegroundEffect.test.ets | |
+| FormLink.test.ets | |
+| Gauge.test.ets | |
+| Grid.test.ets | |
+| GridCol.test.ets | |
+| GridContainerCommonAttributes.test.ets | |
+| GridItem.test.ets | |
+| GridRow.test.ets | |
+| HoverEvent.test.ets | |
+| HyperLink.test.ets | |
+| Image.test.ets | |
+| Image2.test.ets | |
+| Image3ColorFilter.test.ets | |
+| Image4.test.ets | |
+| ImageAnimator.test.ets | |
+| ImageSpan.test.ets | |
+| Line.test.ets | |
+| List.test.ets | |
+| ListItem.test.ets | |
+| ListItemGroup.test.ets | |
+| LoadingProgress.test.ets | |
+| LocationButton.test.ets | |
+| Marquee.test.ets | |
+| Menu.test.ets | |
+| MenuItem.test.ets | |
+| MenuItemGroup.test.ets | |
+| MotionBlur.test.ets | |
+| NavDestination.test.ets | |
+| Navigation.test.ets | |
+| Navigator.test.ets | |
+| NestedScroll.test.ets | |
+| OnAreaChange.test.ets | |
+| Panel.test.ets | |
+| PasteButton.test.ets | |
+| Path.test.ets | |
+| PatternLock.test.ets | |
+| Polygon.test.ets | |
+| Polyline.test.ets | |
+| Progress.test.ets | |
+| QRCode.test.ets | |
+| Radio.test.ets | |
+| Rating.test.ets | |
+| Refresh.test.ets | |
+| RelativeContainer.test.ets | |
+| RenderGroup.test.ets | |
+| RequestFocusFocusable.test.ets | |
+| RichEditor.test.ets | |
+| RichText.test.ets | |
+| Row.test.ets | |
+| RowSplit.test.ets | |
+| Scroll.test.ets | |
+| ScrollBar.test.ets | |
+| ScrollableCommonMethod.test.ets | |
+| Search.test.ets | |
+| Select.test.ets | |
+| Shape.test.ets | |
+| SideBarContainer.test.ets | |
+| Slider.test.ets | |
+| Span.test.ets | |
+| Stack.test.ets | |
+| Stepper.test.ets | |
+| Swiper.test.ets | |
+| SymbolGlyph.test.ets | |
+| SymbolSpan.test.ets | |
+| Tabs.test.ets | |
+| Text.test.ets | |
+| TextArea.test.ets | |
+| TextClock.test.ets | |
+| TextInput.test.ets | |
+| TextPicker.test.ets | |
+| TextTimer.test.ets | |
+| TimePicker.test.ets | |
+| Toggle.test.ets | |
+| TransformRotateScaleTranslate.test.ets | |
+| TransitionEffect.test.ets | |
+| UseShadowBatching.test.ets | |
+| Video.test.ets | |
+| Visibility.test.ets | |
+| WaterFlow.test.ets | |
+| WaterFlowDataSource.ets | |
+| Web.test.ets | |
+| XComponent.test.ets | |
+| ZIndex.test.ets | |
