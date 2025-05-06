@@ -932,7 +932,6 @@ class IDLVisitor extends arkts.AbstractVisitor {
             entries.forEach(entry => {
                 if (idl.isNamespace(entry)) {
                     entry.members = removeDuplicatedByScope(entry.members)
-                    return
                 }
                 const count = namesCount.get(entry.name)!
                 if (count > 1) {
