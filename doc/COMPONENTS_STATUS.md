@@ -1411,52 +1411,52 @@
 |`onWillShow`| Function |Evstigneev Roman | done |  |  |
 |`onWillHide`| Function |Evstigneev Roman | done |  |  |
 |*Text*| *Component* | Samarin Sergey | blocked IDL |  | |
-|`construct`| Function |  Kirill Kirichenko | done |  |  |
-|`setTextOptions`| Function | Kirill Kirichenko | done |  |  |
-|`font0`| Function |Samarin Sergey | done |  |  |
-|`font1`| Function |Samarin Sergey | done |  |  |
-|`fontColor`| Function |Samarin Sergey | done |  |  |
-|`fontSize`| Function |Samarin Sergey | done |  |  |
-|`minFontSize`| Function |Samarin Sergey | done |  |  |
-|`maxFontSize`| Function |Samarin Sergey | done |  |  |
-|`minFontScale`| Function |Samarin Sergey | done |  |  |
-|`maxFontScale`| Function |Samarin Sergey | done |  |  |
-|`fontStyle`| Function |Samarin Sergey | done |  |  |
-|`fontWeight0`| Function | Samarin Sergey | done |  |  |
-|`fontWeight1`| Function |Samarin Sergey | done |  |  |
-|`lineSpacing`| Function |Samarin Sergey | done |  |  |
-|`textAlign`| Function |Samarin Sergey | done |  |  |
-|`lineHeight`| Function |Samarin Sergey | done |  |  |
-|`textOverflow`| Function |Samarin Sergey | done |  |  |
-|`fontFamily`| Function |Samarin Sergey | done |  |  |
-|`maxLines`| Function |Samarin Sergey | done |  |  |
-|`decoration`| Function |Samarin Sergey | done |  |  |
-|`letterSpacing`| Function |Samarin Sergey | done |  |  |
-|`textCase`| Function |Samarin Sergey | done |  |  |
-|`baselineOffset`| Function |Samarin Sergey | done |  |  |
-|`copyOption`| Function |Samarin Sergey | done |  |  |
-|`draggable`| Function |Samarin Sergey | done |  |  |
-|`textShadow`| Function |Samarin Sergey | done |  |  |
-|`heightAdaptivePolicy`| Function |Samarin Sergey | done |  |  |
-|`textIndent`| Function |Samarin Sergey | done |  |  |
-|`wordBreak`| Function | Samarin Sergey | done |  |  |
-|`lineBreakStrategy`| Function |Samarin Sergey | done |  |  |
-|`onCopy`| Function | Kirill Kirichenko | done |  |  |
-|`caretColor`| Function |Samarin Sergey | done |  | |
-|`selectedBackgroundColor`| Function |Samarin Sergey | done |  | |
-|`ellipsisMode`| Function |Samarin Sergey | done |  |  |
-|`enableDataDetector`| Function | Kirill Kirichenko | done |  |  |
-|`dataDetectorConfig`| Function | Samarin Sergey | done |  | |
-|`onTextSelectionChange`| Function | Kirill Kirichenko | done |  |  |
-|`fontFeature`| Function |Samarin Sergey | done |  |  |
+|`construct`| Function |  Kirill Kirichenko | done | pass |  |
+|`setTextOptions`| Function | Kirill Kirichenko | done | pass  |  |
+|`font0`| Function |Samarin Sergey | done | failed |  |
+|`font1`| Function |Samarin Sergey | done | failed |  |
+|`fontColor`| Function |Samarin Sergey | done | pass |  |
+|`fontSize`| Function |Samarin Sergey | done | pass |  |
+|`minFontSize`| Function |Samarin Sergey | done | pass |  |
+|`maxFontSize`| Function |Samarin Sergey | done | pass |  |
+|`minFontScale`| Function |Samarin Sergey | done | pass |  |
+|`maxFontScale`| Function |Samarin Sergey | done | pass |  |
+|`fontStyle`| Function |Samarin Sergey | done | pass |  |
+|`fontWeight0`| Function | Samarin Sergey | done | failed |  |
+|`fontWeight1`| Function |Samarin Sergey | done | failed |  |
+|`lineSpacing`| Function |Samarin Sergey | done | pass |  |
+|`textAlign`| Function |Samarin Sergey | done | pass |  |
+|`lineHeight`| Function |Samarin Sergey | done | pass |  |
+|`textOverflow`| Function |Samarin Sergey | done | pass |  |
+|`fontFamily`| Function |Samarin Sergey | done | failed |  |
+|`maxLines`| Function |Samarin Sergey | done | pass |  |
+|`decoration`| Function |Samarin Sergey | done | pass |  |
+|`letterSpacing`| Function |Samarin Sergey | done | pass |  |
+|`textCase`| Function |Samarin Sergey | done | pass |  |
+|`baselineOffset`| Function |Samarin Sergey | done | pass |  |
+|`copyOption`| Function |Samarin Sergey | done | pass |  |
+|`draggable`| Function |Samarin Sergey | done | pass |  |
+|`textShadow`| Function |Samarin Sergey | done | pass |  |
+|`heightAdaptivePolicy`| Function |Samarin Sergey | done | pass |  |
+|`textIndent`| Function |Samarin Sergey | done | pass |  |
+|`wordBreak`| Function | Samarin Sergey | done | pass |  |
+|`lineBreakStrategy`| Function |Samarin Sergey | done | pass |  |
+|`onCopy`| Function | Kirill Kirichenko | done | pass |  |
+|`caretColor`| Function |Samarin Sergey | done | pass |  |
+|`selectedBackgroundColor`| Function |Samarin Sergey | done | pass |  |
+|`ellipsisMode`| Function |Samarin Sergey | done | pass |  |
+|`enableDataDetector`| Function | Kirill Kirichenko | done | pass |  |
+|`dataDetectorConfig`| Function | Samarin Sergey | done | pass |  |
+|`onTextSelectionChange`| Function | Kirill Kirichenko | done | pass |  |
+|`fontFeature`| Function |Samarin Sergey | done | pass |  |
 |`marqueeOptions`| Function | Samarin Sergey | done |  | |
 |`onMarqueeStateChange`| Function | Samarin Sergey | done |  | |
-|`privacySensitive`| Function |Samarin Sergey | done |  |  |
-|`textSelectable`| Function |Samarin Sergey | done |  |  |
+|`privacySensitive`| Function |Samarin Sergey | done | pass |  |
+|`textSelectable`| Function |Samarin Sergey | done | pass |  |
 |`editMenuOptions`| Function | Pavelyev Ivan | done |  |  |
-|`halfLeading`| Function |Samarin Sergey | done |  |  |
+|`halfLeading`| Function |Samarin Sergey | done | pass |  |
 |`enableHapticFeedback`| Function |Samarin Sergey | done |  |  |
-|`selection`| Function |Samarin Sergey | done |  | |
+|`selection`| Function |Samarin Sergey | done | pass | |
 |`bindSelectionMenu`| Function | Lobah Mikhail | done |  |  |
 |*TextArea*|*Component*|Tuzhilkin Ivan| blocked IDL |  |  |
 |`construct`| Function | Tuzhilkin Ivan| done |  | |
