@@ -1022,11 +1022,11 @@
 |`bindSelectionMenu`| Function | Dmitry A Smirnov| done |  |  |
 |`customKeyboard`| Function | Dmitry A Smirnov| done |  |  |
 |`placeholder`| Function | Dudkin Sergey| done |  |  |
-|*RichText*| *Component* | Dudkin Sergey| done |  |  |
-|`construct`| Function | Dudkin Sergey| done |  |  |
-|`setRichTextOptions`| Function | Dudkin Sergey| done |  |  |
-|`onStart`| Function | Dudkin Sergey| done |  |  |
-|`onComplete`| Function | Dudkin Sergey| done |  |  |
+|*RichText*| *Component* | Dudkin Sergey| done | pass |  |
+|`construct`| Function | Dudkin Sergey| done | pass |  |
+|`setRichTextOptions`| Function | Dudkin Sergey| done | pass |  |
+|`onStart`| Function | Dudkin Sergey| done | pass |  |
+|`onComplete`| Function | Dudkin Sergey| done | pass |  |
 |*RootScene*| *Component* | Spirin Andrey | done |  | |
 |`construct`| Function |Spirin Andrey | done |  | |
 |`setRootSceneOptions`| Function | Spirin Andrey | done |  | |
