@@ -1303,41 +1303,41 @@
 |`nextLabel`| Function | Morozov Sergey | done |  | |
 |`status`| Function | Morozov Sergey | done |  | |
 |*Swiper*| *Component* | Skroba Gleb | done |  |  |
-|`construct`| Function |Skroba Gleb | done |  |  |
-|`setSwiperOptions`| Function | Skroba Gleb | done |  |  |
-|`index`| Function | Skroba Gleb| done |  |  |
-|`autoPlay0`| Function | Skroba Gleb| done |  |  |
-|`autoPlay1`| Function | Skroba Gleb| done |  |  |
-|`interval`| Function | Skroba Gleb| done |  |  |
-|`indicator0`| Function |  Skroba Gleb| done |  |  |
-|`indicator1`| Function | Skroba Gleb| done |  |  |
-|`loop`| Function | Skroba Gleb| done |  |  |
-|`duration`| Function | Skroba Gleb | done |  |  |
+|`construct`| Function |Skroba Gleb | done | pass  |  |
+|`setSwiperOptions`| Function | Skroba Gleb | done | pass  |  |
+|`index`| Function | Skroba Gleb| done | pass |  |
+|`autoPlay0`| Function | Skroba Gleb| done | pass |  |
+|`autoPlay1`| Function | Skroba Gleb| done | pass |  |
+|`interval`| Function | Skroba Gleb| done | pass |  |
+|`indicator0`| Function |  Skroba Gleb| done | pass |  |
+|`indicator1`| Function | Skroba Gleb| done | pass |  |
+|`loop`| Function | Skroba Gleb| done | pass |  |
+|`duration`| Function | Skroba Gleb | done | pass |  |
 |`vertical`| Function | Skroba Gleb | done |  |  |
-|`itemSpace`| Function | Skroba Gleb | done |  |  |
-|`displayMode`| Function | Skroba Gleb| done |  |  |
-|`cachedCount0`| Function | Skroba Gleb| done |  |  |
-|`cachedCount1`| Function | Skroba Gleb| done |  |  |
+|`itemSpace`| Function | Skroba Gleb | done | pass |  |
+|`displayMode`| Function | Skroba Gleb| done | pass |  |
+|`cachedCount0`| Function | Skroba Gleb| done | pass |  |
+|`cachedCount1`| Function | Skroba Gleb| done | pass |  |
 |`effectMode`| Function | Skroba Gleb | done |  |  |
 |`disableSwipe`| Function | Skroba Gleb| done |  |  |
-|`curve`| Function | Skroba Gleb| done |  |  |
-|`onChange`| Function | Skroba Gleb| done |  |  |
-|`onSelected`| Function | Pavelyev Ivan | done | | |
+|`curve`| Function | Skroba Gleb| done | pass |  |
+|`onChange`| Function | Skroba Gleb| done | failed |  |
+|`onSelected`| Function | Pavelyev Ivan | done | failed | |
 |`indicatorStyle`| Function | Skroba Gleb| done |  |deprecated?  |
-|`onUnselected`| Function | Pavelyev Ivan | done | | |
+|`onUnselected`| Function | Pavelyev Ivan | done | failed | |
 |`onAnimationStart`| Function | Skroba Gleb| done |  |  |
 |`onAnimationEnd`| Function | Skroba Gleb | done |  |  |
 |`onGestureSwipe`| Function | Skroba Gleb | done |  |  |
-|`nestedScroll`| Function | Skroba Gleb| testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3ULZ |
+|`nestedScroll`| Function | Skroba Gleb| testskipped | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3ULZ |
 |`customContentTransition`| Function | Skroba Gleb | done |  | |
 |`onContentDidScroll`| Function | Skroba Gleb| done |  | |
-|`indicatorInteractive`| Function | Skroba Gleb| done |  |  |
-|`pageFlipMode`| Function | Lobah Mikhail| done| | Not exists on FB|
+|`indicatorInteractive`| Function | Skroba Gleb| done | pass  |  |
+|`pageFlipMode`| Function | Lobah Mikhail| done | | Not exists on FB|
 |`onContentWillScroll`| Function | Pavelyev Ivan | done | | |
-|`displayArrow`| Function | Skroba Gleb| done |  |  |
-|`displayCount`| Function |Skroba Gleb | done |  |  |
-|`prevMargin`| Function | Skroba Gleb| done |  |  |
-|`nextMargin`| Function | Skroba Gleb | done |  |  |
+|`displayArrow`| Function | Skroba Gleb| done | pass |  |
+|`displayCount`| Function |Skroba Gleb | done | pass |  |
+|`prevMargin`| Function | Skroba Gleb| done | pass |  |
+|`nextMargin`| Function | Skroba Gleb | done | pass |  |
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
 |*IndicatorComponent*| *Component* | Skroba Gleb | done |  |  |
 |`construct`| Function | Skroba Gleb | done |  |  |
@@ -3009,8 +3009,8 @@
 |`setTextSelection`| Function |Evstigneev Roman | done |  |  |
 |*SwiperController*| *Class* | Skroba Gleb | done |  |  |
 |`ctor`| Function | Skroba Gleb | done |  |  |
-|`showNext`| Function | Skroba Gleb | done |  |  |
-|`showPrevious`| Function | Skroba Gleb | done |  |  |
+|`showNext`| Function | Skroba Gleb | done | failed |  |
+|`showPrevious`| Function | Skroba Gleb | done | failed |  |
 |`changeIndex0`| Function | Skroba Gleb | done |  |  |
 |`changeIndex1`| Function | Skroba Gleb | done |  |  |
 |`finishAnimation`| Function | Skroba Gleb | done |  |  |
