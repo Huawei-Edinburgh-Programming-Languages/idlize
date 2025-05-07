@@ -128,7 +128,7 @@
 | Select.test.ets | Samarin Sergey    |
 | Shape.test.ets | Vadim Voronov     |
 | SideBarContainer.test.ets | Daryina Olga      |
-| Slider.test.ets |                   |
+| Slider.test.ets | Erokhin Ilya      |
 | Span.test.ets |                   |
 | Stack.test.ets | Pisanov Nikolay   |
 | Stepper.test.ets |                   |
