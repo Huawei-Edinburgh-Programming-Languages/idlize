@@ -2697,10 +2697,10 @@
 |`getHeight`| Function |Vadim Voronov| done |  | |
 |`getWidth`| Function |Vadim Voronov| done |  | |
 |`getCanvas`| Function |Vadim Voronov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
-|*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | testskipped | | |
-|`ctor`| Function |Vadim Voronov | testskipped | | |
-|`toDataURL`| Function | Vadim Voronov | testskipped | | |
-|`transferToImageBitmap`| Function | Vadim Voronov | testskipped | |    |
+|*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | done | | |
+|`ctor`| Function |Vadim Voronov | done | | |
+|`toDataURL`| Function | Vadim Voronov | done | | |
+|`transferToImageBitmap`| Function | Vadim Voronov | done | |    |
 |*OffscreenCanvas*| *Class* | Vadim Voronov | testskipped | | |
 |`ctor`| Function |Vadim Voronov | testskipped | | |
 |`transferToImageBitmap`| Function | Vadim Voronov | testskipped | | |
