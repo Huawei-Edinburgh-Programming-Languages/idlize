@@ -93,7 +93,7 @@
 | ListItemGroup.test.ets |                   |
 | LoadingProgress.test.ets | Samarin Sergey    |
 | LocationButton.test.ets |                   |
-| Marquee.test.ets |                   |
+| Marquee.test.ets | Andrey Khudenkikh  |
 | Menu.test.ets | Sergey Morozov    |
 | MenuItem.test.ets | Sergey Morozov    |
 | MenuItemGroup.test.ets | Sergey Morozov    |
@@ -153,4 +153,4 @@
 | WaterFlowDataSource.ets |                   |
 | Web.test.ets |                   |
 | XComponent.test.ets |                   |
-| ZIndex.test.ets |                   |
+| ZIndex.test.ets | Andrey Khudenkikh |
