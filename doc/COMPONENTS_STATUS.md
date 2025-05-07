@@ -772,11 +772,11 @@
 |`color`|Function| Samarin Sergey | done | pass |  |
 |`enableLoading`|Function| Samarin Sergey | done | pass |  |
 |`contentModifier`|Function| Samarin Sergey| blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
-|*LocationButton*| *Component* |Samarin Sergey| done |  |  |
-|`construct`| Function |Samarin Sergey| done |  |  |
-|`setLocationButtonOptions0`| Function |Samarin Sergey| done |  |deprecated: icon, text, buttonType  |
-|`setLocationButtonOptions1`| Function |Samarin Sergey| done |  |deprecated: icon, text, buttonType  |
-|`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan | testskipped |  |   |
+|*LocationButton*| *Component* |Samarin Sergey| done | test blocked | deprecated since API 15 |
+|`construct`| Function |Samarin Sergey| done | test blocked |  |
+|`setLocationButtonOptions0`| Function |Samarin Sergey| done | test blocked |deprecated: icon, text, buttonType  |
+|`setLocationButtonOptions1`| Function |Samarin Sergey| done | test blocked |deprecated: icon, text, buttonType  |
+|`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan | testskipped | test blocked |   |
 |*Marquee*| *Component* | Andrey Khudenkikh| done |  |  |
 |`construct`| Function |Andrey Khudenkikh| done |  |  |
 |`setMarqueeOptions`| Function | Andrey Khudenkikh| done |  |  |
@@ -886,10 +886,10 @@
 |`onHeightChange`| Function |Pavelyev Ivan| done |  |  |
 |`_onChangeEvent_mode`| Function | Erokhin Ilya | done |  | |
 |*PasteButton*| *Component* | Samarin Sergey| done |  |  |
-|`construct`| Function | Samarin Sergey| done |  |  |
-|`setPasteButtonOptions0`| Function | Samarin Sergey| done |  |  |
-|`setPasteButtonOptions1`| Function | Samarin Sergey| done |  |  |
-|`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan, Evstgneev Roman | testskipped |  |  |
+|`construct`| Function | Samarin Sergey| done | pass |  |
+|`setPasteButtonOptions0`| Function | Samarin Sergey| done | not covered |  |
+|`setPasteButtonOptions1`| Function | Samarin Sergey| done | failed | If PasteButtonOptions.text is not specified, there should be no text description |
+|`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan, Evstgneev Roman | testskipped | not covered |  |
 |*Path*| *Component* | Skroba Gleb | done |  |  |
 |`construct`| Function |Skroba Gleb | done |  |  |
 |`setPathOptions`| Function | Skroba Gleb | done |  |  |
