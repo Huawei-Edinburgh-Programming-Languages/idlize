@@ -430,21 +430,21 @@
 |`contentModifier1`| Function | Andrey Khudenkikh | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`_onChangeEvent_select`| Function | Erokhin Ilya | done | test blocked | test blocked by $$ interface |
 |*CheckboxGroup*| *Component* | Dudkin Sergey| done |  |  |
-|`construct`| Function |Dudkin Sergey| done |  |  |
-|`setCheckboxGroupOptions`| Function | Dudkin Sergey| done |  |  |
-|`selectAll0`| Function | Dudkin Sergey | done |  |  |
+|`construct`| Function |Dudkin Sergey| done | pass |  |
+|`setCheckboxGroupOptions`| Function | Dudkin Sergey| done | pass |  |
+|`selectAll0`| Function | Dudkin Sergey | done | pass |  |
 |`selectAll1`| Function | Dudkin Sergey | done |  |  |
-|`selectedColor0`| Function | Dudkin Sergey | done |  |  |
+|`selectedColor0`| Function | Dudkin Sergey | done | failed |  |
 |`selectedColor1`| Function | Dudkin Sergey | done |  |  |
-|`unselectedColor0`| Function | Dudkin Sergey | done |  |  |
+|`unselectedColor0`| Function | Dudkin Sergey | done | failed |  |
 |`unselectedColor1`| Function | Dudkin Sergey | done |  |  |
-|`mark0`| Function | Dudkin Sergey | done |  |  |
+|`mark0`| Function | Dudkin Sergey | done | failed | test failed info: strokeColor doesn`t work |
 |`mark1`| Function | Dudkin Sergey | done |  |  |
-|`onChange0`| Function | Dudkin Sergey | done |  |  |
+|`onChange0`| Function | Dudkin Sergey | done | pass |  |
 |`onChange1`| Function | Dudkin Sergey | done |  |  |
-|`checkboxShape0`| Function | Dudkin Sergey | done |  |  |
+|`checkboxShape0`| Function | Dudkin Sergey | done | failed |  |
 |`checkboxShape1`| Function | Dudkin Sergey | done |  |  |
-|`_onChangeEvent_selectAll`| Function | Erokhin Ilya | done |  | |
+|`_onChangeEvent_selectAll`| Function | Erokhin Ilya | done | test blocked | test blocked by $$ interface |
 |*Circle*|*Component*| Erokhin Ilya | done |  |  |
 |`construct`| Function |Erokhin Ilya | done |  |  |
 |`setCircleOptions`|Function| Erokhin Ilya | done |  |  |
