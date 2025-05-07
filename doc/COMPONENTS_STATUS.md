@@ -1077,8 +1077,8 @@
 |`setScrollBarOptions`| Function | Maksimov Nikita | done |  | |
 |`enableNestedScroll`| Function | Maksimov Nikita | done |  | |
 |*Search*|*Component*| Evstigneev Roman | blocked IDL |  |  |
-|`construct`| Function |Evstigneev Roman | done |  |   |
-|`setSearchOptions`|Function| Evstigneev Roman | done |  |   |
+|`construct`| Function |Evstigneev Roman | done | pass |   |
+|`setSearchOptions`|Function| Evstigneev Roman | done | pass |   |
 |`fontColor`|Function| Evstigneev Roman | done |  |  |
 |`searchIcon`|Function| Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAYXQ8 (+)|
 |`cancelButton`|Function| Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB |
@@ -1107,9 +1107,9 @@
 |`maxFontSize`|Function| Evstigneev Roman | done |  |  |
 |`minFontScale`| Function | Kovalev Sergey | done |  | |
 |`maxFontScale`| Function | Kovalev Sergey | done |  | |
-|`decoration`|Function| Evstigneev Roman | done |  |  |
-|`letterSpacing`|Function| Evstigneev Roman | done |  |  |
-|`lineHeight`|Function| Evstigneev Roman | done |  |  |
+|`decoration`|Function| Evstigneev Roman | done | pass |  |
+|`letterSpacing`|Function| Evstigneev Roman | done | pass |  |
+|`lineHeight`|Function| Evstigneev Roman | done | pass |  |
 |`type`|Function| Evstigneev Roman | done |  |  |
 |`fontFeature`|Function| Evstigneev Roman | done |  |  |
 |`onWillInsert`|Function| Skroba Gleb | done |  |   |
