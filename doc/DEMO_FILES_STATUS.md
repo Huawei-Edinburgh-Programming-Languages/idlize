@@ -15,7 +15,7 @@
 | Circle.test.ets | Porodin Alexander |
 | Click.test.ets |                   |
 | ClickEffect.test.ets |                   |
-| Column.test.ets |                   |
+| Column.test.ets | Tuzhilkin Ivan |
 | ColumnSplit.test.ets |                   |
 | CommonAccessibility.test.ets | Pisanov Nikolay   |
 | CommonAnimateTo.test.ets | Pisanov Nikolay   |
