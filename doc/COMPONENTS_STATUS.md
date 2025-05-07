@@ -518,9 +518,9 @@
 |*EffectComponent*| *Component* | Ekaterina Stepanova | done |  | |
 |`construct`| Function |Ekaterina Stepanova | done |  | |
 |`setEffectComponentOptions`| Function | Ekaterina Stepanova | done |  | |
-|*Ellipse*| *Component* | Ekaterina Stepanova | done |  | |
-|`construct`| Function |Ekaterina Stepanova | done |  | |
-|`setEllipseOptions`| Function | Ekaterina Stepanova | done |  | |
+|*Ellipse*| *Component* | Ekaterina Stepanova | done | pass | |
+|`construct`| Function |Ekaterina Stepanova | done | pass | |
+|`setEllipseOptions`| Function | Ekaterina Stepanova | done | pass | |
 |*EmbeddedComponent*| *Component* | Ekaterina Stepanova | blocked IDL |  | |
 |`construct`| Function | Ekaterina Stepanova | in progress |  |  |
 |`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | in progress |  |  |
@@ -1224,16 +1224,16 @@
 |`setShapeOptions0`| Function |Samarin Sergey| testskipped |  | |
 |`setShapeOptions1`|Function|Samarin Sergey| testskipped |  | |
 |`viewPort`|Function|Dudkin Sergey| done |  |  |
-|`stroke`|Function|Dudkin Sergey| done |  |  |
-|`fill`|Function|Dudkin Sergey| done |  |  |
+|`stroke`|Function|Dudkin Sergey| done | pass |  |
+|`fill`|Function|Dudkin Sergey| done | pass |  |
 |`strokeDashOffset`|Function|Dudkin Sergey| done |  |  |
-|`strokeDashArray`|Function|Erokhin Ilya| done |  |  |
+|`strokeDashArray`|Function|Erokhin Ilya| done | pass |  |
 |`strokeLineCap`|Function|Dudkin Sergey| done |  |  |
 |`strokeLineJoin`|Function|Dudkin Sergey| done |  |  |
 |`strokeMiterLimit`|Function|Dudkin Sergey| done |  |  |
-|`strokeOpacity`|Function|Dudkin Sergey| done |  |  |
-|`fillOpacity`|Function|Dudkin Sergey| done |  |  |
-|`strokeWidth`|Function|Dudkin Sergey| done |  |  |
+|`strokeOpacity`|Function|Dudkin Sergey| done | pass |  |
+|`fillOpacity`|Function|Dudkin Sergey| done | pass |  |
+|`strokeWidth`|Function|Dudkin Sergey| done | pass |  |
 |`antiAlias`|Function|Dudkin Sergey| done |  |  |
 |`mesh`|Function|Erokhin Ilya| done|  |  |  |
 |*Slider*| *Component* |Morozov Sergey | blocked IDL |  |  |
