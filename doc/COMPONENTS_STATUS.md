@@ -412,23 +412,23 @@
 |`onReady`| Function |Vadim Voronov | done |  |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked IDL |  |  |
-|`construct`| Function |Samarin Sergey | done |  | |
-|`setCheckboxOptions`| Function | Samarin Sergey | done |  | |
-|`select0`| Function |Andrey Khudenkikh | done |  |  |
+|`construct`| Function |Samarin Sergey | done | pass | |
+|`setCheckboxOptions`| Function | Samarin Sergey | done | pass | |
+|`select0`| Function |Andrey Khudenkikh | done | pass |  |
 |`select1`| Function | Andrey Khudenkikh | done |  |  |
-|`selectedColor0`| Function |Andrey Khudenkikh | done |  |  |
+|`selectedColor0`| Function |Andrey Khudenkikh | done | pass |  |
 |`selectedColor1`| Function | Andrey Khudenkikh | done |  |  |
-|`shape0`| Function |Andrey Khudenkikh | done |  |  |
+|`shape0`| Function |Andrey Khudenkikh | done | failed |  |
 |`shape1`| Function | Andrey Khudenkikh | done |  |  |
-|`unselectedColor0`| Function | Andrey Khudenkikh | done |  |  |
+|`unselectedColor0`| Function | Andrey Khudenkikh | done | pass |  |
 |`unselectedColor1`| Function | Andrey Khudenkikh | done |  |  |
-|`mark0`| Function |Andrey Khudenkikh | done |  |  |
+|`mark0`| Function |Andrey Khudenkikh | done | pass |  |
 |`mark1`| Function | Andrey Khudenkikh | done |  |  |
-|`onChange0`| Function | Andrey Khudenkikh | done |  |  |
+|`onChange0`| Function | Andrey Khudenkikh | done | pass |  |
 |`onChange1`| Function | Andrey Khudenkikh | done |  |  |
-|`contentModifier0`| Function | Andrey Khudenkikh | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`contentModifier0`| Function | Andrey Khudenkikh | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`contentModifier1`| Function | Andrey Khudenkikh | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
-|`_onChangeEvent_select`| Function | Erokhin Ilya | done |  | |
+|`_onChangeEvent_select`| Function | Erokhin Ilya | done | test blocked | test blocked by $$ interface |
 |*CheckboxGroup*| *Component* | Dudkin Sergey| done |  |  |
 |`construct`| Function |Dudkin Sergey| done |  |  |
 |`setCheckboxGroupOptions`| Function | Dudkin Sergey| done |  |  |
