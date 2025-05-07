@@ -64,8 +64,8 @@
 | Divider.test.ets | |
 | EffectComponent.test.ets | |
 | Ellipse.test.ets | |
-| Flex.test.ets | |
-| FlexCommonAttributes.test.ets | |
+| Flex.test.ets | Dmitry A Smirnov|
+| FlexCommonAttributes.test.ets | Dmitry A Smirnov|
 | FocusStopFocuBox.test.ets | |
 | FocusTraversalGroup.test.ets | |
 | FocusTraversalToComponentsEffect.test.ets | |
@@ -106,7 +106,7 @@
 | Panel.test.ets |Daryina Olga |
 | PasteButton.test.ets | |
 | Path.test.ets |Daryina Olga |
-| PatternLock.test.ets | |
+| PatternLock.test.ets | Dmitry A Smirnov|
 | Polygon.test.ets | |
 | Polyline.test.ets | |
 | Progress.test.ets |Erokhin Ilya |
