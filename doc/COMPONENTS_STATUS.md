@@ -294,19 +294,19 @@
 |`lightUpEffect1`| Function | Dmitry A Smirnov | done |  | |
 |`pixelStretchEffect0`| Function | Lobah Mikhail | done |  | |
 |`pixelStretchEffect1`| Function | Dmitry A Smirnov | done |  | |
-|`accessibilityGroup0`| Function |Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityGroup1`| Function | Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityText0`| Function | Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityText1`| Function |Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`accessibilityGroup0`| Function |Lobah Mikhail | done |  | |
+|`accessibilityGroup1`| Function | Lobah Mikhail | done |  | |
+|`accessibilityText0`| Function | Lobah Mikhail | done |  | |
+|`accessibilityText1`| Function |Lobah Mikhail | done |  | |
 |`accessibilityNextFocusId`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`accessibilityDefaultFocus`| Function | Lobah Mikhail| blocked IDL | | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00|
 |`accessibilityUseSamePage`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`accessibilityScrollTriggerable`| Function | Tuzhilkin Ivan | done | | WRONG_GENERATION: parameter should be Opt, need cherry-pick to feature_branch |
 |`accessibilityRole`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onAccessibilityFocus`| Function | Evstigneev Roman | done | | feature: API not present |
-|`accessibilityTextHint`| Function | Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityDescription0`| Function | Lobah Mikhail| done| blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityDescription1`| Function | Lobah Mikhail| done| blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`accessibilityTextHint`| Function | Lobah Mikhail | done |  | |
+|`accessibilityDescription0`| Function | Lobah Mikhail| done| | |
+|`accessibilityDescription1`| Function | Lobah Mikhail| done| | |
 |`accessibilityLevel`| Function | Lobah Mikhail | done |  | |
 |`accessibilityVirtualNode`| Function | Lobah Mikhail | done |  |  |
 |`accessibilityChecked`| Function | Lobah Mikhail | done |  | |
@@ -412,39 +412,39 @@
 |`onReady`| Function |Vadim Voronov | done |  |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked IDL |  |  |
-|`construct`| Function |Samarin Sergey | done | pass | |
-|`setCheckboxOptions`| Function | Samarin Sergey | done | pass | |
-|`select0`| Function |Andrey Khudenkikh | done | pass |  |
+|`construct`| Function |Samarin Sergey | done |  | |
+|`setCheckboxOptions`| Function | Samarin Sergey | done |  | |
+|`select0`| Function |Andrey Khudenkikh | done |  |  |
 |`select1`| Function | Andrey Khudenkikh | done |  |  |
-|`selectedColor0`| Function |Andrey Khudenkikh | done | pass |  |
+|`selectedColor0`| Function |Andrey Khudenkikh | done |  |  |
 |`selectedColor1`| Function | Andrey Khudenkikh | done |  |  |
-|`shape0`| Function |Andrey Khudenkikh | done | failed |  |
+|`shape0`| Function |Andrey Khudenkikh | done |  |  |
 |`shape1`| Function | Andrey Khudenkikh | done |  |  |
-|`unselectedColor0`| Function | Andrey Khudenkikh | done | pass |  |
+|`unselectedColor0`| Function | Andrey Khudenkikh | done |  |  |
 |`unselectedColor1`| Function | Andrey Khudenkikh | done |  |  |
-|`mark0`| Function |Andrey Khudenkikh | done | pass |  |
+|`mark0`| Function |Andrey Khudenkikh | done |  |  |
 |`mark1`| Function | Andrey Khudenkikh | done |  |  |
-|`onChange0`| Function | Andrey Khudenkikh | done | pass |  |
+|`onChange0`| Function | Andrey Khudenkikh | done |  |  |
 |`onChange1`| Function | Andrey Khudenkikh | done |  |  |
-|`contentModifier0`| Function | Andrey Khudenkikh | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`contentModifier0`| Function | Andrey Khudenkikh | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`contentModifier1`| Function | Andrey Khudenkikh | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
-|`_onChangeEvent_select`| Function | Erokhin Ilya | done | test blocked | test blocked by $$ interface |
+|`_onChangeEvent_select`| Function | Erokhin Ilya | done |  | |
 |*CheckboxGroup*| *Component* | Dudkin Sergey| done |  |  |
-|`construct`| Function |Dudkin Sergey| done | pass |  |
-|`setCheckboxGroupOptions`| Function | Dudkin Sergey| done | pass |  |
-|`selectAll0`| Function | Dudkin Sergey | done | pass |  |
+|`construct`| Function |Dudkin Sergey| done |  |  |
+|`setCheckboxGroupOptions`| Function | Dudkin Sergey| done |  |  |
+|`selectAll0`| Function | Dudkin Sergey | done |  |  |
 |`selectAll1`| Function | Dudkin Sergey | done |  |  |
-|`selectedColor0`| Function | Dudkin Sergey | done | failed |  |
+|`selectedColor0`| Function | Dudkin Sergey | done |  |  |
 |`selectedColor1`| Function | Dudkin Sergey | done |  |  |
-|`unselectedColor0`| Function | Dudkin Sergey | done | failed |  |
+|`unselectedColor0`| Function | Dudkin Sergey | done |  |  |
 |`unselectedColor1`| Function | Dudkin Sergey | done |  |  |
-|`mark0`| Function | Dudkin Sergey | done | failed | test failed info: strokeColor doesn`t work |
+|`mark0`| Function | Dudkin Sergey | done |  |  |
 |`mark1`| Function | Dudkin Sergey | done |  |  |
-|`onChange0`| Function | Dudkin Sergey | done | pass |  |
+|`onChange0`| Function | Dudkin Sergey | done |  |  |
 |`onChange1`| Function | Dudkin Sergey | done |  |  |
-|`checkboxShape0`| Function | Dudkin Sergey | done | failed |  |
+|`checkboxShape0`| Function | Dudkin Sergey | done |  |  |
 |`checkboxShape1`| Function | Dudkin Sergey | done |  |  |
-|`_onChangeEvent_selectAll`| Function | Erokhin Ilya | done | test blocked | test blocked by $$ interface |
+|`_onChangeEvent_selectAll`| Function | Erokhin Ilya | done |  | |
 |*Circle*|*Component*| Erokhin Ilya | done |  |  |
 |`construct`| Function |Erokhin Ilya | done |  |  |
 |`setCircleOptions`|Function| Erokhin Ilya | done |  |  |
@@ -582,8 +582,8 @@
 |`scrollBar`|Function| Erokhin Ilya | done |  |  |
 |`onScrollBarUpdate`|Function| Skroba Gleb | done |  | |
 |`onScrollIndex`|Function| Erokhin Ilya | done |  |  |
-|`cachedCount0`| Function |Erokhin Ilya | done | test blocked(blocked IDL) |  |
-|`cachedCount1`|Function| Erokhin Ilya | done | test blocked(blocked IDL) |  |
+|`cachedCount0`| Function |Erokhin Ilya | done |  |  |
+|`cachedCount1`|Function| Erokhin Ilya | done |  |  |
 |`editMode`|Function| Erokhin Ilya | done |  |  |
 |`multiSelectable`|Function| Erokhin Ilya | done |  |  |
 |`maxCount`|Function| Erokhin Ilya | done |  |  |
@@ -607,7 +607,7 @@
 |`onScrollStop`|Function| Erokhin Ilya | done |  |  |
 |`onScrollFrameBegin`|Function| Skroba Gleb | done |  |   |
 |`edgeEffect`|Function| Erokhin Ilya | done |  |  |
-|*GridItem*|*Component*| Erokhin Ilya | done | test blocked(blocked IDL) |  |
+|*GridItem*|*Component*| Erokhin Ilya | done |  |  |
 |`construct`| Function |Erokhin Ilya | done |  |  |
 |`setGridItemOptions`|Function| Erokhin Ilya | done |  |  |
 |`rowStart`|Function| Erokhin Ilya | done |  |  |
@@ -924,13 +924,13 @@
 |`setPolylineOptions`| Function | Politov Mikhail | done |  |  |
 |`points`| Function | Politov Mikhail | done |  |   |
 |*Progress*| *Component* | Erokhin Ilya | blocked IDL |  | |
-|`construct`| Function | Erokhin Ilya | done | pass | deprecated for `style` property |
-|`setProgressOptions`| Function | Erokhin Ilya | done | failed | deprecated for `style` property |
-|`value`| Function | Erokhin Ilya | done | test blocked | test blocked by runtime error in Koala part during setProgressOptions |
-|`color`| Function | Erokhin Ilya | done | test blocked | test blocked by runtime error in Koala part during setProgressOptions |
-|`style`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov linearStyle.strokeRadius need to be tested, test blocked by runtime error in Koala part during setProgressOptions |
-|`privacySensitive`| Function | Erokhin Ilya | done | test blocked | test blocked by runtime error in Koala part during setProgressOptions |
-|`contentModifier`| Function | Erokhin Ilya | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
+|`construct`| Function | Erokhin Ilya | done |  | deprecated for `style` property |
+|`setProgressOptions`| Function | Erokhin Ilya | done |  | deprecated for `style` property |
+|`value`| Function | Erokhin Ilya | done |  | |
+|`color`| Function | Erokhin Ilya | done |  | |
+|`style`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov linearStyle.strokeRadius need to be tested |
+|`privacySensitive`| Function | Erokhin Ilya | done |  | |
+|`contentModifier`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |*QRCode*| *Component* | Evstigneev Roman | done |  |  |
 |`construct`| Function |Evstigneev Roman | done |  |  |
 |`setQRCodeOptions`| Function |Evstigneev Roman | done |  |  |
@@ -1022,11 +1022,11 @@
 |`bindSelectionMenu`| Function | Dmitry A Smirnov| done |  |  |
 |`customKeyboard`| Function | Dmitry A Smirnov| done |  |  |
 |`placeholder`| Function | Dudkin Sergey| done |  |  |
-|*RichText*| *Component* | Dudkin Sergey| done | pass |  |
-|`construct`| Function | Dudkin Sergey| done | pass |  |
-|`setRichTextOptions`| Function | Dudkin Sergey| done | pass |  |
-|`onStart`| Function | Dudkin Sergey| done | pass |  |
-|`onComplete`| Function | Dudkin Sergey| done | pass |  |
+|*RichText*| *Component* | Dudkin Sergey| done |  |  |
+|`construct`| Function | Dudkin Sergey| done |  |  |
+|`setRichTextOptions`| Function | Dudkin Sergey| done |  |  |
+|`onStart`| Function | Dudkin Sergey| done |  |  |
+|`onComplete`| Function | Dudkin Sergey| done |  |  |
 |*RootScene*| *Component* | Spirin Andrey | done |  | |
 |`construct`| Function |Spirin Andrey | done |  | |
 |`setRootSceneOptions`| Function | Spirin Andrey | done |  | |
@@ -1369,16 +1369,16 @@
 |`effectStrategy`| Function |Dmitry A Smirnov| done |  |  |
 |`renderingStrategy`| Function |Dmitry A Smirnov| done |  |  |
 |*Tabs*| *Component* | Tuzhilkin Ivan | done |  |  |
-|`construct`| Function |Tuzhilkin Ivan | done |  |  |
+|`construct`| Function |Tuzhilkin Ivan | done | pass |  |
 |`setTabsOptions`| Function | Skroba Gleb | done |  |  |
-|`vertical`| Function | Tuzhilkin Ivan | done |  |  |
-|`barPosition`| Function | Tuzhilkin Ivan | done |  |  |
-|`scrollable`| Function | Tuzhilkin Ivan | done |  |  |
-|`barMode0`| Function |Tuzhilkin Ivan | done |  |  |
+|`vertical`| Function | Tuzhilkin Ivan | done | pass |  |
+|`barPosition`| Function | Tuzhilkin Ivan | done | pass |  |
+|`scrollable`| Function | Tuzhilkin Ivan | done | pass |  |
+|`barMode0`| Function |Tuzhilkin Ivan | done | fail |  |
 |`barMode1`| Function | Tuzhilkin Ivan | done |  |  |
-|`barWidth`| Function | Tuzhilkin Ivan | done |  |  |
-|`barHeight`| Function | Tuzhilkin Ivan | done  |  |
-|`animationDuration`| Function | Tuzhilkin Ivan | done |  | |
+|`barWidth`| Function | Tuzhilkin Ivan | done | pass |  |
+|`barHeight`| Function | Tuzhilkin Ivan | done  | pass |
+|`animationDuration`| Function | Tuzhilkin Ivan | done | pass | |
 |`animationMode`| Function | Tuzhilkin Ivan | done |  |  |
 |`edgeEffect`| Function | Tuzhilkin Ivan | done |  |  |
 |`onChange`| Function | Tuzhilkin Ivan | done |  |  |
@@ -1388,10 +1388,10 @@
 |`onAnimationStart`| Function | Tuzhilkin Ivan | done |  |  |
 |`onAnimationEnd`| Function | Tuzhilkin Ivan | done |  |  |
 |`onGestureSwipe`| Function | Tuzhilkin Ivan | done |  |  |
-|`fadingEdge`| Function | Tuzhilkin Ivan | done |  |  |
-|`divider`| Function | Tuzhilkin Ivan | done |  |  |
-|`barOverlap`| Function | Tuzhilkin Ivan | done |  |  |
-|`barBackgroundColor`| Function | Tuzhilkin Ivan | done |  |  |
+|`fadingEdge`| Function | Tuzhilkin Ivan | done | pass |  |
+|`divider`| Function | Tuzhilkin Ivan | done | fail |  |
+|`barOverlap`| Function | Tuzhilkin Ivan | done | pass |  |
+|`barBackgroundColor`| Function | Tuzhilkin Ivan | done | pass |  |
 |`barGridAlign`| Function | Tuzhilkin Ivan | done |  |  |
 |`customContentTransition`| Function | Dudkin Sergey | done |  |  |
 |`barBackgroundBlurStyle0`|  Function | Tuzhilkin Ivan | done |  |  |
@@ -1403,9 +1403,9 @@
 |`cachedMaxCount`| Function | Erokhin Ilya| done | | |
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
 |*TabContent*| *Component* | Evstigneev Roman | blocked IDL |  |  |
-|`construct`| Function | Evstigneev Roman | done |  |  |
+|`construct`| Function | Evstigneev Roman | done | pass |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |  |
-|`tabBar0`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | done | |  |
+|`tabBar0`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | done | pass |  |
 |`tabBar1`| Function |Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |  |
 |`tabBar2`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |  |
 |`onWillShow`| Function |Evstigneev Roman | done |  |  |
