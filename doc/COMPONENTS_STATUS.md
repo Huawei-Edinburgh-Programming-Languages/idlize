@@ -239,8 +239,8 @@
 |`alignSelf`| Function | Roman Sedaikin | done |  | |
 |`displayPriority`| Function | Roman Sedaikin | done |  | |
 |`zIndex`| Function | Roman Sedaikin | done |  | |
-|`direction`| Function | Roman Sedaikin | done |  | |
-|`align`| Function | Roman Sedaikin | done |  | |
+|`direction`| Function | Roman Sedaikin | done | pass | |
+|`align`| Function | Roman Sedaikin | done | pass | |
 |`position`| Function | Roman Sedaikin | done |  | |
 |`markAnchor`| Function | Dmitry A Smirnov| done |  | |
 |`offset`| Function | Skroba Gleb | done |  | |
@@ -327,7 +327,7 @@
 |`onTouchIntercept`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done |  | EVENT |
 |`onSizeChange`| Function | Dmitry A Smirnov| done |  | |
 |`accessibilityFocusDrawLevel`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
-|`customProperty`| Function | Dmitry A Smirnov| in progress |  | need clrify bridge implementation|
+|`customProperty`| Function | Dmitry A Smirnov| in progress | test blocked | need clrify bridge implementation, test blocked by FrameNode.getCustomProperty |
 |`expandSafeArea`| Function | Dmitry A Smirnov| done |  |  |
 |`background`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
 |`backgroundImage0`| Function | Erokhin Ilya | done |  | |
@@ -351,7 +351,7 @@
 |`backdropBlur1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`sharedTransition`|Function|Skroba Gleb | done |  |  |
 |`chainMode`| Function | Berezin Kirill | done |  | |
-|`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
+|`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`overlay`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the `Ark_ComponentContent ` class without stubs is required.|
 |`blendMode0`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`blendMode1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
