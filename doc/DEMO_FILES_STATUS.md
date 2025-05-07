@@ -132,7 +132,7 @@
 | Span.test.ets |                   |
 | Stack.test.ets | Pisanov Nikolay   |
 | Stepper.test.ets |                   |
-| Swiper.test.ets |                   |
+| Swiper.test.ets | Skroba Gleb      |
 | SymbolGlyph.test.ets |                   |
 | SymbolSpan.test.ets |                   |
 | Tabs.test.ets | Skroba Gleb       |
