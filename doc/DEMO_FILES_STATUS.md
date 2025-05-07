@@ -92,7 +92,7 @@
 | ListItem.test.ets |                   |
 | ListItemGroup.test.ets |                   |
 | LoadingProgress.test.ets | Samarin Sergey    |
-| LocationButton.test.ets |                   |
+| LocationButton.test.ets | Samarin Sergey    |
 | Marquee.test.ets | Andrey Khudenkikh  |
 | Menu.test.ets | Sergey Morozov    |
 | MenuItem.test.ets | Sergey Morozov    |
@@ -104,7 +104,7 @@
 | NestedScroll.test.ets |                   |
 | OnAreaChange.test.ets |                   |
 | Panel.test.ets | Daryina Olga      |
-| PasteButton.test.ets |                   |
+| PasteButton.test.ets | Samarin Sergey    |
 | Path.test.ets | Daryina Olga      |
 | PatternLock.test.ets | Dmitry A Smirnov  |
 | Polygon.test.ets |                   |
