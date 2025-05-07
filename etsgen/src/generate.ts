@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { capitalize, collapseTypes, generateSyntheticFunctionName, generateSyntheticIdlNodeName, IDLFile, IDLLibrary, IDLMethod, Language, PeerLibrary, throwException } from "@idlizer/core"
+import { capitalize, collapseTypes, flattenUnionType, generateSyntheticFunctionName, generateSyntheticIdlNodeName, IDLFile, IDLLibrary, IDLMethod, Language, PeerLibrary, throwException } from "@idlizer/core"
 import * as arkts from "@koalaui/libarkts"
 import * as idl from "@idlizer/core/idl"
 import * as path from "node:path"
@@ -225,6 +225,13 @@ class IDLVisitor extends arkts.AbstractVisitor {
             .map(it => it.replaceAll('@', ''))
             .map(it => it.split('-').map((it, i) => i === 0 ? it : capitalize(it)).join('')) // kebab-case to camelCase
             .filter(it => it.length && it !== '.' && it !== '..')
+    }
+
+    private mode: 'regular' | 'arkoala' = 'arkoala'
+    private arkoalaTweaks(op:() => void) {
+        if (this.mode === 'arkoala') {
+            op()
+        }
     }
 
     constructor(
@@ -447,10 +454,29 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     visitTSTypeAliasDeclaration(declaration: arkts.TSTypeAliasDeclaration): arkts.TSTypeAliasDeclaration {
+        const name = declaration.id!.name
+        if (this.mode === 'arkoala') {
+            if (['Length', 'Dimension'].includes(name)) {
+                this.entries.push(idl.createTypedef(
+                    name,
+                    idl.createUnionType([
+                        idl.IDLStringType,
+                        idl.IDLNumberType,
+                        idl.createReferenceType('Resource_')
+                    ]),
+                    [],
+                    {
+                        extendedAttributes: [],
+                        fileName: this.fileName
+                    }
+                ))
+                return declaration
+            }
+        }
         const { set:paramsSet, parameters } = this.extractTypeParameters(declaration.typeParams)
         this.withTypeParamContext(paramsSet, () => {
             this.entries.push(idl.createTypedef(
-                declaration.id!.name,
+                name,
                 this.serializeType(declaration.typeAnnotation),
                 parameters,
                 {
@@ -913,57 +939,59 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
     postprocessEntires() {
         /* arkgen specialization */
-        const componentInterface = this.entries.find(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.ComponentInterface))
-        if (componentInterface) {
-            if (!idl.isInterface(componentInterface)) {
-                throw new Error("ComponentInterface must be interface!")
-            }
-            const componentAttributeRef = componentInterface.callables.at(0)?.returnType
-            if (!componentAttributeRef || !idl.isReferenceType(componentAttributeRef)) {
-                throw new Error("No component attribute found!")
-            }
-            const processedEntries: idl.IDLEntry[] = []
-            this.entries.forEach(entry => {
-                if (entry.name === componentInterface.name && entry !== componentInterface) {
-                    return
+        if (this.mode === 'arkoala') {
+            const componentInterface = this.entries.find(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.ComponentInterface))
+            if (componentInterface) {
+                if (!idl.isInterface(componentInterface)) {
+                    throw new Error("ComponentInterface must be interface!")
                 }
-                if (entry.name === componentAttributeRef.name) {
-                    entry.extendedAttributes ??= []
-                    entry.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Component })
-                    if (idl.isInterface(entry)) {
-                        const methods:idl.IDLMethod[] = []
-                        const properties: idl.IDLProperty[] = []
-                        entry.methods.forEach(method => {
-                            if (method.isStatic) {
-                                methods.push(method)
-                                return
-                            }
-                            if (method.returnType === idl.IDLThisType && method.parameters.length === 1) {
-                                properties.push(
-                                    idl.createProperty(
-                                        method.name,
-                                        method.parameters[0].type,
-                                        false,
-                                        false,
-                                        false,
-                                        {
-                                            extendedAttributes: (method.extendedAttributes ?? []).concat({ name: idl.IDLExtendedAttributes.CommonMethod }),
-                                            documentation: method.documentation,
-                                            fileName: method.fileName
-                                        }
-                                    )
-                                )
-                                return
-                            }
-                            methods.push(method)
-                        })
-                        entry.methods = methods
-                        entry.properties = properties.concat(entry.properties)
+                const componentAttributeRef = componentInterface.callables.at(0)?.returnType
+                if (!componentAttributeRef || !idl.isReferenceType(componentAttributeRef)) {
+                    throw new Error("No component attribute found!")
+                }
+                const processedEntries: idl.IDLEntry[] = []
+                this.entries.forEach(entry => {
+                    if (entry.name === componentInterface.name && entry !== componentInterface) {
+                        return
                     }
-                }
-                processedEntries.push(entry)
-            })
-            this.entries = processedEntries
+                    if (entry.name === componentAttributeRef.name) {
+                        entry.extendedAttributes ??= []
+                        entry.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Component })
+                        if (idl.isInterface(entry)) {
+                            const methods:idl.IDLMethod[] = []
+                            const properties: idl.IDLProperty[] = []
+                            entry.methods.forEach(method => {
+                                if (method.isStatic) {
+                                    methods.push(method)
+                                    return
+                                }
+                                if (method.returnType === idl.IDLThisType && method.parameters.length === 1) {
+                                    properties.push(
+                                        idl.createProperty(
+                                            method.name,
+                                            method.parameters[0].type,
+                                            false,
+                                            false,
+                                            false,
+                                            {
+                                                extendedAttributes: (method.extendedAttributes ?? []).concat({ name: idl.IDLExtendedAttributes.CommonMethod }),
+                                                documentation: method.documentation,
+                                                fileName: method.fileName
+                                            }
+                                        )
+                                    )
+                                    return
+                                }
+                                methods.push(method)
+                            })
+                            entry.methods = methods
+                            entry.properties = properties.concat(entry.properties)
+                        }
+                    }
+                    processedEntries.push(entry)
+                })
+                this.entries = processedEntries
+            }
         }
 
         /* remove synthetic duplicates */

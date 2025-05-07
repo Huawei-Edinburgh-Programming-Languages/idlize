@@ -4,7 +4,6 @@
         "int",
         "RepeatInterface",
         "WrappedBuilder",
-        "ContentModifier",
         "wrapBuilder",
         "IMonitorValue",
         "IMonitor",

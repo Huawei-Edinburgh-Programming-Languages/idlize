@@ -926,6 +926,20 @@ namespace OHOS::Ace::NG::GeneratedModifier {
         out.append(") \n");
         appendGroupedLog(1, out);
     }
+    void OnClickImpl(Ark_NativePointer node,
+        const Callback_ClickEvent_Void* event,
+        const Ark_Number* distanceThreshold)
+    {
+        RegisterOnClick(node, event);
+        if (!needGroupedLog(1))
+        return;
+        string out("onClick(");
+        WriteToString(&out, event);
+        out.append(", ");
+        WriteToString(&out, distanceThreshold);
+        out.append(") \n");
+        appendGroupedLog(1, out);
+    }
     } // CommonMethodModifier
 
     namespace EventEmulatorAccessor {

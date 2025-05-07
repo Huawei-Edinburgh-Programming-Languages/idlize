@@ -18,3 +18,6 @@ interface ParticleAttribute {};
 
 interface LocalStorage {};
 
+/////////////////////////////////////////////////////
+
+callback Callback_RangeUpdate = void (i32 index, pointer mark, i32 end);

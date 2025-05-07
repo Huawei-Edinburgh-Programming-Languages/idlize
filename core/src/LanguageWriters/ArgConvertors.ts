@@ -31,7 +31,7 @@ import { RuntimeType } from "./common";
 import { generatorConfiguration, generatorTypePrefix } from "../config"
 import { LibraryInterface } from "../LibraryInterface";
 import { hashCodeFromString, warn } from "../util";
-import { flattenUnionType, UnionRuntimeTypeChecker } from "../peer-generation/unions";
+import { UnionRuntimeTypeChecker } from "../peer-generation/unions";
 import { CppConvertor, CppNameConvertor } from "./convertors/CppConvertors";
 import { createEmptyReferenceResolver, ReferenceResolver } from "../peer-generation/ReferenceResolver";
 import { PrimitiveTypesInstance } from "../peer-generation/PrimitiveType";
@@ -78,7 +78,6 @@ export function isDirectConvertedType(originalType: idl.IDLType|undefined, libra
         convertor instanceof MapConvertor ||
         convertor instanceof TupleConvertor ||
         convertor instanceof AggregateConvertor ||
-        convertor instanceof UnionConvertor ||
         convertor instanceof OptionConvertor ||
         convertor instanceof ImportTypeConvertor) {
         // try { console.log(`convertor is ${convertor.constructor.name} for ${JSON.stringify(originalType)}`) } catch (e) {}
@@ -1072,7 +1071,7 @@ export class UnionConvertor extends BaseArgConvertor { //
         return new BlockStatement(statements, false)
     }
     nativeType(): idl.IDLType {
-        return flattenUnionType(this.library, this.type)
+        return this.type
     }
     interopType(): idl.IDLType {
         throw new Error("Union")
