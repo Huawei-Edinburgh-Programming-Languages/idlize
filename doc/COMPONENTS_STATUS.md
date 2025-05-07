@@ -707,8 +707,8 @@
 |`columnsTemplate`| Function | | | | no such API in generation 125 |
 |*Line*|*Component*|Dudkin Sergey| done |  |  |
 |`construct`| Function |Dudkin Sergey| done |  |  |
-|`setLineOptions`|Function|Dudkin Sergey| done | pass |  |
-|`startPoint`|Function|Dudkin Sergey| done | pass |  |
+|`setLineOptions`|Function|Dudkin Sergey| done | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`startPoint`|Function|Dudkin Sergey| done | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`endPoint`|Function|Dudkin Sergey| done | pass |  |
 |*List*|*Component*|Morozov Sergey| done |  |  |
 |`construct`| Function |Morozov Sergey| done |  |  |
@@ -1877,7 +1877,7 @@
 |`autoHide`| Function |Dmitry A Smirnov| done | pass |  |
 |`sideBarPosition`| Function |Dmitry A Smirnov| done | pass |  |
 |`divider`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2170 |
-|`minContentWidth`| Function |Dmitry A Smirnov| done | failed |  |
+|`minContentWidth`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2170 |
 |`_onChangeEvent_showSideBar`| Function | Erokhin Ilya | done |  | |
 |*RemoteWindow*| *Component* | Spirin Andrey, Evstigneev Roman | done |  | |
 |`construct`| Function |Spirin Andrey, Evstigneev Roman | done |  | |
