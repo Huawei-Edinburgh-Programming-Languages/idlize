@@ -15,7 +15,7 @@
 | Circle.test.ets | Porodin Alexander |
 | Click.test.ets |                   |
 | ClickEffect.test.ets |                   |
-| Column.test.ets | Tuzhilkin Ivan |
+| Column.test.ets | Tuzhilkin Ivan    |
 | ColumnSplit.test.ets |                   |
 | CommonAccessibility.test.ets | Pisanov Nikolay   |
 | CommonAnimateTo.test.ets | Pisanov Nikolay   |
@@ -58,7 +58,7 @@
 | ContainerSpan.test.ets |                   |
 | Counter.test.ets |                   |
 | CustomComponentBox.test.ets |                   |
-| DataPanel.test.ets | Sergey Morozov |
+| DataPanel.test.ets | Sergey Morozov    |
 | DatePicker.test.ets | Vadim Voronov     |
 | DisplayPriority.test.ets |                   |
 | Divider.test.ets |                   |
@@ -81,8 +81,8 @@
 | GridRow.test.ets | Evstigneev Roman  |
 | HoverEvent.test.ets |                   |
 | HyperLink.test.ets |                   |
-| Image.test.ets | Dudkin Sergey   |
-| Image2.test.ets | Dudkin Sergey  |
+| Image.test.ets | Dudkin Sergey     |
+| Image2.test.ets | Dudkin Sergey     |
 | Image3ColorFilter.test.ets |                   |
 | Image4.test.ets |                   |
 | ImageAnimator.test.ets |                   |
@@ -94,9 +94,9 @@
 | LoadingProgress.test.ets |                   |
 | LocationButton.test.ets |                   |
 | Marquee.test.ets |                   |
-| Menu.test.ets |                   |
-| MenuItem.test.ets |                   |
-| MenuItemGroup.test.ets |                   |
+| Menu.test.ets | Sergey Morozov    |
+| MenuItem.test.ets | Sergey Morozov    |
+| MenuItemGroup.test.ets | Sergey Morozov    |
 | MotionBlur.test.ets |                   |
 | NavDestination.test.ets |                   |
 | Navigation.test.ets |                   |
