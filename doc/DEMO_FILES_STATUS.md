@@ -118,7 +118,7 @@
 | RenderGroup.test.ets | |
 | RequestFocusFocusable.test.ets | |
 | RichEditor.test.ets | |
-| RichText.test.ets | |
+| RichText.test.ets |Erokhin Ilya |
 | Row.test.ets | Daryina Olga|
 | RowSplit.test.ets | Daryina Olga|
 | Scroll.test.ets | |
