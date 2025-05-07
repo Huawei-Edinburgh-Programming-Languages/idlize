@@ -31,9 +31,9 @@
 | CommonClipMaskAnimation.test.ets | Pisanov Nikolay   |
 | CommonClipMaskShape.test.ets | Pisanov Nikolay   |
 | CommonColorGradient.test.ets | Pisanov Nikolay   |
-| CommonCustomProperty.test.ets |                   |
-| CommonDirectionAlign.test.ets |                   |
-| CommonDraggableDragPreviewOptionsOnDragStartEnd.test.ets |                   |
+| CommonCustomProperty.test.ets | Pisanov Nikolay   |
+| CommonDirectionAlign.test.ets | Pisanov Nikolay   |
+| CommonDraggableDragPreviewOptionsOnDragStartEnd.test.ets | Pisanov Nikolay   |
 | CommonDrawModifier.test.ets |                   |
 | CommonGeometryTransition.test.ets |                   |
 | CommonHitTestBehavior.test.ets |                   |
