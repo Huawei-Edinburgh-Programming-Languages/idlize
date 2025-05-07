@@ -1459,70 +1459,70 @@
 |`selection`| Function |Samarin Sergey | done | pass | |
 |`bindSelectionMenu`| Function | Lobah Mikhail | done |  |  |
 |*TextArea*|*Component*|Tuzhilkin Ivan| blocked IDL |  |  |
-|`construct`| Function | Tuzhilkin Ivan| done |  | |
-|`setTextAreaOptions`|Function|Tuzhilkin Ivan| done |  | |
-|`placeholderColor`|Function|Tuzhilkin Ivan| done |  | |
-|`placeholderFont`|Function|Tuzhilkin Ivan| done |  | |
-|`enterKeyType`|Function|Tuzhilkin Ivan| done |  |  |
-|`textAlign`|Function|Tuzhilkin Ivan| done |  |  |
-|`caretColor`|Function|Tuzhilkin Ivan| done |  |  |
-|`fontColor`|Function|Tuzhilkin Ivan| done |  |  |
-|`fontSize`|Function|Tuzhilkin Ivan| done |  |  |
-|`fontStyle`|Function|Tuzhilkin Ivan| done |  |  |
-|`fontWeight`|Function|Tuzhilkin Ivan| done |  |  |
-|`fontFamily`|Function|Tuzhilkin Ivan| done |  |  |
-|`textOverflow`|Function|Tuzhilkin Ivan| done |  |  |
-|`textIndent`|Function|Tuzhilkin Ivan| done |  |  |
-|`caretStyle`|Function|Tuzhilkin Ivan| done |  |  |
-|`selectedBackgroundColor`|Function|Tuzhilkin Ivan| done |  | |
-|`onSubmit0`| Function | Tuzhilkin Ivan, Spirin Andrey| done |  |  |
-|`onSubmit1`|Function|Tuzhilkin Ivan, Spirin Andrey| done |  |  |
-|`onChange`|Function|Tuzhilkin Ivan| done |  |  |
-|`onTextSelectionChange`|Function|Tuzhilkin Ivan| done |  | |
-|`onContentScroll`|Function|Tuzhilkin Ivan| done |  |  |
-|`onEditChange`|Function|Tuzhilkin Ivan| done |  |  |
-|`onCopy`|Function|Tuzhilkin Ivan| done |  |  |
-|`onCut`|Function|Tuzhilkin Ivan| done |  |  |
-|`onPaste`|Function|Tuzhilkin Ivan| done |  | |
-|`copyOption`|Function|Tuzhilkin Ivan| done |  |  |
-|`enableKeyboardOnFocus`|Function|Tuzhilkin Ivan| done |  |  |
-|`maxLength`|Function|Tuzhilkin Ivan| done |  |  |
-|`style`|Function|Tuzhilkin Ivan| done |  |  |
-|`barState`|Function|Tuzhilkin Ivan| done |  |  |
-|`selectionMenuHidden`|Function|Tuzhilkin Ivan| done |  |  |
-|`minFontSize`|Function|Tuzhilkin Ivan| done |  |  |
-|`maxFontSize`|Function|Tuzhilkin Ivan| done |  |  |
-|`minFontScale`| Function | Kovalev Sergey | done |  | |
-|`maxFontScale`| Function | Kovalev Sergey | done |  | |
-|`heightAdaptivePolicy`|Function|Tuzhilkin Ivan| done |  |  |
-|`maxLines`|Function|Tuzhilkin Ivan| done |  |  |
-|`wordBreak`|Function|Tuzhilkin Ivan| done |  |  |
-|`lineBreakStrategy`|Function|Tuzhilkin Ivan| done |  |  |
-|`decoration`|Function|Tuzhilkin Ivan| done |  |  |
-|`letterSpacing`|Function|Tuzhilkin Ivan| done |  |  |
-|`lineSpacing`|Function|Tuzhilkin Ivan| done |  | |
-|`lineHeight`|Function|Tuzhilkin Ivan| done |  | |
-|`type`|Function|Tuzhilkin Ivan| done |  |  |
-|`enableAutoFill`|Function|Tuzhilkin Ivan| done |  |  |
-|`contentType`|Function|Tuzhilkin Ivan| done |  |  |
-|`fontFeature`|Function|Tuzhilkin Ivan| done |  |  |
-|`onWillInsert`|Function| Skroba Gleb | done |  |   |
-|`onDidInsert`|Function|Tuzhilkin Ivan| done |  |  |
-|`onWillDelete`|Function| Skroba Gleb | done |  |   |
-|`onDidDelete`|Function|Tuzhilkin Ivan| done |  |  |
-|`editMenuOptions`|Function| Pavelyev Ivan | done |  |  |
-|`enablePreviewText`|Function|Tuzhilkin Ivan| done |  |  |
-|`enableHapticFeedback`|Function|Tuzhilkin Ivan| done |  | |
-|`autoCapitalizationMode`| Function | | | | no such API in generation 125 |
-|`halfLeading`| Function | Kovalev Sergey | done |  | |
-|`ellipsisMode`| Function | Kovalev Sergey | done |  | |
-|`stopBackPress`| Function | Kovalev Sergey | done |  | |
-|`onWillChange`| Function | Erokhin Ilya | done | | |
-|`keyboardAppearance`| Function | Erokhin Ilya | done | | |
-|`inputFilter`|Function|Tuzhilkin Ivan| done |  | |
-|`showCounter`|Function|Tuzhilkin Ivan| done |  |   |
-|`customKeyboard`|Function| Erokhin Ilya | done |  | UT by Vadim Voronov  |
-|`_onChangeEvent_text`| Function | Erokhin Ilya | done |  | |
+|`construct`| Function | Tuzhilkin Ivan| done | pass | |
+|`setTextAreaOptions`|Function|Tuzhilkin Ivan| done | pass | |
+|`placeholderColor`|Function|Tuzhilkin Ivan| done | pass | |
+|`placeholderFont`|Function|Tuzhilkin Ivan| done | pass | |
+|`enterKeyType`|Function|Tuzhilkin Ivan| done | pass |  |
+|`textAlign`|Function|Tuzhilkin Ivan| done | pass |  |
+|`caretColor`|Function|Tuzhilkin Ivan| done | pass |  |
+|`fontColor`|Function|Tuzhilkin Ivan| done | pass |  |
+|`fontSize`|Function|Tuzhilkin Ivan| done | pass |  |
+|`fontStyle`|Function|Tuzhilkin Ivan| done | pass |  |
+|`fontWeight`|Function|Tuzhilkin Ivan| done | pass |  |
+|`fontFamily`|Function|Tuzhilkin Ivan| done | pass |  |
+|`textOverflow`|Function|Tuzhilkin Ivan| done | failed |  |
+|`textIndent`|Function|Tuzhilkin Ivan| done | pass |  |
+|`caretStyle`|Function|Tuzhilkin Ivan| done | pass |  |
+|`selectedBackgroundColor`|Function|Tuzhilkin Ivan| done | pass | |
+|`onSubmit0`| Function | Tuzhilkin Ivan, Spirin Andrey| done | not covered |  |
+|`onSubmit1`|Function|Tuzhilkin Ivan, Spirin Andrey| done | not covered |  |
+|`onChange`|Function|Tuzhilkin Ivan| done | pass | not covered |
+|`onTextSelectionChange`|Function|Tuzhilkin Ivan| done | not covered | |
+|`onContentScroll`|Function|Tuzhilkin Ivan| done | not covered |  |
+|`onEditChange`|Function|Tuzhilkin Ivan| done | not covered |  |
+|`onCopy`|Function|Tuzhilkin Ivan| done | not covered |  |
+|`onCut`|Function|Tuzhilkin Ivan| done | not covered |  |
+|`onPaste`|Function|Tuzhilkin Ivan| done | not covered | |
+|`copyOption`|Function|Tuzhilkin Ivan| done | pass |  |
+|`enableKeyboardOnFocus`|Function|Tuzhilkin Ivan| done | pass |  |
+|`maxLength`|Function|Tuzhilkin Ivan| done | pass |  |
+|`style`|Function|Tuzhilkin Ivan| done | not covered |  |
+|`barState`|Function|Tuzhilkin Ivan| done | pass |  |
+|`selectionMenuHidden`|Function|Tuzhilkin Ivan| done | pass |  |
+|`minFontSize`|Function|Tuzhilkin Ivan| done | pass |  |
+|`maxFontSize`|Function|Tuzhilkin Ivan| done | pass |  |
+|`minFontScale`| Function | Kovalev Sergey | done | not covered | |
+|`maxFontScale`| Function | Kovalev Sergey | done | not covered | |
+|`heightAdaptivePolicy`|Function|Tuzhilkin Ivan| done | pass |  |
+|`maxLines`|Function|Tuzhilkin Ivan| done | pass |  |
+|`wordBreak`|Function|Tuzhilkin Ivan| done | pass |  |
+|`lineBreakStrategy`|Function|Tuzhilkin Ivan| done | pass |  |
+|`decoration`|Function|Tuzhilkin Ivan| done | pass |  |
+|`letterSpacing`|Function|Tuzhilkin Ivan| done | pass |  |
+|`lineSpacing`|Function|Tuzhilkin Ivan| done | pass | |
+|`lineHeight`|Function|Tuzhilkin Ivan| done | pass | |
+|`type`|Function|Tuzhilkin Ivan| done | not covered |  |
+|`enableAutoFill`|Function|Tuzhilkin Ivan| done | pass |  |
+|`contentType`|Function|Tuzhilkin Ivan| done | failed |  |
+|`fontFeature`|Function|Tuzhilkin Ivan| done | pass |  |
+|`onWillInsert`|Function| Skroba Gleb | done | not covered |   |
+|`onDidInsert`|Function|Tuzhilkin Ivan| done | not covered |  |
+|`onWillDelete`|Function| Skroba Gleb | done | not covered |   |
+|`onDidDelete`|Function|Tuzhilkin Ivan| done | not covered |  |
+|`editMenuOptions`|Function| Pavelyev Ivan | done | not covered |  |
+|`enablePreviewText`|Function|Tuzhilkin Ivan| done | not covered |  |
+|`enableHapticFeedback`|Function|Tuzhilkin Ivan| done | not covered | |
+|`autoCapitalizationMode`| Function | not covered | | | no such API in generation 125 |
+|`halfLeading`| Function | Kovalev Sergey | done | not covered | |
+|`ellipsisMode`| Function | Kovalev Sergey | done | not covered | |
+|`stopBackPress`| Function | Kovalev Sergey | done | not covered | |
+|`onWillChange`| Function | Erokhin Ilya | done | not covered | |
+|`keyboardAppearance`| Function | Erokhin Ilya | done | not covered | |
+|`inputFilter`|Function|Tuzhilkin Ivan| done | test blocked  | blocked IDL |
+|`showCounter`|Function|Tuzhilkin Ivan| done | pass |   |
+|`customKeyboard`|Function| Erokhin Ilya | done | not covered | UT by Vadim Voronov  |
+|`_onChangeEvent_text`| Function | Erokhin Ilya | done | not covered | |
 |*TextClock*| *Component* |Pavelyev Ivan| blocked IDL |  |  |
 |`construct`| Function |Pavelyev Ivan| done |  |  |
 |`setTextClockOptions`| Function |Pavelyev Ivan| done |  |  |
