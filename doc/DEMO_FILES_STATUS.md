@@ -124,7 +124,7 @@
 | Scroll.test.ets |                   |
 | ScrollBar.test.ets |                   |
 | ScrollableCommonMethod.test.ets |                   |
-| Search.test.ets |                   |
+| Search.test.ets | Erokhin Ilya      |
 | Select.test.ets | Samarin Sergey    |
 | Shape.test.ets | Vadim Voronov     |
 | SideBarContainer.test.ets | Daryina Olga      |
