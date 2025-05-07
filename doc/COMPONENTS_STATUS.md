@@ -2469,7 +2469,7 @@
 |*TextContentControllerBase*| *Class* | Morozov Sergey | done |  | |
 |`ctor`| Function | Dudkin Sergey | done |  |  |
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
-|`getTextContentRect`| Function | Morozov Sergey, SkrobaGleb | done | test disabled |
+|`getTextContentRect`| Function | Morozov Sergey, SkrobaGleb | done | test blocked |
 |`getTextContentLineCount`| Function | Morozov Sergey | done |  | |
 |`addText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
 |`deleteText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
