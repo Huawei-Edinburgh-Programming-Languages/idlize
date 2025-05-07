@@ -924,13 +924,13 @@
 |`setPolylineOptions`| Function | Politov Mikhail | done |  |  |
 |`points`| Function | Politov Mikhail | done |  |   |
 |*Progress*| *Component* | Erokhin Ilya | blocked IDL |  | |
-|`construct`| Function | Erokhin Ilya | done |  | deprecated for `style` property |
-|`setProgressOptions`| Function | Erokhin Ilya | done |  | deprecated for `style` property |
-|`value`| Function | Erokhin Ilya | done |  | |
-|`color`| Function | Erokhin Ilya | done |  | |
-|`style`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov linearStyle.strokeRadius need to be tested |
-|`privacySensitive`| Function | Erokhin Ilya | done |  | |
-|`contentModifier`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
+|`construct`| Function | Erokhin Ilya | done | pass | deprecated for `style` property |
+|`setProgressOptions`| Function | Erokhin Ilya | done | failed | deprecated for `style` property |
+|`value`| Function | Erokhin Ilya | done | test blocked | test blocked by runtime error in Koala part during setProgressOptions |
+|`color`| Function | Erokhin Ilya | done | test blocked | test blocked by runtime error in Koala part during setProgressOptions |
+|`style`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov linearStyle.strokeRadius need to be tested, test blocked by runtime error in Koala part during setProgressOptions |
+|`privacySensitive`| Function | Erokhin Ilya | done | test blocked | test blocked by runtime error in Koala part during setProgressOptions |
+|`contentModifier`| Function | Erokhin Ilya | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |*QRCode*| *Component* | Evstigneev Roman | done |  |  |
 |`construct`| Function |Evstigneev Roman | done |  |  |
 |`setQRCodeOptions`| Function |Evstigneev Roman | done |  |  |
