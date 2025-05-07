@@ -63,7 +63,7 @@
 | DisplayPriority.test.ets |                   |
 | Divider.test.ets |                   |
 | EffectComponent.test.ets |                   |
-| Ellipse.test.ets |                   |
+| Ellipse.test.ets | Erokhin Ilya      |
 | Flex.test.ets | Dmitry A Smirnov  |
 | FlexCommonAttributes.test.ets | Dmitry A Smirnov  |
 | FocusStopFocuBox.test.ets |                   |
