@@ -1,156 +1,156 @@
-| FILE | responsible |
-| --------- | -------- |
-| AlphabetIndexer.test.ets | Porodin Alexander|
-| AspectRatio.test.ets | Porodin Alexander|
-| AttachDetach.test.ets | |
-| BackgroundBlurEffects.test.ets | |
-| Badge.test.ets | |
-| BaseSpan.test.ets | Porodin Alexander|
-| Blank.test.ets | Porodin Alexander|
-| Button.test.ets | Tuzhilkin Ivan |
-| CalendarPicker.test.ets | Porodin Alexander|
-| Canvas.test.ets | Vadim Voronov |
-| Checkbox.test.ets |Erokhin Ilya |
-| CheckboxGroup.test.ets |Erokhin Ilya |
-| Circle.test.ets | Porodin Alexander|
-| Click.test.ets | |
-| ClickEffect.test.ets | |
-| Column.test.ets | |
-| ColumnSplit.test.ets | |
-| CommonAccessibility.test.ets | Pisanov Nikolay |
-| CommonAnimateTo.test.ets | Pisanov Nikolay |
-| CommonBackdropBlur.test.ets | Pisanov Nikolay |
-| CommonBackgroundBrightness.test.ets | Pisanov Nikolay |
-| CommonBindContentCover.test.ets | Evstigneev Roman|
-| CommonBindPopup.test.ets | Pisanov Nikolay |
-| CommonBindSheet.test.ets | Ilya Erokhin|
-| CommonBlendMode.test.ets | Pisanov Nikolay |
-| CommonBlur.test.ets | Pisanov Nikolay |
-| CommonBorder.test.ets | Pisanov Nikolay |
-| CommonBorderImage.test.ets | Pisanov Nikolay |
-| CommonClipMaskAnimation.test.ets | Pisanov Nikolay |
-| CommonClipMaskShape.test.ets | Pisanov Nikolay |
-| CommonColorGradient.test.ets | Pisanov Nikolay |
-| CommonCustomProperty.test.ets | |
-| CommonDirectionAlign.test.ets | |
-| CommonDraggableDragPreviewOptionsOnDragStartEnd.test.ets | |
-| CommonDrawModifier.test.ets | |
-| CommonGeometryTransition.test.ets | |
-| CommonHitTestBehavior.test.ets | |
-| CommonLayoutWeight.test.ets | |
-| CommonLinearGradientBlur.test.ets | |
-| CommonMotionPath.test.ets | |
-| CommonObscured.test.ets | |
-| CommonOnChildTouchTest.test.ets | |
-| CommonOnVisibleAreaChange.test.ets | |
-| CommonOutline.test.ets | |
-| CommonOverlay.test.ets | |
-| CommonPart1.test.ets | |
-| CommonPart2.test.ets | |
-| CommonPixelRound.test.ets | |
-| CommonPositionOffsetMarkAnchor.test.ets | |
-| CommonRenderFit.test.ets | |
-| CommonSafeArea.test.ets | |
-| CommonSphericalEffectLightUpPixelStretch.test.ets | |
-| CommonSystemBarEffect.test.ets | |
-| CommonTouchAble.test.ets | |
-| Component3D.test.ets | |
-| ContainerSpan.test.ets | |
-| Counter.test.ets | |
-| CustomComponentBox.test.ets | |
-| DataPanel.test.ets | |
-| DatePicker.test.ets | Vadim Voronov |
-| DisplayPriority.test.ets | |
-| Divider.test.ets | |
-| EffectComponent.test.ets | |
-| Ellipse.test.ets | |
-| Flex.test.ets | Dmitry A Smirnov|
-| FlexCommonAttributes.test.ets | Dmitry A Smirnov|
-| FocusStopFocuBox.test.ets | |
-| FocusTraversalGroup.test.ets | |
-| FocusTraversalToComponentsEffect.test.ets | |
-| ForegroundBlurStyle.test.ets | |
-| ForegroundColor.test.ets | |
-| ForegroundEffect.test.ets | |
-| FormLink.test.ets | Daryina Olga |
-| Gauge.test.ets | |
-| Grid.test.ets | Evstigneev Roman |
-| GridCol.test.ets | Evstigneev Roman |
-| GridContainerCommonAttributes.test.ets | Evstigneev Roman |
-| GridItem.test.ets | Evstigneev Roman |
-| GridRow.test.ets | Evstigneev Roman |
-| HoverEvent.test.ets | |
-| HyperLink.test.ets | |
-| Image.test.ets | |
-| Image2.test.ets | |
-| Image3ColorFilter.test.ets | |
-| Image4.test.ets | |
-| ImageAnimator.test.ets | |
-| ImageSpan.test.ets | |
-| Line.test.ets | Daryina Olga|
-| List.test.ets | |
-| ListItem.test.ets | |
-| ListItemGroup.test.ets | |
-| LoadingProgress.test.ets | |
-| LocationButton.test.ets | |
-| Marquee.test.ets | |
-| Menu.test.ets | |
-| MenuItem.test.ets | |
-| MenuItemGroup.test.ets | |
-| MotionBlur.test.ets | |
-| NavDestination.test.ets | |
-| Navigation.test.ets | |
-| Navigator.test.ets | |
-| NestedScroll.test.ets | |
-| OnAreaChange.test.ets | |
-| Panel.test.ets |Daryina Olga |
-| PasteButton.test.ets | |
-| Path.test.ets |Daryina Olga |
-| PatternLock.test.ets | Dmitry A Smirnov|
-| Polygon.test.ets | |
-| Polyline.test.ets | |
-| Progress.test.ets |Erokhin Ilya |
-| QRCode.test.ets | |
-| Radio.test.ets | Porodin Alexander|
-| Rating.test.ets |Daryina Olga |
-| Refresh.test.ets | |
-| RelativeContainer.test.ets | |
-| RenderGroup.test.ets | |
-| RequestFocusFocusable.test.ets | |
-| RichEditor.test.ets | |
-| RichText.test.ets |Erokhin Ilya |
-| Row.test.ets | Daryina Olga|
-| RowSplit.test.ets | Daryina Olga|
-| Scroll.test.ets | |
-| ScrollBar.test.ets | |
-| ScrollableCommonMethod.test.ets | |
-| Search.test.ets | |
-| Select.test.ets | Samarin Sergey |
-| Shape.test.ets | Vadim Voronov |
-| SideBarContainer.test.ets | Daryina Olga|
-| Slider.test.ets | |
-| Span.test.ets | |
-| Stack.test.ets | Pisanov Nikolay |
-| Stepper.test.ets | |
-| Swiper.test.ets | |
-| SymbolGlyph.test.ets | |
-| SymbolSpan.test.ets | |
-| Tabs.test.ets | Skroba Gleb |
-| Text.test.ets | Ilya Erokhin|
-| TextArea.test.ets | |
-| TextClock.test.ets | |
-| TextInput.test.ets | |
-| TextPicker.test.ets | |
-| TextTimer.test.ets | |
-| TimePicker.test.ets | |
-| Toggle.test.ets | |
-| TransformRotateScaleTranslate.test.ets | |
-| TransitionEffect.test.ets | |
-| UseShadowBatching.test.ets | |
-| Video.test.ets | |
-| Visibility.test.ets | |
-| WaterFlow.test.ets | |
-| WaterFlowDataSource.ets | |
-| Web.test.ets | |
-| XComponent.test.ets | |
-| ZIndex.test.ets | |
+| FILE | responsible       |
+| --------- |-------------------|
+| AlphabetIndexer.test.ets | Porodin Alexander |
+| AspectRatio.test.ets | Porodin Alexander |
+| AttachDetach.test.ets |                   |
+| BackgroundBlurEffects.test.ets |                   |
+| Badge.test.ets |                   |
+| BaseSpan.test.ets | Porodin Alexander |
+| Blank.test.ets | Porodin Alexander |
+| Button.test.ets | Tuzhilkin Ivan    |
+| CalendarPicker.test.ets | Porodin Alexander |
+| Canvas.test.ets | Vadim Voronov     |
+| Checkbox.test.ets | Erokhin Ilya      |
+| CheckboxGroup.test.ets | Erokhin Ilya      |
+| Circle.test.ets | Porodin Alexander |
+| Click.test.ets |                   |
+| ClickEffect.test.ets |                   |
+| Column.test.ets |                   |
+| ColumnSplit.test.ets |                   |
+| CommonAccessibility.test.ets | Pisanov Nikolay   |
+| CommonAnimateTo.test.ets | Pisanov Nikolay   |
+| CommonBackdropBlur.test.ets | Pisanov Nikolay   |
+| CommonBackgroundBrightness.test.ets | Pisanov Nikolay   |
+| CommonBindContentCover.test.ets | Evstigneev Roman  |
+| CommonBindPopup.test.ets | Pisanov Nikolay   |
+| CommonBindSheet.test.ets | Ilya Erokhin      |
+| CommonBlendMode.test.ets | Pisanov Nikolay   |
+| CommonBlur.test.ets | Pisanov Nikolay   |
+| CommonBorder.test.ets | Pisanov Nikolay   |
+| CommonBorderImage.test.ets | Pisanov Nikolay   |
+| CommonClipMaskAnimation.test.ets | Pisanov Nikolay   |
+| CommonClipMaskShape.test.ets | Pisanov Nikolay   |
+| CommonColorGradient.test.ets | Pisanov Nikolay   |
+| CommonCustomProperty.test.ets |                   |
+| CommonDirectionAlign.test.ets |                   |
+| CommonDraggableDragPreviewOptionsOnDragStartEnd.test.ets |                   |
+| CommonDrawModifier.test.ets |                   |
+| CommonGeometryTransition.test.ets |                   |
+| CommonHitTestBehavior.test.ets |                   |
+| CommonLayoutWeight.test.ets |                   |
+| CommonLinearGradientBlur.test.ets |                   |
+| CommonMotionPath.test.ets |                   |
+| CommonObscured.test.ets |                   |
+| CommonOnChildTouchTest.test.ets |                   |
+| CommonOnVisibleAreaChange.test.ets |                   |
+| CommonOutline.test.ets |                   |
+| CommonOverlay.test.ets |                   |
+| CommonPart1.test.ets |                   |
+| CommonPart2.test.ets |                   |
+| CommonPixelRound.test.ets |                   |
+| CommonPositionOffsetMarkAnchor.test.ets |                   |
+| CommonRenderFit.test.ets |                   |
+| CommonSafeArea.test.ets |                   |
+| CommonSphericalEffectLightUpPixelStretch.test.ets |                   |
+| CommonSystemBarEffect.test.ets |                   |
+| CommonTouchAble.test.ets |                   |
+| Component3D.test.ets |                   |
+| ContainerSpan.test.ets |                   |
+| Counter.test.ets |                   |
+| CustomComponentBox.test.ets |                   |
+| DataPanel.test.ets | Sergey Morozov |
+| DatePicker.test.ets | Vadim Voronov     |
+| DisplayPriority.test.ets |                   |
+| Divider.test.ets |                   |
+| EffectComponent.test.ets |                   |
+| Ellipse.test.ets |                   |
+| Flex.test.ets | Dmitry A Smirnov  |
+| FlexCommonAttributes.test.ets | Dmitry A Smirnov  |
+| FocusStopFocuBox.test.ets |                   |
+| FocusTraversalGroup.test.ets |                   |
+| FocusTraversalToComponentsEffect.test.ets |                   |
+| ForegroundBlurStyle.test.ets |                   |
+| ForegroundColor.test.ets |                   |
+| ForegroundEffect.test.ets |                   |
+| FormLink.test.ets | Daryina Olga      |
+| Gauge.test.ets |                   |
+| Grid.test.ets | Evstigneev Roman  |
+| GridCol.test.ets | Evstigneev Roman  |
+| GridContainerCommonAttributes.test.ets | Evstigneev Roman  |
+| GridItem.test.ets | Evstigneev Roman  |
+| GridRow.test.ets | Evstigneev Roman  |
+| HoverEvent.test.ets |                   |
+| HyperLink.test.ets |                   |
+| Image.test.ets |                   |
+| Image2.test.ets |                   |
+| Image3ColorFilter.test.ets |                   |
+| Image4.test.ets |                   |
+| ImageAnimator.test.ets |                   |
+| ImageSpan.test.ets |                   |
+| Line.test.ets | Daryina Olga      |
+| List.test.ets |                   |
+| ListItem.test.ets |                   |
+| ListItemGroup.test.ets |                   |
+| LoadingProgress.test.ets |                   |
+| LocationButton.test.ets |                   |
+| Marquee.test.ets |                   |
+| Menu.test.ets |                   |
+| MenuItem.test.ets |                   |
+| MenuItemGroup.test.ets |                   |
+| MotionBlur.test.ets |                   |
+| NavDestination.test.ets |                   |
+| Navigation.test.ets |                   |
+| Navigator.test.ets |                   |
+| NestedScroll.test.ets |                   |
+| OnAreaChange.test.ets |                   |
+| Panel.test.ets | Daryina Olga      |
+| PasteButton.test.ets |                   |
+| Path.test.ets | Daryina Olga      |
+| PatternLock.test.ets | Dmitry A Smirnov  |
+| Polygon.test.ets |                   |
+| Polyline.test.ets |                   |
+| Progress.test.ets | Erokhin Ilya      |
+| QRCode.test.ets |                   |
+| Radio.test.ets | Porodin Alexander |
+| Rating.test.ets | Daryina Olga      |
+| Refresh.test.ets |                   |
+| RelativeContainer.test.ets |                   |
+| RenderGroup.test.ets |                   |
+| RequestFocusFocusable.test.ets |                   |
+| RichEditor.test.ets |                   |
+| RichText.test.ets | Erokhin Ilya      |
+| Row.test.ets | Daryina Olga      |
+| RowSplit.test.ets | Daryina Olga      |
+| Scroll.test.ets |                   |
+| ScrollBar.test.ets |                   |
+| ScrollableCommonMethod.test.ets |                   |
+| Search.test.ets |                   |
+| Select.test.ets | Samarin Sergey    |
+| Shape.test.ets | Vadim Voronov     |
+| SideBarContainer.test.ets | Daryina Olga      |
+| Slider.test.ets |                   |
+| Span.test.ets |                   |
+| Stack.test.ets | Pisanov Nikolay   |
+| Stepper.test.ets |                   |
+| Swiper.test.ets |                   |
+| SymbolGlyph.test.ets |                   |
+| SymbolSpan.test.ets |                   |
+| Tabs.test.ets | Skroba Gleb       |
+| Text.test.ets | Ilya Erokhin      |
+| TextArea.test.ets |                   |
+| TextClock.test.ets |                   |
+| TextInput.test.ets |                   |
+| TextPicker.test.ets |                   |
+| TextTimer.test.ets |                   |
+| TimePicker.test.ets |                   |
+| Toggle.test.ets |                   |
+| TransformRotateScaleTranslate.test.ets |                   |
+| TransitionEffect.test.ets |                   |
+| UseShadowBatching.test.ets |                   |
+| Video.test.ets |                   |
+| Visibility.test.ets |                   |
+| WaterFlow.test.ets |                   |
+| WaterFlowDataSource.ets |                   |
+| Web.test.ets |                   |
+| XComponent.test.ets |                   |
+| ZIndex.test.ets |                   |
