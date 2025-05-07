@@ -91,7 +91,7 @@
 | List.test.ets |                   |
 | ListItem.test.ets |                   |
 | ListItemGroup.test.ets |                   |
-| LoadingProgress.test.ets |                   |
+| LoadingProgress.test.ets | Samarin Sergey    |
 | LocationButton.test.ets |                   |
 | Marquee.test.ets |                   |
 | Menu.test.ets | Sergey Morozov    |
