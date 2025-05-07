@@ -9,7 +9,7 @@
 | Blank.test.ets | Porodin Alexander|
 | Button.test.ets | Tuzhilkin Ivan |
 | CalendarPicker.test.ets | Porodin Alexander|
-| Canvas.test.ets | |
+| Canvas.test.ets | Vadim Voronov |
 | Checkbox.test.ets | |
 | CheckboxGroup.test.ets | |
 | Circle.test.ets | Porodin Alexander|
@@ -59,7 +59,7 @@
 | Counter.test.ets | |
 | CustomComponentBox.test.ets | |
 | DataPanel.test.ets | |
-| DatePicker.test.ets | |
+| DatePicker.test.ets | Vadim Voronov |
 | DisplayPriority.test.ets | |
 | Divider.test.ets | |
 | EffectComponent.test.ets | |
@@ -126,7 +126,7 @@
 | ScrollableCommonMethod.test.ets | |
 | Search.test.ets | |
 | Select.test.ets | |
-| Shape.test.ets | |
+| Shape.test.ets | Vadim Voronov |
 | SideBarContainer.test.ets | Daryina Olga|
 | Slider.test.ets | |
 | Span.test.ets | |
