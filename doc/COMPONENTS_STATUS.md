@@ -608,15 +608,15 @@
 |`onScrollFrameBegin`|Function| Skroba Gleb | done |  |   |
 |`edgeEffect`|Function| Erokhin Ilya | done |  |  |
 |*GridItem*|*Component*| Erokhin Ilya | done | test blocked(blocked IDL) |  |
-|`construct`| Function |Erokhin Ilya | done |  |  |
-|`setGridItemOptions`|Function| Erokhin Ilya | done |  |  |
-|`rowStart`|Function| Erokhin Ilya | done |  |  |
-|`rowEnd`|Function| Erokhin Ilya | done |  |  |
-|`columnStart`|Function| Erokhin Ilya | done |  |  |
-|`columnEnd`|Function| Erokhin Ilya | done |  |  |
-|`forceRebuild`|Function| Erokhin Ilya | done |  |deprecated?  |
-|`selectable`|Function| Erokhin Ilya | done |  |  |
-|`selected`|Function| Erokhin Ilya | done |  |  |
+|`construct`| Function |Erokhin Ilya | done | test blocked(blocked IDL) |  |
+|`setGridItemOptions`|Function| Erokhin Ilya | done | test blocked(blocked IDL) |  |
+|`rowStart`|Function| Erokhin Ilya | done | test blocked(blocked IDL)  |  |
+|`rowEnd`|Function| Erokhin Ilya | done | test blocked(blocked IDL)  |  |
+|`columnStart`|Function| Erokhin Ilya | done | test blocked(blocked IDL)  |  |
+|`columnEnd`|Function| Erokhin Ilya | done | test blocked(blocked IDL) |  |
+|`forceRebuild`|Function| Erokhin Ilya | done | test blocked(deprecated since 9) |deprecated?  |
+|`selectable`|Function| Erokhin Ilya | done | test blocked(blocked IDL)  |  |
+|`selected`|Function| Erokhin Ilya | done | test blocked(blocked IDL)  |  |
 |`onSelect`|Function| Erokhin Ilya | done |  |  |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*GridCol*| *Component* | Lobah Mikhail| done |  |  |
