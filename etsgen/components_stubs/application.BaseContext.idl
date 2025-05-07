@@ -1,3 +1,6 @@
 package application.BaseContext;
 
-interface BaseContext {};
+[Entity=Class]
+interface BaseContext {
+    constructor();
+};

@@ -2,11 +2,11 @@ package ohos.app.ability.common;
 
 import application.BaseContext.BaseContext as BaseContext;
 
+[Async]
+callback Context_getGroupDir_Callback = void (String result);
+
 [DefaultExport]
 namespace common {
-    [Async]
-    callback Context_getGroupDir_Callback = void (String result);
-
     [Entity=Class]
     interface Context: [Extends] BaseContext {
         // attribute resmgr.ResourceManager resourceManager;

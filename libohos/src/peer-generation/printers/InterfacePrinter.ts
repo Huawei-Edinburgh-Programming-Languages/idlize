@@ -62,9 +62,24 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         return this.isDeclared && idl.getNamespacesPathFor(decl).length === 0
     }
 
+    protected maybeConvertReexportTypedef(node: idl.IDLTypedef): string | undefined {
+        if (!idl.isReferenceType(node.type)) return undefined
+        const target = this.peerLibrary.resolveTypeReference(node.type)
+        if (target?.name != node.name || idl.getNamespaceName(target)) return undefined
+        const currentModule = this.peerLibrary.layout.resolve({node: node, role: LayoutNodeRole.INTERFACE})
+        const targetModule = this.peerLibrary.layout.resolve({node: target, role: LayoutNodeRole.INTERFACE})
+        const relative = ImportsCollector.resolveRelative(currentModule, targetModule)!
+        return `export { ${node.name} } from "${relative}"`
+    }
+
     convertTypedef(node: idl.IDLTypedef) {
         if (idl.hasExtAttribute(node, idl.IDLExtendedAttributes.Import))
             return
+        let reexportTypedef: string | undefined
+        if (reexportTypedef = this.maybeConvertReexportTypedef(node)) {
+            this.writer.print(reexportTypedef)
+            return
+        }
         const type = this.writer.getNodeName(node.type)
         const typeParams = this.printTypeParameters(node.typeParameters)
         this.writer.print(`export type ${node.name}${typeParams} = ${type};`)
@@ -166,7 +181,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         const implementsItems: string[] = []
         superTypes?.forEach(it => {
             const superDecl = this.peerLibrary.resolveTypeReference(it)
-            const parentTypeArgs = this.printTypeParameters(
+            const parentTypeArgs = this.printTypeArguments(
                 (it as idl.IDLReferenceType)?.typeArguments?.map(it => idl.printType(it)))
             const clause = `${idl.forceAsNamedNode(it).name}${parentTypeArgs}`
             if (superDecl && isMaterialized(idlInterface, this.peerLibrary) && idl.isClassSubkind(idlInterface) && idl.isInterface(superDecl) && idl.isInterfaceSubkind(superDecl))
@@ -249,7 +264,16 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
     }
 
     protected printTypeParameters(typeParameters: string[] | undefined): string {
-        return typeParameters?.length ? `<${typeParameters.join(",").replace("[]", "")}>` : ""
+        function addDefaultIfNeeded(typeParameter: string): string {
+            if (!typeParameter.includes('='))
+                return `${typeParameter} = void`
+            return typeParameter
+        }
+        return typeParameters?.length ? `<${typeParameters.map(addDefaultIfNeeded).join(",").replace("[]", "")}>` : ""
+    }
+
+    protected printTypeArguments(typeArguments: string[] | undefined): string {
+        return typeArguments?.length ? `<${typeArguments.join(",").replace("[]", "")}>` : ""
     }
 
     protected convertType(idlType: idl.IDLType): string {
