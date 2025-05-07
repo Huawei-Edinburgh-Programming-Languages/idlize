@@ -294,19 +294,19 @@
 |`lightUpEffect1`| Function | Dmitry A Smirnov | done |  | |
 |`pixelStretchEffect0`| Function | Lobah Mikhail | done |  | |
 |`pixelStretchEffect1`| Function | Dmitry A Smirnov | done |  | |
-|`accessibilityGroup0`| Function |Lobah Mikhail | done |  | |
-|`accessibilityGroup1`| Function | Lobah Mikhail | done |  | |
-|`accessibilityText0`| Function | Lobah Mikhail | done |  | |
-|`accessibilityText1`| Function |Lobah Mikhail | done |  | |
+|`accessibilityGroup0`| Function |Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`accessibilityGroup1`| Function | Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`accessibilityText0`| Function | Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`accessibilityText1`| Function |Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`accessibilityNextFocusId`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`accessibilityDefaultFocus`| Function | Lobah Mikhail| blocked IDL | | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00|
 |`accessibilityUseSamePage`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`accessibilityScrollTriggerable`| Function | Tuzhilkin Ivan | done | | WRONG_GENERATION: parameter should be Opt, need cherry-pick to feature_branch |
 |`accessibilityRole`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onAccessibilityFocus`| Function | Evstigneev Roman | done | | feature: API not present |
-|`accessibilityTextHint`| Function | Lobah Mikhail | done |  | |
-|`accessibilityDescription0`| Function | Lobah Mikhail| done| | |
-|`accessibilityDescription1`| Function | Lobah Mikhail| done| | |
+|`accessibilityTextHint`| Function | Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`accessibilityDescription0`| Function | Lobah Mikhail| done| blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`accessibilityDescription1`| Function | Lobah Mikhail| done| blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`accessibilityLevel`| Function | Lobah Mikhail | done |  | |
 |`accessibilityVirtualNode`| Function | Lobah Mikhail | done |  |  |
 |`accessibilityChecked`| Function | Lobah Mikhail | done |  | |
