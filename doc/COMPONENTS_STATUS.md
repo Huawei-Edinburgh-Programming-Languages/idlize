@@ -667,7 +667,7 @@
 |`onFinish`| Function | Evstigneev Roman | done |  | |
 |`enableAnalyzer`| Function | Evstigneev Roman | done |  | |
 |`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (+) |
-|`resizable`| Function | Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY | |
+|`resizable`| Function | Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`privacySensitive`| Function | Evstigneev Roman | done |  | |
 |`enhancedImageQuality`| Function | Erokhin Ilya | done |  |  |
 |`orientation`| Function | Samarin Sergey | done |  | |
@@ -1406,8 +1406,8 @@
 |`construct`| Function | Evstigneev Roman | done | pass |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |  |
 |`tabBar0`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | done | pass |  |
-|`tabBar1`| Function |Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |  |
-|`tabBar2`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |  |
+|`tabBar1`| Function |Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |
+|`tabBar2`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |
 |`onWillShow`| Function |Evstigneev Roman | done |  |  |
 |`onWillHide`| Function |Evstigneev Roman | done |  |  |
 |*Text*| *Component* | Samarin Sergey | blocked IDL |  | |
@@ -1627,13 +1627,13 @@
 |`textStyle1`| Function |Ekaterina Stepanova | done |  |  |
 |`selectedTextStyle0`| Function | Ekaterina Stepanova| done |  |  |
 |`selectedTextStyle1`| Function | Ekaterina Stepanova| done |  |  |
-|`disableTextStyleAnimation`| Function | Kovalev Sergey | done |Upst | API is present on Upstream only |
+|`disableTextStyleAnimation`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`defaultTextStyle`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`onAccept`| Function |Ekaterina Stepanova | done |  |deprecated  |
 |`onCancel`| Function |Ekaterina Stepanova | done |  |deprecated  |
 |`onChange0`| Function | Tuzhilkin Ivan| done |  |  |
 |`onChange1`| Function |Tuzhilkin Ivan| done |  |  |
-|`onScrollStop0`| Function | Kovalev Sergey | done | API is present on Upstream only |
+|`onScrollStop0`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`onScrollStop1`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`onEnterSelectedArea`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`selectedIndex0`| Function |Ekaterina Stepanova | done |  |  |
@@ -1682,8 +1682,8 @@
 |`enableCascade`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*Toggle*| *Component* |Morozov Sergey |blocked IDL |  |
-|`construct`| Function |Morozov Sergey | done | unblocked since AceEngine won't fix it |
-|`setToggleOptions`| Function |Morozov Sergey | done | unblocked since AceEngine won't fix it |
+|`construct`| Function |Morozov Sergey | done | | unblocked since AceEngine won't fix it |
+|`setToggleOptions`| Function |Morozov Sergey | done | | unblocked since AceEngine won't fix it |
 |`onChange`| Function | Morozov Sergey| done |  |  |
 |`contentModifier`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`selectedColor`| Function | Morozov Sergey| done |  |  |
@@ -1962,10 +1962,10 @@
 |`createSRGBGammaToLinear`| Function |Evstigneev Roman | in progress| | |
 |`createLumaColorFilter`| Function |Evstigneev Roman | in progress | | |
 |`createMatrixColorFilter`| Function |Evstigneev Roman | in progress| | |
-|*Lattice*| *Class* |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY | |
-|`ctor`| Function |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY | |
-|`createImageLattice0`| Function |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY | |
-|`createImageLattice1`| Function |Evstigneev Roman | blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY | |
+|*Lattice*| *Class* |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`ctor`| Function |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`createImageLattice0`| Function |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`createImageLattice1`| Function |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |*DrawingCanvas*| *Class* | Dudkin Sergey | done |  | |
 |`ctor`| Function | Dudkin Sergey | done |  | |
 |`drawRect`| Function | Dudkin Sergey | done |  | |
@@ -2331,12 +2331,12 @@
 |`setY`| Function | Kovalev Sergey | done |  | |
 |`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Kovalev Sergey | done |  | empty implementation |
-|`getRawDeltaX`| Function | Kovalev Sergey| done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
-|`setRawDeltaX`| Function | Kovalev Sergey| done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
-|`getRawDeltaY`| Function | Kovalev Sergey | done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
-|`setRawDeltaY`| Function | Kovalev Sergey | done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
-|`getPressedButtons`| Function | Kovalev Sergey | done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
-|`setPressedButtons`| Function |Kovalev Sergey| done | noFB | doesn't present in FB missed in SDK since 15, done for Upstream |
+|`getRawDeltaX`| Function | Kovalev Sergey| done |  | doesn't present in FB missed in SDK since 15, done for Upstream |
+|`setRawDeltaX`| Function | Kovalev Sergey| done |  | doesn't present in FB missed in SDK since 15, done for Upstream |
+|`getRawDeltaY`| Function | Kovalev Sergey | done |  | doesn't present in FB missed in SDK since 15, done for Upstream |
+|`setRawDeltaY`| Function | Kovalev Sergey | done |  | doesn't present in FB missed in SDK since 15, done for Upstream |
+|`getPressedButtons`| Function | Kovalev Sergey | done |  | doesn't present in FB missed in SDK since 15, done for Upstream |
+|`setPressedButtons`| Function |Kovalev Sergey| done |  | doesn't present in FB missed in SDK since 15, done for Upstream |
 |*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | done |  | |
 |`ctor`| Function |Pavelyev Ivan, Samarin Sergey | done |  | |
 |`getType`| Function | Pavelyev Ivan, Samarin Sergey | done |  | |
@@ -2509,7 +2509,7 @@
 |`ctor`| Function | Skroba Gleb | done | |  |
 |`getName`| Function | Skroba Gleb | done | |  |
 |`setName`| Function | Skroba Gleb | done | |  |
-|`getParam`| Function | | managed side |managed side |  |
+|`getParam`| Function | | managed side | | managed side |
 |`setParam`| Function | Skroba Gleb | done | |  |
 |`getOnPop`| Function | Skroba Gleb | done | |  |
 |`setOnPop`| Function | Skroba Gleb | done | |  |
