@@ -129,7 +129,7 @@
 | Shape.test.ets | Vadim Voronov     |
 | SideBarContainer.test.ets | Daryina Olga      |
 | Slider.test.ets | Erokhin Ilya      |
-| Span.test.ets |                   |
+| Span.test.ets | Erokhin Ilya      |
 | Stack.test.ets | Pisanov Nikolay   |
 | Stepper.test.ets |                   |
 | Swiper.test.ets | Skroba Gleb      |
