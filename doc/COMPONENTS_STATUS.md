@@ -11,34 +11,34 @@
 |`onDisconnect`| Function | Tuzhilkin Ivan | deprecated |  | deprecated |
 |*AlphabetIndexer*| *Component* |Ekaterina Stepanova| done |  |  |
 |`construct`| Function |Ekaterina Stepanova| done |  |  |
-|`setAlphabetIndexerOptions`| Function |Ekaterina Stepanova| done |  | deprecated |
+|`setAlphabetIndexerOptions`| Function |Ekaterina Stepanova| done | pass | deprecated |
 |`onSelected`| Function |Ekaterina Stepanova| done |  |  |
-|`color`| Function |Ekaterina Stepanova| done |  |  |
-|`selectedColor`| Function |Ekaterina Stepanova| done |  |  |
-|`popupColor`| Function |Ekaterina Stepanova| done |  |  |
-|`selectedBackgroundColor`| Function |Ekaterina Stepanova| done |  |  |
-|`popupBackground`| Function |Ekaterina Stepanova| done |  |  |
-|`popupSelectedColor`| Function |Ekaterina Stepanova| done |  |  |
-|`popupUnselectedColor`| Function |Ekaterina Stepanova| done |  |  |
-|`popupItemBackgroundColor`| Function |Ekaterina Stepanova| done |  |  |
-|`usingPopup`| Function |Ekaterina Stepanova| done |  |  |
-|`selectedFont`| Function |Ekaterina Stepanova| done |  |  |
-|`popupFont`| Function |Ekaterina Stepanova| done |  |  |
-|`popupItemFont`| Function |Ekaterina Stepanova| done |  |  |
-|`itemSize`| Function |Ekaterina Stepanova| done |  |  |
-|`font`| Function |Ekaterina Stepanova| done |  |  |
-|`onSelect`| Function |Ekaterina Stepanova| done |  |  |
-|`onRequestPopupData`| Function |Skroba Gleb| done |  |  |
-|`onPopupSelect`| Function |Ekaterina Stepanova| done |  |  |
-|`selected`| Function |Ekaterina Stepanova| done |  |  |
+|`color`| Function |Ekaterina Stepanova| done | pass |  |
+|`selectedColor`| Function |Ekaterina Stepanova| done | pass |  |
+|`popupColor`| Function |Ekaterina Stepanova| done | pass |  |
+|`selectedBackgroundColor`| Function |Ekaterina Stepanova| done | pass |  |
+|`popupBackground`| Function |Ekaterina Stepanova| done | pass |  |
+|`popupSelectedColor`| Function |Ekaterina Stepanova| done | pass |  |
+|`popupUnselectedColor`| Function |Ekaterina Stepanova| done | pass |  |
+|`popupItemBackgroundColor`| Function |Ekaterina Stepanova| done | pass |  |
+|`usingPopup`| Function |Ekaterina Stepanova| done | pass |  |
+|`selectedFont`| Function |Ekaterina Stepanova| done | pass |  |
+|`popupFont`| Function |Ekaterina Stepanova| done | pass |  |
+|`popupItemFont`| Function |Ekaterina Stepanova| done | pass |  |
+|`itemSize`| Function |Ekaterina Stepanova| done | pass |  |
+|`font`| Function |Ekaterina Stepanova| done | pass |  |
+|`onSelect`| Function |Ekaterina Stepanova| done | failed | OHOSUI-2172 |
+|`onRequestPopupData`| Function |Skroba Gleb| done | failed | OHOSUI-2172 |
+|`onPopupSelect`| Function |Ekaterina Stepanova| done | failed | OHOSUI-2172 |
+|`selected`| Function |Ekaterina Stepanova| done | pass |  |
 |`popupPosition`| Function |Ekaterina Stepanova| done |  |  |
-|`autoCollapse`| Function |Ekaterina Stepanova| done |  |  |
-|`popupItemBorderRadius`| Function |Ekaterina Stepanova| done |  |  |
-|`itemBorderRadius`| Function |Ekaterina Stepanova| done |  |  |
-|`popupBackgroundBlurStyle`| Function |Ekaterina Stepanova| done |  |  |
-|`popupTitleBackground`| Function |Ekaterina Stepanova| done |  |  |
-|`enableHapticFeedback`| Function |Ekaterina Stepanova| done |  |  |
-|`alignStyle`| Function |Ekaterina Stepanova| done |  |  |
+|`autoCollapse`| Function |Ekaterina Stepanova| done | pass |  |
+|`popupItemBorderRadius`| Function |Ekaterina Stepanova| done | pass |  |
+|`itemBorderRadius`| Function |Ekaterina Stepanova| done | pass |  |
+|`popupBackgroundBlurStyle`| Function |Ekaterina Stepanova| done | pass |  |
+|`popupTitleBackground`| Function |Ekaterina Stepanova| done | pass |  |
+|`enableHapticFeedback`| Function |Ekaterina Stepanova| done | test blocked | not supported by dayu200 |
+|`alignStyle`| Function |Ekaterina Stepanova| done | pass |  |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*Animator*| *Component* | Skroba Gleb | managed side |  |  |
 |`construct`| Function | Skroba Gleb | managed side |  |  |
@@ -707,9 +707,9 @@
 |`columnsTemplate`| Function | | | | no such API in generation 125 |
 |*Line*|*Component*|Dudkin Sergey| done |  |  |
 |`construct`| Function |Dudkin Sergey| done |  |  |
-|`setLineOptions`|Function|Dudkin Sergey| done |  |  |
-|`startPoint`|Function|Dudkin Sergey| done |  |  |
-|`endPoint`|Function|Dudkin Sergey| done |  |  |
+|`setLineOptions`|Function|Dudkin Sergey| done | pass |  |
+|`startPoint`|Function|Dudkin Sergey| done | pass |  |
+|`endPoint`|Function|Dudkin Sergey| done | pass |  |
 |*List*|*Component*|Morozov Sergey| done |  |  |
 |`construct`| Function |Morozov Sergey| done |  |  |
 |`setListOptions`|Function|Morozov Sergey| done |  |  |
@@ -892,8 +892,8 @@
 |`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan, Evstgneev Roman | testskipped |  |  |
 |*Path*| *Component* | Skroba Gleb | done |  |  |
 |`construct`| Function |Skroba Gleb | done |  |  |
-|`setPathOptions`| Function | Skroba Gleb | done |  |  |
-|`commands`| Function | Skroba Gleb | done |  |  |
+|`setPathOptions`| Function | Skroba Gleb | done | pass |  |
+|`commands`| Function | Skroba Gleb | done | pass |  |
 |*PatternLock*| *Component* | Dmitry A Smirnov| in progress |  |  |
 |`construct`| Function | Dmitry A Smirnov| done | pass |  |
 |`setPatternLockOptions`| Function | Dmitry A Smirnov| done | pass |  |
@@ -950,15 +950,15 @@
 |`_onChangeEvent_checked`| Function | Erokhin Ilya | done |  | |
 |*Rating*| *Component* | Lobah Mikhail| done |  |  |
 |`construct`| Function | Lobah Mikhail| done |  |  |
-|`setRatingOptions`| Function | Lobah Mikhail| done |  | |
-|`stars0`| Function | Lobah Mikhail| done |  | |
-|`stars1`| Function | Lobah Mikhail| done |  | |
-|`stepSize0`| Function | Lobah Mikhail| done |  | |
-|`stepSize1`| Function | Lobah Mikhail| done |  | |
-|`starStyle0`| Function | Lobah Mikhail| done |  | |
-|`starStyle1`| Function | Lobah Mikhail| done |  | |
-|`onChange0`| Function | Lobah Mikhail| done |  |  |
-|`onChange1`| Function | Lobah Mikhail| done |  |  |
+|`setRatingOptions`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
+|`stars0`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
+|`stars1`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
+|`stepSize0`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
+|`stepSize1`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
+|`starStyle0`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
+|`starStyle1`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
+|`onChange0`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
+|`onChange1`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
 |`contentModifier0`| Function | Lobah Mikhail| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`contentModifier1`| Function | Lobah Mikhail| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`_onChangeEvent_rating`| Function | Erokhin Ilya | done |  | |
@@ -1864,20 +1864,20 @@
 |*SideBarContainer*| *Component* |Dmitry A Smirnov|in progress|  |
 |`construct`| Function |Dmitry A Smirnov| done |  |  |
 |`setSideBarContainerOptions`| Function |Dmitry A Smirnov| done |  |  |
-|`showSideBar`| Function |Dmitry A Smirnov| done |  |  |
+|`showSideBar`| Function |Dmitry A Smirnov| done | pass |  |
 |`controlButton`| Function |Dmitry A Smirnov| done |  | need submit to FB |
-|`showControlButton`| Function |Dmitry A Smirnov| done |  |  |
+|`showControlButton`| Function |Dmitry A Smirnov| done | pass |  |
 |`onChange`| Function |Dmitry A Smirnov| done |  |  |
-|`sideBarWidth0`| Function |Dmitry A Smirnov| done |  |  |
-|`sideBarWidth1`| Function |Dmitry A Smirnov| done |  |  |
-|`minSideBarWidth`| Function |Dmitry A Smirnov| done |  |  |
-|`minSideBarWidth1`| Function |Dmitry A Smirnov| done |  |  |
-|`maxSideBarWidth0`| Function |Dmitry A Smirnov| done |  |  |
-|`maxSideBarWidth1`| Function |Dmitry A Smirnov| done |  |  |
-|`autoHide`| Function |Dmitry A Smirnov| done |  |  |
-|`sideBarPosition`| Function |Dmitry A Smirnov| done |  |  |
-|`divider`| Function |Dmitry A Smirnov| done |  |  |
-|`minContentWidth`| Function |Dmitry A Smirnov| done |  |  |
+|`sideBarWidth0`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2169 |
+|`sideBarWidth1`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2169 |
+|`minSideBarWidth`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2169 |
+|`minSideBarWidth1`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2169 |
+|`maxSideBarWidth0`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2169 |
+|`maxSideBarWidth1`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2169 |
+|`autoHide`| Function |Dmitry A Smirnov| done | pass |  |
+|`sideBarPosition`| Function |Dmitry A Smirnov| done | pass |  |
+|`divider`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2170 |
+|`minContentWidth`| Function |Dmitry A Smirnov| done | failed |  |
 |`_onChangeEvent_showSideBar`| Function | Erokhin Ilya | done |  | |
 |*RemoteWindow*| *Component* | Spirin Andrey, Evstigneev Roman | done |  | |
 |`construct`| Function |Spirin Andrey, Evstigneev Roman | done |  | |
