@@ -81,8 +81,8 @@
 | GridRow.test.ets | Evstigneev Roman  |
 | HoverEvent.test.ets |                   |
 | HyperLink.test.ets |                   |
-| Image.test.ets |                   |
-| Image2.test.ets |                   |
+| Image.test.ets | Dudkin Sergey   |
+| Image2.test.ets | Dudkin Sergey  |
 | Image3ColorFilter.test.ets |                   |
 | Image4.test.ets |                   |
 | ImageAnimator.test.ets |                   |
