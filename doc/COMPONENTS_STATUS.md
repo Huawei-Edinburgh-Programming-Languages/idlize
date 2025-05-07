@@ -475,13 +475,13 @@
 |`construct`| Function | Tuzhilkin Ivan| done |  |  |
 |`setContainerSpanOptions`| Function |Tuzhilkin Ivan| done |  |  |
 |`textBackgroundStyle`| Function |Tuzhilkin Ivan| done |  |  |
-|*Counter*| *Component* | Erokhin Ilya | done |  |  |
-|`construct`| Function |Erokhin Ilya | done |  |  |
-|`setCounterOptions`| Function | Erokhin Ilya | done |  |  |
-|`onInc`| Function | Erokhin Ilya | done |  |  |
-|`onDec`| Function | Erokhin Ilya | done |  |  |
-|`enableDec`| Function | Erokhin Ilya | done |  |  |
-|`enableInc`| Function | Erokhin Ilya | done |  |  |
+|*Counter*| *Component* | Erokhin Ilya | done | pass |  |
+|`construct`| Function |Erokhin Ilya | done | pass |  |
+|`setCounterOptions`| Function | Erokhin Ilya | done | pass |  |
+|`onInc`| Function | Erokhin Ilya | done | pass |  |
+|`onDec`| Function | Erokhin Ilya | done | pass |  |
+|`enableDec`| Function | Erokhin Ilya | done | pass |  |
+|`enableInc`| Function | Erokhin Ilya | done | pass |  |
 |*DataPanel*| *Component* | Morozov Sergey | blocked IDL |  |  |
 |`construct`| Function |Morozov Sergey | done |  |  |
 |`setDataPanelOptions`| Function | Morozov Sergey | done |  |  |
