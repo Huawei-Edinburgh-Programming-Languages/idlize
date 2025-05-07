@@ -767,11 +767,11 @@
 |`divider`|Function|Morozov Sergey| done |  |  |
 |`childrenMainSize`|Function|Morozov Sergey| done |  |  |
 |*LoadingProgress*|*Component*| Samarin Sergey | done |  |  |
-|`construct`| Function | Samarin Sergey | done |  |  |
-|`setLoadingProgressOptions`|Function| Samarin Sergey | done |  |  |
-|`color`|Function| Samarin Sergey | done |  |  |
-|`enableLoading`|Function| Samarin Sergey | done |  |  |
-|`contentModifier`|Function| Samarin Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`construct`| Function | Samarin Sergey | done | pass |  |
+|`setLoadingProgressOptions`|Function| Samarin Sergey | done | pass |  |
+|`color`|Function| Samarin Sergey | done | pass |  |
+|`enableLoading`|Function| Samarin Sergey | done | pass |  |
+|`contentModifier`|Function| Samarin Sergey| blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*LocationButton*| *Component* |Samarin Sergey| done |  |  |
 |`construct`| Function |Samarin Sergey| done |  |  |
 |`setLocationButtonOptions0`| Function |Samarin Sergey| done |  |deprecated: icon, text, buttonType  |
