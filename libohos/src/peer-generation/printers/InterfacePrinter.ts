@@ -888,6 +888,7 @@ export class ArkTSInterfacesVisitor implements InterfacesVisitor {
                 continue
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (idl.isNamespace(entry) ||
+                    idl.isImport(entry) ||
                     isInIdlizeInternal(entry) ||
                     idl.isHandwritten(entry) ||
                     peerGeneratorConfiguration().ignoreEntry(entry.name, this.peerLibrary.language) ||
@@ -903,7 +904,9 @@ export class ArkTSInterfacesVisitor implements InterfacesVisitor {
         for (const entries of moduleToEntries.values()) {
             const seenNames = new Set<string>()
             for (const entry of entries) {
-                if (idl.isImport(entry)) continue
+                if (idl.isImport(entry)) {
+                    continue
+                }
                 const imports = new ImportsCollector()
                 const writer = this.peerLibrary.createLanguageWriter()
 
