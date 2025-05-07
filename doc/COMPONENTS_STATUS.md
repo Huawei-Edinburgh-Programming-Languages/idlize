@@ -144,12 +144,12 @@
 |`compositingFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3  |
 |`opacity0`| Function |Roman Sedaikin | done |  | |
 |`opacity1`| Function | Roman Sedaikin | done |  | |
-|`border`| Function | Roman Sedaikin | done |  | |
+|`border`| Function | Roman Sedaikin | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`borderStyle`| Function | Roman Sedaikin | done |  | |
 |`borderWidth`| Function | Roman Sedaikin | done |  | |
 |`borderColor`| Function | Roman Sedaikin | done |  | |
 |`borderRadius`| Function | Roman Sedaikin | done |  | |
-|`borderImage`| Function | Roman Sedaikin | done |  | |
+|`borderImage`| Function | Roman Sedaikin | done | failed | |
 |`outline0`| Function |Skroba Gleb | done |  | |
 |`outline1`| Function | Skroba Gleb | done |  | |
 |`outlineStyle0`| Function | Skroba Gleb | done |  | |
@@ -263,25 +263,25 @@
 |`dragPreview0`| Function |Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder |
 |`dragPreview1`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder |
 |`onPreDrag`| Function | Lobah Mikhail | done |  | |
-|`linearGradient0`| Function |Roman Sedaikin | done |  | |
-|`linearGradient1`| Function | Dmitry A Smirnov | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values|
-|`sweepGradient0`| Function |Roman Sedaikin | done |  | |
-|`sweepGradient1`| Function | Dmitry A Smirnov | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values,no rotation attribute in json, does not reset to default values in invalid cases|
-|`radialGradient0`| Function |Erokhin Ilya | done |  |  |
-|`radialGradient1`| Function | Dmitry A Smirnov | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values |
+|`linearGradient0`| Function |Roman Sedaikin | done | pass | |
+|`linearGradient1`| Function | Dmitry A Smirnov | done | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values|
+|`sweepGradient0`| Function |Roman Sedaikin | done | pass | |
+|`sweepGradient1`| Function | Dmitry A Smirnov | done | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values,no rotation attribute in json, does not reset to default values in invalid cases|
+|`radialGradient0`| Function |Erokhin Ilya | done | pass |  |
+|`radialGradient1`| Function | Dmitry A Smirnov | done | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values |
 |`motionPath`| Function | Lobah Mikhail | done |  | |
 |`shadow0`| Function |Roman Sedaikin | done |  | |
 |`shadow1`| Function | Dmitry A Smirnov | done |  | |
 |`clip0`| Function | Dudkin Sergey | done |  |  |
 |`clip1`| Function | Dudkin Sergey | done |  |  |
 |`clip2`| Function | Dudkin Sergey | done |  |  |
-|`clipShape0`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`clipShape1`| Function | Dmitry A Smirnov | testskipped |  | |
-|`mask0`| Function | Maksimov Nikita | done |  | |
+|`clipShape0`| Function | Tuzhilkin Ivan | testskipped | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`clipShape1`| Function | Dmitry A Smirnov | testskipped | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`mask0`| Function | Maksimov Nikita | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`mask1`| Function | Maksimov Nikita, Tuzhilkin Ivan | done |  | WRONG_OVERRIDE, `mask1` is duplicate of `mask0`, need cherry-pick to feature_branch |
 |`mask2`| Function | Maksimov Nikita, Tuzhilkin Ivan | done |  | WRONG_OVERRIDE, deprecated, empty implementation, need cherry-pick to feature_branch |
-|`maskShape0`| Function |Tuzhilkin Ivan| done |  | need cherry-pick to feature_branch |
-|`maskShape1`| Function |Tuzhilkin Ivan| done |  | need cherry-pick to feature_branch |
+|`maskShape0`| Function |Tuzhilkin Ivan| done | blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`maskShape1`| Function |Tuzhilkin Ivan| done | blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`key`| Function | Lobah Mikhail | done |  | |
 |`id`| Function | Erokhin Ilya | done |  |  |
 |`geometryTransition0`| Function | Lobah Mikhail | done | | testskipped due to aceEngine issue https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
@@ -317,8 +317,8 @@
 |`renderFit0`| Function | Dmitry A Smirnov| done |  | |
 |`renderFit1`| Function | Dmitry A Smirnov| done |  | |
 |`gestureModifier`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
-|`backgroundBrightness0`| Function | Skroba Gleb | done |  | |
-|`backgroundBrightness1`| Function | Dmitry A Smirnov | done |  | |
+|`backgroundBrightness0`| Function | Skroba Gleb | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundBrightness1`| Function | Dmitry A Smirnov | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onGestureJudgeBegin`| Function | Skroba Gleb, Maksimov Nikita | done |  | UT by Vadim Voronov  |
 |`onGestureRecognizerJudgeBegin0`| Function | Skroba Gleb, Maksimov Nikita | done |  | UT by Vadim Voronov  |
 |`onGestureRecognizerJudgeBegin1`| Function | Skroba Gleb, Maksimov Nikita | done |  | UT by Vadim Voronov  |
@@ -342,22 +342,22 @@
 |`gesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`priorityGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`parallelGesture`| Function | Erokhin Ilya | testskipped |  |  |
-|`blur0`| Function | Roman Sedaikin, Erokhin Ilya | done |  | |
-|`blur1`| Function |Roman Sedaikin, Erokhin Ilya | done |  | |
+|`blur0`| Function | Roman Sedaikin, Erokhin Ilya | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`blur1`| Function |Roman Sedaikin, Erokhin Ilya | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`linearGradientBlur0`| Function |Lobah Mikhail | done |  | |
 |`linearGradientBlur1`| Function | Dmitry A Smirnov | done |  | |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
-|`backdropBlur0`| Function | Berezin Kirill | done |  | |
-|`backdropBlur1`| Function | Dmitry A Smirnov | done |  | |
+|`backdropBlur0`| Function | Berezin Kirill | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backdropBlur1`| Function | Dmitry A Smirnov | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`sharedTransition`|Function|Skroba Gleb | done |  |  |
 |`chainMode`| Function | Berezin Kirill | done |  | |
 |`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD |
 |`overlay`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the `Ark_ComponentContent ` class without stubs is required.|
-|`blendMode0`| Function | Lobah Mikhail | done |  | |
-|`blendMode1`| Function | Dmitry A Smirnov | done |  | |
+|`blendMode0`| Function | Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`blendMode1`| Function | Dmitry A Smirnov | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`advancedBlendMode`| Function | Erokhin Ilya |in progress |  |  |
 |`bindTips`| Function | Tuzhilkin Ivan | in progress | | only for generation > 125|
-|`bindPopup`| Function | Erokhin Ilya | done |  | fixes of issues were provided by our team, https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL2K, https://gitee.com/openharmony/arkui_ace_engine/issues/IBY31B |
+|`bindPopup`| Function | Erokhin Ilya | done | blocked | fixes of issues were provided by our team, https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL2K, https://gitee.com/openharmony/arkui_ace_engine/issues/IBY31B, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`bindMenu0`| Function | Erokhin Ilya | blocked IDL |  | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`bindMenu1`| Function | Erokhin Ilya | blocked IDL |  | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`bindContextMenu0`| Function | Erokhin Ilya, Evstigneev Roman | done |  | |
@@ -1282,9 +1282,9 @@
 |`textCase`| Function | Politov Mikhail | done |  |  |
 |`lineHeight`| Function | Politov Mikhail | done |  |  |
 |`textShadow`| Function | Politov Mikhail | testskipped |  | test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
-|*Stack*| *Component* | Korobeinikov Evgeny | done |  |  |
-|`construct`| Function |Korobeinikov Evgeny | done |  |  |
-|`setStackOptions` | Function | Korobeinikov Evgeny | done |  |  |
+|*Stack*| *Component* | Korobeinikov Evgeny | done | pass |  |
+|`construct`| Function |Korobeinikov Evgeny | done | pass |  |
+|`setStackOptions` | Function | Korobeinikov Evgeny | done | pass |  |
 |`alignContent` | Function | Korobeinikov Evgeny | done |  |  |
 |`pointLight` | Function | Evstigneev Roman, Andrey Khudenkikh | done |  |  UT by Evstigneev Roman |
 |*Stepper*| *Component* | Morozov Sergey | done |  |  |
@@ -2719,8 +2719,8 @@
 |`postCardAction`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`dollar_r`| Function | Erokhin Ilya | managed side |  | NEED TO BE REMOVED  |
 |`dollar_rawfile`| Function | Erokhin Ilya | managed side |  | NEED TO BE REMOVED  |
-|`animateTo`| Function | Erokhin Ilya | testskipped |  | |
-|`animateToImmediately`| Function | Erokhin Ilya | testskipped |  | |
+|`animateTo`| Function | Erokhin Ilya | testskipped | failed | |
+|`animateToImmediately`| Function | Erokhin Ilya | testskipped | failed | |
 |`vp2px`| Function | Erokhin Ilya | done |  | |
 |`px2vp`| Function | Erokhin Ilya | done |  | |
 |`fp2px`| Function | Erokhin Ilya | done |  | |
