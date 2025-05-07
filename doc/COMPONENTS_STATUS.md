@@ -985,7 +985,7 @@
 |`guideLine`| Function | Dmitry A Smirnov | done |  |  |
 |`barrier0`| Function |Dmitry A Smirnov | done |  |  |
 |`barrier1`| Function | Dmitry A Smirnov | done |  |  |
-|*RichEditor*| *Component* | Dudkin Sergey| in progress |  |  |
+|*RichEditor*| *Component* | Dudkin Sergey| in progress | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue |
 |`construct`| Function | Dudkin Sergey| done |  |  |
 |`setRichEditorOptions`| Function | Dudkin Sergey| done |  |  |
 |`setRichEditorOptions1`| Function | Dudkin Sergey| done |  |  |
