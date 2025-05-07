@@ -1166,48 +1166,48 @@
 |`heightAdaptivePolicy`| Function | Samarin Sergey | done |  | API is present on Upstream only |
 |`enabled`| Function | Samarin Sergey | done |  | API is present on Upstream only |
 |`chainMode`| Function | Samarin Sergey | done |  | API is present on Upstream only |
-|*Select*| *Component* | Samarin Sergey | blocked IDL |  |  |
-|`construct`| Function | Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
-|`setSelectOptions` | Function | Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
-|`selected0`| Function | Samarin Sergey | done |  |  |
-|`selected1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`value0`| Function |Samarin Sergey | done |  |  |
-|`value1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`font0`| Function |Samarin Sergey | done |  |  |
-|`font1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`fontColor0` | Function | Samarin Sergey | done |  |  |
-|`fontColor1`| Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`selectedOptionBgColor0`| Function | Samarin Sergey | done |  |  |
-|`selectedOptionBgColor1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`selectedOptionFont0` | Function | Samarin Sergey | done |  |  |
-|`selectedOptionFont1`| Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`selectedOptionFontColor0`| Function | Samarin Sergey | done |  |  |
-|`selectedOptionFontColor1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`optionBgColor0` | Function | Samarin Sergey | done |  |  |
-|`optionBgColor1`| Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`optionFont0`| Function | Samarin Sergey | done |  |  |
-|`optionFont1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only, https://gitee.com/openharmony/arkui_ace_engine/issues/IC201O |
-|`optionFontColor0` | Function | Samarin Sergey | done |  |  |
-|`optionFontColor1`| Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`onSelect0`| Function | Samarin Sergey | done |  |  |
-|`onSelect1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`space0` | Function | Samarin Sergey | done |  |  |
-|`space1`| Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`arrowPosition0`| Function | Samarin Sergey | done |  |  |
-|`arrowPosition1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`optionWidth0` | Function | Samarin Sergey | done |  |  |
-|`optionWidth1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`optionHeight0`| Function | Dmitry A Smirnov | done | | |
-|`optionHeight1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only, https://gitee.com/openharmony/arkui_ace_engine/issues/IC201O |
-|`menuBackgroundColor0` | Function | Samarin Sergey | done |  |  |
-|`menuBackgroundColor1`| Function | Dmitry A Smirnov | done |  | API is present on Upstream only, https://gitee.com/openharmony/arkui_ace_engine/issues/IC201O |
-|`menuBackgroundBlurStyle0` | Function | Samarin Sergey | done |  |  |
-|`menuBackgroundBlurStyle1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only, https://gitee.com/openharmony/arkui_ace_engine/issues/IC201O |
-|`controlSize0` | Function | Samarin Sergey | done |  |  |
-|`controlSize1`| Function | Dmitry A Smirnov | done |  | API is present on Upstream only, https://gitee.com/openharmony/arkui_ace_engine/issues/IC201O |
+|*Select*| *Component* | Samarin Sergey | blocked IDL | test blocked | runtime error in Koala part during setSelectOptions |
+|`construct`| Function | Samarin Sergey | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
+|`setSelectOptions` | Function | Samarin Sergey | blocked IDL | failed | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD +; runtime error in Arkoala part, issue https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`selected0`| Function | Samarin Sergey | done | test blocked |  |
+|`selected1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`value0`| Function |Samarin Sergey | done | test blocked |  |
+|`value1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`font0`| Function |Samarin Sergey | done | test blocked |  |
+|`font1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`fontColor0` | Function | Samarin Sergey | done | test blocked |  |
+|`fontColor1`| Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`selectedOptionBgColor0`| Function | Samarin Sergey | done | test blocked |  |
+|`selectedOptionBgColor1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`selectedOptionFont0` | Function | Samarin Sergey | done | test blocked |  |
+|`selectedOptionFont1`| Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`selectedOptionFontColor0`| Function | Samarin Sergey | done | test blocked |  |
+|`selectedOptionFontColor1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`optionBgColor0` | Function | Samarin Sergey | done | test blocked |  |
+|`optionBgColor1`| Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`optionFont0`| Function | Samarin Sergey | done | test blocked |  |
+|`optionFont1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only, https://gitee.com/openharmony/arkui_ace_engine/issues/IC201O |
+|`optionFontColor0` | Function | Samarin Sergey | done | test blocked |  |
+|`optionFontColor1`| Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`onSelect0`| Function | Samarin Sergey | done | test blocked |  |
+|`onSelect1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`space0` | Function | Samarin Sergey | done | test blocked |  |
+|`space1`| Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`arrowPosition0`| Function | Samarin Sergey | done | test blocked |  |
+|`arrowPosition1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`optionWidth0` | Function | Samarin Sergey | done | test blocked |  |
+|`optionWidth1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`optionHeight0`| Function | Dmitry A Smirnov | done | test blocked | |
+|`optionHeight1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only, https://gitee.com/openharmony/arkui_ace_engine/issues/IC201O |
+|`menuBackgroundColor0` | Function | Samarin Sergey | done | test blocked |  |
+|`menuBackgroundColor1`| Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only, https://gitee.com/openharmony/arkui_ace_engine/issues/IC201O |
+|`menuBackgroundBlurStyle0` | Function | Samarin Sergey | done | test blocked |  |
+|`menuBackgroundBlurStyle1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only, https://gitee.com/openharmony/arkui_ace_engine/issues/IC201O |
+|`controlSize0` | Function | Samarin Sergey | done | test blocked |  |
+|`controlSize1`| Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only, https://gitee.com/openharmony/arkui_ace_engine/issues/IC201O |
 |`menuItemContentModifier0` | Function | Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`menuItemContentModifier1` | Function | Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
-|`divider` | Function | Samarin Sergey | done |  |  |
+|`divider` | Function | Samarin Sergey | done | test blocked |  |
 |`textModifier`| Function | Samarin Sergey | managed side |  | |
 |`arrowModifier`| Function | Maksimov Nikita, Evstigneev Roman | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
 |`optionTextModifier`| Function | Maksimov Nikita, Evstigneev Roman | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
@@ -1215,10 +1215,10 @@
 |`dividerStyle`| Function | Evstigneev Roman | in progress | | API is not present |
 |`avoidance`| Function | Evstigneev Roman | in progress | | API is not present |
 |`menuOutline`| Function | Evstigneev Roman | in progress | | API is not present |
-|`menuAlign0` | Function | Samarin Sergey | done |  |  |
-|`menuAlign1` | Function | Dmitry A Smirnov | done |  | API is present on Upstream only |
-|`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
-|`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
+|`menuAlign0` | Function | Samarin Sergey | done | test blocked |  |
+|`menuAlign1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
+|`_onChangeEvent_selected`| Function | Erokhin Ilya | done | test blocked | |
+|`_onChangeEvent_value`| Function | Erokhin Ilya | done | test blocked | |
 |*Shape*|*Component*|Dudkin Sergey| in progress |  |  |
 |`construct`| Function |Samarin Sergey| testskipped |  | |
 |`setShapeOptions0`| Function |Samarin Sergey| testskipped |  | |
