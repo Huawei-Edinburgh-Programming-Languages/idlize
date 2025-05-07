@@ -109,7 +109,7 @@
 | PatternLock.test.ets | |
 | Polygon.test.ets | |
 | Polyline.test.ets | |
-| Progress.test.ets | |
+| Progress.test.ets |Erokhin Ilya |
 | QRCode.test.ets | |
 | Radio.test.ets | Porodin Alexander|
 | Rating.test.ets |Daryina Olga |
