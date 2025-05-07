@@ -10,8 +10,8 @@
 | Button.test.ets | Tuzhilkin Ivan |
 | CalendarPicker.test.ets | Porodin Alexander|
 | Canvas.test.ets | Vadim Voronov |
-| Checkbox.test.ets | |
-| CheckboxGroup.test.ets | |
+| Checkbox.test.ets |Erokhin Ilya |
+| CheckboxGroup.test.ets |Erokhin Ilya |
 | Circle.test.ets | Porodin Alexander|
 | Click.test.ets | |
 | ClickEffect.test.ets | |
