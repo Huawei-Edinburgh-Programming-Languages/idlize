@@ -73,7 +73,7 @@ export class TsLayout extends CommonLayoutBase {
                 return packageClause
             }
         }
-        let pureFileName = target.node.fileName
+        let pureFileName = idl.getFileFor(target.node)?.fileName
             ?.replaceAll('.d.ts', '')
             ?.replaceAll('.idl', '')
             ?.replaceAll('@', '')
@@ -106,7 +106,7 @@ class ArkTsLayout extends CommonLayoutBase {
         if (idl.isHandwritten(target.node)) {
             return HandwrittenModule(this.library.language)
         }
-        let pureFileName = target.node.fileName
+        let pureFileName = idl.getFileFor(target.node)?.fileName
             ?.replaceAll('.d.ts', '')
             ?.replaceAll('.idl', '')
         if (pureFileName) {
