@@ -137,7 +137,7 @@
 | SymbolSpan.test.ets |                   |
 | Tabs.test.ets | Skroba Gleb       |
 | Text.test.ets | Ilya Erokhin      |
-| TextArea.test.ets |                   |
+| TextArea.test.ets | Evstigneev Roman |
 | TextClock.test.ets |                   |
 | TextInput.test.ets |                   |
 | TextPicker.test.ets |                   |

@@ -571,42 +571,42 @@
 |`privacySensitive`| Function | Maksimov Nikita | done |  ||
 |`contentModifier`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*Grid*|*Component*| Erokhin Ilya | done |  |  |
-|`construct`| Function |Erokhin Ilya | done |  | |
-|`setGridOptions`|Function| Erokhin Ilya | done |  | |
+|`construct`| Function |Erokhin Ilya | done | pass | |
+|`setGridOptions`|Function| Erokhin Ilya | done | pass | |
 |`columnsTemplate`|Function| Erokhin Ilya | done |  |  |
-|`rowsTemplate`|Function| Erokhin Ilya | done |  |  |
-|`columnsGap`|Function| Erokhin Ilya | done |  |  |
-|`rowsGap`|Function| Erokhin Ilya | done |  |  |
-|`scrollBarWidth`|Function| Erokhin Ilya | done |  |  |
-|`scrollBarColor`|Function| Erokhin Ilya | done |  |  |
-|`scrollBar`|Function| Erokhin Ilya | done |  |  |
+|`rowsTemplate`|Function| Erokhin Ilya | done | pass |  |
+|`columnsGap`|Function| Erokhin Ilya | done | pass |  |
+|`rowsGap`|Function| Erokhin Ilya | done | pass |  |
+|`scrollBarWidth`|Function| Erokhin Ilya | done | pass |  |
+|`scrollBarColor`|Function| Erokhin Ilya | done | pass |  |
+|`scrollBar`|Function| Erokhin Ilya | done | pass |  |
 |`onScrollBarUpdate`|Function| Skroba Gleb | done |  | |
 |`onScrollIndex`|Function| Erokhin Ilya | done |  |  |
 |`cachedCount0`| Function |Erokhin Ilya | done | test blocked(blocked IDL) |  |
 |`cachedCount1`|Function| Erokhin Ilya | done | test blocked(blocked IDL) |  |
-|`editMode`|Function| Erokhin Ilya | done |  |  |
-|`multiSelectable`|Function| Erokhin Ilya | done |  |  |
-|`maxCount`|Function| Erokhin Ilya | done |  |  |
-|`minCount`|Function| Erokhin Ilya | done |  |  |
-|`cellLength`|Function| Erokhin Ilya | done |  |  |
-|`layoutDirection`|Function| Erokhin Ilya | done |  |  |
-|`supportAnimation`|Function| Erokhin Ilya | done |  |  |
+|`editMode`|Function| Erokhin Ilya | done | pass |  |
+|`multiSelectable`|Function| Erokhin Ilya | done | pass |  |
+|`maxCount`|Function| Erokhin Ilya | done | pass |  |
+|`minCount`|Function| Erokhin Ilya | done | pass |  |
+|`cellLength`|Function| Erokhin Ilya | done | pass |  |
+|`layoutDirection`|Function| Erokhin Ilya | done | pass |  |
+|`supportAnimation`|Function| Erokhin Ilya | done | pass |  |
 |`onItemDragStart`|Function| Skroba Gleb | done |  |  |
 |`onItemDragEnter`|Function| Erokhin Ilya | done |  |  |
 |`onItemDragMove`|Function| Erokhin Ilya | done |  |  |
 |`onItemDragLeave`|Function| Erokhin Ilya | done |  |  |
 |`onItemDrop`|Function| Erokhin Ilya | done |  |  |
-|`nestedScroll`|Function| Erokhin Ilya | done |  |  |
-|`enableScrollInteraction`|Function| Erokhin Ilya | done |  |  |
-|`friction`|Function| Erokhin Ilya | done |  |  |
-|`alignItems`| Function | Erokhin Ilya | done |  |  |
+|`nestedScroll`|Function| Erokhin Ilya | done | pass |  |
+|`enableScrollInteraction`|Function| Erokhin Ilya | done | pass |  |
+|`friction`|Function| Erokhin Ilya | done | pass |  |
+|`alignItems`| Function | Erokhin Ilya | done | pass |  |
 |`onScroll`|Function| Erokhin Ilya | done |  |deprecated?  |
 |`onReachStart`|Function| Erokhin Ilya | done |  |  |
 |`onReachEnd`|Function| Erokhin Ilya | done |  |  |
-|`onScrollStart`|Function| Erokhin Ilya | done |  |  |
+|`onScrollStart`|Function| Erokhin Ilya | done | pass |  |
 |`onScrollStop`|Function| Erokhin Ilya | done |  |  |
 |`onScrollFrameBegin`|Function| Skroba Gleb | done |  |   |
-|`edgeEffect`|Function| Erokhin Ilya | done |  |  |
+|`edgeEffect`|Function| Erokhin Ilya | done | pass |  |
 |*GridItem*|*Component*| Erokhin Ilya | done | test blocked(blocked IDL) |  |
 |`construct`| Function |Erokhin Ilya | done | test blocked(blocked IDL) |  |
 |`setGridItemOptions`|Function| Erokhin Ilya | done | test blocked(blocked IDL) |  |
@@ -620,19 +620,19 @@
 |`onSelect`|Function| Erokhin Ilya | done |  |  |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*GridCol*| *Component* | Lobah Mikhail| done |  |  |
-|`construct`| Function |Lobah Mikhail| done |  |  |
-|`setGridColOptions`| Function |Lobah Mikhail| done |  |  |
-|`span`| Function |Lobah Mikhail| done |  |  |
-|`gridColOffset`| Function |Lobah Mikhail| done |  |  |
-|`order`| Function |Lobah Mikhail| done |  |  |
+|`construct`| Function |Lobah Mikhail| done | pass |  |
+|`setGridColOptions`| Function |Lobah Mikhail| done | pass |  |
+|`span`| Function |Lobah Mikhail| done | pass |  |
+|`gridColOffset`| Function |Lobah Mikhail| done | pass |  |
+|`order`| Function |Lobah Mikhail| done | pass |  |
 |*GridContainer*| *Component* |Lobah Mikhail| deprecated | test blocked | (deprecated since API 9) |
 |`construct`| Function |Lobah Mikhail| deprecated | test blocked | (deprecated since API 9) |
 |`setGridContainerOptions`| Function |Lobah Mikhail|deprecated | test blocked | (deprecated since API 9) |
-|*GridRow*| *Component* |Lobah Mikhail| done |  |  |
-|`construct`| Function |Lobah Mikhail| done |  |  |
-|`setGridRowOptions`| Function |Lobah Mikhail| done |  |  |
+|*GridRow*| *Component* |Lobah Mikhail| done | |  |
+|`construct`| Function |Lobah Mikhail| done | pass |  |
+|`setGridRowOptions`| Function |Lobah Mikhail| done | pass |  |
 |`onBreakpointChange`| Function |Lobah Mikhail| done |  |  |
-|`alignItems`| Function |Lobah Mikhail| done |  |  |
+|`alignItems`| Function |Lobah Mikhail| done | pass |  |
 |*Hyperlink*| *Component* | Morozov Sergey | done |  |   |
 |`construct`| Function | Morozov Sergey | done |  |   |
 |`setHyperlinkOptions`| Function | Morozov Sergey | done |  | |
