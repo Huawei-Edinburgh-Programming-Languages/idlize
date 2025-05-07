@@ -582,8 +582,8 @@
 |`scrollBar`|Function| Erokhin Ilya | done |  |  |
 |`onScrollBarUpdate`|Function| Skroba Gleb | done |  | |
 |`onScrollIndex`|Function| Erokhin Ilya | done |  |  |
-|`cachedCount0`| Function |Erokhin Ilya | done |  |  |
-|`cachedCount1`|Function| Erokhin Ilya | done |  |  |
+|`cachedCount0`| Function |Erokhin Ilya | done | test blocked(blocked IDL) |  |
+|`cachedCount1`|Function| Erokhin Ilya | done | test blocked(blocked IDL) |  |
 |`editMode`|Function| Erokhin Ilya | done |  |  |
 |`multiSelectable`|Function| Erokhin Ilya | done |  |  |
 |`maxCount`|Function| Erokhin Ilya | done |  |  |
@@ -607,7 +607,7 @@
 |`onScrollStop`|Function| Erokhin Ilya | done |  |  |
 |`onScrollFrameBegin`|Function| Skroba Gleb | done |  |   |
 |`edgeEffect`|Function| Erokhin Ilya | done |  |  |
-|*GridItem*|*Component*| Erokhin Ilya | done |  |  |
+|*GridItem*|*Component*| Erokhin Ilya | done | test blocked(blocked IDL) |  |
 |`construct`| Function |Erokhin Ilya | done |  |  |
 |`setGridItemOptions`|Function| Erokhin Ilya | done |  |  |
 |`rowStart`|Function| Erokhin Ilya | done |  |  |
