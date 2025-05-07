@@ -57,7 +57,8 @@ import {
     printTSTypeChecker,
     printArkTSTypeChecker,
     ScopeLibrarayLayout,
-    createPeersPrinter
+    createPeersPrinter,
+    copyFile
 } from "@idlizer/libohos"
 import { ArkoalaInstall, LibaceInstall } from "./ArkoalaInstall"
 import { ArkPrimitiveTypesInstance } from "./ArkPrimitiveType"
@@ -117,17 +118,33 @@ function copyArkoalaFiles(config: {
     const subsetJson = path.join(fs.existsSync(Subset) ? Subset : ExternalStubs, 'subset.json')
     const subsetData = JSON.parse(fs.readFileSync(subsetJson).toString())
     if (!subsetData) throw new Error(`Cannot parse ${subsetJson}`)
+    const copyFiles = (files: string, ...fromFallbacks: string[]) => {
+        for (const file of files) {
+            let found = false
+            for (const from of fromFallbacks) {
+                const fromPath = path.join(from, file)
+                if (fs.existsSync(fromPath)) {
+                    found = true
+                    copyFile(fromPath, path.join(arkoala.sig, file))
+                    break
+                }
+            }
+            if (!found) {
+                throw new Error(`Template for file ${file} was not found in paths ${fromFallbacks.join(':')}`)
+            }
+        }
+        return
+    }
 
     if (config.onlyIntegrated) {
-        copyToArkoala(fs.existsSync(Subset) ? Subset : ExternalStubs, arkoala, subsetData.generatedSubset);
+        copyFiles(subsetData.generatedSubset, fs.existsSync(Subset) ? Subset : ExternalStubs)
         return
     }
 
     if (fs.existsSync(Subset)) {
-        copyToArkoala(Subset, arkoala, subsetData.subset)
+        copyFiles(subsetData.subset, Subset)
     } else {
-        copyToArkoala(External, arkoala, subsetData.subset)
-        copyToArkoala(ExternalStubs, arkoala, subsetData.subset)
+        copyFiles(subsetData.subset, ExternalStubs, External)
     }
 }
 
@@ -151,7 +168,6 @@ export function generateArkoalaFromIdl(config: {
         new ArkoalaInstall(config.arkoalaDestination, config.lang, false, peerLibrary.useMemoM3) :
         new ArkoalaInstall(config.outDir, config.lang, true, peerLibrary.useMemoM3)
     arkoala.createDirs([ARKOALA_PACKAGE_PATH, INTEROP_PACKAGE_PATH].map(dir => path.join(arkoala.javaDir, dir)))
-    arkoala.createDirs(['', ''].map(dir => path.join(arkoala.cjDir, dir)))
 
     peerLibrary.name = 'arkoala'
     peerLibrary.setFileLayout(arkoalaLayout(peerLibrary, 'Ark', ARKOALA_PACKAGE_PATH))
@@ -210,14 +226,19 @@ export function generateArkoalaFromIdl(config: {
             ],
             { customLayout: new LayoutManager(new ArkTSComponentsLayout(peerLibrary)) }
         )
-        install(
-            arkoala.arktsSdkDir,
-            peerLibrary,
-            [
-                createInterfacePrinter(true),
-                printComponentsDeclarations,
-            ],
-        )
+        if (peerLibrary.useMemoM3) {
+            install(
+                arkoala.arktsSdkDir,
+                peerLibrary,
+                [
+                    createInterfacePrinter(true),
+                    printComponentsDeclarations,
+                ],
+                {
+                    isDeclared: true,
+                }
+            )
+        }
     }
 
 
@@ -442,11 +463,6 @@ function selectOutDir(arkoala: ArkoalaInstall, lang: Language) {
     return ''
 }
 
-function copyToArkoala(from: string, arkoala: ArkoalaInstall, filters?: string[]) {
-    filters = filters?.map(it => path.join(from, it))
-    copyDir(from, arkoala.sig, true, filters)
-}
-
 function copyToLibace(from: string, libace: LibaceInstall) {
     const macros = path.join(from, 'arkoala-arkts/framework/native/src/arkoala-macros.h')
     fs.copyFileSync(macros, libace.arkoalaMacros)
@@ -488,7 +504,7 @@ function printModifiersImplFile(filePath: string, state: MultiFileModifiersVisit
     writer.print("")
 
     if (options.namespaces) {
-        writer.pushNamespace(options.namespaces.generated, false)
+        writer.pushNamespace(options.namespaces.generated, { ident: false })
     }
 
     writer.concat(state.real)
@@ -496,7 +512,7 @@ function printModifiersImplFile(filePath: string, state: MultiFileModifiersVisit
     writer.concat(state.accessors)
 
     if (options.namespaces) {
-        writer.popNamespace(false)
+        writer.popNamespace({ ident: false })
     }
 
     writer.print("")
@@ -515,24 +531,24 @@ function printModifiersCommonImplFile(filePath: string, content: LanguageWriter,
     writer.print("")
 
     if (options.namespaces) {
-        writer.pushNamespace(options.namespaces.base, false)
+        writer.pushNamespace(options.namespaces.base, { ident: false })
     }
     writer.concat(appendModifiersCommonPrologue())
 
     if (options.namespaces) {
-        writer.popNamespace(false)
+        writer.popNamespace({ ident: false })
     }
 
     writer.print("")
 
     if (options.namespaces) {
-        writer.pushNamespace(options.namespaces.generated, false)
+        writer.pushNamespace(options.namespaces.generated, { ident: false })
     }
 
     writer.concat(completeModifiersContent(content, options.basicVersion, options.fullVersion, options.extendedVersion))
 
     if (options.namespaces) {
-        writer.popNamespace(false)
+        writer.popNamespace({ ident: false })
     }
 
     writer.print("")
@@ -551,12 +567,12 @@ function printApiImplFile(library: PeerLibrary, filePath: string, options: Modif
     writer.print("")
 
     if (options.namespaces) {
-        writer.pushNamespace(options.namespaces.base, false)
+        writer.pushNamespace(options.namespaces.base, { ident: false })
     }
     writer.concat(appendViewModelBridge(library))
 
     if (options.namespaces) {
-        writer.popNamespace(false)
+        writer.popNamespace({ ident: false })
     }
 
     writer.printTo(filePath)
@@ -631,10 +647,10 @@ function makeConverterHeader(path: string, namespace: string, library: PeerLibra
     }
     converter.print("")
 
-    converter.pushNamespace(namespace, false)
+    converter.pushNamespace(namespace, { ident: false })
     converter.print("")
     writeConvertors(library, converter)
-    converter.popNamespace(false)
+    converter.popNamespace({ ident: false })
     converter.print(`\n#endif // ${includeGuardDefine}`)
     converter.print("")
     return converter
