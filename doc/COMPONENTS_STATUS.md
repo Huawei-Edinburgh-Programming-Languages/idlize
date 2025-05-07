@@ -526,10 +526,10 @@
 |`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | in progress |  |  |
 |`onTerminated`| Function | Ekaterina Stepanova | in progress |  |  |
 |`onError`| Function |Skroba Gleb | testskipped |  |  |
-|*Flex*| *Component* | Kovalev Sergey | done |  |  |
-|`construct`| Function | Kovalev Sergey | done |  |  |
-|`setFlexOptions`| Function | Kovalev Sergey | done |  |  |
-|`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  | UT by Evstigneev Roman |
+|*Flex*| *Component* | Kovalev Sergey | done | |  |
+|`construct`| Function | Kovalev Sergey | done | pass |  |
+|`setFlexOptions`| Function | Kovalev Sergey | done | pass |  |
+|`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done | pass | UT by Evstigneev Roman |
 |*FlowItem*| *Component* | Evstigneev Roman | done |  |  |
 |`construct`| Function | Evstigneev Roman | done |  |  |
 |`setFlowItemOptions`| Function | Evstigneev Roman | done |  |  |
@@ -895,18 +895,18 @@
 |`setPathOptions`| Function | Skroba Gleb | done |  |  |
 |`commands`| Function | Skroba Gleb | done |  |  |
 |*PatternLock*| *Component* | Dmitry A Smirnov| in progress |  |  |
-|`construct`| Function | Dmitry A Smirnov| done |  |  |
-|`setPatternLockOptions`| Function | Dmitry A Smirnov| done |  |  |
-|`sideLength`| Function | Dmitry A Smirnov| done |  |  |
-|`circleRadius`| Function | Dmitry A Smirnov| done |  |  |
+|`construct`| Function | Dmitry A Smirnov| done | pass |  |
+|`setPatternLockOptions`| Function | Dmitry A Smirnov| done | pass |  |
+|`sideLength`| Function | Dmitry A Smirnov| done | pass |  |
+|`circleRadius`| Function | Dmitry A Smirnov| done | pass |  |
 |`backgroundColor`| Function | Dmitry A Smirnov| done |  |common method |
-|`regularColor`| Function | Dmitry A Smirnov| done |  |  |
-|`selectedColor`| Function | Dmitry A Smirnov| done |  |  |
-|`activeColor`| Function | Dmitry A Smirnov| done |  |  |
-|`pathColor`| Function | Dmitry A Smirnov| done |  |  |
-|`pathStrokeWidth`| Function | Dmitry A Smirnov| done |  |  |
+|`regularColor`| Function | Dmitry A Smirnov| done | pass |  |
+|`selectedColor`| Function | Dmitry A Smirnov| done | pass |  |
+|`activeColor`| Function | Dmitry A Smirnov| done | pass |  |
+|`pathColor`| Function | Dmitry A Smirnov| done | pass |  |
+|`pathStrokeWidth`| Function | Dmitry A Smirnov| done | pass |  |
 |`onPatternComplete`| Function | Dmitry A Smirnov| done |  |  |
-|`autoReset`| Function | Dmitry A Smirnov| done |  |  |
+|`autoReset`| Function | Dmitry A Smirnov| done | pass |  |
 |`onDotConnect`| Function | Dmitry A Smirnov| done |  |  |
 |`activateCircleStyle`| Function | Dmitry A Smirnov| done |  | |
 |`skipUnselectedPoint`| Function | Dmitry A Smirnov | done| | need merge to fb|
