@@ -56,7 +56,7 @@
 | CommonTouchAble.test.ets |                   |
 | Component3D.test.ets |                   |
 | ContainerSpan.test.ets |                   |
-| Counter.test.ets |                   |
+| Counter.test.ets | Erokhin Ilya      |
 | CustomComponentBox.test.ets |                   |
 | DataPanel.test.ets | Sergey Morozov    |
 | DatePicker.test.ets | Vadim Voronov     |
