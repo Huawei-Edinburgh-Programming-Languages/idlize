@@ -1237,33 +1237,33 @@
 |`antiAlias`|Function|Dudkin Sergey| done |  |  |
 |`mesh`|Function|Erokhin Ilya| done|  |  |  |
 |*Slider*| *Component* |Morozov Sergey | blocked IDL |  |  |
-|`construct`| Function |Morozov Sergey | done |  |  |
-|`setSliderOptions`| Function |Morozov Sergey | done |  |  |
-|`blockColor`| Function |Morozov Sergey | done |  |  |
-|`trackColor`| Function |Morozov Sergey | testskipped | | AceEngine won't fix, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPH6O |
-|`selectedColor0`| Function |Morozov Sergey |done  |  |
+|`construct`| Function |Morozov Sergey | done | pass |  |
+|`setSliderOptions`| Function |Morozov Sergey | done | pass |  |
+|`blockColor`| Function |Morozov Sergey | done | pass |  |
+|`trackColor`| Function |Morozov Sergey | testskipped | pass | AceEngine won't fix, https://gitee.com/openharmony/arkui_ace_engine/issues/IBPH6O |
+|`selectedColor0`| Function |Morozov Sergey |done  | pass |
 |`selectedColor1`| Function |Morozov Sergey |done  |  |
 |`minLabel`| Function |Morozov Sergey | done |  |deprecated  |
 |`maxLabel`| Function |Morozov Sergey | done |  |deprecated  |
-|`showSteps`| Function |Morozov Sergey | done |  |  |
-|`trackThickness`| Function |Morozov Sergey | done |  |  |
-|`onChange`| Function |Morozov Sergey | done |  |  |
-|`blockBorderColor`| Function |Morozov Sergey | done |  |  |
-|`blockBorderWidth`| Function |Morozov Sergey | done |  |  |
-|`stepColor`| Function |Morozov Sergey | done |  |  |
-|`trackBorderRadius`| Function |Morozov Sergey | done |  |  |
-|`selectedBorderRadius`| Function |Morozov Sergey | done |  |  |
-|`blockSize`| Function |Morozov Sergey | done |  |  |
-|`blockStyle`| Function |Morozov Sergey | blocked IDL |  | TBD |
-|`stepSize`| Function |Morozov Sergey | done |  |  |
-|`sliderInteractionMode`| Function |Morozov Sergey | done |  |  |
-|`minResponsiveDistance`| Function |Morozov Sergey | done |  |  |
-|`contentModifier`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
-|`slideRange`| Function | Morozov Sergey | done |  |  |
+|`showSteps`| Function |Morozov Sergey | done | pass |  |
+|`trackThickness`| Function |Morozov Sergey | done | pass |  |
+|`onChange`| Function |Morozov Sergey | done | pass |  |
+|`blockBorderColor`| Function |Morozov Sergey | done | pass |  |
+|`blockBorderWidth`| Function |Morozov Sergey | done | pass |  |
+|`stepColor`| Function |Morozov Sergey | done | pass |  |
+|`trackBorderRadius`| Function |Morozov Sergey | done | pass |  |
+|`selectedBorderRadius`| Function |Morozov Sergey | done | pass |  |
+|`blockSize`| Function |Morozov Sergey | done | pass |  |
+|`blockStyle`| Function |Morozov Sergey | blocked IDL | test blocked | TBD |
+|`stepSize`| Function |Morozov Sergey | done | pass |  |
+|`sliderInteractionMode`| Function |Morozov Sergey | done | pass |  |
+|`minResponsiveDistance`| Function |Morozov Sergey | done | pass |  |
+|`contentModifier`| Function |Morozov Sergey | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`slideRange`| Function | Morozov Sergey | done | pass |  |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | |
 |`enableHapticFeedback`| Function | Kovalev Sergey | done | | |
-|`showTips`| Function |Morozov Sergey | done |  |  |
-|`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
+|`showTips`| Function |Morozov Sergey | done | failed |  |
+|`_onChangeEvent_value`| Function | Erokhin Ilya | done | test blocked | test blocked by $$ usage in ArkTS 1.2 |
 |*BaseSpan*| *Component* |Politov Mikhail | done |  |  |
 |`construct`| Function |Politov Mikhail | done |  |  |
 |`textBackgroundStyle`| Function | Politov Mikhail | done |  |  |
