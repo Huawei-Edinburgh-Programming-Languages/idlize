@@ -66,22 +66,22 @@
 |`setBlankOptions`| Function | Skroba Gleb | done |  |  |
 |`color`| Function | Skroba Gleb | done |  |  |
 |*Button*| *Component* | Evstigneev Roman | blocked IDL |  |  |
-|`construct`| Function | Evstigneev Roman | done |  |  |
-|`setButtonOptions0`| Function | Evstigneev Roman | done |  |  |
-|`setButtonOptions1`| Function | Evstigneev Roman | done |  |  |
-|`setButtonOptions2`| Function | Evstigneev Roman | done |  |  |
-|`type`| Function | Evstigneev Roman | done |  |  |
-|`stateEffect`| Function |Evstigneev Roman | done |  |  |
-|`buttonStyle`| Function |Evstigneev Roman | done |  |  |
-|`controlSize`| Function |Evstigneev Roman | done |  |  |
-|`role`| Function | Evstigneev Roman | done |  |  |
-|`fontColor`| Function | Evstigneev Roman | testskipped |  | Ace issue fixed, test in progress Evstigneev Roman |
-|`fontSize`| Function | Evstigneev Roman | testskipped |  | Ace issue fixed, test in progress Evstigneev Roman |
-|`fontWeight`| Function |Evstigneev Roman | testskipped |  | Ace issue fixed, test in progress Evstigneev Roman |
-|`fontStyle`| Function |Evstigneev Roman | done |  |  |
-|`fontFamily`| Function |Evstigneev Roman | done |  |  |
+|`construct`| Function | Evstigneev Roman | done |  pass |  |
+|`setButtonOptions0`| Function | Evstigneev Roman | done | pass |  |
+|`setButtonOptions1`| Function | Evstigneev Roman | done | pass |  |
+|`setButtonOptions2`| Function | Evstigneev Roman | done | pass |  |
+|`type`| Function | Evstigneev Roman | done | pass |  |
+|`stateEffect`| Function |Evstigneev Roman | done | pass |  |
+|`buttonStyle`| Function |Evstigneev Roman | done | pass |  |
+|`controlSize`| Function |Evstigneev Roman | done | pass |  |
+|`role`| Function | Evstigneev Roman | done | pass |  |
+|`fontColor`| Function | Evstigneev Roman | testskipped | pass | Ace issue fixed, test in progress Evstigneev Roman |
+|`fontSize`| Function | Evstigneev Roman | testskipped | pass | Ace issue fixed, test in progress Evstigneev Roman |
+|`fontWeight`| Function |Evstigneev Roman | testskipped | pass | Ace issue fixed, test in progress Evstigneev Roman |
+|`fontStyle`| Function |Evstigneev Roman | done | pass |  |
+|`fontFamily`| Function |Evstigneev Roman | done | pass |  |
 |`contentModifier`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG (+) & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
-|`labelStyle`| Function |Evstigneev Roman | done |  |  |
+|`labelStyle`| Function |Evstigneev Roman | done | test blocked(blocked IDL) |  |
 |`minFontScale`| Function | Kovalev Sergey | done |  | |
 |`maxFontScale`| Function | Kovalev Sergey | done |  | |
 |*Calendar*| *Component* | Maksimov Nikita | done |  |  |
@@ -449,13 +449,13 @@
 |`construct`| Function |Erokhin Ilya | done |  |  |
 |`setCircleOptions`|Function| Erokhin Ilya | done |  |  |
 |*Column*| *Component* | Politov Mikhail | done |  |  |
-|`construct`| Function | Politov Mikhail | done |  |  |
-|`setColumnOptions0`| Function | Politov Mikhail | done |  |  |
-|`setColumnOptions1`| Function | Dudkin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IC3NZW |
-|`alignItems`| Function | Politov Mikhail | done |  |  |
-|`justifyContent`| Function | Politov Mikhail | done |  |  |
-|`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  | UT by Evstigneev Roman |
-|`reverse`| Function | Politov Mikhail | done |  |  |
+|`construct`| Function | Politov Mikhail | done | pass |  |
+|`setColumnOptions0`| Function | Politov Mikhail | done | | |
+|`setColumnOptions1`| Function | Dudkin Sergey | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IC3NZW |
+|`alignItems`| Function | Politov Mikhail | done | pass |  |
+|`justifyContent`| Function | Politov Mikhail | done | pass |  |
+|`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done | pass | UT by Evstigneev Roman |
+|`reverse`| Function | Politov Mikhail | done | pass |  |
 |*ColumnSplit*| *Component* | Dmitry A Smirnov| done |  | |
 |`construct`| Function |Dmitry A Smirnov| done |  | |
 |`setColumnSplitOptions`| Function | Dmitry A Smirnov| done |  |  |
