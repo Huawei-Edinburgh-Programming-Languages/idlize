@@ -1316,18 +1316,18 @@
 |`vertical`| Function | Skroba Gleb | done |  |  |
 |`itemSpace`| Function | Skroba Gleb | done | pass |  |
 |`displayMode`| Function | Skroba Gleb| done | pass |  |
-|`cachedCount0`| Function | Skroba Gleb| done | pass |  |
-|`cachedCount1`| Function | Skroba Gleb| done | pass |  |
-|`effectMode`| Function | Skroba Gleb | done |  |  |
-|`disableSwipe`| Function | Skroba Gleb| done |  |  |
+|`cachedCount0`| Function | Skroba Gleb| done | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`cachedCount1`| Function | Skroba Gleb| done | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`effectMode`| Function | Skroba Gleb | done | pass |  |
+|`disableSwipe`| Function | Skroba Gleb| done | pass |  |
 |`curve`| Function | Skroba Gleb| done | pass |  |
-|`onChange`| Function | Skroba Gleb| done | failed |  |
-|`onSelected`| Function | Pavelyev Ivan | done | failed | |
+|`onChange`| Function | Skroba Gleb| done | blocked |  |
+|`onSelected`| Function | Pavelyev Ivan | done | blocked | |
 |`indicatorStyle`| Function | Skroba Gleb| done |  |deprecated?  |
-|`onUnselected`| Function | Pavelyev Ivan | done | failed | |
-|`onAnimationStart`| Function | Skroba Gleb| done |  |  |
-|`onAnimationEnd`| Function | Skroba Gleb | done |  |  |
-|`onGestureSwipe`| Function | Skroba Gleb | done |  |  |
+|`onUnselected`| Function | Pavelyev Ivan | done | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onAnimationStart`| Function | Skroba Gleb| done | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onAnimationEnd`| Function | Skroba Gleb | done | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onGestureSwipe`| Function | Skroba Gleb | done | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`nestedScroll`| Function | Skroba Gleb| testskipped | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3ULZ |
 |`customContentTransition`| Function | Skroba Gleb | done |  | |
 |`onContentDidScroll`| Function | Skroba Gleb| done |  | |
