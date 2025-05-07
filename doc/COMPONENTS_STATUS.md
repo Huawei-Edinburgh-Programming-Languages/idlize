@@ -1268,20 +1268,20 @@
 |`construct`| Function |Politov Mikhail | done |  |  |
 |`textBackgroundStyle`| Function | Politov Mikhail | done |  |  |
 |`baselineOffset`| Function | Politov Mikhail | done |  |  |
-|*Span*| *Component* | Politov Mikhail | done |  |  |
-|`construct`| Function |Politov Mikhail | done |  |  |
-|`setSpanOptions`| Function |Politov Mikhail | done  |  |
-|`font`| Function | Politov Mikhail | done |  |  |
-|`fontColor`| Function |Politov Mikhail | done |  |  |
-|`fontSize`| Function |Politov Mikhail | done |  |  |
-|`fontStyle`| Function |Politov Mikhail | done |  |  |
-|`fontWeight`| Function |Politov Mikhail | done |  |  |
-|`fontFamily`| Function |Politov Mikhail | done |  |  |
-|`decoration`| Function | Politov Mikhail | done |  |  |
-|`letterSpacing`| Function |Politov Mikhail | done |  |  |
-|`textCase`| Function | Politov Mikhail | done |  |  |
-|`lineHeight`| Function | Politov Mikhail | done |  |  |
-|`textShadow`| Function | Politov Mikhail | testskipped |  | test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
+|*Span*| *Component* | Politov Mikhail | done | pass |  |
+|`construct`| Function |Politov Mikhail | done | pass |  |
+|`setSpanOptions`| Function |Politov Mikhail | done | pass |  |
+|`font`| Function | Politov Mikhail | done | pass |  |
+|`fontColor`| Function |Politov Mikhail | done | pass |  |
+|`fontSize`| Function |Politov Mikhail | done | pass |  |
+|`fontStyle`| Function |Politov Mikhail | done | pass |  |
+|`fontWeight`| Function |Politov Mikhail | done | pass |  |
+|`fontFamily`| Function |Politov Mikhail | done | pass |  |
+|`decoration`| Function | Politov Mikhail | done | pass |  |
+|`letterSpacing`| Function |Politov Mikhail | done | pass |  |
+|`textCase`| Function | Politov Mikhail | done | pass |  |
+|`lineHeight`| Function | Politov Mikhail | done | pass |  |
+|`textShadow`| Function | Politov Mikhail | testskipped | pass | test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
 |*Stack*| *Component* | Korobeinikov Evgeny | done | pass |  |
 |`construct`| Function |Korobeinikov Evgeny | done | pass |  |
 |`setStackOptions` | Function | Korobeinikov Evgeny | done | pass |  |
