@@ -2,21 +2,21 @@
 | --------- |-------------------|
 | AlphabetIndexer.test.ets | Porodin Alexander |
 | AspectRatio.test.ets | Porodin Alexander |
-| AttachDetach.test.ets |                   |
+| AttachDetach.test.ets | Vadim Voronov |
 | BackgroundBlurEffects.test.ets |                   |
 | Badge.test.ets |                   |
 | BaseSpan.test.ets | Porodin Alexander |
 | Blank.test.ets | Porodin Alexander |
 | Button.test.ets | Tuzhilkin Ivan    |
 | CalendarPicker.test.ets | Porodin Alexander |
-| Canvas.test.ets | Vadim Voronov     |
+| Canvas.test.ets | Vadim Voronov |
 | Checkbox.test.ets | Erokhin Ilya      |
 | CheckboxGroup.test.ets | Erokhin Ilya      |
 | Circle.test.ets | Porodin Alexander |
-| Click.test.ets |                   |
-| ClickEffect.test.ets |                   |
+| Click.test.ets | Vadim Voronov |
+| ClickEffect.test.ets | Vadim Voronov |
 | Column.test.ets | Tuzhilkin Ivan    |
-| ColumnSplit.test.ets |                   |
+| ColumnSplit.test.ets | Vadim Voronov |
 | CommonAccessibility.test.ets | Pisanov Nikolay   |
 | CommonAnimateTo.test.ets | Pisanov Nikolay   |
 | CommonBackdropBlur.test.ets | Pisanov Nikolay   |
@@ -38,8 +38,8 @@
 | CommonGeometryTransition.test.ets |                   |
 | CommonHitTestBehavior.test.ets |                   |
 | CommonLayoutWeight.test.ets |                   |
-| CommonLinearGradientBlur.test.ets |                   |
-| CommonMotionPath.test.ets |                   |
+| CommonLinearGradientBlur.test.ets | Vadim Voronov |
+| CommonMotionPath.test.ets | Vadim Voronov |
 | CommonObscured.test.ets |                   |
 | CommonOnChildTouchTest.test.ets |                   |
 | CommonOnVisibleAreaChange.test.ets |                   |
