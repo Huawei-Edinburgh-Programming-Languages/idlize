@@ -34,17 +34,17 @@
 | CommonCustomProperty.test.ets | Pisanov Nikolay   |
 | CommonDirectionAlign.test.ets | Pisanov Nikolay   |
 | CommonDraggableDragPreviewOptionsOnDragStartEnd.test.ets | Pisanov Nikolay   |
-| CommonDrawModifier.test.ets |                   |
-| CommonGeometryTransition.test.ets |                   |
-| CommonHitTestBehavior.test.ets |                   |
-| CommonLayoutWeight.test.ets |                   |
+| CommonDrawModifier.test.ets | Vadim Voronov |
+| CommonGeometryTransition.test.ets | Vadim Voronov |
+| CommonHitTestBehavior.test.ets | Vadim Voronov |
+| CommonLayoutWeight.test.ets | Vadim Voronov |
 | CommonLinearGradientBlur.test.ets | Vadim Voronov |
 | CommonMotionPath.test.ets | Vadim Voronov |
-| CommonObscured.test.ets |                   |
-| CommonOnChildTouchTest.test.ets |                   |
-| CommonOnVisibleAreaChange.test.ets |                   |
-| CommonOutline.test.ets |                   |
-| CommonOverlay.test.ets |                   |
+| CommonObscured.test.ets | Vadim Voronov |
+| CommonOnChildTouchTest.test.ets | Vadim Voronov |
+| CommonOnVisibleAreaChange.test.ets | Vadim Voronov |
+| CommonOutline.test.ets | Vadim Voronov |
+| CommonOverlay.test.ets | Vadim Voronov |
 | CommonPart1.test.ets |                   |
 | CommonPart2.test.ets |                   |
 | CommonPixelRound.test.ets |                   |
