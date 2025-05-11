@@ -138,9 +138,9 @@
 | Tabs.test.ets | Skroba Gleb       |
 | Text.test.ets | Ilya Erokhin      |
 | TextArea.test.ets | Evstigneev Roman |
-| TextClock.test.ets |                   |
-| TextInput.test.ets |                   |
-| TextPicker.test.ets |                   |
+| TextClock.test.ets | Mikhail Politov |
+| TextInput.test.ets | Mikhail Politov |
+| TextPicker.test.ets | Mikhail Politov |
 | TextTimer.test.ets |                   |
 | TimePicker.test.ets |                   |
 | Toggle.test.ets |                   |
