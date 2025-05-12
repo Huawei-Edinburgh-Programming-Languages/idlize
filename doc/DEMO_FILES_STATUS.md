@@ -49,7 +49,7 @@
 | CommonPart2.test.ets | Pisanov Nikolay   |
 | CommonPixelRound.test.ets | Pisanov Nikolay   |
 | CommonPositionOffsetMarkAnchor.test.ets |                   |
-| CommonRenderFit.test.ets |                   |
+| CommonRenderFit.test.ets | Evstingneev Roman |
 | CommonSafeArea.test.ets |                   |
 | CommonSphericalEffectLightUpPixelStretch.test.ets |                   |
 | CommonSystemBarEffect.test.ets |                   |
