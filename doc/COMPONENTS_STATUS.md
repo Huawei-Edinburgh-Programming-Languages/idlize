@@ -1313,7 +1313,7 @@
 |`indicator1`| Function | Skroba Gleb| done | pass |  |
 |`loop`| Function | Skroba Gleb| done | pass |  |
 |`duration`| Function | Skroba Gleb | done | pass |  |
-|`vertical`| Function | Skroba Gleb | done |  |  |
+|`vertical`| Function | Skroba Gleb | done | pass |  |
 |`itemSpace`| Function | Skroba Gleb | done | pass |  |
 |`displayMode`| Function | Skroba Gleb| done | pass |  |
 |`cachedCount0`| Function | Skroba Gleb| done | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -1339,8 +1339,8 @@
 |`prevMargin`| Function | Skroba Gleb| done | pass |  |
 |`nextMargin`| Function | Skroba Gleb | done | pass |  |
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
-|*IndicatorComponent*| *Component* | Skroba Gleb | done |  |  |
-|`construct`| Function | Skroba Gleb | done |  |  |
+|*IndicatorComponent*| *Component* | Skroba Gleb | done | |  |
+|`construct`| Function | Skroba Gleb | done | failed | "Can't have nullptr ptr ${}" probably no the component code |
 |`setIndicatorComponentOptions`| Function | Skroba Gleb | done |  |  |
 |`initialIndex`| Function | Skroba Gleb | done |  |  |
 |`count`| Function | Skroba Gleb | done |  |  |
@@ -3027,7 +3027,7 @@
 |`getMainAxisLength`| Function | Skroba Gleb | done | | |
 |`setMainAxisLength`| Function | Skroba Gleb | done | | |
 |*IndicatorComponentController*| *Class* | Skroba Gleb | done |  |  |
-|`ctor`| Function | Skroba Gleb | done |  |  |
+|`ctor`| Function | Skroba Gleb | done | failed | "Can't have nullptr ptr ${}" probably no the component code |
 |`showNext`| Function | Skroba Gleb | done |  |  |
 |`showPrevious`| Function | Skroba Gleb | done |  |  |
 |`changeIndex`| Function | Skroba Gleb | done |  |  |
