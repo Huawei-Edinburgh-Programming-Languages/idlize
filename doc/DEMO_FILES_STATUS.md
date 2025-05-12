@@ -48,12 +48,12 @@
 | CommonPart1.test.ets | Pisanov Nikolay   |
 | CommonPart2.test.ets | Pisanov Nikolay   |
 | CommonPixelRound.test.ets | Pisanov Nikolay   |
-| CommonPositionOffsetMarkAnchor.test.ets |                   |
+| CommonPositionOffsetMarkAnchor.test.ets | Vadim Voronov |
 | CommonRenderFit.test.ets | Evstingneev Roman |
-| CommonSafeArea.test.ets |                   |
-| CommonSphericalEffectLightUpPixelStretch.test.ets |                   |
-| CommonSystemBarEffect.test.ets |                   |
-| CommonTouchAble.test.ets |                   |
+| CommonSafeArea.test.ets | Vadim Voronov |
+| CommonSphericalEffectLightUpPixelStretch.test.ets | Vadim Voronov |
+| CommonSystemBarEffect.test.ets | Vadim Voronov |
+| CommonTouchAble.test.ets | Vadim Voronov |
 | Component3D.test.ets |                   |
 | ContainerSpan.test.ets |                   |
 | Counter.test.ets | Erokhin Ilya      |
