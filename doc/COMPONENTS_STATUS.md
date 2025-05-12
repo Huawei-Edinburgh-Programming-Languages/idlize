@@ -1064,14 +1064,14 @@
 |`scrollBar`| Function | Berezin Kirill | done |  |  |
 |`scrollBarColor`| Function | Berezin Kirill | done |  |  |
 |`scrollBarWidth`| Function | Berezin Kirill | done |  |  |
-|`onScrollFrameBegin`| Function | Dudkin Sergey | done |  | |
+|`onScrollFrameBegin`| Function | Dudkin Sergey | done | fail | |
 |`nestedScroll`| Function | Berezin Kirill | done |  |  |
 |`enableScrollInteraction`| Function | Berezin Kirill | done |  |  |
-|`friction`| Function | Berezin Kirill | done |  |  |
+|`friction`| Function | Berezin Kirill | done | pass |  |
 |`scrollSnap`| Function | Berezin Kirill | done |  |  |
 |`enablePaging`| Function | Berezin Kirill | done |  |  |
 |`initialOffset`| Function | Berezin Kirill | done |  |  |
-|`edgeEffect`| Function | Berezin Kirill | done |  |  |
+|`edgeEffect`| Function | Berezin Kirill | done | fail | |
 |*ScrollBar*| *Component* | Maksimov Nikita | done |  | |
 |`construct`| Function | Maksimov Nikita | done |  | |
 |`setScrollBarOptions`| Function | Maksimov Nikita | done |  | |
