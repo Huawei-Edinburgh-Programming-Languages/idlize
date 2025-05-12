@@ -70,7 +70,7 @@
 | FocusTraversalGroup.test.ets |                   |
 | FocusTraversalToComponentsEffect.test.ets |                   |
 | ForegroundBlurStyle.test.ets |                   |
-| ForegroundColor.test.ets |                   |
+| ForegroundColor.test.ets | Evstingneev Roman |
 | ForegroundEffect.test.ets |                   |
 | FormLink.test.ets | Daryina Olga      |
 | Gauge.test.ets |                   |
