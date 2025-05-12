@@ -141,7 +141,7 @@
 | TextClock.test.ets | Mikhail Politov |
 | TextInput.test.ets | Mikhail Politov |
 | TextPicker.test.ets | Mikhail Politov |
-| TextTimer.test.ets |                   |
+| TextTimer.test.ets | Evstigneev Roman |
 | TimePicker.test.ets |                   |
 | Toggle.test.ets |                   |
 | TransformRotateScaleTranslate.test.ets |                   |
