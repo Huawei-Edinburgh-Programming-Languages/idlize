@@ -121,8 +121,8 @@
 | RichText.test.ets | Erokhin Ilya      |
 | Row.test.ets | Daryina Olga      |
 | RowSplit.test.ets | Daryina Olga      |
-| Scroll.test.ets |                   |
-| ScrollBar.test.ets |                   |
+| Scroll.test.ets | Tuzhilkin Ivan |
+| ScrollBar.test.ets | Tuzhilkin Ivan |
 | ScrollableCommonMethod.test.ets |                   |
 | Search.test.ets | Erokhin Ilya      |
 | Select.test.ets | Samarin Sergey    |
