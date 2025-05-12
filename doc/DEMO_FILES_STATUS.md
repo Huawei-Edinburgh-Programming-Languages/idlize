@@ -110,7 +110,7 @@
 | Polygon.test.ets |                   |
 | Polyline.test.ets |                   |
 | Progress.test.ets | Erokhin Ilya      |
-| QRCode.test.ets |                   |
+| QRCode.test.ets | Evstigneev Roman |
 | Radio.test.ets | Porodin Alexander |
 | Rating.test.ets | Daryina Olga      |
 | Refresh.test.ets |                   |
