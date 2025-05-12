@@ -160,7 +160,7 @@
 |`outlineColor1`| Function | Skroba Gleb | done |  | |
 |`outlineRadius0`| Function |Skroba Gleb | done |  | |
 |`outlineRadius1`| Function | Skroba Gleb | done |  | |
-|`foregroundColor0`| Function | Roman Sedaikin, Erokhin Ilya | done |  | |
+|`foregroundColor0`| Function | Roman Sedaikin, Erokhin Ilya | done | blocked IDL | ColoringStrategy supported in the SDK |
 |`foregroundColor1`| Function |Roman Sedaikin, Erokhin Ilya | done |  | |
 |`onClick0`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done |  | EVENT |
 |`onClick1`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done |  | EVENT |
