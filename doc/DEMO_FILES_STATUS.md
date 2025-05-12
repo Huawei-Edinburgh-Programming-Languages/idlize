@@ -108,8 +108,8 @@
 | PasteButton.test.ets | Samarin Sergey    |
 | Path.test.ets | Daryina Olga      |
 | PatternLock.test.ets | Dmitry A Smirnov  |
-| Polygon.test.ets |                   |
-| Polyline.test.ets |                   |
+| Polygon.test.ets | Skroba Gleb |
+| Polyline.test.ets | Skroba Gleb |
 | Progress.test.ets | Erokhin Ilya      |
 | QRCode.test.ets | Evstigneev Roman |
 | Radio.test.ets | Porodin Alexander |
