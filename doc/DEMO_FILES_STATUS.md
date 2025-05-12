@@ -13,8 +13,8 @@
 | Checkbox.test.ets | Erokhin Ilya      |
 | CheckboxGroup.test.ets | Erokhin Ilya      |
 | Circle.test.ets | Porodin Alexander |
-| Click.test.ets | Vadim Voronov |
-| ClickEffect.test.ets | Vadim Voronov |
+| Click.test.ets | Kovalev Sergey |
+| ClickEffect.test.ets | Kovalev Sergey |
 | Column.test.ets | Tuzhilkin Ivan    |
 | ColumnSplit.test.ets | Vadim Voronov |
 | CommonAccessibility.test.ets | Pisanov Nikolay   |
@@ -37,7 +37,7 @@
 | CommonDrawModifier.test.ets | Vadim Voronov |
 | CommonGeometryTransition.test.ets | Vadim Voronov |
 | CommonHitTestBehavior.test.ets | Vadim Voronov |
-| CommonLayoutWeight.test.ets | Vadim Voronov |
+| CommonLayoutWeight.test.ets | Kovalev Sergey |
 | CommonLinearGradientBlur.test.ets | Vadim Voronov |
 | CommonMotionPath.test.ets | Vadim Voronov |
 | CommonObscured.test.ets | Vadim Voronov |
