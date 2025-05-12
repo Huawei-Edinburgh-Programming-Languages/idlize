@@ -4,7 +4,7 @@
 | AspectRatio.test.ets | Porodin Alexander |
 | AttachDetach.test.ets | Vadim Voronov |
 | BackgroundBlurEffects.test.ets |                   |
-| Badge.test.ets |                   |
+| Badge.test.ets | Tuzhilkin Ivan |
 | BaseSpan.test.ets | Porodin Alexander |
 | Blank.test.ets | Porodin Alexander |
 | Button.test.ets | Tuzhilkin Ivan    |
