@@ -1524,16 +1524,16 @@
 |`customKeyboard`|Function| Erokhin Ilya | done | not covered | UT by Vadim Voronov  |
 |`_onChangeEvent_text`| Function | Erokhin Ilya | done | not covered | |
 |*TextClock*| *Component* |Pavelyev Ivan| blocked IDL |  |  |
-|`construct`| Function |Pavelyev Ivan| done |  |  |
-|`setTextClockOptions`| Function |Pavelyev Ivan| done |  |  |
-|`format`| Function |Pavelyev Ivan| done |  |  |
-|`onDateChange`| Function |Pavelyev Ivan| done |  |  |
-|`fontColor`| Function |Pavelyev Ivan| done |  |  |
-|`fontSize`| Function |Pavelyev Ivan| done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6PK |
-|`fontStyle`| Function |Pavelyev Ivan| done |  |  |
-|`fontWeight`| Function |Pavelyev Ivan| done |  |  |
-|`fontFamily`| Function |Pavelyev Ivan| done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6QC |
-|`textShadow`| Function |Pavelyev Ivan| done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6PK |
+|`construct`| Function |Pavelyev Ivan| done | pass |  |
+|`setTextClockOptions`| Function |Pavelyev Ivan| done | pass |  |
+|`format`| Function |Pavelyev Ivan| done | pass |  |
+|`onDateChange`| Function |Pavelyev Ivan| done | not covered |  |
+|`fontColor`| Function |Pavelyev Ivan| done | pass |  |
+|`fontSize`| Function |Pavelyev Ivan| done | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6PK |
+|`fontStyle`| Function |Pavelyev Ivan| done | pass |  |
+|`fontWeight`| Function |Pavelyev Ivan| done | pass |  |
+|`fontFamily`| Function |Pavelyev Ivan| done | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6QC |
+|`textShadow`| Function |Pavelyev Ivan| done | failed | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6PK, when ShadowOptions is empty cpp crash happen |
 |`fontFeature`| Function |Pavelyev Ivan| done |  |  |
 |`contentModifier`| Function |Pavelyev Ivan| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`dateTimeOptions`| Function |Politov Mikhail| testskipped |  |  |
@@ -3128,7 +3128,7 @@
 |`show`| Function | Ekaterina Stepanova | done |  |  |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |  |
 |`ctor`| Function |Ekaterina Stepanova| done |  |  |
-|`start`| Function |Ekaterina Stepanova| done |  |  |
+|`start`| Function |Ekaterina Stepanova| done | test blocked | Cannot find method 'start ()V' |
 |`pause`| Function |Ekaterina Stepanova| done |  |  |
 |`reset`| Function |Ekaterina Stepanova| done |  |  |
 |*TimePickerDialog*| *Class* | Ekaterina Stepanova | done |  | |
