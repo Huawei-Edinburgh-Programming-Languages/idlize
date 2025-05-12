@@ -817,21 +817,21 @@ class ArkTSSyntheticGenerator extends DependenciesCollector {
     }
 
     convertCallback(decl: idl.IDLCallback): idl.IDLEntry[] {
-        if (decl.returnType !== idl.IDLVoidType) {
-            const continuationReference = this.library.createContinuationCallbackReference(decl.returnType)
-            const continuation = this.library.resolveTypeReference(continuationReference)!
-            this.onSyntheticDeclaration(continuation)
-        }
+        // if (decl.returnType !== idl.IDLVoidType) {
+        //     const continuationReference = this.library.createContinuationCallbackReference(decl.returnType)
+        //     const continuation = this.library.resolveTypeReference(continuationReference)!
+        //     this.onSyntheticDeclaration(continuation)
+        // }
 
-        const transformed = maybeTransformManagedCallback(decl, this.library)
-        if (transformed) {
-            this.convert(transformed)
-            this.onSyntheticDeclaration(transformed)
-        }
+        // const transformed = maybeTransformManagedCallback(decl, this.library)
+        // if (transformed) {
+        //     this.convert(transformed)
+        //     this.onSyntheticDeclaration(transformed)
+        // }
 
-        const maybeTransformed = maybeTransformManagedCallback(decl, this.library)
-        if (maybeTransformed)
-            this.onSyntheticDeclaration(maybeTransformed)
+        // const maybeTransformed = maybeTransformManagedCallback(decl, this.library)
+        // if (maybeTransformed)
+        //     this.onSyntheticDeclaration(maybeTransformed)
 
         return super.convertCallback(decl)
     }
@@ -839,14 +839,14 @@ class ArkTSSyntheticGenerator extends DependenciesCollector {
     convertInterface(decl: idl.IDLInterface): idl.IDLEntry[] {
         if (idl.isHandwritten(decl))
             return super.convertInterface(decl)
-        idl.forEachFunction(decl, function_ => {
-            const promise = idl.asPromise(function_.returnType)
-            if (promise) {
-                const reference = this.library.createContinuationCallbackReference(promise)
-                const continuation = this.library.resolveTypeReference(reference)!
-                this.onSyntheticDeclaration(continuation)
-            }
-        })
+        // idl.forEachFunction(decl, function_ => {
+        //     const promise = idl.asPromise(function_.returnType)
+        //     if (promise) {
+        //         const reference = this.library.createContinuationCallbackReference(promise)
+        //         const continuation = this.library.resolveTypeReference(reference)!
+        //         this.onSyntheticDeclaration(continuation)
+        //     }
+        // })
         return super.convertInterface(decl)
     }
 }
