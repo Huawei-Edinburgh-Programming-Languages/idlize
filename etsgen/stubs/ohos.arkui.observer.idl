@@ -1,8 +1,0 @@
-package ohos.arkui.observer;
-
-[DefaultExport]
-namespace observer {
-    interface RouterPageInfo {};
-    interface NavigationInfo {};
-    interface NavDestinationInfo {};
-};
