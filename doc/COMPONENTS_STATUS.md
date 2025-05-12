@@ -916,13 +916,13 @@
 |`onComplete`| Function | Evstigneev Roman | done | | |
 |`onError`| Function | Evstigneev Roman | done |  | |
 |*Polygon*| *Component* |Politov Mikhail | done |  | |
-|`construct`| Function |Politov Mikhail | done |  | |
-|`setPolygonOptions`| Function | Politov Mikhail | done |  | |
-|`points`| Function | Politov Mikhail | done |  |  |
+|`construct`| Function |Politov Mikhail | done | pass | |
+|`setPolygonOptions`| Function | Politov Mikhail | done | pass | |
+|`points`| Function | Politov Mikhail | done | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |*Polyline*| *Component* | Politov Mikhail | done |  |  |
-|`construct`| Function |Politov Mikhail | done |  |  |
-|`setPolylineOptions`| Function | Politov Mikhail | done |  |  |
-|`points`| Function | Politov Mikhail | done |  |   |
+|`construct`| Function |Politov Mikhail | done | pass |  |
+|`setPolylineOptions`| Function | Politov Mikhail | done | pass |  |
+|`points`| Function | Politov Mikhail | done | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |*Progress*| *Component* | Erokhin Ilya | blocked IDL |  | |
 |`construct`| Function | Erokhin Ilya | done | pass | deprecated for `style` property |
 |`setProgressOptions`| Function | Erokhin Ilya | done | failed | deprecated for `style` property |
@@ -1321,7 +1321,7 @@
 |`effectMode`| Function | Skroba Gleb | done | pass |  |
 |`disableSwipe`| Function | Skroba Gleb| done | pass |  |
 |`curve`| Function | Skroba Gleb| done | pass |  |
-|`onChange`| Function | Skroba Gleb| done | blocked |  |
+|`onChange`| Function | Skroba Gleb| done | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onSelected`| Function | Pavelyev Ivan | done | blocked | |
 |`indicatorStyle`| Function | Skroba Gleb| done |  |deprecated?  |
 |`onUnselected`| Function | Pavelyev Ivan | done | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -1369,7 +1369,7 @@
 |`effectStrategy`| Function |Dmitry A Smirnov| done |  |  |
 |`renderingStrategy`| Function |Dmitry A Smirnov| done |  |  |
 |*Tabs*| *Component* | Tuzhilkin Ivan | done |  |  |
-|`construct`| Function |Tuzhilkin Ivan | done |  |  |
+|`construct`| Function |Tuzhilkin Ivan | done | pass |  |
 |`setTabsOptions`| Function | Skroba Gleb | done |  |  |
 |`vertical`| Function | Tuzhilkin Ivan | done | pass |  |
 |`barPosition`| Function | Tuzhilkin Ivan | done | pass |  |
@@ -1403,7 +1403,7 @@
 |`cachedMaxCount`| Function | Erokhin Ilya| done | | |
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
 |*TabContent*| *Component* | Evstigneev Roman | blocked IDL |  |  |
-|`construct`| Function | Evstigneev Roman | done |  |  |
+|`construct`| Function | Evstigneev Roman | done | pass |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |  |
 |`tabBar0`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | done | pass |  |
 |`tabBar1`| Function |Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |
