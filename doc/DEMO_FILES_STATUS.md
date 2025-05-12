@@ -45,9 +45,9 @@
 | CommonOnVisibleAreaChange.test.ets | Vadim Voronov |
 | CommonOutline.test.ets | Vadim Voronov |
 | CommonOverlay.test.ets | Vadim Voronov |
-| CommonPart1.test.ets |                   |
-| CommonPart2.test.ets |                   |
-| CommonPixelRound.test.ets |                   |
+| CommonPart1.test.ets | Pisanov Nikolay   |
+| CommonPart2.test.ets | Pisanov Nikolay   |
+| CommonPixelRound.test.ets | Pisanov Nikolay   |
 | CommonPositionOffsetMarkAnchor.test.ets |                   |
 | CommonRenderFit.test.ets |                   |
 | CommonSafeArea.test.ets |                   |
