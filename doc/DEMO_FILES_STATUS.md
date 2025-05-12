@@ -87,6 +87,7 @@
 | Image4.test.ets |                   |
 | ImageAnimator.test.ets |                   |
 | ImageSpan.test.ets |                   |
+| IndicatorComponent.test.ets | Skroba Gleb |
 | Line.test.ets | Daryina Olga      |
 | List.test.ets |                   |
 | ListItem.test.ets |                   |
