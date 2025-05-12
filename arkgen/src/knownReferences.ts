@@ -13,6 +13,22 @@
  * limitations under the License.
  */
 
-export const ReferenceNames = {
-    AttributeModifier: "arkui.component.common.AttributeModifier"
+import { ConfigTypeInfer, D } from "@idlizer/core"
+import { readFileSync } from "fs"
+
+const KnownReferencesSchema = D.object({
+    AttributeModifier: D.string()
+})
+export type KnownReferencesType = ConfigTypeInfer<typeof KnownReferencesSchema>
+export let referenceNames: KnownReferencesType | undefined = undefined
+export function loadKnownReferences(path:string) {
+    const content = readFileSync(path, 'utf-8')
+    const data = JSON.parse(content)
+    referenceNames = KnownReferencesSchema.validate(data).unwrap()
+}
+export function getReferenceTo(key:keyof KnownReferencesType): string {
+    if (referenceNames === undefined) {
+        throw new Error("Reference mapping is not loaded!")
+    }
+    return referenceNames[key]
 }

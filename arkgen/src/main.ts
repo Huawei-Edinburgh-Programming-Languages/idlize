@@ -53,6 +53,7 @@ import { IDLVisitor, loadPeerConfiguration,
 import { generateArkoalaFromIdl, generateLibaceFromIdl } from "./arkoala"
 import { ArkoalaPeerLibrary } from "./ArkoalaPeerLibrary"
 import { makeInteropBridges } from "./InteropBridges"
+import { loadKnownReferences } from "./knownReferences"
 
 const options = program
     .option('--show-config-schema', 'Prints JSON schema for config')
@@ -100,6 +101,7 @@ const options = program
     .option('--interop-bridges <string>', "Generate interop bridges macros")
     .option('--use-memo-m3', "Generate code with m3 @memo annotations and functions with @ComponentBuilder", false)
     .option('--use-component-optional', 'Make all component\'s properties nullable')
+    .option('--reference-names <string>', 'Provides reference mapping', path.resolve(__dirname, '..', 'generation-config', 'references', 'default'))
 
     .parse()
     .opts()
@@ -121,6 +123,7 @@ let apiVersion = options.apiVersion ?? 9999
 Language.ARKTS.extension = options.arktsExtension as string
 
 setDefaultConfiguration(loadPeerConfiguration(options.optionsFile, options.ignoreDefaultConfig as boolean))
+loadKnownReferences(path.resolve(options.referenceNames))
 
 if (process.env.npm_package_version && !options.showConfigSchema) {
     console.log(`IDLize version ${findVersion()}`)
