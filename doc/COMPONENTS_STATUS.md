@@ -116,15 +116,15 @@
 |`width1`| Function |Roman Sedaikin | done |  | |
 |`height0`| Function |Roman Sedaikin | done |  | |
 |`height1`| Function |Roman Sedaikin | done |  | |
-|`drawModifier`| Function | Erokhin Ilya | done |  | |
+|`drawModifier`| Function | Erokhin Ilya | done | failed | info: UIContext createAnimator, animateTo, vp2x not implemented|
 |`responseRegion`| Function | Skroba Gleb | done |  | |
 |`mouseResponseRegion`| Function | Skroba Gleb | done |  | |
 |`size`| Function | Roman Sedaikin | done |  | |
 |`constraintSize`| Function | Roman Sedaikin | done |  | |
 |`touchable`| Function | Roman Sedaikin | done |  | |
-|`hitTestBehavior`| Function | Roman Sedaikin | done |  | |
-|`onChildTouchTest`| Function | Skroba Gleb | done |  |   |
-|`layoutWeight`| Function | Roman Sedaikin | done |  | |
+|`hitTestBehavior`| Function | Roman Sedaikin | done | passed | |
+|`onChildTouchTest`| Function | Skroba Gleb | done | failed | info: Cannot find method ListItem, onDidScroll, method edgeEffect undefined cannot be cast to EdgeEffectOptions, arkui.component.forEach.ETSGLOBAL at std.core.LinkerUnresolvedClassError.<ctor> |
+|`layoutWeight`| Function | Roman Sedaikin | done | passed | |
 |`chainWeight`| Function | Politov Mikhail | testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBJW6H |
 |`padding`| Function | Skroba Gleb | done |  | |
 |`safeAreaPadding`| Function |Dmitry A Smirnov | done |  | |
@@ -132,7 +132,7 @@
 |`backgroundColor0`| Function |Skroba Gleb| done | passed |  |
 |`backgroundColor1`| Function |Skroba Gleb| done |  |  |
 |`pixelRound`| Function | Skroba Gleb | done |  |  |
-|`backgroundImageSize`| Function | Erokhin Ilya | done |  |  |
+|`backgroundImageSize`| Function | Erokhin Ilya | done | not covered | info: cannot find method backgroundImage  |
 |`backgroundImagePosition`| Function | Erokhin Ilya | done |  |  |
 |`backgroundEffect0`| Function |Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundEffect1`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -150,7 +150,7 @@
 |`borderColor`| Function | Roman Sedaikin | done |  | |
 |`borderRadius`| Function | Roman Sedaikin | done |  | |
 |`borderImage`| Function | Roman Sedaikin | done | failed | |
-|`outline0`| Function |Skroba Gleb | done |  | |
+|`outline0`| Function |Skroba Gleb | done | passed | |
 |`outline1`| Function | Skroba Gleb | done |  | |
 |`outlineStyle0`| Function | Skroba Gleb | done | passed | |
 |`outlineStyle1`| Function | Skroba Gleb | done |  | |
@@ -229,8 +229,8 @@
 |`transform1`| Function | Dmitry A Smirnov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUR61 Type `object` is converted to `ArkCustomObject`|
 |`onAppear`| Function | Roman Sedaikin | done |  | |
 |`onDisAppear`| Function | Roman Sedaikin | done |  | |
-|`onAttach`| Function | Andrey Khudenkikh | done |  | |
-|`onDetach`| Function | Andrey Khudenkikh | done |  | |
+|`onAttach`| Function | Andrey Khudenkikh | done | failed | info: cannot find method onAttach, UIContext getPromptAction not implemented |
+|`onDetach`| Function | Andrey Khudenkikh | done | failed | info: cannot find method onDetach, UIContext getPromptAction not implemented |
 |`onAreaChange`| Function | Roman Sedaikin | done |  | |
 |`visibility`| Function | Roman Sedaikin | done | pass | |
 |`flexGrow`| Function | Dmitry A Smirnov| done |  | |
@@ -241,16 +241,16 @@
 |`zIndex`| Function | Roman Sedaikin | done |  | |
 |`direction`| Function | Roman Sedaikin | done | pass | |
 |`align`| Function | Roman Sedaikin | done | pass | |
-|`position`| Function | Roman Sedaikin | done |  | |
-|`markAnchor`| Function | Dmitry A Smirnov| done |  | |
-|`offset`| Function | Skroba Gleb | done |  | |
+|`position`| Function | Roman Sedaikin | done | failed  | info: position with Edges failed  message: entry.src.main.ets.pages.Index.gensym%%_752 |
+|`markAnchor`| Function | Dmitry A Smirnov| done | passed | |
+|`offset`| Function | Skroba Gleb | done | failed | info: offset with Edges failed  message: entry.src.main.ets.pages.Index.gensym%%_752|
 |`enabled`| Function | Roman Sedaikin | done |  | |
 |`useSizeType`| Function | Dmitry A Smirnov| testskipped |  | deprecated, modifier is ready|
 |`alignRules0`| Function | Dmitry A Smirnov| done |  | |
 |`alignRules1`| Function | Dmitry A Smirnov| done |  | |
 |`aspectRatio`| Function | Roman Sedaikin | done |  | |
-|`clickEffect0`| Function | Lobah Mikhail | done | failed | info: Cannot find method 'clickEffect |
-|`clickEffect1`| Function | Dmitry A Smirnov | done | failed | info: Cannot find method 'clickEffect |
+|`clickEffect0`| Function | Lobah Mikhail | done | failed | info: cannot find method 'clickEffect |
+|`clickEffect1`| Function | Dmitry A Smirnov | done | failed | info: cannot find method 'clickEffect |
 |`onDragStart`| Function | Skroba Gleb, Evstigneev Roman | done |  | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now. |
 |`onDragEnter`| Function | Lobah Mikhail, Evstigneev Roman | done |  |  |
 |`onDragMove`| Function | Lobah Mikhail, Evstigneev Roman | done |  |  |
@@ -269,7 +269,7 @@
 |`sweepGradient1`| Function | Dmitry A Smirnov | done | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values,no rotation attribute in json, does not reset to default values in invalid cases|
 |`radialGradient0`| Function |Erokhin Ilya | done | pass |  |
 |`radialGradient1`| Function | Dmitry A Smirnov | done | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values |
-|`motionPath`| Function | Lobah Mikhail | done |  | |
+|`motionPath`| Function | Lobah Mikhail | done | failed | info: UIContext animateTo is not implemented |
 |`shadow0`| Function |Roman Sedaikin | done |  | |
 |`shadow1`| Function | Dmitry A Smirnov | done |  | |
 |`clip0`| Function | Dudkin Sergey | done |  |  |
@@ -284,8 +284,8 @@
 |`maskShape1`| Function |Tuzhilkin Ivan| done | test blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`key`| Function | Lobah Mikhail | done |  | |
 |`id`| Function | Erokhin Ilya | done |  |  |
-|`geometryTransition0`| Function | Lobah Mikhail | done | | testskipped due to aceEngine issue https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
-|`geometryTransition1`| Function | Lobah Mikhail | done | | testskipped due to aceEngine issue https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
+|`geometryTransition0`| Function | Lobah Mikhail | testskipped | failed | info: cannot find method geometryTransition, test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG |
+|`geometryTransition1`| Function | Lobah Mikhail | testskipped | failed | info: cannot find method geometryTransition, test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
 |`stateStyles`| Function | Dudkin Sergey | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`restoreId`| Function | Lobah Mikhail | done |  | |
 |`sphericalEffect0`| Function | Lobah Mikhail | done | passed | |
@@ -311,7 +311,7 @@
 |`accessibilityVirtualNode`| Function | Lobah Mikhail | done |  |  |
 |`accessibilityChecked`| Function | Lobah Mikhail | done |  | |
 |`accessibilitySelected`| Function | Lobah Mikhail | done |  | |
-|`obscured`| Function |Dmitry A Smirnov | done |  | |
+|`obscured`| Function |Dmitry A Smirnov | done | passed | |
 |`reuseId`| Function |Dmitry A Smirnov | managed side |  | not implemented in ace_engine|
 |`reuse`| Function |managed side | managed side | | to be removed from CAPI generation |
 |`renderFit0`| Function | Dmitry A Smirnov| done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -327,11 +327,11 @@
 |`onTouchIntercept`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done |  | EVENT |
 |`onSizeChange`| Function | Dmitry A Smirnov| done |  | |
 |`accessibilityFocusDrawLevel`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
-|`customProperty`| Function | Dmitry A Smirnov| in progress | test blocked | need clrify bridge implementation, test blocked by FrameNode.getCustomProperty |
-|`expandSafeArea`| Function | Dmitry A Smirnov| done |  |  |
+|`customProperty`| Function | Dmitry A Smirnov| in progress | test blocked | need clarify bridge implementation, test blocked by FrameNode.getCustomProperty |
+|`expandSafeArea`| Function | Dmitry A Smirnov| done | not covered | info: cannot find method backgroundImage |
 |`background`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
-|`backgroundImage0`| Function | Erokhin Ilya | done |  | |
-|`backgroundImage1`| Function | Erokhin Ilya | done |  | |
+|`backgroundImage0`| Function | Erokhin Ilya | done | failed | info: cannot find method backgroundImage |
+|`backgroundImage1`| Function | Erokhin Ilya | done | failed | info: cannot find method backgroundImage |
 |`backgroundBlurStyle0`| Function | Skroba Gleb | done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundBlurStyle1`| Function | Tuzhilkin Ivan | done | test blocked | need cherry-pick to feature_branch,  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundBlurStyle0`| Function | Roman Sedaikin | done | blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
@@ -352,7 +352,7 @@
 |`sharedTransition`|Function|Skroba Gleb | done |  |  |
 |`chainMode`| Function | Berezin Kirill | done |  | |
 |`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`overlay`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the `Ark_ComponentContent ` class without stubs is required.|
+|`overlay`| Function | Lobah Mikhail | blocked IDL | passed | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the 'Ark_ComponentContent' class without stubs is required.|
 |`blendMode0`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`blendMode1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`advancedBlendMode`| Function | Erokhin Ilya |in progress |  |  |
@@ -365,7 +365,7 @@
 |`bindContentCover0`| Function | Erokhin Ilya | done | test blocked(blocked IDL) | UT by Vadim Voronov |
 |`bindContentCover1`| Function | Erokhin Ilya | done | test blocked(blocked IDL) | UT by Vadim Voronov |
 |`bindSheet`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onVisibleAreaChange`| Function | Erokhin Ilya | done |  | |
+|`onVisibleAreaChange`| Function | Erokhin Ilya | done | passed | info: ForEach replaced removed arkui.component.forEach.ETSGLOBAL at std.core.LinkerUnresolvedClassError.<ctor> |
 |`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`keyboardShortcut`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |*Common*| *Component* | Maksimov Nikita | done |  | |
@@ -408,7 +408,7 @@
 |*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  |
 |`construct`| Function |Vadim Voronov, Evstigneev Roman | done | passed |
 |`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | done | failed | info: undefined cannot be cast to ImageAIOptions  |
-|`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | blocked AceEngine | not covered | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | blocked AceEngine | failed | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onReady`| Function |Vadim Voronov | done |  |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked IDL |  |  |
@@ -457,10 +457,10 @@
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done | pass | UT by Evstigneev Roman |
 |`reverse`| Function | Politov Mikhail | done | pass |  |
 |*ColumnSplit*| *Component* | Dmitry A Smirnov| done |  | |
-|`construct`| Function |Dmitry A Smirnov| done |  | |
-|`setColumnSplitOptions`| Function | Dmitry A Smirnov| done |  |  |
-|`resizeable`| Function | Dmitry A Smirnov| done |  |  |
-|`divider`| Function | Dmitry A Smirnov| done |  |  |
+|`construct`| Function |Dmitry A Smirnov| done | passed | |
+|`setColumnSplitOptions`| Function | Dmitry A Smirnov| done | passed |  |
+|`resizeable`| Function | Dmitry A Smirnov| done | passed |  |
+|`divider`| Function | Dmitry A Smirnov| done | failed | info: cannot find method 'divider |
 |*Component3D*| *Component* |Kovalev Sergey | blocked IDL |  | |
 |`construct`| Function |Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD (+) |
 |`setComponent3DOptions`| Function |Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD (+) |
@@ -492,18 +492,18 @@
 |`trackShadow`| Function |Morozov Sergey | testskipped | | https://gitee.com/openharmony/arkui_ace_engine/issues/IBVDFV |
 |`contentModifier`| Function | Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |*DatePicker*| *Component* | Vadim Voronov | done |  |  |
-|`construct`| Function |Vadim Voronov | done |  |  |
-|`setDatePickerOptions`| Function | Vadim Voronov| done |  | |
-|`lunar0`| Function |Vadim Voronov | done |  |  |
+|`construct`| Function |Vadim Voronov | done | passed |  |
+|`setDatePickerOptions`| Function | Vadim Voronov| done | passed | |
+|`lunar0`| Function |Vadim Voronov | done | passed |  |
 |`lunar1`| Function |Vadim Voronov | done |  |  |
-|`disappearTextStyle0`| Function | Vadim Voronov| done |  |  |
+|`disappearTextStyle0`| Function | Vadim Voronov| done | passed |  |
 |`disappearTextStyle1`| Function | Vadim Voronov| done |  |  |
-|`textStyle0`| Function |Vadim Voronov | done |  |  |
+|`textStyle0`| Function |Vadim Voronov | done | passed |  |
 |`textStyle1`| Function |Vadim Voronov | done |  |  |
-|`selectedTextStyle0`| Function |Vadim Voronov | done |  |  |
+|`selectedTextStyle0`| Function |Vadim Voronov | done | passed |  |
 |`selectedTextStyle1`| Function |Vadim Voronov | done |  |  |
-|`onChange`| Function | Vadim Voronov| done |  | deprecated since API10 replaced by onDateChange |
-|`onDateChange`| Function |Vadim Voronov | done |  | |
+|`onChange`| Function | Vadim Voronov| done | not covered | info: method not found, deprecated since API10 replaced by onDateChange |
+|`onDateChange`| Function |Vadim Voronov | done | passed | |
 |`onDateChange1`| Function |Vadim Voronov | done |  | |
 |`digitalCrownSensitivity`| Function | Vadim Voronov | done |  | |
 |`enableHapticFeedback`| Function | Vadim Voronov | done | | |
