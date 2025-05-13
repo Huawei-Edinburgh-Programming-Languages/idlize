@@ -986,7 +986,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     if (idl.isCallback((entry))) {
                         let hasComponentInReferences = false
                         idl.forEachChild(entry, (node) => {
-                            if (idl.isNamedNode(node) && node.name === componentUIAttributeName)
+                            if (idl.isNamedNode(node) && [componentUIAttributeName, componentAttributeName].includes(node.name))
                                 hasComponentInReferences = true
                         })
                         if (hasComponentInReferences) {
