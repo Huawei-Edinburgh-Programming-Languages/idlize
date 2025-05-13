@@ -208,8 +208,8 @@
 |`invert1`| Function |Lobah Mikhail |  done | |
 |`hueRotate0`| Function |Lobah Mikhail |  done | |
 |`hueRotate1`| Function | Lobah Mikhail |  done | |
-|`useShadowBatching0`| Function | Lobah Mikhail | done |  | |
-|`useShadowBatching1`| Function | Lobah Mikhail | done |  | |
+|`useShadowBatching0`| Function | Lobah Mikhail | done | pass | |
+|`useShadowBatching1`| Function | Lobah Mikhail | done | pass | |
 |`useEffect0`| Function |Lobah Mikhail | done |  | |
 |`useEffect1`| Function |Lobah Mikhail | done |  | |
 |`useEffect2`| Function |Lobah Mikhail | done |  | |

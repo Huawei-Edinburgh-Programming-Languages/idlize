@@ -147,7 +147,7 @@
 | Toggle.test.ets |                   |
 | TransformRotateScaleTranslate.test.ets | Dmitry A Smirnov |
 | TransitionEffect.test.ets |                   |
-| UseShadowBatching.test.ets |                   |
+| UseShadowBatching.test.ets | Dmitry A Smirnov|
 | Video.test.ets |                   |
 | Visibility.test.ets |                   |
 | WaterFlow.test.ets |                   |
