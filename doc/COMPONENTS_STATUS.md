@@ -131,12 +131,12 @@
 |`margin`| Function | Skroba Gleb | done |  | |
 |`backgroundColor0`| Function |Skroba Gleb| done | passed |  |
 |`backgroundColor1`| Function |Skroba Gleb| done |  |  |
-|`pixelRound`| Function | Skroba Gleb | done |  |  |
-|`backgroundImageSize`| Function | Erokhin Ilya | done |  |  |
-|`backgroundImagePosition`| Function | Erokhin Ilya | done |  |  |
+|`pixelRound`| Function | Skroba Gleb | done | pass |  |
+|`backgroundImageSize`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundImagePosition`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundEffect0`| Function |Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundEffect1`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`backgroundImageResizable`| Function | Skroba Gleb | done |  | |
+|`backgroundImageResizable`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundEffect`| Function | Skroba Gleb | done | pass |  |
 |`visualEffect`| Function | Skroba Gleb | blocked IDL | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
 |`backgroundFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
@@ -192,22 +192,22 @@
 |`transition1`| Function |Dmitry A Smirnov| done |  |transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`motionBlur0`| Function |Dmitry A Smirnov| done | test blocked | test blocked by common.animation(...) |
 |`motionBlur1`| Function | Dmitry A Smirnov| done | test blocked | test blocked by common.animation(...) |
-|`brightness0`| Function | Lobah Mikhail | done |  |  |
+|`brightness0`| Function | Lobah Mikhail | done | pass |  |
 |`brightness1`| Function |Lobah Mikhail | done |  |  |
-|`contrast0`| Function |Lobah Mikhail | done |  | |
+|`contrast0`| Function |Lobah Mikhail | done | pass | |
 |`contrast1`| Function | Lobah Mikhail | done |  | |
-|`grayscale0`| Function | Lobah Mikhail | done |  | |
+|`grayscale0`| Function | Lobah Mikhail | done | pass | |
 |`grayscale1`| Function |Lobah Mikhail | done |  | |
-|`colorBlend0`| Function |Lobah Mikhail | done |  | |
+|`colorBlend0`| Function |Lobah Mikhail | done | pass | |
 |`colorBlend1`| Function | Lobah Mikhail | done |  | |
-|`saturate0`| Function | Lobah Mikhail | done |  | |
+|`saturate0`| Function | Lobah Mikhail | done | pass | |
 |`saturate1`| Function | Lobah Mikhail | done |  | |
-|`sepia0`| Function | Lobah Mikhail | done |  | |
+|`sepia0`| Function | Lobah Mikhail | done | pass | |
 |`sepia1`| Function | Lobah Mikhail | done |  | |
-|`invert0`| Function | Lobah Mikhail |  done | |
-|`invert1`| Function |Lobah Mikhail |  done | |
-|`hueRotate0`| Function |Lobah Mikhail |  done | |
-|`hueRotate1`| Function | Lobah Mikhail |  done | |
+|`invert0`| Function | Lobah Mikhail | done | pass | |
+|`invert1`| Function |Lobah Mikhail | done | | |
+|`hueRotate0`| Function |Lobah Mikhail | done | pass | |
+|`hueRotate1`| Function | Lobah Mikhail | done | | |
 |`useShadowBatching0`| Function | Lobah Mikhail | done | pass | |
 |`useShadowBatching1`| Function | Lobah Mikhail | done | pass | |
 |`useEffect0`| Function |Lobah Mikhail | done |  | |
@@ -270,9 +270,9 @@
 |`radialGradient0`| Function |Erokhin Ilya | done | pass |  |
 |`radialGradient1`| Function | Dmitry A Smirnov | done | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values |
 |`motionPath`| Function | Lobah Mikhail | done |  | |
-|`shadow0`| Function |Roman Sedaikin | done |  | |
+|`shadow0`| Function |Roman Sedaikin | done | pass | |
 |`shadow1`| Function | Dmitry A Smirnov | done |  | |
-|`clip0`| Function | Dudkin Sergey | done |  |  |
+|`clip0`| Function | Dudkin Sergey | done | pass |  |
 |`clip1`| Function | Dudkin Sergey | done |  |  |
 |`clip2`| Function | Dudkin Sergey | done |  |  |
 |`clipShape0`| Function | Tuzhilkin Ivan | testskipped | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -291,7 +291,7 @@
 |`sphericalEffect0`| Function | Lobah Mikhail | done | passed | |
 |`sphericalEffect1`| Function | Dmitry A Smirnov | done |  | |
 |`lightUpEffect0`| Function | Lobah Mikhail | done | passed | |
-|`lightUpEffect1`| Function | Dmitry A Smirnov | done | passed | |
+|`lightUpEffect1`| Function | Dmitry A Smirnov | done |  | |
 |`pixelStretchEffect0`| Function | Lobah Mikhail | done | passed | |
 |`pixelStretchEffect1`| Function | Dmitry A Smirnov | done | | |
 |`accessibilityGroup0`| Function |Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -330,8 +330,8 @@
 |`customProperty`| Function | Dmitry A Smirnov| in progress | test blocked | need clrify bridge implementation, test blocked by FrameNode.getCustomProperty |
 |`expandSafeArea`| Function | Dmitry A Smirnov| done |  |  |
 |`background`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
-|`backgroundImage0`| Function | Erokhin Ilya | done |  | |
-|`backgroundImage1`| Function | Erokhin Ilya | done |  | |
+|`backgroundImage0`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundImage1`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundBlurStyle0`| Function | Skroba Gleb | done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundBlurStyle1`| Function | Tuzhilkin Ivan | done | test blocked | need cherry-pick to feature_branch,  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundBlurStyle0`| Function | Roman Sedaikin | done | blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
