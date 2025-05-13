@@ -1647,17 +1647,17 @@
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done |  | |
 |*TextTimer*| *Component* |Ekaterina Stepanova| blocked IDL |  |  |
-|`construct`| Function | Ekaterina Stepanova| done |  |  |
-|`setTextTimerOptions`| Function |Ekaterina Stepanova| done |  |  |
-|`format`| Function |Ekaterina Stepanova| done |  |  |
-|`fontColor`| Function |Ekaterina Stepanova| done |  |  |
-|`fontSize`| Function |Ekaterina Stepanova| done |  |  |
-|`fontStyle`| Function | Ekaterina Stepanova| done |  |  |
-|`fontWeight`| Function |Ekaterina Stepanova| done |  |  |
-|`fontFamily`| Function |Ekaterina Stepanova| done |  |  |
-|`onTimer`| Function |Ekaterina Stepanova| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB3V0H |
-|`textShadow`| Function |Ekaterina Stepanova| blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2SZK |
-|`contentModifier`| Function |Ekaterina Stepanova| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`construct`| Function | Ekaterina Stepanova| done | pass |  |
+|`setTextTimerOptions`| Function |Ekaterina Stepanova| done | pass |  |
+|`format`| Function |Ekaterina Stepanova| done | pass |  |
+|`fontColor`| Function |Ekaterina Stepanova| done | pass |  |
+|`fontSize`| Function |Ekaterina Stepanova| done | pass |  |
+|`fontStyle`| Function | Ekaterina Stepanova| done | pass |  |
+|`fontWeight`| Function |Ekaterina Stepanova| done | pass |  |
+|`fontFamily`| Function |Ekaterina Stepanova| done | pass  |  |
+|`onTimer`| Function |Ekaterina Stepanova| blocked IDL | not covered | https://gitee.com/nikolay-igotti/idlize/issues/IB3V0H |
+|`textShadow`| Function |Ekaterina Stepanova| blocked AceEngine | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2SZK |
+|`contentModifier`| Function |Ekaterina Stepanova| blocked IDL | not covered | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*TimePicker*| *Component* | Ekaterina Stepanova| blocked IDL |  |  |
 |`construct`| Function |Politov Mikhail| done |  |  |
 |`setTimePickerOptions`| Function |Politov Mikhail| done |  |  |
@@ -3127,8 +3127,8 @@
 |*TextPickerDialog*| *Class* | Ekaterina Stepanova | done |  | |
 |`show`| Function | Ekaterina Stepanova | done |  |  |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |  |
-|`ctor`| Function |Ekaterina Stepanova| done |  |  |
-|`start`| Function |Ekaterina Stepanova| done | test blocked | Cannot find method 'start ()V' |
+|`ctor`| Function |Ekaterina Stepanova| done | pass |  |
+|`start`| Function |Ekaterina Stepanova| done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`pause`| Function |Ekaterina Stepanova| done |  |  |
 |`reset`| Function |Ekaterina Stepanova| done |  |  |
 |*TimePickerDialog*| *Class* | Ekaterina Stepanova | done |  | |
