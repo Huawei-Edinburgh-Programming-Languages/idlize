@@ -116,7 +116,7 @@
 | Rating.test.ets | Daryina Olga      |
 | Refresh.test.ets |                   |
 | RelativeContainer.test.ets | Dmitry A Smirnov |
-| RenderGroup.test.ets |                   |
+| RenderGroup.test.ets | Vadim Voronov |
 | RequestFocusFocusable.test.ets |                   |
 | RichEditor.test.ets | Erokhin Ilya      |
 | RichText.test.ets | Erokhin Ilya      |
