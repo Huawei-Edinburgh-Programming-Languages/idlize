@@ -129,7 +129,7 @@
 |`padding`| Function | Skroba Gleb | done |  | |
 |`safeAreaPadding`| Function |Dmitry A Smirnov | done |  | |
 |`margin`| Function | Skroba Gleb | done |  | |
-|`backgroundColor0`| Function |Skroba Gleb| done |  |  |
+|`backgroundColor0`| Function |Skroba Gleb| done | passed |  |
 |`backgroundColor1`| Function |Skroba Gleb| done |  |  |
 |`pixelRound`| Function | Skroba Gleb | done |  |  |
 |`backgroundImageSize`| Function | Erokhin Ilya | done |  |  |
@@ -152,13 +152,13 @@
 |`borderImage`| Function | Roman Sedaikin | done | failed | |
 |`outline0`| Function |Skroba Gleb | done |  | |
 |`outline1`| Function | Skroba Gleb | done |  | |
-|`outlineStyle0`| Function | Skroba Gleb | done |  | |
+|`outlineStyle0`| Function | Skroba Gleb | done | passed | |
 |`outlineStyle1`| Function | Skroba Gleb | done |  | |
-|`outlineWidth0`| Function |Skroba Gleb | done |  | |
+|`outlineWidth0`| Function |Skroba Gleb | done | passed | |
 |`outlineWidth1`| Function | Skroba Gleb | done |  | |
-|`outlineColor0`| Function | Skroba Gleb | done |  | |
+|`outlineColor0`| Function | Skroba Gleb | done | passed | |
 |`outlineColor1`| Function | Skroba Gleb | done |  | |
-|`outlineRadius0`| Function |Skroba Gleb | done |  | |
+|`outlineRadius0`| Function |Skroba Gleb | done | passed | |
 |`outlineRadius1`| Function | Skroba Gleb | done |  | |
 |`foregroundColor0`| Function | Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundColor1`| Function |Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -249,8 +249,8 @@
 |`alignRules0`| Function | Dmitry A Smirnov| done |  | |
 |`alignRules1`| Function | Dmitry A Smirnov| done |  | |
 |`aspectRatio`| Function | Roman Sedaikin | done |  | |
-|`clickEffect0`| Function | Lobah Mikhail | done |  | |
-|`clickEffect1`| Function | Dmitry A Smirnov | done |  | |
+|`clickEffect0`| Function | Lobah Mikhail | done | failed | info: Cannot find method 'clickEffect |
+|`clickEffect1`| Function | Dmitry A Smirnov | done | failed | info: Cannot find method 'clickEffect |
 |`onDragStart`| Function | Skroba Gleb, Evstigneev Roman | done |  | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now. |
 |`onDragEnter`| Function | Lobah Mikhail, Evstigneev Roman | done |  |  |
 |`onDragMove`| Function | Lobah Mikhail, Evstigneev Roman | done |  |  |
@@ -288,12 +288,12 @@
 |`geometryTransition1`| Function | Lobah Mikhail | done | | testskipped due to aceEngine issue https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
 |`stateStyles`| Function | Dudkin Sergey | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`restoreId`| Function | Lobah Mikhail | done |  | |
-|`sphericalEffect0`| Function | Lobah Mikhail | done |  | |
+|`sphericalEffect0`| Function | Lobah Mikhail | done | passed | |
 |`sphericalEffect1`| Function | Dmitry A Smirnov | done |  | |
-|`lightUpEffect0`| Function | Lobah Mikhail | done |  | |
-|`lightUpEffect1`| Function | Dmitry A Smirnov | done |  | |
-|`pixelStretchEffect0`| Function | Lobah Mikhail | done |  | |
-|`pixelStretchEffect1`| Function | Dmitry A Smirnov | done |  | |
+|`lightUpEffect0`| Function | Lobah Mikhail | done | passed | |
+|`lightUpEffect1`| Function | Dmitry A Smirnov | done | passed | |
+|`pixelStretchEffect0`| Function | Lobah Mikhail | done | passed | |
+|`pixelStretchEffect1`| Function | Dmitry A Smirnov | done | | |
 |`accessibilityGroup0`| Function |Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`accessibilityGroup1`| Function | Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`accessibilityText0`| Function | Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -344,7 +344,7 @@
 |`parallelGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`blur0`| Function | Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`blur1`| Function |Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`linearGradientBlur0`| Function |Lobah Mikhail | done |  | |
+|`linearGradientBlur0`| Function |Lobah Mikhail | done | passed | |
 |`linearGradientBlur1`| Function | Dmitry A Smirnov | done |  | |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
 |`backdropBlur0`| Function | Berezin Kirill | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -406,9 +406,9 @@
 |`edgeEffect`| Function | Samarin Sergey | done |  | |
 |`fadingEdge`| Function | Samarin Sergey | done |  | |
 |*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  |
-|`construct`| Function |Vadim Voronov, Evstigneev Roman | done |  |
-|`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | done |  |  |
-|`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`construct`| Function |Vadim Voronov, Evstigneev Roman | done | passed |
+|`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | done | failed | info: undefined cannot be cast to ImageAIOptions  |
+|`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | blocked AceEngine | not covered | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onReady`| Function |Vadim Voronov | done |  |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked IDL |  |  |
@@ -1285,7 +1285,7 @@
 |*Stack*| *Component* | Korobeinikov Evgeny | done | pass |  |
 |`construct`| Function |Korobeinikov Evgeny | done | pass |  |
 |`setStackOptions` | Function | Korobeinikov Evgeny | done | pass |  |
-|`alignContent` | Function | Korobeinikov Evgeny | done |  |  |
+|`alignContent` | Function | Korobeinikov Evgeny | done | passed  |  |
 |`pointLight` | Function | Evstigneev Roman, Andrey Khudenkikh | done |  |  UT by Evstigneev Roman |
 |*Stepper*| *Component* | Morozov Sergey | done |  |  |
 |`construct`| Function |Morozov Sergey | done |  |  |
@@ -1538,16 +1538,16 @@
 |`contentModifier`| Function |Pavelyev Ivan| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`dateTimeOptions`| Function |Politov Mikhail| testskipped |  |  |
 |*TextInput*| *Component* | Spirin Andrey | in progress |  |  |
-|`construct`| Function | Spirin Andrey | done |  | |
-|`setTextInputOptions`| Function | Spirin Andrey | done |  | |
-|`type`| Function | Spirin Andrey | done |  |  |
+|`construct`| Function | Spirin Andrey | done | passed | |
+|`setTextInputOptions`| Function | Spirin Andrey | done | passed | |
+|`type`| Function | Spirin Andrey | done | passed |  |
 |`contentType`| Function | Spirin Andrey | done |  |  |
-|`placeholderColor`| Function | Spirin Andrey | done |  |  |
+|`placeholderColor`| Function | Spirin Andrey | done | failed | info: placeholder is not displayed without any log error |
 |`textOverflow`| Function | Spirin Andrey, Lobah Mikhail| done|  |https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
 |`textIndent`| Function | Spirin Andrey | done |  |  |
-|`placeholderFont`| Function | Spirin Andrey, Tuzhilkin Ivan | testskipped |  | |
-|`enterKeyType`| Function | Spirin Andrey | done |  |  |
-|`caretColor`| Function | Spirin Andrey | done |  |  |
+|`placeholderFont`| Function | Spirin Andrey, Tuzhilkin Ivan | testskipped | failed | info: placeholder is not displayed without any log error |
+|`enterKeyType`| Function | Spirin Andrey | done | passed |  |
+|`caretColor`| Function | Spirin Andrey | done | passed |  |
 |`onEditChanged`| Function | Spirin Andrey | done |  |deprecated UT Kovalev Sergey |
 |`onEditChange`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`onSubmit`| Function | Spirin Andrey | done |  | EVENT |
