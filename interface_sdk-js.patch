@@ -1,114 +1,567 @@
-diff --git a/api/arkui/CheckboxGroupModifier.d.ets b/api/arkui/CheckboxGroupModifier.d.ets
-index 81cdc77e0..a52a19e4d 100644
---- a/api/arkui/CheckboxGroupModifier.d.ets
-+++ b/api/arkui/CheckboxGroupModifier.d.ets
+diff --git a/api/@internal/component/ets/xcomponent.d.ts b/api/@internal/component/ets/xcomponent.d.ts
+index 06f38f200..227d10a95 100644
+--- a/api/@internal/component/ets/xcomponent.d.ts
++++ b/api/@internal/component/ets/xcomponent.d.ts
+@@ -229,7 +229,8 @@ declare class XComponentController {
+    * @since arkts {'1.1':'12','1.2':'20'}
+    * @arkts 1.1&1.2
+    */
+-  getXComponentSurfaceRotation(): Required<SurfaceRotationOptions>;
++  // type Required does not exists
++  getXComponentSurfaceRotation(): SurfaceRotationOptions;
+ 
+   /**
+    * Called after the surface is first created.
+diff --git a/api/arkui/ButtonModifier.d.ts b/api/arkui/ButtonModifier.d.ts
+index d91f7ea8d..a25c4c25e 100644
+--- a/api/arkui/ButtonModifier.d.ts
++++ b/api/arkui/ButtonModifier.d.ts
+@@ -20,7 +20,7 @@
+ 
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+-import { ButtonAttribute } from './component/Button'
++import { ButtonAttribute } from './component/button'
+ /*** endif */
+ 
+ /*** if arkts 1.2 */
+diff --git a/api/arkui/CheckboxGroupModifier.d.ts b/api/arkui/CheckboxGroupModifier.d.ts
+index 022516fe7..fe821df1b 100644
+--- a/api/arkui/CheckboxGroupModifier.d.ts
++++ b/api/arkui/CheckboxGroupModifier.d.ts
+@@ -20,7 +20,7 @@
+ 
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+-import { CheckboxGroupAttribute } from './component/CheckboxGroup'
++import { CheckboxGroupAttribute } from './component/checkboxgroup'
+ /*** endif */
+ 
+ /*** if arkts 1.2 */
+diff --git a/api/arkui/CheckboxModifier.d.ts b/api/arkui/CheckboxModifier.d.ts
+index e996c16ba..6d3dc02f8 100644
+--- a/api/arkui/CheckboxModifier.d.ts
++++ b/api/arkui/CheckboxModifier.d.ts
+@@ -20,7 +20,7 @@
+ 
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+-import { CheckboxAttribute } from './component/Checkbox'
++import { CheckboxAttribute } from './component/checkbox'
+ /*** endif */
+ 
+ /*** if arkts 1.2 */
+diff --git a/api/arkui/GridItemModifier.d.ts b/api/arkui/GridItemModifier.d.ts
+index 81679e3bb..8bfd84bc3 100644
+--- a/api/arkui/GridItemModifier.d.ts
++++ b/api/arkui/GridItemModifier.d.ts
+@@ -20,7 +20,7 @@
+ 
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+-import { GridItemAttribute } from './component/griditem'
++import { GridItemAttribute } from './component/gridItem'
+ /*** endif */
+ 
+ /**
+diff --git a/api/arkui/ListItemGroupModifier.d.ts b/api/arkui/ListItemGroupModifier.d.ts
+index 1924c8832..a4254c892 100644
+--- a/api/arkui/ListItemGroupModifier.d.ts
++++ b/api/arkui/ListItemGroupModifier.d.ts
 @@ -19,7 +19,7 @@
   */
  
- import { AttributeModifier } from './component/common'
--import { CheckboxGroupAttribute } from './component/checkboxGroup'
-+import { CheckboxGroupAttribute } from './component/checkboxgroup'
+ /*** if arkts 1.2 */
+-import { ListItemGroupAttribute } from './component/ListItemGroup';
++import { ListItemGroupAttribute } from './component/listItemGroup';
+ import { AttributeModifier } from './component/common';
+ /*** endif */
  
+diff --git a/api/arkui/ListItemModifier.d.ts b/api/arkui/ListItemModifier.d.ts
+index b165d0d10..8e7fa974a 100644
+--- a/api/arkui/ListItemModifier.d.ts
++++ b/api/arkui/ListItemModifier.d.ts
+@@ -19,7 +19,7 @@
+  */
+ 
+ /*** if arkts 1.2 */
+-import { ListItemAttribute } from './component/ListItem';
++import { ListItemAttribute } from './component/listItem';
+ import { AttributeModifier } from './component/common';
+ /*** endif */
+ 
+diff --git a/api/arkui/ListModifier.d.ts b/api/arkui/ListModifier.d.ts
+index 937062f7a..2e19ae449 100644
+--- a/api/arkui/ListModifier.d.ts
++++ b/api/arkui/ListModifier.d.ts
+@@ -19,8 +19,9 @@
+  */
+ 
+ /*** if arkts 1.2 */
+-import { ListItemAttribute } from './component/ListItem';
++import { ListItemAttribute } from './component/listItem';
+ import { AttributeModifier } from './component/common';
++import { ListAttribute } from './component/list'
+ /*** endif */
  
  /**
-diff --git a/api/arkui/GridItemModifier.d.ets b/api/arkui/GridItemModifier.d.ets
-index ac7042936..40a2472cd 100644
---- a/api/arkui/GridItemModifier.d.ets
-+++ b/api/arkui/GridItemModifier.d.ets
+diff --git a/api/arkui/MenuItemModifier.d.ts b/api/arkui/MenuItemModifier.d.ts
+index 2b9b25a23..ed366d1a9 100644
+--- a/api/arkui/MenuItemModifier.d.ts
++++ b/api/arkui/MenuItemModifier.d.ts
 @@ -20,7 +20,7 @@
  
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+-import { MenuItemAttribute } from './component/MenuItem'
++import { MenuItemAttribute } from './component/menuItem'
+ /*** endif */
+ 
+ /*** if arkts 1.2 */
+diff --git a/api/arkui/MenuModifier.d.ts b/api/arkui/MenuModifier.d.ts
+index a97574b22..d52490699 100644
+--- a/api/arkui/MenuModifier.d.ts
++++ b/api/arkui/MenuModifier.d.ts
+@@ -20,7 +20,7 @@
+ 
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+-import { MenuAttribute } from './component/Menu'
++import { MenuAttribute } from './component/menu'
+ /*** endif */
+ 
+ /*** if arkts 1.2 */
+diff --git a/api/arkui/NavRouterModifier.d.ets b/api/arkui/NavRouterModifier.d.ets
+index 90ba19ec7..5a6051e37 100644
+--- a/api/arkui/NavRouterModifier.d.ets
++++ b/api/arkui/NavRouterModifier.d.ets
+@@ -20,7 +20,8 @@
+ 
  
  import { AttributeModifier } from './component/common'
--import { GridItemAttribute } from './component/gridItem'
-+import { GridItemAttribute } from './component/griditem'
+-import { NavRouterAttribute } from './component/navRouter'
++// no such file
++// import { NavRouterAttribute } from './component/navRouter'
+ 
+ 
+ 
+@@ -33,7 +34,7 @@ import { NavRouterAttribute } from './component/navRouter'
+  * @atomicservice
+  * @since 12
+ */
+-export declare class NavRouterModifier extends NavRouterAttribute implements AttributeModifier<NavRouterAttribute> {
++export declare class NavRouterModifier implements AttributeModifier<object> {
+ 
+   /**
+    * Defines the normal update attribute function.
+@@ -44,9 +45,9 @@ export declare class NavRouterModifier extends NavRouterAttribute implements Att
+    * @atomicservice
+    * @since 12
+    */
+-  applyNormalAttribute: undefined | ((instance: NavRouterAttribute) => void);
+-  applyPressedAttribute: undefined | ((instance: NavRouterAttribute) => void);
+-  applyFocusedAttribute: undefined | ((instance: NavRouterAttribute) => void);
+-  applyDisabledAttribute: undefined | ((instance: NavRouterAttribute) => void);
+-  applySelectedAttribute: undefined | ((instance: NavRouterAttribute) => void);
++  // applyNormalAttribute: undefined | ((instance: NavRouterAttribute) => void);
++  // applyPressedAttribute: undefined | ((instance: NavRouterAttribute) => void);
++  // applyFocusedAttribute: undefined | ((instance: NavRouterAttribute) => void);
++  // applyDisabledAttribute: undefined | ((instance: NavRouterAttribute) => void);
++  // applySelectedAttribute: undefined | ((instance: NavRouterAttribute) => void);
+ }
+diff --git a/api/arkui/NavigatorModifier.d.ets b/api/arkui/NavigatorModifier.d.ets
+index 55d2ea997..57995a69b 100644
+--- a/api/arkui/NavigatorModifier.d.ets
++++ b/api/arkui/NavigatorModifier.d.ets
+@@ -20,7 +20,8 @@
+ 
+ 
+ import { AttributeModifier } from './component/common'
+-import { NavigatorAttribute } from './component/navigator'
++// file does not exists
++// import { NavigatorAttribute } from './component/navigator'
  
  
  /**
-diff --git a/api/arkui/component/canvas.d.ets b/api/arkui/component/canvas.d.ets
-index d2bba1956..f5f49c39f 100644
---- a/api/arkui/component/canvas.d.ets
-+++ b/api/arkui/component/canvas.d.ets
-@@ -22,7 +22,7 @@
- // WARNING! THIS FILE IS AUTO-GENERATED, DO NOT MAKE CHANGES, THEY WILL BE LOST ON NEXT GENERATION!
+@@ -32,7 +33,7 @@ import { NavigatorAttribute } from './component/navigator'
+  * @atomicservice
+  * @since 12
+ */
+-export declare class NavigatorModifier extends NavigatorAttribute implements AttributeModifier<NavigatorAttribute> {
++export declare class NavigatorModifier implements AttributeModifier<object> {
  
- import { memo, ComponentBuilder, __memo_context_type, __memo_id_type } from './../stateManagement/runtime'
--import { LengthMetricsUnit, LengthMetrics } from './../Graphics'
-+import { LengthMetricsUnit, LengthMetrics, Size } from './../Graphics'
- import { Matrix2D } from './matrix2d'
- import { PixelMap, DrawingCanvas, VisualEffect, Filter, UniformDataType, Blender, Length, SizeOptions, ConstraintSizeOptions, ChainWeightOptions, Padding, LocalizedPadding, Margin, LocalizedMargin, ResourceColor, Position, BorderOptions, EdgeStyles, EdgeWidths, LocalizedEdgeWidths, EdgeColors, LocalizedEdgeColors, BorderRadiuses, LocalizedBorderRadiuses, OutlineOptions, EdgeOutlineStyles, Dimension, EdgeOutlineWidths, OutlineRadiuses, Area, Edges, LocalizedEdges, LocalizedPosition, ResourceStr, AccessibilityOptions, VoidCallback } from './units'
- import { FrameNode } from './../FrameNode'
-@@ -179,10 +179,6 @@ export interface OffscreenCanvas {
-     transferToImageBitmap(): ImageBitmap
-     getContext2d(options?: RenderingContextSettings): OffscreenCanvasRenderingContext2D
+   /**
+    * Defines the normal update attribute function.
+@@ -43,9 +44,9 @@ export declare class NavigatorModifier extends NavigatorAttribute implements Att
+    * @atomicservice
+    * @since 12
+    */
+-  applyNormalAttribute: undefined | ((instance: NavigatorAttribute) => void);
+-  applyPressedAttribute: undefined | ((instance: NavigatorAttribute) => void);
+-  applyFocusedAttribute: undefined | ((instance: NavigatorAttribute) => void);
+-  applyDisabledAttribute: undefined | ((instance: NavigatorAttribute) => void);
+-  applySelectedAttribute: undefined | ((instance: NavigatorAttribute) => void);
++  // applyNormalAttribute: undefined | ((instance: NavigatorAttribute) => void);
++  // applyPressedAttribute: undefined | ((instance: NavigatorAttribute) => void);
++  // applyFocusedAttribute: undefined | ((instance: NavigatorAttribute) => void);
++  // applyDisabledAttribute: undefined | ((instance: NavigatorAttribute) => void);
++  // applySelectedAttribute: undefined | ((instance: NavigatorAttribute) => void);
  }
--export interface Size {
--    width: number;
--    height: number;
+diff --git a/api/arkui/PanelModifier.d.ets b/api/arkui/PanelModifier.d.ets
+index 75d34cf8f..506205258 100644
+--- a/api/arkui/PanelModifier.d.ets
++++ b/api/arkui/PanelModifier.d.ets
+@@ -19,7 +19,8 @@
+  */
+ 
+ import { AttributeModifier } from './component/common'
+-import { PanelAttribute } from './component/panel'
++// no such file
++// import { PanelA ttribute } from './component/panel'
+ 
+ 
+ 
+@@ -32,7 +33,7 @@ import { PanelAttribute } from './component/panel'
+  * @atomicservice
+  * @since 12
+ */
+-export declare class PanelModifier extends PanelAttribute implements AttributeModifier<PanelAttribute> {
++export declare class PanelModifier implements AttributeModifier<PanelAttribute> {
+ 
+   /**
+    * Defines the normal update attribute function.
+@@ -43,9 +44,9 @@ export declare class PanelModifier extends PanelAttribute implements AttributeMo
+    * @atomicservice
+    * @since 12
+    */
+-  applyNormalAttribute: undefined | ((instance: PanelAttribute) => void);
+-  applyPressedAttribute: undefined | ((instance: PanelAttribute) => void);
+-  applyFocusedAttribute: undefined | ((instance: PanelAttribute) => void);
+-  applyDisabledAttribute: undefined | ((instance: PanelAttribute) => void);
+-  applySelectedAttribute: undefined | ((instance: PanelAttribute) => void);
++  // applyNormalAttribute: undefined | ((instance: PanelAttribute) => void);
++  // applyPressedAttribute: undefined | ((instance: PanelAttribute) => void);
++  // applyFocusedAttribute: undefined | ((instance: PanelAttribute) => void);
++  // applyDisabledAttribute: undefined | ((instance: PanelAttribute) => void);
++  // applySelectedAttribute: undefined | ((instance: PanelAttribute) => void);
+ }
+diff --git a/api/arkui/QRCodeModifier.d.ts b/api/arkui/QRCodeModifier.d.ts
+index dfafaad3d..5f387f14c 100644
+--- a/api/arkui/QRCodeModifier.d.ts
++++ b/api/arkui/QRCodeModifier.d.ts
+@@ -21,6 +21,7 @@
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+ import { QRCodeAttribute } from './component/qrcode'
++import { CounterAttribute } from './component/counter'
+ /*** endif */
+ 
+ /**
+@@ -117,4 +118,4 @@ export declare class QRCodeModifier extends QRCodeAttribute implements Attribute
+    * @arkts 1.2
+    */
+   applySelectedAttribute: undefined | ((instance: CounterAttribute) => void);
 -}
- export interface DrawingRenderingContext {
-     readonly size: Size;
-     readonly canvas: DrawingCanvas;
-diff --git a/api/arkui/component/particle.d.ets b/api/arkui/component/particle.d.ets
-index 9290d76a2..e0ece661a 100644
---- a/api/arkui/component/particle.d.ets
-+++ b/api/arkui/component/particle.d.ets
-@@ -26,10 +26,6 @@ import { VP, ResourceStr, Dimension } from './units'
- import { ImageFit, Curve } from './enums'
- import { ICurve } from './common'
- import { SizeT, PositionT } from './../Graphics'
--export type ParticleTuple<T1,T2> = [
--    T1,
--    T2
--]
- export interface VelocityOptions {
-     speed: ParticleTuple<number, number>;
-     angle: ParticleTuple<number, number>;
-@@ -39,7 +35,7 @@ export interface PointParticleParameters {
+\ No newline at end of file
++}
+diff --git a/api/arkui/RadioModifier.d.ts b/api/arkui/RadioModifier.d.ts
+index 173274fce..066d2caa1 100644
+--- a/api/arkui/RadioModifier.d.ts
++++ b/api/arkui/RadioModifier.d.ts
+@@ -20,7 +20,8 @@
+ 
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+-import { RadioAttribute } from './component/Radio'
++// does not exists
++// import { RadioAttribute } from './component/Radio'
+ /*** endif */
+ 
+ /*** if arkts 1.2 */
+@@ -35,7 +36,8 @@ import { RadioAttribute } from './component/Radio'
+  * @since 20
+  * @arkts 1.2
+  */
+-declare type RadioApplyNormalFunction = (RadioAttribute: RadioAttribute) => void;
++// does not used
++// declare type RadioApplyNormalFunction = (RadioAttribute: RadioAttribute) => void;
+ 
+ /**
+  * Defines Radio Modifier
+@@ -47,62 +49,63 @@ declare type RadioApplyNormalFunction = (RadioAttribute: RadioAttribute) => void
+  * @since 20
+  * @arkts 1.2
+ */
+-export declare class RadioAttribute extends RadioAttribute implements AttributeModifier<RadioAttribute> {
++// what it was? `class A extends A`?
++export declare class RadioAttributeModifier implements AttributeModifier<object> {
+   /**
+    * Defines the normal update attribute function.
+-   * 
+-   * @type {undefined | ((instance: RadioAttribute) => void)}
+-   * @syscap SystemCapability.ArkUI.ArkUI.Full
+-   * @crossplatform
+-   * @atomicservice
+-   * @since 20
+-   * @arkts 1.2
+-   */
+-  applyNormalAttribute: undefined | ((instance: RadioAttribute) => void);
+-  /**
+-   * Defines the pressed update attribute function.
+-   * 
+-   * @type {undefined | ((instance: RadioAttribute) => void)}
+-   * @syscap SystemCapability.ArkUI.ArkUI.Full
+-   * @crossplatform
+-   * @atomicservice
+-   * @since 20
+-   * @arkts 1.2
+-   */
+-  applyPressedAttribute: undefined | ((instance: RadioAttribute) => void);
+-  /**
+-   * Defines the focused update attribute function.
+-   * 
+-   * @type {undefined | ((instance: RadioAttribute) => void)}
+-   * @syscap SystemCapability.ArkUI.ArkUI.Full
+-   * @crossplatform
+-   * @atomicservice
+-   * @since 20
+-   * @arkts 1.2
+-   */
+-  applyFocusedAttribute: undefined | ((instance: RadioAttribute) => void);
+-  /**
+-   * Defines the disabled update attribute function.
+-   * 
+-   * @type {undefined | ((instance: RadioAttribute) => void)}
+-   * @syscap SystemCapability.ArkUI.ArkUI.Full
+-   * @crossplatform
+-   * @atomicservice
+-   * @since 20
+-   * @arkts 1.2
+-   */
+-  applyDisabledAttribute: undefined | ((instance: RadioAttribute) => void);
+-  /**
+-   * Defines the selected update attribute function.
+-   * 
+-   * @type {undefined | ((instance: RadioAttribute) => void)}
+-   * @syscap SystemCapability.ArkUI.ArkUI.Full
+-   * @crossplatform
+-   * @atomicservice
+-   * @since 20
+-   * @arkts 1.2
+-   */
+-  applySelectedAttribute: undefined | ((instance: RadioAttribute) => void);
++  //  * 
++  //  * @type {undefined | ((instance: RadioAttribute) => void)}
++  //  * @syscap SystemCapability.ArkUI.ArkUI.Full
++  //  * @crossplatform
++  //  * @atomicservice
++  //  * @since 20
++  //  * @arkts 1.2
++  //  */
++  // applyNormalAttribute: undefined | ((instance: RadioAttribute) => void);
++  // /**
++  //  * Defines the pressed update attribute function.
++  //  * 
++  //  * @type {undefined | ((instance: RadioAttribute) => void)}
++  //  * @syscap SystemCapability.ArkUI.ArkUI.Full
++  //  * @crossplatform
++  //  * @atomicservice
++  //  * @since 20
++  //  * @arkts 1.2
++  //  */
++  // applyPressedAttribute: undefined | ((instance: RadioAttribute) => void);
++  // /**
++  //  * Defines the focused update attribute function.
++  //  * 
++  //  * @type {undefined | ((instance: RadioAttribute) => void)}
++  //  * @syscap SystemCapability.ArkUI.ArkUI.Full
++  //  * @crossplatform
++  //  * @atomicservice
++  //  * @since 20
++  //  * @arkts 1.2
++  //  */
++  // applyFocusedAttribute: undefined | ((instance: RadioAttribute) => void);
++  // /**
++  //  * Defines the disabled update attribute function.
++  //  * 
++  //  * @type {undefined | ((instance: RadioAttribute) => void)}
++  //  * @syscap SystemCapability.ArkUI.ArkUI.Full
++  //  * @crossplatform
++  //  * @atomicservice
++  //  * @since 20
++  //  * @arkts 1.2
++  //  */
++  // applyDisabledAttribute: undefined | ((instance: RadioAttribute) => void);
++  // /**
++  //  * Defines the selected update attribute function.
++  //  * 
++  //  * @type {undefined | ((instance: RadioAttribute) => void)}
++  //  * @syscap SystemCapability.ArkUI.ArkUI.Full
++  //  * @crossplatform
++  //  * @atomicservice
++  //  * @since 20
++  //  * @arkts 1.2
++  //  */
++  // applySelectedAttribute: undefined | ((instance: RadioAttribute) => void);
  }
- export interface ImageParticleParameters {
-     src: ResourceStr;
--    size: ParticleTuple<Dimension, Dimension>;
-+    size: [Dimension, Dimension];
-     objectFit?: ImageFit;
+ /*** endif */
+ 
+@@ -115,7 +118,7 @@ export declare class RadioAttribute extends RadioAttribute implements AttributeM
+  * @atomicservice
+  * @since 12
+ */
+-export declare class RadioModifier extends RadioAttribute implements AttributeModifier<RadioAttribute> {
++export declare class RadioModifier implements AttributeModifier<object> {
+ 
+   /**
+    * Defines the normal update attribute function.
+@@ -126,5 +129,5 @@ export declare class RadioModifier extends RadioAttribute implements AttributeMo
+    * @atomicservice
+    * @since 12
+    */
+-  applyNormalAttribute?(instance: RadioAttribute): void;
++  // applyNormalAttribute?(instance: RadioAttribute): void;
  }
- export interface ParticleConfigs {
-diff --git a/api/arkui/component/polygon.d.ets b/api/arkui/component/polygon.d.ets
-index 88d0f4c16..7e5b138b9 100644
---- a/api/arkui/component/polygon.d.ets
-+++ b/api/arkui/component/polygon.d.ets
-@@ -33,10 +33,8 @@ import { Resource } from './../../../api/global/resource'
- import { Callback_Void } from './abilityComponent'
- import { FocusBoxStyle, FocusPriority } from './focus'
- import { GestureInfo, BaseGestureEvent, GestureJudgeResult, GestureType, GestureMask } from './gesture'
--interface Point {
--    x: number;
--    y: number;
+\ No newline at end of file
+diff --git a/api/arkui/RatingModifier.d.ts b/api/arkui/RatingModifier.d.ts
+index acd2d9663..e9d7c9e02 100644
+--- a/api/arkui/RatingModifier.d.ts
++++ b/api/arkui/RatingModifier.d.ts
+@@ -20,7 +20,7 @@
+ 
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+-import { RatingAttribute } from './component/Rating'
++import { RatingAttribute } from './component/rating'
+ /*** endif */
+ 
+ /*** if arkts 1.2 */
+diff --git a/api/arkui/RichEditorModifier.d.ts b/api/arkui/RichEditorModifier.d.ts
+index 30f1e8249..7acc87de7 100644
+--- a/api/arkui/RichEditorModifier.d.ts
++++ b/api/arkui/RichEditorModifier.d.ts
+@@ -20,7 +20,6 @@
+ 
+ 
+ 
+-
+ /**
+  * Defines RichEditor Modifier
+  *
+@@ -30,41 +29,42 @@
+  * @atomicservice
+  * @since 12
+ */
+-export declare class RichEditorModifier extends RichEditorAttribute implements AttributeModifier<RichEditorAttribute> {
++// no imports, two same declarations
++// export declare class RichEditorModifier extends RichEditorAttribute implements AttributeModifier<RichEditorAttribute> {
+ 
+-  /**
+-   * Defines the normal update attribute function.
+-   * 
+-   * @param { RichEditorAttribute } instance
+-   * @syscap SystemCapability.ArkUI.ArkUI.Full
+-   * @crossplatform
+-   * @atomicservice
+-   * @since 12
+-   */
+-  applyNormalAttribute?(instance: RichEditorAttribute): void;
 -}
-+import { Point } from '../../@ohos.graphics.common2D'
-+
- export interface PolygonOptions {
-     width?: string | number;
-     height?: string | number;
-diff --git a/api/arkui/component/swiper.d.ets b/api/arkui/component/swiper.d.ets
-index 881cef63b..909ec7f8e 100644
---- a/api/arkui/component/swiper.d.ets
-+++ b/api/arkui/component/swiper.d.ets
-@@ -41,15 +41,15 @@ export interface SwiperController {
-     changeIndex(index: number, useAnimation?: boolean): undefined
-     finishAnimation(callback_?: VoidCallback): undefined
- }
--export interface Indicator<T> {
-+export class Indicator<T> {
-     left(value: Length): T
-     top(value: Length): T
-     right(value: Length): T
-     bottom(value: Length): T
-     start(value: LengthMetrics): T
-     end(value: LengthMetrics): T
--    dot(): DotIndicator
--    digit(): DigitIndicator
-+    static dot(): DotIndicator
-+    static digit(): DigitIndicator
- }
- export interface DotIndicator extends Indicator<DotIndicator> {
-     itemWidth(value: Length): DotIndicator
++//   /**
++//    * Defines the normal update attribute function.
++//    * 
++//    * @param { RichEditorAttribute } instance
++//    * @syscap SystemCapability.ArkUI.ArkUI.Full
++//    * @crossplatform
++//    * @atomicservice
++//    * @since 12
++//    */
++//   applyNormalAttribute?(instance: RichEditorAttribute): void;
++// }
+ 
+-/**
+- * Defines RichEditor Modifier
+- *
+- * @extends RichEditorAttribute
+- * @implements AttributeModifier
+- * @syscap SystemCapability.ArkUI.ArkUI.Full
+- * @atomicservice
+- * @since 20
+- * @arkts 1.2
+-*/
+-export declare class RichEditorModifier extends RichEditorAttribute implements AttributeModifier<RichEditorAttribute> {
++// /**
++//  * Defines RichEditor Modifier
++//  *
++//  * @extends RichEditorAttribute
++//  * @implements AttributeModifier
++//  * @syscap SystemCapability.ArkUI.ArkUI.Full
++//  * @atomicservice
++//  * @since 20
++//  * @arkts 1.2
++// */
++// export declare class RichEditorModifier extends RichEditorAttribute implements AttributeModifier<RichEditorAttribute> {
+ 
+-  /**
+-   * Defines the normal update attribute function.
+-   * 
+-   * @type { ?((instance: RichEditorAttribute) => void) }
+-   * @syscap SystemCapability.ArkUI.ArkUI.Full
+-   * @crossplatform
+-   * @atomicservice
+-   * @since 20
+-   * @arkts 1.2
+-   */
+-  applyNormalAttribute?: ((instance: RichEditorAttribute) => void);
+-}
++//   /**
++//    * Defines the normal update attribute function.
++//    * 
++//    * @type { ?((instance: RichEditorAttribute) => void) }
++//    * @syscap SystemCapability.ArkUI.ArkUI.Full
++//    * @crossplatform
++//    * @atomicservice
++//    * @since 20
++//    * @arkts 1.2
++//    */
++//   applyNormalAttribute?: ((instance: RichEditorAttribute) => void);
++// }
+diff --git a/api/arkui/SelectModifier.d.ts b/api/arkui/SelectModifier.d.ts
+index 42f355237..c2ededdda 100644
+--- a/api/arkui/SelectModifier.d.ts
++++ b/api/arkui/SelectModifier.d.ts
+@@ -20,7 +20,7 @@
+ 
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+-import { SelectAttribute } from './component/Select'
++import { SelectAttribute } from './component/select'
+ /*** endif */
+ 
+ /*** if arkts 1.2 */
+diff --git a/api/arkui/SliderModifier.d.ts b/api/arkui/SliderModifier.d.ts
+index 504521302..69bd9d390 100644
+--- a/api/arkui/SliderModifier.d.ts
++++ b/api/arkui/SliderModifier.d.ts
+@@ -20,7 +20,7 @@
+ 
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+-import { SliderAttribute } from './component/Slider'
++import { SliderAttribute } from './component/slider'
+ /*** endif */
+ 
+ /*** if arkts 1.2 */
+diff --git a/api/arkui/ToggleModifier.d.ts b/api/arkui/ToggleModifier.d.ts
+index 38d642bb9..78ac1d5de 100644
+--- a/api/arkui/ToggleModifier.d.ts
++++ b/api/arkui/ToggleModifier.d.ts
+@@ -20,7 +20,7 @@
+ 
+ /*** if arkts 1.2 */
+ import { AttributeModifier } from './component/common'
+-import { SelectAttribute } from './component/Select'
++import { SelectAttribute } from './component/select'
+ /*** endif */
+ 
+ /*** if arkts 1.2 */

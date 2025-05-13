@@ -376,6 +376,9 @@ class IDLVisitor extends arkts.AbstractVisitor {
             importString = importFilePath
         }
         const importedPackageClause = this.detectPackageNameByPath(importString)
+        if (importedPackageClause.join('.') === this.packageClause.join('.')) {
+            return node
+        }
         node.specifiers.forEach(spec => {
             if (arkts.isImportSpecifier(spec)) {
                 const imported = spec.imported!
@@ -766,6 +769,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 case 'Object': return idl.IDLObjectType
                 case 'object': return idl.IDLObjectType
                 case 'ArrayBuffer': return idl.IDLBufferType
+                case 'Uint8Array': return idl.IDLBufferType
                 case 'Uint8ClampedArray': return idl.IDLBufferType
                 case 'Boolean': return idl.IDLBooleanType
                 case 'Int32Array': return idl.createContainerType('sequence', [idl.IDLI32Type])
@@ -773,6 +777,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 case 'ReadonlyArray': return idl.createContainerType('sequence', typeArgs ?? [] /* better check here? */)
                 case 'number': return idl.IDLNumberType
                 case 'ErrorCallback': return idl.createReferenceType(name)
+                case 'Readonly': return typeArgs![0]
             }
             return idl.createReferenceType(name, typeArgs)
         }
@@ -939,60 +944,49 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     postprocessEntires() {
-        /* arkgen specialization */
         if (this.mode === 'arkoala') {
+            /* arkgen specialization */
             const componentInterface = this.entries.find(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.ComponentInterface))
             if (componentInterface) {
                 if (!idl.isInterface(componentInterface)) {
                     throw new Error("ComponentInterface must be interface!")
                 }
-                const componentAttributeRef = componentInterface.callables.at(0)?.returnType
-                if (!componentAttributeRef || !idl.isReferenceType(componentAttributeRef)) {
+                const componentUIAttributeRef = componentInterface.callables.at(0)?.returnType
+                if (!componentUIAttributeRef || !idl.isReferenceType(componentUIAttributeRef)) {
                     throw new Error("No component attribute found!")
+                }
+                if (!componentUIAttributeRef.name.startsWith("UI")) {
+                    throw new Error("Expecting component attribute to be started with UI like UICommonMethod. If it is not match this criteria, please ensure SDK is correct")
+                }
+                const componentUIAttributeName = componentUIAttributeRef.name
+                const componentAttributeName = componentUIAttributeRef.name.slice(2)
+                if (componentUIAttributeRef.name.startsWith("UI")) {
+                    componentInterface.callables.forEach(it => it.returnType = idl.createReferenceType(
+                        componentAttributeName,
+                        componentUIAttributeRef.typeArguments,
+                        {
+                            documentation: componentUIAttributeRef.documentation,
+                            extendedAttributes: componentUIAttributeRef.extendedAttributes,
+                            fileName: componentUIAttributeRef.fileName
+                        }
+                    ))
                 }
                 const processedEntries: idl.IDLEntry[] = []
                 this.entries.forEach(entry => {
                     if (entry.name === componentInterface.name && entry !== componentInterface) {
                         return
                     }
-                    if (entry.name === componentAttributeRef.name) {
+                    if (entry.name === componentUIAttributeName) {
+                        return
+                    }
+                    if (entry.name === componentAttributeName) {
                         entry.extendedAttributes ??= []
                         entry.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Component })
-                        if (idl.isInterface(entry)) {
-                            const methods:idl.IDLMethod[] = []
-                            const properties: idl.IDLProperty[] = []
-                            entry.methods.forEach(method => {
-                                if (method.isStatic) {
-                                    methods.push(method)
-                                    return
-                                }
-                                if (method.returnType === idl.IDLThisType && method.parameters.length === 1) {
-                                    properties.push(
-                                        idl.createProperty(
-                                            method.name,
-                                            method.parameters[0].type,
-                                            false,
-                                            false,
-                                            false,
-                                            {
-                                                extendedAttributes: (method.extendedAttributes ?? []).concat({ name: idl.IDLExtendedAttributes.CommonMethod }),
-                                                documentation: method.documentation,
-                                                fileName: method.fileName
-                                            }
-                                        )
-                                    )
-                                    return
-                                }
-                                methods.push(method)
-                            })
-                            entry.methods = methods
-                            entry.properties = properties.concat(entry.properties)
-                        }
                     }
                     if (idl.isCallback((entry))) {
                         let hasComponentInReferences = false
                         idl.forEachChild(entry, (node) => {
-                            if (idl.isNamedNode(node) && node.name === componentAttributeRef.name)
+                            if (idl.isNamedNode(node) && [componentUIAttributeName, componentAttributeName].includes(node.name))
                                 hasComponentInReferences = true
                         })
                         if (hasComponentInReferences) {

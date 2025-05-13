@@ -590,6 +590,15 @@ export function createOptionalType(element:IDLType, nodeInitializer?: IDLNodeIni
     if (isOptionalType(element) && !nodeInitializer) {
         return element
     }
+    if (isOptionalType(element)) {
+        return {
+            kind: IDLKind.OptionalType,
+            type: element.type,
+            ...nodeInitializer,
+            _idlNodeBrand: innerIdlSymbol,
+            _idlTypeBrand: innerIdlSymbol,
+        }
+    }
     return {
         kind: IDLKind.OptionalType,
         type: element,
