@@ -931,8 +931,15 @@ export class CustomTypeConvertor extends BaseArgConvertor {
 export class OptionConvertor extends BaseArgConvertor {
     private readonly typeConvertor: ArgConvertor
     // TODO: be smarter here, and for smth like Length|undefined or number|undefined pass without serializer.
-    constructor(private library: LibraryInterface, param: string, public type: idl.IDLType) {
+    constructor(library: LibraryInterface, param: string, public type: idl.IDLType) {
         let conv = library.typeConvertor(param, type)
+        let currentConv:ArgConvertor = conv
+        while (currentConv instanceof ProxyConvertor) {
+            currentConv = currentConv.convertor
+        }
+        if (currentConv instanceof OptionConvertor) {
+            conv = currentConv.typeConvertor
+        }
         let runtimeTypes = conv.runtimeTypes;
         if (!runtimeTypes.includes(RuntimeType.UNDEFINED)) {
             runtimeTypes.push(RuntimeType.UNDEFINED)

@@ -29,7 +29,7 @@ export function generateSyntheticIdlNodeName(type: idl.IDLType): string {
         }
     }
     if (idl.isNamedNode(type))
-        return type.name
+        return type.name.split('.').map(capitalize).join('_')
     if (idl.isOptionalType(type))
         return `Opt_${generateSyntheticIdlNodeName(type.type)}`
     throw `Can not compute type name of ${idl.IDLKind[type.kind]}`
