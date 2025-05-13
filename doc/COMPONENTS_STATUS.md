@@ -291,7 +291,7 @@
 |`sphericalEffect0`| Function | Lobah Mikhail | done | passed | |
 |`sphericalEffect1`| Function | Dmitry A Smirnov | done |  | |
 |`lightUpEffect0`| Function | Lobah Mikhail | done | passed | |
-|`lightUpEffect1`| Function | Dmitry A Smirnov | done | passed | |
+|`lightUpEffect1`| Function | Dmitry A Smirnov | done |  | |
 |`pixelStretchEffect0`| Function | Lobah Mikhail | done | passed | |
 |`pixelStretchEffect1`| Function | Dmitry A Smirnov | done | | |
 |`accessibilityGroup0`| Function |Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
