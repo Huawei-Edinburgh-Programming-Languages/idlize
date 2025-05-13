@@ -62,7 +62,7 @@
 | DatePicker.test.ets | Vadim Voronov |
 | DisplayPriority.test.ets | Vadim Voronov |
 | Divider.test.ets | Vadim Voronov |
-| EffectComponent.test.ets | Vadim Voronov |
+| EffectComponent.test.ets | Porodin Alexander |
 | Ellipse.test.ets | Erokhin Ilya      |
 | Flex.test.ets | Dmitry A Smirnov  |
 | FlexCommonAttributes.test.ets | Dmitry A Smirnov  |
@@ -116,7 +116,7 @@
 | Rating.test.ets | Daryina Olga      |
 | Refresh.test.ets | Pavelev Ivan      |
 | RelativeContainer.test.ets | Dmitry A Smirnov |
-| RenderGroup.test.ets | Vadim Voronov |
+| RenderGroup.test.ets | Porodin Alexander |
 | RequestFocusFocusable.test.ets |                   |
 | RichEditor.test.ets | Erokhin Ilya      |
 | RichText.test.ets | Erokhin Ilya      |
