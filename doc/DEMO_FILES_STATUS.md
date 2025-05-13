@@ -115,7 +115,7 @@
 | Radio.test.ets | Porodin Alexander |
 | Rating.test.ets | Daryina Olga      |
 | Refresh.test.ets |                   |
-| RelativeContainer.test.ets |                   |
+| RelativeContainer.test.ets | Dmitry A Smirnov |
 | RenderGroup.test.ets |                   |
 | RequestFocusFocusable.test.ets |                   |
 | RichEditor.test.ets | Erokhin Ilya      |
@@ -145,7 +145,7 @@
 | TextTimer.test.ets | Evstigneev Roman |
 | TimePicker.test.ets |                   |
 | Toggle.test.ets |                   |
-| TransformRotateScaleTranslate.test.ets |                   |
+| TransformRotateScaleTranslate.test.ets | Dmitry A Smirnov |
 | TransitionEffect.test.ets |                   |
 | UseShadowBatching.test.ets |                   |
 | Video.test.ets |                   |
