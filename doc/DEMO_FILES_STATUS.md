@@ -114,7 +114,7 @@
 | QRCode.test.ets | Evstigneev Roman |
 | Radio.test.ets | Porodin Alexander |
 | Rating.test.ets | Daryina Olga      |
-| Refresh.test.ets |                   |
+| Refresh.test.ets | Pavelev Ivan      |
 | RelativeContainer.test.ets | Dmitry A Smirnov |
 | RenderGroup.test.ets | Vadim Voronov |
 | RequestFocusFocusable.test.ets |                   |
