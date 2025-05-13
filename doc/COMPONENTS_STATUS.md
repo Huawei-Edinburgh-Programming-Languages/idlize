@@ -162,8 +162,8 @@
 |`outlineRadius1`| Function | Skroba Gleb | done |  | |
 |`foregroundColor0`| Function | Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundColor1`| Function |Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onClick0`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done |  | EVENT |
-|`onClick1`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done |  | EVENT |
+|`onClick0`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done | pass | EVENT |
+|`onClick1`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done | pass | EVENT |
 |`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done |  | EVENT |
 |`onHoverMove`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | done |  | UT by Vadim Voronov EVENT |
