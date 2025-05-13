@@ -68,7 +68,7 @@
 | FlexCommonAttributes.test.ets | Dmitry A Smirnov  |
 | FocusStopFocuBox.test.ets | Vadim Voronov |
 | FocusTraversalGroup.test.ets | Vadim Voronov |
-| FocusTraversalToComponentsEffect.test.ets |                   |
+| FocusTraversalToComponentsEffect.test.ets | Vadim Voronov |
 | ForegroundBlurStyle.test.ets | Skroba Gleb |
 | ForegroundColor.test.ets | Evstingneev Roman |
 | ForegroundEffect.test.ets | Skroba Gleb |
