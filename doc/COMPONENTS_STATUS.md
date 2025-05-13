@@ -58,9 +58,9 @@
 |`onFinish`| Function | Skroba Gleb | managed side |  | deprecated since 12  |
 |`onFrame`| Function | Skroba Gleb | managed side |  | deprecated since 12  |
 |*Badge*| *Component* |Vadim Voronov | done |  |  |
-|`construct`| Function |Vadim Voronov | done |  | |
-|`setBadgeOptions0`| Function |Vadim Voronov | done |  | |
-|`setBadgeOptions1`| Function |Vadim Voronov | done |  | |
+|`construct`| Function |Vadim Voronov | done | test blocked | test blocked by incorrect SDK.|
+|`setBadgeOptions0`| Function |Vadim Voronov | done | test blocked | test blocked by incorrect SDK.|
+|`setBadgeOptions1`| Function |Vadim Voronov | done | test blocked | test blocked by incorrect SDK.|
 |*Blank*| *Component* | Skroba Gleb | done |  |  |
 |`construct`| Function | Skroba Gleb | done |  |  |
 |`setBlankOptions`| Function | Skroba Gleb | done |  |  |
