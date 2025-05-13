@@ -54,20 +54,20 @@
 | CommonSphericalEffectLightUpPixelStretch.test.ets | Vadim Voronov |
 | CommonSystemBarEffect.test.ets | Vadim Voronov |
 | CommonTouchAble.test.ets | Vadim Voronov |
-| Component3D.test.ets |                   |
-| ContainerSpan.test.ets |                   |
+| Component3D.test.ets | Vadim Voronov |
+| ContainerSpan.test.ets | Vadim Voronov |
 | Counter.test.ets | Erokhin Ilya      |
-| CustomComponentBox.test.ets |                   |
+| CustomComponentBox.test.ets | Vadim Voronov |
 | DataPanel.test.ets | Sergey Morozov    |
-| DatePicker.test.ets | Vadim Voronov     |
-| DisplayPriority.test.ets |                   |
-| Divider.test.ets |                   |
-| EffectComponent.test.ets |                   |
+| DatePicker.test.ets | Vadim Voronov |
+| DisplayPriority.test.ets | Vadim Voronov |
+| Divider.test.ets | Vadim Voronov |
+| EffectComponent.test.ets | Vadim Voronov |
 | Ellipse.test.ets | Erokhin Ilya      |
 | Flex.test.ets | Dmitry A Smirnov  |
 | FlexCommonAttributes.test.ets | Dmitry A Smirnov  |
-| FocusStopFocuBox.test.ets |                   |
-| FocusTraversalGroup.test.ets |                   |
+| FocusStopFocuBox.test.ets | Vadim Voronov |
+| FocusTraversalGroup.test.ets | Vadim Voronov |
 | FocusTraversalToComponentsEffect.test.ets |                   |
 | ForegroundBlurStyle.test.ets |                   |
 | ForegroundColor.test.ets | Evstingneev Roman |
