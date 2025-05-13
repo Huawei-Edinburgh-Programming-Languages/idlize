@@ -73,7 +73,7 @@
 | ForegroundColor.test.ets | Evstingneev Roman |
 | ForegroundEffect.test.ets |                   |
 | FormLink.test.ets | Daryina Olga      |
-| Gauge.test.ets |                   |
+| Gauge.test.ets | Sergey Morozov |
 | Grid.test.ets | Evstigneev Roman  |
 | GridCol.test.ets | Evstigneev Roman  |
 | GridContainerCommonAttributes.test.ets | Evstigneev Roman  |
@@ -89,9 +89,9 @@
 | ImageSpan.test.ets |                   |
 | IndicatorComponent.test.ets | Skroba Gleb |
 | Line.test.ets | Daryina Olga      |
-| List.test.ets |                   |
-| ListItem.test.ets |                   |
-| ListItemGroup.test.ets |                   |
+| List.test.ets | Sergey Morozov |
+| ListItem.test.ets | Sergey Morozov |
+| ListItemGroup.test.ets | Sergey Morozov |
 | LoadingProgress.test.ets | Samarin Sergey    |
 | LocationButton.test.ets | Samarin Sergey    |
 | Marquee.test.ets | Andrey Khudenkikh  |
