@@ -69,9 +69,9 @@
 | FocusStopFocuBox.test.ets | Vadim Voronov |
 | FocusTraversalGroup.test.ets | Vadim Voronov |
 | FocusTraversalToComponentsEffect.test.ets |                   |
-| ForegroundBlurStyle.test.ets |                   |
+| ForegroundBlurStyle.test.ets | Skroba Gleb |
 | ForegroundColor.test.ets | Evstingneev Roman |
-| ForegroundEffect.test.ets |                   |
+| ForegroundEffect.test.ets | Skroba Gleb |
 | FormLink.test.ets | Daryina Olga      |
 | Gauge.test.ets | Sergey Morozov |
 | Grid.test.ets | Evstigneev Roman  |
