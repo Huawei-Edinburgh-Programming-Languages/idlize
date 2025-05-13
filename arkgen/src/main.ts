@@ -217,13 +217,15 @@ if (options.idl2peer) {
     const { inputFiles, inputDirs } = formatInputPaths(options)
 
     const idlLibrary = new ArkoalaPeerLibrary(language, options.useMemoM3)
-    const allInputFiles = scanInputDirs(inputDirs)
+    const allInputFiles = libohosPredefinedFiles()
+        .concat(arkgenPredefinedFiles())
+        .concat(scanInputDirs(inputDirs))
         .concat(inputFiles)
-        .concat(libohosPredefinedFiles())
     const idlInputFiles = allInputFiles.filter(it => it.endsWith('.idl'))
     idlInputFiles.forEach(idlFilename => {
         idlFilename = path.resolve(idlFilename)
         const [file] = toIDLFile(idlFilename)
+        removeDuplicateEntries(idlLibrary, file)
         idlLibrary.files.push(file)
     })
     if (options.verifyIdl) {
@@ -284,21 +286,7 @@ if (options.dts2peer) {
         {
             compilerOptions: defaultCompilerOptions,
             onSingleFile(file: IDLFile, outputDir, sourceFile, isAux) {
-                // TODO: this hack must be removed
-                file.entries = file.entries.filter(newEntry =>
-                    !idlLibrary.files.find(peerFile => peerFile.entries.find(entry => {
-                        if (([newEntry, entry].every(isInterface)
-                            || [newEntry, entry].every(isEnum)
-                            || [newEntry, entry].every(isSyntheticEntry))) {
-                            if (newEntry.name === entry.name) {
-                                console.error("Removed duplicate", newEntry.name, 'from', file.fileName, ', another declaration found at', peerFile.fileName)
-                                return true
-                            }
-                        }
-                        return false
-                    }))
-                )
-
+                removeDuplicateEntries(idlLibrary, file)
                 linearizeNamespaceMembers(file.entries).forEach(it => {
                     transformMethodsAsync2ReturnPromise(it)
                 })
@@ -329,6 +317,23 @@ if (options.dts2peer) {
 
 if (!didJob) {
     program.help()
+}
+
+// TODO: this hack must be removed
+function removeDuplicateEntries(idlLibrary: ArkoalaPeerLibrary, file: IDLFile) {
+    file.entries = file.entries.filter(newEntry =>
+        !idlLibrary.files.find(peerFile => peerFile.entries.find(entry => {
+            if (([newEntry, entry].every(isInterface)
+                || [newEntry, entry].every(isEnum)
+                || [newEntry, entry].every(isSyntheticEntry))) {
+                if (newEntry.name === entry.name) {
+                    console.error("Removed duplicate", newEntry.name, 'from', file.fileName, ', another declaration found at', peerFile.fileName)
+                    return true
+                }
+            }
+            return false
+        }))
+    )
 }
 
 function generateTarget(idlLibrary: ArkoalaPeerLibrary, outDir: string, lang: Language) {
