@@ -979,12 +979,12 @@
 |`pullDownRatio`| Function |Politov Mikhail | done |  |  |
 |`maxPullDownDistance`| Function | | | | no such API in generation 125 |
 |`_onChangeEvent_refreshing`| Function | Erokhin Ilya | done |  | |
-|*RelativeContainer*| *Component* | Dmitry A Smirnov | done |  |  |
+|*RelativeContainer*| *Component* | Dmitry A Smirnov | done | failed | OHOSUI-2171 |
 |`construct`| Function |Dmitry A Smirnov | done |  |  |
 |`setRelativeContainerOptions`| Function | Dmitry A Smirnov | done |  |  |
-|`guideLine`| Function | Dmitry A Smirnov | done |  |  |
-|`barrier0`| Function |Dmitry A Smirnov | done |  |  |
-|`barrier1`| Function | Dmitry A Smirnov | done |  |  |
+|`guideLine`| Function | Dmitry A Smirnov | done | failed | is not called in demo |
+|`barrier0`| Function |Dmitry A Smirnov | done | failed | is not called in demo |
+|`barrier1`| Function | Dmitry A Smirnov | done | failed | is not called in demo |
 |*RichEditor*| *Component* | Dudkin Sergey| in progress | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue |
 |`construct`| Function | Dudkin Sergey| done |  |  |
 |`setRichEditorOptions`| Function | Dudkin Sergey| done |  |  |
