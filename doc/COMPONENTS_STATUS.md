@@ -190,8 +190,8 @@
 |`animation`| Function | managed side | managed side | |  |
 |`transition0`| Function |Dmitry A Smirnov| done |  |transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`transition1`| Function |Dmitry A Smirnov| done |  |transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
-|`motionBlur0`| Function |Dmitry A Smirnov| done |  | |
-|`motionBlur1`| Function | Dmitry A Smirnov| done |  | |
+|`motionBlur0`| Function |Dmitry A Smirnov| done | test blocked | test blocked by common.animation(...) |
+|`motionBlur1`| Function | Dmitry A Smirnov| done | test blocked | test blocked by common.animation(...) |
 |`brightness0`| Function | Lobah Mikhail | done |  |  |
 |`brightness1`| Function |Lobah Mikhail | done |  |  |
 |`contrast0`| Function |Lobah Mikhail | done |  | |
@@ -2236,7 +2236,7 @@
 |`opacity`| Function | Andrey Khudenkikh | done | | |
 |`move`| Function | Andrey Khudenkikh | done | | |
 |`asymmetric`| Function | Andrey Khudenkikh | done | | |
-|`animation`| Function | Andrey Khudenkikh | done | | |
+|`animation`| Function | Andrey Khudenkikh | done | failed | |
 |`combine`| Function | Andrey Khudenkikh | done | | |
 |`getIDENTITY`| Function | Andrey Khudenkikh | done | | |
 |`getOPACITY`| Function | Andrey Khudenkikh | done | | |
