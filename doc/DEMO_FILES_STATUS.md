@@ -98,7 +98,7 @@
 | Menu.test.ets | Sergey Morozov    |
 | MenuItem.test.ets | Sergey Morozov    |
 | MenuItemGroup.test.ets | Sergey Morozov    |
-| MotionBlur.test.ets |                   |
+| MotionBlur.test.ets | Evstigneev Roman |
 | NavDestination.test.ets |                   |
 | Navigation.test.ets |                   |
 | Navigator.test.ets |                   |
@@ -149,7 +149,7 @@
 | TransitionEffect.test.ets |                   |
 | UseShadowBatching.test.ets | Dmitry A Smirnov|
 | Video.test.ets |                   |
-| Visibility.test.ets |                   |
+| Visibility.test.ets | Evstigneev Roman |
 | WaterFlow.test.ets |                   |
 | WaterFlowDataSource.ets |                   |
 | Web.test.ets |                   |

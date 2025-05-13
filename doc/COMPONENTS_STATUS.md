@@ -232,7 +232,7 @@
 |`onAttach`| Function | Andrey Khudenkikh | done |  | |
 |`onDetach`| Function | Andrey Khudenkikh | done |  | |
 |`onAreaChange`| Function | Roman Sedaikin | done |  | |
-|`visibility`| Function | Roman Sedaikin | done |  | |
+|`visibility`| Function | Roman Sedaikin | done | pass | |
 |`flexGrow`| Function | Dmitry A Smirnov| done |  | |
 |`flexShrink`| Function | Dmitry A Smirnov| done |  | |
 |`flexBasis`| Function | Dmitry A Smirnov| done |  | |
@@ -314,8 +314,8 @@
 |`obscured`| Function |Dmitry A Smirnov | done |  | |
 |`reuseId`| Function |Dmitry A Smirnov | managed side |  | not implemented in ace_engine|
 |`reuse`| Function |managed side | managed side | | to be removed from CAPI generation |
-|`renderFit0`| Function | Dmitry A Smirnov| done |  | |
-|`renderFit1`| Function | Dmitry A Smirnov| done |  | |
+|`renderFit0`| Function | Dmitry A Smirnov| done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`renderFit1`| Function | Dmitry A Smirnov| done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`gestureModifier`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`backgroundBrightness0`| Function | Skroba Gleb | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundBrightness1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
