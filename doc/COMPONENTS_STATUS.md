@@ -364,7 +364,7 @@
 |`bindContextMenu1`| Function | Erokhin Ilya, Evstigneev Roman | done |  | |
 |`bindContentCover0`| Function | Erokhin Ilya | done | test blocked(blocked IDL) | UT by Vadim Voronov |
 |`bindContentCover1`| Function | Erokhin Ilya | done | test blocked(blocked IDL) | UT by Vadim Voronov |
-|`bindSheet`| Function | Erokhin Ilya | testskipped |test blocked  | UT in progress Vadim Voronov |
+|`bindSheet`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done |  | |
 |`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`keyboardShortcut`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
@@ -418,7 +418,7 @@
 |`select1`| Function | Andrey Khudenkikh | done |  |  |
 |`selectedColor0`| Function |Andrey Khudenkikh | done | pass |  |
 |`selectedColor1`| Function | Andrey Khudenkikh | done |  |  |
-|`shape0`| Function |Andrey Khudenkikh | done | failed |  |
+|`shape0`| Function |Andrey Khudenkikh | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`shape1`| Function | Andrey Khudenkikh | done |  |  |
 |`unselectedColor0`| Function | Andrey Khudenkikh | done | pass |  |
 |`unselectedColor1`| Function | Andrey Khudenkikh | done |  |  |
@@ -434,15 +434,15 @@
 |`setCheckboxGroupOptions`| Function | Dudkin Sergey| done | pass |  |
 |`selectAll0`| Function | Dudkin Sergey | done | pass |  |
 |`selectAll1`| Function | Dudkin Sergey | done |  |  |
-|`selectedColor0`| Function | Dudkin Sergey | done | failed |  |
+|`selectedColor0`| Function | Dudkin Sergey | done | failed | OHOSUI-2181 |
 |`selectedColor1`| Function | Dudkin Sergey | done |  |  |
-|`unselectedColor0`| Function | Dudkin Sergey | done | failed |  |
+|`unselectedColor0`| Function | Dudkin Sergey | done | failed | OHOSUI-2181 |
 |`unselectedColor1`| Function | Dudkin Sergey | done |  |  |
-|`mark0`| Function | Dudkin Sergey | done | failed | test failed info: strokeColor doesn`t work |
+|`mark0`| Function | Dudkin Sergey | done | failed | test failed info: strokeColor doesn`t work, OHOSUI-2181 |
 |`mark1`| Function | Dudkin Sergey | done |  |  |
 |`onChange0`| Function | Dudkin Sergey | done | pass |  |
 |`onChange1`| Function | Dudkin Sergey | done |  |  |
-|`checkboxShape0`| Function | Dudkin Sergey | done | failed |  |
+|`checkboxShape0`| Function | Dudkin Sergey | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`checkboxShape1`| Function | Dudkin Sergey | done |  |  |
 |`_onChangeEvent_selectAll`| Function | Erokhin Ilya | done | test blocked | test blocked by $$ interface |
 |*Circle*|*Component*| Erokhin Ilya | done |  |  |
@@ -925,7 +925,7 @@
 |`points`| Function | Politov Mikhail | done | blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |*Progress*| *Component* | Erokhin Ilya | blocked IDL |  | |
 |`construct`| Function | Erokhin Ilya | done | pass | deprecated for `style` property |
-|`setProgressOptions`| Function | Erokhin Ilya | done | failed | deprecated for `style` property |
+|`setProgressOptions`| Function | Erokhin Ilya | done | test blocked | deprecated for `style` property, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`value`| Function | Erokhin Ilya | done | test blocked | test blocked by runtime error in Koala part during setProgressOptions |
 |`color`| Function | Erokhin Ilya | done | test blocked | test blocked by runtime error in Koala part during setProgressOptions |
 |`style`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov linearStyle.strokeRadius need to be tested, test blocked by runtime error in Koala part during setProgressOptions |
@@ -1262,7 +1262,7 @@
 |`slideRange`| Function | Morozov Sergey | done | pass |  |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | |
 |`enableHapticFeedback`| Function | Kovalev Sergey | done | | |
-|`showTips`| Function |Morozov Sergey | done | failed |  |
+|`showTips`| Function |Morozov Sergey | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done | test blocked | test blocked by $$ usage in ArkTS 1.2 |
 |*BaseSpan*| *Component* |Politov Mikhail | done |  |  |
 |`construct`| Function |Politov Mikhail | done |  |  |
@@ -1413,8 +1413,8 @@
 |*Text*| *Component* | Samarin Sergey | blocked IDL |  | |
 |`construct`| Function |  Kirill Kirichenko | done | pass |  |
 |`setTextOptions`| Function | Kirill Kirichenko | done | pass  |  |
-|`font0`| Function |Samarin Sergey | done | failed |  |
-|`font1`| Function |Samarin Sergey | done | failed |  |
+|`font0`| Function |Samarin Sergey | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`font1`| Function |Samarin Sergey | done | |  |
 |`fontColor`| Function |Samarin Sergey | done | pass |  |
 |`fontSize`| Function |Samarin Sergey | done | pass |  |
 |`minFontSize`| Function |Samarin Sergey | done | pass |  |
@@ -1423,12 +1423,12 @@
 |`maxFontScale`| Function |Samarin Sergey | done | pass |  |
 |`fontStyle`| Function |Samarin Sergey | done | pass |  |
 |`fontWeight0`| Function | Samarin Sergey | done | failed |  |
-|`fontWeight1`| Function |Samarin Sergey | done | failed |  |
+|`fontWeight1`| Function |Samarin Sergey | done | | OHOSUI-2187 |
 |`lineSpacing`| Function |Samarin Sergey | done | pass |  |
 |`textAlign`| Function |Samarin Sergey | done | pass |  |
 |`lineHeight`| Function |Samarin Sergey | done | pass |  |
 |`textOverflow`| Function |Samarin Sergey | done | pass |  |
-|`fontFamily`| Function |Samarin Sergey | done | failed |  |
+|`fontFamily`| Function |Samarin Sergey | done | failed | OHOSUI-2187 |
 |`maxLines`| Function |Samarin Sergey | done | pass |  |
 |`decoration`| Function |Samarin Sergey | done | pass |  |
 |`letterSpacing`| Function |Samarin Sergey | done | pass |  |

@@ -23,7 +23,7 @@
 | CommonBackgroundBrightness.test.ets | Pisanov Nikolay   |
 | CommonBindContentCover.test.ets | Evstigneev Roman  |
 | CommonBindPopup.test.ets | Pisanov Nikolay   |
-| CommonBindSheet.test.ets | Ilya Erokhin      |
+| CommonBindSheet.test.ets | Erokhin Ilya      |
 | CommonBlendMode.test.ets | Pisanov Nikolay   |
 | CommonBlur.test.ets | Pisanov Nikolay   |
 | CommonBorder.test.ets | Pisanov Nikolay   |
@@ -137,7 +137,7 @@
 | SymbolGlyph.test.ets |                   |
 | SymbolSpan.test.ets |                   |
 | Tabs.test.ets | Skroba Gleb       |
-| Text.test.ets | Ilya Erokhin      |
+| Text.test.ets | Erokhin Ilya      |
 | TextArea.test.ets | Evstigneev Roman |
 | TextClock.test.ets | Mikhail Politov |
 | TextInput.test.ets | Mikhail Politov |
