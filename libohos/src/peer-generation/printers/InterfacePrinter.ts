@@ -66,6 +66,8 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         if (idl.hasExtAttribute(node, idl.IDLExtendedAttributes.Import))
             return
         const type = this.writer.getNodeName(node.type)
+        if (type === node.name)
+            return /// same for other langs?
         const typeParams = this.printTypeParameters(node.typeParameters)
         this.writer.print(`export type ${node.name}${typeParams} = ${type};`)
     }
