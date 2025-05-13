@@ -132,7 +132,7 @@
 | Slider.test.ets | Erokhin Ilya      |
 | Span.test.ets | Erokhin Ilya      |
 | Stack.test.ets | Pisanov Nikolay   |
-| Stepper.test.ets |                   |
+| Stepper.test.ets | Sergey Morozov |
 | Swiper.test.ets | Skroba Gleb      |
 | SymbolGlyph.test.ets |                   |
 | SymbolSpan.test.ets |                   |
