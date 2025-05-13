@@ -944,7 +944,6 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     postprocessEntires() {
-        /* arkgen specialization */
         if (this.mode === 'arkoala') {
             /* arkgen specialization */
             const componentInterface = this.entries.find(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.ComponentInterface))
@@ -987,7 +986,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     if (idl.isCallback((entry))) {
                         let hasComponentInReferences = false
                         idl.forEachChild(entry, (node) => {
-                            if (idl.isNamedNode(node) && node.name === componentAttributeRef.name)
+                            if (idl.isNamedNode(node) && node.name === componentUIAttributeName)
                                 hasComponentInReferences = true
                         })
                         if (hasComponentInReferences) {
