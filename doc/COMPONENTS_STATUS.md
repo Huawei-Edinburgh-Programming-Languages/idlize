@@ -134,8 +134,8 @@
 |`pixelRound`| Function | Skroba Gleb | done |  |  |
 |`backgroundImageSize`| Function | Erokhin Ilya | done |  |  |
 |`backgroundImagePosition`| Function | Erokhin Ilya | done |  |  |
-|`backgroundEffect0`| Function |Skroba Gleb | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`backgroundEffect1`| Function | Skroba Gleb | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundEffect0`| Function |Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundEffect1`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundImageResizable`| Function | Skroba Gleb | done |  | |
 |`foregroundEffect`| Function | Skroba Gleb | done | pass |  |
 |`visualEffect`| Function | Skroba Gleb | blocked IDL | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
@@ -332,7 +332,7 @@
 |`background`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
 |`backgroundImage0`| Function | Erokhin Ilya | done |  | |
 |`backgroundImage1`| Function | Erokhin Ilya | done |  | |
-|`backgroundBlurStyle0`| Function | Skroba Gleb | done | test blocked |  test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundBlurStyle0`| Function | Skroba Gleb | done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundBlurStyle1`| Function | Tuzhilkin Ivan | done | test blocked | need cherry-pick to feature_branch,  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundBlurStyle0`| Function | Roman Sedaikin | done | blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`foregroundBlurStyle1`| Function | Dmitry A Smirnov | in progress |  | |
@@ -347,8 +347,8 @@
 |`linearGradientBlur0`| Function |Lobah Mikhail | done |  | |
 |`linearGradientBlur1`| Function | Dmitry A Smirnov | done |  | |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
-|`backdropBlur0`| Function | Berezin Kirill | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`backdropBlur1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backdropBlur0`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backdropBlur1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`sharedTransition`|Function|Skroba Gleb | done |  |  |
 |`chainMode`| Function | Berezin Kirill | done |  | |
 |`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -736,8 +736,8 @@
 |`onScroll`|Function|Morozov Sergey| done |  |deprecated  |
 |`onScrollIndex`|Function|Morozov Sergey| done |  |  |
 |`onScrollVisibleContentChange`|Function|Morozov Sergey| done |  |  |
-|`onReachStart`|Function|Morozov Sergey| done |  |  |
-|`onReachEnd`|Function|Morozov Sergey| done |  |  |
+|`onReachStart`|Function|Morozov Sergey| done | pass |  |
+|`onReachEnd`|Function|Morozov Sergey| done | pass |  |
 |`onScrollStart`|Function|Morozov Sergey| done |  |  |
 |`onScrollStop`|Function|Morozov Sergey| done |  |  |
 |`onItemDelete`|Function| Skroba Gleb | deprecated |  |  |
@@ -1071,7 +1071,7 @@
 |`scrollSnap`| Function | Berezin Kirill | done |  |  |
 |`enablePaging`| Function | Berezin Kirill | done |  |  |
 |`initialOffset`| Function | Berezin Kirill | done |  |  |
-|`edgeEffect`| Function | Berezin Kirill | done | fail | |
+|`edgeEffect`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*ScrollBar*| *Component* | Maksimov Nikita | done |  | |
 |`construct`| Function | Maksimov Nikita | done |  | |
 |`setScrollBarOptions`| Function | Maksimov Nikita | done |  | |
