@@ -62,7 +62,7 @@
 | DatePicker.test.ets | Vadim Voronov |
 | DisplayPriority.test.ets | Vadim Voronov |
 | Divider.test.ets | Vadim Voronov |
-| EffectComponent.test.ets | Vadim Voronov |
+| EffectComponent.test.ets | Porodin Alexander |
 | Ellipse.test.ets | Erokhin Ilya      |
 | Flex.test.ets | Dmitry A Smirnov  |
 | FlexCommonAttributes.test.ets | Dmitry A Smirnov  |
@@ -116,7 +116,7 @@
 | Rating.test.ets | Daryina Olga      |
 | Refresh.test.ets | Pavelev Ivan      |
 | RelativeContainer.test.ets | Dmitry A Smirnov |
-| RenderGroup.test.ets | Vadim Voronov |
+| RenderGroup.test.ets | Porodin Alexander |
 | RequestFocusFocusable.test.ets |                   |
 | RichEditor.test.ets | Erokhin Ilya      |
 | RichText.test.ets | Erokhin Ilya      |
@@ -132,7 +132,7 @@
 | Slider.test.ets | Erokhin Ilya      |
 | Span.test.ets | Erokhin Ilya      |
 | Stack.test.ets | Pisanov Nikolay   |
-| Stepper.test.ets |                   |
+| Stepper.test.ets | Sergey Morozov |
 | Swiper.test.ets | Skroba Gleb      |
 | SymbolGlyph.test.ets |                   |
 | SymbolSpan.test.ets |                   |
@@ -146,7 +146,7 @@
 | TimePicker.test.ets |                   |
 | Toggle.test.ets |                   |
 | TransformRotateScaleTranslate.test.ets | Dmitry A Smirnov |
-| TransitionEffect.test.ets |                   |
+| TransitionEffect.test.ets | Dmitry A Smirnov |
 | UseShadowBatching.test.ets | Dmitry A Smirnov|
 | Video.test.ets |                   |
 | Visibility.test.ets | Evstigneev Roman |
