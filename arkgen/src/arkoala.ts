@@ -14,7 +14,7 @@
  */
 import * as fs from "fs"
 import * as path from "path"
-import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration, CppConvertor, PeerMethod, MethodModifier, NativeModuleType, LayoutManager } from '@idlizer/core'
+import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration, CppConvertor, PeerMethod, MethodModifier, NativeModuleType, LayoutManager, ETSLanguageWriter } from '@idlizer/core'
 import {
     dummyImplementations, gniFile, libraryCcDeclaration,
     makeArkuiModule, makeCallbacksKinds,
@@ -162,6 +162,7 @@ export function generateArkoalaFromIdl(config: {
     dumpSerialized: boolean,
     callLog: boolean,
     verbose: boolean,
+    useTypeChecker: boolean,
 },
     peerLibrary: PeerLibrary) {
     const arkoala = config.arkoalaDestination ?
@@ -194,7 +195,7 @@ export function generateArkoalaFromIdl(config: {
             return data
         return []
     }
-    const installedFiles = install(
+    const installedFiles = ETSLanguageWriter.useTypeChecker(config.useTypeChecker, () => install(
         selectOutDir(arkoala, peerLibrary.language),
         peerLibrary,
         [
@@ -213,7 +214,7 @@ export function generateArkoalaFromIdl(config: {
                 createGeneratedNativeModulePrinter(NativeModule.Generated),
             )
         ]
-    )
+    ))
 
     if (peerLibrary.language === Language.ARKTS) {
         install(

@@ -1,6 +1,5 @@
 package ohos.base;
 
-[TypeParameters="T = void"]
 callback ErrorCallback = void (BusinessError error);
 
 interface BusinessError {

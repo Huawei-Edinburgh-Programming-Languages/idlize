@@ -772,6 +772,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 case 'IterableIterator': return idl.createContainerType('sequence', typeArgs ?? [] /* better check here? */)
                 case 'ReadonlyArray': return idl.createContainerType('sequence', typeArgs ?? [] /* better check here? */)
                 case 'number': return idl.IDLNumberType
+                case 'ErrorCallback': return idl.createReferenceType(name)
             }
             return idl.createReferenceType(name, typeArgs)
         }
@@ -986,6 +987,16 @@ class IDLVisitor extends arkts.AbstractVisitor {
                             })
                             entry.methods = methods
                             entry.properties = properties.concat(entry.properties)
+                        }
+                    }
+                    if (idl.isCallback((entry))) {
+                        let hasComponentInReferences = false
+                        idl.forEachChild(entry, (node) => {
+                            if (idl.isNamedNode(node) && node.name === componentAttributeRef.name)
+                                hasComponentInReferences = true
+                        })
+                        if (hasComponentInReferences) {
+                            return
                         }
                     }
                     processedEntries.push(entry)

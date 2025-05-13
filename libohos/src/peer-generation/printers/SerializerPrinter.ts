@@ -35,6 +35,7 @@ import { collectDeclarationTargets } from '../DeclarationTargetCollector'
 import { qualifiedName, flattenUnionType, maybeTransformManagedCallback } from '@idlizer/core'
 import { NativeModule } from '../NativeModule'
 import { PrinterFunction } from '../LayoutManager'
+import { isComponentDeclaration } from '../ComponentsCollector'
 
 type SerializableTarget = idl.IDLInterface | idl.IDLCallback
 
@@ -453,6 +454,8 @@ class DeserializerPrinter {
                 writer.writeConstructorImplementation(className, ctorSignature, writer => {}, ctorMethod)
             }
             for (const decl of serializerDeclarations) {
+                if (isComponentDeclaration(this.library, decl))
+                    continue
                 if (idl.isInterface(decl)) {
                     this.generateInterfaceDeserializer(decl, prefix)
                 } else if (idl.isCallback(decl)) {

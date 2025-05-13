@@ -102,6 +102,7 @@ const options = program
     .option('--use-memo-m3', "Generate code with m3 @memo annotations and functions with @ComponentBuilder", false)
     .option('--use-component-optional', 'Make all component\'s properties nullable')
     .option('--reference-names <string>', 'Provides reference mapping', path.resolve(__dirname, '..', 'generation-config', 'references', 'default'))
+    .option('--no-type-checker', "Use TypeChecker or generate ArkTS specific syntax")
 
     .parse()
     .opts()
@@ -353,7 +354,8 @@ function generateTarget(idlLibrary: ArkoalaPeerLibrary, outDir: string, lang: La
             onlyIntegrated: options.onlyIntegrated ?? false,
             dumpSerialized: options.dumpSerialized ?? false,
             callLog: options.callLog ?? false,
-            lang: lang
+            lang: lang,
+            useTypeChecker: options.typeChecker ?? true,
         }, idlLibrary)
     }
     if (options.generatorTarget == "libace" ||
