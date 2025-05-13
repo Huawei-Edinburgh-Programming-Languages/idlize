@@ -295,13 +295,13 @@ export function generateArkoalaFromIdl(config: {
         //     }
         // )
         // index not printed
-        // writeFile(
-        //     arkoala.tsLib(new TargetFile('index')),
-        //     makeArkuiModule(arkuiComponentsFiles.concat(installedFiles), arkoala.tsDir),
-        //     {
-        //         onlyIntegrated: config.onlyIntegrated
-        //     }
-        // )
+        writeFile(
+            arkoala.tsLib(new TargetFile('index')),
+            makeArkuiModule(arkuiComponentsFiles.concat(installedFiles), arkoala.tsDir),
+            {
+                onlyIntegrated: config.onlyIntegrated
+            }
+        )
         writeFile(arkoala.peer(new TargetFile('CallbackKind')),
             makeCallbacksKinds(peerLibrary, peerLibrary.language),
             {

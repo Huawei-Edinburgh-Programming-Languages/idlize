@@ -301,6 +301,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             // TODO: rethink that
             ["\"2d\"", () => idl.IDLStringType],
             ["\"auto\"", () => idl.IDLStringType],
+            ["BusinessError", (type) => idl.createReferenceType("BusinessError")]
         ])
 
     makeEnumMember(parent: idl.IDLEnum, name: string, value: string): idl.IDLEnumMember {
@@ -1596,12 +1597,14 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
     }
 
     isCommonMethodUsedAsProperty(member: ts.ClassElement | ts.TypeElement): member is (ts.MethodDeclaration | ts.MethodSignature) {
-        let className = (ts.isClassDeclaration(member.parent)) ? identName(member.parent.name) : undefined
-        let returnType = (ts.isMethodDeclaration(member) || ts.isMethodSignature(member)) ? identName(member.type) : undefined
-        return (this.options.commonToAttributes ?? true) &&
-            (ts.isMethodDeclaration(member) || ts.isMethodSignature(member)) &&
-            this.isCommonAttributeMethod(member) &&
-            member.parameters.length == 1 && (returnType == "T" || returnType == className)
+        // TODO type replacements for common methods are not working
+        return false
+        // let className = (ts.isClassDeclaration(member.parent)) ? identName(member.parent.name) : undefined
+        // let returnType = (ts.isMethodDeclaration(member) || ts.isMethodSignature(member)) ? identName(member.type) : undefined
+        // return (this.options.commonToAttributes ?? true) &&
+        //     (ts.isMethodDeclaration(member) || ts.isMethodSignature(member)) &&
+        //     this.isCommonAttributeMethod(member) &&
+        //     member.parameters.length == 1 && (returnType == "T" || returnType == className)
     }
     isMethodUsedAsCallback(member: ts.ClassElement | ts.TypeElement): member is (ts.MethodDeclaration | ts.MethodSignature) {
         const parentTypeName = ts.isInterfaceDeclaration(member.parent) || ts.isClassDeclaration(member.parent)

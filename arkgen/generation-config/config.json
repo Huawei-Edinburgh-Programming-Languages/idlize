@@ -301,7 +301,11 @@
             "packages": [""]
         }
     },
-
+    "currentModuleExportedPackages": [
+        "arkui.component",
+        "internal.component.ets",
+        "arkui.idlize"
+    ],
     "globalPackages": [
         "idlize.stdlib",
         "org.openharmony.idlize.predefined",

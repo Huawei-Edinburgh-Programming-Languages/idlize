@@ -42,6 +42,7 @@ export const PeerGeneratorConfigurationSchema = D.combine(
         dumpSerialized: D.boolean(),
         boundProperties: D.map(D.string(), T.stringArray()),
 
+        currentModuleExportedPackages: D.maybe(T.stringArray()),
         cppPrefix: D.string(),
         components: D.object({
             ignoreComponents: T.stringArray(),
