@@ -134,8 +134,8 @@
 |`pixelRound`| Function | Skroba Gleb | done |  |  |
 |`backgroundImageSize`| Function | Erokhin Ilya | done |  |  |
 |`backgroundImagePosition`| Function | Erokhin Ilya | done |  |  |
-|`backgroundEffect0`| Function |Skroba Gleb | done |  |  |
-|`backgroundEffect1`| Function | Skroba Gleb | done |  |  |
+|`backgroundEffect0`| Function |Skroba Gleb | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundEffect1`| Function | Skroba Gleb | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundImageResizable`| Function | Skroba Gleb | done |  | |
 |`foregroundEffect`| Function | Skroba Gleb | done | pass |  |
 |`visualEffect`| Function | Skroba Gleb | blocked IDL | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
@@ -332,8 +332,8 @@
 |`background`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
 |`backgroundImage0`| Function | Erokhin Ilya | done |  | |
 |`backgroundImage1`| Function | Erokhin Ilya | done |  | |
-|`backgroundBlurStyle0`| Function | Skroba Gleb | done | | |
-|`backgroundBlurStyle1`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
+|`backgroundBlurStyle0`| Function | Skroba Gleb | done | test blocked |  test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundBlurStyle1`| Function | Tuzhilkin Ivan | done | test blocked | need cherry-pick to feature_branch,  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundBlurStyle0`| Function | Roman Sedaikin | done | blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`foregroundBlurStyle1`| Function | Dmitry A Smirnov | in progress |  | |
 |`focusScopeId0`| Function | Dmitry A Smirnov| done |  | |
