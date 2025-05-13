@@ -137,7 +137,7 @@
 |`backgroundEffect0`| Function |Skroba Gleb | done |  |  |
 |`backgroundEffect1`| Function | Skroba Gleb | done |  |  |
 |`backgroundImageResizable`| Function | Skroba Gleb | done |  | |
-|`foregroundEffect`| Function | Skroba Gleb | done |  |  |
+|`foregroundEffect`| Function | Skroba Gleb | done | pass |  |
 |`visualEffect`| Function | Skroba Gleb | blocked IDL | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
 |`backgroundFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
 |`foregroundFilter`| Function | Skroba Gleb |  blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3  |
@@ -334,8 +334,8 @@
 |`backgroundImage1`| Function | Erokhin Ilya | done |  | |
 |`backgroundBlurStyle0`| Function | Skroba Gleb | done | | |
 |`backgroundBlurStyle1`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
-|`foregroundBlurStyle0`| Function | Roman Sedaikin | done |  | |
-|`foregroundBlurStyle1`| Function | Dmitry A Smirnov | done |  | |
+|`foregroundBlurStyle0`| Function | Roman Sedaikin | done | blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
+|`foregroundBlurStyle1`| Function | Dmitry A Smirnov | in progress |  | |
 |`focusScopeId0`| Function | Dmitry A Smirnov| done |  | |
 |`focusScopeId1`| Function | Dmitry A Smirnov| done |  | |
 |`focusScopePriority`| Function | Dmitry A Smirnov| done |  | |
