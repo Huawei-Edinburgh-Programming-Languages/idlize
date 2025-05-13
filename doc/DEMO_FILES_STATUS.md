@@ -146,7 +146,7 @@
 | TimePicker.test.ets |                   |
 | Toggle.test.ets |                   |
 | TransformRotateScaleTranslate.test.ets | Dmitry A Smirnov |
-| TransitionEffect.test.ets |                   |
+| TransitionEffect.test.ets | Dmitry A Smirnov |
 | UseShadowBatching.test.ets | Dmitry A Smirnov|
 | Video.test.ets |                   |
 | Visibility.test.ets | Evstigneev Roman |

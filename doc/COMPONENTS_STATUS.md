@@ -188,11 +188,19 @@
 |`focusOnTouch`| Function | Dmitry A Smirnov| done |  | |
 |`focusBox`| Function | Dudkin Sergey | done |  | |
 |`animation`| Function | managed side | managed side | |  |
+<<<<<<< HEAD
 |`transition0`| Function |Dmitry A Smirnov| done |  |transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`transition1`| Function |Dmitry A Smirnov| done |  |transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`motionBlur0`| Function |Dmitry A Smirnov| done | test blocked | test blocked by common.animation(...) |
 |`motionBlur1`| Function | Dmitry A Smirnov| done | test blocked | test blocked by common.animation(...) |
 |`brightness0`| Function | Lobah Mikhail | done | pass |  |
+=======
+|`transition0`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
+|`transition1`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
+|`motionBlur0`| Function |Dmitry A Smirnov| done |  | |
+|`motionBlur1`| Function | Dmitry A Smirnov| done |  | |
+|`brightness0`| Function | Lobah Mikhail | done |  |  |
+>>>>>>> 5cd1ee30 (doc/COMPONENTS_STATUS.md doc/DEMO_FILES_STATUS.md)
 |`brightness1`| Function |Lobah Mikhail | done |  |  |
 |`contrast0`| Function |Lobah Mikhail | done | pass | |
 |`contrast1`| Function | Lobah Mikhail | done |  | |
@@ -2228,16 +2236,16 @@
 |`drawContent`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`drawFront`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`invalidate`| Function | Erokhin Ilya | done |  | |
-|*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress |  | |
+|*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | failed |OHOSUI-2171 |
 |`ctor`| Function |Andrey Khudenkikh | done |  | |
 |`translate`| Function | Andrey Khudenkikh | done |  | |
-|`rotate`| Function | Andrey Khudenkikh | done | | |
+|`rotate`| Function | Andrey Khudenkikh | done | failed| OHOSUI-2171|
 |`scale`| Function | Andrey Khudenkikh | done | | |
 |`opacity`| Function | Andrey Khudenkikh | done | | |
 |`move`| Function | Andrey Khudenkikh | done | | |
 |`asymmetric`| Function | Andrey Khudenkikh | done | | |
-|`animation`| Function | Andrey Khudenkikh | done | failed | |
-|`combine`| Function | Andrey Khudenkikh | done | | |
+|`animation`| Function | Andrey Khudenkikh | done |failed | OHOSUI-2171|
+|`combine`| Function | Andrey Khudenkikh | done | failed| OHOSUI-2171|
 |`getIDENTITY`| Function | Andrey Khudenkikh | done | | |
 |`getOPACITY`| Function | Andrey Khudenkikh | done | | |
 |`getSLIDE`| Function | Andrey Khudenkikh | done | | |
