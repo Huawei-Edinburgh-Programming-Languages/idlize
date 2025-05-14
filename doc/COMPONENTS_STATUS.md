@@ -968,18 +968,18 @@
 |`radiusWidth`|Function|Dudkin Sergey| done |  |  |
 |`radiusHeight`|Function|Dudkin Sergey| done |  |  |
 |`radius`|Function|Dudkin Sergey| done |  |   |
-|*Refresh*| *Component* |Politov Mikhail | blocked IDL |  |  |
-|`construct`| Function |Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD ; offset, friction - deprecated + |
-|`setRefreshOptions`| Function | Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD ; offset, friction - deprecated + |
-|`onStateChange`| Function |Politov Mikhail | done |  |  |
-|`onRefreshing`| Function |Politov Mikhail | done |  |  |
-|`refreshOffset`| Function |Politov Mikhail | done |  |  |
-|`pullToRefresh`| Function |Politov Mikhail | done |  |  |
-|`onOffsetChange`| Function |Politov Mikhail | done |  | |
-|`pullDownRatio`| Function |Politov Mikhail | done |  |  |
-|`maxPullDownDistance`| Function | | | | no such API in generation 125 |
-|`_onChangeEvent_refreshing`| Function | Erokhin Ilya | done |  | |
-|*RelativeContainer*| *Component* | Dmitry A Smirnov | done | failed | OHOSUI-2171 |
+|*Refresh*| *Component* |Politov Mikhail | blocked IDL | failed | OHOSUI-2196 |
+|`construct`| Function |Samarin Sergey | blocked IDL | failed | is not called in demo; https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD ; offset, friction - deprecated + |
+|`setRefreshOptions`| Function | Samarin Sergey | blocked IDL | failed | is not called in demo; https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD ; offset, friction - deprecated + |
+|`onStateChange`| Function |Politov Mikhail | done | failed | is not called in demo |
+|`onRefreshing`| Function |Politov Mikhail | done | failed | is not called in demo |
+|`refreshOffset`| Function |Politov Mikhail | done | failed | is not called in demo |
+|`pullToRefresh`| Function |Politov Mikhail | done | failed | is not called in demo |
+|`onOffsetChange`| Function |Politov Mikhail | done | failed | Ois not called in demo |
+|`pullDownRatio`| Function |Politov Mikhail | done | failed | is not called in demo |
+|`maxPullDownDistance`| Function | | | failed | is not called in demo; no such API in generation 125 |
+|`_onChangeEvent_refreshing`| Function | Erokhin Ilya | done | failed | is not called in demo |
+|*RelativeContainer*| *Component* | Dmitry A Smirnov | done | failed | is not called in demo |
 |`construct`| Function |Dmitry A Smirnov | done |  |  |
 |`setRelativeContainerOptions`| Function | Dmitry A Smirnov | done |  |  |
 |`guideLine`| Function | Dmitry A Smirnov | done | failed | is not called in demo |
