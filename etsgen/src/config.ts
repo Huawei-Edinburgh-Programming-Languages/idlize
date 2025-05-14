@@ -28,6 +28,7 @@ export const ETSConfigScheme = D.object({
     DeletedMethods: D.map(D.string(), T.stringArray()),
     StubbedDeclarations: T.stringArray(),
     ForceDefaultExport: D.default(D.map(D.string(), D.string()), new Map()),
+    SyntheticPackage: T.stringArray(),
 })
 export type ETSVisitorConfig = ConfigTypeInfer<typeof ETSConfigScheme>
 

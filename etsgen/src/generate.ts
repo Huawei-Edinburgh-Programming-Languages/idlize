@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { capitalize, collapseTypes, flattenUnionType, generateSyntheticFunctionName, generateSyntheticIdlNodeName, IDLFile, IDLLibrary, IDLMethod, Language, PeerLibrary, throwException } from "@idlizer/core"
+import { capitalize, collapseTypes, flattenUnionType, generateSyntheticFunctionName, generateSyntheticIdlNodeName, IDLFile, IDLLibrary, IDLMethod, Language, lib, PeerLibrary, resolveNamedNode, throwException } from "@idlizer/core"
 import * as arkts from "@koalaui/libarkts"
 import * as idl from "@idlizer/core/idl"
 import * as path from "node:path"
@@ -52,15 +52,6 @@ function processFile(outDir: string, baseDir: string, file: string, config:ETSVi
     const idlFile = idlVisitor.toIDLSuperFile()
     const fileRelativePath = path.relative(baseDir, file)
     const outFile = path.join(outDir, fileRelativePath.replace(".d.ets", ".idl"))
-    const outFileDir = path.dirname(outFile)
-    if (!fs.existsSync(outFileDir)) {
-        fs.mkdirSync(outFileDir, { recursive: true })
-    }
-    if (idlFile.file.entries.length) {
-        fs.writeFileSync(outFile, idl.toIDLString(idlFile.file, {}), 'utf8')
-    } else {
-        idlFile.skipped = true
-    }
     idlFile.writeFilePath = outFile
     return idlFile
 }
@@ -72,22 +63,44 @@ export interface GenerateFromSTSContext {
     config: ETSVisitorConfig
 }
 
-export function generateFromSts({inputFiles, baseDir, outDir, config}:GenerateFromSTSContext): PeerLibrary {
+export function generateFromSts(config: GenerateFromSTSContext): PeerLibrary {
     if (!process.env.PANDA_SDK_PATH) {
         process.env.PANDA_SDK_PATH = path.resolve(__dirname, "../../node_modules/@panda/sdk")
     }
-    if (!fs.existsSync(outDir)) {
-        fs.mkdirSync(outDir, { recursive: true })
-    }
     console.log(`Use Panda from ${process.env.PANDA_SDK_PATH}`)
-    const doJob = processLogger(inputFiles.length)
-    const library: IDLSuperFile[] = []
+    console.log('Parsing files...')
+    let library = parseFiles(config)
+    console.log('Removing synthetics...')
+    library = removeSynthetics(library)
+    console.log('Adjusting imports...')
+    library = adjustImports(library)
+    console.log('Synthesizing entries...')
+    library = generateSyntheticFiles(library, config)
+    writeFiles(library)
+    // const doAdjustJob = processLogger(adjusted.length)
+    // adjusted.forEach(file => {
+    //     const fileName = file.writeFilePath
+    //     doAdjustJob(fileName, () => {
+    //         const outFileDir = path.dirname(fileName)
+    //         if (!fs.existsSync(outFileDir)) {
+    //             fs.mkdirSync(outFileDir, { recursive: true })
+    //         }
+    //         fs.writeFileSync(fileName, idl.toIDLString(file.file, {}), 'utf8')
+    //         return file
+    //     })
+    // })
+    return new PeerLibrary(Language.ARKTS)
+}
+
+function parseFiles({inputFiles, baseDir, outDir, config}: GenerateFromSTSContext): IDLSuperFile[] {
+    const doParseJob = processLogger(inputFiles.length)
+    let library: IDLSuperFile[] = []
     inputFiles.forEach(file => {
         try {
-            doJob(file, () => {
+            doParseJob(file, () => {
                 const idlFile = processFile(outDir, baseDir, file, config)
                 library.push(idlFile)
-                return idlFile
+                return 'parsed'
             })
         } catch (e: any) {
             console.log(e)
@@ -97,21 +110,25 @@ export function generateFromSts({inputFiles, baseDir, outDir, config}:GenerateFr
             // throw e
         }
     })
-    console.log('Adjusting imports...')
-    const adjusted = adjustImports(library)
-    const doAdjustJob = processLogger(adjusted.length)
-    adjusted.forEach(file => {
-        const fileName = file.writeFilePath
-        doAdjustJob(fileName, () => {
-            const outFileDir = path.dirname(fileName)
-            if (!fs.existsSync(outFileDir)) {
-                fs.mkdirSync(outFileDir, { recursive: true })
-            }
-            fs.writeFileSync(fileName, idl.toIDLString(file.file, {}), 'utf8')
-            return file
-        })
+    return library
+}
+
+function removeSynthetics(library: IDLSuperFile[]): IDLSuperFile[] {
+    const conflictingNames = new Set(library.flatMap(it => it.syntheticEntries).map(it => it.syntheticEntry.name))
+    function removeConflictingChildren(node: idl.IDLEntry | idl.IDLFile, conflictingNames: Set<string>): void {
+        if (idl.isFile(node)) {
+            node.entries = node.entries.filter(it => !conflictingNames.has(it.name))
+            node.entries.forEach(it => removeConflictingChildren(it, conflictingNames))
+        }
+        if (idl.isNamespace(node)) {
+            node.members = node.members.filter(it => !conflictingNames.has(it.name))
+            node.members.forEach(it => removeConflictingChildren(it, conflictingNames))
+        }
+    }
+    library.forEach(file => {
+        removeConflictingChildren(file.file, conflictingNames)
     })
-    return new PeerLibrary(Language.ARKTS)
+    return library
 }
 
 function adjustImports(library:IDLSuperFile[]): IDLSuperFile[] {
@@ -124,9 +141,7 @@ function adjustImports(library:IDLSuperFile[]): IDLSuperFile[] {
         map.get(pkg)!.push(file)
     })
 
-    const updatedFiles:IDLSuperFile[] = []
     library.forEach((file) => {
-        let adjusted = false
         file.file.entries.forEach(entry => {
             if (!idl.isImport(entry)) {
                 return
@@ -154,31 +169,98 @@ function adjustImports(library:IDLSuperFile[]): IDLSuperFile[] {
                         }
                         fileClauseString = clause.slice(0, clause.length - 1).join('.')
                         fileExportName = clause.at(-1)!
-                        adjusted = true
                         break
                     }
                 }
             }
             entry.clause = [...fileClauseString.split('.'), fileExportName]
         })
-        if (adjusted) {
-            updatedFiles.push(file)
-        }
     })
-    return updatedFiles
+    return library
+}
+
+function equalsClause(a: string[], b: string[]): boolean {
+    return a.length === b.length && a.every((it, index) => b[index] === it)
+}
+
+function makeSyntheticFileName(filename: string): string {
+    return filename.replaceAll('.idl', '').replaceAll('.d.ets', '') + ".synthetic.idl"
+}
+
+function generateSyntheticFiles(library: IDLSuperFile[], { config, outDir }: GenerateFromSTSContext): IDLSuperFile[] {
+    const idlLibrary = new PeerLibrary(Language.ARKTS, false)
+    idlLibrary.files.push(...library.map(it => it.file))
+    idlLibrary.files.forEach(idl.linkParentBack)
+    const syntheticFiles: IDLSuperFile[] = []
+    for (const file of library) {
+        const syntheticImports: idl.IDLImport[] = []
+        const syntheticEntries: idl.IDLEntry[] = []
+        const resolvePov = (clause: string[]): idl.IDLNode => {
+            let pov: idl.IDLNode = file.file
+            let povEntries: idl.IDLEntry[] = file.file.entries
+            for (const slice of clause) {
+                for (const entry of povEntries) {
+                    if (idl.isNamespace(entry) && entry.name === slice) {
+                        pov = entry
+                        povEntries = entry.members
+                        break
+                    }
+                }
+            }
+            return pov
+        }
+        for (const synthetic of file.syntheticEntries) {
+            idl.forEachChild(synthetic.syntheticEntry, (child) => {
+                if (idl.isReferenceType(child)) {
+                    const resolved = resolveNamedNode(child.name.split('.'), child, idlLibrary.files)
+                    if (!resolved) return
+                    const resolvedFQN = idl.getFQName(resolved).split('.')
+                    const resolvedNamespace = idl.getNamespacesPathFor(resolved).at(-1)
+                    let resolvedImportClause: string[]
+                    let resolvedRelatireClause: string[]
+                    if (resolvedNamespace) {
+                        resolvedImportClause = idl.getFQName(resolvedNamespace).split('.')
+                        resolvedRelatireClause = resolvedFQN.slice(resolvedImportClause.length - 1)
+                    } else {
+                        resolvedImportClause = resolvedFQN
+                        resolvedRelatireClause = [resolvedFQN.at(-1)!]
+                    }
+                    if (!syntheticImports.some(it => equalsClause(it.clause, resolvedImportClause)))
+                        syntheticImports.push(idl.createImport(resolvedImportClause, resolvedRelatireClause[0]))
+                    child.name = resolvedRelatireClause.join('.')
+                }
+            })
+            syntheticEntries.push(synthetic.syntheticEntry)
+        }
+        syntheticFiles.push({
+            exports: new Map(),
+            file: idl.createFile([...syntheticImports, ...syntheticEntries], makeSyntheticFileName(file.file.fileName!), config.SyntheticPackage),
+            originalFileName: makeSyntheticFileName(file.originalFileName),
+            skipped: false,
+            syntheticEntries: [],
+            writeFilePath: makeSyntheticFileName(file.writeFilePath),
+        })
+    }
+    return [
+        ...library,
+        ...syntheticFiles,
+    ]
+}
+
+function writeFiles(library: IDLSuperFile[]): void {
+    library.forEach(file => {
+        fs.mkdirSync(path.dirname(file.writeFilePath), { recursive: true })
+        fs.writeFileSync(file.writeFilePath, idl.toIDLString(file.file, {}), 'utf8')
+    })
 }
 
 function processLogger(amount: number) {
     let done = 1
-    return (fileName: string, op: () => IDLSuperFile) => {
+    return (fileName: string, op: () => string) => {
         console.log(`[ ${done.toString()}/${amount.toString()} ] Processing ${fileName}`)
         try {
-            const outFile = op()
-            if (outFile.skipped) {
-                console.log(`  ... skipped (file is empty)`)
-            } else {
-                console.log(`  ... saved to ${outFile.writeFilePath}`)
-            }
+            const outMsg = op()
+            console.log(`  ... ${outMsg}`)
         } catch (ex: unknown) {
             console.log(`  ... failed`)
             throw ex
@@ -190,9 +272,9 @@ function processLogger(amount: number) {
 
 interface IDLSuperFile {
     originalFileName: string
-    generatedFileName: string
     writeFilePath: string
     file: IDLFile
+    syntheticEntries: SyntheticEntry[]
     skipped: boolean
     exports: Map<string, string>
 }
@@ -203,11 +285,15 @@ interface ExtractTypeParameterInfo {
     attrs: idl.IDLExtendedAttribute[]
 }
 
+type SyntheticEntry = { syntheticEntry: idl.IDLEntry, povClause: string[] }
+
 class IDLVisitor extends arkts.AbstractVisitor {
     //writer = new IDLLanguageWriter()
     entries: idl.IDLEntry[] = []
+    syntheticEntries: SyntheticEntry[] = []
     fileName: string
     packageClause: string[] = []
+    namespacesPath: string[] = []
 
     private defaultExportName?: string
     private typeParamsStack: Set<string>[] = []
@@ -322,7 +408,9 @@ class IDLVisitor extends arkts.AbstractVisitor {
     visitETSModule(node: arkts.ETSModule): arkts.ETSModule {
         const old = this.entries
         this.entries = []
+        this.namespacesPath.push(node.ident!.name)
         this.visitEachChild(node)
+        this.namespacesPath.pop()
         const members = this.entries
         this.entries = old
         this.entries.push(idl.createNamespace(
@@ -744,10 +832,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
             const mbEtsCallback = this.maybeSerializeETSFunctionReference(type)
             if (mbEtsCallback) {
                 const [etsCallback, args] = mbEtsCallback
-                if (!this.seenTypes.has(etsCallback.name)) {
-                    this.seenTypes.add(etsCallback.name)
-                    this.addSyntheticType(etsCallback)
-                }
+                this.addSyntheticType(etsCallback)
                 return idl.createReferenceType(
                     etsCallback.name,
                     args.length === 0 ? undefined : args.map(it => {
@@ -783,10 +868,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         }
         if (arkts.isETSFunctionType(type)) {
             const [funcType, typeArguments] = this.serializeFunctionType(type as arkts.ETSFunctionType)
-            if (!this.seenTypes.has(funcType.name)) {
-                this.seenTypes.add(funcType.name)
-                this.addSyntheticType(funcType)
-            }
+            this.addSyntheticType(funcType)
             return idl.createReferenceType(
                 funcType.name,
                 typeArguments.length === 0 ? undefined : typeArguments.map(arg => {
@@ -797,10 +879,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         }
         if (arkts.isETSTuple(type)) {
             const [tupleType, typeArguments] = this.serializeTupleType(type)
-            if (!this.seenTypes.has(tupleType.name)) {
-                this.seenTypes.add(tupleType.name)
-                this.addSyntheticType(tupleType)
-            }
+            this.addSyntheticType(tupleType)
             return idl.createReferenceType(
                 tupleType.name,
                 typeArguments.length === 0 ? undefined : typeArguments.map(arg => {
@@ -811,7 +890,6 @@ class IDLVisitor extends arkts.AbstractVisitor {
         }
         throw new Error(`Failed type conversion for ${type ? this.printNode(type) : "undefined"}`)
     }
-    private seenTypes = new Set<string>()
 
     serializePrimitive(type: arkts.Es2pandaPrimitiveType): idl.IDLType {
         switch (type) {
@@ -884,6 +962,9 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     addSyntheticType(entry: idl.IDLEntry) {
+        if (this.syntheticEntries.some(it => it.syntheticEntry.name === entry.name)) return
+        const currentPovClause = this.packageClause.concat(...this.namespacesPath)
+        this.syntheticEntries.push({syntheticEntry: entry, povClause: currentPovClause})
         this.entries.push(entry)
     }
 
@@ -943,7 +1024,8 @@ class IDLVisitor extends arkts.AbstractVisitor {
         }
     }
 
-    postprocessEntires() {
+    postprocessEntires(): void {
+        /* arkgen specialization */
         if (this.mode === 'arkoala') {
             /* arkgen specialization */
             const componentInterface = this.entries.find(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.ComponentInterface))
@@ -999,29 +1081,33 @@ class IDLVisitor extends arkts.AbstractVisitor {
             }
         }
 
-        /* remove synthetic duplicates */
-        function removeDuplicatedByScope(entries:idl.IDLEntry[]): idl.IDLEntry[] {
-            const namesCount = new Map<string, number>()
-            const result:idl.IDLEntry[] = []
-            entries.forEach(entry => {
-                namesCount.set(entry.name, (namesCount.get(entry.name) ?? 0) + 1)
-            })
-            entries.forEach(entry => {
-                if (idl.isNamespace(entry)) {
-                    entry.members = removeDuplicatedByScope(entry.members)
-                }
-                const count = namesCount.get(entry.name)!
-                if (count > 1) {
-                    if (idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.Synthetic)) {
-                        result.push(entry)
-                    }
-                } else {
-                    result.push(entry)
-                }
-            })
-            return result
-        }
-        this.entries = removeDuplicatedByScope(this.entries)
+        // /* remove synthetic duplicates */
+        // function removeDuplicatedByScope(entries:idl.IDLEntry[]): idl.IDLEntry[] {
+        //     const namesCount = new Map<string, number>()
+        //     const result:idl.IDLEntry[] = []
+        //     entries.forEach(entry => {
+        //         namesCount.set(entry.name, (namesCount.get(entry.name) ?? 0) + 1)
+        //     })
+        //     entries.forEach(entry => {
+        //         if (idl.isNamespace(entry)) {
+        //             entry.members = removeDuplicatedByScope(entry.members)
+        //         }
+        //         const count = namesCount.get(entry.name)!
+        //         if (count > 1) {
+        //             if (idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.Synthetic)) {
+        //                 result.push(entry)
+        //             }
+        //         } else {
+        //             result.push(entry)
+        //         }
+        //     })
+        //     return result
+        // }
+        // this.entries = removeDuplicatedByScope(this.entries)
+        const syntheticImports: idl.IDLEntry[] = this.syntheticEntries.map(it =>
+            idl.createImport([...this.config.SyntheticPackage, it.syntheticEntry.name], it.syntheticEntry.name)
+        )
+        this.entries = syntheticImports.concat(this.entries)
     }
 
     toIDLFile(): IDLFile {
@@ -1033,10 +1119,10 @@ class IDLVisitor extends arkts.AbstractVisitor {
     toIDLSuperFile(): IDLSuperFile {
         return {
             originalFileName: this.originalFileName,
-            generatedFileName: this.fileName,
             writeFilePath: this.fileName,
             skipped: false,
             file: this.toIDLFile(),
+            syntheticEntries: this.syntheticEntries,
             exports: this.fileReExports,
         }
     }

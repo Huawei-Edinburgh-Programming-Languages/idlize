@@ -1,4 +1,5 @@
 {
+    "SyntheticPackage": ["arkui", "component", "synthetic"],
     "DeletedDeclarations": [
         "double",
         "int",
