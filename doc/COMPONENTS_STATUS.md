@@ -563,9 +563,9 @@
 |`value`| Function | Maksimov Nikita | done | pass | |
 |`startAngle`| Function | Maksimov Nikita | done | pass | |
 |`endAngle`| Function | Maksimov Nikita | done | pass | |
-|`colors`| Function | Maksimov Nikita | done | failed | |
+|`colors`| Function | Maksimov Nikita | done | blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`strokeWidth`| Function | Maksimov Nikita | done | pass | |
-|`description`| Function | Lobah Mikhail | done | failed | UT done Lobah Mikhail  |
+|`description`| Function | Lobah Mikhail | done | blocked | UT done Lobah Mikhail, demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`trackShadow`| Function | Maksimov Nikita | done | pass |  |
 |`indicator`| Function | Maksimov Nikita | done | pass |  |
 |`privacySensitive`| Function | Maksimov Nikita | done | pass ||
@@ -1287,9 +1287,9 @@
 |`setStackOptions` | Function | Korobeinikov Evgeny | done | pass |  |
 |`alignContent` | Function | Korobeinikov Evgeny | done | passed  |  |
 |`pointLight` | Function | Evstigneev Roman, Andrey Khudenkikh | done |  |  UT by Evstigneev Roman |
-|*Stepper*| *Component* | Morozov Sergey | done | failed |  |
-|`construct`| Function |Morozov Sergey | done | failed |  |
-|`setStepperOptions`| Function | Morozov Sergey | done | failed |  |
+|*Stepper*| *Component* | Morozov Sergey | done | blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`construct`| Function |Morozov Sergey | done | |  |
+|`setStepperOptions`| Function | Morozov Sergey | done |  |  |
 |`onFinish`| Function | Morozov Sergey | done |  |  |
 |`onSkip`| Function | Morozov Sergey | done |  |  |
 |`onChange`| Function | Morozov Sergey | done |  |  |
