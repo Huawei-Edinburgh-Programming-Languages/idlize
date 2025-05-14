@@ -483,13 +483,13 @@
 |`enableDec`| Function | Erokhin Ilya | done | pass |  |
 |`enableInc`| Function | Erokhin Ilya | done | pass |  |
 |*DataPanel*| *Component* | Morozov Sergey | blocked IDL |  |  |
-|`construct`| Function |Morozov Sergey | done |  |  |
-|`setDataPanelOptions`| Function | Morozov Sergey | done |  |  |
-|`closeEffect`| Function | Morozov Sergey | done |  |  |
-|`valueColors`| Function |Morozov Sergey | done | | |
-|`trackBackgroundColor`| Function |Morozov Sergey | done |  |  |
-|`strokeWidth`| Function | Morozov Sergey | done |  |  |
-|`trackShadow`| Function |Morozov Sergey | testskipped | | https://gitee.com/openharmony/arkui_ace_engine/issues/IBVDFV |
+|`construct`| Function |Morozov Sergey | done | pass |  |
+|`setDataPanelOptions`| Function | Morozov Sergey | done | pass |  |
+|`closeEffect`| Function | Morozov Sergey | done | pass |  |
+|`valueColors`| Function |Morozov Sergey | done | failed | |
+|`trackBackgroundColor`| Function |Morozov Sergey | done | pass |  |
+|`strokeWidth`| Function | Morozov Sergey | done | pass |  |
+|`trackShadow`| Function |Morozov Sergey | testskipped | blocked | https://gitee.com/openharmony/arkui_ace_engine/issues/IBVDFV , demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`contentModifier`| Function | Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |*DatePicker*| *Component* | Vadim Voronov | done |  |  |
 |`construct`| Function |Vadim Voronov | done | passed |  |
