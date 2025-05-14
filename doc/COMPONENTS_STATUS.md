@@ -358,8 +358,8 @@
 |`advancedBlendMode`| Function | Erokhin Ilya |in progress |  |  |
 |`bindTips`| Function | Tuzhilkin Ivan | in progress | | only for generation > 125|
 |`bindPopup`| Function | Erokhin Ilya | done | test blocked | fixes of issues were provided by our team, https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL2K, https://gitee.com/openharmony/arkui_ace_engine/issues/IBY31B, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`bindMenu0`| Function | Erokhin Ilya | blocked IDL |  | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
-|`bindMenu1`| Function | Erokhin Ilya | blocked IDL |  | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`bindMenu0`| Function | Erokhin Ilya | blocked IDL | blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`bindMenu1`| Function | Erokhin Ilya | blocked IDL | blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`bindContextMenu0`| Function | Erokhin Ilya, Evstigneev Roman | done |  | |
 |`bindContextMenu1`| Function | Erokhin Ilya, Evstigneev Roman | done |  | |
 |`bindContentCover0`| Function | Erokhin Ilya | done | test blocked(blocked IDL) | UT by Vadim Voronov |
@@ -718,7 +718,7 @@
 |`scrollBar`|Function|Morozov Sergey| done |  |  |
 |`contentStartOffset`|Function|Morozov Sergey| done |  |  |
 |`contentEndOffset`|Function|Morozov Sergey| done |  |  |
-|`divider`|Function|Morozov Sergey| done |  |  |
+|`divider`|Function|Morozov Sergey| done | blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`editMode`|Function|Morozov Sergey| done |  |deprecated  |
 |`multiSelectable`|Function|Morozov Sergey| done |  |  |
 |`cachedCount0`|Function|Morozov Sergey| done |  |  |
@@ -749,8 +749,8 @@
 |`onItemDrop`|Function|Morozov Sergey| done |  |  |
 |`onScrollFrameBegin`|Function| Skroba Gleb | done |  |   |
 |`lanes`|Function|Morozov Sergey| done |  |  |
-|`edgeEffect`|Function|Morozov Sergey| done |  |  |
-|*ListItem*|*Component*|Morozov Sergey| done |  |  |
+|`edgeEffect`|Function|Morozov Sergey| done | blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|*ListItem*|*Component*|Morozov Sergey| done | blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`construct`| Function |Morozov Sergey| done |  |  |
 |`setListItemOptions0`| Function | Morozov Sergey| done |  | deprecated for SetListItemOptions1Impl |
 |`setListItemOptions`|Function|Morozov Sergey| done |  | deprecated for SetListItemOptions1Impl |
@@ -761,7 +761,7 @@
 |`swipeAction`|Function|Samarin Sergey| done |  |  |
 |`onSelect`|Function|Morozov Sergey| done |  |  |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
-|*ListItemGroup*|*Component*|Morozov Sergey| done |  |  |
+|*ListItemGroup*|*Component*|Morozov Sergey| done | blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`construct`| Function |Morozov Sergey| done |  |  |
 |`setListItemGroupOptions`|Function|Dmitry A Smirnov | done |  |   |
 |`divider`|Function|Morozov Sergey| done |  |  |
