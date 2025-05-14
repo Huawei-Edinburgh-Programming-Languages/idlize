@@ -213,8 +213,8 @@
 |`useEffect0`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`useEffect1`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`useEffect2`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`renderGroup0`| Function |Lobah Mikhail | done  | |
-|`renderGroup1`| Function | Lobah Mikhail | done  | |
+|`renderGroup0`| Function |Lobah Mikhail | done  | pass | same as arkui, but looks like there is an issue in ace_engine |
+|`renderGroup1`| Function | Lobah Mikhail | done  | test blocked | absent in ets1.2 now |
 |`freeze0`| Function | Lobah Mikhail | done |  | |
 |`freeze1`| Function | Dmitry A Smirnov | done |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP not in json|
 |`translate0`| Function | Erokhin Ilya | done |  |  |
