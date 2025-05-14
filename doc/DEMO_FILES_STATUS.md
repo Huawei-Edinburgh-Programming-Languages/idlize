@@ -83,7 +83,7 @@
 | HyperLink.test.ets |  Porodin Alexander  |
 | Image.test.ets | Dudkin Sergey     |
 | Image2.test.ets | Dudkin Sergey     |
-| Image3ColorFilter.test.ets |                   |
+| Image3ColorFilter.test.ets | Pavelyev Ivan |
 | Image4.test.ets |                   |
 | ImageAnimator.test.ets |                   |
 | ImageSpan.test.ets |                   |
@@ -114,7 +114,7 @@
 | QRCode.test.ets | Evstigneev Roman |
 | Radio.test.ets | Porodin Alexander |
 | Rating.test.ets | Daryina Olga      |
-| Refresh.test.ets | Pavelev Ivan      |
+| Refresh.test.ets | Pavelyev Ivan      |
 | RelativeContainer.test.ets | Dmitry A Smirnov |
 | RenderGroup.test.ets | Porodin Alexander |
 | RequestFocusFocusable.test.ets |                   |
