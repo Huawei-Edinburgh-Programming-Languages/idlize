@@ -210,9 +210,9 @@
 |`hueRotate1`| Function | Lobah Mikhail | done | | |
 |`useShadowBatching0`| Function | Lobah Mikhail | done | pass | |
 |`useShadowBatching1`| Function | Lobah Mikhail | done | pass | |
-|`useEffect0`| Function |Lobah Mikhail | done |  | |
-|`useEffect1`| Function |Lobah Mikhail | done |  | |
-|`useEffect2`| Function |Lobah Mikhail | done |  | |
+|`useEffect0`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`useEffect1`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`useEffect2`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`renderGroup0`| Function |Lobah Mikhail | done  | |
 |`renderGroup1`| Function | Lobah Mikhail | done  | |
 |`freeze0`| Function | Lobah Mikhail | done |  | |
