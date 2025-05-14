@@ -83,8 +83,8 @@
 | HyperLink.test.ets |  Porodin Alexander  |
 | Image.test.ets | Dudkin Sergey     |
 | Image2.test.ets | Dudkin Sergey     |
-| Image3ColorFilter.test.ets | Pavelyev Ivan |
-| Image4.test.ets |                   |
+| Image3ColorFilter.test.ets |                   |
+| Image4.test.ets | Pavelyev Ivan |
 | ImageAnimator.test.ets |                   |
 | ImageSpan.test.ets |                   |
 | IndicatorComponent.test.ets | Skroba Gleb |
