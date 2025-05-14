@@ -1287,9 +1287,9 @@
 |`setStackOptions` | Function | Korobeinikov Evgeny | done | pass |  |
 |`alignContent` | Function | Korobeinikov Evgeny | done | passed  |  |
 |`pointLight` | Function | Evstigneev Roman, Andrey Khudenkikh | done |  |  UT by Evstigneev Roman |
-|*Stepper*| *Component* | Morozov Sergey | done |  |  |
-|`construct`| Function |Morozov Sergey | done |  |  |
-|`setStepperOptions`| Function | Morozov Sergey | done |  |  |
+|*Stepper*| *Component* | Morozov Sergey | done | failed |  |
+|`construct`| Function |Morozov Sergey | done | failed |  |
+|`setStepperOptions`| Function | Morozov Sergey | done | failed |  |
 |`onFinish`| Function | Morozov Sergey | done |  |  |
 |`onSkip`| Function | Morozov Sergey | done |  |  |
 |`onChange`| Function | Morozov Sergey | done |  |  |
