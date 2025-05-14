@@ -103,7 +103,7 @@
 | Navigation.test.ets |                   |
 | Navigator.test.ets |                   |
 | NestedScroll.test.ets |                   |
-| OnAreaChange.test.ets |                   |
+| OnAreaChange.test.ets | Sergey Morozov |
 | Panel.test.ets | Daryina Olga      |
 | PasteButton.test.ets | Samarin Sergey    |
 | Path.test.ets | Daryina Olga      |
