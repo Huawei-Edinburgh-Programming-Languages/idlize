@@ -792,7 +792,7 @@
 |*MediaCachedImage*| *Component* | Skroba Gleb, Evstigneev Roman | done |  | |
 |`construct`| Function | Skroba Gleb, Evstigneev Roman | done |  |  |
 |`setMediaCachedImageOptions`| Function | Skroba Gleb, Evstigneev Roman | done |  |   |
-|*Menu*|*Component*|Morozov Sergey| done |  |  |
+|*Menu*|*Component*|Morozov Sergey| done | blocked | demo blocked by MenuItem |
 |`construct`| Function |Morozov Sergey| done |  |  |
 |`setMenuOptions`| Function |Morozov Sergey| done |  |  |
 |`fontSize`|Function|Morozov Sergey| done |  |deprecated  |
@@ -802,7 +802,7 @@
 |`menuItemDivider`|Function|Morozov Sergey| done |  | |
 |`menuItemGroupDivider`|Function|Morozov Sergey| done |  | |
 |`subMenuExpandingMode`|Function|Morozov Sergey| done |  |  |
-|*MenuItem*| *Component* |Morozov Sergey| blocked IDL |  |  |
+|*MenuItem*| *Component* |Morozov Sergey| blocked IDL | blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`construct`| Function |Kovalev Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
 |`setMenuItemOptions`| Function |Kovalev Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
 |`selected`| Function |Morozov Sergey| done |  |  |
@@ -813,7 +813,7 @@
 |`labelFont`| Function |Morozov Sergey| done |  |  |
 |`labelFontColor`| Function |Morozov Sergey| done |  |  |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
-|*MenuItemGroup*| *Component* |Morozov Sergey | done |  |  |
+|*MenuItemGroup*| *Component* |Morozov Sergey | done | blocked | demo blocked by MenuItem |
 |`construct`| Function |Morozov Sergey | done |  |  |
 |`setMenuItemGroupOptions`| Function | Dmitry A Smirnov | done |  |   |
 |*NavDestination*| *Component* |Kovalev Sergey | managed side |  |  |
