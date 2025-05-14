@@ -81,7 +81,7 @@
 |`fontStyle`| Function |Evstigneev Roman | done | pass |  |
 |`fontFamily`| Function |Evstigneev Roman | done | pass |  |
 |`contentModifier`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG (+) & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
-|`labelStyle`| Function |Evstigneev Roman | done | test blocked(blocked IDL) |  |
+|`labelStyle`| Function |Evstigneev Roman | done | test blocked |  |
 |`minFontScale`| Function | Kovalev Sergey | done |  | |
 |`maxFontScale`| Function | Kovalev Sergey | done |  | |
 |*Calendar*| *Component* | Maksimov Nikita | done |  |  |
@@ -362,8 +362,8 @@
 |`bindMenu1`| Function | Erokhin Ilya | blocked IDL | test blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`bindContextMenu0`| Function | Erokhin Ilya, Evstigneev Roman | done |  | |
 |`bindContextMenu1`| Function | Erokhin Ilya, Evstigneev Roman | done |  | |
-|`bindContentCover0`| Function | Erokhin Ilya | done | test blocked(blocked IDL) | UT by Vadim Voronov |
-|`bindContentCover1`| Function | Erokhin Ilya | done | test blocked(blocked IDL) | UT by Vadim Voronov |
+|`bindContentCover0`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov |
+|`bindContentCover1`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov |
 |`bindSheet`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done | passed | |
 |`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
@@ -582,8 +582,8 @@
 |`scrollBar`|Function| Erokhin Ilya | done | pass |  |
 |`onScrollBarUpdate`|Function| Skroba Gleb | done |  | |
 |`onScrollIndex`|Function| Erokhin Ilya | done |  |  |
-|`cachedCount0`| Function |Erokhin Ilya | done | test blocked(blocked IDL) |  |
-|`cachedCount1`|Function| Erokhin Ilya | done | test blocked(blocked IDL) |  |
+|`cachedCount0`| Function |Erokhin Ilya | done | test blocked |  |
+|`cachedCount1`|Function| Erokhin Ilya | done | test blocked |  |
 |`editMode`|Function| Erokhin Ilya | done | pass |  |
 |`multiSelectable`|Function| Erokhin Ilya | done | pass |  |
 |`maxCount`|Function| Erokhin Ilya | done | pass |  |
@@ -607,16 +607,16 @@
 |`onScrollStop`|Function| Erokhin Ilya | done |  |  |
 |`onScrollFrameBegin`|Function| Skroba Gleb | done |  |   |
 |`edgeEffect`|Function| Erokhin Ilya | done | pass |  |
-|*GridItem*|*Component*| Erokhin Ilya | done | test blocked(blocked IDL) |  |
-|`construct`| Function |Erokhin Ilya | done | test blocked(blocked IDL) |  |
-|`setGridItemOptions`|Function| Erokhin Ilya | done | test blocked(blocked IDL) |  |
-|`rowStart`|Function| Erokhin Ilya | done | test blocked(blocked IDL)  |  |
-|`rowEnd`|Function| Erokhin Ilya | done | test blocked(blocked IDL)  |  |
-|`columnStart`|Function| Erokhin Ilya | done | test blocked(blocked IDL)  |  |
-|`columnEnd`|Function| Erokhin Ilya | done | test blocked(blocked IDL) |  |
+|*GridItem*|*Component*| Erokhin Ilya | done | test blocked |  |
+|`construct`| Function |Erokhin Ilya | done | test blocked |  |
+|`setGridItemOptions`|Function| Erokhin Ilya | done | test blocked |  |
+|`rowStart`|Function| Erokhin Ilya | done | test blocked  |  |
+|`rowEnd`|Function| Erokhin Ilya | done | test blocked  |  |
+|`columnStart`|Function| Erokhin Ilya | done | test blocked  |  |
+|`columnEnd`|Function| Erokhin Ilya | done | test blocked |  |
 |`forceRebuild`|Function| Erokhin Ilya | done | test blocked | (deprecated since 9)  |
-|`selectable`|Function| Erokhin Ilya | done | test blocked(blocked IDL)  |  |
-|`selected`|Function| Erokhin Ilya | done | test blocked(blocked IDL)  |  |
+|`selectable`|Function| Erokhin Ilya | done | test blocked  |  |
+|`selected`|Function| Erokhin Ilya | done | test blocked  |  |
 |`onSelect`|Function| Erokhin Ilya | done |  |  |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*GridCol*| *Component* | Lobah Mikhail| done |  |  |
