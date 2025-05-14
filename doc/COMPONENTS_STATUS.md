@@ -187,11 +187,11 @@
 |`groupDefaultFocus`| Function | Dmitry A Smirnov| done |  | |
 |`focusOnTouch`| Function | Dmitry A Smirnov| done |  | |
 |`focusBox`| Function | Dudkin Sergey | done |  | |
-|`animation`| Function | managed side | managed side | |  |
+|`animation`| Function | managed side | managed side | failed |  |
 |`transition0`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`transition1`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
-|`motionBlur0`| Function |Dmitry A Smirnov| done |  | |
-|`motionBlur1`| Function | Dmitry A Smirnov| done |  | |
+|`motionBlur0`| Function |Dmitry A Smirnov| done | test blocked | test blocked by common.animation(...) |
+|`motionBlur1`| Function | Dmitry A Smirnov| done | test blocked | test blocked by common.animation(...) |
 |`brightness0`| Function | Lobah Mikhail | done |  |  |
 |`brightness1`| Function |Lobah Mikhail | done |  |  |
 |`contrast0`| Function |Lobah Mikhail | done | pass | |
