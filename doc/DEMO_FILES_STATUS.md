@@ -79,8 +79,8 @@
 | GridContainerCommonAttributes.test.ets | Evstigneev Roman  |
 | GridItem.test.ets | Evstigneev Roman  |
 | GridRow.test.ets | Evstigneev Roman  |
-| HoverEvent.test.ets |                   |
-| HyperLink.test.ets |                   |
+| HoverEvent.test.ets |    Porodin Alexander    |
+| HyperLink.test.ets |  Porodin Alexander  |
 | Image.test.ets | Dudkin Sergey     |
 | Image2.test.ets | Dudkin Sergey     |
 | Image3ColorFilter.test.ets |                   |
@@ -134,8 +134,8 @@
 | Stack.test.ets | Pisanov Nikolay   |
 | Stepper.test.ets | Sergey Morozov |
 | Swiper.test.ets | Skroba Gleb      |
-| SymbolGlyph.test.ets |                   |
-| SymbolSpan.test.ets |                   |
+| SymbolGlyph.test.ets |    Daryina Olga    |
+| SymbolSpan.test.ets |     Daryina Olga   |
 | Tabs.test.ets | Skroba Gleb       |
 | Text.test.ets | Erokhin Ilya      |
 | TextArea.test.ets | Evstigneev Roman |
@@ -143,8 +143,8 @@
 | TextInput.test.ets | Mikhail Politov |
 | TextPicker.test.ets | Mikhail Politov |
 | TextTimer.test.ets | Evstigneev Roman |
-| TimePicker.test.ets |                   |
-| Toggle.test.ets |                   |
+| TimePicker.test.ets |  Daryina Olga   |
+| Toggle.test.ets |  Daryina Olga    |
 | TransformRotateScaleTranslate.test.ets | Dmitry A Smirnov |
 | TransitionEffect.test.ets | Dmitry A Smirnov |
 | UseShadowBatching.test.ets | Dmitry A Smirnov|
