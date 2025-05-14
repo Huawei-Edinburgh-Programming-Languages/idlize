@@ -99,9 +99,9 @@
 | MenuItem.test.ets | Sergey Morozov    |
 | MenuItemGroup.test.ets | Sergey Morozov    |
 | MotionBlur.test.ets | Evstigneev Roman |
-| NavDestination.test.ets |                   |
-| Navigation.test.ets |                   |
-| Navigator.test.ets |                   |
+| NavDestination.test.ets |  Dmitry A Smirnov |
+| Navigation.test.ets | Dmitry A Smirnov |
+| Navigator.test.ets | Dmitry A Smirnov |
 | NestedScroll.test.ets |                   |
 | OnAreaChange.test.ets | Sergey Morozov |
 | Panel.test.ets | Daryina Olga      |

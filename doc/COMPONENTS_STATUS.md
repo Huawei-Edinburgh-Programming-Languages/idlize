@@ -816,56 +816,56 @@
 |*MenuItemGroup*| *Component* |Morozov Sergey | done | blocked | demo blocked by MenuItem |
 |`construct`| Function |Morozov Sergey | done |  |  |
 |`setMenuItemGroupOptions`| Function | Dmitry A Smirnov | done |  |   |
-|*NavDestination*| *Component* |Kovalev Sergey | managed side |  |  |
-|`construct`| Function |Kovalev Sergey | done |  |   |
-|`setNavDestinationOptions`| Function |Kovalev Sergey | done |  |   |
-|`hideTitleBar0`| Function |Kovalev Sergey | done |  |   |
-|`hideTitleBar`| Function |Kovalev Sergey | done |  |   |
-|`hideBackButton`| Function | managed side | managed side | | |
-|`onShown`| Function |Kovalev Sergey | done |  |  |
-|`onHidden`| Function |Kovalev Sergey | done |  |   |
-|`onBackPressed`| Function |Dudkin Sergey | done |  |  |
-|`onResult`| Function | managed side | managed side | | |
-|`mode`| Function |Kovalev Sergey | done |  |   |
-|`backButtonIcon0`| Function |Kovalev Sergey | managed side |  | |
-|`backButtonIcon1`| Function |Kovalev Sergey | managed side |  |  |
-|`menus0`| Function |Kovalev Sergey | managed side |  |  |
-|`menus1`| Function |Kovalev Sergey | managed side |  |  |
-|`onReady`| Function |Kovalev Sergey | managed side |  |  |
-|`onWillAppear`| Function |Kovalev Sergey | done |  |  |
-|`onWillDisappear`| Function |Kovalev Sergey | done |  |  |
-|`onWillShow`| Function |Kovalev Sergey | done |  |   |
-|`onWillHide`| Function | Kovalev Sergey | done |  |   |
-|`systemBarStyle`| Function |Kovalev Sergey | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
-|`recoverable`| Function |Kovalev Sergey | done |  |   |
-|`systemTransition`| Function |Kovalev Sergey | managed side |  |  |
-|`bindToScrollable`| Function | managed side|managed side | | |
-|`bindToNestedScrollable`| Function | managed side| managed side| | |
-|`onActive`| Function |managed side |managed side | | |
-|`onInactive`| Function | managed side|managed side | | |
-|`customTransition`| Function | managed side|managed side | | |
-|`onNewParam`| Function |managed side |managed side | | |
-|`preferredOrientation`| Function |managed side |managed side | | |
-|`enableNavigationIndicator`| Function |managed side |managed side | | |
-|`title`| Function |Kovalev Sergey | managed side |  |  |
-|`toolbarConfiguration`| Function |Kovalev Sergey | managed side |  |  |
-|`hideToolBar`| Function | Kovalev Sergey | managed side |  |  |
-|`ignoreLayoutSafeArea`| Function |Kovalev Sergey | done |  |   |
-|`enableStatusBar`| Function |managed side |managed side | | |
+|*NavDestination*| *Component* |Kovalev Sergey | managed side | test blocked | OHOSUI-2171 |
+|`construct`| Function |Kovalev Sergey | done | test blocked | OHOSUI-2171 |
+|`setNavDestinationOptions`| Function |Kovalev Sergey | done | test blocked |  |
+|`hideTitleBar0`| Function |Kovalev Sergey | done | test blocked |   |
+|`hideTitleBar`| Function |Kovalev Sergey | done | test blocked |   |
+|`hideBackButton`| Function | managed side | managed side | test blocked| |
+|`onShown`| Function |Kovalev Sergey | done | test blocked |  |
+|`onHidden`| Function |Kovalev Sergey | done | test blocked |   |
+|`onBackPressed`| Function |Dudkin Sergey | done | test blocked |  |
+|`onResult`| Function | managed side | managed side | test blocked| |
+|`mode`| Function |Kovalev Sergey | done | test blocked |   |
+|`backButtonIcon0`| Function |Kovalev Sergey | managed side | test blocked | |
+|`backButtonIcon1`| Function |Kovalev Sergey | managed side | test blocked |  |
+|`menus0`| Function |Kovalev Sergey | managed side | test blocked |  |
+|`menus1`| Function |Kovalev Sergey | managed side | test blocked |  |
+|`onReady`| Function |Kovalev Sergey | managed side | test blocked |  |
+|`onWillAppear`| Function |Kovalev Sergey | done |  | test blocked |
+|`onWillDisappear`| Function |Kovalev Sergey | done | test blocked |  |
+|`onWillShow`| Function |Kovalev Sergey | done | test blocked |   |
+|`onWillHide`| Function | Kovalev Sergey | done | test blocked |   |
+|`systemBarStyle`| Function |Kovalev Sergey | blocked IDL | test blocked |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`recoverable`| Function |Kovalev Sergey | done | test blocked |   |
+|`systemTransition`| Function |Kovalev Sergey | managed side | test blocked |  |
+|`bindToScrollable`| Function | managed side|managed side | test blocked| |
+|`bindToNestedScrollable`| Function | managed side| managed side| test blocked| |
+|`onActive`| Function |managed side |managed side | test blocked| |
+|`onInactive`| Function | managed side|managed side | test blocked| |
+|`customTransition`| Function | managed side|managed side | test blocked| |
+|`onNewParam`| Function |managed side |managed side | test blocked| |
+|`preferredOrientation`| Function |managed side |managed side | test blocked| |
+|`enableNavigationIndicator`| Function |managed side |managed side |test blocked | |
+|`title`| Function |Kovalev Sergey | managed side | test blocked |  |
+|`toolbarConfiguration`| Function |Kovalev Sergey | managed side | test blocked |  |
+|`hideToolBar`| Function | Kovalev Sergey | managed side | test blocked |  |
+|`ignoreLayoutSafeArea`| Function |Kovalev Sergey | done | test blocked |   |
+|`enableStatusBar`| Function |managed side |managed side |test blocked | |
 |*NavRouter*| *Component* |Evstigneev Roman | managed side |  | |
 |`construct`| Function |  managed side | managed side | |
 |`setNavRouterOptions0`| Function |Evstigneev Roman| managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF (+) |
 |`setNavRouterOptions1`| Function |Evstigneev Roman| managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF (+) |
 |`onStateChange`| Function |Evstigneev Roman | done |  |deprecated  |
 |`mode`| Function |Evstigneev Roman | done |  |deprecated  |
-|*Navigator*| *Component* | Skroba Gleb| managed side |  |  |
-|`construct`| Function |Skroba Gleb| managed side |  |  |
-|`setNavigatorOptions0`| Function |Skroba Gleb | done |  |   |
-|`setNavigatorOptions1`| Function | Skroba Gleb | done |  |   |
-|`active`| Function | Skroba Gleb | done |  |deprecated , managed side |
-|`type`| Function | Skroba Gleb | done |  |deprecated  |
-|`target`| Function | Skroba Gleb | done |  |deprecated |
-|`params`| Function | Skroba Gleb | managed side |  | deprecated |
+|*Navigator*| *Component* | Skroba Gleb| managed side | test blocked | OHOSUI-2171 |
+|`construct`| Function |Skroba Gleb| managed side | test blocked |  |
+|`setNavigatorOptions0`| Function |Skroba Gleb | done | test blocked |   |
+|`setNavigatorOptions1`| Function | Skroba Gleb | done | test blocked |   |
+|`active`| Function | Skroba Gleb | done | test blocked |deprecated , managed side |
+|`type`| Function | Skroba Gleb | done | test blocked |deprecated  |
+|`target`| Function | Skroba Gleb | done | test blocked |deprecated |
+|`params`| Function | Skroba Gleb | managed side | test blocked | deprecated |
 |*NodeContainer*| *Component* | Skroba Gleb | blocked IDL |  | |
 |`construct`| Function |Skroba Gleb | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |`setNodeContainerOptions`| Function | Skroba Gleb | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
@@ -2228,7 +2228,7 @@
 |`drawContent`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`drawFront`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`invalidate`| Function | Erokhin Ilya | done |  | |
-|*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | failed |OHOSUI-2171 |
+|*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | test blocked |OHOSUI-2171 |
 |`ctor`| Function |Andrey Khudenkikh | done |  | |
 |`translate`| Function | Andrey Khudenkikh | done |  | |
 |`rotate`| Function | Andrey Khudenkikh | done | failed| OHOSUI-2171|
