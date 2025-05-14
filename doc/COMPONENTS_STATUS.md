@@ -867,8 +867,8 @@
 |`target`| Function | Skroba Gleb | done |  |deprecated |
 |`params`| Function | Skroba Gleb | managed side |  | deprecated |
 |*NodeContainer*| *Component* | Skroba Gleb | blocked IDL |  | |
-|`construct`| Function |Skroba Gleb | managed side |  |  |
-|`setNodeContainerOptions`| Function | Skroba Gleb | managed side |  |  |
+|`construct`| Function |Skroba Gleb | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setNodeContainerOptions`| Function | Skroba Gleb | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |*Panel*| *Component* | Pavelyev Ivan| done |  | deprecated  |
 |`construct`| Function |Pavelyev Ivan| done |  |  |
 |`setPanelOptions`| Function | Pavelyev Ivan| done |  |  |
@@ -1073,8 +1073,8 @@
 |`initialOffset`| Function | Berezin Kirill | done |  |  |
 |`edgeEffect`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*ScrollBar*| *Component* | Maksimov Nikita | done |  | |
-|`construct`| Function | Maksimov Nikita | done |  | |
-|`setScrollBarOptions`| Function | Maksimov Nikita | done |  | |
+|`construct`| Function | Maksimov Nikita | done | pass | |
+|`setScrollBarOptions`| Function | Maksimov Nikita | done | pass | |
 |`enableNestedScroll`| Function | Maksimov Nikita | done |  | |
 |*Search*|*Component*| Evstigneev Roman | blocked IDL |  |  |
 |`construct`| Function |Evstigneev Roman | done | pass |   |
@@ -2483,18 +2483,18 @@
 |`getChildDefaultSize`| Function | Morozov Sergey | done | |
 |`setChildDefaultSize`| Function | Morozov Sergey| done |  | |
 |*UICommonEvent*| *Class* | Andrey Khudenkikh | testskipped | | |
-|`ctor`| Function | Andrey Khudenkikh | done | | |
-|`setOnClick`| Function | Andrey Khudenkikh | done | | |
-|`setOnTouch`| Function | Andrey Khudenkikh | done | | |
-|`setOnAppear`| Function | Andrey Khudenkikh | testskipped | | |
-|`setOnDisappear`| Function | Andrey Khudenkikh | done | | |
-|`setOnKeyEvent`| Function | Andrey Khudenkikh | testskipped | | |
-|`setOnFocus`| Function | Andrey Khudenkikh | done | | |
-|`setOnBlur`| Function | Andrey Khudenkikh | done | | |
-|`setOnHover`| Function | Andrey Khudenkikh | done | | |
-|`setOnMouse`| Function |  Andrey Khudenkikh| done | | |
-|`setOnSizeChange`| Function | Andrey Khudenkikh | done | | |
-|`setOnVisibleAreaApproximateChange`| Function | Andrey Khudenkikh | testskipped | | |
+|`ctor`| Function | Andrey Khudenkikh | done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setOnClick`| Function | Andrey Khudenkikh | done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setOnTouch`| Function | Andrey Khudenkikh | done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setOnAppear`| Function | Andrey Khudenkikh | testskipped | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setOnDisappear`| Function | Andrey Khudenkikh | done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setOnKeyEvent`| Function | Andrey Khudenkikh | testskipped | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setOnFocus`| Function | Andrey Khudenkikh | done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setOnBlur`| Function | Andrey Khudenkikh | done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setOnHover`| Function | Andrey Khudenkikh | done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setOnMouse`| Function |  Andrey Khudenkikh| done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setOnSizeChange`| Function | Andrey Khudenkikh | done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setOnVisibleAreaApproximateChange`| Function | Andrey Khudenkikh | testskipped | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |*UIScrollableCommonEvent*| *Class* | Lobah Mikhail| in progress| | |
 |`ctor`| Function | Lobah Mikhail| in progress| | |
 |`setOnReachStart`| Function | Lobah Mikhail| in progress| | |
