@@ -150,7 +150,7 @@
 | UseShadowBatching.test.ets | Dmitry A Smirnov|
 | Video.test.ets |                   |
 | Visibility.test.ets | Evstigneev Roman |
-| WaterFlow.test.ets |                   |
+| WaterFlow.test.ets | Sergey Morozov |
 | WaterFlowDataSource.ets |                   |
 | Web.test.ets |                   |
 | XComponent.test.ets |                   |
