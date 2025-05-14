@@ -151,7 +151,7 @@
 |`borderRadius`| Function | Roman Sedaikin | done |  | |
 |`borderImage`| Function | Roman Sedaikin | done | failed | |
 |`outline0`| Function |Skroba Gleb | done | passed | |
-|`outline1`| Function | Skroba Gleb | done |  | |
+|`outline1`| Function | Skroba Gleb | done | passed | |
 |`outlineStyle0`| Function | Skroba Gleb | done | passed | |
 |`outlineStyle1`| Function | Skroba Gleb | done |  | |
 |`outlineWidth0`| Function |Skroba Gleb | done | passed | |
@@ -289,11 +289,11 @@
 |`stateStyles`| Function | Dudkin Sergey | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`restoreId`| Function | Lobah Mikhail | done |  | |
 |`sphericalEffect0`| Function | Lobah Mikhail | done | passed | |
-|`sphericalEffect1`| Function | Dmitry A Smirnov | done |  | |
+|`sphericalEffect1`| Function | Dmitry A Smirnov | done | passed | |
 |`lightUpEffect0`| Function | Lobah Mikhail | done | passed | |
 |`lightUpEffect1`| Function | Dmitry A Smirnov | done |  | |
 |`pixelStretchEffect0`| Function | Lobah Mikhail | done | passed | |
-|`pixelStretchEffect1`| Function | Dmitry A Smirnov | done | | |
+|`pixelStretchEffect1`| Function | Dmitry A Smirnov | done | passed | |
 |`accessibilityGroup0`| Function |Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`accessibilityGroup1`| Function | Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`accessibilityText0`| Function | Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -345,7 +345,7 @@
 |`blur0`| Function | Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`blur1`| Function |Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`linearGradientBlur0`| Function |Lobah Mikhail | done | passed | |
-|`linearGradientBlur1`| Function | Dmitry A Smirnov | done |  | |
+|`linearGradientBlur1`| Function | Dmitry A Smirnov | done | passed  | |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
 |`backdropBlur0`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backdropBlur1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
