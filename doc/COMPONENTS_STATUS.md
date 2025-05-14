@@ -121,9 +121,9 @@
 |`mouseResponseRegion`| Function | Skroba Gleb | done |  | |
 |`size`| Function | Roman Sedaikin | done |  | |
 |`constraintSize`| Function | Roman Sedaikin | done |  | |
-|`touchable`| Function | Roman Sedaikin | done |  | |
+|`touchable`| Function | Roman Sedaikin | done | passed | |
 |`hitTestBehavior`| Function | Roman Sedaikin | done | passed | |
-|`onChildTouchTest`| Function | Skroba Gleb | done | failed | info: Cannot find method ListItem, onDidScroll, method edgeEffect undefined cannot be cast to EdgeEffectOptions, arkui.component.forEach.ETSGLOBAL at std.core.LinkerUnresolvedClassError.<ctor> |
+|`onChildTouchTest`| Function | Skroba Gleb | done | blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`layoutWeight`| Function | Roman Sedaikin | done | passed | |
 |`chainWeight`| Function | Politov Mikhail | testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBJW6H |
 |`padding`| Function | Skroba Gleb | done |  | |
@@ -229,8 +229,8 @@
 |`transform1`| Function | Dmitry A Smirnov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUR61 Type `object` is converted to `ArkCustomObject`|
 |`onAppear`| Function | Roman Sedaikin | done |  | |
 |`onDisAppear`| Function | Roman Sedaikin | done |  | |
-|`onAttach`| Function | Andrey Khudenkikh | done | failed | info: cannot find method onAttach, UIContext getPromptAction not implemented |
-|`onDetach`| Function | Andrey Khudenkikh | done | failed | info: cannot find method onDetach, UIContext getPromptAction not implemented |
+|`onAttach`| Function | Andrey Khudenkikh | done | blocked IDL | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onDetach`| Function | Andrey Khudenkikh | done | blocked IDL | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onAreaChange`| Function | Roman Sedaikin | done |  | |
 |`visibility`| Function | Roman Sedaikin | done | pass | |
 |`flexGrow`| Function | Dmitry A Smirnov| done |  | |
@@ -241,16 +241,16 @@
 |`zIndex`| Function | Roman Sedaikin | done |  | |
 |`direction`| Function | Roman Sedaikin | done | pass | |
 |`align`| Function | Roman Sedaikin | done | pass | |
-|`position`| Function | Roman Sedaikin | done | failed  | info: position with Edges failed  message: entry.src.main.ets.pages.Index.gensym%%_752 |
+|`position`| Function | Roman Sedaikin | done | blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`markAnchor`| Function | Dmitry A Smirnov| done | passed | |
-|`offset`| Function | Skroba Gleb | done | failed | info: offset with Edges failed  message: entry.src.main.ets.pages.Index.gensym%%_752|
+|`offset`| Function | Skroba Gleb | done | blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`enabled`| Function | Roman Sedaikin | done |  | |
 |`useSizeType`| Function | Dmitry A Smirnov| testskipped |  | deprecated, modifier is ready|
 |`alignRules0`| Function | Dmitry A Smirnov| done |  | |
 |`alignRules1`| Function | Dmitry A Smirnov| done |  | |
 |`aspectRatio`| Function | Roman Sedaikin | done |  | |
-|`clickEffect0`| Function | Lobah Mikhail | done | failed | info: cannot find method 'clickEffect |
-|`clickEffect1`| Function | Dmitry A Smirnov | done | failed | info: cannot find method 'clickEffect |
+|`clickEffect0`| Function | Lobah Mikhail | done | blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`clickEffect1`| Function | Dmitry A Smirnov | done | blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onDragStart`| Function | Skroba Gleb, Evstigneev Roman | done |  | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now. |
 |`onDragEnter`| Function | Lobah Mikhail, Evstigneev Roman | done |  |  |
 |`onDragMove`| Function | Lobah Mikhail, Evstigneev Roman | done |  |  |
@@ -269,7 +269,7 @@
 |`sweepGradient1`| Function | Dmitry A Smirnov | done | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values,no rotation attribute in json, does not reset to default values in invalid cases|
 |`radialGradient0`| Function |Erokhin Ilya | done | pass |  |
 |`radialGradient1`| Function | Dmitry A Smirnov | done | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values |
-|`motionPath`| Function | Lobah Mikhail | done | failed | info: UIContext animateTo is not implemented |
+|`motionPath`| Function | Lobah Mikhail | done | blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`shadow0`| Function |Roman Sedaikin | done | pass | |
 |`shadow1`| Function | Dmitry A Smirnov | done |  | |
 |`clip0`| Function | Dudkin Sergey | done | pass |  |
@@ -284,14 +284,14 @@
 |`maskShape1`| Function |Tuzhilkin Ivan| done | test blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`key`| Function | Lobah Mikhail | done |  | |
 |`id`| Function | Erokhin Ilya | done |  |  |
-|`geometryTransition0`| Function | Lobah Mikhail | testskipped | failed | info: cannot find method geometryTransition, test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG |
-|`geometryTransition1`| Function | Lobah Mikhail | testskipped | failed | info: cannot find method geometryTransition, test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
+|`geometryTransition0`| Function | Lobah Mikhail | testskipped | blocked IDL | test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG |
+|`geometryTransition1`| Function | Lobah Mikhail | testskipped | blocked IDL | test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
 |`stateStyles`| Function | Dudkin Sergey | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`restoreId`| Function | Lobah Mikhail | done |  | |
 |`sphericalEffect0`| Function | Lobah Mikhail | done | passed | |
 |`sphericalEffect1`| Function | Dmitry A Smirnov | done | passed | |
 |`lightUpEffect0`| Function | Lobah Mikhail | done | passed | |
-|`lightUpEffect1`| Function | Dmitry A Smirnov | done |  | |
+|`lightUpEffect1`| Function | Dmitry A Smirnov | done | blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`pixelStretchEffect0`| Function | Lobah Mikhail | done | passed | |
 |`pixelStretchEffect1`| Function | Dmitry A Smirnov | done | passed | |
 |`accessibilityGroup0`| Function |Lobah Mikhail | done | blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -328,7 +328,7 @@
 |`onSizeChange`| Function | Dmitry A Smirnov| done |  | |
 |`accessibilityFocusDrawLevel`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`customProperty`| Function | Dmitry A Smirnov| in progress | test blocked | need clarify bridge implementation, test blocked by FrameNode.getCustomProperty |
-|`expandSafeArea`| Function | Dmitry A Smirnov| done | not covered | info: cannot find method backgroundImage |
+|`expandSafeArea`| Function | Dmitry A Smirnov| done | blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`background`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
 |`backgroundImage0`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundImage1`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -365,7 +365,7 @@
 |`bindContentCover0`| Function | Erokhin Ilya | done | test blocked(blocked IDL) | UT by Vadim Voronov |
 |`bindContentCover1`| Function | Erokhin Ilya | done | test blocked(blocked IDL) | UT by Vadim Voronov |
 |`bindSheet`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onVisibleAreaChange`| Function | Erokhin Ilya | done | passed | info: ForEach replaced removed arkui.component.forEach.ETSGLOBAL at std.core.LinkerUnresolvedClassError.<ctor> |
+|`onVisibleAreaChange`| Function | Erokhin Ilya | done | passed | |
 |`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`keyboardShortcut`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |*Common*| *Component* | Maksimov Nikita | done |  | |
@@ -407,8 +407,8 @@
 |`fadingEdge`| Function | Samarin Sergey | done |  | |
 |*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  |
 |`construct`| Function |Vadim Voronov, Evstigneev Roman | done | passed |
-|`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | done | blocked IDL | info: undefined cannot be cast to ImageAIOptions  |
-|`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | blocked AceEngine | blocked IDL | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | done | blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | blocked AceEngine | blocked IDL | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onReady`| Function |Vadim Voronov | done |  |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked IDL |  |  |
@@ -460,7 +460,7 @@
 |`construct`| Function |Dmitry A Smirnov| done | passed | |
 |`setColumnSplitOptions`| Function | Dmitry A Smirnov| done | passed |  |
 |`resizeable`| Function | Dmitry A Smirnov| done | passed |  |
-|`divider`| Function | Dmitry A Smirnov| done | failed | info: cannot find method 'divider |
+|`divider`| Function | Dmitry A Smirnov| done | blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*Component3D*| *Component* |Kovalev Sergey | blocked IDL |  | |
 |`construct`| Function |Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD (+) |
 |`setComponent3DOptions`| Function |Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD (+) |
