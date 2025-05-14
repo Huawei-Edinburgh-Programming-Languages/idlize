@@ -186,7 +186,7 @@
 |`defaultFocus`| Function | Dmitry A Smirnov| done |  | |
 |`groupDefaultFocus`| Function | Dmitry A Smirnov| done |  | |
 |`focusOnTouch`| Function | Dmitry A Smirnov| done |  | |
-|`focusBox`| Function | Dudkin Sergey | done |  | |
+|`focusBox`| Function | Dudkin Sergey | done | blocked IDL | info: LinkerUnresolvedClassError arkui.Graphics.ColorMetrics |
 |`animation`| Function | managed side | managed side | failed |  |
 |`transition0`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`transition1`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
@@ -237,7 +237,7 @@
 |`flexShrink`| Function | Dmitry A Smirnov| done |  | |
 |`flexBasis`| Function | Dmitry A Smirnov| done |  | |
 |`alignSelf`| Function | Roman Sedaikin | done |  | |
-|`displayPriority`| Function | Roman Sedaikin | done |  | |
+|`displayPriority`| Function | Roman Sedaikin | done | passed | |
 |`zIndex`| Function | Roman Sedaikin | done |  | |
 |`direction`| Function | Roman Sedaikin | done | pass | |
 |`align`| Function | Roman Sedaikin | done | pass | |
@@ -407,8 +407,8 @@
 |`fadingEdge`| Function | Samarin Sergey | done |  | |
 |*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  |
 |`construct`| Function |Vadim Voronov, Evstigneev Roman | done | passed |
-|`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | done | failed | info: undefined cannot be cast to ImageAIOptions  |
-|`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | blocked AceEngine | failed | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | done | blocked IDL | info: undefined cannot be cast to ImageAIOptions  |
+|`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | blocked AceEngine | blocked IDL | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`onReady`| Function |Vadim Voronov | done |  |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |  |
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked IDL |  |  |
@@ -464,17 +464,17 @@
 |*Component3D*| *Component* |Kovalev Sergey | blocked IDL |  | |
 |`construct`| Function |Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD (+) |
 |`setComponent3DOptions`| Function |Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD (+) |
-|`environment`| Function |Kovalev Sergey | done |  |  |
+|`environment`| Function |Kovalev Sergey | done | blocked IDL | info: Component3D not found |
 |`shader`| Function |Kovalev Sergey | done |  |  |
 |`shaderImageTexture`| Function |Kovalev Sergey | done |  |  |
 |`shaderInputBuffer`| Function |Kovalev Sergey | done |  |  |
-|`renderWidth`| Function |Kovalev Sergey | done |  |  |
+|`renderWidth`| Function |Kovalev Sergey | done | blocked IDL | info: Component3D not found |
 |`renderHeight`| Function |Kovalev Sergey | done |  |  |
 |`customRender`| Function |Kovalev Sergey | done |  |  |
-|*ContainerSpan*| *Component* | Tuzhilkin Ivan| done |  |  |
-|`construct`| Function | Tuzhilkin Ivan| done |  |  |
-|`setContainerSpanOptions`| Function |Tuzhilkin Ivan| done |  |  |
-|`textBackgroundStyle`| Function |Tuzhilkin Ivan| done |  |  |
+|*ContainerSpan*| *Component* | Tuzhilkin Ivan| done | passed |  |
+|`construct`| Function | Tuzhilkin Ivan| done | passed |  |
+|`setContainerSpanOptions`| Function |Tuzhilkin Ivan| done | passed |  |
+|`textBackgroundStyle`| Function |Tuzhilkin Ivan| done | passed |  |
 |*Counter*| *Component* | Erokhin Ilya | done | pass |  |
 |`construct`| Function |Erokhin Ilya | done | pass |  |
 |`setCounterOptions`| Function | Erokhin Ilya | done | pass |  |
@@ -508,13 +508,13 @@
 |`digitalCrownSensitivity`| Function | Vadim Voronov | done |  | |
 |`enableHapticFeedback`| Function | Vadim Voronov | done | | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
-|*Divider*| *Component* | Tuzhilkin Ivan | done |  |  |
-|`construct`| Function | Tuzhilkin Ivan |done | | |
-|`setDividerOptions`| Function | Tuzhilkin Ivan| done |  |  |
-|`vertical`| Function | Tuzhilkin Ivan | done |  |  |
-|`color`| Function | Tuzhilkin Ivan | done |  |  |
-|`strokeWidth`| Function | Tuzhilkin Ivan | done |  |  |
-|`lineCap`| Function | Tuzhilkin Ivan | done |  |  |
+|*Divider*| *Component* | Tuzhilkin Ivan | done | passed |  |
+|`construct`| Function | Tuzhilkin Ivan |done | passed | |
+|`setDividerOptions`| Function | Tuzhilkin Ivan| done | passed |  |
+|`vertical`| Function | Tuzhilkin Ivan | done | passed |  |
+|`color`| Function | Tuzhilkin Ivan | done | passed |  |
+|`strokeWidth`| Function | Tuzhilkin Ivan | done | passed |  |
+|`lineCap`| Function | Tuzhilkin Ivan | done | passed |  |
 |*EffectComponent*| *Component* | Ekaterina Stepanova | done |  | |
 |`construct`| Function |Ekaterina Stepanova | done |  | |
 |`setEffectComponentOptions`| Function | Ekaterina Stepanova | done |  | |
