@@ -558,17 +558,17 @@
 |`construct`| Function |Dmitry A Smirnov| done |  |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done |  |  |
 |*Gauge*| *Component* | Maksimov Nikita | blocked IDL |  |  |
-|`construct`| Function | Maksimov Nikita | done |  | |
-|`setGaugeOptions`| Function | Maksimov Nikita | done |  | |
-|`value`| Function | Maksimov Nikita | done |  | |
-|`startAngle`| Function | Maksimov Nikita | done |  | |
-|`endAngle`| Function | Maksimov Nikita | done |  | |
-|`colors`| Function | Maksimov Nikita | done | | |
-|`strokeWidth`| Function | Maksimov Nikita | done |  | |
-|`description`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
-|`trackShadow`| Function | Maksimov Nikita | done |  |  |
-|`indicator`| Function | Maksimov Nikita | done |  |  |
-|`privacySensitive`| Function | Maksimov Nikita | done |  ||
+|`construct`| Function | Maksimov Nikita | done | pass | |
+|`setGaugeOptions`| Function | Maksimov Nikita | done | pass | |
+|`value`| Function | Maksimov Nikita | done | pass | |
+|`startAngle`| Function | Maksimov Nikita | done | pass | |
+|`endAngle`| Function | Maksimov Nikita | done | pass | |
+|`colors`| Function | Maksimov Nikita | done | failed | |
+|`strokeWidth`| Function | Maksimov Nikita | done | pass | |
+|`description`| Function | Lobah Mikhail | done | failed | UT done Lobah Mikhail  |
+|`trackShadow`| Function | Maksimov Nikita | done | pass |  |
+|`indicator`| Function | Maksimov Nikita | done | pass |  |
+|`privacySensitive`| Function | Maksimov Nikita | done | pass ||
 |`contentModifier`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*Grid*|*Component*| Erokhin Ilya | done |  |  |
 |`construct`| Function |Erokhin Ilya | done | pass | |
