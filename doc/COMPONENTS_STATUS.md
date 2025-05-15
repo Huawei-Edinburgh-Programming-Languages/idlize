@@ -786,9 +786,9 @@
 |`fontWeight`| Function | Andrey Khudenkikh| done |  |  |
 |`fontFamily`| Function | Andrey Khudenkikh| done |  |  |
 |`marqueeUpdateStrategy`| Function |Andrey Khudenkikh | done |  |  |
-|`onStart`| Function | Andrey Khudenkikh| done |  |  |
-|`onBounce`| Function |Andrey Khudenkikh | done |  |  |
-|`onFinish`| Function |Andrey Khudenkikh | done |  |  |
+|`onStart`| Function | Andrey Khudenkikh| done | failed | wrong timing for "on" events |
+|`onBounce`| Function |Andrey Khudenkikh | done | failed | wrong timing for "on" events |
+|`onFinish`| Function |Andrey Khudenkikh | done | failed | wrong timing for "on" events |
 |*MediaCachedImage*| *Component* | Skroba Gleb, Evstigneev Roman | done |  | |
 |`construct`| Function | Skroba Gleb, Evstigneev Roman | done |  |  |
 |`setMediaCachedImageOptions`| Function | Skroba Gleb, Evstigneev Roman | done |  |   |
