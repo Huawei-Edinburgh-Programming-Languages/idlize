@@ -2223,11 +2223,11 @@
 |`ctor`| Function |Erokhin Ilya | done |  |  |
 |`interpolate`| Function | Erokhin Ilya | done |  |  |
 |*DrawModifier*| *Class* | Erokhin Ilya | blocked IDL|  | |
-|`ctor`| Function | Erokhin Ilya | done |  | |
-|`drawBehind`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
-|`drawContent`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
-|`drawFront`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
-|`invalidate`| Function | Erokhin Ilya | done |  | |
+|`ctor`| Function | Erokhin Ilya | done | passed | |
+|`drawBehind`| Function | Erokhin Ilya | blocked IDL | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
+|`drawContent`| Function | Erokhin Ilya | blocked IDL |  test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
+|`drawFront`| Function | Erokhin Ilya | blocked IDL | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
+|`invalidate`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | test blocked |OHOSUI-2171 |
 |`ctor`| Function |Andrey Khudenkikh | done |  | |
 |`translate`| Function | Andrey Khudenkikh | done |  | |
