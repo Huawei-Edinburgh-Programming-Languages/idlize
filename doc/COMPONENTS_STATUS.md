@@ -672,22 +672,22 @@
 |`enhancedImageQuality`| Function | Erokhin Ilya | done |  |  |
 |`orientation`| Function | Samarin Sergey | done |  | |
 |*ImageAnimator*| *Component* | Pavelyev Ivan | done |  | |
-|`construct`| Function | Pavelyev Ivan | done |  | |
-|`setImageAnimatorOptions`| Function | Pavelyev Ivan | done |  | |
-|`images`| Function | Pavelyev Ivan | done |  |  |
-|`state`| Function | Pavelyev Ivan | done |  | |
-|`duration`| Function | Pavelyev Ivan | done |  | |
-|`reverse`| Function | Pavelyev Ivan | done |  | |
+|`construct`| Function | Pavelyev Ivan | done | passed | |
+|`setImageAnimatorOptions`| Function | Pavelyev Ivan | done | passed | |
+|`images`| Function | Pavelyev Ivan | done | passed |  |
+|`state`| Function | Pavelyev Ivan | done | passed | |
+|`duration`| Function | Pavelyev Ivan | done | passed | |
+|`reverse`| Function | Pavelyev Ivan | done | passed | |
 |`fixedSize`| Function | Pavelyev Ivan | done |  | |
 |`preDecode`| Function | Pavelyev Ivan | done |  | deprecated |
-|`fillMode`| Function | Pavelyev Ivan | done |  | |
-|`iterations`| Function | Pavelyev Ivan | done |  | |
-|`monitorInvisibleArea`| Function | Samarin Sergey | done | | |
-|`onStart`| Function | Pavelyev Ivan | done |  | |
-|`onPause`| Function | Pavelyev Ivan | done |  | |
-|`onRepeat`| Function | Pavelyev Ivan | done |  | |
+|`fillMode`| Function | Pavelyev Ivan | done | passed | |
+|`iterations`| Function | Pavelyev Ivan | done | passed | |
+|`monitorInvisibleArea`| Function | Samarin Sergey | done | failed | |
+|`onStart`| Function | Pavelyev Ivan | done | passed | |
+|`onPause`| Function | Pavelyev Ivan | done | passed | |
+|`onRepeat`| Function | Pavelyev Ivan | done | passed | |
 |`onCancel`| Function | Pavelyev Ivan | done |  | |
-|`onFinish`| Function | Pavelyev Ivan | done |  | |
+|`onFinish`| Function | Pavelyev Ivan | done | passed | |
 |*ImageSpan*| *Component* | Politov Mikhail | blocked IDL |  |  |
 |`construct`| Function | Politov Mikhail | done |  | |
 |`setImageSpanOptions`| Function | Politov Mikhail | done |  | |
