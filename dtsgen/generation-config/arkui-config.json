@@ -176,7 +176,6 @@
         "@ohos.multimodalInput.intentionCode.d.ts",
         "@ohos.multimodalInput.pointer.d.ts",
         "@ohos.print.d.ts",
-        "@ohos.promptAction.d.ts",
         "@ohos.resourceManager.d.ts",
         "@ohos.router.d.ts",
         "@ohos.rpc.d.ts",
