@@ -145,7 +145,7 @@
 |`opacity0`| Function |Roman Sedaikin | done |  | |
 |`opacity1`| Function | Roman Sedaikin | done |  | |
 |`border`| Function | Roman Sedaikin | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`borderStyle`| Function | Roman Sedaikin | done |  | |
+|`borderStyle`| Function | Roman Sedaikin | done | pass | |
 |`borderWidth`| Function | Roman Sedaikin | done |  | |
 |`borderColor`| Function | Roman Sedaikin | done |  | |
 |`borderRadius`| Function | Roman Sedaikin | done |  | |
