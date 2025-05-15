@@ -83,10 +83,10 @@
 | HyperLink.test.ets |  Porodin Alexander  |
 | Image.test.ets | Dudkin Sergey     |
 | Image2.test.ets | Dudkin Sergey     |
-| Image3ColorFilter.test.ets | Vadim Voronov |
+| Image3ColorFilter.test.ets |                    |
 | Image4.test.ets | Pavelyev Ivan |
-| ImageAnimator.test.ets | Vadim Voronov  |
-| ImageSpan.test.ets | Vadim Voronov |
+| ImageAnimator.test.ets |                   |
+| ImageSpan.test.ets |                   |
 | IndicatorComponent.test.ets | Skroba Gleb |
 | Line.test.ets | Daryina Olga      |
 | List.test.ets | Sergey Morozov |
@@ -102,7 +102,7 @@
 | NavDestination.test.ets |  Dmitry A Smirnov |
 | Navigation.test.ets | Dmitry A Smirnov |
 | Navigator.test.ets | Dmitry A Smirnov |
-| NestedScroll.test.ets | Vadim Voronov |
+| NestedScroll.test.ets |                   |
 | OnAreaChange.test.ets | Sergey Morozov |
 | Panel.test.ets | Daryina Olga      |
 | PasteButton.test.ets | Samarin Sergey    |
@@ -148,7 +148,7 @@
 | TransformRotateScaleTranslate.test.ets | Dmitry A Smirnov |
 | TransitionEffect.test.ets | Dmitry A Smirnov |
 | UseShadowBatching.test.ets | Dmitry A Smirnov|
-| Video.test.ets |                   |
+| Video.test.ets | Pavelyev Ivan |
 | Visibility.test.ets | Evstigneev Roman |
 | WaterFlow.test.ets | Sergey Morozov |
 | WaterFlowDataSource.ets |                   |
