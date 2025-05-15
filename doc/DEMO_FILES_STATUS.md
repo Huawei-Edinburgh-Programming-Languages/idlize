@@ -85,8 +85,8 @@
 | Image2.test.ets | Dudkin Sergey     |
 | Image3ColorFilter.test.ets |                    |
 | Image4.test.ets | Pavelyev Ivan |
-| ImageAnimator.test.ets |                   |
-| ImageSpan.test.ets |                   |
+| ImageAnimator.test.ets | Vadim Voronov |
+| ImageSpan.test.ets | Vadim Voronov |
 | IndicatorComponent.test.ets | Skroba Gleb |
 | Line.test.ets | Daryina Olga      |
 | List.test.ets | Sergey Morozov |
