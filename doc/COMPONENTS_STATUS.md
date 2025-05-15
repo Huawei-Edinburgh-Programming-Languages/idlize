@@ -659,16 +659,16 @@
 |`syncLoad`| Function | Evstigneev Roman | done |  | |
 |`colorFilter`| Function | Evstigneev Roman | in progress |  |  |
 |`copyOption`| Function | Evstigneev Roman | testskipped |  |  tests blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IBEEFF (+) |
-|`draggable`| Function | Evstigneev Roman | done |  |   |
+|`draggable`| Function | Evstigneev Roman | done | pass |   |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  |    |
 |`edgeAntialiasing`| Function | Evstigneev Roman | done |  | |
 |`onComplete`| Function | Evstigneev Roman | done |  | |
 |`onError`| Function | Evstigneev Roman | done |  | |
 |`onFinish`| Function | Evstigneev Roman | done |  | |
-|`enableAnalyzer`| Function | Evstigneev Roman | done |  | |
+|`enableAnalyzer`| Function | Evstigneev Roman | done | pass | |
 |`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (+) |
 |`resizable`| Function | Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
-|`privacySensitive`| Function | Evstigneev Roman | done |  | |
+|`privacySensitive`| Function | Evstigneev Roman | done | pass | |
 |`enhancedImageQuality`| Function | Erokhin Ilya | done |  |  |
 |`orientation`| Function | Samarin Sergey | done |  | |
 |*ImageAnimator*| *Component* | Pavelyev Ivan | done |  | |
