@@ -1939,7 +1939,7 @@
 |`restoreInstanceId`| Function |managed side |managed side | | |
 |`getResourceId`| Function |managed side |managed side | | |
 |*FocusController*| *Class* | Lobah Mikhail| done| | |
-|`requestFocus`| Function | Lobah Mikhail| done| | |
+|`requestFocus`| Function | Lobah Mikhail| done| pass | |
 |*DrawableDescriptor*| *Class* | Evstigneev Roman | done | | need cherry-pick to FB |
 |`ctor`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
 |`getPixelMap`| Function | Evstigneev Roman | done | | need cherry-pick to FB |

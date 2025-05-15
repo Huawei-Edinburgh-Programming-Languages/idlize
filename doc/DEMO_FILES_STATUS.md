@@ -117,7 +117,7 @@
 | Refresh.test.ets | Pavelyev Ivan      |
 | RelativeContainer.test.ets | Dmitry A Smirnov |
 | RenderGroup.test.ets | Porodin Alexander |
-| RequestFocusFocusable.test.ets |                   |
+| RequestFocusFocusable.test.ets | Dmitry A Smirnov |
 | RichEditor.test.ets | Erokhin Ilya      |
 | RichText.test.ets | Erokhin Ilya      |
 | Row.test.ets | Daryina Olga      |
