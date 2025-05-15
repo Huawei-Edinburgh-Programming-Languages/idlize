@@ -226,8 +226,3 @@ interface UIContext {
     // void bindTabsToNestedScrollable(TabsController tabsController, Scroller parentScroller, Scroller childScroller);
     // void unbindTabsFromNestedScrollable(TabsController tabsController, Scroller parentScroller, Scroller childScroller);
 };
-
-[Entity=Interface]
-interface SystemBarStyle {
-    [Optional] attribute String statusBarContentColor;
-};

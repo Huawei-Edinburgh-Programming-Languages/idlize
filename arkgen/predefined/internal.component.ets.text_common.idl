@@ -1,0 +1,39 @@
+dictionary Affinity {
+    number UPSTREAM = 0;
+    number DOWNSTREAM = 1;
+};
+
+dictionary RectWidthStyle {
+    number TIGHT = 0;
+    number MAX = 1;
+};
+
+dictionary RectHeightStyle {
+    number TIGHT = 0;
+    number MAX = 1;
+    number INCLUDE_LINE_SPACE_MIDDLE = 2;
+    number INCLUDE_LINE_SPACE_TOP = 3;
+    number INCLUDE_LINE_SPACE_BOTTOM = 4;
+    number STRUT = 5;
+};
+
+[Entity=Interface]
+interface LineMetrics {
+    attribute number startIndex;
+    attribute number endIndex;
+    attribute number ascent;
+    attribute number descent;
+    attribute number height;
+    attribute number width;
+    attribute number left;
+    attribute number baseline;
+    attribute number lineNumber;
+    attribute number topHeight;
+    attribute record<number, RunMetrics> runMetrics;
+};
+
+[Entity=Interface]
+interface TextBox {
+    attribute Rect rect;
+    attribute TextDirection direction;
+};

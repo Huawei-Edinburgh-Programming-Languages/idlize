@@ -1,0 +1,4 @@
+[Entity=Interface]
+interface SystemBarStyle {
+    [Optional] attribute String statusBarContentColor;
+};

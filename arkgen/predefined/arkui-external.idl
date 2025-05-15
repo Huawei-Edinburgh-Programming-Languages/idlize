@@ -7,22 +7,6 @@ package api.internal.component.ets;
 [Entity=Class, Interfaces="AttributeModifier", ParentTypeArguments="<object>"]
 interface TextModifier {};
 
-/*[Namespace=text]*/
-dictionary RectWidthStyle {
-    number TIGHT = 0;
-    number MAX = 1;
-};
-
-/*[Namespace=text]*/
-dictionary RectHeightStyle {
-    number TIGHT = 0;
-    number MAX = 1;
-    number INCLUDE_LINE_SPACE_MIDDLE = 2;
-    number INCLUDE_LINE_SPACE_TOP = 3;
-    number INCLUDE_LINE_SPACE_BOTTOM = 4;
-    number STRUT = 5;
-};
-
 [Entity=Interface]
 interface WebHeader {
     attribute String headerKey;
@@ -319,26 +303,6 @@ interface FontInfo {
 * from ui_extension_component.idl
 */
 callback ReceiveCallback = void (record<String, Object> data);
-
-/*
-* from @ohos.multimodalInput.intentionCode.idl
-*/
-dictionary IntentionCode {
-    number INTENTION_UNKNOWN = -1;
-    number INTENTION_UP = 1;
-    number INTENTION_DOWN = 2;
-    number INTENTION_LEFT = 3;
-    number INTENTION_RIGHT = 4;
-    number INTENTION_SELECT = 5;
-    number INTENTION_ESCAPE = 6;
-    number INTENTION_BACK = 7;
-    number INTENTION_FORWARD = 8;
-    number INTENTION_MENU = 9;
-    number INTENTION_PAGE_UP = 11;
-    number INTENTION_PAGE_DOWN = 12;
-    number INTENTION_ZOOM_OUT = 13;
-    number INTENTION_ZOOM_IN = 14;
-};
 
 /*
 * from @ohos.window.idl
