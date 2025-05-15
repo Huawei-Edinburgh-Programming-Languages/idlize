@@ -291,7 +291,7 @@
 |`sphericalEffect0`| Function | Lobah Mikhail | done | passed | |
 |`sphericalEffect1`| Function | Dmitry A Smirnov | done | passed | |
 |`lightUpEffect0`| Function | Lobah Mikhail | done | passed | |
-|`lightUpEffect1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`lightUpEffect1`| Function | Dmitry A Smirnov | done | passed | |
 |`pixelStretchEffect0`| Function | Lobah Mikhail | done | passed | |
 |`pixelStretchEffect1`| Function | Dmitry A Smirnov | done | passed | |
 |`accessibilityGroup0`| Function |Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -495,16 +495,16 @@
 |`construct`| Function |Vadim Voronov | done | passed |  |
 |`setDatePickerOptions`| Function | Vadim Voronov| done | passed | |
 |`lunar0`| Function |Vadim Voronov | done | passed |  |
-|`lunar1`| Function |Vadim Voronov | done |  |  |
+|`lunar1`| Function |Vadim Voronov | done | passed |  |
 |`disappearTextStyle0`| Function | Vadim Voronov| done | passed |  |
-|`disappearTextStyle1`| Function | Vadim Voronov| done |  |  |
+|`disappearTextStyle1`| Function | Vadim Voronov| done | passed |  |
 |`textStyle0`| Function |Vadim Voronov | done | passed |  |
-|`textStyle1`| Function |Vadim Voronov | done |  |  |
+|`textStyle1`| Function |Vadim Voronov | done | passed |  |
 |`selectedTextStyle0`| Function |Vadim Voronov | done | passed |  |
-|`selectedTextStyle1`| Function |Vadim Voronov | done |  |  |
+|`selectedTextStyle1`| Function |Vadim Voronov | done | passed |  |
 |`onChange`| Function | Vadim Voronov| done | not covered | info: method not found, deprecated since API10 replaced by onDateChange |
 |`onDateChange`| Function |Vadim Voronov | done | passed | |
-|`onDateChange1`| Function |Vadim Voronov | done |  | |
+|`onDateChange1`| Function |Vadim Voronov | done | passed | |
 |`digitalCrownSensitivity`| Function | Vadim Voronov | done |  | |
 |`enableHapticFeedback`| Function | Vadim Voronov | done | | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
