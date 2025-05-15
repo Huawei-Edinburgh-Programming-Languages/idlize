@@ -124,7 +124,7 @@
 | RowSplit.test.ets | Daryina Olga      |
 | Scroll.test.ets | Tuzhilkin Ivan |
 | ScrollBar.test.ets | Tuzhilkin Ivan |
-| ScrollableCommonMethod.test.ets |                   |
+| ScrollableCommonMethod.test.ets | Mikhail Politov |
 | Search.test.ets | Erokhin Ilya      |
 | Select.test.ets | Samarin Sergey    |
 | Shape.test.ets | Vadim Voronov     |
