@@ -116,7 +116,7 @@
 |`width1`| Function |Roman Sedaikin | done |  | |
 |`height0`| Function |Roman Sedaikin | done |  | |
 |`height1`| Function |Roman Sedaikin | done |  | |
-|`drawModifier`| Function | Erokhin Ilya | done | failed | info: UIContext createAnimator, animateTo, vp2x not implemented|
+|`drawModifier`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`responseRegion`| Function | Skroba Gleb | done |  | |
 |`mouseResponseRegion`| Function | Skroba Gleb | done |  | |
 |`size`| Function | Roman Sedaikin | done |  | |
