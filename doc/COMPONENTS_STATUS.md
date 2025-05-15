@@ -325,11 +325,11 @@
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done |  |  |
 |`monopolizeEvents`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |`onTouchIntercept`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done |  | EVENT |
-|`onSizeChange`| Function | Dmitry A Smirnov| done |  | |
+|`onSizeChange`| Function | Dmitry A Smirnov| done | failed | issue OHOSUI-2216|
 |`accessibilityFocusDrawLevel`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`customProperty`| Function | Dmitry A Smirnov| in progress | test blocked | need clarify bridge implementation, test blocked by FrameNode.getCustomProperty |
 |`expandSafeArea`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`background`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
+|`background`| Function | Lobah Mikhail | done | test blocked | UT done Lobah Mikhail, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundImage0`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundImage1`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundBlurStyle0`| Function | Skroba Gleb | done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -367,7 +367,7 @@
 |`bindSheet`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onVisibleAreaChange`| Function | Erokhin Ilya | done | passed | |
 |`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
-|`keyboardShortcut`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
+|`keyboardShortcut`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*Common*| *Component* | Maksimov Nikita | done |  | |
 |`construct`| Function |Maksimov Nikita | done |  | |
 |`setCommonOptions`| Function | Maksimov Nikita | done |  | |
