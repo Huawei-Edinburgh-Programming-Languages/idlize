@@ -689,9 +689,9 @@
 |`onCancel`| Function | Pavelyev Ivan | done |  | |
 |`onFinish`| Function | Pavelyev Ivan | done | passed | |
 |*ImageSpan*| *Component* | Politov Mikhail | blocked IDL |  |  |
-|`construct`| Function | Politov Mikhail | done |  | |
-|`setImageSpanOptions`| Function | Politov Mikhail | done |  | |
-|`verticalAlign`| Function | Politov Mikhail | done |  |  |
+|`construct`| Function | Politov Mikhail | done | passed | |
+|`setImageSpanOptions`| Function | Politov Mikhail | done | passed | |
+|`verticalAlign`| Function | Politov Mikhail | done | passed |  |
 |`colorFilter`| Function | Politov Mikhail| in progress |  |  |
 |`objectFit`| Function | Politov Mikhail | done |  |  |
 |`onComplete`| Function | Politov Mikhail | done |  |  |
@@ -1265,8 +1265,8 @@
 |`showTips`| Function |Morozov Sergey | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done | test blocked | test blocked by $$ usage in ArkTS 1.2 |
 |*BaseSpan*| *Component* |Politov Mikhail | done |  |  |
-|`construct`| Function |Politov Mikhail | done |  |  |
-|`textBackgroundStyle`| Function | Politov Mikhail | done |  |  |
+|`construct`| Function |Politov Mikhail | done | passed |  |
+|`textBackgroundStyle`| Function | Politov Mikhail | done | passed |  |
 |`baselineOffset`| Function | Politov Mikhail | done |  |  |
 |*Span*| *Component* | Politov Mikhail | done | pass |  |
 |`construct`| Function |Politov Mikhail | done | pass |  |
