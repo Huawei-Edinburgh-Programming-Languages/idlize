@@ -83,10 +83,10 @@
 | HyperLink.test.ets |  Porodin Alexander  |
 | Image.test.ets | Dudkin Sergey     |
 | Image2.test.ets | Dudkin Sergey     |
-| Image3ColorFilter.test.ets |                   |
+| Image3ColorFilter.test.ets | Vadim Voronov |
 | Image4.test.ets | Pavelyev Ivan |
-| ImageAnimator.test.ets |                   |
-| ImageSpan.test.ets |                   |
+| ImageAnimator.test.ets | Vadim Voronov  |
+| ImageSpan.test.ets | Vadim Voronov |
 | IndicatorComponent.test.ets | Skroba Gleb |
 | Line.test.ets | Daryina Olga      |
 | List.test.ets | Sergey Morozov |
@@ -102,7 +102,7 @@
 | NavDestination.test.ets |  Dmitry A Smirnov |
 | Navigation.test.ets | Dmitry A Smirnov |
 | Navigator.test.ets | Dmitry A Smirnov |
-| NestedScroll.test.ets |                   |
+| NestedScroll.test.ets | Vadim Voronov |
 | OnAreaChange.test.ets | Sergey Morozov |
 | Panel.test.ets | Daryina Olga      |
 | PasteButton.test.ets | Samarin Sergey    |
