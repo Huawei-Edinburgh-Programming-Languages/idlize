@@ -164,12 +164,12 @@
 |`foregroundColor1`| Function |Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onClick0`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done | pass | EVENT |
 |`onClick1`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done | pass | EVENT |
-|`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done |  | EVENT |
+|`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done | pass | EVENT |
 |`onHoverMove`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | done |  | UT by Vadim Voronov EVENT |
-|`hoverEffect`| Function | Roman Sedaikin | done |  | |
-|`onMouse`| Function | Kovalev Sergey | done |  | EVENT |
-|`onTouch`| Function | Roman Sedaikin, Tuzhilkin Ivan | testskipped |  | EVENT |
+|`hoverEffect`| Function | Roman Sedaikin | done | pass | |
+|`onMouse`| Function | Kovalev Sergey | done | pass | EVENT |
+|`onTouch`| Function | Roman Sedaikin, Tuzhilkin Ivan | testskipped | pass | EVENT |
 |`onKeyEvent0`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |   |
 |`onKeyEvent1`| Function |Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |   |
 |`onDigitalCrown`| Function | Evstigneev Roman | done | | feature: API not present |
@@ -635,8 +635,8 @@
 |`alignItems`| Function |Lobah Mikhail| done | pass |  |
 |*Hyperlink*| *Component* | Morozov Sergey | done |  |   |
 |`construct`| Function | Morozov Sergey | done |  |   |
-|`setHyperlinkOptions`| Function | Morozov Sergey | done |  | |
-|`color`| Function | Morozov Sergey | done |  | |
+|`setHyperlinkOptions`| Function | Morozov Sergey | done | pass | |
+|`color`| Function | Morozov Sergey | done | pass | |
 |*Image*| *Component* | Evstigneev Roman | blocked IDL |  |  |
 |`construct`| Function |Berezin Kirill | done |  |  |
 |`setImageOptions0`| Function | Berezin Kirill | done |  |  |
