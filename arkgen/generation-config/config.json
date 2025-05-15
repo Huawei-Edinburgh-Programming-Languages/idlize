@@ -152,6 +152,7 @@
     "rootComponents": [
         "Root",
         "ComponentRoot",
+        "RoutedPage",
         "CommonMethod",
         "SecurityComponentMethod",
         "CommonTransition",

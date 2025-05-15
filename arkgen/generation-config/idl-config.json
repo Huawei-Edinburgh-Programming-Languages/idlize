@@ -31,7 +31,10 @@
             "RepeatItemBuilder",
             "RepeatAttribute",
             "TemplateTypedFunc",
-            "EntryOptions"
+            "EntryOptions",
+            "RepeatArray",
+            "RepeatInterface",
+            "Repeat"
         ],
         "DeletedMethods": {
             "CommonMethod": [
