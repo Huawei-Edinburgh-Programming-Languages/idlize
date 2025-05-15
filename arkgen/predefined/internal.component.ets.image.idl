@@ -2,39 +2,60 @@ package org.openharmony.arkui;
 
 [Entity=Class]
 interface DrawableDescriptor {
-
     constructor();
     PixelMap getPixelMap();
-
 };
+
 [Entity=Class]
 interface LayeredDrawableDescriptor: DrawableDescriptor {
-
     constructor(optional DrawableDescriptor foreground, optional DrawableDescriptor background, optional DrawableDescriptor mask);
     DrawableDescriptor getForeground();
     DrawableDescriptor getBackground();
     DrawableDescriptor getMask();
     static String getMaskClipPath();
-
 };
+
 [Entity=Class]
 interface PixelMapDrawableDescriptor: DrawableDescriptor {
-
     constructor(optional PixelMap src);
-
 };
+
 [Entity=Interface]
 interface AnimationOptions {
-
     [Optional]
     attribute number duration;
     [Optional]
     attribute number iterations;
-
 };
+
 [Entity=Class]
 interface AnimatedDrawableDescriptor: DrawableDescriptor {
-
     constructor(sequence<PixelMap> pixelMaps, optional AnimationOptions options);
+};
+
+[Entity=Class]
+interface DrawingColorFilter {
+    static DrawingColorFilter createBlendModeColorFilter(Color color, BlendMode mode);
+    static DrawingColorFilter createBlendModeColorFilter(number color, BlendMode mode);
+    static DrawingColorFilter createComposeColorFilter(DrawingColorFilter outer, DrawingColorFilter inner);
+    static DrawingColorFilter createLinearToSRGBGamma();
+    static DrawingColorFilter createSRGBGammaToLinear();
+    static DrawingColorFilter createLumaColorFilter();
+    static DrawingColorFilter createMatrixColorFilter(sequence<number> matrix);
+};
+
+/*
+* from image.idl
+*/
+typedef Matrix4Transit ImageMatrix;
+
+/*
+* from @ohos.multimedia.image.idl
+*/
+dictionary ResolutionQuality {
+
+    number LOW = 1;
+    number MEDIUM = 2;
+    number HIGH = 3;
 
 };
