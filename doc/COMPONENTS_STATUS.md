@@ -182,10 +182,10 @@
 |`tabStop`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocus`| Function | Roman Sedaikin | done |  | |
 |`onBlur`| Function | Roman Sedaikin | done |  | |
-|`tabIndex`| Function | Dmitry A Smirnov| done |  | |
-|`defaultFocus`| Function | Dmitry A Smirnov| done |  | |
-|`groupDefaultFocus`| Function | Dmitry A Smirnov| done |  | |
-|`focusOnTouch`| Function | Dmitry A Smirnov| done |  | |
+|`tabIndex`| Function | Dmitry A Smirnov| done | passed | |
+|`defaultFocus`| Function | Dmitry A Smirnov| done | passed | |
+|`groupDefaultFocus`| Function | Dmitry A Smirnov| done | passed | |
+|`focusOnTouch`| Function | Dmitry A Smirnov| done | passed | |
 |`focusBox`| Function | Dudkin Sergey | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA info: LinkerUnresolvedClassError arkui.Graphics.ColorMetrics |
 |`animation`| Function | managed side | managed side | failed |  |
 |`transition0`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
@@ -336,9 +336,9 @@
 |`backgroundBlurStyle1`| Function | Tuzhilkin Ivan | done | test blocked | need cherry-pick to feature_branch,  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundBlurStyle0`| Function | Roman Sedaikin | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`foregroundBlurStyle1`| Function | Dmitry A Smirnov | in progress |  | |
-|`focusScopeId0`| Function | Dmitry A Smirnov| done |  | |
-|`focusScopeId1`| Function | Dmitry A Smirnov| done |  | |
-|`focusScopePriority`| Function | Dmitry A Smirnov| done |  | |
+|`focusScopeId0`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
+|`focusScopeId1`| Function | Dmitry A Smirnov| done |  test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
+|`focusScopePriority`| Function | Dmitry A Smirnov| done | passed | |
 |`gesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`priorityGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`parallelGesture`| Function | Erokhin Ilya | testskipped |  |  |
@@ -1551,7 +1551,7 @@
 |`onEditChanged`| Function | Spirin Andrey | done |  |deprecated UT Kovalev Sergey |
 |`onEditChange`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`onSubmit`| Function | Spirin Andrey | done |  | EVENT |
-|`onChange`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail  |
+|`onChange`| Function | Lobah Mikhail | done | passed | UT done Lobah Mikhail  |
 |`onTextSelectionChange`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`onContentScroll`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`maxLength`| Function | Spirin Andrey | done |  |  |
