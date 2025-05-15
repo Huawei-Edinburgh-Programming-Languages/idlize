@@ -386,25 +386,25 @@
 |`strokeDashArray`| Function | Erokhin Ilya| done|  | |
 |*ScrollableCommonMethod*| *Component* | Samarin Sergey | blocked IDL |  |  |
 |`construct`| Function |Samarin Sergey | done |  | empty implementation, functional is supported by managed side |
-|`scrollBar`| Function | Samarin Sergey | done |  |  |
-|`scrollBarColor`| Function | Samarin Sergey | done |  |  |
-|`scrollBarWidth`| Function | Samarin Sergey | done |  |  |
+|`scrollBar`| Function | Samarin Sergey | done | pass |  |
+|`scrollBarColor`| Function | Samarin Sergey | done | pass |  |
+|`scrollBarWidth`| Function | Samarin Sergey | done | pass |  |
 |`nestedScroll`| Function | Samarin Sergey | done |  |  |
-|`enableScrollInteraction`| Function | Samarin Sergey | done |  |  |
-|`friction`| Function | Samarin Sergey | done |  |  |
+|`enableScrollInteraction`| Function | Samarin Sergey | done | pass |  |
+|`friction`| Function | Samarin Sergey | done | pass |  |
 |`onScroll`| Function | Samarin Sergey | deprecated |  |
-|`onWillScroll`| Function | Skroba Gleb | done |  |  |
-|`onDidScroll`| Function | Berezin Kirill | done |  |  |
-|`onReachStart`| Function | Samarin Sergey | done |  | |
-|`onReachEnd`| Function | Samarin Sergey | done |  | |
-|`onScrollStart`| Function | Samarin Sergey | done |  | |
-|`onScrollStop`| Function | Samarin Sergey | done |  | |
+|`onWillScroll`| Function | Skroba Gleb | done | test blocked |  |
+|`onDidScroll`| Function | Berezin Kirill | done | test blocked |  |
+|`onReachStart`| Function | Samarin Sergey | done | pass | |
+|`onReachEnd`| Function | Samarin Sergey | done | pass | |
+|`onScrollStart`| Function | Samarin Sergey | done | pass | |
+|`onScrollStop`| Function | Samarin Sergey | done | pass | |
 |`flingSpeedLimit`| Function | Samarin Sergey | done |  |  |
 |`clipContent`| Function | Evstigneev Roman | done |  |  |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | |
 |`backToTop`| Function | Kovalev Sergey | done |  | |
 |`edgeEffect`| Function | Samarin Sergey | done |  | |
-|`fadingEdge`| Function | Samarin Sergey | done |  | |
+|`fadingEdge`| Function | Samarin Sergey | done | test blocked | |
 |*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  |
 |`construct`| Function |Vadim Voronov, Evstigneev Roman | done | passed |
 |`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
