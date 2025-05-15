@@ -218,7 +218,7 @@ if (options.idl2peer) {
 
     const idlLibrary = new ArkoalaPeerLibrary(language, options.useMemoM3)
     const allInputFiles = libohosPredefinedFiles()
-        .concat(arkgenPredefinedFiles())
+        .concat(arkgenPredefinedFiles().filter(it => !it.endsWith('predefined/resource.idl')))///
         .concat(scanInputDirs(inputDirs))
         .concat(inputFiles)
     const idlInputFiles = allInputFiles.filter(it => it.endsWith('.idl'))

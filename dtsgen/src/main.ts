@@ -151,6 +151,8 @@ function main() {
                 compilerOptions: defaultCompilerOptions,
                 onSingleFile: (file: IDLFile, outputDir, sourceFile, isAux) => {
                     let fileName = sourceFile.fileName
+                    if (peerGeneratorConfiguration().skipFiles.find(f => fileName.endsWith(f)))
+                        return
                     baseDirs.forEach(dir => {
                         const nextFileName = path.relative(path.resolve(dir), sourceFile.fileName)
                         if (nextFileName.length < fileName.length) {

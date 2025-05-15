@@ -75,6 +75,7 @@ export const PeerGeneratorConfigurationSchema = D.combine(
         ),
         CollapseOverloadsARKTS: D.boolean(),
         IDLVisitor: IDLVisitorConfigurationSchema,
+        skipFiles: T.stringArray(),
     })
 )
 
