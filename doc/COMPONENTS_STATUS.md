@@ -2054,7 +2054,7 @@
 |`getScope`| Function | Andrey Khudenkikh | done | | |
 |`setScope`| Function | Andrey Khudenkikh | done | | |
 |*FrameNode*| *Class* | Tuzhilkin Ivan | done |  | |
-|`ctor`| Function | Tuzhilkin Ivan | done |  | |
+|`ctor`| Function | Tuzhilkin Ivan | in progress |  | |
 |`isModifiable`| Function | Tuzhilkin Ivan | done |  | |
 |`appendChild`| Function | Tuzhilkin Ivan | done |  | |
 |`insertChildAfter`| Function | Tuzhilkin Ivan | done |  | |
