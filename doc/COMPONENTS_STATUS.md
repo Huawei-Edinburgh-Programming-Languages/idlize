@@ -889,7 +889,7 @@
 |`construct`| Function | Samarin Sergey| done | pass |  |
 |`setPasteButtonOptions0`| Function | Samarin Sergey| done | not covered |  |
 |`setPasteButtonOptions1`| Function | Samarin Sergey| done | failed | If PasteButtonOptions.text is not specified, there should be no text description |
-|`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan, Evstgneev Roman | testskipped | not covered |  |
+|`onClick`| Function | Samarin Sergey | testskipped | not covered |  |
 |*Path*| *Component* | Skroba Gleb | done |  |  |
 |`construct`| Function |Skroba Gleb | done |  |  |
 |`setPathOptions`| Function | Skroba Gleb | done | pass |  |
@@ -1405,9 +1405,9 @@
 |*TabContent*| *Component* | Evstigneev Roman | blocked IDL |  |  |
 |`construct`| Function | Evstigneev Roman | done | pass |  |
 |`setTabContentOptions`| Function | Evstigneev Roman | done |  |  |
-|`tabBar0`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | done | pass |  |
-|`tabBar1`| Function |Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |
-|`tabBar2`| Function | Evstigneev Roman, Lobah Mikhail, Samarin Sergey | blocked IDL | | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |
+|`tabBar0`| Function | Evstigneev Roman | done | pass |  |
+|`tabBar1`| Function |Evstigneev Roman | blocked IDL | | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |
+|`tabBar2`| Function | Evstigneev Roman | blocked IDL | | `Ark_TabBarSymbol` contains a `SymbolGlyphModifier` which is a stub https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, componentContent ctor is invalid: https://gitee.com/nikolay-igotti/idlize/issues/IC364X, componentContent has Opt_CustomObject in the "reuse" https://gitee.com/nikolay-igotti/idlize/issues/IC36EC |
 |`onWillShow`| Function |Evstigneev Roman | done |  |  |
 |`onWillHide`| Function |Evstigneev Roman | done |  |  |
 |*Text*| *Component* | Samarin Sergey | blocked IDL |  | |
@@ -1816,7 +1816,7 @@
 |`javaScriptOnDocumentStart`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Andrey Khudenkikh, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | testskipped | test blocked  | UT in progress Andrey Khudenkikh, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`layoutMode`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`nestedScroll`| Function | Erokhin Ilya, Dudkin Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`nestedScroll`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya, Andrey Khudenkikh | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -2731,8 +2731,8 @@
 |`restoreDefault`| Function | Erokhin Ilya | done |  | |
 |*ContextMenu*| *Class* | Tuzhilkin Ivan | testskipped |  | |
 |`close`| Function | Tuzhilkin Ivan | testskipped | | can checked only on e2e|
-|*CustomDialogController*| *Class* | Maksimov Nikita, Skroba Gleb | in progress |  | |
-|`ctor`| Function |Maksimov Nikita, Skroba Gleb | in progress |  |  |
+|*CustomDialogController*| *Class* | Maksimov Nikita | in progress |  | |
+|`ctor`| Function |Maksimov Nikita | in progress |  |  |
 |`open`| Function | Maksimov Nikita | testskipped |  |  |
 |`close`| Function | Maksimov Nikita | testskipped |  |   |
 |*LinearGradient*| *Class* | Morozov Sergey | done | | |
@@ -2968,7 +2968,7 @@
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked IDL|  |  |
 |`ctor`| Function |Dudkin Sergey| done |  |  |
 |`addTextSpan`| Function |Dudkin Sergey, Samarin Sergey | testskipped |  | tests are partially ready, but not all fields inside arguments' structs are tested yet |
-|`addImageSpan`| Function |Dudkin Sergey, Maksimov Nikita, Tuzhilkin Ivan, Samarin Sergey, Erokhin Ilya| done |  |  |
+|`addImageSpan`| Function |Dudkin Sergey | done |  |  |
 |`addBuilderSpan`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail |
 |`addSymbolSpan`| Function | Dudkin Sergey| done |  |  |
 |`updateSpanStyle`| Function | Dudkin Sergey| done |  |  |
