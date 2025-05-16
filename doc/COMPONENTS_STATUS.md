@@ -1220,22 +1220,22 @@
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done | test blocked | |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done | test blocked | |
 |*Shape*|*Component*|Dudkin Sergey| in progress |  |  |
-|`construct`| Function |Samarin Sergey| testskipped |  | |
-|`setShapeOptions0`| Function |Samarin Sergey| testskipped |  | |
-|`setShapeOptions1`|Function|Samarin Sergey| testskipped |  | |
-|`viewPort`|Function|Dudkin Sergey| done |  |  |
+|`construct`| Function |Samarin Sergey| testskipped | test blocked | method Shape() not found demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setShapeOptions0`| Function |Samarin Sergey| testskipped | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setShapeOptions1`|Function|Samarin Sergey| testskipped | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`viewPort`|Function|Dudkin Sergey| done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`stroke`|Function|Dudkin Sergey| done | pass |  |
 |`fill`|Function|Dudkin Sergey| done | pass |  |
-|`strokeDashOffset`|Function|Dudkin Sergey| done |  |  |
+|`strokeDashOffset`|Function|Dudkin Sergey| done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`strokeDashArray`|Function|Erokhin Ilya| done | pass |  |
-|`strokeLineCap`|Function|Dudkin Sergey| done |  |  |
-|`strokeLineJoin`|Function|Dudkin Sergey| done |  |  |
-|`strokeMiterLimit`|Function|Dudkin Sergey| done |  |  |
+|`strokeLineCap`|Function|Dudkin Sergey| done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`strokeLineJoin`|Function|Dudkin Sergey| done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`strokeMiterLimit`|Function|Dudkin Sergey| done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`strokeOpacity`|Function|Dudkin Sergey| done | pass |  |
 |`fillOpacity`|Function|Dudkin Sergey| done | pass |  |
 |`strokeWidth`|Function|Dudkin Sergey| done | pass |  |
-|`antiAlias`|Function|Dudkin Sergey| done |  |  |
-|`mesh`|Function|Erokhin Ilya| done|  |  |  |
+|`antiAlias`|Function|Dudkin Sergey| done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`mesh`|Function|Erokhin Ilya| done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*Slider*| *Component* |Morozov Sergey | blocked IDL |  |  |
 |`construct`| Function |Morozov Sergey | done | pass |  |
 |`setSliderOptions`| Function |Morozov Sergey | done | pass |  |
