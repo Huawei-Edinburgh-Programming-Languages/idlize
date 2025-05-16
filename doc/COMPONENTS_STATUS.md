@@ -727,7 +727,7 @@
 |`chainAnimationOptions`|Function|Morozov Sergey| done |  |  |
 |`sticky`|Function|Morozov Sergey| done |  |  |
 |`scrollSnapAlign`|Function|Morozov Sergey| done |  |  |
-|`nestedScroll`|Function|Morozov Sergey| done |  |  |
+|`nestedScroll`|Function|Morozov Sergey| done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`enableScrollInteraction`|Function|Morozov Sergey| done |  |  |
 |`friction`|Function|Morozov Sergey| done |  |  |
 |`childrenMainSize`|Function|Morozov Sergey| done |  |  |
@@ -1954,14 +1954,14 @@
 |*AnimatedDrawableDescriptor*| *Class* | Evstigneev Roman | done | | need cherry-pick to FB |
 |`ctor`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
 |*ColorFilter*| *Class* | Evstigneev Roman | done | |  |
-|`ctor`| Function |Evstigneev Roman | in progress| | |
-|`createBlendModeColorFilter0`| Function |Evstigneev Roman |in progress | | |
-|`createBlendModeColorFilter1`| Function |Evstigneev Roman |in progress | | |
-|`createComposeColorFilter`| Function |Evstigneev Roman |in progress | | |
-|`createLinearToSRGBGamma`| Function |Evstigneev Roman |in progress | | |
-|`createSRGBGammaToLinear`| Function |Evstigneev Roman | in progress| | |
-|`createLumaColorFilter`| Function |Evstigneev Roman | in progress | | |
-|`createMatrixColorFilter`| Function |Evstigneev Roman | in progress| | |
+|`ctor`| Function |Evstigneev Roman | in progress| test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`createBlendModeColorFilter0`| Function |Evstigneev Roman |in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`createBlendModeColorFilter1`| Function |Evstigneev Roman |in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`createComposeColorFilter`| Function |Evstigneev Roman |in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`createLinearToSRGBGamma`| Function |Evstigneev Roman |in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`createSRGBGammaToLinear`| Function |Evstigneev Roman | in progress| test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`createLumaColorFilter`| Function |Evstigneev Roman | in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`createMatrixColorFilter`| Function |Evstigneev Roman | in progress| test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*Lattice*| *Class* |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`ctor`| Function |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`createImageLattice0`| Function |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
