@@ -1698,17 +1698,17 @@
 |`controls`| Function | Erokhin Ilya | done |  |  |
 |`loop`| Function | Erokhin Ilya | done |  |  |
 |`objectFit`| Function | Erokhin Ilya | done |  |  |
-|`onStart`| Function | Erokhin Ilya | done |  |  |
-|`onPause`| Function | Erokhin Ilya | done |  |  |
+|`onStart`| Function | Erokhin Ilya | done | pass |  |
+|`onPause`| Function | Erokhin Ilya | done | pass |  |
 |`onFinish`| Function | Erokhin Ilya | done |  |  |
 |`onFullscreenChange`| Function | Erokhin Ilya | done |  |  |
-|`onPrepared`| Function | Erokhin Ilya | done |  |  |
+|`onPrepared`| Function | Erokhin Ilya | done | pass |  |
 |`onSeeking`| Function | Erokhin Ilya | done |  |  |
 |`onSeeked`| Function | Erokhin Ilya | done |  |  |
 |`onUpdate`| Function | Erokhin Ilya | done |  |  |
-|`onError`| Function | Erokhin Ilya | done |  |  |
+|`onError`| Function | Erokhin Ilya | done | pass |  |
 |`onStop`| Function | Erokhin Ilya | done |  |  |
-|`enableAnalyzer`| Function | Erokhin Ilya | done |  |  |
+|`enableAnalyzer`| Function | Erokhin Ilya | done | pass |  |
 |`analyzerConfig`| Function | Erokhin Ilya | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`surfaceBackgroundColor`| Function | Kovalev Sergey | done | | |
 |`enableShortcutKey`| Function | Kovalev Sergey | done | | |
