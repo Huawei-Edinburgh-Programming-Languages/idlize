@@ -151,7 +151,7 @@
 | Video.test.ets | Pavelyev Ivan |
 | Visibility.test.ets | Evstigneev Roman |
 | WaterFlow.test.ets | Sergey Morozov |
-| WaterFlowDataSource.ets |                   |
+| WaterFlowDataSource.ets | Vadim Voronov |
 | Web.test.ets |                   |
 | XComponent.test.ets |                   |
 | ZIndex.test.ets | Andrey Khudenkikh |
