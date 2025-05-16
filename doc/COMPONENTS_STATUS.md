@@ -121,15 +121,15 @@
 |`mouseResponseRegion`| Function | Skroba Gleb | done |  | |
 |`size`| Function | Roman Sedaikin | done |  | |
 |`constraintSize`| Function | Roman Sedaikin | done |  | |
-|`touchable`| Function | Roman Sedaikin | done | passed | |
-|`hitTestBehavior`| Function | Roman Sedaikin | done | passed | |
+|`touchable`| Function | Roman Sedaikin | done | pass | |
+|`hitTestBehavior`| Function | Roman Sedaikin | done | pass | |
 |`onChildTouchTest`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`layoutWeight`| Function | Roman Sedaikin | done | passed | |
+|`layoutWeight`| Function | Roman Sedaikin | done | pass | |
 |`chainWeight`| Function | Politov Mikhail | testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBJW6H |
 |`padding`| Function | Skroba Gleb | done |  | |
 |`safeAreaPadding`| Function |Dmitry A Smirnov | done |  | |
 |`margin`| Function | Skroba Gleb | done |  | |
-|`backgroundColor0`| Function |Skroba Gleb| done | passed |  |
+|`backgroundColor0`| Function |Skroba Gleb| done | pass |  |
 |`backgroundColor1`| Function |Skroba Gleb| done |  |  |
 |`pixelRound`| Function | Skroba Gleb | done | pass |  |
 |`backgroundImageSize`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -150,15 +150,15 @@
 |`borderColor`| Function | Roman Sedaikin | done |  | |
 |`borderRadius`| Function | Roman Sedaikin | done |  | |
 |`borderImage`| Function | Roman Sedaikin | done | failed | |
-|`outline0`| Function |Skroba Gleb | done | passed | |
-|`outline1`| Function | Skroba Gleb | done | passed | |
-|`outlineStyle0`| Function | Skroba Gleb | done | passed | |
+|`outline0`| Function |Skroba Gleb | done | pass | |
+|`outline1`| Function | Skroba Gleb | done | pass | |
+|`outlineStyle0`| Function | Skroba Gleb | done | pass | |
 |`outlineStyle1`| Function | Skroba Gleb | done |  | |
-|`outlineWidth0`| Function |Skroba Gleb | done | passed | |
+|`outlineWidth0`| Function |Skroba Gleb | done | pass | |
 |`outlineWidth1`| Function | Skroba Gleb | done |  | |
-|`outlineColor0`| Function | Skroba Gleb | done | passed | |
+|`outlineColor0`| Function | Skroba Gleb | done | pass | |
 |`outlineColor1`| Function | Skroba Gleb | done |  | |
-|`outlineRadius0`| Function |Skroba Gleb | done | passed | |
+|`outlineRadius0`| Function |Skroba Gleb | done | pass | |
 |`outlineRadius1`| Function | Skroba Gleb | done |  | |
 |`foregroundColor0`| Function | Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundColor1`| Function |Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -182,10 +182,10 @@
 |`tabStop`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocus`| Function | Roman Sedaikin | done |  | |
 |`onBlur`| Function | Roman Sedaikin | done |  | |
-|`tabIndex`| Function | Dmitry A Smirnov| done | passed | |
-|`defaultFocus`| Function | Dmitry A Smirnov| done | passed | |
-|`groupDefaultFocus`| Function | Dmitry A Smirnov| done | passed | |
-|`focusOnTouch`| Function | Dmitry A Smirnov| done | passed | |
+|`tabIndex`| Function | Dmitry A Smirnov| done | pass | |
+|`defaultFocus`| Function | Dmitry A Smirnov| done | pass | |
+|`groupDefaultFocus`| Function | Dmitry A Smirnov| done | pass | |
+|`focusOnTouch`| Function | Dmitry A Smirnov| done | pass | |
 |`focusBox`| Function | Dudkin Sergey | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA info: LinkerUnresolvedClassError arkui.Graphics.ColorMetrics |
 |`animation`| Function | managed side | managed side | failed |  |
 |`transition0`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
@@ -215,8 +215,8 @@
 |`useEffect2`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`renderGroup0`| Function |Lobah Mikhail | done  | pass | same as arkui, but looks like there is an issue in ace_engine |
 |`renderGroup1`| Function | Lobah Mikhail | done  | test blocked | absent in ets1.2 now |
-|`freeze0`| Function | Lobah Mikhail | done | fail | method does not work https://gitee.com/openharmony/arkui_ace_engine/issues/IC851K |
-|`freeze1`| Function | Dmitry A Smirnov | done | fail | method does not work https://gitee.com/openharmony/arkui_ace_engine/issues/IC851K, https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP not in json|
+|`freeze0`| Function | Lobah Mikhail | done | failed | method does not work https://gitee.com/openharmony/arkui_ace_engine/issues/IC851K |
+|`freeze1`| Function | Dmitry A Smirnov | done | failed | method does not work https://gitee.com/openharmony/arkui_ace_engine/issues/IC851K, https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP not in json|
 |`translate0`| Function | Erokhin Ilya | done |  |  |
 |`translate1`| Function | Erokhin Ilya | done |  |  |
 |`scale0`| Function | Erokhin Ilya | done |  |  |
@@ -237,12 +237,12 @@
 |`flexShrink`| Function | Dmitry A Smirnov| done |  | |
 |`flexBasis`| Function | Dmitry A Smirnov| done |  | |
 |`alignSelf`| Function | Roman Sedaikin | done |  | |
-|`displayPriority`| Function | Roman Sedaikin | done | passed | |
+|`displayPriority`| Function | Roman Sedaikin | done | pass | |
 |`zIndex`| Function | Roman Sedaikin | done |  | |
 |`direction`| Function | Roman Sedaikin | done | pass | |
 |`align`| Function | Roman Sedaikin | done | pass | |
 |`position`| Function | Roman Sedaikin | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`markAnchor`| Function | Dmitry A Smirnov| done | passed | |
+|`markAnchor`| Function | Dmitry A Smirnov| done | pass | |
 |`offset`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`enabled`| Function | Roman Sedaikin | done |  | |
 |`useSizeType`| Function | Dmitry A Smirnov| testskipped |  | deprecated, modifier is ready|
@@ -288,12 +288,12 @@
 |`geometryTransition1`| Function | Lobah Mikhail | testskipped | test blocked | no method found test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
 |`stateStyles`| Function | Dudkin Sergey | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`restoreId`| Function | Lobah Mikhail | done |  | |
-|`sphericalEffect0`| Function | Lobah Mikhail | done | passed | |
-|`sphericalEffect1`| Function | Dmitry A Smirnov | done | passed | |
-|`lightUpEffect0`| Function | Lobah Mikhail | done | passed | |
-|`lightUpEffect1`| Function | Dmitry A Smirnov | done | passed | |
-|`pixelStretchEffect0`| Function | Lobah Mikhail | done | passed | |
-|`pixelStretchEffect1`| Function | Dmitry A Smirnov | done | passed | |
+|`sphericalEffect0`| Function | Lobah Mikhail | done | pass | |
+|`sphericalEffect1`| Function | Dmitry A Smirnov | done | pass | |
+|`lightUpEffect0`| Function | Lobah Mikhail | done | pass | |
+|`lightUpEffect1`| Function | Dmitry A Smirnov | done | pass | |
+|`pixelStretchEffect0`| Function | Lobah Mikhail | done | pass | |
+|`pixelStretchEffect1`| Function | Dmitry A Smirnov | done | pass | |
 |`accessibilityGroup0`| Function |Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`accessibilityGroup1`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`accessibilityText0`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -311,7 +311,7 @@
 |`accessibilityVirtualNode`| Function | Lobah Mikhail | done |  |  |
 |`accessibilityChecked`| Function | Lobah Mikhail | done |  | |
 |`accessibilitySelected`| Function | Lobah Mikhail | done |  | |
-|`obscured`| Function |Dmitry A Smirnov | done | passed | |
+|`obscured`| Function |Dmitry A Smirnov | done | pass | |
 |`reuseId`| Function |Dmitry A Smirnov | managed side |  | not implemented in ace_engine|
 |`reuse`| Function |managed side | managed side | | to be removed from CAPI generation |
 |`renderFit0`| Function | Dmitry A Smirnov| done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -338,13 +338,13 @@
 |`foregroundBlurStyle1`| Function | Dmitry A Smirnov | in progress |  | |
 |`focusScopeId0`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`focusScopeId1`| Function | Dmitry A Smirnov| done |  test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
-|`focusScopePriority`| Function | Dmitry A Smirnov| done | passed | |
+|`focusScopePriority`| Function | Dmitry A Smirnov| done | pass | |
 |`gesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`priorityGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`parallelGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`blur0`| Function | Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`blur1`| Function |Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`linearGradientBlur0`| Function |Lobah Mikhail | done | passed | |
+|`linearGradientBlur0`| Function |Lobah Mikhail | done | pass | |
 |`linearGradientBlur1`| Function | Dmitry A Smirnov | done | passed  | |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
 |`backdropBlur0`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -352,7 +352,7 @@
 |`sharedTransition`|Function|Skroba Gleb | done |  |  |
 |`chainMode`| Function | Berezin Kirill | done |  | |
 |`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`overlay`| Function | Lobah Mikhail | blocked IDL | passed | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the 'Ark_ComponentContent' class without stubs is required.|
+|`overlay`| Function | Lobah Mikhail | blocked IDL | pass | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the 'Ark_ComponentContent' class without stubs is required.|
 |`blendMode0`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`blendMode1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`advancedBlendMode`| Function | Erokhin Ilya |in progress |  |  |
@@ -365,7 +365,7 @@
 |`bindContentCover0`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov |
 |`bindContentCover1`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov |
 |`bindSheet`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onVisibleAreaChange`| Function | Erokhin Ilya | done | passed | |
+|`onVisibleAreaChange`| Function | Erokhin Ilya | done | pass | |
 |`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`keyboardShortcut`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*Common*| *Component* | Maksimov Nikita | done |  | |
@@ -406,7 +406,7 @@
 |`edgeEffect`| Function | Samarin Sergey | done |  | |
 |`fadingEdge`| Function | Samarin Sergey | done | test blocked | |
 |*Canvas*| *Component* |Vadim Voronov, Evstigneev Roman | blocked AceEngine |  |
-|`construct`| Function |Vadim Voronov, Evstigneev Roman | done | passed |
+|`construct`| Function |Vadim Voronov, Evstigneev Roman | done | pass |
 |`setCanvasOptions0`| Function |Vadim Voronov, Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setCanvasOptions1`| Function |Vadim Voronov, Evstigneev Roman | blocked AceEngine | test blocked | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onReady`| Function |Vadim Voronov | done |  |  |
@@ -457,9 +457,9 @@
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done | pass | UT by Evstigneev Roman |
 |`reverse`| Function | Politov Mikhail | done | pass |  |
 |*ColumnSplit*| *Component* | Dmitry A Smirnov| done |  | |
-|`construct`| Function |Dmitry A Smirnov| done | passed | |
-|`setColumnSplitOptions`| Function | Dmitry A Smirnov| done | passed |  |
-|`resizeable`| Function | Dmitry A Smirnov| done | passed |  |
+|`construct`| Function |Dmitry A Smirnov| done | pass | |
+|`setColumnSplitOptions`| Function | Dmitry A Smirnov| done | pass |  |
+|`resizeable`| Function | Dmitry A Smirnov| done | pass |  |
 |`divider`| Function | Dmitry A Smirnov| done | blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*Component3D*| *Component* |Kovalev Sergey | blocked IDL |  | |
 |`construct`| Function |Kovalev Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD (+) |
@@ -471,10 +471,10 @@
 |`renderWidth`| Function |Kovalev Sergey | done | test blocked | info: Component3D not found |
 |`renderHeight`| Function |Kovalev Sergey | done |  |  |
 |`customRender`| Function |Kovalev Sergey | done |  |  |
-|*ContainerSpan*| *Component* | Tuzhilkin Ivan| done | passed |  |
-|`construct`| Function | Tuzhilkin Ivan| done | passed |  |
-|`setContainerSpanOptions`| Function |Tuzhilkin Ivan| done | passed |  |
-|`textBackgroundStyle`| Function |Tuzhilkin Ivan| done | passed |  |
+|*ContainerSpan*| *Component* | Tuzhilkin Ivan| done | pass |  |
+|`construct`| Function | Tuzhilkin Ivan| done | pass |  |
+|`setContainerSpanOptions`| Function |Tuzhilkin Ivan| done | pass |  |
+|`textBackgroundStyle`| Function |Tuzhilkin Ivan| done | pass |  |
 |*Counter*| *Component* | Erokhin Ilya | done | pass |  |
 |`construct`| Function |Erokhin Ilya | done | pass |  |
 |`setCounterOptions`| Function | Erokhin Ilya | done | pass |  |
@@ -492,29 +492,29 @@
 |`trackShadow`| Function |Morozov Sergey | testskipped | test blocked | https://gitee.com/openharmony/arkui_ace_engine/issues/IBVDFV , demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`contentModifier`| Function | Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |*DatePicker*| *Component* | Vadim Voronov | done |  |  |
-|`construct`| Function |Vadim Voronov | done | passed |  |
-|`setDatePickerOptions`| Function | Vadim Voronov| done | passed | |
-|`lunar0`| Function |Vadim Voronov | done | passed |  |
-|`lunar1`| Function |Vadim Voronov | done | passed |  |
-|`disappearTextStyle0`| Function | Vadim Voronov| done | passed |  |
-|`disappearTextStyle1`| Function | Vadim Voronov| done | passed |  |
-|`textStyle0`| Function |Vadim Voronov | done | passed |  |
-|`textStyle1`| Function |Vadim Voronov | done | passed |  |
-|`selectedTextStyle0`| Function |Vadim Voronov | done | passed |  |
-|`selectedTextStyle1`| Function |Vadim Voronov | done | passed |  |
+|`construct`| Function |Vadim Voronov | done | pass |  |
+|`setDatePickerOptions`| Function | Vadim Voronov| done | pass | |
+|`lunar0`| Function |Vadim Voronov | done | pass |  |
+|`lunar1`| Function |Vadim Voronov | done | pass |  |
+|`disappearTextStyle0`| Function | Vadim Voronov| done | pass |  |
+|`disappearTextStyle1`| Function | Vadim Voronov| done | pass |  |
+|`textStyle0`| Function |Vadim Voronov | done | pass |  |
+|`textStyle1`| Function |Vadim Voronov | done | pass |  |
+|`selectedTextStyle0`| Function |Vadim Voronov | done | pass |  |
+|`selectedTextStyle1`| Function |Vadim Voronov | done | pass |  |
 |`onChange`| Function | Vadim Voronov| done | not covered | info: method not found, deprecated since API10 replaced by onDateChange |
-|`onDateChange`| Function |Vadim Voronov | done | passed | |
-|`onDateChange1`| Function |Vadim Voronov | done | passed | |
+|`onDateChange`| Function |Vadim Voronov | done | pass | |
+|`onDateChange1`| Function |Vadim Voronov | done | pass | |
 |`digitalCrownSensitivity`| Function | Vadim Voronov | done |  | |
 |`enableHapticFeedback`| Function | Vadim Voronov | done | | |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
-|*Divider*| *Component* | Tuzhilkin Ivan | done | passed |  |
-|`construct`| Function | Tuzhilkin Ivan |done | passed | |
-|`setDividerOptions`| Function | Tuzhilkin Ivan| done | passed |  |
-|`vertical`| Function | Tuzhilkin Ivan | done | passed |  |
-|`color`| Function | Tuzhilkin Ivan | done | passed |  |
-|`strokeWidth`| Function | Tuzhilkin Ivan | done | passed |  |
-|`lineCap`| Function | Tuzhilkin Ivan | done | passed |  |
+|*Divider*| *Component* | Tuzhilkin Ivan | done | pass |  |
+|`construct`| Function | Tuzhilkin Ivan |done | pass | |
+|`setDividerOptions`| Function | Tuzhilkin Ivan| done | pass |  |
+|`vertical`| Function | Tuzhilkin Ivan | done | pass |  |
+|`color`| Function | Tuzhilkin Ivan | done | pass |  |
+|`strokeWidth`| Function | Tuzhilkin Ivan | done | pass |  |
+|`lineCap`| Function | Tuzhilkin Ivan | done | pass |  |
 |*EffectComponent*| *Component* | Ekaterina Stepanova | done |  | |
 |`construct`| Function |Ekaterina Stepanova | done |  | |
 |`setEffectComponentOptions`| Function | Ekaterina Stepanova | done |  | |
@@ -530,8 +530,8 @@
 |`construct`| Function | Kovalev Sergey | done | pass |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done | pass |  |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done | pass | UT by Evstigneev Roman |
-|*FlowItem*| *Component* | Evstigneev Roman | done | passed |  |
-|`construct`| Function | Evstigneev Roman | done | passed |  |
+|*FlowItem*| *Component* | Evstigneev Roman | done | pass |  |
+|`construct`| Function | Evstigneev Roman | done | pass |  |
 |`setFlowItemOptions`| Function | Evstigneev Roman | done |  |  |
 |*FolderStack*| *Component* | Politov Mikhail | done |  |  |
 |`construct`| Function | Politov Mikhail | done |  |  |
@@ -672,26 +672,26 @@
 |`enhancedImageQuality`| Function | Erokhin Ilya | done |  |  |
 |`orientation`| Function | Samarin Sergey | done |  | |
 |*ImageAnimator*| *Component* | Pavelyev Ivan | done |  | |
-|`construct`| Function | Pavelyev Ivan | done | passed | |
-|`setImageAnimatorOptions`| Function | Pavelyev Ivan | done | passed | |
-|`images`| Function | Pavelyev Ivan | done | passed |  |
-|`state`| Function | Pavelyev Ivan | done | passed | |
-|`duration`| Function | Pavelyev Ivan | done | passed | |
-|`reverse`| Function | Pavelyev Ivan | done | passed | |
+|`construct`| Function | Pavelyev Ivan | done | pass | |
+|`setImageAnimatorOptions`| Function | Pavelyev Ivan | done | pass | |
+|`images`| Function | Pavelyev Ivan | done | pass |  |
+|`state`| Function | Pavelyev Ivan | done | pass | |
+|`duration`| Function | Pavelyev Ivan | done | pass | |
+|`reverse`| Function | Pavelyev Ivan | done | pass | |
 |`fixedSize`| Function | Pavelyev Ivan | done |  | |
 |`preDecode`| Function | Pavelyev Ivan | done |  | deprecated |
-|`fillMode`| Function | Pavelyev Ivan | done | passed | |
-|`iterations`| Function | Pavelyev Ivan | done | passed | |
+|`fillMode`| Function | Pavelyev Ivan | done | pass | |
+|`iterations`| Function | Pavelyev Ivan | done | pass | |
 |`monitorInvisibleArea`| Function | Samarin Sergey | done | failed | |
-|`onStart`| Function | Pavelyev Ivan | done | passed | |
-|`onPause`| Function | Pavelyev Ivan | done | passed | |
-|`onRepeat`| Function | Pavelyev Ivan | done | passed | |
+|`onStart`| Function | Pavelyev Ivan | done | pass | |
+|`onPause`| Function | Pavelyev Ivan | done | pass | |
+|`onRepeat`| Function | Pavelyev Ivan | done | pass | |
 |`onCancel`| Function | Pavelyev Ivan | done |  | |
-|`onFinish`| Function | Pavelyev Ivan | done | passed | |
+|`onFinish`| Function | Pavelyev Ivan | done | pass | |
 |*ImageSpan*| *Component* | Politov Mikhail | blocked IDL |  |  |
-|`construct`| Function | Politov Mikhail | done | passed | |
-|`setImageSpanOptions`| Function | Politov Mikhail | done | passed | |
-|`verticalAlign`| Function | Politov Mikhail | done | passed |  |
+|`construct`| Function | Politov Mikhail | done | pass | |
+|`setImageSpanOptions`| Function | Politov Mikhail | done | pass | |
+|`verticalAlign`| Function | Politov Mikhail | done | pass |  |
 |`colorFilter`| Function | Politov Mikhail| in progress |  |  |
 |`objectFit`| Function | Politov Mikhail | done |  |  |
 |`onComplete`| Function | Politov Mikhail | done |  |  |
@@ -1265,8 +1265,8 @@
 |`showTips`| Function |Morozov Sergey | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`_onChangeEvent_value`| Function | Erokhin Ilya | done | test blocked | test blocked by $$ usage in ArkTS 1.2 |
 |*BaseSpan*| *Component* |Politov Mikhail | done |  |  |
-|`construct`| Function |Politov Mikhail | done | passed |  |
-|`textBackgroundStyle`| Function | Politov Mikhail | done | passed |  |
+|`construct`| Function |Politov Mikhail | done | pass |  |
+|`textBackgroundStyle`| Function | Politov Mikhail | done | pass |  |
 |`baselineOffset`| Function | Politov Mikhail | done |  |  |
 |*Span*| *Component* | Politov Mikhail | done | pass |  |
 |`construct`| Function |Politov Mikhail | done | pass |  |
@@ -1538,20 +1538,20 @@
 |`contentModifier`| Function |Pavelyev Ivan| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`dateTimeOptions`| Function |Politov Mikhail| testskipped |  |  |
 |*TextInput*| *Component* | Spirin Andrey | in progress |  |  |
-|`construct`| Function | Spirin Andrey | done | passed | |
-|`setTextInputOptions`| Function | Spirin Andrey | done | passed | |
-|`type`| Function | Spirin Andrey | done | passed |  |
+|`construct`| Function | Spirin Andrey | done | pass | |
+|`setTextInputOptions`| Function | Spirin Andrey | done | pass | |
+|`type`| Function | Spirin Andrey | done | pass |  |
 |`contentType`| Function | Spirin Andrey | done |  |  |
 |`placeholderColor`| Function | Spirin Andrey | done | failed | info: placeholder is not displayed without any log error |
 |`textOverflow`| Function | Spirin Andrey, Lobah Mikhail| done|  |https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
 |`textIndent`| Function | Spirin Andrey | done |  |  |
 |`placeholderFont`| Function | Spirin Andrey, Tuzhilkin Ivan | testskipped | failed | info: placeholder is not displayed without any log error |
-|`enterKeyType`| Function | Spirin Andrey | done | passed |  |
-|`caretColor`| Function | Spirin Andrey | done | passed |  |
+|`enterKeyType`| Function | Spirin Andrey | done | pass |  |
+|`caretColor`| Function | Spirin Andrey | done | pass |  |
 |`onEditChanged`| Function | Spirin Andrey | done |  |deprecated UT Kovalev Sergey |
 |`onEditChange`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`onSubmit`| Function | Spirin Andrey | done |  | EVENT |
-|`onChange`| Function | Lobah Mikhail | done | passed | UT done Lobah Mikhail  |
+|`onChange`| Function | Lobah Mikhail | done | pass | UT done Lobah Mikhail  |
 |`onTextSelectionChange`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`onContentScroll`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`maxLength`| Function | Spirin Andrey | done |  |  |
@@ -1883,13 +1883,13 @@
 |`construct`| Function |Spirin Andrey, Evstigneev Roman | done |  | |
 |`setRemoteWindowOptions`| Function | Spirin Andrey, Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+) |
 |*WaterFlow*| *Component* | Kovalev Sergey | done |  |  |
-|`construct`| Function | Kovalev Sergey | done | passed | |
-|`setWaterFlowOptions`| Function | Kovalev Sergey | done | passed | |
-|`columnsTemplate`| Function | Kovalev Sergey | done | passed | |
+|`construct`| Function | Kovalev Sergey | done | pass | |
+|`setWaterFlowOptions`| Function | Kovalev Sergey | done | pass | |
+|`columnsTemplate`| Function | Kovalev Sergey | done | pass | |
 |`itemConstraintSize`| Function | Kovalev Sergey | done | | |
 |`rowsTemplate`| Function | Kovalev Sergey | done | | |
-|`columnsGap`| Function | Kovalev Sergey | done | passed | |
-|`rowsGap`| Function |Kovalev Sergey | done | passed | |
+|`columnsGap`| Function | Kovalev Sergey | done | pass | |
+|`rowsGap`| Function |Kovalev Sergey | done | pass | |
 |`layoutDirection`| Function |Kovalev Sergey | done | | |
 |`nestedScroll`| Function | Kovalev Sergey | done | | |
 |`enableScrollInteraction`| Function | Kovalev Sergey | done | | |
@@ -2223,7 +2223,7 @@
 |`ctor`| Function |Erokhin Ilya | done |  |  |
 |`interpolate`| Function | Erokhin Ilya | done |  |  |
 |*DrawModifier*| *Class* | Erokhin Ilya | blocked IDL|  | |
-|`ctor`| Function | Erokhin Ilya | done | passed | |
+|`ctor`| Function | Erokhin Ilya | done | pass | |
 |`drawBehind`| Function | Erokhin Ilya | blocked IDL | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`drawContent`| Function | Erokhin Ilya | blocked IDL |  test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`drawFront`| Function | Erokhin Ilya | blocked IDL | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
@@ -3293,7 +3293,7 @@
 |`forward`| Function | Erokhin Ilya | done |  | deprecated |
 |`getCookieManager`| Function | Erokhin Ilya | deprecated |  | testskipped |
 |*XComponentController*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`ctor`| Function |Tuzhilkin Ivan | testskipped | passed | |
+|`ctor`| Function |Tuzhilkin Ivan | testskipped | pass | |
 |`getXComponentSurfaceId`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`getXComponentContext`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF +, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`setXComponentSurfaceSize`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
