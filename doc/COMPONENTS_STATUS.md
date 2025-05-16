@@ -1036,7 +1036,7 @@
 |`setRowOptions1`| Function | Andrey Khudenkikh | done |  |  |
 |`alignItems`| Function | Andrey Khudenkikh | done | pass |  |
 |`justifyContent`| Function | Andrey Khudenkikh | done | pass |  |
-|`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  | UT by Evstigneev Roman |
+|`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done | failed | UT by Evstigneev Roman, method does not work |
 |`reverse`| Function | Andrey Khudenkikh | done | pass |  |
 |*RowSplit*| *Component* | Dmitry A Smirnov| done |  | |
 |`construct`| Function | Dmitry A Smirnov| done |  | |
@@ -1350,10 +1350,10 @@
 |`onChange`| Function | Skroba Gleb | done |  |  |
 |*SymbolGlyph*| *Component* |Andrey Khudenkikh | blocked IDL |  |  |
 |`construct`| Function |Andrey Khudenkikh | done |  |  |
-|`setSymbolGlyphOptions`| Function |Andrey Khudenkikh | done |  |  |
-|`fontSize`| Function |Andrey Khudenkikh | done |  |  |
-|`fontColor`| Function |Andrey Khudenkikh | done |  |  |
-|`fontWeight`| Function |Andrey Khudenkikh | done |  |  |
+|`setSymbolGlyphOptions`| Function |Andrey Khudenkikh | done | pass |  |
+|`fontSize`| Function |Andrey Khudenkikh | done | pass |  |
+|`fontColor`| Function |Andrey Khudenkikh | done | pass |  |
+|`fontWeight`| Function |Andrey Khudenkikh | done | pass |  |
 |`effectStrategy`| Function |Andrey Khudenkikh | done |  |  |
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |  |
 |`minFontScale`| Function | Kovalev Sergey | done  | |
@@ -1362,10 +1362,10 @@
 |`symbolEffect1`| Function |Andrey Khudenkikh, Samarin Sergey | done |  |  |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| done |  |  |
 |`construct`| Function |Dmitry A Smirnov| done |  |  |
-|`setSymbolSpanOptions`| Function |Dmitry A Smirnov| done |  |   |
-|`fontSize`| Function |Dmitry A Smirnov| done |  |  |
-|`fontColor`| Function |Dmitry A Smirnov| done |  |  |
-|`fontWeight`| Function |Dmitry A Smirnov| done |  |  |
+|`setSymbolSpanOptions`| Function |Dmitry A Smirnov| done | pass |   |
+|`fontSize`| Function |Dmitry A Smirnov| done | pass |  |
+|`fontColor`| Function |Dmitry A Smirnov| done | pass |  |
+|`fontWeight`| Function |Dmitry A Smirnov| done | pass |  |
 |`effectStrategy`| Function |Dmitry A Smirnov| done |  |  |
 |`renderingStrategy`| Function |Dmitry A Smirnov| done |  |  |
 |*Tabs*| *Component* | Tuzhilkin Ivan | done |  |  |
@@ -1661,34 +1661,34 @@
 |*TimePicker*| *Component* | Ekaterina Stepanova| blocked IDL |  |  |
 |`construct`| Function |Politov Mikhail| done |  |  |
 |`setTimePickerOptions`| Function |Politov Mikhail| done |  |  |
-|`useMilitaryTime0`| Function |Ekaterina Stepanova| done |  |  |
+|`useMilitaryTime0`| Function |Ekaterina Stepanova| done | pass |  |
 |`useMilitaryTime1`| Function |Ekaterina Stepanova| done |  |  |
-|`loop0`| Function |Ekaterina Stepanova| done |  |  |
+|`loop0`| Function |Ekaterina Stepanova| done | pass |  |
 |`loop1`| Function |Ekaterina Stepanova| done |  |  |
-|`disappearTextStyle0`| Function |Ekaterina Stepanova| done |  |  |
+|`disappearTextStyle0`| Function |Ekaterina Stepanova| done | pass |  |
 |`disappearTextStyle1`| Function |Ekaterina Stepanova| done |  |  |
-|`textStyle0`| Function |Ekaterina Stepanova| done |  |  |
+|`textStyle0`| Function |Ekaterina Stepanova| done | pass |  |
 |`textStyle1`| Function |Ekaterina Stepanova| done |  |  |
-|`selectedTextStyle0`| Function |Ekaterina Stepanova| done |  |  |
+|`selectedTextStyle0`| Function |Ekaterina Stepanova| done | pass |  |
 |`selectedTextStyle1`| Function |Ekaterina Stepanova| done |  |  |
 |`dateTimeOptions0`| Function |Politov Mikhail| done |  | |
 |`dateTimeOptions1`| Function |Politov Mikhail| done |  | |
-|`onChange0`| Function |Ekaterina Stepanova| done |  |  |
+|`onChange0`| Function |Ekaterina Stepanova| done | pass |  |
 |`onChange1`| Function |Ekaterina Stepanova| done |  |  |
-|`onEnterSelectedArea`| Function | Kovalev Sergey | done | | API is present on Upstream only |
+|`onEnterSelectedArea`| Function | Kovalev Sergey | done | pass | API is present on Upstream only |
 |`enableHapticFeedback0`| Function |Ekaterina Stepanova| done |  |  |
 |`enableHapticFeedback1`| Function |Ekaterina Stepanova| done |  |  |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | API is present on Upstream only |
-|`enableCascade`| Function | Kovalev Sergey | done | | API is present on Upstream only |
+|`enableCascade`| Function | Kovalev Sergey | done | pass | API is present on Upstream only |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
 |*Toggle*| *Component* |Morozov Sergey |blocked IDL |  |
 |`construct`| Function |Morozov Sergey | done | | unblocked since AceEngine won't fix it |
-|`setToggleOptions`| Function |Morozov Sergey | done | | unblocked since AceEngine won't fix it |
-|`onChange`| Function | Morozov Sergey| done |  |  |
+|`setToggleOptions`| Function |Morozov Sergey | done |  | unblocked since AceEngine won't fix it |
+|`onChange`| Function | Morozov Sergey| done | pass |  |
 |`contentModifier`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
-|`selectedColor`| Function | Morozov Sergey| done |  |  |
-|`switchPointColor`| Function | Morozov Sergey| done |  |  |
-|`switchStyle`| Function | Morozov Sergey| done |  |  |
+|`selectedColor`| Function | Morozov Sergey| done | pass |  |
+|`switchPointColor`| Function | Morozov Sergey| done | pass |  |
+|`switchStyle`| Function | Morozov Sergey| done | pass |  |
 |`_onChangeEvent_isOn`| Function | Erokhin Ilya | done |  | |
 |*Video*| *Component* | Erokhin Ilya | blocked AceEngine|  |  |
 |`construct`| Function |Erokhin Ilya | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |

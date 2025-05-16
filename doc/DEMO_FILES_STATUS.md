@@ -93,7 +93,7 @@
 | ListItem.test.ets | Sergey Morozov |
 | ListItemGroup.test.ets | Sergey Morozov |
 | LoadingProgress.test.ets | Samarin Sergey    |
-| LocationButton.test.ets | Samarin Sergey    |
+| LocationButton.test.ets | Porodin Alexander  |
 | Marquee.test.ets | Andrey Khudenkikh  |
 | Menu.test.ets | Sergey Morozov    |
 | MenuItem.test.ets | Sergey Morozov    |
