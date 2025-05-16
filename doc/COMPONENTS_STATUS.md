@@ -1713,138 +1713,138 @@
 |`surfaceBackgroundColor`| Function | Kovalev Sergey | done | | |
 |`enableShortcutKey`| Function | Kovalev Sergey | done | | |
 |*Web*| *Component* | Erokhin Ilya | blocked IDL |  | |
-|`construct`| Function |Erokhin Ilya | done |  |  |
-|`setWebOptions`| Function | Erokhin Ilya | done |  |  |
-|`javaScriptAccess`| Function | Erokhin Ilya | done |  | |
-|`fileAccess`| Function | Erokhin Ilya | done |  | |
-|`onlineImageAccess`| Function | Erokhin Ilya | done |  | |
-|`domStorageAccess`| Function | Erokhin Ilya | done |  | |
-|`imageAccess`| Function | Erokhin Ilya | done |  | |
-|`mixedMode`| Function | Erokhin Ilya | done |  | |
-|`zoomAccess`| Function | Erokhin Ilya | done |  | |
-|`geolocationAccess`| Function | Erokhin Ilya | done |  | |
-|`javaScriptProxy`| Function | Erokhin Ilya | in progress |  | |
-|`password`| Function | Erokhin Ilya | done |  |deprecated |
-|`cacheMode`| Function | Erokhin Ilya | done |  | |
-|`darkMode`| Function | Erokhin Ilya | done |  | |
-|`forceDarkAccess`| Function | Erokhin Ilya | done |  | |
-|`mediaOptions`| Function | Erokhin Ilya | done |  | |
-|`tableData`| Function | Erokhin Ilya | done |  |deprecated |
-|`wideViewModeAccess`| Function | Erokhin Ilya | done |  |deprecated |
-|`overviewModeAccess`| Function | Erokhin Ilya | done |  | |
-|`overScrollMode`| Function | Erokhin Ilya | done |  | |
-|`blurOnKeyboardHideMode`| Function | Vadim Voronov | done | | |
-|`textZoomAtio`| Function | Erokhin Ilya | done |  |deprecated |
-|`textZoomRatio`| Function | Erokhin Ilya | done |  | |
-|`databaseAccess`| Function | Erokhin Ilya | done |  | |
-|`initialScale`| Function | Erokhin Ilya | done |  | |
-|`userAgent`| Function | Erokhin Ilya | done |  |deprecated |
-|`metaViewport`| Function | Erokhin Ilya | done |  | |
-|`onPageEnd`| Function | Erokhin Ilya | done |  | |
-|`onPageBegin`| Function | Erokhin Ilya | done |  | |
-|`onProgressChange`| Function | Erokhin Ilya | done |  | |
-|`onTitleReceive`| Function | Erokhin Ilya | done |  | |
-|`onGeolocationHide`| Function | Erokhin Ilya | done |  | |
-|`onGeolocationShow`| Function | Erokhin Ilya | done |  | |
-|`onRequestSelected`| Function | Erokhin Ilya | done |  | |
-|`onAlert`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
-|`onBeforeUnload`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
-|`onConfirm`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
-|`onPrompt`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
-|`onConsole`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
-|`onErrorReceive`| Function | Erokhin Ilya | done |  | |
-|`onHttpErrorReceive`| Function | Erokhin Ilya | done |  | |
-|`onDownloadStart`| Function | Erokhin Ilya | done |  | |
-|`onRefreshAccessedHistory`| Function | Erokhin Ilya | done |  | |
-|`onUrlLoadIntercept`| Function | Erokhin Ilya, Maksimov Nikita | done |  |deprecated |
-|`onSslErrorReceive`| Function | Erokhin Ilya | done |  | deprecated |
-|`onRenderExited0`| Function | Erokhin Ilya | done |  |deprecated |
-|`onRenderExited1`| Function |Erokhin Ilya | done |  |deprecated |
-|`onShowFileSelector`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
-|`onFileSelectorShow`| Function | Erokhin Ilya | done |  | deprecated |
-|`onResourceLoad`| Function | Erokhin Ilya | done |  | |
-|`onFullScreenExit`| Function | Erokhin Ilya | done |  | |
-|`onFullScreenEnter`| Function | Erokhin Ilya | done |  | |
-|`onScaleChange`| Function | Erokhin Ilya | done |  | |
-|`onHttpAuthRequest`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
-|`onInterceptRequest`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
-|`onPermissionRequest`| Function | Erokhin Ilya | done |  | |
-|`onScreenCaptureRequest`| Function | Erokhin Ilya | done |  | |
-|`onContextMenuShow`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
-|`onContextMenuHide`| Function | Erokhin Ilya | done |  | deprecated|
-|`mediaPlayGestureAccess`| Function | Erokhin Ilya | done |  | |
-|`onSearchResultReceive`| Function | Erokhin Ilya | done |  | |
-|`onScroll`| Function | Erokhin Ilya | done |  | |
-|`onSslErrorEventReceive`| Function | Erokhin Ilya | done |  | |
-|`onSslErrorEvent`| Function | Erokhin Ilya | done |  | |
-|`onClientAuthenticationRequest`| Function | Erokhin Ilya | done |  | |
-|`onWindowNew`| Function | Erokhin Ilya | done |  | |
-|`onWindowExit`| Function | Erokhin Ilya | done |  | |
-|`multiWindowAccess`| Function | Erokhin Ilya | done |  | |
-|`onInterceptKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |  |
-|`webStandardFont`| Function | Erokhin Ilya | done |  | |
-|`webSerifFont`| Function | Erokhin Ilya | done |  | |
-|`webSansSerifFont`| Function | Erokhin Ilya | done |  | |
-|`webFixedFont`| Function | Erokhin Ilya | done |  | |
-|`webFantasyFont`| Function | Erokhin Ilya | done |  | |
-|`webCursiveFont`| Function | Erokhin Ilya | done |  | |
-|`defaultFixedFontSize`| Function | Erokhin Ilya | done |  | |
-|`defaultFontSize`| Function | Erokhin Ilya | done |  | |
-|`minFontSize`| Function | Erokhin Ilya | done |  | |
-|`minLogicalFontSize`| Function | Erokhin Ilya | done |  | |
-|`defaultTextEncodingFormat`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
-|`forceDisplayScrollBar`| Function | Erokhin Ilya | done |  | |
-|`blockNetwork`| Function | Erokhin Ilya | done |  | |
-|`horizontalScrollBarAccess`| Function | Erokhin Ilya | done |  | |
-|`verticalScrollBarAccess`| Function | Erokhin Ilya | done |  | |
-|`onTouchIconUrlReceived`| Function | Erokhin Ilya | done |  | |
-|`onFaviconReceived`| Function | Erokhin Ilya | done |  |  |
-|`onPageVisible`| Function | Erokhin Ilya | done |  | |
-|`onDataResubmitted`| Function | Erokhin Ilya | done |  | |
-|`pinchSmooth`| Function | Erokhin Ilya | done |  | |
-|`allowWindowOpenMethod`| Function | Erokhin Ilya | done |  | |
-|`onAudioStateChanged`| Function | Erokhin Ilya | done |  | |
-|`onFirstContentfulPaint`| Function | Erokhin Ilya | blocked IDL |  | need i64 , https://gitee.com/nikolay-igotti/idlize/issues/IC36BZ |
-|`onFirstMeaningfulPaint`| Function | Erokhin Ilya | blocked IDL |  | need i64 , https://gitee.com/nikolay-igotti/idlize/issues/IC36BZ |
-|`onLargestContentfulPaint`| Function | Erokhin Ilya | blocked IDL |  | need i64 , https://gitee.com/nikolay-igotti/idlize/issues/IC36BZ |
-|`onLoadIntercept`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
-|`onControllerAttached`| Function | Erokhin Ilya | done |  | |
-|`onOverScroll`| Function | Erokhin Ilya | done |  | |
-|`onSafeBrowsingCheckResult`| Function | Erokhin Ilya | done |  | |
-|`onNavigationEntryCommitted`| Function | Erokhin Ilya | done |  | |
-|`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | done |  | |
-|`javaScriptOnDocumentStart`| Function | Erokhin Ilya | testskipped |  | UT in progress Andrey Khudenkikh |
-|`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | testskipped |  | UT in progress Andrey Khudenkikh |
-|`layoutMode`| Function | Erokhin Ilya | done |  | |
-|`nestedScroll`| Function | Erokhin Ilya, Dudkin Sergey | done |  |  |
-|`enableNativeEmbedMode`| Function | Erokhin Ilya | done |  | |
-|`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya, Andrey Khudenkikh | done |  | |
-|`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | done |  | |
-|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya, Andrey Khudenkikh, Tuzhilkin Ivan | testskipped |  | Optional EventResult part is not covered in UT |
-|`copyOptions`| Function | Erokhin Ilya | done |  | |
-|`onOverrideUrlLoading`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
-|`textAutosizing`| Function | Erokhin Ilya | done |  | |
-|`enableNativeMediaPlayer`| Function | Erokhin Ilya | done |  | |
-|`onRenderProcessNotResponding`| Function | Erokhin Ilya | done |  | |
-|`onRenderProcessResponding`| Function | Erokhin Ilya | done |  | |
-|`selectionMenuOptions`| Function | Erokhin Ilya | testskipped |  | UT in progress Andrey Khudenkikh |
-|`onViewportFitChanged`| Function | Erokhin Ilya | done |  | |
-|`onInterceptKeyboardAttach`| Function | Erokhin Ilya, Maksimov Nikita | done |  | |
-|`onAdsBlocked`| Function | Erokhin Ilya | done |  | |
-|`keyboardAvoidMode`| Function | Erokhin Ilya | done |  | |
-|`editMenuOptions`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done |  |  |
-|`enableHapticFeedback`| Function | Erokhin Ilya | done |  | |
-|`enableFollowSystemFontWeight`| Function | Vadim Voronov | done | | |
-|`enableWebAVSession`| Function | Vadim Voronov  | done | | |
-|`optimizeParserBudget`| Function | Vadim Voronov  | done | | |
-|`runJavaScriptOnDocumentStart`| Function | Vadim Voronov  | done | | |
+|`construct`| Function |Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setWebOptions`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`javaScriptAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`fileAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onlineImageAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`domStorageAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`imageAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | 
+|`mixedMode`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`zoomAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`geolocationAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`javaScriptProxy`| Function | Erokhin Ilya | in progress | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`password`| Function | Erokhin Ilya | done | test blocked | deprecated | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`cacheMode`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`darkMode`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`forceDarkAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`mediaOptions`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`tableData`| Function | Erokhin Ilya | done | test blocked | deprecated | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`wideViewModeAccess`| Function | Erokhin Ilya | done | test blocked | deprecated | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`overviewModeAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`overScrollMode`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`blurOnKeyboardHideMode`| Function | Vadim Voronov | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`textZoomAtio`| Function | Erokhin Ilya | done | test blocked | deprecated | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`textZoomRatio`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`databaseAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`initialScale`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`userAgent`| Function | Erokhin Ilya | done | test blocked | deprecated | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`metaViewport`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onPageEnd`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onPageBegin`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onProgressChange`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onTitleReceive`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onGeolocationHide`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onGeolocationShow`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onRequestSelected`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onAlert`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onBeforeUnload`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onConfirm`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onPrompt`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onConsole`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onErrorReceive`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onHttpErrorReceive`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onDownloadStart`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onRefreshAccessedHistory`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onUrlLoadIntercept`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | deprecated | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onSslErrorReceive`| Function | Erokhin Ilya | done | test blocked | deprecated | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onRenderExited0`| Function | Erokhin Ilya | done | test blocked | deprecated | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onRenderExited1`| Function |Erokhin Ilya | done | test blocked | deprecated | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onShowFileSelector`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onFileSelectorShow`| Function | Erokhin Ilya | done | test blocked | deprecated | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onResourceLoad`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onFullScreenExit`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onFullScreenEnter`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onScaleChange`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onHttpAuthRequest`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onInterceptRequest`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onPermissionRequest`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onScreenCaptureRequest`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onContextMenuShow`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onContextMenuHide`| Function | Erokhin Ilya | done | test blocked |deprecated | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`mediaPlayGestureAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onSearchResultReceive`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onScroll`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onSslErrorEventReceive`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onSslErrorEvent`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onClientAuthenticationRequest`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onWindowNew`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onWindowExit`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`multiWindowAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onInterceptKeyEvent`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`webStandardFont`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`webSerifFont`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`webSansSerifFont`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`webFixedFont`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`webFantasyFont`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`webCursiveFont`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`defaultFixedFontSize`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`defaultFontSize`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`minFontSize`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`minLogicalFontSize`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`defaultTextEncodingFormat`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`forceDisplayScrollBar`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`blockNetwork`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`horizontalScrollBarAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`verticalScrollBarAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onTouchIconUrlReceived`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onFaviconReceived`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onPageVisible`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onDataResubmitted`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`pinchSmooth`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`allowWindowOpenMethod`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onAudioStateChanged`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onFirstContentfulPaint`| Function | Erokhin Ilya | blocked IDL | test blocked | need i64 , https://gitee.com/nikolay-igotti/idlize/issues/IC36BZ, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`onFirstMeaningfulPaint`| Function | Erokhin Ilya | blocked IDL | test blocked | need i64 , https://gitee.com/nikolay-igotti/idlize/issues/IC36BZ, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`onLargestContentfulPaint`| Function | Erokhin Ilya | blocked IDL | test blocked | need i64 , https://gitee.com/nikolay-igotti/idlize/issues/IC36BZ, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`onLoadIntercept`| Function | Erokhin Ilya, Maksimov Nikita | done test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onControllerAttached`| Function | Erokhin Ilya | done test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onOverScroll`| Function | Erokhin Ilya | done test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onSafeBrowsingCheckResult`| Function | Erokhin Ilya | done test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onNavigationEntryCommitted`| Function | Erokhin Ilya | done test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onIntelligentTrackingPreventionResult`| Function | Erokhin Ilya | done test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`javaScriptOnDocumentStart`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Andrey Khudenkikh, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`javaScriptOnDocumentEnd`| Function | Erokhin Ilya | testskipped | test blocked  | UT in progress Andrey Khudenkikh, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`layoutMode`| Function | Erokhin Ilya | done test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`nestedScroll`| Function | Erokhin Ilya, Dudkin Sergey | done test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`enableNativeEmbedMode`| Function | Erokhin Ilya | done test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya, Andrey Khudenkikh | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya, Andrey Khudenkikh, Tuzhilkin Ivan | testskipped | test blocked | Optional EventResult part is not covered in UT, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`copyOptions`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onOverrideUrlLoading`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`textAutosizing`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`enableNativeMediaPlayer`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onRenderProcessNotResponding`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onRenderProcessResponding`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`selectionMenuOptions`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Andrey Khudenkikh, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`onViewportFitChanged`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onInterceptKeyboardAttach`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onAdsBlocked`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`keyboardAvoidMode`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`editMenuOptions`| Function | Erokhin Ilya, Maksimov Nikita, Pavelyev Ivan | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`enableHapticFeedback`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`enableFollowSystemFontWeight`| Function | Vadim Voronov | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`enableWebAVSession`| Function | Vadim Voronov  | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`optimizeParserBudget`| Function | Vadim Voronov  | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`runJavaScriptOnDocumentStart`| Function | Vadim Voronov  | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`runJavaScriptOnDocumentEnd`| Function | Vadim Voronov  | done | | |
-|`runJavaScriptOnHeadEnd`| Function | Vadim Voronov  | done | | |
-|`nativeEmbedOptions`| Function | | | | no such API in generation 125 |
-|`enableDataDetector`| Function | | | | no such API in generation 125 |
-|`dataDetectorConfig`| Function | | | | no such API in generation 125 |
-|`registerNativeEmbedRule`| Function | Erokhin Ilya | done |  | |
-|`bindSelectionMenu`| Function | Lobah Mikhail| done| | |
+|`runJavaScriptOnHeadEnd`| Function | Vadim Voronov  | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`nativeEmbedOptions`| Function | | | test blocked | no such API in generation 125, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`enableDataDetector`| Function | | | test blocked | no such API in generation 125, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`dataDetectorConfig`| Function | | | test blocked | no such API in generation 125, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`registerNativeEmbedRule`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`bindSelectionMenu`| Function | Lobah Mikhail| done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*WindowScene*| *Component* | Dudkin Sergey | done |  | |
 |`construct`| Function |Dudkin Sergey | done |  | |
 |`setWindowSceneOptions`| Function | Dudkin Sergey | done |  | |
@@ -1981,9 +1981,9 @@
 |`getBlue`| Function | Lobah Mikhail| done| | |
 |`getAlpha`| Function | Lobah Mikhail| done| | |
 |*WebviewController*| *Class* | Politov Mikhail | done | | |
-|`ctor`| Function | Politov Mikhail | done | | |
-|`initializeWebEngine`| Function | Politov Mikhail | done | | |
-|`loadUrl`| Function | Politov Mikhail | done | | |
+|`ctor`| Function | Politov Mikhail | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA 
+|`initializeWebEngine`| Function | Politov Mikhail | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA 
+|`loadUrl`| Function | Politov Mikhail | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA 
 |*GlobalScope_ohos_arkui_componentSnapshot*| *Class* | Dudkin Sergey| done | | |
 |`get`| Function | Dudkin Sergey | done | | |
 |*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | Vadim Voronov | done | | blocked IDL on FB |
