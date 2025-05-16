@@ -160,8 +160,8 @@
 |`outlineColor1`| Function | Skroba Gleb | done |  | |
 |`outlineRadius0`| Function |Skroba Gleb | done | pass | |
 |`outlineRadius1`| Function | Skroba Gleb | done |  | |
-|`foregroundColor0`| Function | Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`foregroundColor1`| Function |Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`foregroundColor0`| Function | Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`foregroundColor1`| Function |Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onClick0`| Function |Roman Sedaikin | done | pass | EVENT |
 |`onClick1`| Function |Roman Sedaikin | done | pass | EVENT |
 |`onHover`| Function | Andrey Khudenkikh | done | pass | EVENT |
@@ -169,11 +169,11 @@
 |`onAccessibilityHover`| Function | Andrey Khudenkikh | done |  | UT by Vadim Voronov EVENT |
 |`hoverEffect`| Function | Roman Sedaikin | done | pass | |
 |`onMouse`| Function | Kovalev Sergey | done | pass | EVENT |
-|`onTouch`| Function | Roman Sedaikin, Tuzhilkin Ivan | testskipped | pass | EVENT |
-|`onKeyEvent0`| Function | Erokhin Ilya, Pavelyev Ivan | done |  |   |
-|`onKeyEvent1`| Function |Erokhin Ilya, Pavelyev Ivan | done |  |   |
+|`onTouch`| Function | Roman Sedaikin | testskipped | pass | EVENT |
+|`onKeyEvent0`| Function | Pavelyev Ivan | done |  |   |
+|`onKeyEvent1`| Function |Pavelyev Ivan | done |  |   |
 |`onDigitalCrown`| Function | Evstigneev Roman | done | | feature: API not present |
-|`onKeyPreIme`| Function | Erokhin Ilya, Pavelyev Ivan | done |  |  |
+|`onKeyPreIme`| Function | Pavelyev Ivan | done |  |  |
 |`onKeyEventDispatch`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocusAxisEvent`| Function | Evstigneev Roman | done | | feature: API not present |
 |`onAxisEvent`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
@@ -278,8 +278,8 @@
 |`clipShape0`| Function | Tuzhilkin Ivan | testskipped | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`clipShape1`| Function | Dmitry A Smirnov | testskipped | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`mask0`| Function | Maksimov Nikita | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`mask1`| Function | Maksimov Nikita, Tuzhilkin Ivan | done |  | WRONG_OVERRIDE, `mask1` is duplicate of `mask0`, need cherry-pick to feature_branch |
-|`mask2`| Function | Maksimov Nikita, Tuzhilkin Ivan | done |  | WRONG_OVERRIDE, deprecated, empty implementation, need cherry-pick to feature_branch |
+|`mask1`| Function | Tuzhilkin Ivan | done |  | WRONG_OVERRIDE, `mask1` is duplicate of `mask0`, need cherry-pick to feature_branch |
+|`mask2`| Function | Tuzhilkin Ivan | done |  | WRONG_OVERRIDE, deprecated, empty implementation, need cherry-pick to feature_branch |
 |`maskShape0`| Function |Tuzhilkin Ivan| done | test blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`maskShape1`| Function |Tuzhilkin Ivan| done | test blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`key`| Function | Lobah Mikhail | done |  | |
@@ -319,9 +319,9 @@
 |`gestureModifier`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`backgroundBrightness0`| Function | Skroba Gleb | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundBrightness1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onGestureJudgeBegin`| Function | Skroba Gleb, Maksimov Nikita | done |  | UT by Vadim Voronov  |
-|`onGestureRecognizerJudgeBegin0`| Function | Skroba Gleb, Maksimov Nikita | done |  | UT by Vadim Voronov  |
-|`onGestureRecognizerJudgeBegin1`| Function | Skroba Gleb, Maksimov Nikita | done |  | UT by Vadim Voronov  |
+|`onGestureJudgeBegin`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
+|`onGestureRecognizerJudgeBegin0`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
+|`onGestureRecognizerJudgeBegin1`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done |  |  |
 |`monopolizeEvents`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
 |`onTouchIntercept`| Function | Andrey Khudenkikh | done |  | EVENT |
@@ -342,8 +342,8 @@
 |`gesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`priorityGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`parallelGesture`| Function | Erokhin Ilya | testskipped |  |  |
-|`blur0`| Function | Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`blur1`| Function |Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`blur0`| Function | Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`blur1`| Function |Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`linearGradientBlur0`| Function |Lobah Mikhail | done | pass | |
 |`linearGradientBlur1`| Function | Dmitry A Smirnov | done | pass | |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
@@ -360,8 +360,8 @@
 |`bindPopup`| Function | Erokhin Ilya | done | test blocked | fixes of issues were provided by our team, https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL2K, https://gitee.com/openharmony/arkui_ace_engine/issues/IBY31B, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`bindMenu0`| Function | Erokhin Ilya | blocked IDL | test blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`bindMenu1`| Function | Erokhin Ilya | blocked IDL | test blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
-|`bindContextMenu0`| Function | Erokhin Ilya, Evstigneev Roman | done |  | |
-|`bindContextMenu1`| Function | Erokhin Ilya, Evstigneev Roman | done |  | |
+|`bindContextMenu0`| Function | Evstigneev Roman | done |  | |
+|`bindContextMenu1`| Function | Evstigneev Roman | done |  | |
 |`bindContentCover0`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov |
 |`bindContentCover1`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov |
 |`bindSheet`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -993,7 +993,7 @@
 |`onSelect`| Function | Dudkin Sergey| done |  |   |
 |`onSelectionChange`| Function | Dudkin Sergey| done |  |  |
 |`aboutToIMEInput`| Function | Dudkin Sergey| done |  |  |
-|`onIMEInputComplete`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
+|`onIMEInputComplete`| Function | Dudkin Sergey | testskipped |  | reopened after refactoring methods |
 |`onDidIMEInput`| Function | Dudkin Sergey| done |  |  |
 |`aboutToDelete`| Function | Dudkin Sergey| done |  |  |
 |`onDeleteComplete`| Function | Dudkin Sergey| done |  |  |
@@ -1006,11 +1006,11 @@
 |`selectedBackgroundColor`| Function | Dudkin Sergey| done |  |  |
 |`onEditingChange`| Function | Dudkin Sergey| done |  |  |
 |`enterKeyType`| Function | Dudkin Sergey| done |  |  |
-|`onSubmit`| Function | Dudkin Sergey, Evstigneev Roman | done |  |  |
+|`onSubmit`| Function | Dudkin Sergey | done |  |  |
 |`onWillChange`| Function | Dudkin Sergey| done |  |  |
 |`onDidChange`| Function | Dudkin Sergey| done |  |  |
-|`onCut`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
-|`onCopy`| Function | Dudkin Sergey, Evstigneev Roman | testskipped |  | reopened after refactoring methods |
+|`onCut`| Function | Dudkin Sergey | testskipped |  | reopened after refactoring methods |
+|`onCopy`| Function | Dudkin Sergey | testskipped |  | reopened after refactoring methods |
 |`editMenuOptions`| Function | Pavelyev Ivan | done |  |  |
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done |  |  |
 |`enableHapticFeedback`| Function | Dudkin Sergey| done |  |  |
@@ -1358,8 +1358,8 @@
 |`renderingStrategy`| Function |Andrey Khudenkikh | done |  |  |
 |`minFontScale`| Function | Kovalev Sergey | done  | |
 |`maxFontScale`| Function | Kovalev Sergey | done  | |
-|`symbolEffect0`| Function |Andrey Khudenkikh, Samarin Sergey | done |  |  |
-|`symbolEffect1`| Function |Andrey Khudenkikh, Samarin Sergey | done |  |  |
+|`symbolEffect0`| Function |Andrey Khudenkikh | done |  |  |
+|`symbolEffect1`| Function |Andrey Khudenkikh | done |  |  |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| done |  |  |
 |`construct`| Function |Dmitry A Smirnov| done |  |  |
 |`setSymbolSpanOptions`| Function |Dmitry A Smirnov| done | pass |   |
@@ -1475,8 +1475,8 @@
 |`textIndent`|Function|Tuzhilkin Ivan| done | pass |  |
 |`caretStyle`|Function|Tuzhilkin Ivan| done | pass |  |
 |`selectedBackgroundColor`|Function|Tuzhilkin Ivan| done | pass | |
-|`onSubmit0`| Function | Tuzhilkin Ivan, Spirin Andrey| done | not covered |  |
-|`onSubmit1`|Function|Tuzhilkin Ivan, Spirin Andrey| done | not covered |  |
+|`onSubmit0`| Function | Tuzhilkin Ivan| done | not covered |  |
+|`onSubmit1`|Function|Tuzhilkin Ivan| done | not covered |  |
 |`onChange`|Function|Tuzhilkin Ivan| done | pass | not covered |
 |`onTextSelectionChange`|Function|Tuzhilkin Ivan| done | not covered | |
 |`onContentScroll`|Function|Tuzhilkin Ivan| done | not covered |  |
@@ -1543,7 +1543,7 @@
 |`type`| Function | Spirin Andrey | done | pass |  |
 |`contentType`| Function | Spirin Andrey | done |  |  |
 |`placeholderColor`| Function | Spirin Andrey | done | failed | info: placeholder is not displayed without any log error |
-|`textOverflow`| Function | Spirin Andrey, Lobah Mikhail| done|  |https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
+|`textOverflow`| Function | Lobah Mikhail| done|  |https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
 |`textIndent`| Function | Spirin Andrey | done |  |  |
 |`placeholderFont`| Function | Spirin Andrey | testskipped | failed | info: placeholder is not displayed without any log error |
 |`enterKeyType`| Function | Spirin Andrey | done | pass |  |
@@ -1578,7 +1578,7 @@
 |`underlineColor`| Function | Spirin Andrey | done |  |  |
 |`selectionMenuHidden`| Function | Spirin Andrey | done |  |  |
 |`barState`| Function | Spirin Andrey | done |  |  |
-|`maxLines`| Function | Spirin Andrey, Lobah Mikhail| done| |
+|`maxLines`| Function | Lobah Mikhail| done| |
 |`wordBreak`| Function | Spirin Andrey | done |  |  |
 |`lineBreakStrategy`| Function | Spirin Andrey | done |  |  |
 |`cancelButton`| Function | Spirin Andrey | done |  |  |
@@ -1612,7 +1612,7 @@
 |`keyboardAppearance`| Function | Erokhin Ilya | done | | |
 |`inputFilter`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`customKeyboard`| Function | Lobah Mikhail | done |  |   |
-|`showCounter`| Function | Spirin Andrey, Lobah Mikhail| done| | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
+|`showCounter`| Function | Lobah Mikhail| done| | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
 |`_onChangeEvent_text`| Function | Erokhin Ilya | done |  | |
 |*TextPicker*| *Component* |Ekaterina Stepanova | in progress |  |  |
 |`construct`| Function | Tuzhilkin Ivan| done |  |   |
@@ -1781,7 +1781,7 @@
 |`onWindowNew`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onWindowExit`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`multiWindowAccess`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onInterceptKeyEvent`| Function | Erokhin Ilya, Pavelyev Ivan | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onInterceptKeyEvent`| Function | Pavelyev Ivan | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`webStandardFont`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`webSerifFont`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`webSansSerifFont`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -1832,7 +1832,7 @@
 |`onInterceptKeyboardAttach`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onAdsBlocked`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`keyboardAvoidMode`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`editMenuOptions`| Function | Erokhin Ilya, Pavelyev Ivan | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`editMenuOptions`| Function | Pavelyev Ivan | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`enableHapticFeedback`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`enableFollowSystemFontWeight`| Function | Vadim Voronov | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`enableWebAVSession`| Function | Vadim Voronov  | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -2040,9 +2040,9 @@
 |*GlobalScope_ohos_measure_utils*| *Class* | Dudkin Sergey | done | | |
 |`measureText`| Function | Dudkin Sergey | done | | |
 |`measureTextSize`| Function | Dudkin Sergey | done | | |
-|*SymbolEffect*| *Class* | wangtao, Maksimov Nikita | done | | |
-|`ctor`| Function |wangtao, Maksimov Nikita | done | | empty implementation |
-|`dummyForAccessorGenerate`| Function | wangtao, Maksimov Nikita | done | | empty implementation |
+|*SymbolEffect*| *Class* | wangtao | done | | |
+|`ctor`| Function |wangtao | done | | empty implementation |
+|`dummyForAccessorGenerate`| Function | wangtao | done | | empty implementation |
 |*ScaleSymbolEffect*| *Class* | Andrey Khudenkikh | done | | |
 |`ctor`| Function |Andrey Khudenkikh | done | | |
 |`getScope`| Function | Andrey Khudenkikh | done | | |
@@ -2269,28 +2269,28 @@
 |`setDeviceId`| Function | Politov Mikhail | done |  | |
 |`getTargetDisplayId`| Function | Maksimov Nikita | done |  | |
 |`setTargetDisplayId`| Function | Maksimov Nikita | done |  | |
-|*ClickEvent*| *Class* | Maksimov Nikita, Pavelyev Ivan | in progress |  | |
-|`ctor`| Function |Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
-|`getDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
-|`setDisplayX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
-|`setDisplayY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getWindowX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
-|`setWindowX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getWindowY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
-|`setWindowY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getScreenX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | deprecated? |
-|`setScreenX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
-|`getScreenY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | deprecated? |
-|`setScreenY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  |deprecated? |
-|`getX`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
-|`setX`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
-|`getY`| Function | Maksimov Nikita, Pavelyev Ivan, Tuzhilkin Ivan | done |  | |
-|`setY`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
+|*ClickEvent*| *Class* | Maksimov Nikita | in progress |  | |
+|`ctor`| Function |Tuzhilkin Ivan | done |  | |
+|`getDisplayX`| Function | Tuzhilkin Ivan | done |  | |
+|`setDisplayX`| Function | Maksimov Nikita | done |  | |
+|`getDisplayY`| Function | Tuzhilkin Ivan | done |  | |
+|`setDisplayY`| Function | Maksimov Nikita | done |  | |
+|`getWindowX`| Function | Tuzhilkin Ivan | done |  | |
+|`setWindowX`| Function | Maksimov Nikita | done |  | |
+|`getWindowY`| Function | Tuzhilkin Ivan | done |  | |
+|`setWindowY`| Function | Maksimov Nikita | done |  | |
+|`getScreenX`| Function | Tuzhilkin Ivan | done |  | deprecated? |
+|`setScreenX`| Function | Maksimov Nikita | done |  |deprecated? |
+|`getScreenY`| Function | Tuzhilkin Ivan | done |  | deprecated? |
+|`setScreenY`| Function | Maksimov Nikita | done |  |deprecated? |
+|`getX`| Function | Tuzhilkin Ivan | done |  | |
+|`setX`| Function | Maksimov Nikita | done |  | |
+|`getY`| Function | Tuzhilkin Ivan | done |  | |
+|`setY`| Function | Maksimov Nikita | done |  | |
 |`getHand`| Function | Samarin Sergey | done | | |
 |`setHand`| Function | Samarin Sergey | blocked IDL | | request to delete the interface from CAPI: https://gitee.com/nikolay-igotti/idlize/issues/IC5IO9 |
 |`getPreventDefault`| Function | Samarin Sergey | done | | |
-|`setPreventDefault`| Function | Maksimov Nikita, Pavelyev Ivan | done |  | |
+|`setPreventDefault`| Function | Maksimov Nikita | done |  | |
 |*HoverEvent*| *Class* | Tuzhilkin Ivan | done |  | |
 |`ctor`| Function | Tuzhilkin Ivan | done | | UT: need cherry-pick to FB |
 |`getX`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
@@ -2308,26 +2308,26 @@
 |`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |*MouseEvent*| *Class* | Kovalev Sergey | done |  | |
-|`ctor`| Function |Kovalev Sergey, Tuzhilkin Ivan | done |  | |
-|`getButton`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
+|`ctor`| Function |Kovalev Sergey | done |  | |
+|`getButton`| Function | Kovalev Sergey | done |  | |
 |`setButton`| Function | Kovalev Sergey | done |  | |
-|`getAction`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
+|`getAction`| Function | Kovalev Sergey | done |  | |
 |`setAction`| Function | Kovalev Sergey | done |  | |
-|`getDisplayX`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
+|`getDisplayX`| Function | Kovalev Sergey | done |  | |
 |`setDisplayX`| Function | Kovalev Sergey | done |  | |
-|`getDisplayY`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
+|`getDisplayY`| Function | Kovalev Sergey | done |  | |
 |`setDisplayY`| Function | Kovalev Sergey | done |  | |
-|`getWindowX`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
+|`getWindowX`| Function | Kovalev Sergey | done |  | |
 |`setWindowX`| Function | Kovalev Sergey | done |  | |
-|`getWindowY`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
+|`getWindowY`| Function | Kovalev Sergey | done |  | |
 |`setWindowY`| Function | Kovalev Sergey | done |  | |
-|`getScreenX`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | deprecated? |
+|`getScreenX`| Function | Kovalev Sergey | done |  | deprecated? |
 |`setScreenX`| Function | Kovalev Sergey | done |  |deprecated? |
-|`getScreenY`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | deprecated? |
+|`getScreenY`| Function | Kovalev Sergey | done |  | deprecated? |
 |`setScreenY`| Function | Kovalev Sergey | done |  |deprecated? |
-|`getX`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
+|`getX`| Function | Kovalev Sergey | done |  | |
 |`setX`| Function | Kovalev Sergey | done |  | |
-|`getY`| Function | Kovalev Sergey, Tuzhilkin Ivan | done |  | |
+|`getY`| Function | Kovalev Sergey | done |  | |
 |`setY`| Function | Kovalev Sergey | done |  | |
 |`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Kovalev Sergey | done |  | empty implementation |
@@ -2338,8 +2338,8 @@
 |`getPressedButtons`| Function | Kovalev Sergey | done |  | doesn't present in FB missed in SDK since 15, done for Upstream |
 |`setPressedButtons`| Function |Kovalev Sergey| done |  | doesn't present in FB missed in SDK since 15, done for Upstream |
 |*AccessibilityHoverEvent*| *Class* | Pavelyev Ivan | done |  | |
-|`ctor`| Function |Pavelyev Ivan, Samarin Sergey | done |  | |
-|`getType`| Function | Pavelyev Ivan, Samarin Sergey | done |  | |
+|`ctor`| Function |Pavelyev Ivan | done |  | |
+|`getType`| Function | Pavelyev Ivan | done |  | |
 |`setType`| Function | Pavelyev Ivan | done |  | |
 |`getX`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
 |`setX`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
@@ -2354,9 +2354,9 @@
 |`getWindowY`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
 |`setWindowY`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
 |*TouchEvent*| *Class* | Tuzhilkin Ivan | done |  | |
-|`ctor`| Function |  Tuzhilkin Ivan, Samarin Sergey | done |  | |
+|`ctor`| Function |  Tuzhilkin Ivan | done |  | |
 |`getHistoricalPoints`| Function | Tuzhilkin Ivan | done |  | wait new generation on feature_branch  |
-|`getType`| Function | Tuzhilkin Ivan, Samarin Sergey | done |  | |
+|`getType`| Function | Tuzhilkin Ivan | done |  | |
 |`setType`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |`getTouches`| Function | Tuzhilkin Ivan | done | | |
 |`setTouches`| Function | Tuzhilkin Ivan | done |  | empty implementation |
@@ -2418,13 +2418,13 @@
 |*KeyEvent*| *Class* | Maksimov Nikita | done |  |  |
 |`ctor`| Function |Maksimov Nikita | done | | |
 |`getModifierKeyState`| Function | Maksimov Nikita | done | | |
-|`getType`| Function | Maksimov Nikita, Samarin Sergey | done |  | |
+|`getType`| Function | Maksimov Nikita | done |  | |
 |`setType`| Function | Maksimov Nikita | done | | |
 |`getKeyCode`| Function | Maksimov Nikita | done | | |
 |`setKeyCode`| Function | Maksimov Nikita | done | | |
 |`getKeyText`| Function | Maksimov Nikita | done | | |
 |`setKeyText`| Function | Maksimov Nikita | done | | |
-|`getKeySource`| Function | Maksimov Nikita, Samarin Sergey | done | | |
+|`getKeySource`| Function | Maksimov Nikita | done | | |
 |`setKeySource`| Function | Maksimov Nikita | done | | |
 |`getDeviceId`| Function | Maksimov Nikita | done | | |
 |`setDeviceId`| Function | Maksimov Nikita | done | | |
@@ -2996,11 +2996,11 @@
 |`fling`| Function | Erokhin Ilya | done |  |  |
 |`scrollPage0`| Function | Erokhin Ilya | done |  |  |
 |`scrollPage1`| Function | Erokhin Ilya | done |  |  |
-|`currentOffset`| Function | Erokhin Ilya, Skroba Gleb | done | | |
+|`currentOffset`| Function | Skroba Gleb | done | | |
 |`scrollToIndex`| Function | Erokhin Ilya | done |  | |
 |`scrollBy`| Function | Erokhin Ilya | done |  |  |
 |`isAtEnd`| Function | Erokhin Ilya | done |  |  |
-|`getItemRect`| Function | Erokhin Ilya, Skroba Gleb | done | | |
+|`getItemRect`| Function | Skroba Gleb | done | | |
 |`getItemIndex`| Function | Erokhin Ilya | done |  |  |
 |*SearchController*| *Class* |Evstigneev Roman | done |  |  |
 |`ctor`| Function |Evstigneev Roman | done |  |  |
@@ -3117,7 +3117,7 @@
 |*SubmitEvent*| *Class* | Tuzhilkin Ivan | done |  | |
 |`ctor`| Function |Tuzhilkin Ivan | done |  | |
 |`keepEditableState`| Function | Tuzhilkin Ivan | done |  | |
-|`getText`| Function | Tuzhilkin Ivan, Pavelyev Ivan | done |  | |
+|`getText`| Function | Tuzhilkin Ivan | done |  | |
 |`setText`| Function | Tuzhilkin Ivan | done |  | |
 |*TextInputController*| *Class* | Spirin Andrey | done |  |  |
 |`ctor`| Function | Spirin Andrey | done |  |  |
@@ -3342,10 +3342,10 @@
 |*TextStyle_styled_string*| *Class* | Erokhin Ilya | done |  |  |
 |`ctor`| Function | Erokhin Ilya | done |  |  |
 |`getFontColor`| Function | Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
-|`getFontFamily`| Function | Erokhin Ilya, Tuzhilkin Ivan | done |  | FB: Return value will be changed to optional after 125 generation |
-|`getFontSize`| Function | Erokhin Ilya, Tuzhilkin Ivan | done |  | FB: Return value will be changed to optional after 125 generation |
-|`getFontWeight`| Function | Erokhin Ilya, Tuzhilkin Ivan | done |  | FB: Return value will be changed to optional after 125 generation |
-|`getFontStyle`| Function | Erokhin Ilya, Tuzhilkin Ivan | done |  | FB: Return value will be changed to optional after 125 generation |
+|`getFontFamily`| Function | Tuzhilkin Ivan | done |  | FB: Return value will be changed to optional after 125 generation |
+|`getFontSize`| Function | Tuzhilkin Ivan | done |  | FB: Return value will be changed to optional after 125 generation |
+|`getFontWeight`| Function | Tuzhilkin Ivan | done |  | FB: Return value will be changed to optional after 125 generation |
+|`getFontStyle`| Function | Tuzhilkin Ivan | done |  | FB: Return value will be changed to optional after 125 generation |
 |*DecorationStyle*| *Class* | Tuzhilkin Ivan | in progress |  | |
 |`ctor`| Function |Tuzhilkin Ivan | done |  | |
 |`getType`| Function | Tuzhilkin Ivan | done |  | |
@@ -3367,12 +3367,12 @@
 |`ctor`| Function |Dudkin Sergey| done | | |
 |*ParagraphStyle*| *Class* |Dudkin Sergey | done |  | |
 |`ctor`| Function |Dudkin Sergey | done |  | |
-|`getTextAlign`| Function |Dudkin Sergey, Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
-|`getTextIndent`| Function |Dudkin Sergey, Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
-|`getMaxLines`| Function |Dudkin Sergey, Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
-|`getOverflow`| Function |Dudkin Sergey, Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
-|`getWordBreak`| Function |Dudkin Sergey, Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation|
-|`getLeadingMargin`| Function | Dudkin Sergey, Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
+|`getTextAlign`| Function |Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
+|`getTextIndent`| Function |Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
+|`getMaxLines`| Function |Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
+|`getOverflow`| Function |Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
+|`getWordBreak`| Function |Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation|
+|`getLeadingMargin`| Function | Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
 |`getParagraphSpacing`| Function | | | | no such API in generation 125 |
 |*LineHeightStyle*| *Class* |Dudkin Sergey |done|  | |
 |`ctor`| Function |Dudkin Sergey |done|  | |
