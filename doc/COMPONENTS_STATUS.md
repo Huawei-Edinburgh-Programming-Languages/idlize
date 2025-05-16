@@ -1898,7 +1898,7 @@
 |`cachedCount1`| Function | Kovalev Sergey | done | | |
 |`onReachStart`| Function | Kovalev Sergey | done | | |
 |`onReachEnd`| Function | Kovalev Sergey | done | | |
-|`onScrollFrameBegin`| Function | Dudkin Sergey | | |
+|`onScrollFrameBegin`| Function | Dudkin Sergey | in progress | |
 |`onScrollIndex`| Function | Kovalev Sergey | done | | |
 |*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | blocked IDL |  | |
 |`construct`| Function | Tuzhilkin Ivan | testskipped |  | |
@@ -2474,8 +2474,8 @@
 |`addText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
 |`deleteText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
 |`getSelection`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
-|`clearPreviewText`| Function | Lobah Mikhail| | | not generated on Upstream|
-|`getText`| Function | Lobah Mikhail| | | not generated on Upstream|
+|`clearPreviewText`| Function | | | | not generated on Upstream|
+|`getText`| Function | | | | not generated on Upstream|
 |*ChildrenMainSize*| *Class* | Morozov Sergey | done |  |
 |`ctor`| Function |Morozov Sergey | done |  |  |
 |`splice`| Function | Morozov Sergey | done |  |  |
