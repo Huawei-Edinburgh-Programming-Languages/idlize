@@ -2069,7 +2069,7 @@
 |`dispose`| Function | Tuzhilkin Ivan | done |  | |
 |`getOpacity`| Function | Morozov Sergey | done | | |
 |`getPositionToWindowWithTransform`| Function | Morozov Sergey | done | | |
-|`getFrameNodeByKey`| Function | Lobah Mikhail| in progress| | |
+|`getFrameNodeByKey`| Function | | | | |
 |*LengthMetrics*| *Class* | Evstigneev Roman | done | | |
 |`ctor`| Function |Evstigneev Roman | done | | |
 |`px`| Function | Evstigneev Roman | done | | |
@@ -2495,13 +2495,13 @@
 |`setOnMouse`| Function |  Andrey Khudenkikh| done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |`setOnSizeChange`| Function | Andrey Khudenkikh | done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |`setOnVisibleAreaApproximateChange`| Function | Andrey Khudenkikh | testskipped | test blocked | Compilation error: Cannot find type 'BuilderNode' |
-|*UIScrollableCommonEvent*| *Class* | Lobah Mikhail| in progress| | |
-|`ctor`| Function | Lobah Mikhail| in progress| | |
-|`setOnReachStart`| Function | Lobah Mikhail| in progress| | |
-|`setOnReachEnd`| Function | Lobah Mikhail| in progress| | |
-|`setOnScrollStart`| Function | Lobah Mikhail| in progress| | |
-|`setOnScrollStop`| Function | Lobah Mikhail| in progress| | |
-|`setOnScrollFrameBegin`| Function | Lobah Mikhail| in progress| | |
+|*UIScrollableCommonEvent*| *Class* | | | | |
+|`ctor`| Function | | | | |
+|`setOnReachStart`| Function | | | | |
+|`setOnReachEnd`| Function | | | | |
+|`setOnScrollStart`| Function | | | | |
+|`setOnScrollStop`| Function | | | | |
+|`setOnScrollFrameBegin`| Function | | | | |
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`ctor`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
@@ -2870,17 +2870,17 @@
 |*TapRecognizer*| *Class* | Lobah Mikhail| done| | |
 |`ctor`| Function | Lobah Mikhail| done| | |
 |`getTapCount`| Function | Lobah Mikhail| done| | |
-|*LongPressRecognizer*| *Class* | Lobah Mikhail| in progress| | |
-|`ctor`| Function | Lobah Mikhail| in progress| | |
-|`isRepeat`| Function | Lobah Mikhail| in progress| | |
-|`getDuration`| Function | Lobah Mikhail| in progress| | |
-|*SwipeRecognizer*| *Class* | Lobah Mikhail| in progress| | |
-|`ctor`| Function | Lobah Mikhail| in progress| | |
-|`getVelocityThreshold`| Function | Lobah Mikhail| in progress| | |
-|`getDirection`| Function | Lobah Mikhail| in progress| | |
-|*PinchRecognizer*| *Class* | Lobah Mikhail| in progress| | |
-|`ctor`| Function | Lobah Mikhail| in progress| | |
-|`getDistance`| Function | Lobah Mikhail| in progress| | |
+|*LongPressRecognizer*| *Class* | | | | |
+|`ctor`| Function | | | | |
+|`isRepeat`| Function | | | | |
+|`getDuration`| Function | | | | |
+|*SwipeRecognizer*| *Class* | | | | |
+|`ctor`| Function | | | | |
+|`getVelocityThreshold`| Function | | | | |
+|`getDirection`| Function | | | | |
+|*PinchRecognizer*| *Class* | | | | |
+|`ctor`| Function | | | | |
+|`getDistance`| Function | | | | |
 |*RotationRecognizer*| *Class* | Lobah Mikhail| done| | |
 |`ctor`| Function | Lobah Mikhail| done| | |
 |`getAngle`| Function | Lobah Mikhail| done| | |
