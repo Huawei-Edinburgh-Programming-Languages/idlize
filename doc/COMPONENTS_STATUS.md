@@ -190,8 +190,8 @@
 |`animation`| Function | managed side | managed side | failed |  |
 |`transition0`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`transition1`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
-|`motionBlur0`| Function |Dmitry A Smirnov| done | test blocked | test blocked by common.animation(...) |
-|`motionBlur1`| Function | Dmitry A Smirnov| done | test blocked | test blocked by common.animation(...) |
+|`motionBlur0`| Function |Dmitry A Smirnov| done | pass | |
+|`motionBlur1`| Function | Dmitry A Smirnov| done | pass | |
 |`brightness0`| Function | Lobah Mikhail | done |  |  |
 |`brightness1`| Function |Lobah Mikhail | done |  |  |
 |`contrast0`| Function |Lobah Mikhail | done | pass | |
