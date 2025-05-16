@@ -1850,17 +1850,17 @@
 |`setWindowSceneOptions`| Function | Dudkin Sergey | done |  | |
 |`attractionEffect`| Function | Dudkin Sergey  | done |  |  |
 |*XComponent*| *Component* | Tuzhilkin Ivan | blocked IDL |  | |
-|`construct`| Function |Tuzhilkin Ivan | testskipped | | |
-|`setXComponentOptions0`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
-|`setXComponentOptions1`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
-|`setXComponentOptions2`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+)|
-|`setXComponentOptions3`| Function | Tuzhilkin Ivan | in progress |  | only for generation > 125 |
-|`onLoad`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS (+) |
-|`onDestroy`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`enableAnalyzer`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`enableSecure`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`hdrBrightness`| Function | Tuzhilkin Ivan | testskipped | | supported only on UPSTREAM now |
-|`enableTransparentLayer`| Function | Tuzhilkin Ivan | testskipped | | supported only on UPSTREAM now |
+|`construct`| Function |Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setXComponentOptions0`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+), demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setXComponentOptions1`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+), demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setXComponentOptions2`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+), demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setXComponentOptions3`| Function | Tuzhilkin Ivan | in progress | test blocked | only for generation > 125, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`onLoad`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS (+), demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`onDestroy`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`enableAnalyzer`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`enableSecure`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`hdrBrightness`| Function | Tuzhilkin Ivan | testskipped | test blocked | supported only on UPSTREAM now, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`enableTransparentLayer`| Function | Tuzhilkin Ivan | testskipped | test blocked | supported only on UPSTREAM now, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |*SideBarContainer*| *Component* |Dmitry A Smirnov|in progress|  |
 |`construct`| Function |Dmitry A Smirnov| done |  |  |
 |`setSideBarContainerOptions`| Function |Dmitry A Smirnov| done |  |  |
@@ -3293,19 +3293,19 @@
 |`forward`| Function | Erokhin Ilya | done |  | deprecated |
 |`getCookieManager`| Function | Erokhin Ilya | deprecated |  | testskipped |
 |*XComponentController*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`ctor`| Function |Tuzhilkin Ivan | testskipped |  | |
-|`getXComponentSurfaceId`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`getXComponentContext`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF + |
-|`setXComponentSurfaceSize`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`setXComponentSurfaceRect`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`getXComponentSurfaceRect`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`setXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`getXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`onSurfaceCreated`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
-|`onSurfaceChanged`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
-|`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N + |
-|`startImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`stopImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped |  | |
+|`ctor`| Function |Tuzhilkin Ivan | testskipped | passed | |
+|`getXComponentSurfaceId`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`getXComponentContext`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF +, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`setXComponentSurfaceSize`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setXComponentSurfaceRect`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`getXComponentSurfaceRect`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`getXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onSurfaceCreated`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N +, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`onSurfaceChanged`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N +, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`onSurfaceDestroyed`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N +, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`startImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`stopImageAnalyzer`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*WaterFlowSections*| *Class* | Kovalev Sergey | done |  | |
 |`ctor`| Function |Kovalev Sergey | done |  | |
 |`splice`| Function | Kovalev Sergey | done |  | |
