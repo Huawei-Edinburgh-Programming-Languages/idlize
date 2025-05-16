@@ -1883,23 +1883,23 @@
 |`construct`| Function |Spirin Andrey, Evstigneev Roman | done |  | |
 |`setRemoteWindowOptions`| Function | Spirin Andrey, Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+) |
 |*WaterFlow*| *Component* | Kovalev Sergey | done |  |  |
-|`construct`| Function | Kovalev Sergey | done |  |  |
-|`setWaterFlowOptions`| Function | Kovalev Sergey | done |  |  |
-|`columnsTemplate`| Function | Kovalev Sergey | done |  |  |
-|`itemConstraintSize`| Function | Kovalev Sergey | done |  |  |
-|`rowsTemplate`| Function | Kovalev Sergey | done |  |  |
-|`columnsGap`| Function | Kovalev Sergey | done |  |  |
-|`rowsGap`| Function |Kovalev Sergey | done |  |  |
-|`layoutDirection`| Function |Kovalev Sergey | done |  |  |
-|`nestedScroll`| Function | Kovalev Sergey | done |  |  |
-|`enableScrollInteraction`| Function | Kovalev Sergey | done |  |  |
-|`friction`| Function | Kovalev Sergey | done |  |  |
-|`cachedCount0`| Function |Kovalev Sergey | done |  |  |
-|`cachedCount1`| Function | Kovalev Sergey | done |  |  |
-|`onReachStart`| Function | Kovalev Sergey | done |  | |
-|`onReachEnd`| Function | Kovalev Sergey | done |  | |
-|`onScrollFrameBegin`| Function | Dudkin Sergey | done |  | |
-|`onScrollIndex`| Function | Kovalev Sergey | done |  | |
+|`construct`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setWaterFlowOptions`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`columnsTemplate`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`itemConstraintSize`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`rowsTemplate`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`columnsGap`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`rowsGap`| Function |Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`layoutDirection`| Function |Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`nestedScroll`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`enableScrollInteraction`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`friction`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`cachedCount0`| Function |Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`cachedCount1`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onReachStart`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onReachEnd`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onScrollFrameBegin`| Function | Dudkin Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onScrollIndex`| Function | Kovalev Sergey | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | blocked IDL |  | |
 |`construct`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL |  | |https://gitee.com/nikolay-igotti/idlize/issues/IB6H50
