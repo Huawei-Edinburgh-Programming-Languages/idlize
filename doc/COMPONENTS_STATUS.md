@@ -162,8 +162,8 @@
 |`outlineRadius1`| Function | Skroba Gleb | done |  | |
 |`foregroundColor0`| Function | Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundColor1`| Function |Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onClick0`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done | pass | EVENT |
-|`onClick1`| Function |Roman Sedaikin, Maksimov Nikita, Pavelyev Ivan | done | pass | EVENT |
+|`onClick0`| Function |Roman Sedaikin | done | pass | EVENT |
+|`onClick1`| Function |Roman Sedaikin | done | pass | EVENT |
 |`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done | pass | EVENT |
 |`onHoverMove`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
 |`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | done |  | UT by Vadim Voronov EVENT |
@@ -776,7 +776,7 @@
 |`construct`| Function |Samarin Sergey| done | test blocked |  |
 |`setLocationButtonOptions0`| Function |Samarin Sergey| done | test blocked |deprecated: icon, text, buttonType  |
 |`setLocationButtonOptions1`| Function |Samarin Sergey| done | test blocked |deprecated: icon, text, buttonType  |
-|`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan | testskipped | test blocked |   |
+|`onClick`| Function | Samarin Sergey | testskipped | test blocked |   |
 |*Marquee*| *Component* | Andrey Khudenkikh| done |  |  |
 |`construct`| Function |Andrey Khudenkikh| done |  |  |
 |`setMarqueeOptions`| Function | Andrey Khudenkikh| done |  |  |
@@ -1046,7 +1046,7 @@
 |`construct`| Function |Samarin Sergey| done |  |  |
 |`setSaveButtonOptions0`| Function | Samarin Sergey| done |  |  |
 |`setSaveButtonOptions`| Function | Samarin Sergey| done |  |  |
-|`onClick`| Function | Samarin Sergey, Maksimov Nikita, Pavelyev Ivan | testskipped |  |  |
+|`onClick`| Function | Samarin Sergey | testskipped |  |  |
 |*Screen*| *Component* | Dudkin Sergey | done |  | |
 |`construct`| Function | Dudkin Sergey | done |  | |
 |`setScreenOptions`| Function | Dudkin Sergey | done |  | |
@@ -1513,7 +1513,7 @@
 |`editMenuOptions`|Function| Pavelyev Ivan | done | not covered |  |
 |`enablePreviewText`|Function|Tuzhilkin Ivan| done | not covered |  |
 |`enableHapticFeedback`|Function|Tuzhilkin Ivan| done | not covered | |
-|`autoCapitalizationMode`| Function | not covered | | | no such API in generation 125 |
+|`autoCapitalizationMode`| Function | | | not covered | no such API in generation 125 |
 |`halfLeading`| Function | Kovalev Sergey | done | not covered | |
 |`ellipsisMode`| Function | Kovalev Sergey | done | not covered | |
 |`stopBackPress`| Function | Kovalev Sergey | done | not covered | |
@@ -1545,7 +1545,7 @@
 |`placeholderColor`| Function | Spirin Andrey | done | failed | info: placeholder is not displayed without any log error |
 |`textOverflow`| Function | Spirin Andrey, Lobah Mikhail| done|  |https://gitee.com/openharmony/arkui_ace_engine/issues/IB57XU|
 |`textIndent`| Function | Spirin Andrey | done |  |  |
-|`placeholderFont`| Function | Spirin Andrey, Tuzhilkin Ivan | testskipped | failed | info: placeholder is not displayed without any log error |
+|`placeholderFont`| Function | Spirin Andrey | testskipped | failed | info: placeholder is not displayed without any log error |
 |`enterKeyType`| Function | Spirin Andrey | done | pass |  |
 |`caretColor`| Function | Spirin Andrey | done | pass |  |
 |`onEditChanged`| Function | Spirin Andrey | done |  |deprecated UT Kovalev Sergey |
@@ -1820,7 +1820,7 @@
 |`enableNativeEmbedMode`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onNativeEmbedLifecycleChange`| Function | Erokhin Ilya, Andrey Khudenkikh | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onNativeEmbedVisibilityChange`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya, Andrey Khudenkikh, Tuzhilkin Ivan | testskipped | test blocked | Optional EventResult part is not covered in UT, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`onNativeEmbedGestureEvent`| Function | Erokhin Ilya | testskipped | test blocked | Optional EventResult part is not covered in UT, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`copyOptions`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onOverrideUrlLoading`| Function | Erokhin Ilya, Maksimov Nikita | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`textAutosizing`| Function | Erokhin Ilya | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -2199,7 +2199,7 @@
 |`setNavigationOptions`| Function | managed side| managed side| | |
 |`setNavDestinationNode`| Function |managed side |managed side | | |
 |*EventEmulator*| *Class* | Dmitry A Smirnov | managed side | | |
-|`emitClickEvent`| Function | Dmitry A Smirnov, Maksimov Nikita | managed side | | |
+|`emitClickEvent`| Function | managed side | managed side | | |
 |`emitTextInputEvent`| Function | Dmitry A Smirnov | managed side | | |
 |*ActionSheet*| *Class* | Ekaterina Stepanova | testskipped |  | |
 |`show`| Function | Ekaterina Stepanova | testskipped |  | UT in progress, Skroba Gleb |
@@ -2545,7 +2545,7 @@
 |`clear`| Function | Morozov Sergey | managed side |  |  |
 |`getAllPathName`| Function | Morozov Sergey | managed side |  |  | 
 |`getParamByIndex`| Function | Morozov Sergey | managed side |  |  | 
-|`getParamByName`| Function | Morozov Sergey, Skroba Gleb | managed side |  |  |
+|`getParamByName`| Function | managed side | managed side |  |  |
 |`getIndexByName`| Function | Morozov Sergey | managed side |  |  |
 |`getParent`| Function | Morozov Sergey | managed side |  |  |
 |`size`| Function | Skroba Gleb | done |  |  |
