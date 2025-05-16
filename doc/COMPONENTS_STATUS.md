@@ -187,7 +187,7 @@
 |`groupDefaultFocus`| Function | Dmitry A Smirnov| done | pass | |
 |`focusOnTouch`| Function | Dmitry A Smirnov| done | pass | |
 |`focusBox`| Function | Dudkin Sergey | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA info: LinkerUnresolvedClassError arkui.Graphics.ColorMetrics |
-|`animation`| Function | managed side | managed side | failed |  |
+|`animation`| Function | managed side | managed side | test blocked | test blocked by ICurve |
 |`transition0`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`transition1`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`motionBlur0`| Function |Dmitry A Smirnov| done | pass | |
@@ -2219,7 +2219,7 @@
 |`goTo`| Function | Maksimov Nikita | done |  |  |
 |*CalendarPickerDialog*| *Class* | Ekaterina Stepanova | testskipped |  | |
 |`show`| Function | Ekaterina Stepanova | testskipped |  | UT in progress, Skroba Gleb |
-|*ICurve*| *Class* | Erokhin Ilya | done |  | |
+|*ICurve*| *Class* | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`ctor`| Function |Erokhin Ilya | done |  |  |
 |`interpolate`| Function | Erokhin Ilya | done |  |  |
 |*DrawModifier*| *Class* | Erokhin Ilya | blocked IDL|  | |
