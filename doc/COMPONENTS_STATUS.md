@@ -40,23 +40,23 @@
 |`enableHapticFeedback`| Function |Ekaterina Stepanova| done | test blocked | not supported by dayu200 |
 |`alignStyle`| Function |Ekaterina Stepanova| done | pass |  |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done |  | |
-|*Animator*| *Component* | Skroba Gleb | managed side |  |  |
-|`construct`| Function | Skroba Gleb | managed side |  |  |
+|*Animator*| *Component* |  managed side | managed side |  |  |
+|`construct`| Function |  managed side | managed side |  |  |
 |`setAnimatorOptions`| Function | managed side | managed side |  |
-|`state`| Function | Skroba Gleb | managed side |  |  |
-|`duration`| Function | Skroba Gleb | managed side |  |  |
-|`curve`| Function | Skroba Gleb | managed side |  |  |
-|`delay`| Function | Skroba Gleb | managed side |  |  |
-|`fillMode`| Function | Skroba Gleb | managed side |  |  |
-|`iterations`| Function | Skroba Gleb | managed side |  |  |
-|`playMode`| Function | Skroba Gleb | managed side |  |  |
-|`motion`| Function | Skroba Gleb | managed side |  |  |
-|`onStart`| Function | Skroba Gleb | managed side |  |  |
-|`onPause`| Function | Skroba Gleb | managed side |  |  |
-|`onRepeat`| Function | Skroba Gleb | managed side |  |  |
-|`onCancel`| Function | Skroba Gleb | managed side |  |  |
-|`onFinish`| Function | Skroba Gleb | managed side |  | deprecated since 12  |
-|`onFrame`| Function | Skroba Gleb | managed side |  | deprecated since 12  |
+|`state`| Function |  managed side | managed side |  |  |
+|`duration`| Function |  managed side | managed side |  |  |
+|`curve`| Function |  managed side | managed side |  |  |
+|`delay`| Function |  managed side | managed side |  |  |
+|`fillMode`| Function |  managed side | managed side |  |  |
+|`iterations`| Function |  managed side | managed side |  |  |
+|`playMode`| Function |  managed side | managed side |  |  |
+|`motion`| Function |  managed side | managed side |  |  |
+|`onStart`| Function |  managed side | managed side |  |  |
+|`onPause`| Function |  managed side | managed side |  |  |
+|`onRepeat`| Function |  managed side | managed side |  |  |
+|`onCancel`| Function |  managed side | managed side |  |  |
+|`onFinish`| Function |  managed side | managed side |  | deprecated since 12  |
+|`onFrame`| Function |  managed side | managed side |  | deprecated since 12  |
 |*Badge*| *Component* |Vadim Voronov | done |  |  |
 |`construct`| Function |Vadim Voronov | done | test blocked | test blocked by incorrect SDK.|
 |`setBadgeOptions0`| Function |Vadim Voronov | done | test blocked | test blocked by incorrect SDK.|
@@ -166,7 +166,7 @@
 |`onClick1`| Function |Roman Sedaikin | done | pass | EVENT |
 |`onHover`| Function | Andrey Khudenkikh, Tuzhilkin Ivan | done | pass | EVENT |
 |`onHoverMove`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
-|`onAccessibilityHover`| Function | Andrey Khudenkikh, Pavelyev Ivan | done |  | UT by Vadim Voronov EVENT |
+|`onAccessibilityHover`| Function | Andrey Khudenkikh | done |  | UT by Vadim Voronov EVENT |
 |`hoverEffect`| Function | Roman Sedaikin | done | pass | |
 |`onMouse`| Function | Kovalev Sergey | done | pass | EVENT |
 |`onTouch`| Function | Roman Sedaikin, Tuzhilkin Ivan | testskipped | pass | EVENT |
@@ -312,7 +312,7 @@
 |`accessibilityChecked`| Function | Lobah Mikhail | done |  | |
 |`accessibilitySelected`| Function | Lobah Mikhail | done |  | |
 |`obscured`| Function |Dmitry A Smirnov | done | pass | |
-|`reuseId`| Function |Dmitry A Smirnov | managed side |  | not implemented in ace_engine|
+|`reuseId`| Function |managed side | managed side |  | not implemented in ace_engine|
 |`reuse`| Function |managed side | managed side | | to be removed from CAPI generation |
 |`renderFit0`| Function | Dmitry A Smirnov| done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`renderFit1`| Function | Dmitry A Smirnov| done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -854,21 +854,21 @@
 |`enableStatusBar`| Function |managed side |managed side |test blocked | |
 |*NavRouter*| *Component* |Evstigneev Roman | managed side |  | |
 |`construct`| Function |  managed side | managed side | |
-|`setNavRouterOptions0`| Function |Evstigneev Roman| managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF (+) |
-|`setNavRouterOptions1`| Function |Evstigneev Roman| managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF (+) |
+|`setNavRouterOptions0`| Function | managed side | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF (+) |
+|`setNavRouterOptions1`| Function | managed side | managed side |  | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF (+) |
 |`onStateChange`| Function |Evstigneev Roman | done |  |deprecated  |
 |`mode`| Function |Evstigneev Roman | done |  |deprecated  |
-|*Navigator*| *Component* | Skroba Gleb| managed side | test blocked | OHOSUI-2171 |
-|`construct`| Function |Skroba Gleb| managed side | test blocked |  |
+|*Navigator*| *Component* |  managed side | managed side | test blocked | OHOSUI-2171 |
+|`construct`| Function | managed side | managed side | test blocked |  |
 |`setNavigatorOptions0`| Function |Skroba Gleb | done | test blocked |   |
 |`setNavigatorOptions1`| Function | Skroba Gleb | done | test blocked |   |
 |`active`| Function | Skroba Gleb | done | test blocked |deprecated , managed side |
 |`type`| Function | Skroba Gleb | done | test blocked |deprecated  |
 |`target`| Function | Skroba Gleb | done | test blocked |deprecated |
-|`params`| Function | Skroba Gleb | managed side | test blocked | deprecated |
+|`params`| Function |  managed side | managed side | test blocked | deprecated |
 |*NodeContainer*| *Component* | Skroba Gleb | blocked IDL |  | |
-|`construct`| Function |Skroba Gleb | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
-|`setNodeContainerOptions`| Function | Skroba Gleb | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`construct`| Function | managed side | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
+|`setNodeContainerOptions`| Function |  managed side | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |*Panel*| *Component* | Pavelyev Ivan| done |  | deprecated  |
 |`construct`| Function |Pavelyev Ivan| done |  |  |
 |`setPanelOptions`| Function | Pavelyev Ivan| done |  |  |
@@ -1879,9 +1879,9 @@
 |`divider`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2170 |
 |`minContentWidth`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2170 |
 |`_onChangeEvent_showSideBar`| Function | Erokhin Ilya | done |  | |
-|*RemoteWindow*| *Component* | Spirin Andrey, Evstigneev Roman | done |  | |
-|`construct`| Function |Spirin Andrey, Evstigneev Roman | done |  | |
-|`setRemoteWindowOptions`| Function | Spirin Andrey, Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+) |
+|*RemoteWindow*| *Component* | Spirin Andrey | done |  | |
+|`construct`| Function |Spirin Andrey | done |  | |
+|`setRemoteWindowOptions`| Function | Spirin Andrey | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+) |
 |*WaterFlow*| *Component* | Kovalev Sergey | done |  |  |
 |`construct`| Function | Kovalev Sergey | done | pass | |
 |`setWaterFlowOptions`| Function | Kovalev Sergey | done | pass | |
@@ -2200,7 +2200,7 @@
 |`setNavDestinationNode`| Function |managed side |managed side | | |
 |*EventEmulator*| *Class* | Dmitry A Smirnov | managed side | | |
 |`emitClickEvent`| Function | managed side | managed side | | |
-|`emitTextInputEvent`| Function | Dmitry A Smirnov | managed side | | |
+|`emitTextInputEvent`| Function | managed side | managed side | | |
 |*ActionSheet*| *Class* | Ekaterina Stepanova | testskipped |  | |
 |`show`| Function | Ekaterina Stepanova | testskipped |  | UT in progress, Skroba Gleb |
 |*AlertDialog*| *Class* | Ekaterina Stepanova | testskipped |  | |
@@ -2505,7 +2505,7 @@
 |*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`ctor`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
-|*NavPathInfo*| *Class* | Skroba Gleb | managed side | | done in C-API as workarond, the managed side support is planned  |
+|*NavPathInfo*| *Class* |  managed side | managed side | | done in C-API as workarond, the managed side support is planned  |
 |`ctor`| Function | Skroba Gleb | done | |  |
 |`getName`| Function | Skroba Gleb | done | |  |
 |`setName`| Function | Skroba Gleb | done | |  |
@@ -2717,8 +2717,8 @@
 |*GlobalScope_common*| *Class* | Erokhin Ilya | blocked IDL |  | |
 |`getContext`| Function | Erokhin Ilya | blocked IDL |  | RET_VAL_STABBED https://gitee.com/nikolay-igotti/idlize/issues/IBJXAR |
 |`postCardAction`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
-|`dollar_r`| Function | Erokhin Ilya | managed side |  | NEED TO BE REMOVED  |
-|`dollar_rawfile`| Function | Erokhin Ilya | managed side |  | NEED TO BE REMOVED  |
+|`dollar_r`| Function | managed side | managed side |  | NEED TO BE REMOVED  |
+|`dollar_rawfile`| Function | managed side | managed side |  | NEED TO BE REMOVED  |
 |`animateTo`| Function | Erokhin Ilya | testskipped | failed | |
 |`animateToImmediately`| Function | Erokhin Ilya | testskipped | failed | |
 |`vp2px`| Function | Erokhin Ilya | done |  | |
@@ -2967,7 +2967,7 @@
 |`getCaretRect`| Function | Erokhin Ilya | done | | |
 |*RichEditorController*| *Class* |Dudkin Sergey| blocked IDL|  |  |
 |`ctor`| Function |Dudkin Sergey| done |  |  |
-|`addTextSpan`| Function |Dudkin Sergey, Samarin Sergey | testskipped |  | tests are partially ready, but not all fields inside arguments' structs are tested yet |
+|`addTextSpan`| Function |Dudkin Sergey | testskipped |  | tests are partially ready, but not all fields inside arguments' structs are tested yet |
 |`addImageSpan`| Function |Dudkin Sergey | done |  |  |
 |`addBuilderSpan`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail |
 |`addSymbolSpan`| Function | Dudkin Sergey| done |  |  |
@@ -3031,24 +3031,24 @@
 |`showNext`| Function | Skroba Gleb | done |  |  |
 |`showPrevious`| Function | Skroba Gleb | done |  |  |
 |`changeIndex`| Function | Skroba Gleb | done |  |  |
-|*HierarchicalSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`ctor`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`getFillStyle`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`setFillStyle`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|*AppearSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`ctor`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`getScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`setScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|*DisappearSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`ctor`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`getScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`setScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|*BounceSymbolEffect*| *Class* | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`ctor`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`getScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`setScope`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`getDirection`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
-|`setDirection`| Function | wangtao, Maksimov Nikita, Andrey Khudenkikh | done | | |
+|*HierarchicalSymbolEffect*| *Class* | wangtao  | done | | |
+|`ctor`| Function | wangtao  | done | | |
+|`getFillStyle`| Function | wangtao  | done | | |
+|`setFillStyle`| Function | wangtao  | done | | |
+|*AppearSymbolEffect*| *Class* | wangtao  | done | | |
+|`ctor`| Function | wangtao  | done | | |
+|`getScope`| Function | wangtao  | done | | |
+|`setScope`| Function | wangtao  | done | | |
+|*DisappearSymbolEffect*| *Class* | wangtao  | done | | |
+|`ctor`| Function | wangtao  | done | | |
+|`getScope`| Function | wangtao  | done | | |
+|`setScope`| Function | wangtao  | done | | |
+|*BounceSymbolEffect*| *Class* | wangtao  | done | | |
+|`ctor`| Function | wangtao  | done | | |
+|`getScope`| Function | wangtao  | done | | |
+|`setScope`| Function | wangtao  | done | | |
+|`getDirection`| Function | wangtao  | done | | |
+|`setDirection`| Function | wangtao  | done | | |
 |*PulseSymbolEffect*| *Class* | Maksimov Nikita | done | | |
 |`ctor`| Function | Maksimov Nikita | done | | |
 |*TabsController*| *Class* | Skroba Gleb | done |  | |
