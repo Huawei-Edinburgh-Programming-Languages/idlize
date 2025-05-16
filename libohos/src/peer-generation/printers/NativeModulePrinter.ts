@@ -349,7 +349,7 @@ function collectNativeModuleImports(module: NativeModuleType, imports: ImportsCo
         imports.addFeatures(["int32", "int64", "float32"], "@koalaui/common")
         if (module === NativeModule.Generated && library.name === 'arkoala') {
             if (library.language === Language.TS || library.language === Language.ARKTS)
-                imports.addFeature('Length', './units')
+                imports.addFeature('Length', './internal.component.ets.units')
         }
     }
 }

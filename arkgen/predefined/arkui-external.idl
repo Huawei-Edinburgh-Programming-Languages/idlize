@@ -7,18 +7,6 @@ package api.internal.component.ets;
 [Entity=Class, Interfaces="AttributeModifier", ParentTypeArguments="<object>"]
 interface TextModifier {};
 
-[Entity=Interface]
-interface WebHeader {
-    attribute String headerKey;
-    attribute String headerValue;
-};
-
-[Entity=Class]
-interface WebviewController {
-  static void initializeWebEngine();
-  void loadUrl((String or Resource) url, optional sequence<WebHeader> headers);
-};
-
 /**
  * The componentSnapshot API declaration , part for M2 app
  */
@@ -303,18 +291,6 @@ interface FontInfo {
 * from ui_extension_component.idl
 */
 callback ReceiveCallback = void (record<String, Object> data);
-
-/*
-* from @ohos.window.idl
-*/
-dictionary WindowStatusType {
-    number UNDEFINED = 0;
-    number FULL_SCREEN = 1;
-    number MAXIMIZE = 2;
-    number MINIMIZE = 3;
-    number FLOATING = 4;
-    number SPLIT_SCREEN = 5;
-};
 
 /*
 * from units.idl

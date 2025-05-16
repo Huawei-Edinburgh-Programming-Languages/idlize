@@ -1,0 +1,20 @@
+dictionary Orientation {
+    number UNSPECIFIED = 0;
+    number PORTRAIT = 1;
+    number LANDSCAPE = 2;
+    number PORTRAIT_INVERTED = 3;
+    number LANDSCAPE_INVERTED = 4;
+    number AUTO_ROTATION = 5;
+    number AUTO_ROTATION_PORTRAIT = 6;
+    number AUTO_ROTATION_LANDSCAPE = 7;
+    number AUTO_ROTATION_RESTRICTED = 8;
+    number AUTO_ROTATION_PORTRAIT_RESTRICTED = 9;
+    number AUTO_ROTATION_LANDSCAPE_RESTRICTED = 10;
+    number LOCKED = 11;
+    number AUTO_ROTATION_UNSPECIFIED = 12;
+    number USER_ROTATION_PORTRAIT = 13;
+    number USER_ROTATION_LANDSCAPE = 14;
+    number USER_ROTATION_PORTRAIT_INVERTED = 15;
+    number USER_ROTATION_LANDSCAPE_INVERTED = 16;
+    number FOLLOW_DESKTOP = 17;
+};

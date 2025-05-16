@@ -159,3 +159,7 @@ dictionary IntentionCode {
     number INTENTION_ZOOM_OUT = 13;
     number INTENTION_ZOOM_IN = 14;
 };
+
+interface DataSyncOptions {
+    [Optional] attribute String destUri;
+};
