@@ -143,7 +143,6 @@
         "@ohos.app.ability.OpenLinkOptions.d.ts",
         "@ohos.app.ability.StartOptions.d.ts",
         "@ohos.app.ability.UIAbility.d.ts",
-        "@ohos.app.ability.Want.d.ts",
         "@ohos.arkui.componentSnapshot.d.ts",
         "@ohos.arkui.componentUtils.d.ts",
         "@ohos.arkui.dragController.d.ts",

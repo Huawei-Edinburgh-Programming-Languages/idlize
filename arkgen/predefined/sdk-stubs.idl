@@ -1,4 +1,0 @@
-package internal.component.ets;
-
-callback OnHoverCallback = void ();
-callback MenuCallback = void ();
