@@ -91,7 +91,6 @@
         "arkui/ComponentContent.d.ts",
         "arkui/Content.d.ts",
         "arkui/FrameNode.d.ts",
-        "arkui/Graphics.d.ts",
         "arkui/ImageModifier.d.ts",
         "arkui/NodeContent.d.ts",
         "arkui/NodeController.d.ts",
