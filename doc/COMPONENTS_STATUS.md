@@ -556,7 +556,7 @@
 |`onLoad`| Function | Vadim Voronov | done |  | |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |  |
 |`construct`| Function |Dmitry A Smirnov| done |  |  |
-|`setFormLinkOptions`| Function | Dmitry A Smirnov| done |  |  |
+|`setFormLinkOptions`| Function | Dmitry A Smirnov| done | pass |  |
 |*Gauge*| *Component* | Maksimov Nikita | blocked IDL |  |  |
 |`construct`| Function | Maksimov Nikita | done | pass | |
 |`setGaugeOptions`| Function | Maksimov Nikita | done | pass | |
@@ -1032,16 +1032,16 @@
 |`setRootSceneOptions`| Function | Spirin Andrey | done |  | |
 |*Row*| *Component* | Andrey Khudenkikh | done |  |  |
 |`construct`| Function |Andrey Khudenkikh | done |  |  |
-|`setRowOptions0`| Function | Andrey Khudenkikh | done |  |  |
+|`setRowOptions0`| Function | Andrey Khudenkikh | done | pass |  |
 |`setRowOptions1`| Function | Andrey Khudenkikh | done |  |  |
-|`alignItems`| Function | Andrey Khudenkikh | done |  |  |
-|`justifyContent`| Function | Andrey Khudenkikh | done |  |  |
+|`alignItems`| Function | Andrey Khudenkikh | done | pass |  |
+|`justifyContent`| Function | Andrey Khudenkikh | done | pass |  |
 |`pointLight`| Function | Evstigneev Roman, Andrey Khudenkikh | done |  | UT by Evstigneev Roman |
-|`reverse`| Function | Andrey Khudenkikh | done |  |  |
+|`reverse`| Function | Andrey Khudenkikh | done | pass |  |
 |*RowSplit*| *Component* | Dmitry A Smirnov| done |  | |
 |`construct`| Function | Dmitry A Smirnov| done |  | |
-|`setRowSplitOptions`| Function | Dmitry A Smirnov| done |  |  |
-|`resizeable`| Function | Dmitry A Smirnov| done |  |  |
+|`setRowSplitOptions`| Function | Dmitry A Smirnov| done | failed | OHOSUI-2201 Text in rowSplit does not appear |
+|`resizeable`| Function | Dmitry A Smirnov| done | failed | OHOSUI-2202 resizeable does not work |
 |*SaveButton*| *Component* | Samarin Sergey| done |  |  |
 |`construct`| Function |Samarin Sergey| done |  |  |
 |`setSaveButtonOptions0`| Function | Samarin Sergey| done |  |  |
