@@ -152,6 +152,6 @@
 | Visibility.test.ets | Evstigneev Roman |
 | WaterFlow.test.ets | Sergey Morozov |
 | WaterFlowDataSource.ets | Vadim Voronov |
-| Web.test.ets |                   |
-| XComponent.test.ets |                   |
+| Web.test.ets | Vadim Voronov |
+| XComponent.test.ets | Vadim Voronov |
 | ZIndex.test.ets | Andrey Khudenkikh |
