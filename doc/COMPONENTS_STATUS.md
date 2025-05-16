@@ -1838,7 +1838,7 @@
 |`enableWebAVSession`| Function | Vadim Voronov  | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`optimizeParserBudget`| Function | Vadim Voronov  | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`runJavaScriptOnDocumentStart`| Function | Vadim Voronov  | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`runJavaScriptOnDocumentEnd`| Function | Vadim Voronov  | done test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`runJavaScriptOnDocumentEnd`| Function | Vadim Voronov  | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`runJavaScriptOnHeadEnd`| Function | Vadim Voronov  | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`nativeEmbedOptions`| Function | | | test blocked | no such API in generation 125, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`enableDataDetector`| Function | | | test blocked | no such API in generation 125, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
