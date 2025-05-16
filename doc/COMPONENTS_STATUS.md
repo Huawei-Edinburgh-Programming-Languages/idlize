@@ -286,7 +286,7 @@
 |`id`| Function | Erokhin Ilya | done |  |  |
 |`geometryTransition0`| Function | Lobah Mikhail | testskipped | test blocked | no method found test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG |
 |`geometryTransition1`| Function | Lobah Mikhail | testskipped | test blocked | no method found test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
-|`stateStyles`| Function | Dudkin Sergey | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
+|`stateStyles`| Function | managed side | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`restoreId`| Function | Lobah Mikhail | done |  | |
 |`sphericalEffect0`| Function | Lobah Mikhail | done | pass | |
 |`sphericalEffect1`| Function | Dmitry A Smirnov | done | pass | |
@@ -816,7 +816,7 @@
 |*MenuItemGroup*| *Component* |Morozov Sergey | done | test blocked | demo blocked by MenuItem |
 |`construct`| Function |Morozov Sergey | done |  |  |
 |`setMenuItemGroupOptions`| Function | Dmitry A Smirnov | done |  |   |
-|*NavDestination*| *Component* |Kovalev Sergey | managed side | test blocked | OHOSUI-2171 |
+|*NavDestination*| *Component* | managed side | managed side | test blocked | OHOSUI-2171 |
 |`construct`| Function |Kovalev Sergey | done | test blocked | OHOSUI-2171 |
 |`setNavDestinationOptions`| Function |Kovalev Sergey | done | test blocked |  |
 |`hideTitleBar0`| Function |Kovalev Sergey | done | test blocked |   |
@@ -827,18 +827,18 @@
 |`onBackPressed`| Function |Dudkin Sergey | done | test blocked |  |
 |`onResult`| Function | managed side | managed side | test blocked| |
 |`mode`| Function |Kovalev Sergey | done | test blocked |   |
-|`backButtonIcon0`| Function |Kovalev Sergey | managed side | test blocked | |
-|`backButtonIcon1`| Function |Kovalev Sergey | managed side | test blocked |  |
-|`menus0`| Function |Kovalev Sergey | managed side | test blocked |  |
-|`menus1`| Function |Kovalev Sergey | managed side | test blocked |  |
-|`onReady`| Function |Kovalev Sergey | managed side | test blocked |  |
+|`backButtonIcon0`| Function | managed side | managed side | test blocked | |
+|`backButtonIcon1`| Function | managed side | managed side | test blocked |  |
+|`menus0`| Function | managed side | managed side | test blocked |  |
+|`menus1`| Function | managed side | managed side | test blocked |  |
+|`onReady`| Function | managed side | managed side | test blocked |  |
 |`onWillAppear`| Function |Kovalev Sergey | done |  | test blocked |
 |`onWillDisappear`| Function |Kovalev Sergey | done | test blocked |  |
 |`onWillShow`| Function |Kovalev Sergey | done | test blocked |   |
 |`onWillHide`| Function | Kovalev Sergey | done | test blocked |   |
 |`systemBarStyle`| Function |Kovalev Sergey | blocked IDL | test blocked |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`recoverable`| Function |Kovalev Sergey | done | test blocked |   |
-|`systemTransition`| Function |Kovalev Sergey | managed side | test blocked |  |
+|`systemTransition`| Function | managed side | managed side | test blocked |  |
 |`bindToScrollable`| Function | managed side|managed side | test blocked| |
 |`bindToNestedScrollable`| Function | managed side| managed side| test blocked| |
 |`onActive`| Function |managed side |managed side | test blocked| |
@@ -847,9 +847,9 @@
 |`onNewParam`| Function |managed side |managed side | test blocked| |
 |`preferredOrientation`| Function |managed side |managed side | test blocked| |
 |`enableNavigationIndicator`| Function |managed side |managed side |test blocked | |
-|`title`| Function |Kovalev Sergey | managed side | test blocked |  |
-|`toolbarConfiguration`| Function |Kovalev Sergey | managed side | test blocked |  |
-|`hideToolBar`| Function | Kovalev Sergey | managed side | test blocked |  |
+|`title`| Function | managed side | managed side | test blocked |  |
+|`toolbarConfiguration`| Function | managed side | managed side | test blocked |  |
+|`hideToolBar`| Function | managed side | managed side | test blocked |  |
 |`ignoreLayoutSafeArea`| Function |Kovalev Sergey | done | test blocked |   |
 |`enableStatusBar`| Function |managed side |managed side |test blocked | |
 |*NavRouter*| *Component* |Evstigneev Roman | managed side |  | |
@@ -1208,10 +1208,10 @@
 |`menuItemContentModifier0` | Function | Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`menuItemContentModifier1` | Function | Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`divider` | Function | Samarin Sergey | done | test blocked |  |
-|`textModifier`| Function | Samarin Sergey | managed side |  | |
-|`arrowModifier`| Function | Maksimov Nikita, Evstigneev Roman | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
-|`optionTextModifier`| Function | Maksimov Nikita, Evstigneev Roman | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
-|`selectedOptionTextModifier`| Function | Maksimov Nikita, Evstigneev Roman | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
+|`textModifier`| Function | managed side | managed side |  | |
+|`arrowModifier`| Function | managed side | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
+|`optionTextModifier`| Function | managed side | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
+|`selectedOptionTextModifier`| Function | managed side | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
 |`dividerStyle`| Function | Evstigneev Roman | in progress | | API is not present |
 |`avoidance`| Function | Evstigneev Roman | in progress | | API is not present |
 |`menuOutline`| Function | Evstigneev Roman | in progress | | API is not present |
@@ -2129,7 +2129,7 @@
 |`getFirstChild`| Function | Morozov Sergey | done | | done on Upstream |
 |`getNextSibling`| Function | Morozov Sergey | done | | done on Upstream |
 |`getPreviousSibling`| Function | Morozov Sergey | done | | done on Upstream |
-|`draw`| Function | Morozov Sergey | managed side | | |
+|`draw`| Function | managed side | managed side | | |
 |`invalidate`| Function | Morozov Sergey | testskipped | | done on Upstream |
 |`dispose`| Function | Morozov Sergey | done | | done on Upstream |
 |`getBackgroundColor`| Function | Morozov Sergey | done | | done on Upstream |
@@ -2469,7 +2469,7 @@
 |*TextContentControllerBase*| *Class* | Morozov Sergey | done |  | |
 |`ctor`| Function | Dudkin Sergey | done |  |  |
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
-|`getTextContentRect`| Function | Morozov Sergey, SkrobaGleb | done | test blocked |
+|`getTextContentRect`| Function | Morozov Sergey | done | test blocked |
 |`getTextContentLineCount`| Function | Morozov Sergey | done |  | |
 |`addText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
 |`deleteText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
@@ -2509,7 +2509,7 @@
 |`ctor`| Function | Skroba Gleb | done | |  |
 |`getName`| Function | Skroba Gleb | done | |  |
 |`setName`| Function | Skroba Gleb | done | |  |
-|`getParam`| Function | | managed side | | managed side |
+|`getParam`| Function | managed side | managed side | |  |
 |`setParam`| Function | Skroba Gleb | done | |  |
 |`getOnPop`| Function | Skroba Gleb | done | |  |
 |`setOnPop`| Function | Skroba Gleb | done | |  |
@@ -2517,51 +2517,51 @@
 |`setIsEntry`| Function | Skroba Gleb | done | |  |
 |`getNavDestinationId`| Function |managed side | managed side | |  |
 |`setNavDestinationId`| Function |managed side | managed side | |  |
-|*NavPathStack*| *Class* | Morozov Sergey | managed side |  |   |
+|*NavPathStack*| *Class* | managed side | managed side |  |   |
 |`ctor`| Function | Skroba Gleb | done |  |   |
 |`pushPath0`| Function | Skroba Gleb | done |  |   |
 |`pushPath1`| Function | Skroba Gleb | done |  |   |
-|`pushDestination0`| Function | Morozov Sergey | managed side |  |   |
-|`pushDestination1`| Function | Morozov Sergey | managed side |  |   |
-|`pushPathByName0`| Function | Morozov Sergey | managed side|  | |
-|`pushPathByName1`| Function | Morozov Sergey | managed side|  |  |
-|`pushDestinationByName0`| Function | Morozov Sergey | managed side |  |  | 
-|`pushDestinationByName1`| Function | Morozov Sergey | managed side |  |  | 
-|`replacePath0`| Function | Morozov Sergey | managed side |  |  |
-|`replacePath1`| Function | Morozov Sergey | managed side |  |  |
-|`replaceDestination`| Function | Morozov Sergey | managed side |  | |
-|`replacePathByName`| Function | Morozov Sergey | managed side |  |  |
-|`removeByIndexes`| Function | Morozov Sergey | managed side |  |  |
-|`removeByName`| Function | Morozov Sergey | managed side |  |  |
-|`removeByNavDestinationId`| Function | Morozov Sergey | managed side |  |  |
-|`pop0`| Function | Skroba Gleb | managed side |  | |  
-|`pop1`| Function | Skroba Gleb | managed side |  | |  
-|`popToName0`| Function | Morozov Sergey | managed side |  |  |
-|`popToName1`| Function | Morozov Sergey | managed side |  |  |
-|`popToIndex0`| Function | Morozov Sergey | managed side |  |  |
-|`popToIndex1`| Function | Morozov Sergey | managed side |  |  |
-|`moveToTop`| Function | Morozov Sergey | managed side |  |  |
-|`moveIndexToTop`| Function | Morozov Sergey | managed side |  |  |
-|`clear`| Function | Morozov Sergey | managed side |  |  |
-|`getAllPathName`| Function | Morozov Sergey | managed side |  |  | 
-|`getParamByIndex`| Function | Morozov Sergey | managed side |  |  | 
+|`pushDestination0`| Function | managed side | managed side |  |   |
+|`pushDestination1`| Function | managed side | managed side |  |   |
+|`pushPathByName0`| Function | managed side | managed side|  | |
+|`pushPathByName1`| Function | managed side | managed side|  |  |
+|`pushDestinationByName0`| Function | managed side | managed side |  |  | 
+|`pushDestinationByName1`| Function | managed side | managed side |  |  | 
+|`replacePath0`| Function | managed side | managed side |  |  |
+|`replacePath1`| Function | managed side | managed side |  |  |
+|`replaceDestination`| Function | managed side | managed side |  | |
+|`replacePathByName`| Function | managed side | managed side |  |  |
+|`removeByIndexes`| Function | managed side | managed side |  |  |
+|`removeByName`| Function | managed side | managed side |  |  |
+|`removeByNavDestinationId`| Function | managed side | managed side |  |  |
+|`pop0`| Function | managed side | managed side |  | |  
+|`pop1`| Function | managed side | managed side |  | |  
+|`popToName0`| Function | managed side | managed side |  |  |
+|`popToName1`| Function | managed side | managed side |  |  |
+|`popToIndex0`| Function | managed side | managed side |  |  |
+|`popToIndex1`| Function | managed side | managed side |  |  |
+|`moveToTop`| Function | managed side | managed side |  |  |
+|`moveIndexToTop`| Function | managed side | managed side |  |  |
+|`clear`| Function | managed side | managed side |  |  |
+|`getAllPathName`| Function | managed side | managed side |  |  | 
+|`getParamByIndex`| Function | managed side | managed side |  |  | 
 |`getParamByName`| Function | managed side | managed side |  |  |
-|`getIndexByName`| Function | Morozov Sergey | managed side |  |  |
-|`getParent`| Function | Morozov Sergey | managed side |  |  |
+|`getIndexByName`| Function | managed side | managed side |  |  |
+|`getParent`| Function | managed side | managed side |  |  |
 |`size`| Function | Skroba Gleb | done |  |  |
-|`disableAnimation`| Function | Morozov Sergey | managed side |  |  |
-|`setInterception`| Function | Morozov Sergey | managed side |  |  |
+|`disableAnimation`| Function | managed side | managed side |  |  |
+|`setInterception`| Function | managed side | managed side |  |  |
 |`getPathStack`| Function | managed side | managed side | | |
 |`setPathStack`| Function | managed side | managed side | | |
-|*NavigationTransitionProxy*| *Class* | Morozov Sergey | managed side |  |  |
+|*NavigationTransitionProxy*| *Class* | managed side | managed side |  |  |
 |`ctor`| Function |Morozov Sergey | done |  |  |
 |`finishTransition`| Function | Morozov Sergey | done |  |  |
 |`cancelTransition`| Function | Morozov Sergey | done |  |  |
 |`updateTransition`| Function | Morozov Sergey | done |  |  |
 |`getFrom`| Function | managed side | managed side | | |
-|`setFrom`| Function | Morozov Sergey | managed side |  | , https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
+|`setFrom`| Function | managed side | managed side |  | , https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
 |`getTo`| Function | managed side | managed side | | |
-|`setTo`| Function | Morozov Sergey | managed side |  | , https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
+|`setTo`| Function | managed side | managed side |  | , https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
 |`getIsInteractive`| Function | Morozov Sergey | done |  |  |
 |`setIsInteractive`| Function | Morozov Sergey | done |  |  |
 |*CanvasGradient*| *Class* | Vadim Voronov | done |  | |
@@ -2858,7 +2858,7 @@
 |*GestureRecognizer*| *Class* | Kovalev Sergey | done |  | |
 |`ctor`| Function | Kovalev Sergey | done | | |
 |`getTag`| Function | Kovalev Sergey | done | | |
-|`getType`| Function | Kovalev Sergey, Samarin Sergey | done |  | |
+|`getType`| Function | Kovalev Sergey | done |  | |
 |`isBuiltIn`| Function | Kovalev Sergey | done |  | |
 |`setEnabled`| Function | Kovalev Sergey | done |  | |
 |`isEnabled`| Function | Kovalev Sergey | done |  | |
@@ -2931,13 +2931,13 @@
 |`setTranslateX`| Function | Vadim Voronov | done |  | |
 |`getTranslateY`| Function | Vadim Voronov | done |  | |
 |`setTranslateY`| Function | Vadim Voronov | done |  | |
-|*NavDestinationContext*| *Class* | Morozov Sergey | managed side |  |  |
-|`ctor`| Function |Morozov Sergey | managed side |  |  |
-|`getConfigInRouteMap`| Function | Morozov Sergey | managed side |  |  |
+|*NavDestinationContext*| *Class* | managed side | managed side |  |  |
+|`ctor`| Function | managed side | managed side |  |  |
+|`getConfigInRouteMap`| Function | managed side | managed side |  |  |
 |`getPathInfo`| Function | managed side| managed side| | |
-|`setPathInfo`| Function | Morozov Sergey | managed side |  | , https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
+|`setPathInfo`| Function | managed side | managed side |  | , https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
 |`getPathStack`| Function | managed side| managed side| | |
-|`setPathStack`| Function | Morozov Sergey | managed side |  | , https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
+|`setPathStack`| Function | managed side | managed side |  | , https://gitee.com/nikolay-igotti/idlize/issues/IB7ZKX |
 |`getNavDestinationId`| Function | managed side | managed side |  | |
 |`setNavDestinationId`| Function | Morozov Sergey | done |  |  |
 |*PatternLockController*| *Class* |Dmitry A Smirnov| done |  |  |
@@ -2975,7 +2975,7 @@
 |`updateParagraphStyle`| Function | Dudkin Sergey| done |  |  |
 |`deleteSpans`| Function |Dudkin Sergey| done |  |  |
 |`getSpans`| Function |Dudkin Sergey| done |  |  |
-|`getParagraphs`| Function |Dmitry A Smirnov, Ivan Pavelyev| done |  | |
+|`getParagraphs`| Function |Dmitry A Smirnov| done |  | |
 |`getSelection`| Function |Dudkin Sergey| done |  |  |
 |`fromStyledString`| Function | Dudkin Sergey| done |  |  |
 |`toStyledString`| Function | Dudkin Sergey| done |  |  |
