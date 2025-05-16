@@ -345,7 +345,7 @@
 |`blur0`| Function | Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`blur1`| Function |Roman Sedaikin, Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`linearGradientBlur0`| Function |Lobah Mikhail | done | pass | |
-|`linearGradientBlur1`| Function | Dmitry A Smirnov | done | passed  | |
+|`linearGradientBlur1`| Function | Dmitry A Smirnov | done | pass | |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
 |`backdropBlur0`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backdropBlur1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -1285,7 +1285,7 @@
 |*Stack*| *Component* | Korobeinikov Evgeny | done | pass |  |
 |`construct`| Function |Korobeinikov Evgeny | done | pass |  |
 |`setStackOptions` | Function | Korobeinikov Evgeny | done | pass |  |
-|`alignContent` | Function | Korobeinikov Evgeny | done | passed  |  |
+|`alignContent` | Function | Korobeinikov Evgeny | done | pass |  |
 |`pointLight` | Function | Evstigneev Roman, Andrey Khudenkikh | done |  |  UT by Evstigneev Roman |
 |*Stepper*| *Component* | Morozov Sergey | done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`construct`| Function |Morozov Sergey | done | |  |
