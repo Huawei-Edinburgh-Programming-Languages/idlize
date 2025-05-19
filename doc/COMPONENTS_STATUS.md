@@ -63,8 +63,8 @@
 |`setBadgeOptions1`| Function |Vadim Voronov | done | test blocked | test blocked by incorrect SDK.|
 |*Blank*| *Component* | Skroba Gleb | done |  |  |
 |`construct`| Function | Skroba Gleb | done |  |  |
-|`setBlankOptions`| Function | Skroba Gleb | done |  |  |
-|`color`| Function | Skroba Gleb | done |  |  |
+|`setBlankOptions`| Function | Skroba Gleb | done | pass |  |
+|`color`| Function | Skroba Gleb | done | pass |  |
 |*Button*| *Component* | Evstigneev Roman | blocked IDL |  |  |
 |`construct`| Function | Evstigneev Roman | done |  pass |  |
 |`setButtonOptions0`| Function | Evstigneev Roman | done | pass |  |
