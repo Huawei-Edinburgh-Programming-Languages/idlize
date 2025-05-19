@@ -274,6 +274,20 @@
         ]
     },
     "hooks": {
+        "CommonMethod": {
+            "gesture": {
+                "hookName": "hookCommonMethodGestureImpl"
+            },
+            "priorityGesture": {
+                "hookName": "hookCommonMethodPriorityGestureImpl"
+            },
+            "parallelGesture": {
+                "hookName": "hookCommonMethodParallelGestureImpl"
+            },
+            "gestureModifier": {
+                "hookName": "hookCommonMethodGestureModifierImpl"
+            }
+        },
         "Button": {
             "contentModifier": {
                 "hookName": "hookButtonContentModifier"
