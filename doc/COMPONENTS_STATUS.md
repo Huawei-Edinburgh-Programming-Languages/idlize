@@ -102,14 +102,14 @@
 |`onRequestData`| Function | Maksimov Nikita | done |  | |
 |*CalendarPicker*| *Component* |Politov Mikhail | done |  |  |
 |`construct`| Function |Politov Mikhail | done |  |  |
-|`setCalendarPickerOptions`| Function |Politov Mikhail | testskipped |  | UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB7RNZ |
-|`textStyle0`| Function |Politov Mikhail | done |  |  |
-|`textStyle1`| Function |Politov Mikhail | done |  |  |
-|`onChange0`| Function |Politov Mikhail | done |  |  |
+|`setCalendarPickerOptions`| Function |Politov Mikhail | testskipped | failed | UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB7RNZ, test failed OHOSUI-2244 |
+|`textStyle0`| Function |Politov Mikhail | done | pass |  |
+|`textStyle1`| Function |Politov Mikhail | done | pass |  |
+|`onChange0`| Function |Politov Mikhail | done | pass |  |
 |`onChange1`| Function | Politov Mikhail | done |  |  |
-|`markToday`| Function | Samarin Sergey | done | | |
-|`edgeAlign0`| Function | Politov Mikhail | done |  |  |
-|`edgeAlign1`| Function |Politov Mikhail | done |  |  |
+|`markToday`| Function | Samarin Sergey | done | pass | same as in arkui, false is not applied |
+|`edgeAlign0`| Function | Politov Mikhail | done | pass |  |
+|`edgeAlign1`| Function |Politov Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*CommonMethod*|*Component*|Skroba Gleb,Erokhin Ilya | in progress |  |  |
 |`construct`| Function |Skroba Gleb |done |  | empty implementation, functional is supported by managed side |
 |`width0`| Function |Roman Sedaikin | done |  | |
