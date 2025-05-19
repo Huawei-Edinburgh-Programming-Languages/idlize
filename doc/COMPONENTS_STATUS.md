@@ -2870,17 +2870,17 @@
 |*TapRecognizer*| *Class* | Lobah Mikhail| done| | |
 |`ctor`| Function | Lobah Mikhail| done| | |
 |`getTapCount`| Function | Lobah Mikhail| done| | |
-|*LongPressRecognizer*| *Class* | Vadim Voronov | | | |
-|`ctor`| Function | Vadim Voronov | | | |
-|`isRepeat`| Function | Vadim Voronov | | | |
-|`getDuration`| Function | Vadim Voronov | | | |
-|*SwipeRecognizer*| *Class* | Vadim Voronov | | | |
-|`ctor`| Function | Vadim Voronov | | | |
-|`getVelocityThreshold`| Function | Vadim Voronov | | | |
-|`getDirection`| Function | Vadim Voronov | | | |
-|*PinchRecognizer*| *Class* | Vadim Voronov | | | |
-|`ctor`| Function | Vadim Voronov | | | |
-|`getDistance`| Function | Vadim Voronov | | | |
+|*LongPressRecognizer*| *Class* | Vadim Voronov | in progress | | |
+|`ctor`| Function | Vadim Voronov | in progress | | |
+|`isRepeat`| Function | Vadim Voronov | in progress | | |
+|`getDuration`| Function | Vadim Voronov | in progress | | |
+|*SwipeRecognizer*| *Class* | Vadim Voronov | in progress | | |
+|`ctor`| Function | Vadim Voronov | in progress | | |
+|`getVelocityThreshold`| Function | Vadim Voronov | in progress | | |
+|`getDirection`| Function | Vadim Voronov | in progress | | |
+|*PinchRecognizer*| *Class* | Vadim Voronov | in progress | | |
+|`ctor`| Function | Vadim Voronov | in progress | | |
+|`getDistance`| Function | Vadim Voronov | in progress | | |
 |*RotationRecognizer*| *Class* | Lobah Mikhail| done| | |
 |`ctor`| Function | Lobah Mikhail| done| | |
 |`getAngle`| Function | Lobah Mikhail| done| | |
