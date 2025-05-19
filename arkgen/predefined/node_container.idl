@@ -1,0 +1,13 @@
+package org.openharmony.arkui;
+
+callback NodeContainer_AboutToResizeCallback = void (Size size);
+
+[Entity=Class]
+interface NodeContainerOps {
+    static void aboutToAppearAttribute(pointer self, Callback_Void callback);
+    static void aboutToDisappearAttribute(pointer self, Callback_Void callback);
+    static void aboutToResizeAttribute(pointer self, NodeContainer_AboutToResizeCallback callback);
+    static void onAttachAttribute(pointer self, Callback_Void callback);
+    static void onDetachAttribute(pointer self, Callback_Void callback);
+    static void onTouchEventAttribute(pointer self, Callback_TouchEvent_Void callback);
+};
