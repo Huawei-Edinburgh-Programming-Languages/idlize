@@ -113,9 +113,9 @@
 |*CommonMethod*|*Component*|Skroba Gleb,Erokhin Ilya | in progress |  |  |
 |`construct`| Function |Skroba Gleb |done |  | empty implementation, functional is supported by managed side |
 |`width0`| Function |Roman Sedaikin | done |  | |
-|`width1`| Function |Roman Sedaikin | done |  | |
+|`width1`| Function |Roman Sedaikin | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IC8XWH |
 |`height0`| Function |Roman Sedaikin | done |  | |
-|`height1`| Function |Roman Sedaikin | done |  | |
+|`height1`| Function |Roman Sedaikin | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IC8XWH |
 |`drawModifier`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`responseRegion`| Function | Skroba Gleb | done |  | |
 |`mouseResponseRegion`| Function | Skroba Gleb | done |  | |
