@@ -1,0 +1,6 @@
+package ohos.arkui.node;
+
+
+[Entity=Interface]
+interface Content {
+};
