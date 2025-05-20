@@ -1,6 +1,6 @@
 |file|owner|status (deprecated, absent sdk, absent patched, idlizer) |
 |----|----|----|
-|ability_component_modifier.cpp|||
+|ability_component_modifier.cpp|Pavelyev Ivan|depricated|
 |accessibility_hover_event_accessor.cpp|||
 |action_sheet_accessor.cpp|||
 |alert_dialog_accessor.cpp|||
