@@ -2455,14 +2455,14 @@
 |`updateProgress`| Function | Maksimov Nikita | done |  | |
 |`updateColor`| Function | Maksimov Nikita | done |  | |
 |`enableBreathingAnimation`| Function | Maksimov Nikita | done |  | |
-|*Measurable*| *Class* | managed side| managed side| |part of CustomComponent |
-|`ctor`| Function |managed side | managed side| | |
-|`measure`| Function |managed side | managed side| | |
-|`getMargin`| Function | managed side| managed side| | |
-|`getPadding`| Function | managed side| managed side| | |
-|`getBorderWidth`| Function |managed side |managed side | | |
-|`getUniqueId`| Function |managed side |managed side | | |
-|`setUniqueId`| Function |managed side |managed side | | |
+|*Measurable*| *Class* | Erokhin Ilya | in progress | |part of CustomComponent |
+|`ctor`| Function | Erokhin Ilya | in progress | | |
+|`measure`| Function | Erokhin Ilya | in progress | | |
+|`getMargin`| Function | Erokhin Ilya | in progress | | |
+|`getPadding`| Function | Erokhin Ilya | in progress | | |
+|`getBorderWidth`| Function | Erokhin Ilya | in progress | | |
+|`getUniqueId`| Function | Erokhin Ilya | in progress | | |
+|`setUniqueId`| Function | Erokhin Ilya | in progress | | |
 |*View*| *Class* | Skroba Gleb | in progress |  | |
 |`ctor`| Function |Skroba Gleb | in progress |  | |
 |`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
