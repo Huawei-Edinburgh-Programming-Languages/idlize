@@ -29,6 +29,7 @@
         "PinchGestureInterface",
         "RotationGestureInterface",
         "GestureGroupInterface",
+        "LayoutPolicy",
         "BaseContext",
         "ClickEvent"
     ],
