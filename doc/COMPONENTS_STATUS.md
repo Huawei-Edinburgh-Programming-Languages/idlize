@@ -2455,7 +2455,17 @@
 |`updateProgress`| Function | Maksimov Nikita | done |  | |
 |`updateColor`| Function | Maksimov Nikita | done |  | |
 |`enableBreathingAnimation`| Function | Maksimov Nikita | done |  | |
-|*Measurable*| *Class* | Erokhin Ilya | in progress | |part of CustomComponent |
+|*Layoutable*| *Class* | Erokhin Ilya | in progress | | |
+|`ctor`| Function | Erokhin Ilya | in progress | | |
+|`measure`| Function | Erokhin Ilya | in progress | | |
+|`getMargin`| Function | Erokhin Ilya | in progress | | |
+|`getPadding`| Function | Erokhin Ilya | in progress | | |
+|`getBorderWidth`| Function | Erokhin Ilya | in progress | | |
+|`getMeasureResult`| Function | Erokhin Ilya | in progress | | |
+|`setMeasureResult`| Function | Erokhin Ilya | in progress | | |
+|`getUniqueId`| Function | Erokhin Ilya | in progress | | |
+|`setUniqueId`| Function | Erokhin Ilya | in progress | | |
+|*Measurable*| *Class* | Erokhin Ilya | in progress | | |
 |`ctor`| Function | Erokhin Ilya | in progress | | |
 |`measure`| Function | Erokhin Ilya | in progress | | |
 |`getMargin`| Function | Erokhin Ilya | in progress | | |
