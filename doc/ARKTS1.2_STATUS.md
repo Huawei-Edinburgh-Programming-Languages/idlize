@@ -1,16 +1,16 @@
 |file|owner|status (deprecated, absent sdk, absent patched, idlizer) |
 |----|----|----|
 |ability_component_modifier.cpp|Pavelyev Ivan|depricated|
-|accessibility_hover_event_accessor.cpp|Pavelyev Ivan||
+|accessibility_hover_event_accessor.cpp|Pavelyev Ivan|idlizer|
 |action_sheet_accessor.cpp|Pavelyev Ivan|deprecated|
 |alert_dialog_accessor.cpp|Pavelyev Ivan|deprecated|
 |animated_drawable_descriptor_accessor.cpp|Pavelyev Ivan||
 |base_event_accessor.cpp|Pavelyev Ivan|idlizer|
 |base_gesture_event_accessor.cpp|Pavelyev Ivan|idlizer|
-|canvas_modifier.cpp|||
-|common_modifier.cpp|||
-|component3d_modifier.cpp|||
-|context_menu_accessor.cpp|||
+|canvas_modifier.cpp|Pavelyev Ivan|idlizer|
+|common_modifier.cpp|Pavelyev Ivan|idlizer|
+|component3d_modifier.cpp|Pavelyev Ivan|absent patched|
+|context_menu_accessor.cpp|Pavelyev Ivan|deprecated|
 |drawing_canvas_accessor.cpp|||
 |filter_accessor.cpp|||
 |focus_axis_event_accessor.cpp|||
