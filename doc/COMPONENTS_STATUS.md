@@ -517,7 +517,7 @@
 |`lineCap`| Function | Tuzhilkin Ivan | done | pass |  |
 |*EffectComponent*| *Component* | Ekaterina Stepanova | done |  | |
 |`construct`| Function |Ekaterina Stepanova | done |  | |
-|`setEffectComponentOptions`| Function | Ekaterina Stepanova | done |  | |
+|`setEffectComponentOptions`| Function | Ekaterina Stepanova | done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*Ellipse*| *Component* | Ekaterina Stepanova | done | pass | |
 |`construct`| Function |Ekaterina Stepanova | done | pass | |
 |`setEllipseOptions`| Function | Ekaterina Stepanova | done | pass | |
