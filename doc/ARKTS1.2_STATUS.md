@@ -11,8 +11,8 @@
 |common_modifier.cpp|Pavelyev Ivan|idlizer|
 |component3d_modifier.cpp|Pavelyev Ivan|absent patched|
 |context_menu_accessor.cpp|Pavelyev Ivan|deprecated|
-|drawing_canvas_accessor.cpp|||
-|filter_accessor.cpp|||
+|drawing_canvas_accessor.cpp|Pavelyev Ivan|idlizer?|
+|filter_accessor.cpp|Pavelyev Ivan|idlizer?|
 |focus_axis_event_accessor.cpp|Pavelyev Ivan|idlizer|
 |gesture_event_accessor.cpp|Pavelyev Ivan|idlizer|
 |gesture_group_interface_accessor.cpp|Pavelyev Ivan|absent patched|
@@ -26,7 +26,7 @@
 |long_press_gesture_event_accessor.cpp|Pavelyev Ivan|idlizer|
 |long_press_gesture_interface_accessor.cpp|Pavelyev Ivan|absent patched|
 |menu_item_configuration_accessor.cpp|Pavelyev Ivan|idlizer|
-|mouse_event_accessor.cpp|||
+|mouse_event_accessor.cpp|Pavelyev Ivan|idlizer|
 |nav_router_modifier.cpp|||
 |navigator_modifier.cpp|||
 |pan_gesture_event_accessor.cpp|||
