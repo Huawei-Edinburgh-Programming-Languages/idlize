@@ -27,27 +27,28 @@
 |long_press_gesture_interface_accessor.cpp|Pavelyev Ivan|absent patched|
 |menu_item_configuration_accessor.cpp|Pavelyev Ivan|idlizer|
 |mouse_event_accessor.cpp|Pavelyev Ivan|idlizer|
-|nav_router_modifier.cpp|||
-|navigator_modifier.cpp|||
-|pan_gesture_event_accessor.cpp|||
-|pan_gesture_interface_accessor.cpp|||
-|panel_modifier.cpp|||
-|path_modifier.cpp|||
-|pinch_gesture_event_accessor.cpp|||
-|pinch_gesture_interface_accessor.cpp|||
-|pixel_map_drawable_descriptor_accessor.cpp|||
-|plugin_component_modifier.cpp|||
-|rich_editor_modifier.cpp|||
-|rotation_gesture_event_accessor.cpp|||
-|rotation_gesture_interface_accessor.cpp|||
-|swipe_gesture_event_accessor.cpp|||
-|swipe_gesture_interface_accessor.cpp|||
-|tap_gesture_event_accessor.cpp|||
-|tap_gesture_interface_accessor.cpp|||
-|text_style_styled_string_accessor.cpp|||
-|view_accessor.cpp|||
-|virtual_scroll_options_accessor.cpp|||
-|web_controller_accessor.cpp|||
-|web_cookie_accessor.cpp|||
-|webview_controller_accessor.cpp|||
-|worker_event_listener_accessor.cpp|||
+|nav_router_modifier.cpp|Kovalev|deprecated|
+|navigator_modifier.cpp|Kovalev|deprecated|
+|pan_gesture_event_accessor.cpp|Kovalev|idlizer|
+|pan_gesture_interface_accessor.cpp|Kovalev|idlizer|
+|panel_modifier.cpp|Kovalev|deprecated|
+|path_modifier.cpp|Kovalev|idlizer|
+|pinch_gesture_event_accessor.cpp|Kovalev|idlizer|
+|pinch_gesture_interface_accessor.cpp|Kovalev|idlizer|
+|pixel_map_drawable_descriptor_accessor.cpp|Kovalev|absent sdk|
+|plugin_component_modifier.cpp|Kovalev|idlizer|
+|rich_editor_modifier.cpp|Kovalev|idlizer|
+|rotation_gesture_event_accessor.cpp|Kovalev|idlizer|
+|rotation_gesture_interface_accessor.cpp|Kovalev|idlizer|
+|swipe_gesture_event_accessor.cpp|Kovalev|idlizer|
+|swipe_gesture_interface_accessor.cpp|Kovalev|idlizer|
+|tap_gesture_event_accessor.cpp|Kovalev|idlizer|
+|tap_gesture_interface_accessor.cpp|Kovalev|idlizer|
+|text_style_styled_string_accessor.cpp|Kovalev|idlizer|
+|view_accessor.cpp|Kovalev|absent sdk|
+|virtual_scroll_options_accessor.cpp|Kovalev|absent patched|
+|web_controller_accessor.cpp|Kovalev|absent patched|
+|web_cookie_accessor.cpp|Kovalev|absent sdk|
+|webview_controller_accessor.cpp|Kovalev|idlizer|
+|worker_event_listener_accessor.cpp|Kovalev|absent sdk|
+
