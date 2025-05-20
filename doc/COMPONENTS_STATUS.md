@@ -968,10 +968,10 @@
 |`_onChangeEvent_rating`| Function | Erokhin Ilya | done |  | |
 |*Rect*|*Component*|Dudkin Sergey| done |  |  |
 |`construct`| Function |Dudkin Sergey| done |  |  |
-|`setRectOptions`|Function|Dudkin Sergey| done |  |  |
-|`radiusWidth`|Function|Dudkin Sergey| done |  |  |
-|`radiusHeight`|Function|Dudkin Sergey| done |  |  |
-|`radius`|Function|Dudkin Sergey| done |  |   |
+|`setRectOptions`|Function|Dudkin Sergey| done | pass |  |
+|`radiusWidth`|Function|Dudkin Sergey| done | pass |  |
+|`radiusHeight`|Function|Dudkin Sergey| done | pass |  |
+|`radius`|Function|Dudkin Sergey| done | pass |   |
 |*Refresh*| *Component* |Politov Mikhail | blocked IDL | failed | OHOSUI-2196 |
 |`construct`| Function |Samarin Sergey | blocked IDL | failed | is not called in demo; https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD ; offset, friction - deprecated + |
 |`setRefreshOptions`| Function | Samarin Sergey | blocked IDL | failed | is not called in demo; https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD ; offset, friction - deprecated + |
