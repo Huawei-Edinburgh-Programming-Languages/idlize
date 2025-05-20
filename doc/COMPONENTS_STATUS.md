@@ -4,6 +4,10 @@
 |`construct`| Function | Tuzhilkin Ivan | testskipped | | implementation is created early by Nikolay Pisanov |
 |*ComponentRoot*| *Component* | Tuzhilkin Ivan | testskipped | | implementation is created early by Nikolay Pisanov |
 |`construct`| Function |Tuzhilkin Ivan | testskipped | | implementation is created early by Nikolay Pisanov |
+|*CustomLayoutRoot*| *Component* | Erokhin Ilya | in progress | | |
+|`construct`| Function | Erokhin Ilya | in progress | | |
+|`subscribeOnMeasureSize`| Function | Erokhin Ilya | in progress | | |
+|`subscribeOnPlaceChildren`| Function | Erokhin Ilya | in progress | | |
 |*AbilityComponent*| *Component* | Tuzhilkin Ivan | deprecated |  | deprecated |
 |`construct`| Function |Tuzhilkin Ivan | deprecated |  | deprecated |
 |`setAbilityComponentOptions`| Function | Tuzhilkin Ivan | deprecated  |  |  |
