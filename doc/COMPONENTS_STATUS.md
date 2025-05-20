@@ -2459,24 +2459,24 @@
 |`updateProgress`| Function | Maksimov Nikita | done |  | |
 |`updateColor`| Function | Maksimov Nikita | done |  | |
 |`enableBreathingAnimation`| Function | Maksimov Nikita | done |  | |
-|*Layoutable*| *Class* | Erokhin Ilya | in progress | | |
-|`ctor`| Function | Erokhin Ilya | in progress | | |
-|`measure`| Function | Erokhin Ilya | in progress | | |
-|`getMargin`| Function | Erokhin Ilya | in progress | | |
-|`getPadding`| Function | Erokhin Ilya | in progress | | |
-|`getBorderWidth`| Function | Erokhin Ilya | in progress | | |
-|`getMeasureResult`| Function | Erokhin Ilya | in progress | | |
-|`setMeasureResult`| Function | Erokhin Ilya | in progress | | |
-|`getUniqueId`| Function | Erokhin Ilya | in progress | | |
-|`setUniqueId`| Function | Erokhin Ilya | in progress | | |
-|*Measurable*| *Class* | Erokhin Ilya | in progress | | |
-|`ctor`| Function | Erokhin Ilya | in progress | | |
-|`measure`| Function | Erokhin Ilya | in progress | | |
-|`getMargin`| Function | Erokhin Ilya | in progress | | |
-|`getPadding`| Function | Erokhin Ilya | in progress | | |
-|`getBorderWidth`| Function | Erokhin Ilya | in progress | | |
-|`getUniqueId`| Function | Erokhin Ilya | in progress | | |
-|`setUniqueId`| Function | Erokhin Ilya | in progress | | |
+|*Layoutable*| *Class* | Samarin Sergey | in progress | | |
+|`ctor`| Function | Samarin Sergey | in progress | | |
+|`measure`| Function | Samarin Sergey | in progress | | |
+|`getMargin`| Function | Samarin Sergey | in progress | | |
+|`getPadding`| Function | Samarin Sergey | in progress | | |
+|`getBorderWidth`| Function | Samarin Sergey | in progress | | |
+|`getMeasureResult`| Function | Samarin Sergey | in progress | | |
+|`setMeasureResult`| Function | Samarin Sergey | in progress | | |
+|`getUniqueId`| Function | Samarin Sergey | in progress | | |
+|`setUniqueId`| Function | Samarin Sergey | in progress | | |
+|*Measurable*| *Class* | Samarin Sergey | in progress | | |
+|`ctor`| Function | Samarin Sergey | in progress | | |
+|`measure`| Function | Samarin Sergey | in progress | | |
+|`getMargin`| Function | Samarin Sergey | in progress | | |
+|`getPadding`| Function | Samarin Sergey | in progress | | |
+|`getBorderWidth`| Function | Samarin Sergey | in progress | | |
+|`getUniqueId`| Function | Samarin Sergey | in progress | | |
+|`setUniqueId`| Function | Samarin Sergey | in progress | | |
 |*View*| *Class* | Skroba Gleb | in progress |  | |
 |`ctor`| Function |Skroba Gleb | in progress |  | |
 |`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
