@@ -19,13 +19,13 @@
 |grid_container_modifier.cpp|Pavelyev Ivan|deprecated|
 |hover_event_accessor.cpp|Pavelyev Ivan|idlizer|
 |key_event_accessor.cpp|Pavelyev Ivan|idlizer|
-|layered_drawable_descriptor_accessor.cpp|||
-|lazy_grid_layout_modifier.cpp|||
-|lazyv_grid_layout_modifier.cpp|||
-|location_button_modifier.cpp|||
-|long_press_gesture_event_accessor.cpp|||
-|long_press_gesture_interface_accessor.cpp|||
-|menu_item_configuration_accessor.cpp|||
+|layered_drawable_descriptor_accessor.cpp|Pavelyev Ivan|absent sdk|
+|lazy_grid_layout_modifier.cpp|Pavelyev Ivan|absent patched|
+|lazyv_grid_layout_modifier.cpp|Pavelyev Ivan|absent patched|
+|location_button_modifier.cpp|Pavelyev Ivan|deprecated|
+|long_press_gesture_event_accessor.cpp|Pavelyev Ivan|idlizer|
+|long_press_gesture_interface_accessor.cpp|Pavelyev Ivan|absent patched|
+|menu_item_configuration_accessor.cpp|Pavelyev Ivan|idlizer|
 |mouse_event_accessor.cpp|||
 |nav_router_modifier.cpp|||
 |navigator_modifier.cpp|||
