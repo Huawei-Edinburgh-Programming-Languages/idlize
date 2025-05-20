@@ -1,4 +1,5 @@
-|file|owner|status (deprecated, absent sdk, absent patched, idlizer)
+|file|owner|status (deprecated, absent sdk, absent patched, idlizer) |
+|----|----|----|
 |ability_component_modifier.cpp|||
 |accessibility_hover_event_accessor.cpp|||
 |action_sheet_accessor.cpp|||
