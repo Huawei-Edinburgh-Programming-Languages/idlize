@@ -373,17 +373,17 @@
 |`setCommonOptions`| Function | Maksimov Nikita | done |  | |
 |*CommonShapeMethod*|*Component*|Skroba Gleb| done |  |  |
 |`construct`| Function |Skroba Gleb| done |  | empty implementation, functional is supported by managed side |
-|`stroke`|Function| Skroba Gleb | done |  |  |
-|`fill`|Function| Skroba Gleb | done |  |  |
-|`strokeDashOffset`| Function | Evstigneev Roman | done |  |  |
-|`strokeLineCap`| Function | Evstigneev Roman | done |  |  |
-|`strokeLineJoin`| Function | Evstigneev Roman | done |  |  |
-|`strokeMiterLimit`| Function | Evstigneev Roman | done |  |  |
-|`strokeOpacity`| Function | Evstigneev Roman | done |  |  |
-|`fillOpacity`| Function | Evstigneev Roman | done |  |  |
-|`strokeWidth`| Function | Evstigneev Roman | done |  |  |
-|`antiAlias`| Function | Evstigneev Roman | done |  |  |
-|`strokeDashArray`| Function | Erokhin Ilya| done|  | |
+|`stroke`|Function| Skroba Gleb | done | pass |  |
+|`fill`|Function| Skroba Gleb | done | pass |  |
+|`strokeDashOffset`| Function | Evstigneev Roman | done | blocked |  |
+|`strokeLineCap`| Function | Evstigneev Roman | done | blocked |  |
+|`strokeLineJoin`| Function | Evstigneev Roman | done | blocked |  |
+|`strokeMiterLimit`| Function | Evstigneev Roman | done | blocked |  |
+|`strokeOpacity`| Function | Evstigneev Roman | done | pass |  |
+|`fillOpacity`| Function | Evstigneev Roman | done | pass |  |
+|`strokeWidth`| Function | Evstigneev Roman | done | pass |  |
+|`antiAlias`| Function | Evstigneev Roman | done | pass |  |
+|`strokeDashArray`| Function | Erokhin Ilya| done| failed | to submit internal issue |
 |*ScrollableCommonMethod*| *Component* | Samarin Sergey | blocked IDL |  |  |
 |`construct`| Function |Samarin Sergey | done |  | empty implementation, functional is supported by managed side |
 |`scrollBar`| Function | Samarin Sergey | done | pass |  |
@@ -447,7 +447,7 @@
 |`_onChangeEvent_selectAll`| Function | Erokhin Ilya | done | test blocked | test blocked by $$ interface |
 |*Circle*|*Component*| Erokhin Ilya | done |  |  |
 |`construct`| Function |Erokhin Ilya | done |  |  |
-|`setCircleOptions`|Function| Erokhin Ilya | done |  |  |
+|`setCircleOptions`|Function| Erokhin Ilya | done | pass |  |
 |*Column*| *Component* | Politov Mikhail | done |  |  |
 |`construct`| Function | Politov Mikhail | done | pass |  |
 |`setColumnOptions0`| Function | Politov Mikhail | done | | |
