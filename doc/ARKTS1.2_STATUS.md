@@ -4,7 +4,7 @@
 |accessibility_hover_event_accessor.cpp|Pavelyev Ivan|idlizer|
 |action_sheet_accessor.cpp|Pavelyev Ivan|deprecated|
 |alert_dialog_accessor.cpp|Pavelyev Ivan|deprecated|
-|animated_drawable_descriptor_accessor.cpp|Pavelyev Ivan||
+|animated_drawable_descriptor_accessor.cpp|Pavelyev Ivan|absent sdk|
 |base_event_accessor.cpp|Pavelyev Ivan|idlizer|
 |base_gesture_event_accessor.cpp|Pavelyev Ivan|idlizer|
 |canvas_modifier.cpp|Pavelyev Ivan|idlizer|
@@ -13,12 +13,12 @@
 |context_menu_accessor.cpp|Pavelyev Ivan|deprecated|
 |drawing_canvas_accessor.cpp|||
 |filter_accessor.cpp|||
-|focus_axis_event_accessor.cpp|||
-|gesture_event_accessor.cpp|||
-|gesture_group_interface_accessor.cpp|||
-|grid_container_modifier.cpp|||
-|hover_event_accessor.cpp|||
-|key_event_accessor.cpp|||
+|focus_axis_event_accessor.cpp|Pavelyev Ivan|idlizer|
+|gesture_event_accessor.cpp|Pavelyev Ivan|idlizer|
+|gesture_group_interface_accessor.cpp|Pavelyev Ivan|absent patched|
+|grid_container_modifier.cpp|Pavelyev Ivan|deprecated|
+|hover_event_accessor.cpp|Pavelyev Ivan|idlizer|
+|key_event_accessor.cpp|Pavelyev Ivan|idlizer|
 |layered_drawable_descriptor_accessor.cpp|||
 |lazy_grid_layout_modifier.cpp|||
 |lazyv_grid_layout_modifier.cpp|||
