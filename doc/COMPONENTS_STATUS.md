@@ -1975,9 +1975,9 @@
 |`drawRect`| Function | Dudkin Sergey | done |  | |
 |*ColorMetrics*| *Class* | Lobah Mikhail| done| | |
 |`ctor`| Function | Lobah Mikhail| done| | |
-|`numeric`| Function | Lobah Mikhail| done| | |
-|`rgba`| Function | Lobah Mikhail| done| | |
-|`resourceColor`| Function | Lobah Mikhail| done| | |
+|`numeric`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`rgba`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`resourceColor`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`blendColor`| Function | Lobah Mikhail| done| | |
 |`getColor`| Function | Lobah Mikhail| done| | |
 |`getRed`| Function | Lobah Mikhail| done| | |
