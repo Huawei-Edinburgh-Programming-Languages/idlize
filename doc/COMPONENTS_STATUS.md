@@ -2455,10 +2455,10 @@
 |`getStopPropagation`| Function | Evstigneev Roman | done | | feature: API not present |
 |`setStopPropagation`| Function | Evstigneev Roman | done  |  | empty implementation, feature: API not present |
 |*ProgressMask*| *Class* | Maksimov Nikita | done |  | |
-|`ctor`| Function |Maksimov Nikita | done |  | |
-|`updateProgress`| Function | Maksimov Nikita | done |  | |
-|`updateColor`| Function | Maksimov Nikita | done |  | |
-|`enableBreathingAnimation`| Function | Maksimov Nikita | done |  | |
+|`ctor`| Function |Maksimov Nikita | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`updateProgress`| Function | Maksimov Nikita | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`updateColor`| Function | Maksimov Nikita | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`enableBreathingAnimation`| Function | Maksimov Nikita | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*Layoutable*| *Class* | Samarin Sergey | in progress | | |
 |`ctor`| Function | Samarin Sergey | in progress | | |
 |`measure`| Function | Samarin Sergey | in progress | | |
