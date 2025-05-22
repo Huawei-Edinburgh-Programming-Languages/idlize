@@ -1111,7 +1111,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
             orderedTypeParameters.length ? orderedTypeParameters : undefined
         )
         result.extendedAttributes ??= []
-        if (!this.contextual.hasSuggestion && this.contextual.forced)
+        if (!this.contextual.hasSuggestion || !this.contextual.forced)
             result.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Synthetic })
 
         return [result, orderedTypeParameters]
@@ -1132,7 +1132,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         const extendedAttributes: idl.IDLExtendedAttribute[] = [
             { name: idl.IDLExtendedAttributes.Entity, value: idl.IDLEntity.Tuple }
         ]
-        if (!this.contextual.hasSuggestion && this.contextual.forced)
+        if (!this.contextual.hasSuggestion || !this.contextual.forced)
             extendedAttributes.push({ name: idl.IDLExtendedAttributes.Synthetic })
 
         return idl.createInterface(
