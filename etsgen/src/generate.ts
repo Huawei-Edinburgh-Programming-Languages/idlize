@@ -668,7 +668,8 @@ class IDLVisitor extends arkts.AbstractVisitor {
                         serializedMethod.isOptional,
                     ))
                 } else if (idl.isConstructor(serializedMethod)) {
-                    constructors.push(serializedMethod)
+                    if (serializedMethod.parameters.length > 0)
+                        constructors.push(serializedMethod)
                 } else {
                     methods.push(serializedMethod)
                 }
