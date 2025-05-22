@@ -2599,10 +2599,10 @@
 |`ctor`| Function |Vadim Voronov | done |  |  |
 |`setTransform`| Function | Vadim Voronov | done |  |  |
 |*ImageBitmap*| *Class* | Vadim Voronov | testskipped  |  | |
-|`ctor`| Function | Vadim Voronov | done |  |  |
-|`close`| Function | Vadim Voronov | done |  |  |
-|`getHeight`| Function | Vadim Voronov | testskipped |  |  |
-|`getWidth`| Function | Vadim Voronov | testskipped |  |  |
+|`ctor`| Function | Vadim Voronov | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`close`| Function | Vadim Voronov | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`getHeight`| Function | Vadim Voronov | testskipped | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`getWidth`| Function | Vadim Voronov | testskipped | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*ImageData*| *Class* | Morozov Sergey | in progress | | |
 |`ctor`| Function |Morozov Sergey | done | | |
 |`getData`| Function | Morozov Sergey | in progress | | |
