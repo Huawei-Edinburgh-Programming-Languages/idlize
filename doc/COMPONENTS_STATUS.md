@@ -2111,10 +2111,10 @@
 |`copy`| Function | Samarin Sergey | done | | |
 |`invert`| Function | Samarin Sergey | done | | |
 |`combine`| Function | Samarin Sergey | done | | |
-|`translate`| Function | Samarin Sergey | done | | |
-|`scale`| Function | Samarin Sergey | done | | |
+|`translate`| Function | Samarin Sergey | done | failed | to submit internal issue |
+|`scale`| Function | Samarin Sergey | done | failed | to submit internal issue |
 |`skew`| Function | Samarin Sergey | done | | |
-|`rotate`| Function | Samarin Sergey | done | | |
+|`rotate`| Function | Samarin Sergey | done | failed | to submit internal issue |
 |`transformPoint`| Function | Samarin Sergey | done | | |
 |`setPolyToPoly`| Function | Samarin Sergey | testskipped | | |
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
