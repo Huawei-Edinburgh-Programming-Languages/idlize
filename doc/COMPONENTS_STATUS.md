@@ -546,8 +546,8 @@
 |`enableAnimation`| Function | Politov Mikhail | done | test blocked | no screen rotation supported by dayu200 |
 |`autoHalfFold`| Function | Politov Mikhail | done | test blocked | no screen rotation supported by dayu200 |
 |*FormComponent*| *Component* | Vadim Voronov | blocked IDL |  |  |
-|`construct`| Function | Vadim Voronov | blocked IDL | | Opt_Want/CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
-|`setFormComponentOptions`| Function | Vadim Voronov | blocked IDL | | Opt_Want/CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`construct`| Function | Vadim Voronov |  | |  |
+|`setFormComponentOptions`| Function | Vadim Voronov | | |  |
 |`size`| Function | Vadim Voronov | blocked AceEngine |  | implemented with tests, empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`moduleName`| Function | Vadim Voronov | done |  | |
 |`dimension`| Function | Vadim Voronov | done |  | |
@@ -555,7 +555,7 @@
 |`visibility`| Function | Vadim Voronov | done |  | |
 |`onAcquired`| Function | Vadim Voronov | done |  |  |
 |`onError`| Function | Vadim Voronov | done |  | on FB testskipped |
-|`onRouter`| Function | Vadim Voronov | in progress |  | on FB https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`onRouter`| Function | Vadim Voronov | in progress |  |  |
 |`onUninstall`| Function | Vadim Voronov | done |  |  |
 |`onLoad`| Function | Vadim Voronov | done |  | |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |  |
@@ -1906,9 +1906,9 @@
 |`onScrollIndex`| Function | Kovalev Sergey | done | | |
 |*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | blocked IDL |  | |
 |`construct`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL |  | |https://gitee.com/nikolay-igotti/idlize/issues/IB6H50
+|`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan |  |  | |
 |`onRemoteReady`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`onReceive`| Function | Tuzhilkin Ivan | blocked IDL |  |https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`onReceive`| Function | Tuzhilkin Ivan |  |  | |
 |`onResult`| Function | Tuzhilkin Ivan | deprecated |  | testskipped | |
 |`onRelease`| Function | Tuzhilkin Ivan | deprecated |  | testskipped | |
 |`onError`| Function | Skroba Gleb | testskipped |  | |
@@ -2477,9 +2477,9 @@
 |`getBorderWidth`| Function | Samarin Sergey | in progress | | |
 |`getUniqueId`| Function | Samarin Sergey | in progress | | |
 |`setUniqueId`| Function | Samarin Sergey | in progress | | |
-|*View*| *Class* | Skroba Gleb | in progress |  | |
+|*View*| *Class* | Skroba Gleb | in progress |  | pending generation |
 |`ctor`| Function |Skroba Gleb | in progress |  | |
-|`create`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`create`| Function | Skroba Gleb |  |  |  |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | done |  | |
 |`ctor`| Function | Dudkin Sergey | done |  |  |
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
@@ -2699,7 +2699,7 @@
 |`setTextAlign`| Function  | Vadim Voronov | done |  |   |
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextBaseline`| Function  | Vadim Voronov | done |  |   |
-|*CanvasRenderingContext2D*| *Class* | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|*CanvasRenderingContext2D*| *Class* | Vadim Voronov | blocked IDL |  |  |
 |`ctor`| Function |Vadim Voronov| done |  |  |
 |`toDataURL`| Function |Vadim Voronov| done |  |  |
 |`startImageAnalyzer`| Function | Vadim Voronov | done |  | |
@@ -2710,7 +2710,7 @@
 |`offOnDetach`| Function | Vadim Voronov | done |  |  |
 |`getHeight`| Function |Vadim Voronov| done |  | |
 |`getWidth`| Function |Vadim Voronov| done |  | |
-|`getCanvas`| Function |Vadim Voronov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`getCanvas`| Function |Vadim Voronov | blocked IDL | |  |
 |*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | done | | |
 |`ctor`| Function |Vadim Voronov | done | | |
 |`toDataURL`| Function | Vadim Voronov | done | | |
@@ -2730,7 +2730,7 @@
 |`getCanvas`| Function | Vadim Voronov | done | | |
 |*GlobalScope_common*| *Class* | Erokhin Ilya | blocked IDL |  | |
 |`getContext`| Function | Erokhin Ilya | blocked IDL |  | RET_VAL_STABBED https://gitee.com/nikolay-igotti/idlize/issues/IBJXAR |
-|`postCardAction`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`postCardAction`| Function | Tuzhilkin Ivan |  |  |  |
 |`dollar_r`| Function | managed side | managed side |  | NEED TO BE REMOVED  |
 |`dollar_rawfile`| Function | managed side | managed side |  | NEED TO BE REMOVED  |
 |`animateTo`| Function | Erokhin Ilya | testskipped | failed | |
@@ -3334,8 +3334,8 @@
 |`setOnScrollIndex`| Function | | | | no such API in generation 125 |
 |*UIExtensionProxy*| *Class* | Tuzhilkin Ivan | blocked IDL|  | |
 |`ctor`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`send`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
-|`sendSync`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
+|`send`| Function | Tuzhilkin Ivan | L |  |  |
+|`sendSync`| Function | Tuzhilkin Ivan |  |  |  |
 |`onAsyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`onSyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`offAsyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
