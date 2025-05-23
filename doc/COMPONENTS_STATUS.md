@@ -1660,7 +1660,7 @@
 |`fontWeight`| Function |Ekaterina Stepanova| done | pass |  |
 |`fontFamily`| Function |Ekaterina Stepanova| done | pass  |  |
 |`onTimer`| Function |Ekaterina Stepanova| blocked IDL | not covered | https://gitee.com/nikolay-igotti/idlize/issues/IB3V0H |
-|`textShadow`| Function |Ekaterina Stepanova| blocked AceEngine | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IB2SZK |
+|`textShadow`| Function |Ekaterina Stepanova| testskipped | pass | UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB2SZK |
 |`contentModifier`| Function |Ekaterina Stepanova| blocked IDL | not covered | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*TimePicker*| *Component* | Ekaterina Stepanova| blocked IDL |  |  |
 |`construct`| Function |Politov Mikhail| done |  |  |
