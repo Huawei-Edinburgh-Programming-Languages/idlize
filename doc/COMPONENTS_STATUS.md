@@ -221,8 +221,8 @@
 |`renderGroup1`| Function | Lobah Mikhail | done  | test blocked | absent in ets1.2 now |
 |`freeze0`| Function | Lobah Mikhail | done | failed | method does not work https://gitee.com/openharmony/arkui_ace_engine/issues/IC851K |
 |`freeze1`| Function | Dmitry A Smirnov | done | failed | method does not work https://gitee.com/openharmony/arkui_ace_engine/issues/IC851K, https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP not in json|
-|`translate0`| Function | Erokhin Ilya | done |  |  |
-|`translate1`| Function | Erokhin Ilya | done |  |  |
+|`translate0`| Function | Erokhin Ilya | done | pass |  |
+|`translate1`| Function | Erokhin Ilya | done | pass |  |
 |`scale0`| Function | Erokhin Ilya | done |  |  |
 |`scale1`| Function | Dmitry A Smirnov | done |  |  https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values|
 |`gridSpan`| Function | Lobah Mikhail | done |  |deprecated? |
