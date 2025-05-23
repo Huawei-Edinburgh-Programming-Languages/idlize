@@ -1126,7 +1126,7 @@
 |`autoCapitalizationMode`| Function | | | | no such API in generation 125 |
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
 |`stopBackPress`| Function | Kovalev Sergey | done |  | |
-|`onWillChange`| Function | Kovalev Sergey| in progress| | |
+|`onWillChange`| Function | Kovalev Sergey| done | | |
 |`keyboardAppearance`| Function | Kovalev Sergey|done | | |
 |`searchButton`|Function| Evstigneev Roman | done |  |  |
 |`inputFilter`|Function| Evstigneev Roman | done |  |  |
