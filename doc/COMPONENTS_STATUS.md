@@ -540,11 +540,11 @@
 |*FolderStack*| *Component* | Politov Mikhail | done |  |  |
 |`construct`| Function | Politov Mikhail | done |  |  |
 |`setFolderStackOptions`| Function | Politov Mikhail | done |  |  |
-|`alignContent`| Function | Politov Mikhail | done |  |  |
-|`onFolderStateChange`| Function | Politov Mikhail | done |  |  |
-|`onHoverStatusChange`| Function | Politov Mikhail | done |  |  |
-|`enableAnimation`| Function | Politov Mikhail | done |  |  |
-|`autoHalfFold`| Function | Politov Mikhail | done |  |  |
+|`alignContent`| Function | Politov Mikhail | done | pass |  |
+|`onFolderStateChange`| Function | Politov Mikhail | done | pass |  |
+|`onHoverStatusChange`| Function | Politov Mikhail | done | pass |  |
+|`enableAnimation`| Function | Politov Mikhail | done | test blocked | no screen rotation supported by dayu200 |
+|`autoHalfFold`| Function | Politov Mikhail | done | test blocked | no screen rotation supported by dayu200 |
 |*FormComponent*| *Component* | Vadim Voronov | blocked IDL |  |  |
 |`construct`| Function | Vadim Voronov | blocked IDL | | Opt_Want/CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
 |`setFormComponentOptions`| Function | Vadim Voronov | blocked IDL | | Opt_Want/CustomObject https://gitee.com/nikolay-igotti/idlize/issues/IB6H50 |
@@ -1048,9 +1048,9 @@
 |`resizeable`| Function | Dmitry A Smirnov| done | failed | OHOSUI-2202 resizeable does not work |
 |*SaveButton*| *Component* | Samarin Sergey| done |  |  |
 |`construct`| Function |Samarin Sergey| done |  |  |
-|`setSaveButtonOptions0`| Function | Samarin Sergey| done |  |  |
-|`setSaveButtonOptions`| Function | Samarin Sergey| done |  |  |
-|`onClick`| Function | Samarin Sergey | testskipped |  |  |
+|`setSaveButtonOptions0`| Function | Samarin Sergey| done | pass |  |
+|`setSaveButtonOptions`| Function | Samarin Sergey| done | pass |  |
+|`onClick`| Function | Samarin Sergey | testskipped | pass |  |
 |*Screen*| *Component* | Dudkin Sergey | done |  | |
 |`construct`| Function | Dudkin Sergey | done |  | |
 |`setScreenOptions`| Function | Dudkin Sergey | done |  | |
@@ -1301,11 +1301,11 @@
 |`onPrevious`| Function | Morozov Sergey | done |  |  |
 |`_onChangeEvent_index`| Function | Erokhin Ilya | done |  | |
 |*StepperItem*| *Component* | Morozov Sergey | done |  | |
-|`construct`| Function |Morozov Sergey | done |  | |
-|`setStepperItemOptions`| Function | Morozov Sergey | done |  | |
-|`prevLabel`| Function | Morozov Sergey | done |  | |
-|`nextLabel`| Function | Morozov Sergey | done |  | |
-|`status`| Function | Morozov Sergey | done |  | |
+|`construct`| Function |Morozov Sergey | done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setStepperItemOptions`| Function | Morozov Sergey | done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`prevLabel`| Function | Morozov Sergey | done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`nextLabel`| Function | Morozov Sergey | done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`status`| Function | Morozov Sergey | done | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*Swiper*| *Component* | Skroba Gleb | done |  |  |
 |`construct`| Function |Skroba Gleb | done | pass  |  |
 |`setSwiperOptions`| Function | Skroba Gleb | done | pass  |  |
