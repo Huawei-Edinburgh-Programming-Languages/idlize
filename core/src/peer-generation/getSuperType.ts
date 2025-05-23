@@ -16,20 +16,20 @@
 import * as idl from '../idl'
 import { ReferenceResolver } from './ReferenceResolver'
 
-function getSuperCandidates(declaration:idl.IDLInterface, resolver: ReferenceResolver): idl.IDLInterface[] {
+function getSuperCandidates(declaration:idl.IDLInterface, resolver: ReferenceResolver): [idl.IDLInterface, idl.IDLReferenceType][] {
     return declaration.inheritance
-        .map(it => resolver.resolveTypeReference(it))
-        .filter(it => it && idl.isInterface(it) && idl.isClassSubkind(it))
-        .map(it => it as idl.IDLInterface)
+        .map(it => [resolver.resolveTypeReference(it), it] as const)
+        .filter(([it,]) => it && idl.isInterface(it) && idl.isClassSubkind(it))
+        .map(it => it as [idl.IDLInterface, idl.IDLReferenceType])
 }
 
-export function getSuper(declaration:idl.IDLInterface, resolver: ReferenceResolver): idl.IDLInterface | undefined {
+function getSuperTuple(declaration:idl.IDLInterface, resolver: ReferenceResolver): [idl.IDLInterface, idl.IDLReferenceType] | undefined {
     if (idl.isClassSubkind(declaration)) {
         const found = declaration.inheritance.find(it => idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Extends))
         if (found) {
             const resolved = resolver.resolveTypeReference(found)
             if (resolved && idl.isInterface(resolved)) {
-                return resolved
+                return [resolved, found]
             }
         }
         const candidates = getSuperCandidates(declaration, resolver)
@@ -46,5 +46,13 @@ export function getSuper(declaration:idl.IDLInterface, resolver: ReferenceResolv
     if (!resolved || !idl.isInterface(resolved)) {
         return undefined
     }
-    return resolved
+    return [resolved, fst]
+}
+
+export function getSuper(declaration:idl.IDLInterface, resolver: ReferenceResolver): idl.IDLInterface | undefined {
+    return getSuperTuple(declaration, resolver)?.[0]
+}
+
+export function getSuperType(declaration:idl.IDLInterface, resolver: ReferenceResolver): idl.IDLReferenceType | undefined {
+    return getSuperTuple(declaration, resolver)?.[1]
 }

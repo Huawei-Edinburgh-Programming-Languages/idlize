@@ -25,7 +25,8 @@ import {
     isStaticMaterialized,
     isInCurrentModule,
     ArgumentModifier,
-    getSuper
+    getSuper,
+    getSuperType
 } from '@idlizer/core'
 import { ArgConvertor, PeerLibrary } from "@idlizer/core"
 import { createOutArgConvertor } from "../PromiseConvertors"
@@ -175,15 +176,15 @@ export class IdlPeerProcessor {
 
         const isDeclInterface = idl.isInterfaceSubkind(decl) && !isStaticMaterialized
         const implemenationParentName = isDeclInterface ? getInternalClassName(decl.name) : decl.name
-        let resolvedType = getSuper(decl, this.library)
+        const resolvedDecl = getSuper(decl, this.library)
         const interfaces: idl.IDLReferenceType[] = []
         const propertiesFromInterface: idl.IDLProperty[] = []
-        let superType = undefined
-        if (resolvedType) {
-            superType = idl.createReferenceType(resolvedType)
-            if (!resolvedType || !idl.isInterface(resolvedType) || !isMaterialized(resolvedType, this.library)) {
+        let superType: idl.IDLReferenceType | undefined = undefined
+        if (resolvedDecl) {
+            superType = getSuperType(decl, this.library)
+            if (!resolvedDecl || !idl.isInterface(resolvedDecl) || !isMaterialized(resolvedDecl, this.library)) {
                 propertiesFromInterface.push(...getUniquePropertiesFromSuperTypes(decl, this.library))
-                interfaces.push(superType)
+                interfaces.push(superType!)
                 superType = undefined
             }
         }
