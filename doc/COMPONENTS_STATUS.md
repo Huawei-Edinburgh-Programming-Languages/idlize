@@ -2795,15 +2795,15 @@
 |`setSpeed`| Function | Evstigneev Roman | done | | |
 |*GestureEvent*| *Class* | Samarin Sergey | done |  | |
 |`ctor`| Function |Samarin Sergey | done |  | |
-|`getRepeat`| Function | Samarin Sergey | done |  | |
+|`getRepeat`| Function | Samarin Sergey | done | pass | |
 |`setRepeat`| Function | Samarin Sergey | done |  | |
-|`getFingerList`| Function | Kovalev Sergey | done | | |
-|`setFingerList`| Function | Samarin Sergey | done |  | |
-|`getOffsetX`| Function | Samarin Sergey | done |  | |
+|`getFingerList`| Function | Kovalev Sergey | done | failed | crash, need submit |
+|`setFingerList`| Function | Samarin Sergey | done | | |
+|`getOffsetX`| Function | Samarin Sergey | done | pass | |
 |`setOffsetX`| Function | Samarin Sergey | done |  | |
-|`getOffsetY`| Function | Samarin Sergey | done |  | |
+|`getOffsetY`| Function | Samarin Sergey | done | pass | |
 |`setOffsetY`| Function | Samarin Sergey | done |  | |
-|`getAngle`| Function | Samarin Sergey | done |  | |
+|`getAngle`| Function | Samarin Sergey | done | pass | |
 |`setAngle`| Function | Samarin Sergey | done |  | |
 |`getSpeed`| Function | Samarin Sergey | done|  | |
 |`setSpeed`| Function | Samarin Sergey | done |  | |
