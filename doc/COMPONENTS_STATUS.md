@@ -644,7 +644,7 @@
 |*Image*| *Component* | Evstigneev Roman | blocked IDL |  |  |
 |`construct`| Function |Berezin Kirill | done |  |  |
 |`setImageOptions0`| Function | Berezin Kirill | done |  |  |
-|`setImageOptions1`| Function |Berezin Kirill | in progress |  | blocked by DrawableDescriptor  |
+|`setImageOptions1`| Function | |  |  | blocked by DrawableDescriptor  |
 |`setImageOptions2`| Function |Berezin Kirill | blocked IDL |  | SetImageOptions2 unavailable https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`alt`| Function | Evstigneev Roman | done |  | UT done Lobah Mikhail   |
 |`matchTextDirection`| Function | Evstigneev Roman | done |  | |
