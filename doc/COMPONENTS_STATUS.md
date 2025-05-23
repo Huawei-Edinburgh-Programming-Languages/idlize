@@ -2178,10 +2178,10 @@
 |`setBorderColor`| Function | Morozov Sergey | done | | done on Upstream |
 |`getBorderRadius`| Function | Morozov Sergey | done | | done on Upstream |
 |`setBorderRadius`| Function | Morozov Sergey | done | | done on Upstream |
-|`getShapeMask`| Function | Morozov Sergey | testskipped | | |
-|`setShapeMask`| Function | Morozov Sergey | testskipped | | |
-|`getShapeClip`| Function | Morozov Sergey | testskipped | | |
-|`setShapeClip`| Function | Morozov Sergey | testskipped | | |
+|`getShapeMask`| Function | Morozov Sergey | done | | done on Upstream |
+|`setShapeMask`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShapeClip`| Function | Morozov Sergey | done | | done on Upstream |
+|`setShapeClip`| Function | Morozov Sergey | done | | done on Upstream |
 |`getMarkNodeGroup`| Function | Morozov Sergey | done | | done on Upstream |
 |`setMarkNodeGroup`| Function | Morozov Sergey | done | | done on Upstream |
 |`getLengthMetricsUnit`| Function | Morozov Sergey | done | | done on Upstream |
