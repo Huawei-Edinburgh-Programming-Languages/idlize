@@ -2265,8 +2265,8 @@
 |`setTiltX`| Function | Politov Mikhail | done |  | |
 |`getTiltY`| Function | Politov Mikhail | done |  | |
 |`setTiltY`| Function | Politov Mikhail | done |  | |
-|`getRollAngle`| Function | | | | |
-|`setRollAngle`| Function | | | | |
+|`getRollAngle`| Function | Pavelyev Ivan | in progress | | |
+|`setRollAngle`| Function | Pavelyev Ivan | in progress | | |
 |`getSourceTool`| Function | Tuzhilkin Ivan | done |  | |
 |`setSourceTool`| Function | Politov Mikhail | done |  | |
 |`getDeviceId`| Function | Politov Mikhail | done |  | |
