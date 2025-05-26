@@ -339,7 +339,7 @@
 |`backgroundBlurStyle0`| Function | Skroba Gleb | done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundBlurStyle1`| Function | Tuzhilkin Ivan | done | test blocked | need cherry-pick to feature_branch,  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundBlurStyle0`| Function | Roman Sedaikin | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
-|`foregroundBlurStyle1`| Function | Dmitry A Smirnov | in progress |  | |
+|`foregroundBlurStyle1`| Function | Dmitry A Smirnov, Evstigneev Roman | in progress | | |
 |`focusScopeId0`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`focusScopeId1`| Function | Dmitry A Smirnov| done |  test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`focusScopePriority`| Function | Dmitry A Smirnov| done | pass | |
