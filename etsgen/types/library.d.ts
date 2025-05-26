@@ -12,7 +12,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { arkgen } from "./app";
-
-arkgen(process.argv.slice(2))
+export function etsgen(arvg:string[]): void

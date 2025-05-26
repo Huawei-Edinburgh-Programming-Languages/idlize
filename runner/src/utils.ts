@@ -13,6 +13,19 @@
  * limitations under the License.
  */
 
-import { arkgen } from "./app";
+import { readdirSync, statSync } from "fs"
+import { join } from "path"
 
-arkgen(process.argv.slice(2))
+type RecursiveStrings = string | RecursiveStrings[]
+export function flat(xs:RecursiveStrings): string[] {
+    if (typeof xs === 'string') {
+        return [xs]
+    }
+    return xs.flatMap(x => flat(x))
+}
+
+export function scan(dir:string): string[] {
+    return statSync(dir).isDirectory()
+        ? readdirSync(dir).flatMap(file => scan(join(dir, file)))
+        : [dir]
+}

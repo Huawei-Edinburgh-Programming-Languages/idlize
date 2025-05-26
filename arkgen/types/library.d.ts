@@ -13,6 +13,5 @@
  * limitations under the License.
  */
 
-import { arkgen } from "./app";
-
-arkgen(process.argv.slice(2))
+export function arkgen(argv:string[]): void
+export function defaultConfigPath(): string
