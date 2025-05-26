@@ -116,23 +116,23 @@
 |`edgeAlign1`| Function |Politov Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*CommonMethod*|*Component*|Skroba Gleb,Erokhin Ilya | in progress |  |  |
 |`construct`| Function |Skroba Gleb |done |  | empty implementation, functional is supported by managed side |
-|`width0`| Function |Roman Sedaikin | done |  | |
+|`width0`| Function |Roman Sedaikin | done | pass | |
 |`width1`| Function |Roman Sedaikin | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IC8XWH |
-|`height0`| Function |Roman Sedaikin | done |  | |
+|`height0`| Function |Roman Sedaikin | done | pass | |
 |`height1`| Function |Roman Sedaikin | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IC8XWH |
 |`drawModifier`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`responseRegion`| Function | Skroba Gleb | done |  | |
-|`mouseResponseRegion`| Function | Skroba Gleb | done |  | |
-|`size`| Function | Roman Sedaikin | done |  | |
-|`constraintSize`| Function | Roman Sedaikin | done |  | |
+|`responseRegion`| Function | Skroba Gleb | done | pass | |
+|`mouseResponseRegion`| Function | Skroba Gleb | done | pass | |
+|`size`| Function | Roman Sedaikin | done | pass | |
+|`constraintSize`| Function | Roman Sedaikin | done | pass | |
 |`touchable`| Function | Roman Sedaikin | done | pass | |
 |`hitTestBehavior`| Function | Roman Sedaikin | done | pass | |
 |`onChildTouchTest`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`layoutWeight`| Function | Roman Sedaikin | done | pass | |
-|`chainWeight`| Function | Politov Mikhail | testskipped |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBJW6H |
-|`padding`| Function | Skroba Gleb | done |  | |
-|`safeAreaPadding`| Function |Dmitry A Smirnov | done |  | |
-|`margin`| Function | Skroba Gleb | done |  | |
+|`chainWeight`| Function | Politov Mikhail | testskipped | test blocked | https://gitee.com/openharmony/arkui_ace_engine/issues/IBJW6H, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA
+|`padding`| Function | Skroba Gleb | done | pass | |
+|`safeAreaPadding`| Function |Dmitry A Smirnov | done | pass | |
+|`margin`| Function | Skroba Gleb | done | pass | |
 |`backgroundColor0`| Function |Skroba Gleb| done | pass |  |
 |`backgroundColor1`| Function |Skroba Gleb| done |  |  |
 |`pixelRound`| Function | Skroba Gleb | done | pass |  |
