@@ -352,7 +352,7 @@
 |`linearGradientBlur1`| Function | Dmitry A Smirnov | done | pass | |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
 |`backdropBlur0`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`backdropBlur1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backdropBlur1`| Function | Ekaterina Stepanova | in progress |  |  |
 |`sharedTransition`|Function|Skroba Gleb | done |  |  |
 |`chainMode`| Function | Berezin Kirill | done |  | |
 |`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
