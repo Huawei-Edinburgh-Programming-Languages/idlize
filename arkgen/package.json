@@ -12,11 +12,12 @@
   "typesVersions": {
     "*": {
       "app": [
-        "types/library.d.ts"
+        "build/lib/src/app.d.ts"
       ]
     }
   },
   "files": [
+    "build/lib/src/app.d.ts",
     "lib/*.js",
     "stdlib.d.ts",
     "whitelist.json",

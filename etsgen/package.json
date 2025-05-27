@@ -5,6 +5,7 @@
   "main": "lib/main.js",
   "bin": "lib/main.js",
   "files": [
+    "build/lib/src/app.d.ts",
     "lib/*.js",
     "generation-config/**/*",
     "config.json",
@@ -18,7 +19,7 @@
   "typesVersions": {
     "*": {
       "app": [
-        "./types/library.d.ts"
+        "./build/lib/src/app.d.ts"
       ]
     }
   },
