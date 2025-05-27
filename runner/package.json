@@ -5,7 +5,9 @@
   "main": "lib/index.js",
   "bin": "lib/index.js",
   "files": [
-    "lib/*.js"
+    "lib/*.js",
+    "template/**/*",
+    "interface_sdk-js.patch"
   ],
   "license": "Apache-2.0",
   "keywords": [],
