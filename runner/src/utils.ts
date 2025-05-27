@@ -13,8 +13,10 @@
  * limitations under the License.
  */
 
-import { readdirSync, statSync } from "fs"
-import { join } from "path"
+import { execSync } from "child_process"
+import { readdirSync, readFileSync, statSync } from "fs"
+import { writeFileSync } from "node:fs"
+import { join, resolve } from "node:path"
 
 type RecursiveStrings = string | RecursiveStrings[]
 export function flat(xs:RecursiveStrings): string[] {
@@ -23,9 +25,40 @@ export function flat(xs:RecursiveStrings): string[] {
     }
     return xs.flatMap(x => flat(x))
 }
+export function over<T>(x:T|undefined, f:(x:T) => string[]): string[] {
+    if (x === undefined) {
+        return []
+    }
+    return f(x)
+}
 
 export function scan(dir:string): string[] {
     return statSync(dir).isDirectory()
         ? readdirSync(dir).flatMap(file => scan(join(dir, file)))
         : [dir]
+}
+
+interface RunContext {
+    exec: (command:RecursiveStrings) => void
+    cd: (dir:string) => void
+}
+export function run(runner:(ctx:RunContext) => void) {
+    let cwd = process.cwd()
+    runner({
+        exec: (command) => {
+            execSync(flat(command).join(' '), { cwd, stdio: 'inherit' })
+        },
+        cd: (dir) => {
+            cwd = dir
+        }
+    })
+}
+
+const TEMPLATE_DIR = resolve(__dirname, '..', 'template')
+export function installTemplate(name:string, installPath:string, replacements:Map<string, string>) {
+    let content = readFileSync(join(TEMPLATE_DIR, name + '.template'), 'utf-8')
+    replacements.forEach((val, key) => {
+        content = content.replaceAll('%' + key + '%', val)
+    })
+    writeFileSync(installPath, content, 'utf-8')
 }

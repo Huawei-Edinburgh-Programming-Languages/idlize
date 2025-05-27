@@ -15,16 +15,22 @@
 
 import { arkgen, defaultConfigPath as arkgenConfigPath } from "@idlizer/arkgen/app"
 import { etsgen } from "@idlizer/etsgen/app"
-import { copyFileSync, existsSync, mkdirSync, rmSync } from "node:fs"
+import { copyFileSync, cpSync, existsSync, mkdirSync, rmSync } from "node:fs"
 import { dirname, join, relative, resolve } from "node:path"
-import { flat, scan } from "./utils"
+import { flat, installTemplate, over, run, scan } from "./utils"
 import { Command } from "commander"
 
 /////////////////////////////////////////////////
 // CONSTANTS
 
 const WORKING_DIR = resolve(__dirname, '..', 'out')
+const SDK_PATCH_FILE = resolve(__dirname, '..', 'interface_sdk-js.patch')
 const GENERATED_IDL_DIR = join(WORKING_DIR, 'idl')
+const CLONED_SDK_DIR = join(WORKING_DIR, 'original-sdk')
+const CLONED_SDK_BUILD_TOOLS = join(CLONED_SDK_DIR, 'build-tools')
+const PREPARED_SDK_DIR = join(WORKING_DIR, 'patched-sdk')
+const PREPARED_SDK_INTERNAL = join(PREPARED_SDK_DIR, 'api', '@internal', 'component', 'ets')
+const PREPARED_SDK_ARKUI_COMPONENT = join(PREPARED_SDK_DIR, 'api', 'arkui', 'component')
 const GENERATED_PEER_DIR = join(WORKING_DIR, 'peers')
 const GENERATED_PEER_SIG = join(GENERATED_PEER_DIR, 'sig')
 const GENERATED_PEER_LIBACE = join(GENERATED_PEER_DIR, 'libace')
@@ -41,9 +47,10 @@ function main(argv:string[]) {
         .name("@idlizer/runner")
         .arguments("<sdk-path> <install-path>")
         .option('--target <target>', 'sig | libace | all', 'sig')
+        .option('--original-sdk')
         .parse(argv, { from: 'user' })
 
-    const [sdkPath, installPath] = program.args
+    const [sdkPathInput, installPath] = program.args
     const options = program.opts()
 
     // 0. prepare
@@ -53,6 +60,52 @@ function main(argv:string[]) {
     mkdirSync(WORKING_DIR, { recursive: true })
     mkdirSync(GENERATED_IDL_DIR, { recursive: true })
     mkdirSync(GENERATED_PEER_DIR, { recursive: true })
+
+    let sdkPath = sdkPathInput
+    let configPath: string | undefined = undefined
+    if (options.originalSdk) {
+        mkdirSync(PREPARED_SDK_DIR, { recursive: true })
+        mkdirSync(CLONED_SDK_DIR, { recursive: true })
+        cpSync(sdkPath, CLONED_SDK_DIR, { recursive: true })
+
+        run(r => {
+            r.cd(CLONED_SDK_DIR)
+            r.exec(['git', 'apply', SDK_PATCH_FILE])
+
+            const prepareSdkScriptFile = join(CLONED_SDK_DIR, 'build-tools', 'handleApiFiles.js')
+            r.cd(CLONED_SDK_BUILD_TOOLS)
+            r.exec(['npm', 'i'])
+            r.exec([
+                'node', prepareSdkScriptFile,
+                    ['--path', CLONED_SDK_DIR],
+                    ['--type', 'ets2'],
+                    ['--output', PREPARED_SDK_DIR]
+            ])
+
+
+            const arkuiTransformerDir = join(CLONED_SDK_DIR, 'build-tools', 'arkui_transformer')
+            r.cd(arkuiTransformerDir)
+            r.exec(['npm', 'i'])
+            r.exec(['npm', 'run', 'compile:arkui'])
+            r.exec([
+                'node', '.',
+                    ['--input-dir', PREPARED_SDK_INTERNAL],
+                    ['--target-dir', PREPARED_SDK_ARKUI_COMPONENT]
+            ])
+        })
+
+        configPath = join(WORKING_DIR, 'arkts.config.json')
+        installTemplate(
+            'panda.config.json',
+            configPath,
+            new Map([
+                ['PATCHED_SDK_PATH', PREPARED_SDK_DIR]
+            ])
+        )
+
+
+        sdkPath = PREPARED_SDK_DIR
+    }
 
     // 1. d.ets -> idl
     const sdkApiPath = join(sdkPath, 'api')
@@ -65,6 +118,7 @@ function main(argv:string[]) {
             ['--base-dir', sdkApiPath],
             ['--input-dir', join(sdkApiPath, 'arkui', 'component')],
             ['--input-files', additionalFiles],
+            over(configPath, path => ['--ets-config', path])
         ])
     )
     // 2. idl -> peer
@@ -75,8 +129,11 @@ function main(argv:string[]) {
             ['--reference-names', REFERENCE_CONFIG_PATH],
             ['--input-files', idlFiles],
             ['--output-dir', GENERATED_PEER_DIR],
+            ['--generator-target', 'arkoala'],
             ['--language', 'arkts'],
-            '--only-integrated'
+            '--only-integrated',
+            '--use-memo-m3',
+            ['--arkts-extension', '.ets']
         ])
     )
     // 3. Install
