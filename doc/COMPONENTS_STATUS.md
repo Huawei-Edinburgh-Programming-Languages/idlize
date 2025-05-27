@@ -555,7 +555,7 @@
 |`visibility`| Function | Vadim Voronov | done |  | |
 |`onAcquired`| Function | Vadim Voronov | done |  |  |
 |`onError`| Function | Vadim Voronov | done |  | on FB testskipped |
-|`onRouter`| Function | Vadim Voronov | in progress |  |  |
+|`onRouter`| Function | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/ICAZXO |
 |`onUninstall`| Function | Vadim Voronov | done |  |  |
 |`onLoad`| Function | Vadim Voronov | done |  | |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |  |
