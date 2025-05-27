@@ -311,7 +311,7 @@ class CJBuilderClassFileVisitor implements BuilderClassFileVisitor {
         // processTSBuilderClass(builderClass)
 
         collectDeclDependencies(this.peerLibrary, clazz.declaration, imports)
-        if (clazz.declaration.inheritance.length && clazz.declaration.inheritance[0] !== IDLTopType) {
+        if (clazz.declaration.inheritance.length) {
             const maybeParents = [
                 ...this.peerLibrary.buildersToGenerate.values()
             ]
