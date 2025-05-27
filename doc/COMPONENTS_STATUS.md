@@ -146,13 +146,13 @@
 |`backgroundFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
 |`foregroundFilter`| Function | Skroba Gleb |  blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3  |
 |`compositingFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3  |
-|`opacity0`| Function |Roman Sedaikin | done |  | |
+|`opacity0`| Function |Roman Sedaikin | done | pass | |
 |`opacity1`| Function | Roman Sedaikin | done |  | |
 |`border`| Function | Roman Sedaikin | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`borderStyle`| Function | Roman Sedaikin | done | pass | |
-|`borderWidth`| Function | Roman Sedaikin | done |  | |
-|`borderColor`| Function | Roman Sedaikin | done |  | |
-|`borderRadius`| Function | Roman Sedaikin | done |  | |
+|`borderWidth`| Function | Roman Sedaikin | done | pass | |
+|`borderColor`| Function | Roman Sedaikin | done | pass | |
+|`borderRadius`| Function | Roman Sedaikin | done | pass | |
 |`borderImage`| Function | Roman Sedaikin | done | failed | |
 |`outline0`| Function |Skroba Gleb | done | pass | |
 |`outline1`| Function | Skroba Gleb | done | pass | |
@@ -170,17 +170,17 @@
 |`onClick1`| Function |Roman Sedaikin | done | pass | EVENT |
 |`onHover`| Function | Andrey Khudenkikh | done | pass | EVENT |
 |`onHoverMove`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
-|`onAccessibilityHover`| Function | Andrey Khudenkikh | done |  | UT by Vadim Voronov EVENT |
+|`onAccessibilityHover`| Function | Andrey Khudenkikh | done | test blocked | UT by Vadim Voronov EVENT, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`hoverEffect`| Function | Roman Sedaikin | done | pass | |
 |`onMouse`| Function | Kovalev Sergey | done | pass | EVENT |
 |`onTouch`| Function | Roman Sedaikin | testskipped | pass | EVENT |
-|`onKeyEvent0`| Function | Pavelyev Ivan | done |  |   |
-|`onKeyEvent1`| Function |Pavelyev Ivan | done |  |   |
-|`onDigitalCrown`| Function | Evstigneev Roman | done | | feature: API not present |
+|`onKeyEvent0`| Function | Pavelyev Ivan | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`onKeyEvent1`| Function |Pavelyev Ivan | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`onDigitalCrown`| Function | Evstigneev Roman | done | test blocked | feature: API not present, test blocked since wearable |
 |`onKeyPreIme`| Function | Pavelyev Ivan | done |  |  |
 |`onKeyEventDispatch`| Function | Lobah Mikhail| done| | Not exists on FB|
-|`onFocusAxisEvent`| Function | Evstigneev Roman | done | | feature: API not present |
-|`onAxisEvent`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
+|`onFocusAxisEvent`| Function | Evstigneev Roman | done | test blocked | feature: API not present, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onAxisEvent`| Function | Tuzhilkin Ivan | done | failed | need cherry-pick to feature_branch, need to submit issue |
 |`focusable`| Function | Roman Sedaikin | done |  | |
 |`nextFocus`| Function | Politov Mikhail | done | | done on upstream |
 |`tabStop`| Function | Lobah Mikhail| done| | Not exists on FB|
