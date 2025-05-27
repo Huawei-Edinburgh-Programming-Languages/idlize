@@ -662,6 +662,27 @@ index eac19b4aa..b30176bd1 100644
  /**
   * Get Callback from @ohos.base.
   *
+diff --git a/api/global/resource.d.ts b/api/global/resource.d.ts
+index 6ebfe1cd8..7d6443619 100644
+--- a/api/global/resource.d.ts
++++ b/api/global/resource.d.ts
+@@ -114,14 +114,14 @@ export interface Resource {
+   /**
+    * Set params.
+    *
+-   * @type { ?Array<Object | undefined> }
++   * @type { ?Array<string> }
+    * @syscap SystemCapability.Global.ResourceManager
+    * @crossplatform
+    * @atomicservice
+    * @since 20
+    * @arkts 1.2
+    */
+-  params?: Array<Object | undefined>;
++  params?: Array<string>;
+ 
+   /**
+    * Set type.
 diff --git a/build-tools/arkui_transformer/src/interface_converter.ts b/build-tools/arkui_transformer/src/interface_converter.ts
 index 62bf4b49c..eb12c1862 100644
 --- a/build-tools/arkui_transformer/src/interface_converter.ts

@@ -663,10 +663,18 @@ index eac19b4aa..b30176bd1 100644
   * Get Callback from @ohos.base.
   *
 diff --git a/api/global/resource.d.ts b/api/global/resource.d.ts
-index 6ebfe1cd8..f86705b18 100644
+index 6ebfe1cd8..7d6443619 100644
 --- a/api/global/resource.d.ts
 +++ b/api/global/resource.d.ts
-@@ -121,7 +121,7 @@ export interface Resource {
+@@ -114,14 +114,14 @@ export interface Resource {
+   /**
+    * Set params.
+    *
+-   * @type { ?Array<Object | undefined> }
++   * @type { ?Array<string> }
+    * @syscap SystemCapability.Global.ResourceManager
+    * @crossplatform
+    * @atomicservice
     * @since 20
     * @arkts 1.2
     */
