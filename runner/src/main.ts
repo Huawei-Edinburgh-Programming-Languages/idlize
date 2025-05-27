@@ -145,7 +145,7 @@ function main(argv:string[]) {
     }
     const peerFiles = scan(installSourceDir)
     peerFiles.forEach(file => {
-        const relativeFile = relative(GENERATED_PEER_DIR, file)
+        const relativeFile = relative(installSourceDir, file)
         const destinationFile = join(installPath, relativeFile)
         const destinationDir = dirname(destinationFile)
         if (!existsSync(destinationDir)) {
