@@ -139,7 +139,7 @@
 |`backgroundImageSize`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundImagePosition`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundEffect0`| Function |Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`backgroundEffect1`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundEffect1`| Function | Evsitngeev Roman | in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundImageResizable`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundEffect`| Function | Skroba Gleb | done | pass |  |
 |`visualEffect`| Function | Skroba Gleb | blocked IDL | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
@@ -555,7 +555,7 @@
 |`visibility`| Function | Vadim Voronov | done |  | |
 |`onAcquired`| Function | Vadim Voronov | done |  |  |
 |`onError`| Function | Vadim Voronov | done |  | on FB testskipped |
-|`onRouter`| Function | Vadim Voronov | in progress |  |  |
+|`onRouter`| Function | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/ICAZXO |
 |`onUninstall`| Function | Vadim Voronov | done |  |  |
 |`onLoad`| Function | Vadim Voronov | done |  | |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |  |
