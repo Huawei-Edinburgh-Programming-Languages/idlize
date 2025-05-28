@@ -1,5 +1,4 @@
 package idlize.internal.interop;
-
 interface Node {
     pointer CreateNode(i32 node_t, i32 arg0, i32 arg1);
     pointer GetNodeFinalizer();
@@ -34,17 +33,11 @@ interface Node {
     void SetRangeUpdater(pointer ptr0, i32 arg);
     void SetLazyItemIndexer(pointer ptr0, i32 arg);
     pointer GetPipelineContext(pointer ptr0);
-    // TODO: Actually Promise<void>, fix!
     Object VSyncAwait(pointer pipeline);
     void SetVsyncCallback(pointer pipeline);
     void UnblockVsyncWait(pointer pipeline);
     void SetChildTotalCount(pointer ptr0, i32 arg);
     void ShowCrash(String message);
-
-    // TODO: rename to smth more sensible!
-    // i32 CheckArkoalaGeneratedEvents(sequence<u8> result, i32 size);
-    // i32 InjectEvent(sequence<u8> data, i32 size);
-
     void StartPerf(String str1);
     void EndPerf(String str1);
     pointer DumpPerf(i32 arg);

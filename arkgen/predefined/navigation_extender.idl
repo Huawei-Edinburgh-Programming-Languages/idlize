@@ -1,6 +1,9 @@
 package arkui.component.idlize;
 
+import arkui.component.navigation;
+
 callback NavExtender_OnUpdateStack = void ();
+callback NavExtender_OnPop = void (String value);
 
 [Entity=Class]
 interface NavExtender {
@@ -12,7 +15,7 @@ interface NavExtender {
   static void pushPath(NavPathStack pathStack, NavPathInfo info, NavigationOptions options);
   static void replacePath(NavPathStack pathStack, NavPathInfo info, NavigationOptions options);
   static String pop(NavPathStack pathStack, boolean animated);
-  static void setOnPopCallback(NavPathStack pathStack, Callback_String_Void popCallback);
+  static void setOnPopCallback(NavPathStack pathStack, NavExtender_OnPop popCallback);
   static String getIdByIndex(NavPathStack pathStack, i32 index);
   static sequence<String> getIdByName(NavPathStack pathStack, String name);
   static void popToIndex(NavPathStack pathStack, i32 index, boolean animated);

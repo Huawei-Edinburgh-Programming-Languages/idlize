@@ -1,5 +1,4 @@
 package idlize.internal.interop;
-
 interface Interop {
     pointer GetGroupedLog(i32 index);
     void StartGroupedLog(i32 index);

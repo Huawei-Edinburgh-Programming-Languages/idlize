@@ -1,17 +1,31 @@
 package idlize.internal;
-
-interface Finalizable {};
-interface Serializer {};
-interface Deserializer {};
-interface deserializeAndCallCallback {};
-interface checkArkoalaCallbacks {};
-interface CallbackTransformer {};
-interface CallbackBuffer {};
-interface CallbackResourceHolder {};
-interface Tag {};
-interface GENERATED_ArkUIEventsAPI {};
-interface CallbackKind {};
-interface KVMContext {};
-interface TypeChecker {};
-interface TSTypeChecker {};
-interface ArkTSTypeChecker {};
+interface Finalizable {
+};
+interface Serializer {
+};
+interface Deserializer {
+};
+interface deserializeAndCallCallback {
+};
+interface checkArkoalaCallbacks {
+};
+interface CallbackTransformer {
+};
+interface CallbackBuffer {
+};
+interface CallbackResourceHolder {
+};
+interface Tag {
+};
+interface GENERATED_ArkUIEventsAPI {
+};
+interface CallbackKind {
+};
+interface KVMContext {
+};
+interface TypeChecker {
+};
+interface TSTypeChecker {
+};
+interface ArkTSTypeChecker {
+};

@@ -1,5 +1,4 @@
 package idlize.internal.interop;
-
 interface Test {
     i32 TestCallIntNoArgs(i32 arg0);
     i32 TestCallIntIntArraySum(i32 arg0, sequence<i32> arg1, i32 arg2);
@@ -11,7 +10,5 @@ interface Test {
     pointer TestGetManagedCallerSync(i32 kind);
     pointer TestGetManagedHolder();
     pointer TestGetManagedReleaser();
-
     void TestReadAndMutateManagedBuffer(sequence<u8> arr, i32 len);
-    // void TestCallbackSyncCall(sequence<u8> arr, i32 len);
 };
