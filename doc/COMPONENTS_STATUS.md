@@ -181,11 +181,11 @@
 |`onKeyEventDispatch`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocusAxisEvent`| Function | Evstigneev Roman | done | test blocked | feature: API not present, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onAxisEvent`| Function | Tuzhilkin Ivan | done | failed | need cherry-pick to feature_branch, need to submit issue |
-|`focusable`| Function | Roman Sedaikin | done |  | |
-|`nextFocus`| Function | Politov Mikhail | done | | done on upstream |
+|`focusable`| Function | Roman Sedaikin | done | pass | |
+|`nextFocus`| Function | Politov Mikhail | done | test blocked | done on upstream, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`tabStop`| Function | Lobah Mikhail| done| | Not exists on FB|
-|`onFocus`| Function | Roman Sedaikin | done |  | |
-|`onBlur`| Function | Roman Sedaikin | done |  | |
+|`onFocus`| Function | Roman Sedaikin | done | pass | |
+|`onBlur`| Function | Roman Sedaikin | done | pass | |
 |`tabIndex`| Function | Dmitry A Smirnov| done | pass | |
 |`defaultFocus`| Function | Dmitry A Smirnov| done | pass | |
 |`groupDefaultFocus`| Function | Dmitry A Smirnov| done | pass | |
@@ -196,7 +196,7 @@
 |`transition1`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
 |`motionBlur0`| Function |Dmitry A Smirnov| done | pass | |
 |`motionBlur1`| Function | Dmitry A Smirnov| done | pass | |
-|`brightness0`| Function | Lobah Mikhail | done |  |  |
+|`brightness0`| Function | Lobah Mikhail | done | pass |  |
 |`brightness1`| Function |Lobah Mikhail | done |  |  |
 |`contrast0`| Function |Lobah Mikhail | done | pass | |
 |`contrast1`| Function | Lobah Mikhail | done |  | |
@@ -223,19 +223,19 @@
 |`freeze1`| Function | Dmitry A Smirnov | done | failed | method does not work https://gitee.com/openharmony/arkui_ace_engine/issues/IC851K, https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP not in json|
 |`translate0`| Function | Erokhin Ilya | done | pass |  |
 |`translate1`| Function | Erokhin Ilya | done | pass |  |
-|`scale0`| Function | Erokhin Ilya | done |  |  |
+|`scale0`| Function | Erokhin Ilya | done | pass |  |
 |`scale1`| Function | Dmitry A Smirnov | done |  |  https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values|
-|`gridSpan`| Function | Lobah Mikhail | done |  |deprecated? |
-|`gridOffset`| Function | Lobah Mikhail | done |  |deprecated? |
-|`rotate0`| Function | Dmitry A Smirnov | done |  | Dmitry A Smirnov|
+|`gridSpan`| Function | Lobah Mikhail | done | test blocked |deprecated?, test blocked since attribute is absent in sdk |
+|`gridOffset`| Function | Lobah Mikhail | done | test blocked |deprecated?, test blocked since attribute is absent in sdk |
+|`rotate0`| Function | Dmitry A Smirnov | done | pass | Dmitry A Smirnov|
 |`rotate1`| Function | Dmitry A Smirnov | done |  | Dmitry A Smirnov|
 |`transform0`| Function |Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUR61 Type `object` is converted to `ArkCustomObject`|
 |`transform1`| Function | Dmitry A Smirnov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUR61 Type `object` is converted to `ArkCustomObject`|
-|`onAppear`| Function | Roman Sedaikin | done |  | |
+|`onAppear`| Function | Roman Sedaikin | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onDisAppear`| Function | Roman Sedaikin | done |  | |
 |`onAttach`| Function | Andrey Khudenkikh | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onDetach`| Function | Andrey Khudenkikh | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onAreaChange`| Function | Roman Sedaikin | done |  | |
+|`onAreaChange`| Function | Roman Sedaikin | done | pass | |
 |`visibility`| Function | Roman Sedaikin | done | pass | |
 |`flexGrow`| Function | Dmitry A Smirnov| done |  | |
 |`flexShrink`| Function | Dmitry A Smirnov| done |  | |
@@ -286,7 +286,7 @@
 |`mask2`| Function | Tuzhilkin Ivan | done |  | WRONG_OVERRIDE, deprecated, empty implementation, need cherry-pick to feature_branch |
 |`maskShape0`| Function |Tuzhilkin Ivan| done | test blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`maskShape1`| Function |Tuzhilkin Ivan| done | test blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`key`| Function | Lobah Mikhail | done |  | |
+|`key`| Function | Lobah Mikhail | done | pass | |
 |`id`| Function | Erokhin Ilya | done |  |  |
 |`geometryTransition0`| Function | Lobah Mikhail | testskipped | test blocked | no method found test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG |
 |`geometryTransition1`| Function | Lobah Mikhail | testskipped | test blocked | no method found test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
