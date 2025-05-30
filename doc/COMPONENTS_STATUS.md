@@ -139,7 +139,7 @@
 |`backgroundImageSize`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundImagePosition`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundEffect0`| Function |Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`backgroundEffect1`| Function | Evsitngeev Roman | in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundEffect1`| Function | Evstigneev Roman | in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundImageResizable`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundEffect`| Function | Skroba Gleb | done | pass |  |
 |`visualEffect`| Function | Skroba Gleb | blocked IDL | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
@@ -215,8 +215,8 @@
 |`useShadowBatching0`| Function | Lobah Mikhail | done | pass | |
 |`useShadowBatching1`| Function | Lobah Mikhail | done | pass | |
 |`useEffect0`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`useEffect1`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`useEffect2`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`useEffect1`| Function | Evstigneev Roman | in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`useEffect2`| Function | Evstigneev Roman | in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`renderGroup0`| Function |Lobah Mikhail | done  | pass | same as arkui, but looks like there is an issue in ace_engine |
 |`renderGroup1`| Function | Lobah Mikhail | done  | test blocked | absent in ets1.2 now |
 |`freeze0`| Function | Lobah Mikhail | done | failed | method does not work https://gitee.com/openharmony/arkui_ace_engine/issues/IC851K |
