@@ -237,36 +237,36 @@
 |`onDetach`| Function | Andrey Khudenkikh | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onAreaChange`| Function | Roman Sedaikin | done | pass | |
 |`visibility`| Function | Roman Sedaikin | done | pass | |
-|`flexGrow`| Function | Dmitry A Smirnov| done |  | |
-|`flexShrink`| Function | Dmitry A Smirnov| done |  | |
-|`flexBasis`| Function | Dmitry A Smirnov| done |  | |
-|`alignSelf`| Function | Roman Sedaikin | done |  | |
+|`flexGrow`| Function | Dmitry A Smirnov| done | pass | |
+|`flexShrink`| Function | Dmitry A Smirnov| done | pass | |
+|`flexBasis`| Function | Dmitry A Smirnov| done | pass | |
+|`alignSelf`| Function | Roman Sedaikin | done | pass | |
 |`displayPriority`| Function | Roman Sedaikin | done | pass | |
-|`zIndex`| Function | Roman Sedaikin | done |  | |
+|`zIndex`| Function | Roman Sedaikin | done | pass | |
 |`direction`| Function | Roman Sedaikin | done | pass | |
 |`align`| Function | Roman Sedaikin | done | pass | |
 |`position`| Function | Roman Sedaikin | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`markAnchor`| Function | Dmitry A Smirnov| done | pass | |
 |`offset`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`enabled`| Function | Roman Sedaikin | done |  | |
-|`useSizeType`| Function | Dmitry A Smirnov| testskipped |  | deprecated, modifier is ready|
-|`alignRules0`| Function | Dmitry A Smirnov| done |  | |
-|`alignRules1`| Function | Dmitry A Smirnov| done |  | |
-|`aspectRatio`| Function | Roman Sedaikin | done |  | |
+|`enabled`| Function | Roman Sedaikin | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`useSizeType`| Function | Dmitry A Smirnov| testskipped | test blocked | deprecated, modifier is ready|
+|`alignRules0`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`alignRules1`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`aspectRatio`| Function | Roman Sedaikin | done | pass | |
 |`clickEffect0`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`clickEffect1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onDragStart`| Function | Skroba Gleb | done |  | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now. |
-|`onDragEnter`| Function | Lobah Mikhail | done |  |  |
-|`onDragMove`| Function | Lobah Mikhail | done |  |  |
-|`onDragLeave`| Function | Lobah Mikhail | done |  |  |
+|`onDragStart`| Function | Skroba Gleb | done | pass | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now. |
+|`onDragEnter`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onDragMove`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onDragLeave`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onDrop0`| Function |Lobah Mikhail | done |  |  |
 |`onDrop1`| Function | Lobah Mikhail | done |  |  |
 |`onDragEnd`| Function | Lobah Mikhail | done |  |  |
-|`allowDrop`| Function | Lobah Mikhail | done | | |
-|`draggable`| Function | Lobah Mikhail | done |  | |
-|`dragPreview0`| Function |Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder |
-|`dragPreview1`| Function | Lobah Mikhail | done |  | UT done Lobah Mikhail CustomBuilder |
-|`onPreDrag`| Function | Lobah Mikhail | done |  | |
+|`allowDrop`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
+|`draggable`| Function | Lobah Mikhail | done | pass | |
+|`dragPreview0`| Function |Lobah Mikhail | done | test blocked | UT done Lobah Mikhail CustomBuilder, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`dragPreview1`| Function | Lobah Mikhail | done | test blocked | UT done Lobah Mikhail CustomBuilder, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onPreDrag`| Function | Lobah Mikhail | done | pass | |
 |`linearGradient0`| Function |Roman Sedaikin | done | pass | |
 |`linearGradient1`| Function | Dmitry A Smirnov | done | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IC42DP no default values|
 |`sweepGradient0`| Function |Roman Sedaikin | done | pass | |
@@ -287,11 +287,11 @@
 |`maskShape0`| Function |Tuzhilkin Ivan| done | test blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`maskShape1`| Function |Tuzhilkin Ivan| done | test blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`key`| Function | Lobah Mikhail | done | pass | |
-|`id`| Function | Erokhin Ilya | done |  |  |
+|`id`| Function | Erokhin Ilya | done | pass |  |
 |`geometryTransition0`| Function | Lobah Mikhail | testskipped | test blocked | no method found test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG |
 |`geometryTransition1`| Function | Lobah Mikhail | testskipped | test blocked | no method found test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
-|`stateStyles`| Function | managed side | managed side |  | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
-|`restoreId`| Function | Lobah Mikhail | done |  | |
+|`stateStyles`| Function | managed side | managed side | test blocked | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
+|`restoreId`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`sphericalEffect0`| Function | Lobah Mikhail | done | pass | |
 |`sphericalEffect1`| Function | Dmitry A Smirnov | done | pass | |
 |`lightUpEffect0`| Function | Lobah Mikhail | done | pass | |
@@ -302,35 +302,35 @@
 |`accessibilityGroup1`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`accessibilityText0`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`accessibilityText1`| Function |Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityNextFocusId`| Function | Lobah Mikhail| done| | Not exists on FB|
-|`accessibilityDefaultFocus`| Function | Lobah Mikhail| blocked IDL | | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00|
-|`accessibilityUseSamePage`| Function | Lobah Mikhail| done| | Not exists on FB|
-|`accessibilityScrollTriggerable`| Function | Tuzhilkin Ivan | done | | WRONG_GENERATION: parameter should be Opt, need cherry-pick to feature_branch |
-|`accessibilityRole`| Function | Lobah Mikhail| done| | Not exists on FB|
-|`onAccessibilityFocus`| Function | Evstigneev Roman | done | | feature: API not present |
+|`accessibilityNextFocusId`| Function | Lobah Mikhail| done| test blocked | Not exists on FB, no accessibility srvice on FB |
+|`accessibilityDefaultFocus`| Function | Lobah Mikhail| blocked IDL | blocked IDL | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00|
+|`accessibilityUseSamePage`| Function | Lobah Mikhail| done| test blocked | Not exists on FB, no accessibility srvice on FB |
+|`accessibilityScrollTriggerable`| Function | Tuzhilkin Ivan | done | test blocked | WRONG_GENERATION: parameter should be Opt, need cherry-pick to feature_branch, no accessibility srvice on FB |
+|`accessibilityRole`| Function | Lobah Mikhail| done| test blocked | Not exists on FB, no accessibility srvice on FB|
+|`onAccessibilityFocus`| Function | Evstigneev Roman | done | test blocked | feature: API not present, no accessibility srvice on FB |
 |`accessibilityTextHint`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`accessibilityDescription0`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`accessibilityDescription1`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityLevel`| Function | Lobah Mikhail | done |  | |
-|`accessibilityVirtualNode`| Function | Lobah Mikhail | done |  |  |
-|`accessibilityChecked`| Function | Lobah Mikhail | done |  | |
-|`accessibilitySelected`| Function | Lobah Mikhail | done |  | |
+|`accessibilityLevel`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`accessibilityVirtualNode`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`accessibilityChecked`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`accessibilitySelected`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`obscured`| Function |Dmitry A Smirnov | done | pass | |
 |`reuseId`| Function |managed side | managed side |  | not implemented in ace_engine|
 |`reuse`| Function |managed side | managed side | | to be removed from CAPI generation |
 |`renderFit0`| Function | Dmitry A Smirnov| done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`renderFit1`| Function | Dmitry A Smirnov| done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`gestureModifier`| Function | Erokhin Ilya | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`gestureModifier`| Function | Erokhin Ilya | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`backgroundBrightness0`| Function | Skroba Gleb | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundBrightness1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onGestureJudgeBegin`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
 |`onGestureRecognizerJudgeBegin0`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
 |`onGestureRecognizerJudgeBegin1`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done |  |  |
-|`monopolizeEvents`| Function | Erokhin Ilya | done |  | UT by Vadim Voronov |
-|`onTouchIntercept`| Function | Andrey Khudenkikh | done |  | EVENT |
+|`monopolizeEvents`| Function | Erokhin Ilya | done | pass | UT by Vadim Voronov |
+|`onTouchIntercept`| Function | Andrey Khudenkikh | done | pass | EVENT |
 |`onSizeChange`| Function | Dmitry A Smirnov| done | failed | issue OHOSUI-2216|
-|`accessibilityFocusDrawLevel`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
+|`accessibilityFocusDrawLevel`| Function | Tuzhilkin Ivan | done | test blocked | need cherry-pick to feature_branch, test blocked since no accessibility service on FB |
 |`customProperty`| Function | Dmitry A Smirnov| in progress | test blocked | need clarify bridge implementation, test blocked by FrameNode.getCustomProperty |
 |`expandSafeArea`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`background`| Function | Lobah Mikhail | done | test blocked | UT done Lobah Mikhail, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -364,8 +364,8 @@
 |`bindPopup`| Function | Erokhin Ilya | done | test blocked | fixes of issues were provided by our team, https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL2K, https://gitee.com/openharmony/arkui_ace_engine/issues/IBY31B, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`bindMenu0`| Function | Erokhin Ilya | blocked IDL | test blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`bindMenu1`| Function | Erokhin Ilya | blocked IDL | test blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
-|`bindContextMenu0`| Function | Evstigneev Roman | done |  | |
-|`bindContextMenu1`| Function | Evstigneev Roman | done |  | |
+|`bindContextMenu0`| Function | Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`bindContextMenu1`| Function | Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`bindContentCover0`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov |
 |`bindContentCover1`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov |
 |`bindSheet`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -643,37 +643,37 @@
 |`color`| Function | Morozov Sergey | done | pass | |
 |*Image*| *Component* | Evstigneev Roman | blocked IDL |  |  |
 |`construct`| Function |Berezin Kirill | done |  |  |
-|`setImageOptions0`| Function | Berezin Kirill | done |  |  |
+|`setImageOptions0`| Function | Berezin Kirill | done | pass |  |
 |`setImageOptions1`| Function | |  |  | blocked by DrawableDescriptor  |
 |`setImageOptions2`| Function |Berezin Kirill | blocked IDL |  | SetImageOptions2 unavailable https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
-|`alt`| Function | Evstigneev Roman | done |  | UT done Lobah Mikhail   |
-|`matchTextDirection`| Function | Evstigneev Roman | done |  | |
-|`fitOriginalSize`| Function | Evstigneev Roman | done |  | |
-|`fillColor0`| Function | Evstigneev Roman | done |  | |
+|`alt`| Function | Evstigneev Roman | done | pass | UT done Lobah Mikhail   |
+|`matchTextDirection`| Function | Evstigneev Roman | done | pass | |
+|`fitOriginalSize`| Function | Evstigneev Roman | done | pass | |
+|`fillColor0`| Function | Evstigneev Roman | done | pass | |
 |`fillColor1`| Function |Evstigneev Roman | done |  | |
-|`objectFit`| Function |Berezin Kirill| done |  | |
-|`imageMatrix`| Function | Samarin Sergey | done | | |
-|`objectRepeat`| Function | Evstigneev Roman | done |  | |
-|`autoResize`| Function | Evstigneev Roman | done |  |   |
-|`renderMode`| Function | Evstigneev Roman | done |  | |
-|`dynamicRangeMode`| Function | Evstigneev Roman | testskipped |  | test blocked by aceEngine https://gitee.com/openharmony/arkui_ace_engine/issues/IB1IEY, test in progress Evstgneev Roman |
+|`objectFit`| Function |Berezin Kirill| done | pass | |
+|`imageMatrix`| Function | Samarin Sergey | done | failed | no effect, to submit |
+|`objectRepeat`| Function | Evstigneev Roman | done | pass | |
+|`autoResize`| Function | Evstigneev Roman | done | pass |   |
+|`renderMode`| Function | Evstigneev Roman | done | pass | |
+|`dynamicRangeMode`| Function | Evstigneev Roman | testskipped | pass | test blocked by aceEngine https://gitee.com/openharmony/arkui_ace_engine/issues/IB1IEY, test in progress Evstgneev Roman |
 |`hdrBrightness`| Function | | | | no such API in generation 125 |
-|`interpolation`| Function | Evstigneev Roman | done |  | |
-|`sourceSize`| Function | Evstigneev Roman | done |  | |
-|`syncLoad`| Function | Evstigneev Roman | done |  | |
-|`colorFilter`| Function | Evstigneev Roman | in progress |  |  |
-|`copyOption`| Function | Evstigneev Roman | testskipped |  |  tests blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IBEEFF (+) |
+|`interpolation`| Function | Evstigneev Roman | done | pass | |
+|`sourceSize`| Function | Evstigneev Roman | done | pass | |
+|`syncLoad`| Function | Evstigneev Roman | done | pass | |
+|`colorFilter`| Function | Evstigneev Roman | in progress | test blocked |  |
+|`copyOption`| Function | Evstigneev Roman | testskipped | pass |  tests blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IBEEFF (+) |
 |`draggable`| Function | Evstigneev Roman | done | pass |   |
 |`pointLight`| Function | Evstigneev Roman | done |  |    |
-|`edgeAntialiasing`| Function | Evstigneev Roman | done |  | |
+|`edgeAntialiasing`| Function | Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onComplete`| Function | Evstigneev Roman | done |  | |
 |`onError`| Function | Evstigneev Roman | done |  | |
 |`onFinish`| Function | Evstigneev Roman | done |  | |
 |`enableAnalyzer`| Function | Evstigneev Roman | done | pass | |
-|`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (+) |
-|`resizable`| Function | Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine | test blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (+) |
+|`resizable`| Function | Evstigneev Roman | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`privacySensitive`| Function | Evstigneev Roman | done | pass | |
-|`enhancedImageQuality`| Function | Erokhin Ilya | done |  |  |
+|`enhancedImageQuality`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`orientation`| Function | Samarin Sergey | done |  | |
 |*ImageAnimator*| *Component* | Pavelyev Ivan | done |  | |
 |`construct`| Function | Pavelyev Ivan | done | pass | |
@@ -697,10 +697,10 @@
 |`setImageSpanOptions`| Function | Politov Mikhail | done | pass | |
 |`verticalAlign`| Function | Politov Mikhail | done | pass |  |
 |`colorFilter`| Function | Politov Mikhail| in progress |  |  |
-|`objectFit`| Function | Politov Mikhail | done |  |  |
-|`onComplete`| Function | Politov Mikhail | done |  |  |
+|`objectFit`| Function | Politov Mikhail | done | pass |  |
+|`onComplete`| Function | Politov Mikhail | done | pass |  |
 |`onError`| Function | Politov Mikhail | done |  |  |
-|`alt`| Function | Politov Mikhail | done |  | |
+|`alt`| Function | Politov Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*LazyGridLayout*| *Component* | | | | no such API in generation 125 |
 |`construct`| Function | | | | no such API in generation 125 |
 |`rowsGap`| Function | | | | no such API in generation 125 |
