@@ -263,7 +263,8 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
 
         if (clazz.isInterface) {
             const genericsClause = clazz.generics?.length ? `<${clazz.generics.map(sanitizeGenerics).join(", ")}>` : ''
-            interfaces.push(`${this.namespacePrefix}${this.clazz.className}${genericsClause}`)
+            const nsName = printer.language === Language.CJ ? clazz.className : idl.getQualifiedName(clazz.decl, "namespace.name")
+            interfaces.push(`${this.namespacePrefix}${nsName}${genericsClause}`)
         }
 
         if (clazz.isInterface) {
@@ -380,11 +381,6 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
                 this.collector.addFeatures(['GestureName', 'GestureComponent'], './shared/generated-utils')
             }
         }
-    }
-
-    override get namespacePrefix(): string {
-        const namespacePrefix = idl.getNamespaceName(this.clazz.decl)
-        return namespacePrefix.length ? `${idl.getNamespaceName(this.clazz.decl)}.` : ""
     }
 
     private calcClassWeight() {
