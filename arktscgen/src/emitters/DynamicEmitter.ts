@@ -33,9 +33,10 @@ import { AstNodeFilterTransformer } from "../transformers/common/filter/AstNodeF
 import { NullabilityTransformer } from "../transformers/peers/NullabilityTransformer"
 import { AttributeTransformer } from "../transformers/peers/factory/AttributeTransformer"
 import { InteropTransformer } from "../transformers/interop/InteropTransformer"
-import { ConstMergeTransformer } from "../transformers/peers/ConstMergeTransformer"
+import { FilterConstTransformer } from "../transformers/peers/FilterConstTransformer"
 import { Transformer } from "../transformers/Transformer"
 import { UniversalCreateTransformer } from "../transformers/peers/UniversalCreateTransformer"
+import { FilterMutableTransformer } from "../transformers/peers/FilterMutableTransformer"
 
 class SingleFileEmitter {
     constructor(
@@ -124,7 +125,8 @@ export class DynamicEmitter {
     }
 
     private printPeers(idl: IDLFile): void {
-        idl = this.withLog(new ConstMergeTransformer(idl))
+        idl = this.withLog(new FilterConstTransformer(idl))
+        idl = this.withLog(new FilterMutableTransformer(idl))
         idl = this.withLog(new UniversalCreateTransformer(idl))
         idl = this.withLog(new NullabilityTransformer(idl, this.config))
         this.printFile(this.indexPrinter, idl)

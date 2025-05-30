@@ -35,6 +35,10 @@ export class Config {
         return `Const`
     }
 
+    static get mutablePostfix(): string {
+        return `Mutable`
+    }
+
     static get nodeTypeAttribute(): string {
         return `Es2pandaAstNodeType`
     }

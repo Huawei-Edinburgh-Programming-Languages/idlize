@@ -18,7 +18,7 @@ import { IDLEntry, IDLFile, IDLInterface } from "@idlizer/core"
 import { Config } from "../../general/Config";
 import { Transformer } from "../Transformer";
 
-export class ConstMergeTransformer extends Transformer {
+export class FilterMutableTransformer extends Transformer {
     constructor(file: IDLFile) {
         super(file)
     }
@@ -27,11 +27,7 @@ export class ConstMergeTransformer extends Transformer {
         return createUpdatedInterface(
             node,
             node.methods
-                .filter(it => {
-                    if (!it.name.endsWith(Config.constPostfix)) return true
-                    const nonConstVersion = it.name.substring(0, it.name.length - Config.constPostfix.length)
-                    return !node.methods.some(it => it.name === nonConstVersion)
-                })
+                .filter(it => !it.name.endsWith(Config.mutablePostfix))
         )
     }
 }
