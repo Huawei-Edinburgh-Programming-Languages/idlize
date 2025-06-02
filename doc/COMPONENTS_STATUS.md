@@ -3334,8 +3334,8 @@
 |`setOnScrollIndex`| Function | | | | no such API in generation 125 |
 |*UIExtensionProxy*| *Class* | Tuzhilkin Ivan | blocked IDL|  | |
 |`ctor`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`send`| Function | Tuzhilkin Ivan | L |  |  |
-|`sendSync`| Function | Tuzhilkin Ivan |  |  |  |
+|`send`| Function | Tuzhilkin Ivan | blocked |  | blocked Arkoala. Want processing |
+|`sendSync`| Function | Tuzhilkin Ivan | blocked |  | blocked Arkoala. Want processing |
 |`onAsyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`onSyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`offAsyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
