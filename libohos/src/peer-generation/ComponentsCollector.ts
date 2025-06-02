@@ -30,8 +30,9 @@ export function collectComponents(library: LibraryInterface): IdlComponentDeclar
                 continue
             if (idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.HandWrittenImplementation))
                 continue
+            const isRoot = peerGeneratorConfiguration().rootComponents.includes(componentName)
             const fqn = idl.deriveQualifiedNameFrom(`${componentName}Interface`, entry)
-            const compInterface = library.resolveTypeReference(idl.createReferenceType(fqn))
+            const compInterface = isRoot ? undefined : library.resolveTypeReference(idl.createReferenceType(fqn))
             if (!compInterface || idl.isInterface(compInterface)) {
                 components.push(new IdlComponentDeclaration(componentName, compInterface, entry))
             }
