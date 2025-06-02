@@ -2359,7 +2359,7 @@
 |`setWindowY`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
 |*TouchEvent*| *Class* | Tuzhilkin Ivan | done |  | |
 |`ctor`| Function |  Tuzhilkin Ivan | done |  | |
-|`getHistoricalPoints`| Function | Tuzhilkin Ivan | done |  | wait new generation on feature_branch  |
+|`getHistoricalPoints`| Function | Tuzhilkin Ivan | done |  |  |
 |`getType`| Function | Tuzhilkin Ivan | done |  | |
 |`setType`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |`getTouches`| Function | Tuzhilkin Ivan | done | | |
