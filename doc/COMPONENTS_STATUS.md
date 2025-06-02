@@ -343,23 +343,23 @@
 |`focusScopeId0`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`focusScopeId1`| Function | Dmitry A Smirnov| done |  test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`focusScopePriority`| Function | Dmitry A Smirnov| done | pass | |
-|`gesture`| Function | Erokhin Ilya | testskipped |  |  |
+|`gesture`| Function | Erokhin Ilya | testskipped | pass |  |
 |`priorityGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`parallelGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`blur0`| Function | Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`blur1`| Function |Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`linearGradientBlur0`| Function |Lobah Mikhail | done | pass | |
 |`linearGradientBlur1`| Function | Dmitry A Smirnov | done | pass | |
-|`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
+|`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
 |`backdropBlur0`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backdropBlur1`| Function | Ekaterina Stepanova | in progress |  |  |
 |`sharedTransition`|Function|Skroba Gleb | done |  |  |
-|`chainMode`| Function | Berezin Kirill | done |  | |
+|`chainMode`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`overlay`| Function | Lobah Mikhail | blocked IDL | pass | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the 'Ark_ComponentContent' class without stubs is required.|
-|`blendMode0`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`blendMode1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`advancedBlendMode`| Function | Erokhin Ilya |in progress |  |  |
+|`blendMode0`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`blendMode1`| Function | Dmitry A Smirnov | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`advancedBlendMode`| Function | Erokhin Ilya |in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`bindTips`| Function | Tuzhilkin Ivan | in progress | | only for generation > 125|
 |`bindPopup`| Function | Erokhin Ilya | done | test blocked | fixes of issues were provided by our team, https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL2K, https://gitee.com/openharmony/arkui_ace_engine/issues/IBY31B, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`bindMenu0`| Function | Erokhin Ilya | blocked IDL | test blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
@@ -403,7 +403,7 @@
 |`onReachEnd`| Function | Samarin Sergey | done | pass | |
 |`onScrollStart`| Function | Samarin Sergey | done | pass | |
 |`onScrollStop`| Function | Samarin Sergey | done | pass | |
-|`flingSpeedLimit`| Function | Samarin Sergey | done |  |  |
+|`flingSpeedLimit`| Function | Samarin Sergey | done | pass |  |
 |`clipContent`| Function | Evstigneev Roman | done |  |  |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | |
 |`backToTop`| Function | Kovalev Sergey | done |  | |
