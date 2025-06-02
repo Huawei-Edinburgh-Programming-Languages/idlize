@@ -1,0 +1,45 @@
+{
+  "name": "@idlizer/testgen",
+  "version": "2.1.7+devel",
+  "description": "",
+  "main": "lib/main.js",
+  "bin": "lib/main.js",
+  "files": [
+    "build/lib/src/app.d.ts",
+    "lib/*.js",
+    "generation-config/**/*",
+    "config.json",
+    "components_stubs/**/*"
+  ],
+  "exports": {
+    "./app": [
+      "./lib/library.js"
+    ]
+  },
+  "typesVersions": {
+    "*": {
+      "app": [
+        "./build/lib/src/app.d.ts"
+      ]
+    }
+  },
+  "license": "Apache-2.0",
+  "keywords": [],
+  "dependencies": {
+    "@idlizer/core": "2.1.7+devel",
+    "@idlizer/libohos": "2.1.7+devel",
+    "@koalaui/libarkts": "file:../external/ui2abc/libarkts",
+    "commander": "^10.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "@types/node": "^18.0.0",
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6"
+  },
+  "scripts": {
+    "compile": "npm run -C ../core compile && rollup -c"
+  }
+}
