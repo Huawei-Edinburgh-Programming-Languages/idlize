@@ -9,8 +9,6 @@ interface WrappedBuilder {
     attribute Callback_WrappedBuilder_Args_Void builder;
 };
 
-WrappedBuilder wrapBuilder(Callback_WrappedBuilder_Args_Void builder);
-
 [Entity=Interface]
 interface ContentModifier {
     WrappedBuilder applyContent();
@@ -20,4 +18,102 @@ interface ContentModifier {
 interface CommonConfiguration {
     attribute boolean enabled;
     attribute ContentModifier contentModifier;
+};
+
+[Synthetic]
+callback Callback_Button_WrappedBuilder_Args_Void = void (ButtonConfiguration config);
+[Synthetic]
+callback Callback_CheckBox_WrappedBuilder_Args_Void = void (CheckBoxConfiguration config);
+[Synthetic]
+callback Callback_DataPanel_WrappedBuilder_Args_Void = void (DataPanelConfiguration config);
+[Synthetic]
+callback Callback_Gauge_WrappedBuilder_Args_Void = void (GaugeConfiguration config);
+[Synthetic]
+callback Callback_LoadingProgress_WrappedBuilder_Args_Void = void (LoadingProgressConfiguration config);
+[Synthetic]
+callback Callback_Progress_WrappedBuilder_Args_Void = void (ProgressConfiguration config);
+[Synthetic]
+callback Callback_Radio_WrappedBuilder_Args_Void = void (RadioConfiguration config);
+[Synthetic]
+callback Callback_Rating_WrappedBuilder_Args_Void = void (RatingConfiguration config);
+[Synthetic]
+callback Callback_MenuItem_WrappedBuilder_Args_Void = void (MenuItemConfiguration config);
+[Synthetic]
+callback Callback_Slider_WrappedBuilder_Args_Void = void (SliderConfiguration config);
+[Synthetic]
+callback Callback_TextClock_WrappedBuilder_Args_Void = void (TextClockConfiguration config);
+[Synthetic]
+callback Callback_TextTimer_WrappedBuilder_Args_Void = void (TextTimerConfiguration config);
+//[Synthetic]
+//callback Callback_Toggle_WrappedBuilder_Args_Void = void (ToggleConfiguration config);
+
+[Synthetic]
+callback ButtonBuilder = pointer (pointer parentNode, ButtonConfiguration config);
+[Synthetic]
+callback CheckBoxBuilder = pointer (pointer parentNode, CheckBoxConfiguration config);
+[Synthetic]
+callback DataPanelBuilder = pointer (pointer parentNode, DataPanelConfiguration config);
+[Synthetic]
+callback GaugeBuilder = pointer (pointer parentNode, GaugeConfiguration config);
+[Synthetic]
+callback LoadingProgressBuilder = pointer (pointer parentNode, LoadingProgressConfiguration config);
+[Synthetic]
+callback ProgressBuilder = pointer (pointer parentNode, ProgressConfiguration config);
+[Synthetic]
+callback RadioBuilder = pointer (pointer parentNode, RadioConfiguration config);
+[Synthetic]
+callback RatingBuilder = pointer (pointer parentNode, RatingConfiguration config);
+[Synthetic]
+callback MenuItemBuilder = pointer (pointer parentNode, MenuItemConfiguration config);
+[Synthetic]
+callback SliderBuilder = pointer (pointer parentNode, SliderConfiguration config);
+[Synthetic]
+callback TextClockBuilder = pointer (pointer parentNode, TextClockConfiguration config);
+[Synthetic]
+callback TextTimerBuilder = pointer (pointer parentNode, TextTimerConfiguration config);
+//[Synthetic]
+//callback ToggleBuilder = pointer (pointer parentNode, ToggleConfiguration config);
+
+[Synthetic]
+callback Callback_ApplyContent_ButtonBuilder = ButtonBuilder (ContentModifier modifier);
+[Synthetic]
+callback Callback_ApplyContent_CheckBoxBuilder = CheckBoxBuilder (ContentModifier modifier);
+[Synthetic]
+callback Callback_ApplyContent_DataPanelBuilder = DataPanelBuilder (ContentModifier modifier);
+[Synthetic]
+callback Callback_ApplyContent_GaugeBuilder = GaugeBuilder (ContentModifier modifier);
+[Synthetic]
+callback Callback_ApplyContent_LoadingProgressBuilder = LoadingProgressBuilder (ContentModifier modifier);
+[Synthetic]
+callback Callback_ApplyContent_ProgressBuilder = ProgressBuilder (ContentModifier modifier);
+[Synthetic]
+callback Callback_ApplyContent_RadioBuilder = RadioBuilder (ContentModifier modifier);
+[Synthetic]
+callback Callback_ApplyContent_RatingBuilder = RatingBuilder (ContentModifier modifier);
+[Synthetic]
+callback Callback_ApplyContent_MenuItemBuilder = MenuItemBuilder (ContentModifier modifier);
+[Synthetic]
+callback Callback_ApplyContent_SliderBuilder = SliderBuilder (ContentModifier modifier);
+[Synthetic]
+callback Callback_ApplyContent_TextClockBuilder = TextClockBuilder (ContentModifier modifier);
+[Synthetic]
+callback Callback_ApplyContent_TextTimerBuilder = TextTimerBuilder (ContentModifier modifier);
+//[Synthetic]
+//callback Callback_ApplyContent_ToggleBuilder = ToggleBuilder (ContentModifier modifier);
+
+[Entity=Class]
+interface ContentModifierHelper {
+    static void onApplyContentButton(Callback_ApplyContent_ButtonBuilder callback);
+    static void onApplyContentCheckBox(Callback_ApplyContent_CheckBoxBuilder callback);
+    static void onApplyContentDataPanel(Callback_ApplyContent_DataPanelBuilder callback);
+    static void onApplyContentGauge(Callback_ApplyContent_GaugeBuilder callback);
+    static void onApplyContentLoadingProgress(Callback_ApplyContent_LoadingProgressBuilder callback);
+    static void onApplyContentProgress(Callback_ApplyContent_ProgressBuilder callback);
+    static void onApplyContentRadio(Callback_ApplyContent_RadioBuilder callback);
+    static void onApplyContentRating(Callback_ApplyContent_RatingBuilder callback);
+    static void onApplyContentMenuItem(Callback_ApplyContent_MenuItemBuilder callback);
+    static void onApplyContentSlider(Callback_ApplyContent_SliderBuilder callback);
+    static void onApplyContentTextClock(Callback_ApplyContent_TextClockBuilder callback);
+    static void onApplyContentTextTimer(Callback_ApplyContent_TextTimerBuilder callback);
+    //static void onApplyContentToggle(Callback_ApplyContent_ToggleBuilder callback);
 };
