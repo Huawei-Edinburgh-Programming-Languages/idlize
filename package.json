@@ -15,7 +15,8 @@
     "etsgen",
     "arktscgen",
     "runner",
-    "idlinter"
+    "idlinter",
+    "testgen"
   ],
   "license": "Apache-2.0",
   "keywords": [],
