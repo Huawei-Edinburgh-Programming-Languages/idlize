@@ -242,9 +242,12 @@ class Producer {
     }
     // OptionalType
     generateOptionalType(): idl.IDLOptionalType {
-        return idl.createOptionalType(
-            this.generateType() // fix: not undefined here !!!
-        )
+        // bad one filter, rethink it
+        let innerType: idl.IDLType = idl.IDLUndefinedType
+        while (innerType === idl.IDLUndefinedType) {
+            innerType = this.generateType()
+        }
+        return idl.createOptionalType(innerType)
     }
 
     // Version
@@ -261,18 +264,25 @@ class Producer {
 
 export function newGenerator() {
     let nameCounter = 0
-    const savedNames:string[] = []
+    const availableNames:string[] = []
+    const allNames: string[] = []
+
+    for (let i = 0; i < 10; ++i) {
+        const name = `name${++nameCounter}`
+        availableNames.push(name)
+        allNames.push(name)
+    }
+
     const nameGenerator: NameGenerator = (kind) => {
         const defaultName = `val${++nameCounter}`
         switch (kind) {
             case idl.IDLKind.Parameter: return `param${++nameCounter}`
 
-            case idl.IDLKind.ReferenceType: return savedNames[Math.floor(Math.random() * savedNames.length)]
+            case idl.IDLKind.ReferenceType: return allNames[Math.floor(Math.random() * allNames.length)]
 
             case idl.IDLKind.Callback:
             case idl.IDLKind.Interface: {
-                savedNames.push(defaultName)
-                return defaultName
+                return availableNames.pop()!
             }
         }
         return defaultName
