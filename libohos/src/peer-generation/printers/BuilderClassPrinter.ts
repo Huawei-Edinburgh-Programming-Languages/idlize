@@ -82,8 +82,10 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
                         const sig = staticMethod.signature
                         const args = sig.args.map((_, i) => sig.argName(i)).join(", ")
                         const obj = forceAsNamedNode(sig.returnType).name
+                        // TBD: fix FQN
+                        let objName = obj.includes(".") ? obj.split(".").at(-1) : obj
                         // TBD: Use writer.makeObjectAlloc()
-                        writer.writeStatement(writer.makeReturn(writer.makeString(`new ${obj}(${args})`)))
+                        writer.writeStatement(writer.makeReturn(writer.makeString(`new ${objName}(${args})`)))
                     })
                 })
 

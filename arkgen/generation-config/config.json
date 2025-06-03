@@ -68,7 +68,8 @@
         ]
     },
     "forceResource": [
-	    "ContentModifier"
+	    "ContentModifier",
+	    "arkui.component.common.ContentModifier"
     ],
     "boundProperties": {
         "Checkbox": [

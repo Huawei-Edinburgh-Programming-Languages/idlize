@@ -305,6 +305,10 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         return result
     }
 
+    // TBD: use FQN in type parameters
+    private nameFromFQN(value: string): string {
+        return value.includes(".") ? value.split(".").at(-1)! : value
+    }
     protected printInterfaceName(idlInterface: idl.IDLInterface): string {
 
         // Built-in enums cannot be used as constrained type parameters
@@ -327,7 +331,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         superTypes?.forEach(it => {
             const superDecl = this.peerLibrary.resolveTypeReference(it)
             const parentTypeArgs = this.printTypeArguments(
-                (it as idl.IDLReferenceType)?.typeArguments?.map(it => idl.printType(it)))
+                (it as idl.IDLReferenceType)?.typeArguments?.map(it => this.nameFromFQN(idl.printType(it))))
             const clause = `${it.name}${parentTypeArgs}`
 
             const shouldPrintAsImplements = superDecl
@@ -441,7 +445,9 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         return typeParameters?.length ? `<${typeParameters.map(addDefaultIfNeeded).join(",").replace("[]", "")}>` : ""
     }
 
+    // private nameFromFQN
     protected printTypeArguments(typeArguments: string[] | undefined): string {
+        // TBD:
         return typeArguments?.length ? `<${typeArguments.join(",").replace("[]", "")}>` : ""
     }
 

@@ -270,6 +270,9 @@ export class PeerLibrary implements LibraryInterface {
                 ? `'${idl.getFQName(pov)}'`
                 : "[root]"
 
+            const n = pov && idl.isNamedNode(pov) ? pov.name : "undefined"
+            console.log(`Use fallback: ${n}, readable: ${povAsReadableString} target: ${target}`)
+
             // retry from root
             pov = undefined
             const resolveds: idl.IDLNode[] = []

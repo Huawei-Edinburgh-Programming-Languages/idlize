@@ -54,6 +54,7 @@ class IDLDeserializer {
     private namespacePathNames: string[] = []
     private currentPackage: string[] = []
     private genericsScopes: Set<string>[] = []
+    private imports: Map<string, string> = new Map()
 
     enterGenericScope(generics: string[] | undefined) {
         this.genericsScopes.push(new Set(generics ?? []))
@@ -72,6 +73,12 @@ class IDLDeserializer {
     }
     setPackage(pkg: string[]) {
         this.currentPackage = pkg
+    }
+
+    withFQN(type: string): string {
+        const importFQN = this.imports.get(type)
+        if (importFQN) return importFQN
+        return this.currentPackage.length == 0 ? type : [...this.currentPackage, type].join(".")
     }
 
     ///
@@ -139,6 +146,11 @@ class IDLDeserializer {
         throw new Error(`unexpected node type: ${toString(node)}`)
     }
     toIDLImport(node: webidl2.ImportType): idl.IDLImport {
+        console.log(`To IDL import: ${node.alias}, clause: ${node.clause}`)
+        if (node.alias) {
+            console.log(`Use import alias: ${node.alias}, clause: ${node.clause}`)
+            this.imports.set(node.alias, node.clause)
+        }
         return this.withInfo(node, idl.createImport(node.clause.split("."), node.alias || undefined))
     }
     interfaceSubkind(node: webidl2.InterfaceType): idl.IDLInterfaceSubkind {
@@ -261,7 +273,10 @@ class IDLDeserializer {
             if (this.genericsScopes.some(it => it.has(type.idlType))) {
                 idlRefType = idl.createTypeParameterReference(type.idlType)
             } else {
-                const ref = idl.createReferenceType(type.idlType)
+                // TBD
+                const fqn = this.withFQN(type.idlType)
+                console.log(`To IDL type: ${type.idlType}, package: ${this.currentPackage}, fqn: ${fqn}`)
+                const ref = idl.createReferenceType(fqn)
                 ref.typeArguments = this.extractTypeArguments(file, combinedExtAttrs, idl.IDLExtendedAttributes.TypeArguments)
                 idlRefType = ref
             }
