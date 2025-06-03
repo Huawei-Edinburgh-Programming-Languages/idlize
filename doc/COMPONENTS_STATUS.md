@@ -405,7 +405,7 @@
 |`onScrollStop`| Function | Samarin Sergey | done | pass | |
 |`flingSpeedLimit`| Function | Samarin Sergey | done | pass |  |
 |`clipContent`| Function | Evstigneev Roman | done |  |  |
-|`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | |
+|`digitalCrownSensitivity`| Function | Kovalev Sergey | done | test blocked | test blocked since wearable feature |
 |`backToTop`| Function | Kovalev Sergey | done |  | |
 |`edgeEffect`| Function | Samarin Sergey | done |  | |
 |`fadingEdge`| Function | Samarin Sergey | done | test blocked | |
@@ -547,17 +547,17 @@
 |`autoHalfFold`| Function | Politov Mikhail | done | test blocked | no screen rotation supported by dayu200 |
 |*FormComponent*| *Component* | Vadim Voronov | blocked IDL |  |  |
 |`construct`| Function | Vadim Voronov |  | |  |
-|`setFormComponentOptions`| Function | Vadim Voronov | | |  |
-|`size`| Function | Vadim Voronov | blocked AceEngine |  | implemented with tests, empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
-|`moduleName`| Function | Vadim Voronov | done |  | |
-|`dimension`| Function | Vadim Voronov | done |  | |
-|`allowUpdate`| Function | Vadim Voronov | done |  | |
-|`visibility`| Function | Vadim Voronov | done |  | |
-|`onAcquired`| Function | Vadim Voronov | done |  |  |
-|`onError`| Function | Vadim Voronov | done |  | on FB testskipped |
-|`onRouter`| Function | Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/ICAZXO |
-|`onUninstall`| Function | Vadim Voronov | done |  |  |
-|`onLoad`| Function | Vadim Voronov | done |  | |
+|`setFormComponentOptions`| Function | Vadim Voronov | |  |  |
+|`size`| Function | Vadim Voronov | blocked AceEngine | test blocked AceEngine | implemented with tests, empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
+|`moduleName`| Function | Vadim Voronov | done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`dimension`| Function | Vadim Voronov | done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`allowUpdate`| Function | Vadim Voronov | done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`visibility`| Function | Vadim Voronov | done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onAcquired`| Function | Vadim Voronov | done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onError`| Function | Vadim Voronov | done | test blocked | on FB testskipped, test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onRouter`| Function | Vadim Voronov | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/ICAZXO |
+|`onUninstall`| Function | Vadim Voronov | done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`onLoad`| Function | Vadim Voronov | done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*FormLink*| *Component* | Dmitry A Smirnov| done |  |  |
 |`construct`| Function |Dmitry A Smirnov| done |  |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done | pass |  |
