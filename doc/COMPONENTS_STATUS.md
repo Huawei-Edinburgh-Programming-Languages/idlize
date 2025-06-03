@@ -2359,7 +2359,7 @@
 |`setWindowY`| Function | Pavelyev Ivan | done |  | UT by Vadim Voronov |
 |*TouchEvent*| *Class* | Tuzhilkin Ivan | done |  | |
 |`ctor`| Function |  Tuzhilkin Ivan | done |  | |
-|`getHistoricalPoints`| Function | Tuzhilkin Ivan | done |  | wait new generation on feature_branch  |
+|`getHistoricalPoints`| Function | Tuzhilkin Ivan | done |  |  |
 |`getType`| Function | Tuzhilkin Ivan | done |  | |
 |`setType`| Function | Tuzhilkin Ivan | done |  | empty implementation |
 |`getTouches`| Function | Tuzhilkin Ivan | done | | |
@@ -2730,7 +2730,7 @@
 |`getCanvas`| Function | Vadim Voronov | done | | |
 |*GlobalScope_common*| *Class* | Erokhin Ilya | blocked IDL |  | |
 |`getContext`| Function | Erokhin Ilya | blocked IDL |  | RET_VAL_STABBED https://gitee.com/nikolay-igotti/idlize/issues/IBJXAR |
-|`postCardAction`| Function | Tuzhilkin Ivan |  |  |  |
+|`postCardAction`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/ICBY88, https://gitee.com/rri_opensource/koala_projects/issues/ICBY7M |
 |`dollar_r`| Function | managed side | managed side |  | NEED TO BE REMOVED  |
 |`dollar_rawfile`| Function | managed side | managed side |  | NEED TO BE REMOVED  |
 |`animateTo`| Function | Erokhin Ilya | testskipped | failed | |
