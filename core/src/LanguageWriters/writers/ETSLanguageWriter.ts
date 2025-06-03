@@ -180,17 +180,6 @@ export function generateEnumFromNumericName(entry: idl.IDLEntry): string {
     return `${typeName}_FromNumeric`
 }
 
-export function makeArrayTypeCheckCall(
-    valueAccessor: string,
-    typeName: string,
-    writer: LanguageWriter) {
-    return writer.makeMethodCall(
-        "TypeChecker",
-        generateTypeCheckerName(typeName),
-        [writer.makeString(valueAccessor)
-    ])
-}
-
 ////////////////////////////////////////////////////////////////
 //                           WRITER                           //
 ////////////////////////////////////////////////////////////////
@@ -227,18 +216,12 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return this.makeString(`${value} as ${type}`)
     }
     i32FromEnum(value: LanguageExpression, enumEntry: idl.IDLEnum): LanguageExpression {
-        if (ETSLanguageWriter.isUseTypeChecker) {
-            return this.makeMethodCall('TypeChecker', generateEnumToNumericName(enumEntry), [value])
-        }
         return idl.isStringEnum(enumEntry)
             ? this.makeMethodCall(value.asString(), 'getOrdinal', [])
             : this.makeMethodCall(value.asString(), 'valueOf', [])
     }
     enumFromI32(value: LanguageExpression, enumEntry: idl.IDLEnum): LanguageExpression {
         const enumName = this.getNodeName(enumEntry)
-        if (ETSLanguageWriter.isUseTypeChecker) {
-            return this.makeMethodCall('TypeChecker', generateEnumFromNumericName(enumEntry), [value])
-        }
         return idl.isStringEnum(enumEntry)
             ? this.makeString(`${enumName}.values()[${value.asString()}]`)
             : this.makeMethodCall(enumName, 'fromValue', [value])
@@ -262,8 +245,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         return super.makeValueFromOption(value, destinationConvertor)
     }
     override makeIsTypeCall(value: string, decl: idl.IDLInterface): LanguageExpression {
-        return makeInterfaceTypeCheckerCall(value, decl.name,
-            decl.properties.map(it => it.name), new Set(), this)
+        return this.makeString(`${value} instanceof ${this.getNodeName(decl)}`)
     }
     makeEnumEntity(enumEntity: IDLEnum, options: { isExport: boolean, isDeclare?: boolean }): LanguageStatement {
         return new ArkTSEnumEntityStatement(enumEntity, {
@@ -344,36 +326,22 @@ export class ETSLanguageWriter extends TSLanguageWriter {
 
     override instanceOf(convertor: ArgConvertor, value: string, duplicateMembers?: Set<string>): LanguageExpression {
         if (convertor instanceof CustomTypeConvertor) {
-            return makeInterfaceTypeCheckerCall(value,
-                this.getNodeName(convertor.idlType),
-                [],
-                duplicateMembers!,
-                this)
+            return this.makeString(`${value} instanceof ${this.getNodeName(convertor.idlType)}`)
         }
         if (convertor instanceof InterfaceConvertor || convertor instanceof MaterializedClassConvertor) {
-            return makeInterfaceTypeCheckerCall(value,
-                this.getNodeName(convertor.idlType),
-                convertor.declaration.properties.filter(it => !it.isStatic).map(it => it.name),
-                duplicateMembers!,
-                this)
+            return this.makeString(`${value} instanceof ${this.getNodeName(convertor.idlType)}`)
         }
         if (convertor instanceof BufferConvertor) {
-            return makeInterfaceTypeCheckerCall(value,
-                this.getNodeName(convertor.idlType),
-                [],
-                new Set(),
-                this)
+            return this.makeString(`${value} instanceof ${this.getNodeName(convertor.idlType)}`)
         }
         if (convertor instanceof AggregateConvertor) {
-            return makeInterfaceTypeCheckerCall(value,
-                convertor.aliasName !== undefined ? convertor.aliasName : this.getNodeName(convertor.idlType),
-                convertor.members.map(it => it[0]), duplicateMembers!, this)
+            return this.makeString(`${value} instanceof ${convertor.aliasName !== undefined ? convertor.aliasName : this.getNodeName(convertor.idlType)}`)
         }
         if (convertor instanceof ArrayConvertor) {
-            return makeArrayTypeCheckCall(value, this.arrayConvertor.convert(convertor.idlType), this)
+            return this.makeMethodCall('Array', 'isArray', [this.makeString(value)])
         }
         if (idl.isEnum(this.resolver.toDeclaration(convertor.nativeType()))) {
-            return makeEnumTypeCheckerCall(value, this.getNodeName(convertor.idlType), this)
+            return this.makeString(`${value} instanceof ${this.getNodeName(convertor.idlType)}`)
         }
         return super.instanceOf(convertor, value, duplicateMembers)
     }
@@ -392,38 +360,4 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     makeCast(value: LanguageExpression, node: idl.IDLNode, options?: MakeCastOptions): LanguageExpression {
         return new TSCastExpression(value, `${this.getNodeName(node)}`, options?.unsafe ?? false)
     }
-
-    public static _isUseTypeChecker: boolean = true
-    public static get isUseTypeChecker(): boolean { return this._isUseTypeChecker }
-    public static useTypeChecker<T>(isUseTypeChecker: boolean, op: () => T): T {
-        const prevIsUse = this.isReferenceRelativeToNamespaces
-        this._isUseTypeChecker = isUseTypeChecker
-        const result = op()
-        this._isUseTypeChecker = prevIsUse
-        return result
-    }
-}
-
-function makeInterfaceTypeCheckerCall(
-    valueAccessor: string,
-    interfaceName: string,
-    allFields: string[],
-    duplicates: Set<string>,
-    writer: LanguageWriter,
-): LanguageExpression {
-    return writer.makeMethodCall(
-        "TypeChecker",
-        generateTypeCheckerName(interfaceName), [writer.makeString(valueAccessor),
-        ...allFields.map(it => {
-            return writer.makeString(duplicates.has(it) ? "true" : "false")
-        })
-    ])
-}
-
-export function makeEnumTypeCheckerCall(valueAccessor: string, enumName: string, writer: LanguageWriter): LanguageExpression {
-    return writer.makeMethodCall(
-        "TypeChecker",
-        generateTypeCheckerName(enumName),
-        [writer.makeString(valueAccessor)]
-    )
 }

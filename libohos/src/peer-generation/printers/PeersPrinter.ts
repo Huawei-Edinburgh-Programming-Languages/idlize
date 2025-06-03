@@ -133,9 +133,6 @@ class PeerFileVisitor {
         if (this.library.language == Language.TS) {
             imports.addFeature("unsafeCast", "@koalaui/common")
         }
-        if (this.library.language == Language.ARKTS) {
-            imports.addFeature("TypeChecker", "#components")
-        }
         imports.addFeatures(["MaterializedBase", "toPeerPtr", "wrapCallback"], "@koalaui/interop")
         // collectMaterializedImports(imports, this.library)
     }

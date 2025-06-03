@@ -47,7 +47,6 @@ import {
     collectDeclItself,
     createDeserializeAndCallPrinter,
     createGeneratedNativeModulePrinter,
-    printArkTSTypeChecker,
     createInterfacePrinter,
 } from '@idlizer/libohos';
 import { OhosInstall } from "./OhosInstall"
@@ -85,11 +84,6 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
     /////////////////////////////////////////
 
     // install managed part
-    const spreadIfLang = <T>(langs: Language[], ...data: T[]): T[] => {
-        if (langs.includes(peerLibrary.language))
-            return data
-        return []
-    }
     const installed = install(
         ohos.managedDir(),
         peerLibrary,
@@ -115,7 +109,6 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
                     )
                 ))
             }),
-            ...spreadIfLang([Language.ARKTS], printArkTSTypeChecker),
         ]
     )
 

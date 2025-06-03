@@ -314,8 +314,6 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
 
 class ArkTsComponentFileVisitor extends TSComponentFileVisitor {
     protected populateImports(imports: ImportsCollector) {
-        if (!this.options.isDeclared)
-            imports.addFeature('TypeChecker', '#components')
         if (this.library.useMemoM3) {
             imports.addFeatures(['memo', 'memo_stable'], '@koalaui/runtime/annotations')
             imports.addFeatures(['BuilderLambda'], '@koalaui/builderLambda')

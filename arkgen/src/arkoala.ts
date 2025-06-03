@@ -161,7 +161,6 @@ export function generateArkoalaFromIdl(config: {
     dumpSerialized: boolean,
     callLog: boolean,
     verbose: boolean,
-    useTypeChecker: boolean,
 },
     peerLibrary: PeerLibrary) {
     const arkoala = config.arkoalaDestination ?
@@ -194,7 +193,7 @@ export function generateArkoalaFromIdl(config: {
             return data
         return []
     }
-    const installedFiles = ETSLanguageWriter.useTypeChecker(config.useTypeChecker, () => install(
+    const installedFiles = install(
         arkoala.managedDir,
         peerLibrary,
         peerLibrary.language == Language.KOTLIN ?
@@ -220,16 +219,14 @@ export function generateArkoalaFromIdl(config: {
                 createGeneratedNativeModulePrinter(NativeModule.Generated),
             )
         ]
-    ))
+    )
 
     if (peerLibrary.language === Language.ARKTS) {
         install(
             arkoala.managedDir,
             peerLibrary,
             [
-                createGeneratedNativeModulePrinter(NativeModule.Generated),
-                printTSTypeChecker,
-                printArkTSTypeChecker,
+                createGeneratedNativeModulePrinter(NativeModule.Generated)
             ],
             { customLayout: new LayoutManager(new ArkTSComponentsLayout(peerLibrary)) }
         )
@@ -320,11 +317,11 @@ export function generateArkoalaFromIdl(config: {
         const arkuiNativeModuleFile = printPredefinedNativeModule(peerLibrary, NativeModule.ArkUI)
         printArkUILibrariesLoader(arkuiNativeModuleFile)
         writeIntegratedFile(
-            path.join(arkoala.managedDir, 'arkts', NativeModule.ArkUI.name + peerLibrary.language.extension),
+            path.join(arkoala.managedDir, 'peers', NativeModule.ArkUI.name + peerLibrary.language.extension),
             arkuiNativeModuleFile.printToString(),
         )
         writeIntegratedFile(
-            path.join(arkoala.managedDir, 'arkts', NativeModule.Test.name + peerLibrary.language.extension),
+            path.join(arkoala.managedDir, 'peers', NativeModule.Test.name + peerLibrary.language.extension),
             printPredefinedNativeModule(peerLibrary, NativeModule.Test).printToString(),
         )
         // writeIntegratedFile(
