@@ -53,8 +53,6 @@ import {
     makeCSerializers,
     createDeserializeAndCallPrinter,
     Printer,
-    printTSTypeChecker,
-    printArkTSTypeChecker,
     ScopeLibrarayLayout,
     createPeersPrinter,
     copyFile
