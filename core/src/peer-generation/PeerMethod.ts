@@ -26,6 +26,7 @@ import { flattenUnionType } from './unions'
 export class PeerMethod {
     private overloadIndex?: number
     constructor(
+        public decl: idl.IDLConstructor | idl.IDLMethod | idl.IDLCallable | idl.IDLProperty | undefined,
         public originalParentName: string,
         public argConvertors: ArgConvertor[],
         public returnType: IDLType,

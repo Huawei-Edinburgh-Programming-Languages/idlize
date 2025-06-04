@@ -42,6 +42,7 @@ function processMethodOrCallable(library: PeerLibrary, method: idl.IDLMethod | i
     )
     const realRetType = isThisRet ? idl.IDLVoidType : retType
     return new PeerMethod(
+        method,
         originalParentName,
         argConvertors,
         realRetType,
@@ -66,6 +67,7 @@ function processProperty(library: PeerLibrary, prop: idl.IDLProperty, peer: Peer
     const argConvertor = library.typeConvertor("value", prop.type, prop.isOptional)
     const signature = new NamedMethodSignature(idl.IDLThisType, [idl.maybeOptional(prop.type, prop.isOptional)], ["value"])
     return new PeerMethod(
+        prop,
         originalParentName,
         [argConvertor],
         idl.IDLVoidType,
@@ -131,7 +133,7 @@ function generatePeer(library: PeerLibrary, component: IdlComponentDeclaration):
         throw new Error(`Not found a file corresponding to attributes class: ${baseName} (${resolvedPath})`)
     }
 
-    const peer = new PeerClass(file, component.name, baseName)
+    const peer = new PeerClass(file, component.name, baseName, component.attributeDeclaration)
 
     if (component.interfaceDeclaration) {
         fillInterface(library, peer, component.interfaceDeclaration)

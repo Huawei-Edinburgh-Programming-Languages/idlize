@@ -36,6 +36,7 @@ export class MaterializedField {
 
 export class MaterializedMethod extends PeerMethod {
     constructor(
+        public decl: idl.IDLConstructor | idl.IDLMethod | undefined,
         originalParentName: string,
         public implementationParentName: string,
         argConvertors: ArgConvertor[],
@@ -44,7 +45,7 @@ export class MaterializedMethod extends PeerMethod {
         method: Method,
         public outArgConvertor?: ArgConvertor,
     ) {
-        super(originalParentName, argConvertors, returnType, isCallSignature, method, outArgConvertor)
+        super(decl, originalParentName, argConvertors, returnType, isCallSignature, method, outArgConvertor)
     }
 
     override get peerMethodName() {
@@ -117,6 +118,7 @@ export function copyMaterializedMethod(method: MaterializedMethod, overrides: {
     // add more if you need
 }) {
     const copied = new MaterializedMethod(
+        method.decl,
         method.originalParentName,
         method.implementationParentName,
         method.argConvertors,
@@ -173,6 +175,7 @@ export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedM
         return undefined
     }
     return new MaterializedMethod(
+            undefined,
             idl.getQualifiedName(clazz.decl, "namespace.name").split('.').join('_'),
             clazz.getImplementationName(),
             [],

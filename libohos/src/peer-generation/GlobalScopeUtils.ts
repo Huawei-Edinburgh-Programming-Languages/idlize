@@ -34,6 +34,7 @@ export function idlFreeMethodsGroupToLegacy(library: PeerLibrary, methods: IDLMe
 export function idlMethodToMaterializedMethod(library: PeerLibrary, method:IDLMethod): MaterializedMethod {
     const argConvertors = method.parameters.map(it => library.typeConvertor(it.name, it.type, it.isOptional))
     return new MaterializedMethod(
+        method,
         GlobalScopePeerName,
         GlobalScopePeerName,
         argConvertors,

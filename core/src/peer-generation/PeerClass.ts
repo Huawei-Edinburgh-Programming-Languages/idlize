@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IDLFile, IDLI32Type, IDLPointerType, IDLProperty } from "../idl"
+import { IDLFile, IDLI32Type, IDLInterface, IDLPointerType, IDLProperty } from "../idl"
 import { NumericConvertor, PointerConvertor } from "../LanguageWriters/ArgConvertors"
 import { PeerMethod } from "./PeerMethod"
 import { Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters/LanguageWriter"
@@ -30,6 +30,7 @@ export class PeerClass implements PeerClassBase {
         public readonly file: IDLFile,
         public readonly componentName: string,
         public readonly originalFilename: string,
+        public readonly decl: IDLInterface,
     ) { }
 
     generatedName(isCallSignature: boolean): string{
@@ -53,6 +54,7 @@ export class PeerClass implements PeerClassBase {
 
 export function createConstructPeerMethod(clazz: PeerClass): PeerMethod {
     return new PeerMethod(
+            undefined,
             clazz.componentName,
             [new NumericConvertor('id', IDLI32Type), new NumericConvertor('flags', IDLI32Type)],
             IDLPointerType,
