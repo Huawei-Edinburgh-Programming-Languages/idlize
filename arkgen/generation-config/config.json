@@ -276,7 +276,13 @@
             "NavPathStack"
         ]
     },
-    "hooks": {},
+    "hooks": {
+        "Checkbox": {
+            "contentModifier": {
+                "hookName": "hookCheckBoxContentModifier"
+            }
+        }
+    },
     "externalTypes": {},
     "externalPackages": [],
     "materialized": {
@@ -310,7 +316,12 @@
             ]
         }
     },
-    "patchMaterialized": {},
+    "patchMaterialized": {
+        "Button.contentModifier" : {
+            "TS": "console.log(`ContentModifier: ${value}`)",
+            "ARKTS": "console.log(`ContentModifier: ${value}`)"
+        }
+    },
     "CollapseOverloadsARKTS": true,
     "forceContext": [
         "LoadUserView",
