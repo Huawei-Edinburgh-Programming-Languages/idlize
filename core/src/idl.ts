@@ -879,7 +879,7 @@ export function createImport(clause: string[], name?: string, nodeInitializer?: 
 export function createEnum(
     name: string,
     elements: IDLEnumMember[],
-    nodeInitializer: IDLNodeInitializer,
+    nodeInitializer?: IDLNodeInitializer,
 ): IDLEnum {
     return {
         kind: IDLKind.Enum,

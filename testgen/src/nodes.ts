@@ -124,7 +124,25 @@ class Producer {
     // Callable
     // Constructor
     // Enum
+    generateEnum(): idl.IDLEnum {
+        const enumType = this.selectWeighted([
+            [5, idl.IDLNumberType],
+            [1, idl.IDLStringType],
+        ])
+        return idl.createEnum(
+            this.nameGenerator(idl.IDLKind.Enum),
+            this.nTimes(5, () => this.generateEnumMember(enumType))
+        )
+    }
     // EnumMember
+    generateEnumMember(type:idl.IDLPrimitiveType): idl.IDLEnumMember {
+        return idl.createEnumMember(
+            this.nameGenerator(idl.IDLKind.EnumMember),
+            idl.createEnum('fake$$$', []),
+            type,
+            undefined
+        )
+    }
     // Typedef
 
     private depthC() {
