@@ -402,8 +402,8 @@
 |*EmbeddedComponent*| *Component* | Ekaterina Stepanova | blocked IDL |  | |
 |`construct`| Function | Ekaterina Stepanova | in progress |  |  |
 |`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | in progress |  |  |
-|`onTerminated`| Function | Ekaterina Stepanova | in progress |  |  |
-|`onError`| Function |Skroba Gleb | testskipped |  |  |
+|`onTerminated`| Function | Ekaterina Stepanova | in progress | Kovalev Sergey  |  |
+|`onError`| Function |Skroba Gleb | testskipped | Kovalev Sergey |  |
 |*Flex*| *Component* | Kovalev Sergey | done | |  |
 |`construct`| Function | Kovalev Sergey | done | pass |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done | pass |  |
