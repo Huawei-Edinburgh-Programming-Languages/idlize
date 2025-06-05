@@ -829,10 +829,10 @@
 |`activateCircleStyle`| Function | Dmitry A Smirnov| done |  | |
 |`skipUnselectedPoint`| Function | Dmitry A Smirnov | done| | need merge to fb|
 |*PluginComponent*| *Component* | Evstigneev Roman | done |  | |
-|`construct`| Function |Evstigneev Roman | done |  |  |
+|`construct`| Function |Evstigneev Roman | done |  | UT by Dudkin Sergey |
 |`setPluginComponentOptions`| Function | Evstigneev Roman | done |  |  need merge to fb |
-|`onComplete`| Function | Evstigneev Roman | done | | |
-|`onError`| Function | Evstigneev Roman | done |  | |
+|`onComplete`| Function | Evstigneev Roman | done | | UT by Dudkin Sergey |
+|`onError`| Function | Evstigneev Roman | done |  | UT by Dudkin Sergey |
 |*Polygon*| *Component* |Politov Mikhail | done |  | |
 |`construct`| Function |Politov Mikhail | done | pass | |
 |`setPolygonOptions`| Function | Politov Mikhail | done | pass | |
@@ -1888,9 +1888,9 @@
 |`ctor`| Function |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`createImageLattice0`| Function |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`createImageLattice1`| Function |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
-|*DrawingCanvas*| *Class* | Dudkin Sergey | done |  | |
-|`ctor`| Function | Dudkin Sergey | done |  | |
-|`drawRect`| Function | Dudkin Sergey | done |  | |
+|*DrawingCanvas*| *Class* | Dudkin Sergey | done | out of scope | |
+|`ctor`| Function | Dudkin Sergey | done | out of scope | |
+|`drawRect`| Function | Dudkin Sergey | done | out of scope | |
 |*ColorMetrics*| *Class* | Lobah Mikhail| done| | |
 |`ctor`| Function | Lobah Mikhail| done| | |
 |`numeric`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -1906,8 +1906,8 @@
 |`ctor`| Function | Politov Mikhail | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA 
 |`initializeWebEngine`| Function | Politov Mikhail | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA 
 |`loadUrl`| Function | Politov Mikhail | done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA 
-|*GlobalScope_ohos_arkui_componentSnapshot*| *Class* | Dudkin Sergey| done | | |
-|`get`| Function | Dudkin Sergey | done | | |
+|*GlobalScope_ohos_arkui_componentSnapshot*| *Class* | Dudkin Sergey| done | out of scope | |
+|`get`| Function | Dudkin Sergey | done | out of scope | |
 |*GlobalScope_ohos_arkui_performanceMonitor*| *Class* | Vadim Voronov | done | | blocked IDL on FB |
 |`begin`| Function | Vadim Voronov | done | | |
 |`end`| Function | Vadim Voronov | done | | |
@@ -1933,14 +1933,14 @@
 |`radiusWidth`| Function | Samarin Sergey | done | | |
 |`radiusHeight`| Function | Samarin Sergey | done | | |
 |`radius`| Function | Samarin Sergey | done | | |
-|*CircleShape*| *Class* |Dudkin Sergey |done | | |
-|`ctor`| Function |Dudkin Sergey | done | | |
-|`offset`| Function |Dudkin Sergey | done | | |
-|`fill`| Function | Dudkin Sergey | done | | |
-|`position`| Function |Dudkin Sergey | done | | |
-|`width`| Function |Dudkin Sergey | done | | |
-|`height`| Function |Dudkin Sergey | done | | |
-|`size`| Function |Dudkin Sergey | done | | |
+|*CircleShape*| *Class* |Dudkin Sergey |done | out of scope | |
+|`ctor`| Function |Dudkin Sergey | done | out of scope| |
+|`offset`| Function |Dudkin Sergey | done | out of scope | |
+|`fill`| Function | Dudkin Sergey | done | out of scope | |
+|`position`| Function |Dudkin Sergey | done | out of scope | |
+|`width`| Function |Dudkin Sergey | done | out of scope | |
+|`height`| Function |Dudkin Sergey | done | out of scope | |
+|`size`| Function |Dudkin Sergey | done | out of scope | |
 |*EllipseShape*| *Class* | Erokhin Ilya | done | | |
 |`ctor`| Function | Erokhin Ilya | done | | |
 |`offset`| Function | Erokhin Ilya | done | | |
@@ -2617,7 +2617,7 @@
 |`setTextAlign`| Function  | Vadim Voronov | done |  |   |
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextBaseline`| Function  | Vadim Voronov | done |  |   |
-|*CanvasRenderingContext2D*| *Class* | Vadim Voronov | blocked IDL |  |  |
+|*CanvasRenderingContext2D*| *Class* | Vadim Voronov | done |  |  |
 |`ctor`| Function |Vadim Voronov| done |  |  |
 |`toDataURL`| Function |Vadim Voronov| done |  |  |
 |`startImageAnalyzer`| Function | Vadim Voronov | done |  | |
