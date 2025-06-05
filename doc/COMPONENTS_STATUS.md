@@ -2530,7 +2530,7 @@
 |`ctor`| Function |  Vadim Voronov | done | | |
 |`getAntialias`| Function | Vadim Voronov | done | | |
 |`setAntialias`| Function | Vadim Voronov | done | | |
-|*CanvasRenderer*| *Class*  | Vadim Voronov | blocked IDL |  | |
+|*CanvasRenderer*| *Class*  | Vadim Voronov | blocked IDL | Vadim Voronov | |
 |`ctor`| Function |Vadim Voronov | done |  | |
 |`drawImage0`| Function |Vadim Voronov | done |  | |
 |`drawImage1`| Function  | Vadim Voronov | done |  | |
@@ -2617,7 +2617,7 @@
 |`setTextAlign`| Function  | Vadim Voronov | done |  |   |
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextBaseline`| Function  | Vadim Voronov | done |  |   |
-|*CanvasRenderingContext2D*| *Class* | Vadim Voronov | done |  |  |
+|*CanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov |  |
 |`ctor`| Function |Vadim Voronov| done |  |  |
 |`toDataURL`| Function |Vadim Voronov| done |  |  |
 |`startImageAnalyzer`| Function | Vadim Voronov | done |  | |
