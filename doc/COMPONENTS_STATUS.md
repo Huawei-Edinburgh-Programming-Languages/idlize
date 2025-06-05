@@ -76,13 +76,10 @@
 |*CalendarPicker*| *Component* |Politov Mikhail | done |  |  |
 |`construct`| Function |Politov Mikhail | done |  |  |
 |`setCalendarPickerOptions`| Function |Politov Mikhail | testskipped | failed | UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB7RNZ, test failed OHOSUI-2244 |
-|`textStyle0`| Function |Politov Mikhail | done | pass |  |
-|`textStyle1`| Function |Politov Mikhail | done | pass |  |
-|`onChange0`| Function |Politov Mikhail | done | pass |  |
-|`onChange1`| Function | Politov Mikhail | done |  |  |
+|`textStyle`| Function |Politov Mikhail | done | pass |  |
+|`onChange`| Function |Politov Mikhail | done | pass |  |
 |`markToday`| Function | Samarin Sergey | done | pass | same as in arkui, false is not applied |
-|`edgeAlign0`| Function | Politov Mikhail | done | pass |  |
-|`edgeAlign1`| Function |Politov Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`edgeAlign`| Function |Politov Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*Canvas*| *Component* |Vadim Voronov | blocked AceEngine |  |
 |`construct`| Function |Vadim Voronov | done | pass |
 |`setCanvasOptions0`| Function |Vadim Voronov | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -92,20 +89,13 @@
 |*Checkbox*| *Component* | Andrey Khudenkikh | blocked IDL | Andrey Khudenkikh |  |
 |`construct`| Function |Samarin Sergey | done | pass | |
 |`setCheckboxOptions`| Function | Samarin Sergey | done | pass | |
-|`select0`| Function |Andrey Khudenkikh | done | pass |  |
-|`select1`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
-|`selectedColor0`| Function |Andrey Khudenkikh | done | pass |  |
-|`selectedColor1`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
-|`shape0`| Function |Andrey Khudenkikh | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`shape1`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
-|`unselectedColor0`| Function | Andrey Khudenkikh | done | pass |  |
-|`unselectedColor1`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
-|`mark0`| Function |Andrey Khudenkikh | done | pass |  |
-|`mark1`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
-|`onChange0`| Function | Andrey Khudenkikh | done | pass |  |
-|`onChange1`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
-|`contentModifier0`| Function | Andrey Khudenkikh | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
-|`contentModifier1`| Function | Andrey Khudenkikh | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
+|`select`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
+|`selectedColor`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
+|`shape`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
+|`unselectedColor`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
+|`mark`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
+|`onChange`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
+|`contentModifier`| Function | Andrey Khudenkikh | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*CheckboxGroup*| *Component* | Dudkin Sergey| done |  |  |
 |`construct`| Function |Dudkin Sergey| done | pass |  |
 |`setCheckboxGroupOptions`| Function | Dudkin Sergey| done | pass |  |
