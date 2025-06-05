@@ -710,28 +710,28 @@
 |*MediaCachedImage*| *Component* | Skroba Gleb | done |  | |
 |`construct`| Function | Skroba Gleb | done |  |  |
 |`setMediaCachedImageOptions`| Function | Skroba Gleb | done |  |   |
-|*Menu*|*Component*|Morozov Sergey| done | test blocked | demo blocked by MenuItem |
-|`construct`| Function |Morozov Sergey| done |  |  |
-|`setMenuOptions`| Function |Morozov Sergey| done |  |  |
-|`font`|Function|Morozov Sergey| done |  |  |
-|`fontColor`|Function|Morozov Sergey| done |  |  |
-|`radius`|Function|Morozov Sergey| done |  |  |
-|`menuItemDivider`|Function|Morozov Sergey| done |  | |
-|`menuItemGroupDivider`|Function|Morozov Sergey| done |  | |
-|`subMenuExpandingMode`|Function|Morozov Sergey| done |  |  |
-|*MenuItem*| *Component* |Morozov Sergey| blocked IDL | test blocked | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`construct`| Function |Kovalev Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
-|`setMenuItemOptions`| Function |Kovalev Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
-|`selected`| Function |Morozov Sergey| done |  |  |
-|`selectIcon`| Function |Morozov Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB |
-|`onChange`| Function |Morozov Sergey| done |  |  |
-|`contentFont`| Function |Morozov Sergey| done |  |  |
-|`contentFontColor`| Function |Morozov Sergey| done |  |  |
-|`labelFont`| Function |Morozov Sergey| done |  |  |
-|`labelFontColor`| Function |Morozov Sergey| done |  |  |
-|*MenuItemGroup*| *Component* |Morozov Sergey | done | test blocked | demo blocked by MenuItem |
-|`construct`| Function |Morozov Sergey | done |  |  |
-|`setMenuItemGroupOptions`| Function | Dmitry A Smirnov | done |  |   |
+|*Menu*|*Component*|Morozov Sergey| done |  |  |
+|`construct`| Function |Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setMenuOptions`| Function |Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`font`|Function|Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`fontColor`|Function|Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`radius`|Function|Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`menuItemDivider`|Function|Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
+|`menuItemGroupDivider`|Function|Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
+|`subMenuExpandingMode`|Function|Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|*MenuItem*| *Component* |Morozov Sergey| blocked IDL |  |  |
+|`construct`| Function |Kovalev Sergey| blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
+|`setMenuItemOptions`| Function |Kovalev Sergey| blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD + |
+|`selected`| Function |Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`selectIcon`| Function |Morozov Sergey| blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB |
+|`onChange`| Function |Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`contentFont`| Function |Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`contentFontColor`| Function |Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`labelFont`| Function |Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`labelFontColor`| Function |Morozov Sergey| done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|*MenuItemGroup*| *Component* |Morozov Sergey | done |  |  |
+|`construct`| Function |Morozov Sergey | done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setMenuItemGroupOptions`| Function | Dmitry A Smirnov | done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |*NavDestination*| *Component* | managed side | managed side | test blocked | OHOSUI-2171 |
 |`construct`| Function |Kovalev Sergey | done | test blocked | OHOSUI-2171 |
 |`setNavDestinationOptions`| Function |Kovalev Sergey | done | test blocked |  |
