@@ -1126,9 +1126,9 @@
 |`arrowModifier`| Function | managed side | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
 |`optionTextModifier`| Function | managed side | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
 |`selectedOptionTextModifier`| Function | managed side | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
-|`dividerStyle`| Function | Evstigneev Roman | in progress | | API is not present |
-|`avoidance`| Function | Evstigneev Roman | in progress | | API is not present |
-|`menuOutline`| Function | Evstigneev Roman | in progress | | API is not present |
+|`dividerStyle`| Function | Evstigneev Roman, Samarin Sergey | testskipped | | |
+|`avoidance`| Function | Evstigneev Roman, Samarin Sergey | testskipped | | |
+|`menuOutline`| Function | Evstigneev Roman, Samarin Sergey | testskipped | | |
 |`menuAlign0` | Function | Samarin Sergey | done | test blocked |  |
 |`menuAlign1` | Function | Dmitry A Smirnov | done | test blocked | API is present on Upstream only |
 |`_onChangeEvent_selected`| Function | Erokhin Ilya | done | test blocked | |
