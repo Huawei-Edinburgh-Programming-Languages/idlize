@@ -899,7 +899,7 @@
 |`guideLine`| Function | Dmitry A Smirnov | done | failed | is not called in demo |
 |`barrier0`| Function |Dmitry A Smirnov | done | failed | is not called in demo |
 |`barrier1`| Function | Dmitry A Smirnov | done | failed | is not called in demo |
-|*RichEditor*| *Component* | Dudkin Sergey| in progress | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue |
+|*RichEditor*| *Component* | Dudkin Sergey| in progress | Alexander Porodin | test is blocked due to ArkTS 1.2 Compilation Issue |
 |`construct`| Function | Dudkin Sergey| done |  |  |
 |`setRichEditorOptions`| Function | Dudkin Sergey| done |  |  |
 |`setRichEditorOptions1`| Function | Dudkin Sergey| done |  |  |
