@@ -493,7 +493,7 @@
 |*FormComponent*| *Component* | Vadim Voronov | blocked IDL |  |  |
 |`construct`| Function | Vadim Voronov |  | |  |
 |`setFormComponentOptions`| Function | Vadim Voronov | |  |  |
-|`size`| Function | Vadim Voronov | blocked AceEngine | test blocked AceEngine | implemented with tests, empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
+|`size`| Function | Vadim Voronov | in progress | test blocked AceEngine | empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`moduleName`| Function | Vadim Voronov | done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`dimension`| Function | Vadim Voronov | done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`allowUpdate`| Function | Vadim Voronov | done | test blocked | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -2004,19 +2004,19 @@
 |`setUnit`| Function | Samarin Sergey | done | | |
 |`getValue`| Function | Samarin Sergey | done | | |
 |`setValue`| Function | Samarin Sergey | done | | |
-|*ShapeMask*| *Class* | Vadim Voronov | done | | API is present on Upstream only  |
+|*ShapeMask*| *Class* | Vadim Voronov | done | | |
 |`ctor`| Function |  Vadim Voronov | done | |   |
-|`setRectShape`| Function | Vadim Voronov | done | | API is present on Upstream only  |
-|`setRoundRectShape`| Function | Vadim Voronov | done | | API is present on Upstream only  |
-|`setCircleShape`| Function | Vadim Voronov | done | | API is present on Upstream only  |
-|`setOvalShape`| Function | Vadim Voronov | done | | API is present on Upstream only  |
-|`setCommandPath`| Function | Vadim Voronov | done | | API is present on Upstream only |
-|`getFillColor`| Function | Vadim Voronov | done | | API is present on Upstream only |
-|`setFillColor`| Function | Vadim Voronov | done | | API is present on Upstream only |
-|`getStrokeColor`| Function | Vadim Voronov | done | | API is present on Upstream only |
-|`setStrokeColor`| Function | Vadim Voronov | done | | API is present on Upstream only |
-|`getStrokeWidth`| Function | Vadim Voronov | done | | API is present on Upstream only |
-|`setStrokeWidth`| Function | Vadim Voronov | done | | API is present on Upstream only |
+|`setRectShape`| Function | Vadim Voronov | done | | |
+|`setRoundRectShape`| Function | Vadim Voronov | done | | |
+|`setCircleShape`| Function | Vadim Voronov | done | | |
+|`setOvalShape`| Function | Vadim Voronov | done | | |
+|`setCommandPath`| Function | Vadim Voronov | done | | |
+|`getFillColor`| Function | Vadim Voronov | done | | |
+|`setFillColor`| Function | Vadim Voronov | done | | |
+|`getStrokeColor`| Function | Vadim Voronov | done | | |
+|`setStrokeColor`| Function | Vadim Voronov | done | | |
+|`getStrokeWidth`| Function | Vadim Voronov | done | | |
+|`setStrokeWidth`| Function | Vadim Voronov | done | | |
 |*ShapeClip*| *Class* | Andrey Khudenkikh | done | | |
 |`ctor`| Function | Andrey Khudenkikh | done | | |
 |`setRectShape`| Function | Andrey Khudenkikh | done | | |
@@ -2628,7 +2628,7 @@
 |`offOnDetach`| Function | Vadim Voronov | done |  |  |
 |`getHeight`| Function |Vadim Voronov| done |  | |
 |`getWidth`| Function |Vadim Voronov| done |  | |
-|`getCanvas`| Function |Vadim Voronov | blocked IDL | |  |
+|`getCanvas`| Function |Vadim Voronov | testskipped | |  |
 |*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | done | | |
 |`ctor`| Function |Vadim Voronov | done | | |
 |`toDataURL`| Function | Vadim Voronov | done | | |
