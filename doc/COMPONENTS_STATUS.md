@@ -697,13 +697,13 @@
 |`contentModifier`|Function| Samarin Sergey| blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*Marquee*| *Component* | Andrey Khudenkikh| done |  |  |
 |`construct`| Function |Andrey Khudenkikh| done |  |  |
-|`setMarqueeOptions`| Function | Andrey Khudenkikh| done |  |  |
-|`fontColor`| Function |Andrey Khudenkikh | done |  |  |
-|`fontSize`| Function |Andrey Khudenkikh | done |  |  |
-|`allowScale`| Function |Andrey Khudenkikh | done |  |  |
-|`fontWeight`| Function | Andrey Khudenkikh| done |  |  |
+|`setMarqueeOptions`| Function | Andrey Khudenkikh| done | fail | loop is not applied |
+|`fontColor`| Function |Andrey Khudenkikh | done | pass |  |
+|`fontSize`| Function |Andrey Khudenkikh | done | pass |  |
+|`allowScale`| Function |Andrey Khudenkikh | done | pass |  |
+|`fontWeight`| Function | Andrey Khudenkikh| done | failed | FontWeight.Bolder does not work |
 |`fontFamily`| Function | Andrey Khudenkikh| done |  |  |
-|`marqueeUpdateStrategy`| Function |Andrey Khudenkikh | done |  |  |
+|`marqueeUpdateStrategy`| Function |Andrey Khudenkikh | done | pass |  |
 |`onStart`| Function | Andrey Khudenkikh| done | failed | wrong timing for "on" events |
 |`onBounce`| Function |Andrey Khudenkikh | done | failed | wrong timing for "on" events |
 |`onFinish`| Function |Andrey Khudenkikh | done | failed | wrong timing for "on" events |
