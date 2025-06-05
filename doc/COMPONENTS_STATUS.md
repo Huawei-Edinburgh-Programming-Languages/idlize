@@ -829,10 +829,10 @@
 |`activateCircleStyle`| Function | Dmitry A Smirnov| done |  | |
 |`skipUnselectedPoint`| Function | Dmitry A Smirnov | done| | need merge to fb|
 |*PluginComponent*| *Component* | Evstigneev Roman | done |  | |
-|`construct`| Function |Evstigneev Roman | done |  |  |
+|`construct`| Function |Evstigneev Roman | done |  | UT by Dudkin Sergey |
 |`setPluginComponentOptions`| Function | Evstigneev Roman | done |  |  need merge to fb |
-|`onComplete`| Function | Evstigneev Roman | done | | |
-|`onError`| Function | Evstigneev Roman | done |  | |
+|`onComplete`| Function | Evstigneev Roman | done | | UT by Dudkin Sergey |
+|`onError`| Function | Evstigneev Roman | done |  | UT by Dudkin Sergey |
 |*Polygon*| *Component* |Politov Mikhail | done |  | |
 |`construct`| Function |Politov Mikhail | done | pass | |
 |`setPolygonOptions`| Function | Politov Mikhail | done | pass | |
