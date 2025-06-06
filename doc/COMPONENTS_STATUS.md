@@ -730,7 +730,7 @@
 |*NodeContainer*| *Component* | Skroba Gleb | blocked IDL |  | |
 |`construct`| Function | managed side | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |`setNodeContainerOptions`| Function |  managed side | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
-|*PasteButton*| *Component* | Samarin Sergey| done |  |  |
+|*PasteButton*| *Component* | Samarin Sergey| done | Samarin Sergey |  |
 |`construct`| Function | Samarin Sergey| done | pass |  |
 |`setPasteButtonOptions0`| Function | Samarin Sergey| done | not covered |  |
 |`setPasteButtonOptions1`| Function | Samarin Sergey| done | failed | If PasteButtonOptions.text is not specified, there should be no text description |
