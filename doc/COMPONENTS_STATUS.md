@@ -846,13 +846,13 @@
 |`backgroundColor`| Function |Evstigneev Roman | testskipped | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ (+) or https://gitee.com/openharmony/arkui_ace_engine/issues/IBJUC2 |
 |`contentOpacity`| Function |Evstigneev Roman | testskipped | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ (+) or https://gitee.com/openharmony/arkui_ace_engine/issues/IBJUC2 |
 |*Radio*| *Component* | Evstigneev Roman | done |  |  |
-|`construct`| Function |Evstigneev Roman | done |  |  |
-|`setRadioOptions`| Function | Dmitry A Smirnov | done |  | CustomBuilder |
-|`checked0`| Function | Evstigneev Roman | done |  |  |
+|`construct`| Function |Evstigneev Roman | done | pass |  |
+|`setRadioOptions`| Function | Dmitry A Smirnov | done | pass | CustomBuilder, test passed but differs with ArkUI behavior |
+|`checked0`| Function | Evstigneev Roman | done | pass |  |
 |`checked1`| Function | Evstigneev Roman | done |  |  |
-|`onChange0`| Function |  Evstigneev Roman | done |  |  |
+|`onChange0`| Function |  Evstigneev Roman | done | pass |  |
 |`onChange1`| Function | Evstigneev Roman | done |  |  |
-|`radioStyle`| Function | Evstigneev Roman | done |  |  |
+|`radioStyle`| Function | Evstigneev Roman | done | pass |  |
 |`contentModifier0`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`contentModifier1`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*Rating*| *Component* | Lobah Mikhail| done |  |  |
@@ -889,25 +889,25 @@
 |`guideLine`| Function | Dmitry A Smirnov | done | failed | is not called in demo |
 |`barrier0`| Function |Dmitry A Smirnov | done | failed | is not called in demo |
 |`barrier1`| Function | Dmitry A Smirnov | done | failed | is not called in demo |
-|*RichEditor*| *Component* | Dudkin Sergey| in progress | Alexander Porodin | test is blocked due to ArkTS 1.2 Compilation Issue |
-|`construct`| Function | Dudkin Sergey| done |  |  |
-|`setRichEditorOptions`| Function | Dudkin Sergey| done |  |  |
+|*RichEditor*| *Component* | Dudkin Sergey| in progress | Alexander Porodin |  |
+|`construct`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`setRichEditorOptions`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
 |`setRichEditorOptions1`| Function | Dudkin Sergey| done |  |  |
-|`onReady`| Function | Dudkin Sergey| done |  |  |
-|`onSelect`| Function | Dudkin Sergey| done |  |   |
-|`onSelectionChange`| Function | Dudkin Sergey| done |  |  |
-|`aboutToIMEInput`| Function | Dudkin Sergey| done |  |  |
-|`onIMEInputComplete`| Function | Dudkin Sergey | testskipped |  | reopened after refactoring methods |
-|`onDidIMEInput`| Function | Dudkin Sergey| done |  |  |
-|`aboutToDelete`| Function | Dudkin Sergey| done |  |  |
-|`onDeleteComplete`| Function | Dudkin Sergey| done |  |  |
-|`copyOptions`| Function | Dudkin Sergey| done |  |  |
-|`onPaste`| Function | Dudkin Sergey| done |  |  |
-|`enableDataDetector`| Function | Dudkin Sergey| done |  |  |
-|`enablePreviewText`| Function | Dudkin Sergey| done |  |  |
-|`dataDetectorConfig`| Function | Dudkin Sergey| done |  |  |
-|`caretColor`| Function | Dudkin Sergey| done |  |  |
-|`selectedBackgroundColor`| Function | Dudkin Sergey| done |  |  |
+|`onReady`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`onSelect`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import  |
+|`onSelectionChange`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`aboutToIMEInput`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`onIMEInputComplete`| Function | Dudkin Sergey | testskipped | test blocked | reopened after refactoring methods, Compilation issue on RichEditor import |
+|`onDidIMEInput`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`aboutToDelete`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`onDeleteComplete`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`copyOptions`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`onPaste`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`enableDataDetector`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`enablePreviewText`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`dataDetectorConfig`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`caretColor`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
+|`selectedBackgroundColor`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
 |`onEditingChange`| Function | Dudkin Sergey| done |  |  |
 |`enterKeyType`| Function | Dudkin Sergey| done |  |  |
 |`onSubmit`| Function | Dudkin Sergey | done |  |  |
