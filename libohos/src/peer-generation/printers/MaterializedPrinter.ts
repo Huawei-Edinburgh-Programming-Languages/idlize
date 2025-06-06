@@ -436,17 +436,14 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
         ], '@koalaui/interop')
         this.collector.addFeatures(['MaterializedBase'], '@koalaui/interop')
         this.collector.addFeatures(['unsafeCast'], '@koalaui/common')
-        collectDeclItself(this.library, idl.createReferenceType("Serializer"), this.collector)
         collectDeclItself(this.library, idl.createReferenceType("CallbackKind"), this.collector)
         this.collector.addFeatures(['int32', 'int64', 'float32'], '@koalaui/common')
         this.collector.addFeatures(['NativeBuffer'], '@koalaui/interop')
         if (this.library.language === Language.ARKTS) {
             this.collector.addFeatures(['NativeBuffer'], '@koalaui/interop')
-            collectDeclItself(this.library, idl.createReferenceType("Deserializer"), this.collector)
         }
         if (this.library.language === Language.TS) {
             this.collector.addFeature('isInstanceOf', '@koalaui/interop')
-            collectDeclItself(this.library, idl.createReferenceType("Deserializer"), this.collector)
         }
 
         const hookMethods = generatorConfiguration().hooks.get(this.clazz.className)

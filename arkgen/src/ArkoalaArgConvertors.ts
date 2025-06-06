@@ -39,9 +39,9 @@ export class ArkoalaInterfaceConvertor extends InterfaceConvertor {
     }
 }
 
-export class PaddingConvertor extends AggregateConvertor {
+export class PaddingConvertor extends InterfaceConvertor {
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return writer.makeIsTypeCall(value, this.decl)
+        return writer.makeIsTypeCall(value, this.declaration)
     }
 }
 

@@ -66,7 +66,7 @@ export class ArkoalaPeerLibrary extends PeerLibrary {
     override declarationConvertor(param: string, type: idl.IDLReferenceType, declaration: idl.IDLEntry | undefined): ArgConvertor {
         switch (type.name) {
             case `Padding`:
-                return new PaddingConvertor(this, param, type, declaration as idl.IDLInterface)
+                return new PaddingConvertor(this, declaration!.name, param, declaration as idl.IDLInterface)
             case `AnimationRange`:
                 return new CustomTypeConvertor(param, "AnimationRange", false, "AnimationRange<number>")
         }
@@ -76,7 +76,7 @@ export class ArkoalaPeerLibrary extends PeerLibrary {
 
             if (idl.isInterface(declaration)) {
                 if (isMaterialized(declaration, this)) {
-                    return new ArkoalaMaterializedClassConvertor(param, declaration)
+                    return new ArkoalaMaterializedClassConvertor(this, param, declaration)
                 }
                 if (!isBuilderClass(declaration) &&
                     declaration.subkind === idl.IDLInterfaceSubkind.Interface)
