@@ -826,11 +826,11 @@
 |*Polygon*| *Component* |Politov Mikhail | done |  | |
 |`construct`| Function |Politov Mikhail | done | pass | |
 |`setPolygonOptions`| Function | Politov Mikhail | done | pass | |
-|`points`| Function | Politov Mikhail | done | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`points`| Function | Politov Mikhail | done | pass | |
 |*Polyline*| *Component* | Politov Mikhail | done |  |  |
 |`construct`| Function |Politov Mikhail | done | pass |  |
 |`setPolylineOptions`| Function | Politov Mikhail | done | pass |  |
-|`points`| Function | Politov Mikhail | done | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
+|`points`| Function | Politov Mikhail | done | pass |  |
 |*Progress*| *Component* | Erokhin Ilya | blocked IDL |  | |
 |`construct`| Function | Erokhin Ilya | done | pass | deprecated for `style` property |
 |`setProgressOptions`| Function | Erokhin Ilya | done | test blocked | deprecated for `style` property, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
