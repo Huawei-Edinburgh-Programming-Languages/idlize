@@ -399,7 +399,7 @@
 |`scrollBar`| Function | Samarin Sergey | done | pass |  |
 |`scrollBarColor`| Function | Samarin Sergey | done | pass |  |
 |`scrollBarWidth`| Function | Samarin Sergey | done | pass |  |
-|`nestedScroll`| Function | Samarin Sergey | done |  |  |
+|`nestedScroll`| Function | Samarin Sergey | done |  | pass |
 |`enableScrollInteraction`| Function | Samarin Sergey | done | pass |  |
 |`friction`| Function | Samarin Sergey | done | pass |  |
 |`onReachStart`| Function | Samarin Sergey | done | pass | |
@@ -410,7 +410,7 @@
 |`clipContent`| Function | Evstigneev Roman | done |  |  |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | done | test blocked | test blocked since wearable feature |
 |`backToTop`| Function | Kovalev Sergey | done |  | |
-|`edgeEffect`| Function | Samarin Sergey | done |  | |
+|`edgeEffect`| Function | Samarin Sergey | done | pass | |
 |`fadingEdge`| Function | Samarin Sergey | done | test blocked | |
 |*ContainerSpan*| *Component* | Tuzhilkin Ivan| done | pass |  |
 |`construct`| Function | Tuzhilkin Ivan| done | pass |  |
