@@ -254,7 +254,7 @@
 |`key`| Function | Lobah Mikhail | done | pass | |
 |`id`| Function | Erokhin Ilya | done | pass |  |
 |`geometryTransition0`| Function | Lobah Mikhail | testskipped | test blocked | no method found test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG |
-|`geometryTransition1`| Function | Lobah Mikhail | testskipped | test blocked | no method found test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
+|`geometryTransition1`| Function | Lobah Mikhail | testskipped | failed | OHOSUI-2375, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
 |`stateStyles`| Function | managed side | managed side | test blocked | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`restoreId`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`sphericalEffect`| Function | Lobah Mikhail | done | pass | |
@@ -307,7 +307,7 @@
 |`linearGradientBlur`| Function |Lobah Mikhail | done | pass | |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
 |`backdropBlur`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`sharedTransition`|Function|Skroba Gleb | done |  |  |
+|`sharedTransition`|Function|Skroba Gleb | done | test blocked | navigation between pages does not work to check transition |
 |`chainMode`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`overlay`| Function | Lobah Mikhail | blocked IDL | pass | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the 'Ark_ComponentContent' class without stubs is required.|
