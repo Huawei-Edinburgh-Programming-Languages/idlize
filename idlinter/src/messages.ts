@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { MessageSeverity, DiagnosticMessage, Location, DiagnosticResult, DiagnosticException } from "./diagnostictypes"
+import { MessageSeverity, DiagnosticMessage, Location, DiagnosticResults, DiagnosticException } from "./diagnostictypes"
 
 /**
  * Index for DiagnosticMessageKind by code
@@ -78,7 +78,7 @@ export class DiagnosticMessageKind {
         return msg
     }
 
-    pushDiagnosticMessage(diagnosticResult: DiagnosticResult, locations: Location[], mainMessage?: string, additionalMessage?: string): void {
+    pushDiagnosticMessage(diagnosticResult: DiagnosticResults, locations: Location[], mainMessage?: string, additionalMessage?: string): void {
         diagnosticResult.push(this.generateDiagnosticMessage(locations, mainMessage, additionalMessage))
     }
 
@@ -95,7 +95,10 @@ export let ProcessingError = new DiagnosticMessageKind("fatal", 102, "Processing
 
 export let UnresolvedReference = new DiagnosticMessageKind("error", 200, "Unresolved reference")
 export let DuplicateIdentifier = new DiagnosticMessageKind("error", 201, "Duplicate identifier", undefined, "Duplicate of")
-export let InconsistentEnum = new DiagnosticMessageKind("error", 202, "Enum includes both string and number values", undefined, "Incompatible with")
+export let InconsistentEnum = new DiagnosticMessageKind("error", 202, "Enum includes both string and number values", undefined, "Conflicting value")
+
+export let WrongAttributeName = new DiagnosticMessageKind("error", 301, "Wrong attribute name")
+export let WrongAttributePlacement = new DiagnosticMessageKind("error", 302, "Wrong attribute placement")
 
 // export let PackageNotFound = new DiagnosticMessageKind("error", 105, "Package not found")
 // export let IdentifierNotFound = new DiagnosticMessageKind("error", 106, "Identifier not found")
