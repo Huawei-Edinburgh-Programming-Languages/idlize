@@ -39,7 +39,7 @@ interface FrameNode {
     // ([TypeArguments="LengthMetrics"] SizeT) getUserConfigSize();
     String getId();
     number getUniqueId();
-    // String getNodeType();
+    String getNodeType();
     number getOpacity();
     boolean isVisible();
     boolean isClipToFrame();
@@ -76,4 +76,5 @@ interface FrameNode {
     void reuse();
     void recycle();
     static pointer getFrameNodePtr(FrameNode node);
+    static FrameNode createTypedFrameNode(String type);
 };
