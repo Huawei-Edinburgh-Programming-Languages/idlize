@@ -732,8 +732,8 @@
 |`setNodeContainerOptions`| Function |  managed side | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |*PasteButton*| *Component* | Samarin Sergey| done | Samarin Sergey |  |
 |`construct`| Function | Samarin Sergey| done | pass |  |
-|`setPasteButtonOptions0`| Function | Samarin Sergey| done | not covered |  |
-|`setPasteButtonOptions1`| Function | Samarin Sergey| done | failed | If PasteButtonOptions.text is not specified, there should be no text description |
+|`setPasteButtonOptions0`| Function | Samarin Sergey| done | not covered | Compilation issue |
+|`setPasteButtonOptions1`| Function | Samarin Sergey| done | pass |  |
 |`onClick`| Function | Samarin Sergey | testskipped | not covered |  |
 |*Path*| *Component* | Skroba Gleb | done |  |  |
 |`construct`| Function |Skroba Gleb | done |  |  |
