@@ -679,7 +679,7 @@
 |`setListItemGroupOptions`|Function|Dmitry A Smirnov | done |  |   |
 |`divider`|Function|Morozov Sergey| done |  |  |
 |`childrenMainSize`|Function|Morozov Sergey| done |  |  |
-|*LoadingProgress*|*Component*| Samarin Sergey | done |  |  |
+|*LoadingProgress*|*Component*| Samarin Sergey | done | Samarin Sergey |  |
 |`construct`| Function | Samarin Sergey | done | pass |  |
 |`setLoadingProgressOptions`|Function| Samarin Sergey | done | pass |  |
 |`color`|Function| Samarin Sergey | done | pass |  |
