@@ -582,16 +582,16 @@
 |`syncLoad`| Function | Evstigneev Roman | done | pass | |
 |`copyOption`| Function | Evstigneev Roman | testskipped | pass |  tests blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IBEEFF (+) |
 |`draggable`| Function | Evstigneev Roman | done | pass |   |
-|`pointLight`| Function | Evstigneev Roman | done |  |    |
+|`pointLight`| Function | Evstigneev Roman | done | Pavelyev Ivan |    |
 |`edgeAntialiasing`| Function | Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onComplete`| Function | Evstigneev Roman | done |  | |
-|`onError`| Function | Evstigneev Roman | done |  | |
-|`onFinish`| Function | Evstigneev Roman | done |  | |
+|`onComplete`| Function | Evstigneev Roman | done | Pavelyev Ivan | |
+|`onError`| Function | Evstigneev Roman | done | Pavelyev Ivan | |
+|`onFinish`| Function | Evstigneev Roman | done | Pavelyev Ivan | |
 |`enableAnalyzer`| Function | Evstigneev Roman | done | pass | |
 |`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine | test blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (+) |
 |`resizable`| Function | Evstigneev Roman | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`privacySensitive`| Function | Evstigneev Roman | done | pass | |
-|`orientation`| Function | Samarin Sergey | done |  | |
+|`orientation`| Function | Samarin Sergey | done | Pavelyev Ivan | |
 |*ImageAnimator*| *Component* | Pavelyev Ivan | done |  | |
 |`construct`| Function | Pavelyev Ivan | done | pass | |
 |`setImageAnimatorOptions`| Function | Pavelyev Ivan | done | pass | |
