@@ -1769,7 +1769,7 @@
 |`setHeight`| Function | | | | |
 |`getWidth`| Function | Morozov Sergey | done | | |
 |`setWidth`| Function | | | | |
-|*RenderingContextSettings*| *Class* | Vadim Voronov | done | | |
+|*RenderingContextSettings*| *Class* | Vadim Voronov | done | Vadim Voronov | |
 |`ctor`| Function |  Vadim Voronov | done | | |
 |`getAntialias`| Function | Vadim Voronov | done | | |
 |`setAntialias`| Function | Vadim Voronov | done | | |
@@ -1861,21 +1861,21 @@
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextBaseline`| Function  | Vadim Voronov | done |  |   |
 |*CanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov |  |
-|`ctor`| Function |Vadim Voronov| done |  |  |
-|`toDataURL`| Function |Vadim Voronov| done |  |  |
-|`startImageAnalyzer`| Function | Vadim Voronov | done |  | |
-|`stopImageAnalyzer`| Function | Vadim Voronov| done |  | |
-|`onOnAttach`| Function | Vadim Voronov | done |  |  |
-|`offOnAttach`| Function | Vadim Voronov | done |  |  |
-|`onOnDetach`| Function | Vadim Voronov | done |  | |
-|`offOnDetach`| Function | Vadim Voronov | done |  |  |
-|`getHeight`| Function |Vadim Voronov| done |  | |
-|`setHeight`| Function | | | | |
-|`getWidth`| Function |Vadim Voronov| done |  | |
-|`setWidth`| Function | | | | |
+|`ctor`| Function |Vadim Voronov| done | passed |  |
+|`toDataURL`| Function |Vadim Voronov| done | failed |  |
+|`startImageAnalyzer`| Function | Vadim Voronov | done | failed  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`stopImageAnalyzer`| Function | Vadim Voronov| done | failed | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
+|`onOnAttach`| Function | Vadim Voronov | done | failed |  |
+|`offOnAttach`| Function | Vadim Voronov | done | failed |  |
+|`onOnDetach`| Function | Vadim Voronov | done | failed | |
+|`offOnDetach`| Function | Vadim Voronov | done | failed |  |
+|`getHeight`| Function |Vadim Voronov| done | pass | |
+|`setHeight`| Function |Vadim Voronov | in progress | | |
+|`getWidth`| Function |Vadim Voronov| done | pass | |
+|`setWidth`| Function |Vadim Voronov | in progress | pass | |
 |`getCanvas`| Function |Vadim Voronov | testskipped | |  |
-|`setCanvas`| Function | | | | |
-|*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | done | | |
+|`setCanvas`| Function |Vadim Voronov | in progress | | |
+|*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov | |
 |`ctor`| Function |Vadim Voronov | done | | |
 |`toDataURL`| Function | Vadim Voronov | done | | |
 |`transferToImageBitmap`| Function | Vadim Voronov | done | |    |
@@ -1887,7 +1887,7 @@
 |`setHeight`| Function | Vadim Voronov | testskipped | | |
 |`getWidth`| Function | Vadim Voronov | testskipped| | |
 |`setWidth`| Function | Vadim Voronov | testskipped | | |
-|*DrawingRenderingContext*| *Class* | Vadim Voronov | done |  | |
+|*DrawingRenderingContext*| *Class* | Vadim Voronov | done | Vadim Voronov | |
 |`ctor`| Function | Vadim Voronov | done |  | |
 |`invalidate`| Function | Vadim Voronov | done |  | |
 |`getSize`| Function | Vadim Voronov | done |  | |
