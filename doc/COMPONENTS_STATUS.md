@@ -1861,7 +1861,7 @@
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextBaseline`| Function  | Vadim Voronov | done |  |   |
 |*CanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov |  |
-|`ctor`| Function |Vadim Voronov| done | passed |  |
+|`ctor`| Function |Vadim Voronov| done | pass |  |
 |`toDataURL`| Function |Vadim Voronov| done | failed |  |
 |`startImageAnalyzer`| Function | Vadim Voronov | done | failed  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`stopImageAnalyzer`| Function | Vadim Voronov| done | failed | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
