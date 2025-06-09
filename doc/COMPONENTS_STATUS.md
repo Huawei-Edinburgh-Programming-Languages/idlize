@@ -1869,10 +1869,10 @@
 |`offOnAttach`| Function | Vadim Voronov | done | failed |  |
 |`onOnDetach`| Function | Vadim Voronov | done | failed | |
 |`offOnDetach`| Function | Vadim Voronov | done | failed |  |
-|`getHeight`| Function |Vadim Voronov| done | pass | https://gitee.com/nikolay-igotti/idlize/issues/ICDSLH|
-|`setHeight`| Function |Vadim Voronov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/ICDSLH|
-|`getWidth`| Function |Vadim Voronov| done | pass | https://gitee.com/nikolay-igotti/idlize/issues/ICDSLH|
-|`setWidth`| Function |Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/ICDSLH|
+|`getHeight`| Function |Vadim Voronov| done | pass | |
+|`setHeight`| Function |Vadim Voronov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/ICDSL|
+|`getWidth`| Function |Vadim Voronov| done | pass | |
+|`setWidth`| Function |Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/ICDSL|
 |`getCanvas`| Function |Vadim Voronov | testskipped | |  |
 |`setCanvas`| Function |Vadim Voronov | in progress | | |
 |*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov | |
