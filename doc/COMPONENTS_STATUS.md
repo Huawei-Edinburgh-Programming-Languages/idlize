@@ -1862,13 +1862,13 @@
 |`setTextBaseline`| Function  | Vadim Voronov | done |  |   |
 |*CanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov |  |
 |`ctor`| Function |Vadim Voronov| in progress | pass | todo in API v.129 |
-|`toDataURL`| Function |Vadim Voronov| done | failed |  |
+|`toDataURL`| Function |Vadim Voronov| done | failed | bug hos2393 |
 |`startImageAnalyzer`| Function | Vadim Voronov | done | failed  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`stopImageAnalyzer`| Function | Vadim Voronov| done | failed | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
-|`onOnAttach`| Function | Vadim Voronov | done | failed |  |
-|`offOnAttach`| Function | Vadim Voronov | done | failed |  |
-|`onOnDetach`| Function | Vadim Voronov | done | failed | |
-|`offOnDetach`| Function | Vadim Voronov | done | failed |  |
+|`onOnAttach`| Function | Vadim Voronov | done | failed | bug hos2391 |
+|`offOnAttach`| Function | Vadim Voronov | done | failed | bug hos2391 |
+|`onOnDetach`| Function | Vadim Voronov | done | failed | bug hos2391 |
+|`offOnDetach`| Function | Vadim Voronov | done | failed | bug hos2391 |
 |`getHeight`| Function |Vadim Voronov| done | pass | |
 |`setHeight`| Function |Vadim Voronov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/ICDSL|
 |`getWidth`| Function |Vadim Voronov| done | pass | |
