@@ -419,9 +419,9 @@
 |`onHoverStatusChange`| Function | Politov Mikhail | done | pass |  |
 |`enableAnimation`| Function | Politov Mikhail | done | test blocked | no screen rotation supported by dayu200 |
 |`autoHalfFold`| Function | Politov Mikhail | done | test blocked | no screen rotation supported by dayu200 |
-|*FormComponent*| *Component* | Vadim Voronov | blocked IDL |  |  |
+|*FormComponent*| *Component* | Vadim Voronov | blocked IDL |  | whole component out of scope, no need to develop |
 |`construct`| Function | Vadim Voronov | done | out of scope |  |
-|`setFormComponentOptions`| Function | Vadim Voronov | | out of scope |  |
+|`setFormComponentOptions`| Function | Vadim Voronov |skip | out of scope |  |
 |`size`| Function | Vadim Voronov | in progress | out of scope | empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`moduleName`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`dimension`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -429,10 +429,10 @@
 |`visibility`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onAcquired`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onError`| Function | Vadim Voronov | done | out of scope | on FB testskipped, test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onRouter`| Function | Vadim Voronov | blocked IDL | out of scope | https://gitee.com/nikolay-igotti/idlize/issues/ICAZXO |
+|`onRouter`| Function | Vadim Voronov | skip | out of scope | https://gitee.com/nikolay-igotti/idlize/issues/ICAZXO |
 |`onUninstall`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onLoad`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|*FormLink*| *Component* | Dmitry A Smirnov| done | out of scope |  |
+|*FormLink*| *Component* | Dmitry A Smirnov| done | out of scope | whole component out of scope, no need to develop |
 |`construct`| Function |Dmitry A Smirnov| done | out of scope |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done | out of scope |  |
 |*Gauge*| *Component* | Maksimov Nikita | blocked IDL |  |  |
@@ -730,7 +730,7 @@
 |*NodeContainer*| *Component* | Skroba Gleb | blocked IDL |  | |
 |`construct`| Function | managed side | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |`setNodeContainerOptions`| Function |  managed side | managed side | test blocked | Compilation error: Cannot find type 'BuilderNode' |
-|*PasteButton*| *Component* | Samarin Sergey| done | Samarin Sergey |  |
+|*PasteButton*| *Component* | Samarin Sergey| done | Samarin Sergey | whole component out of scope, no need to develop  |
 |`construct`| Function | Samarin Sergey| done | pass |  |
 |`setPasteButtonOptions0`| Function | Samarin Sergey| done | not covered | Compilation issue |
 |`setPasteButtonOptions1`| Function | Samarin Sergey| done | pass |  |
