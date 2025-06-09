@@ -339,7 +339,7 @@
 |`antiAlias`| Function | Evstigneev Roman | done | pass |  |
 |`strokeDashArray`| Function | Erokhin Ilya| done| failed | to submit internal issue |
 |*ScrollableCommonMethod*| *Component* | Samarin Sergey | blocked IDL |  |  |
-|`construct`| Function |Samarin Sergey | done |  | empty implementation, functional is supported by managed side |
+|`construct`| Function |Samarin Sergey | done | pass | empty implementation, functional is supported by managed side |
 |`scrollBar`| Function | Samarin Sergey | done | pass |  |
 |`scrollBarColor`| Function | Samarin Sergey | done | pass |  |
 |`scrollBarWidth`| Function | Samarin Sergey | done | pass |  |
