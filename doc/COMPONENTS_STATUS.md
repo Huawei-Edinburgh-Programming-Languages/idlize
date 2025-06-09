@@ -1861,7 +1861,7 @@
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextBaseline`| Function  | Vadim Voronov | done |  |   |
 |*CanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov |  |
-|`ctor`| Function |Vadim Voronov| in progress | pass |  |
+|`ctor`| Function |Vadim Voronov| in progress | pass | todo in API v.129 |
 |`toDataURL`| Function |Vadim Voronov| done | failed |  |
 |`startImageAnalyzer`| Function | Vadim Voronov | done | failed  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`stopImageAnalyzer`| Function | Vadim Voronov| done | failed | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
@@ -1874,7 +1874,7 @@
 |`getWidth`| Function |Vadim Voronov| done | pass | |
 |`setWidth`| Function |Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/ICDSL|
 |`getCanvas`| Function |Vadim Voronov | testskipped | |  |
-|`setCanvas`| Function |Vadim Voronov | in progress | | |
+|`setCanvas`| Function |Vadim Voronov | in progress | | todo in API v.129 |
 |*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov | |
 |`ctor`| Function |Vadim Voronov | done | | |
 |`toDataURL`| Function | Vadim Voronov | done | | |
