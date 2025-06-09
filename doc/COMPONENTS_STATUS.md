@@ -1861,7 +1861,7 @@
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextBaseline`| Function  | Vadim Voronov | done |  |   |
 |*CanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov |  |
-|`ctor`| Function |Vadim Voronov| done | pass |  |
+|`ctor`| Function |Vadim Voronov| in progress | pass |  |
 |`toDataURL`| Function |Vadim Voronov| done | failed |  |
 |`startImageAnalyzer`| Function | Vadim Voronov | done | failed  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`stopImageAnalyzer`| Function | Vadim Voronov| done | failed | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
@@ -1870,9 +1870,9 @@
 |`onOnDetach`| Function | Vadim Voronov | done | failed | |
 |`offOnDetach`| Function | Vadim Voronov | done | failed |  |
 |`getHeight`| Function |Vadim Voronov| done | pass | https://gitee.com/nikolay-igotti/idlize/issues/ICDSLH|
-|`setHeight`| Function |Vadim Voronov | in progress | | https://gitee.com/nikolay-igotti/idlize/issues/ICDSLH|
+|`setHeight`| Function |Vadim Voronov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/ICDSLH|
 |`getWidth`| Function |Vadim Voronov| done | pass | https://gitee.com/nikolay-igotti/idlize/issues/ICDSLH|
-|`setWidth`| Function |Vadim Voronov | in progress |  | https://gitee.com/nikolay-igotti/idlize/issues/ICDSLH|
+|`setWidth`| Function |Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/ICDSLH|
 |`getCanvas`| Function |Vadim Voronov | testskipped | |  |
 |`setCanvas`| Function |Vadim Voronov | in progress | | |
 |*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov | |
