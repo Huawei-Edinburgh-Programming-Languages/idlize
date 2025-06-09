@@ -120,7 +120,7 @@
 |`construct`| Function |Dmitry A Smirnov| done | pass | |
 |`setColumnSplitOptions`| Function | Dmitry A Smirnov| done | pass |  |
 |`resizeable`| Function | Dmitry A Smirnov| done | pass |  |
-|`divider`| Function | Dmitry A Smirnov| done | blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`divider`| Function | Dmitry A Smirnov| done | test blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*CommonMethod*|*Component*|Skroba Gleb,Erokhin Ilya | in progress |  |  |
 |`construct`| Function |Skroba Gleb |done |  | empty implementation, functional is supported by managed side |
 |`width`| Function |Roman Sedaikin | done | pass | |
@@ -422,7 +422,7 @@
 |*FormComponent*| *Component* | Vadim Voronov | blocked IDL |  |  |
 |`construct`| Function | Vadim Voronov | done | out of scope |  |
 |`setFormComponentOptions`| Function | Vadim Voronov | | out of scope |  |
-|`size`| Function | Vadim Voronov | in progress | out of scope AceEngine | empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
+|`size`| Function | Vadim Voronov | in progress | out of scope | empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`moduleName`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`dimension`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`allowUpdate`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -581,7 +581,7 @@
 |`listDirection`|Function|Morozov Sergey| done |  |  |
 |`contentStartOffset`|Function|Morozov Sergey| done |  |  |
 |`contentEndOffset`|Function|Morozov Sergey| done |  |  |
-|`divider`|Function|Morozov Sergey| done | test test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`divider`|Function|Morozov Sergey| done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`multiSelectable`|Function|Morozov Sergey| done |  |  |
 |`cachedCount0`|Function|Morozov Sergey| done |  |  |
 |`cachedCount1`| Function |Morozov Sergey| done |  |  |
