@@ -526,7 +526,7 @@
 |`onError`| Function | Evstigneev Roman | done | Pavelyev Ivan | |
 |`onFinish`| Function | Evstigneev Roman | done | Pavelyev Ivan | |
 |`enableAnalyzer`| Function | Evstigneev Roman | done | pass | |
-|`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine | test blocked AceEngine | https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (+) |
+|`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine | test blocked | methods is not implemented, https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (+) |
 |`resizable`| Function | Evstigneev Roman | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`privacySensitive`| Function | Evstigneev Roman | done | pass | |
 |`orientation`| Function | Samarin Sergey | done | Pavelyev Ivan | |
