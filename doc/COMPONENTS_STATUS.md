@@ -105,8 +105,8 @@
 |`mark`| Function | Dudkin Sergey | done | failed | test failed info: strokeColor doesn`t work, OHOSUI-2181 |
 |`onChange`| Function | Dudkin Sergey | done | pass |  |
 |`checkboxShape`| Function | Dudkin Sergey | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|*Circle*|*Component*| Erokhin Ilya | done |  |  |
-|`construct`| Function |Erokhin Ilya | done |  |  |
+|*Circle*|*Component*| Erokhin Ilya | done | pass |  |
+|`construct`| Function |Erokhin Ilya | done | pass |  |
 |`setCircleOptions`|Function| Erokhin Ilya | done | pass |  |
 |*Column*| *Component* | Politov Mikhail | done |  |  |
 |`construct`| Function | Politov Mikhail | done | pass |  |
@@ -122,7 +122,7 @@
 |`resizeable`| Function | Dmitry A Smirnov| done | pass |  |
 |`divider`| Function | Dmitry A Smirnov| done | test blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*CommonMethod*|*Component*|Skroba Gleb,Erokhin Ilya | in progress |  |  |
-|`construct`| Function |Skroba Gleb |done |  | empty implementation, functional is supported by managed side |
+|`construct`| Function |Skroba Gleb |done | pass | empty implementation, functional is supported by managed side |
 |`width`| Function |Roman Sedaikin | done | pass | |
 |`height`| Function |Roman Sedaikin | done | pass | |
 |`drawModifier`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
