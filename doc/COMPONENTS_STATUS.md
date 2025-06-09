@@ -1,7 +1,7 @@
 | Component | Function | Owner | Status (done=merged **with** UT, testskipped=merged **without** UT, blocked=blocked by IDL)| verification status |issue/comment|
 | --------- | -------- | ----- | ------ |------|------|
-|*AlphabetIndexer*| *Component* |Ekaterina Stepanova| done |  |  |
-|`construct`| Function |Ekaterina Stepanova| done |  |  |
+|*AlphabetIndexer*| *Component* |Ekaterina Stepanova| done | tested partially |  |
+|`construct`| Function |Ekaterina Stepanova| done | pass |  |
 |`setAlphabetIndexerOptions`| Function |Ekaterina Stepanova| done | pass | deprecated |
 |`color`| Function |Ekaterina Stepanova| done | pass |  |
 |`selectedColor`| Function |Ekaterina Stepanova| done | pass |  |
@@ -46,12 +46,12 @@
 |`onCancel`| Function |  managed side | managed side |  |  |
 |`onFinish`| Function |  managed side | managed side |  | deprecated since 12  |
 |`onFrame`| Function |  managed side | managed side |  | deprecated since 12  |
-|*Badge*| *Component* |Vadim Voronov | done |  |  |
+|*Badge*| *Component* |Vadim Voronov | done | test blocked |  |
 |`construct`| Function |Vadim Voronov | done | test blocked | test blocked by incorrect SDK.|
 |`setBadgeOptions0`| Function |Vadim Voronov | done | test blocked | test blocked by incorrect SDK.|
 |`setBadgeOptions1`| Function |Vadim Voronov | done | test blocked | test blocked by incorrect SDK.|
-|*Blank*| *Component* | Skroba Gleb | done |  |  |
-|`construct`| Function | Skroba Gleb | done |  |  |
+|*Blank*| *Component* | Skroba Gleb | done | pass |  |
+|`construct`| Function | Skroba Gleb | done | pass |  |
 |`setBlankOptions`| Function | Skroba Gleb | done | pass |  |
 |`color`| Function | Skroba Gleb | done | pass |  |
 |*Button*| *Component* | Evstigneev Roman | blocked IDL |  |  |
