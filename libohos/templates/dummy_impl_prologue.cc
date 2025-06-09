@@ -823,12 +823,15 @@ void SetCurrentIndex(Ark_NativePointer nodePtr,
                      Ark_Int32 index) {
     auto* node = AsNode(nodePtr);
     Ark_NativePointer mark = (Ark_NativePointer)0x1;
+    // TBD: Update the SetCurrentIndex mark according to the !2153 fix
     if (index >= 0 && index < (int)node->children()->size()) {
         mark = (*node->children())[index];
     }
     NodeData* data = (NodeData*)node->customVoidData();
     if (data) {
-        data->updater.call(data->updater.resource.resourceId, index, mark, 1000);
+        // mark has been removed from the RangeUpdate callback
+        //data->updater.call(data->updater.resource.resourceId, index, mark, 1000);
+        data->updater.call(data->updater.resource.resourceId, index, 1000);
     }
 }
 }
@@ -853,48 +856,21 @@ namespace OHOS::Ace::NG::GeneratedModifier {
         appendGroupedLog(1, out);
         return (void*) 300;
     }
-    void OnRangeUpdateImpl(Ark_NativePointer node,
-                           Ark_Int32 totalCount,
-                           const Callback_RangeUpdate* updater)
+    void SyncImpl(Ark_NativePointer node,
+                 Ark_Int32 totalCount,
+                 const Callback_CreateItem *creator,
+                 const Callback_RangeUpdate *updater)
     {
         if (!needGroupedLog(1))
             return;
-        string out("OnRangeUpdate(");
+        string out("Sync(");
         WriteToString(&out, node);
         out.append(", ");
         WriteToString(&out, totalCount);
         out.append(", ");
-        WriteToString(&out, updater);
-        out.append(") \n");
-        appendGroupedLog(1, out);
-    }
-    void SetCurrentIndexImpl(Ark_NativePointer node,
-                             Ark_Int32 index)
-    {
-        if (!needGroupedLog(1))
-            return;
-        string out("SetCurrentIndex(");
-        WriteToString(&out, node);
+        WriteToString(&out, creator);
         out.append(", ");
-        WriteToString(&out, index);
-        out.append(") \n");
-        appendGroupedLog(1, out);
-    }
-    void PrepareImpl(Ark_NativePointer node, Ark_Int32 itemCount, Ark_Int32 offset)
-    {
-        if (!needGroupedLog(1))
-            return;
-        string out("Prepare(");
-        WriteToString(&out, node);
-        out.append(") \n");
-        appendGroupedLog(1, out);
-    }
-    void NotifyChangeImpl(Ark_NativePointer node, Ark_Int32 startIndex, Ark_Int32 endIndex, Ark_Int32 count)
-    {
-        if (!needGroupedLog(1))
-            return;
-        string out("NotifyChangeImpl(");
-        WriteToString(&out, node);
+        WriteToString(&out, updater);
         out.append(") \n");
         appendGroupedLog(1, out);
     }
