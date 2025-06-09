@@ -755,11 +755,11 @@
 |`onDotConnect`| Function | Dmitry A Smirnov| done |  |  |
 |`activateCircleStyle`| Function | Dmitry A Smirnov| done |  | |
 |`skipUnselectedPoint`| Function | Dmitry A Smirnov | done| | need merge to fb|
-|*PluginComponent*| *Component* | Evstigneev Roman | done |  | |
-|`construct`| Function |Evstigneev Roman | done |  | UT by Dudkin Sergey |
-|`setPluginComponentOptions`| Function | Evstigneev Roman | done |  |  need merge to fb |
-|`onComplete`| Function | Evstigneev Roman | done | | UT by Dudkin Sergey |
-|`onError`| Function | Evstigneev Roman | done |  | UT by Dudkin Sergey |
+|*PluginComponent*| *Component* | Evstigneev Roman | done | blocked | Not compilable on SDK from 06.06.2025|
+|`construct`| Function |Evstigneev Roman | done | blocked | E2E by Dudkin Sergey |
+|`setPluginComponentOptions`| Function | Evstigneev Roman | done | blocked |  need merge to fb |
+|`onComplete`| Function | Evstigneev Roman | done | blocked | E2E by Dudkin Sergey |
+|`onError`| Function | Evstigneev Roman | done | blocked | E2E by Dudkin Sergey |
 |*Polygon*| *Component* |Politov Mikhail | done |  | |
 |`construct`| Function |Politov Mikhail | done | pass | |
 |`setPolygonOptions`| Function | Politov Mikhail | done | pass | |
