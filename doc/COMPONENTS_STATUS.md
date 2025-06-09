@@ -141,8 +141,8 @@
 |`pixelRound`| Function | Skroba Gleb | done | pass |  |
 |`backgroundImageSize`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundImagePosition`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`backgroundEffect0`| Function |Skroba Gleb | done | Samarin Sergey old result: test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`backgroundEffect1`| Function | Evstigneev Roman | testskipped | Samarin Sergey old result: test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundEffect0`| Function |Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundEffect1`| Function | Evstigneev Roman | testskipped | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundImageResizable`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`foregroundEffect`| Function | Skroba Gleb | done | pass |  |
 |`visualEffect`| Function | Skroba Gleb | blocked IDL | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
@@ -173,7 +173,7 @@
 |`onKeyEvent0`| Function | Pavelyev Ivan | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`onKeyEvent1`| Function |Pavelyev Ivan | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`onDigitalCrown`| Function | Evstigneev Roman | done | test blocked | feature: API not present, test blocked since wearable |
-|`onKeyPreIme`| Function | Pavelyev Ivan | done |  |  |
+|`onKeyPreIme`| Function | Pavelyev Ivan | done | Samarin Sergey |  |
 |`onKeyEventDispatch`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocusAxisEvent`| Function | Evstigneev Roman | done | test blocked | feature: API not present, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onAxisEvent`| Function | Tuzhilkin Ivan | done | failed | need cherry-pick to feature_branch, need to submit issue |
@@ -234,9 +234,9 @@
 |`onDragEnter`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onDragMove`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onDragLeave`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onDrop0`| Function |Lobah Mikhail | done |  |  |
-|`onDrop1`| Function | Lobah Mikhail | done |  |  |
-|`onDragEnd`| Function | Lobah Mikhail | done |  |  |
+|`onDrop0`| Function |Lobah Mikhail | done | Samarin Sergey |  |
+|`onDrop1`| Function | Lobah Mikhail | done | Samarin Sergey |  |
+|`onDragEnd`| Function | Lobah Mikhail | done | Samarin Sergey |  |
 |`allowDrop`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`draggable`| Function | Lobah Mikhail | done | pass | |
 |`dragPreview0`| Function |Lobah Mikhail | done | test blocked | UT done Lobah Mikhail CustomBuilder, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -286,7 +286,7 @@
 |`onGestureJudgeBegin`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
 |`onGestureRecognizerJudgeBegin0`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
 |`onGestureRecognizerJudgeBegin1`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
-|`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done |  |  |
+|`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | Samarin Sergey |  |
 |`monopolizeEvents`| Function | Erokhin Ilya | done | pass | UT by Vadim Voronov |
 |`onTouchIntercept`| Function | Andrey Khudenkikh | done | pass | EVENT |
 |`onSizeChange`| Function | Dmitry A Smirnov| done | failed | issue OHOSUI-2216|
