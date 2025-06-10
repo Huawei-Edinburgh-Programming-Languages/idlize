@@ -284,8 +284,8 @@
 |`gestureModifier`| Function | Erokhin Ilya | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`backgroundBrightness`| Function | Skroba Gleb | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onGestureJudgeBegin`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
-|`onGestureRecognizerJudgeBegin0`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
-|`onGestureRecognizerJudgeBegin1`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
+|`onGestureRecognizerJudgeBegin0`| Function | Skroba Gleb | done | Samarin Sergey | UT by Vadim Voronov  |
+|`onGestureRecognizerJudgeBegin1`| Function | Skroba Gleb | done | Samarin Sergey | UT by Vadim Voronov  |
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | Samarin Sergey |  |
 |`monopolizeEvents`| Function | Erokhin Ilya | done | pass | UT by Vadim Voronov |
 |`onTouchIntercept`| Function | Andrey Khudenkikh | done | pass | EVENT |
@@ -302,7 +302,7 @@
 |`focusScopePriority`| Function | Dmitry A Smirnov| done | pass | |
 |`gesture`| Function | Erokhin Ilya | testskipped | pass |  |
 |`priorityGesture`| Function | Erokhin Ilya | testskipped |  |  |
-|`parallelGesture`| Function | Erokhin Ilya | testskipped |  |  |
+|`parallelGesture`| Function | Erokhin Ilya | testskipped | Samarin Sergey |  |
 |`blur`| Function | Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`linearGradientBlur`| Function |Lobah Mikhail | done | pass | |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
