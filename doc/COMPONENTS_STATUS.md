@@ -158,8 +158,8 @@
 |`borderImage`| Function | Roman Sedaikin | done | failed | |
 |`outline`| Function |Skroba Gleb | done | pass | |
 |`outlineStyle`| Function | Skroba Gleb | done | pass | |
-|`outlineWidth`| Function |Skroba Gleb | done | pass | demo test of second parameter in progress Vadim Voronov |
-|`outlineColor`| Function | Skroba Gleb | done | pass | demo test of all parameters in progress Vadim Voronov |
+|`outlineWidth`| Function |Skroba Gleb | in progress | failed | bug hos2403, code was commented, demo test by Vadim Voronov |
+|`outlineColor`| Function | Skroba Gleb | in progress | failed | bug hos2403, code was commented, demo test by Vadim Voronov |
 |`outlineRadius`| Function |Skroba Gleb | done | pass | |
 |`foregroundColor`| Function | Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onClick0`| Function |Roman Sedaikin | done | pass | EVENT |
