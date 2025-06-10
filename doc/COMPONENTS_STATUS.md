@@ -173,7 +173,7 @@
 |`onKeyEvent0`| Function | Pavelyev Ivan | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`onKeyEvent1`| Function |Pavelyev Ivan | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`onDigitalCrown`| Function | Evstigneev Roman | done | test blocked | feature: API not present, test blocked since wearable |
-|`onKeyPreIme`| Function | Pavelyev Ivan | done | Samarin Sergey |  |
+|`onKeyPreIme`| Function | Pavelyev Ivan | done | failed | unit tests failed |
 |`onKeyEventDispatch`| Function | Lobah Mikhail| done| | Not exists on FB|
 |`onFocusAxisEvent`| Function | Evstigneev Roman | done | test blocked | feature: API not present, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onAxisEvent`| Function | Tuzhilkin Ivan | done | failed | need cherry-pick to feature_branch, need to submit issue |
@@ -234,9 +234,9 @@
 |`onDragEnter`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onDragMove`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onDragLeave`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onDrop0`| Function |Lobah Mikhail | done | Samarin Sergey |  |
-|`onDrop1`| Function | Lobah Mikhail | done | Samarin Sergey |  |
-|`onDragEnd`| Function | Lobah Mikhail | done | Samarin Sergey |  |
+|`onDrop0`| Function |Lobah Mikhail | done | test blocked | runtime linker issue |
+|`onDrop1`| Function | Lobah Mikhail | done | failed |  |
+|`onDragEnd`| Function | Lobah Mikhail | done | failed |  |
 |`allowDrop`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
 |`draggable`| Function | Lobah Mikhail | done | pass | |
 |`dragPreview0`| Function |Lobah Mikhail | done | test blocked | UT done Lobah Mikhail CustomBuilder, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
