@@ -385,7 +385,7 @@
 |`selectedTextStyle`| Function |Vadim Voronov | done | pass |  |
 |`onDateChange`| Function |Vadim Voronov | done | pass | |
 |`digitalCrownSensitivity`| Function | Vadim Voronov | done |  | |
-|`enableHapticFeedback`| Function | Vadim Voronov | done | | |
+|`enableHapticFeedback`| Function | Vadim Voronov | done | test blocked | not supported by dayu200 |
 |*Divider*| *Component* | Tuzhilkin Ivan | done | pass |  |
 |`construct`| Function | Tuzhilkin Ivan |done | pass | |
 |`setDividerOptions`| Function | Tuzhilkin Ivan| done | pass |  |
@@ -849,7 +849,7 @@
 |`onCopy`| Function | Dudkin Sergey | testskipped |  | reopened after refactoring methods |
 |`editMenuOptions`| Function | Pavelyev Ivan | done |  |  |
 |`enableKeyboardOnFocus`| Function | Dudkin Sergey| done |  |  |
-|`enableHapticFeedback`| Function | Dudkin Sergey| done |  |  |
+|`enableHapticFeedback`| Function | Dudkin Sergey| done | test blocked | not supported by dayu200 |
 |`barState`| Function | Dudkin Sergey| done |  |  |
 |`maxLength`| Function | Lobah Mikhail| done| | not exists on FB|
 |`maxLines`| Function | Lobah Mikhail| done| | not exists on FB|
@@ -951,7 +951,7 @@
 |`onDidDelete`|Function| Evstigneev Roman | done |  |  |
 |`editMenuOptions`|Function| Pavelyev Ivan | done |  |  |
 |`enablePreviewText`|Function| Evstigneev Roman | done |  |  |
-|`enableHapticFeedback`|Function|Evstigneev Roman| done |  |  |
+|`enableHapticFeedback`|Function|Evstigneev Roman| done | test blocked | not supported by dayu200 |
 |`autoCapitalizationMode`| Function | | | | no such API in generation 125 |
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
 |`stopBackPress`| Function | Kovalev Sergey | done |  | |
@@ -1083,7 +1083,7 @@
 |`contentModifier`| Function |Morozov Sergey | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`slideRange`| Function | Morozov Sergey | done | pass |  |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | |
-|`enableHapticFeedback`| Function | Kovalev Sergey | done | | |
+|`enableHapticFeedback`| Function | Kovalev Sergey | done | test blocked | not supported by dayu200 |
 |`showTips`| Function |Morozov Sergey | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*BaseSpan*| *Component* |Politov Mikhail | done |  |  |
 |`construct`| Function |Politov Mikhail | done | pass |  |
@@ -1252,7 +1252,7 @@
 |`textSelectable`| Function |Samarin Sergey | done | pass |  |
 |`editMenuOptions`| Function | Pavelyev Ivan | done |  |  |
 |`halfLeading`| Function |Samarin Sergey | done | pass |  |
-|`enableHapticFeedback`| Function |Samarin Sergey | done |  |  |
+|`enableHapticFeedback`| Function |Samarin Sergey | done | test blocked | not supported by dayu200 |
 |`font`| Function |Samarin Sergey | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`fontWeight`| Function | Samarin Sergey | done | failed |  |
 |`selection`| Function |Samarin Sergey | done | pass | |
@@ -1310,7 +1310,7 @@
 |`onDidDelete`|Function|Tuzhilkin Ivan| done | not covered |  |
 |`editMenuOptions`|Function| Pavelyev Ivan | done | not covered |  |
 |`enablePreviewText`|Function|Tuzhilkin Ivan| done | not covered |  |
-|`enableHapticFeedback`|Function|Tuzhilkin Ivan| done | not covered | |
+|`enableHapticFeedback`|Function|Tuzhilkin Ivan| done | test blocked | not supported by dayu200 |
 |`autoCapitalizationMode`| Function | | | not covered | no such API in generation 125 |
 |`halfLeading`| Function | Kovalev Sergey | done | not covered | |
 |`ellipsisMode`| Function | Kovalev Sergey | done | not covered | |
@@ -1398,7 +1398,7 @@
 |`onDidDelete`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`editMenuOptions`| Function | Pavelyev Ivan| done|  |  |
 |`enablePreviewText`| Function | Spirin Andrey | done |  |  |
-|`enableHapticFeedback`| Function | Spirin Andrey | done |  |  |
+|`enableHapticFeedback`| Function | Spirin Andrey | done | test blocked | not supported by dayu200 |
 |`autoCapitalizationMode`| Function | | | | no such API in generation 125 |
 |`halfLeading`| Function | Kovalev Sergey | done |  | |
 |`ellipsisMode`| Function |  Kovalev Sergey| done |  | |
@@ -1449,7 +1449,7 @@
 |`dateTimeOptions`| Function |Politov Mikhail| done |  | |
 |`onChange`| Function |Ekaterina Stepanova| done | pass |  |
 |`onEnterSelectedArea`| Function | Kovalev Sergey | done | pass | API is present on Upstream only |
-|`enableHapticFeedback`| Function |Ekaterina Stepanova| done |  |  |
+|`enableHapticFeedback`| Function |Ekaterina Stepanova| done | test blocked | not supported by dayu200 |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | API is present on Upstream only |
 |`enableCascade`| Function | Kovalev Sergey | done | pass | API is present on Upstream only |
 |*Toggle*| *Component* |Morozov Sergey |blocked IDL |  |
