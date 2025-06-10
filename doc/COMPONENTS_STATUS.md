@@ -1408,24 +1408,24 @@
 |`inputFilter`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`customKeyboard`| Function | Lobah Mikhail | done |  |   |
 |`showCounter`| Function | Lobah Mikhail| done| | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
-|*TextPicker*| *Component* |Ekaterina Stepanova | in progress | Ekaterina Stepanova  |  |
-|`construct`| Function | Tuzhilkin Ivan| done |  |   |
-|`setTextPickerOptions`| Function | Tuzhilkin Ivan| done |  |   |
-|`defaultPickerItemHeight`| Function |Ekaterina Stepanova | done |  |  |
-|`canLoop`| Function |Ekaterina Stepanova | done |  |  |
-|`disappearTextStyle`|Function |Ekaterina Stepanova | done |  |  |
-|`textStyle`| Function |Ekaterina Stepanova | done |  |  |
-|`selectedTextStyle`| Function | Ekaterina Stepanova| done |  |  |
-|`disableTextStyleAnimation`| Function | Kovalev Sergey | done | | API is present on Upstream only |
-|`defaultTextStyle`| Function | Kovalev Sergey | done | | API is present on Upstream only |
-|`onChange`| Function | Tuzhilkin Ivan| done |  |  |
-|`onScrollStop`| Function | Kovalev Sergey | done | | API is present on Upstream only |
-|`onEnterSelectedArea`| Function | Kovalev Sergey | done | | API is present on Upstream only |
-|`selectedIndex`| Function |Ekaterina Stepanova | done |  |  |
-|`divider`| Function |Ekaterina Stepanova | done |  |  |
-|`gradientHeight`| Function | Ekaterina Stepanova| done |  |  |
-|`enableHapticFeedback`| Function | Kovalev Sergey | done | | API is present on Upstream only |
-|`digitalCrownSensitivity`| Function | Kovalev Sergey | done | | API is present on Upstream only |
+|*TextPicker*| *Component* |Ekaterina Stepanova | in progress | Ekaterina Stepanova |  |
+|`construct`| Function | Tuzhilkin Ivan| done | Ekaterina Stepanova |   |
+|`setTextPickerOptions`| Function | Tuzhilkin Ivan| done | Ekaterina Stepanova |   |
+|`defaultPickerItemHeight`| Function |Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`canLoop`| Function |Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`disappearTextStyle`|Function |Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`textStyle`| Function |Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`selectedTextStyle`| Function | Ekaterina Stepanova| done | Ekaterina Stepanova |  |
+|`disableTextStyleAnimation`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
+|`defaultTextStyle`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
+|`onChange`| Function | Tuzhilkin Ivan| done | Ekaterina Stepanova |  |
+|`onScrollStop`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
+|`onEnterSelectedArea`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
+|`selectedIndex`| Function |Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`divider`| Function |Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`gradientHeight`| Function | Ekaterina Stepanova| done | Ekaterina Stepanova |  |
+|`enableHapticFeedback`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
+|`digitalCrownSensitivity`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
 |*TextTimer*| *Component* |Ekaterina Stepanova| blocked IDL |  |  |
 |`construct`| Function | Ekaterina Stepanova| done | pass |  |
 |`setTextTimerOptions`| Function |Ekaterina Stepanova| done | pass |  |
