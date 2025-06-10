@@ -86,15 +86,15 @@
 |`setCanvasOptions1`| Function |Vadim Voronov | blocked AceEngine | test blocked | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onReady`| Function |Vadim Voronov | done |  |  |
 |`enableAnalyzer`| Function |Vadim Voronov | done |  |  |
-|*Checkbox*| *Component* | Andrey Khudenkikh | blocked IDL | Andrey Khudenkikh |  |
+|*Checkbox*| *Component* | Andrey Khudenkikh | blocked IDL | failed |  |
 |`construct`| Function |Samarin Sergey | done | pass | |
 |`setCheckboxOptions`| Function | Samarin Sergey | done | pass | |
-|`select`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
-|`selectedColor`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
-|`shape`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
-|`unselectedColor`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
-|`mark`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
-|`onChange`| Function | Andrey Khudenkikh | done | Andrey Khudenkikh |  |
+|`select`| Function | Andrey Khudenkikh | done | pass |  |
+|`selectedColor`| Function | Andrey Khudenkikh | done | pass |  |
+|`shape`| Function | Andrey Khudenkikh | done | pass |  |
+|`unselectedColor`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2401 |
+|`mark`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2401 |
+|`onChange`| Function | Andrey Khudenkikh | done | pass |  |
 |`contentModifier`| Function | Andrey Khudenkikh | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*CheckboxGroup*| *Component* | Dudkin Sergey| done |  |  |
 |`construct`| Function |Dudkin Sergey| done | pass |  |
