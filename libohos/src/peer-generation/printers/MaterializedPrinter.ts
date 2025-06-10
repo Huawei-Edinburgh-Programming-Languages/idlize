@@ -26,7 +26,7 @@ import {
 } from "../LanguageWriters";
 import {
     LanguageWriter, getInternalClassName,
-    MaterializedClass, MaterializedField, PeerLibrary, LayoutNodeRole
+    MaterializedClass, MaterializedField, MaterializedMethod, PeerLibrary, LayoutNodeRole
 } from "@idlizer/core"
 import { groupOverloads, OverloadsPrinter } from "./OverloadsPrinter";
 import { ImportsCollector } from "../ImportsCollector"
@@ -71,17 +71,18 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         return idl.maybeOptional(field.field.type, field.isNullableOriginalTypeField)
     }
 
-    printCtor(clazz: MaterializedClass, superClassName?: string) {
+    printCtor(clazz: MaterializedClass, ctor: MaterializedMethod, superClassName?: string) {
         const config = peerGeneratorConfiguration()
 
         const ctorPostfix = `_${clazz.className.toLowerCase()}`
         const implementationClassName = clazz.getImplementationName()
         const pointerType = IDLPointerType
         this.library.setCurrentContext(`${clazz.className}.constructor`)
-        writePeerMethod(this.library, this.printer, clazz.ctor!, true, this.dumpSerialized, ctorPostfix, "", pointerType)
+        writePeerMethod(this.library, this.printer, ctor, true, this.dumpSerialized, ctorPostfix, "", pointerType)
         this.library.setCurrentContext(undefined)
 
-        const ctorSig = clazz.ctor!.method.signature as NamedMethodSignature
+        // TBD: constructor
+        const ctorSig = ctor.method.signature as NamedMethodSignature
         const sigWithPointer = new NamedMethodSignature(
             ctorSig.returnType,
             ctorSig.args,
@@ -296,9 +297,10 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
 
             this.printFields(clazz)
 
-            if (clazz.ctor) {
-                this.printCtor(clazz, superClassName)
+            for (const ctor of clazz.ctors) {
+                this.printCtor(clazz, ctor, superClassName)
             }
+
             if (clazz.finalizer) printPeerFinalizer(clazz, writer)
 
             this.printOverloads(clazz)
@@ -424,7 +426,7 @@ function writeFromPtrMethod(clazz: MaterializedClass, writer: LanguageWriter, cl
         writer.writeStatement(writer.makeAssign(objVar,
             clazzRefType,
             //TODO: Need to pass IDLType instead of string to makeNewObject
-            writer.makeNewObject(writer.getNodeName(clazzRefType), writer.language == Language.JAVA ? [] : clazz.ctor!.method.signature.args.map(it => writer.makeNull(writer.getNodeName(it)))),
+            writer.makeNewObject(writer.getNodeName(clazzRefType), []),
             true)
         )
         writer.writeStatement(
@@ -441,16 +443,16 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
         printJavaImports(this.printer, imports)
     }
 
-    override printCtor(clazz: MaterializedClass, superClassName?: string): void {
+    override printCtor(clazz: MaterializedClass, ctor: MaterializedMethod, superClassName?: string): void {
         const emptyParameterType = createReferenceType(ARK_MATERIALIZEDBASE_EMPTY_PARAMETER)
         const ctorPostfix = `_${clazz.className.toLowerCase()}`
         const implementationClassName = clazz.getImplementationName()
         const pointerType = IDLPointerType
         this.library.setCurrentContext(`${clazz.className}.constructor`)
-        writePeerMethod(this.library, this.printer, clazz.ctor!, true, this.dumpSerialized, ctorPostfix, "", pointerType)
+        writePeerMethod(this.library, this.printer, ctor, true, this.dumpSerialized, ctorPostfix, "", pointerType)
         this.library.setCurrentContext(undefined)
 
-        const ctorSig = clazz.ctor!.method.signature as NamedMethodSignature
+        const ctorSig = ctor.method.signature as NamedMethodSignature
         // constructor with a special parameter to use in static methods
         const emptySignature = new MethodSignature(IDLVoidType, [emptyParameterType])
         this.printer.writeConstructorImplementation(implementationClassName, emptySignature, writer => {

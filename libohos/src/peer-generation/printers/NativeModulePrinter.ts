@@ -134,7 +134,9 @@ class NativeModuleArkUIGeneratedVisitor extends NativeModulePrinterBase {
 
     private printMaterializedMethods() {
         this.library.orderedMaterialized.forEach(clazz => {
-            if (clazz.ctor) this.printPeerMethod(clazz.ctor, idl.IDLPointerType)
+            clazz.ctors.forEach(ctor => {
+                this.printPeerMethod(ctor, idl.IDLPointerType)
+            })
             if (clazz.finalizer) this.printPeerMethod(clazz.finalizer, idl.IDLPointerType)
             clazz.methods.forEach(method => {
                 this.printPeerMethod(method, method.tsReturnType())
