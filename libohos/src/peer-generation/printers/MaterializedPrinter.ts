@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { capitalize, stringOrNone, Language, generifiedTypeName, sanitizeGenerics, ArgumentModifier, generatorConfiguration, getSuper, ReferenceResolver, MaterializedMethod, throwException } from '@idlizer/core'
+import { capitalize, stringOrNone, Language, generifiedTypeName, sanitizeGenerics, ArgumentModifier, generatorConfiguration, getSuper, ReferenceResolver, isMaterialized, MaterializedMethod, throwException } from '@idlizer/core'
 import { printPeerFinalizer, writePeerMethod } from "./PeersPrinter"
 import {
     FieldModifier,
@@ -272,6 +272,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
 
         this.printImports()
 
+        let extraSuperDecl: idl.IDLInterface | undefined = undefined
         let superClassName = generifiedTypeName(clazz.superClass, getSuperName(clazz, this.library))
         if (!superClassName && printer.language == Language.JAVA) {
             superClassName = clazz.isStaticMaterialized ? ARK_OBJECTBASE : ARK_MATERIALIZEDBASE
@@ -279,14 +280,22 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         const interfaces: string[] = clazz.isStaticMaterialized ? [] : ["MaterializedBase"]
         if (clazz.interfaces) {
             interfaces.push(
-                ...clazz.interfaces.map(it => {
+                ...clazz.interfaces.flatMap(it => {
                     const decl = this.library.resolveTypeReference(it)
                     if (!decl) {
                         throw new Error(`Not found declaration "${it.name}"`)
                     }
                     const typeArgs = it.typeArguments?.length ? `<${it.typeArguments.map(arg => printer.getNodeName(arg))}>` : ""
                     const nsName = printer.language === Language.CJ ? decl.name : idl.getQualifiedName(decl, 'namespace.name')
-                    return `${this.namespacePrefix}${nsName}${printer.language == Language.CJ ? 'Interface' : ''}${typeArgs}`
+                    const resultName = `${this.namespacePrefix}${nsName}${printer.language == Language.CJ ? 'Interface' : ''}${typeArgs}`
+                    if (idl.isInterface(decl) && idl.isClassSubkind(decl)) {
+                        if (superClassName === undefined) {
+                            superClassName = resultName
+                            extraSuperDecl = decl
+                            return []
+                        }
+                    }
+                    return [resultName]
                 }))
         }
 
@@ -321,7 +330,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
 
         if (printer.language !== Language.KOTLIN) {
             printer.writeClass(this.mangle(implementationClassName), writer => {
-                if (!superClassName && !clazz.isStaticMaterialized) {
+                if ((!superClassName || (extraSuperDecl && !isMaterialized(extraSuperDecl, this.library))) && !clazz.isStaticMaterialized) {
                     writer.writeFieldDeclaration("peer", FinalizableType, undefined, true, writer.makeNull())
                     // write getPeer() method
                     const getPeerSig = new MethodSignature(idl.createOptionalType(idl.createReferenceType("Finalizable")), [])

@@ -79,6 +79,43 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         return `export { ${node.name} } from "${relative}"`
     }
 
+    protected initializeType(type:idl.IDLType): string {
+        if (idl.isPrimitiveType(type)) {
+            switch (type) {
+                case idl.IDLNumberType: return '0'
+                case idl.IDLStringType: return '""'
+            }
+        }
+        if (idl.isContainerType(type)) {
+            if (type.containerKind === 'record') {
+                return 'new Map()'
+            }
+            if (type.containerKind === 'sequence') {
+                return '[]'
+            }
+        }
+        if (idl.isOptionalType(type)) {
+            return 'undefined'
+        }
+        if (idl.isReferenceType(type)) {
+            const decl = this.peerLibrary.resolveTypeReference(type)
+            if (decl) {
+                if (idl.isEnum(decl)) {
+                    return this.peerLibrary.language === Language.TS
+                        ? `0 as ${type.name}`
+                        : `${type.name}.fromValue(0)`
+                }
+                if (idl.isInterface(decl)) {
+                    const content = decl.properties
+                        .map(prop => `${prop.name}: ${prop.isOptional ? 'undefined' : this.initializeType(prop.type)}`)
+                        .join(', ')
+                    return '{ ' + content + ' }'
+                }
+            }
+        }
+        throw new Error(`Not handled! ${idl.DebugUtils.debugPrintType(type)}`)
+    }
+
     convertTypedef(node: idl.IDLTypedef) {
         if (idl.hasExtAttribute(node, idl.IDLExtendedAttributes.Synthetic)) {
             return
@@ -142,14 +179,15 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         //TODO: CommonMethod has a method onClick and a property onClick
         const seenFields = new Set<string>()
         const declaredPrefix = this.needDeclaredPrefix(idlInterface) ? "declare " : ""
-        const kindPrefix = isBuilderClass(idlInterface) ? "class " : "interface "
+        const isClass = idl.isClassSubkind(idlInterface) || isBuilderClass(idlInterface)
+        const kindPrefix = isClass ? "class " : "interface "
         return ([`export ${declaredPrefix}${kindPrefix}${this.printInterfaceName(idlInterface)} {`] as stringOrNone[])
             .concat(idlInterface.constants
                 .map(it => this.printIfNotSeen(it, it => this.printConstant(it), seenFields)).flat())
             .concat(idlInterface.properties
                 // TODO ArkTS does not support static fields in interfaces
                 .filter(it => !it.isStatic)
-                .map(it => this.printIfNotSeen(it, it => this.printProperty(it), seenFields)).flat())
+                .map(it => this.printIfNotSeen(it, it => this.printProperty(it, isClass), seenFields)).flat())
             // TODO enable when materialized will print methods from parent interface, now do not have time to implement this
             // .concat(idlInterface.methods
             //     .map(it => this.printIfNotSeen(it, it => this.printMethod(it), seenFields)).flat())
@@ -170,7 +208,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
             .concat(idlInterface.constants
                 .map(it => this.printConstant(it)).flat())
             .concat(idlInterface.properties
-                .map(it => this.printProperty(it)).flat())
+                .map(it => this.printProperty(it, !isInterface)).flat())
             .concat(this.collapseAmbiguousMethods(idlInterface.methods)
                 .filter(it => !idl.isInterfaceSubkind(idlInterface) || !it.isStatic)
                 .map(it => this.printMethod(it)).flat())
@@ -343,7 +381,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
                 && isMaterialized(idlInterface, this.peerLibrary)
                 && idl.isClassSubkind(idlInterface)
                 && idl.isInterface(superDecl)
-                && (idl.isInterfaceSubkind(superDecl) || idl.isClassSubkind(superDecl) && !isMaterialized(superDecl, this.peerLibrary))
+                && (idl.isInterfaceSubkind(superDecl))
 
             if (shouldPrintAsImplements) {
                 implementsItems.push(clause)
@@ -365,12 +403,12 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         ]
     }
 
-    protected printProperty(prop: idl.IDLProperty): stringOrNone[] {
+    protected printProperty(prop: idl.IDLProperty, classProperty:boolean): stringOrNone[] {
         const staticMod = prop.isStatic ? "static " : ""
         const readonlyMod = prop.isReadonly ? "readonly " : ""
         return [
             ...this.printExtendedAttributes(prop),
-            indentedBy(`${staticMod}${readonlyMod}${this.printPropNameWithType(prop)};`, 1)
+            indentedBy(`${staticMod}${readonlyMod}${this.printPropNameWithType(prop, classProperty)};`, 1)
         ]
     }
 
@@ -405,13 +443,14 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         return []
     }
 
-    private printPropNameWithType(prop: idl.IDLProperty): string {
+    private printPropNameWithType(prop: idl.IDLProperty, classProperty:boolean): string {
         const isOptional = prop.isOptional
         const type = this.convertType(prop.type)
+        const propSuffix = isOptional ? "?" : ""
         if (prop.name === "") {
-            return `${type}${isOptional ? "?" : ""}`
+            return `${type}${propSuffix}`
         }
-        return `${prop.name}${isOptional ? "?" : ""}: ${type}`
+        return `${prop.name}${propSuffix}: ${type}${classProperty && !this.isDeclared && !prop.isOptional ? ` = ${this.initializeType(prop.type)}` : ''}`
     }
 
     protected printParameters(parameters: idl.IDLParameter[]): string {
@@ -507,7 +546,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
                         it.isStatic,
                         false)
                     const maybeComma = propIndex < tuple.properties.length - 1 ? ',' : ''
-                    return [indentedBy(`${this.printPropNameWithType(property)}${maybeComma}`, 1)]
+                    return [indentedBy(`${this.printPropNameWithType(property, false)}${maybeComma}`, 1)]
                 }, seenFields)).flat())
             .concat(["]"])
     }
