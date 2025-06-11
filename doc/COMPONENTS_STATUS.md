@@ -123,33 +123,33 @@
 |`divider`| Function | Dmitry A Smirnov| done | test blocked IDL | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*CommonMethod*|*Component*|Skroba Gleb,Erokhin Ilya | in progress |  |  |
 |`construct`| Function |Skroba Gleb |done | pass | empty implementation, functional is supported by managed side |
-|`width`| Function |Roman Sedaikin | done | pass | |
-|`height`| Function |Roman Sedaikin | done | pass | |
-|`drawModifier`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`responseRegion`| Function | Skroba Gleb | done | pass | |
-|`mouseResponseRegion`| Function | Skroba Gleb | done | pass | |
-|`size`| Function | Roman Sedaikin | done | pass | |
+|`width`| Function |Roman Sedaikin | done | failed | commented ViewAbstract static methods code |
+|`height`| Function |Roman Sedaikin | done | failed | commented ViewAbstract static methods code |
+|`drawModifier`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`responseRegion`| Function | Skroba Gleb | done | failed | commented ViewAbstract static methods code |
+|`mouseResponseRegion`| Function | Skroba Gleb | done | failed | commented ViewAbstract static methods code |
+|`size`| Function | Roman Sedaikin | done | failed | commented ViewAbstract static methods code |
 |`constraintSize`| Function | Roman Sedaikin | done | pass | |
-|`hitTestBehavior`| Function | Roman Sedaikin | done | pass | |
+|`hitTestBehavior`| Function | Roman Sedaikin | done | failed | commented ViewAbstract static methods code |
 |`onChildTouchTest`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`layoutWeight`| Function | Roman Sedaikin | done | pass | |
 |`chainWeight`| Function | Politov Mikhail | testskipped | test blocked | https://gitee.com/openharmony/arkui_ace_engine/issues/IBJW6H, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA
 |`padding`| Function | Skroba Gleb | done | pass | |
-|`safeAreaPadding`| Function |Dmitry A Smirnov | done | pass | |
+|`safeAreaPadding`| Function |Dmitry A Smirnov | done | failed | commented ViewAbstract static methods code |
 |`margin`| Function | Skroba Gleb | done | pass | |
-|`backgroundColor`| Function |Skroba Gleb| done | pass |  |
+|`backgroundColor`| Function |Skroba Gleb| done | failed | commented ViewAbstract static methods code |
 |`pixelRound`| Function | Skroba Gleb | done | pass |  |
-|`backgroundImageSize`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`backgroundImagePosition`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundImageSize`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code | |
+|`backgroundImagePosition`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code | |
 |`backgroundEffect0`| Function |Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`backgroundEffect1`| Function | Evstigneev Roman | testskipped | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`backgroundImageResizable`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundImageResizable`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code | |
 |`foregroundEffect`| Function | Skroba Gleb | done | pass |  |
-|`visualEffect`| Function | Skroba Gleb | blocked IDL | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
-|`backgroundFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
-|`foregroundFilter`| Function | Skroba Gleb |  blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3  |
-|`compositingFilter`| Function | Skroba Gleb | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3  |
-|`opacity`| Function |Roman Sedaikin | done | pass | |
+|`visualEffect`| Function | Skroba Gleb | blocked IDL | failed | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3, commented ViewAbstract static methods code | |
+|`backgroundFilter`| Function | Skroba Gleb | blocked IDL | failed  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3, commented ViewAbstract static methods code |
+|`foregroundFilter`| Function | Skroba Gleb |  blocked IDL | failed | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3, commented ViewAbstract static methods code |
+|`compositingFilter`| Function | Skroba Gleb | blocked IDL | failed | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY & napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3, commented ViewAbstract static methods code |
+|`opacity`| Function |Roman Sedaikin | done | failed | commented ViewAbstract static methods code |
 |`border`| Function | Roman Sedaikin | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`borderStyle`| Function | Roman Sedaikin | done | pass | |
 |`borderWidth`| Function | Roman Sedaikin | done | pass | |
@@ -157,55 +157,55 @@
 |`borderRadius`| Function | Roman Sedaikin | done | pass | |
 |`borderImage`| Function | Roman Sedaikin | done | failed | |
 |`outline`| Function |Skroba Gleb | done | pass | |
-|`outlineStyle`| Function | Skroba Gleb | done | pass | |
-|`outlineWidth`| Function |Skroba Gleb | in progress | failed | bug hos2403, code was commented, demo test by Vadim Voronov |
-|`outlineColor`| Function | Skroba Gleb | in progress | failed | bug hos2403, code was commented, demo test by Vadim Voronov |
-|`outlineRadius`| Function |Skroba Gleb | done | pass | |
+|`outlineStyle`| Function | Skroba Gleb | done | failed | commented ViewAbstract static methods code |
+|`outlineWidth`| Function |Skroba Gleb | done | failed | bug hos2403, commented ViewAbstract static methods code, demo test by Vadim Voronov |
+|`outlineColor`| Function | Skroba Gleb | done | failed | bug hos2403, commented ViewAbstract static methods code, demo test by Vadim Voronov |
+|`outlineRadius`| Function |Skroba Gleb | done | failed | commented ViewAbstract static methods code |
 |`foregroundColor`| Function | Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onClick0`| Function |Roman Sedaikin | done | pass | EVENT |
 |`onClick1`| Function |Roman Sedaikin | done | pass | EVENT |
 |`onHover`| Function | Andrey Khudenkikh | done | pass | EVENT |
-|`onHoverMove`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
-|`onAccessibilityHover`| Function | Andrey Khudenkikh | done | test blocked | UT by Vadim Voronov EVENT, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`hoverEffect`| Function | Roman Sedaikin | done | pass | |
+|`onHoverMove`| Function | Tuzhilkin Ivan | done | failed | need cherry-pick to feature_branch, commented ViewAbstract static methods code |
+|`onAccessibilityHover`| Function | Andrey Khudenkikh | done | test blocked | UT by Vadim Voronov EVENT, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`hoverEffect`| Function | Roman Sedaikin | done | failed | commented ViewAbstract static methods code |
 |`onMouse`| Function | Kovalev Sergey | done | pass | EVENT |
 |`onTouch`| Function | Roman Sedaikin | testskipped | pass | EVENT |
-|`onKeyEvent0`| Function | Pavelyev Ivan | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
-|`onKeyEvent1`| Function |Pavelyev Ivan | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
-|`onDigitalCrown`| Function | Evstigneev Roman | done | test blocked | feature: API not present, test blocked since wearable |
-|`onKeyPreIme`| Function | Pavelyev Ivan | done | failed | unit tests failed |
-|`onKeyEventDispatch`| Function | Lobah Mikhail| done| | Not exists on FB|
+|`onKeyEvent0`| Function | Pavelyev Ivan | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`onKeyEvent1`| Function |Pavelyev Ivan | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`onDigitalCrown`| Function | Evstigneev Roman | done | test blocked | feature: API not present, test blocked since wearable, commented ViewAbstract static methods code |
+|`onKeyPreIme`| Function | Pavelyev Ivan | done | failed | unit tests failed, commented ViewAbstractModelNG static methods code |
+|`onKeyEventDispatch`| Function | Lobah Mikhail| done| failed  | Not exists on FB, commented ViewAbstract static methods code|
 |`onFocusAxisEvent`| Function | Evstigneev Roman | done | test blocked | feature: API not present, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onAxisEvent`| Function | Tuzhilkin Ivan | done | failed | need cherry-pick to feature_branch, need to submit issue |
-|`focusable`| Function | Roman Sedaikin | done | pass | |
+|`focusable`| Function | Roman Sedaikin | done | failed | commented ViewAbstract static methods code |
 |`nextFocus`| Function | Politov Mikhail | done | test blocked | done on upstream, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`tabStop`| Function | Lobah Mikhail| done| | Not exists on FB|
+|`tabStop`| Function | Lobah Mikhail| done| failed | Not exists on FB, commented ViewAbstract static methods code |
 |`onFocus`| Function | Roman Sedaikin | done | pass | |
 |`onBlur`| Function | Roman Sedaikin | done | pass | |
-|`tabIndex`| Function | Dmitry A Smirnov| done | pass | |
-|`defaultFocus`| Function | Dmitry A Smirnov| done | pass | |
-|`groupDefaultFocus`| Function | Dmitry A Smirnov| done | pass | |
-|`focusOnTouch`| Function | Dmitry A Smirnov| done | pass | |
+|`tabIndex`| Function | Dmitry A Smirnov| done | failed | commented ViewAbstract static methods code |
+|`defaultFocus`| Function | Dmitry A Smirnov| done | failed | commented ViewAbstract static methods code |
+|`groupDefaultFocus`| Function | Dmitry A Smirnov| done | failed | commented ViewAbstract static methods code |
+|`focusOnTouch`| Function | Dmitry A Smirnov| done | failed | commented ViewAbstract static methods code |
 |`focusBox`| Function | Dudkin Sergey | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA info: LinkerUnresolvedClassError arkui.Graphics.ColorMetrics |
 |`animation`| Function | managed side | managed side | test blocked | test blocked by ICurve |
 |`transition0`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
-|`transition1`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped|
-|`motionBlur`| Function |Dmitry A Smirnov| done | pass | |
-|`brightness`| Function | Lobah Mikhail | done | pass |  |
-|`contrast`| Function |Lobah Mikhail | done | pass | |
-|`grayscale`| Function | Lobah Mikhail | done | pass | |
-|`colorBlend`| Function |Lobah Mikhail | done | pass | |
-|`saturate`| Function | Lobah Mikhail | done | pass | |
-|`sepia`| Function | Lobah Mikhail | done | pass | |
-|`invert`| Function | Lobah Mikhail | done | pass | |
+|`transition1`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped, commented ViewAbstract static methods code |
+|`motionBlur`| Function |Dmitry A Smirnov| done | failed | commented ViewAbstract static methods code |
+|`brightness`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`contrast`| Function |Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`grayscale`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`colorBlend`| Function |Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`saturate`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`sepia`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`invert`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
 |`hueRotate`| Function |Lobah Mikhail | done | pass | |
-|`useShadowBatching`| Function | Lobah Mikhail | done | pass | |
-|`useEffect0`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`useEffect1`| Function | Evstigneev Roman | in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`renderGroup`| Function |Lobah Mikhail | done  | pass | same as arkui, but looks like there is an issue in ace_engine |
-|`freeze`| Function | Lobah Mikhail | done | failed | method does not work https://gitee.com/openharmony/arkui_ace_engine/issues/IC851K |
-|`translate`| Function | Erokhin Ilya | done | pass |  |
-|`scale`| Function | Erokhin Ilya | done | pass |  |
+|`useShadowBatching`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`useEffect0`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`useEffect1`| Function | Evstigneev Roman | in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`renderGroup`| Function |Lobah Mikhail | done  | failed | same as arkui, but looks like there is an issue in ace_engine, commented ViewAbstract static methods code |
+|`freeze`| Function | Lobah Mikhail | done | failed | method does not work https://gitee.com/openharmony/arkui_ace_engine/issues/IC851K, commented ViewAbstract static methods code |
+|`translate`| Function | Erokhin Ilya | done | failed | commented ViewAbstract static methods code |
+|`scale`| Function | Erokhin Ilya | done | failed | commented ViewAbstract static methods code |
 |`rotate`| Function | Dmitry A Smirnov | done | pass | Dmitry A Smirnov|
 |`transform`| Function |Lobah Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBUR61 Type `object` is converted to `ArkCustomObject`|
 |`onAppear`| Function | Roman Sedaikin | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -213,7 +213,7 @@
 |`onAttach`| Function | Andrey Khudenkikh | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onDetach`| Function | Andrey Khudenkikh | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onAreaChange`| Function | Roman Sedaikin | done | pass | |
-|`visibility`| Function | Roman Sedaikin | done | pass | |
+|`visibility`| Function | Roman Sedaikin | done | failed | commented ViewAbstract static methods code |
 |`flexGrow`| Function | Dmitry A Smirnov| done | pass | |
 |`flexShrink`| Function | Dmitry A Smirnov| done | pass | |
 |`flexBasis`| Function | Dmitry A Smirnov| done | pass | |
@@ -229,102 +229,102 @@
 |`alignRules0`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`alignRules1`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`aspectRatio`| Function | Roman Sedaikin | done | pass | |
-|`clickEffect`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onDragStart`| Function | Skroba Gleb | done | pass | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now. |
-|`onDragEnter`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onDragMove`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onDragLeave`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onDrop0`| Function |Lobah Mikhail | done | test blocked | runtime linker issue |
+|`clickEffect`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code | |
+|`onDragStart`| Function | Skroba Gleb | done | failed | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now, commented ViewAbstract static methods code |
+|`onDragEnter`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`onDragMove`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`onDragLeave`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`onDrop0`| Function |Lobah Mikhail | done | test blocked | runtime linker issue, commented ViewAbstract static methods code |
 |`onDrop1`| Function | Lobah Mikhail | in progress | failed | not implemented |
-|`onDragEnd`| Function | Lobah Mikhail | done | failed | won't work because of guozejun changes |
-|`allowDrop`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
-|`draggable`| Function | Lobah Mikhail | done | pass | |
-|`dragPreview0`| Function |Lobah Mikhail | done | test blocked | UT done Lobah Mikhail CustomBuilder, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`dragPreview1`| Function | Lobah Mikhail | done | test blocked | UT done Lobah Mikhail CustomBuilder, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onPreDrag`| Function | Lobah Mikhail | done | pass | |
-|`linearGradient`| Function |Roman Sedaikin | done | pass | |
-|`sweepGradient0`| Function |Roman Sedaikin | done | pass | |
-|`radialGradient`| Function |Erokhin Ilya | done | pass |  |
-|`motionPath`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`shadow`| Function |Roman Sedaikin | done | pass | |
-|`clip`| Function | Dudkin Sergey | done | pass |  |
-|`clipShape`| Function | Tuzhilkin Ivan | testskipped | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`mask`| Function | Maksimov Nikita | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`maskShape`| Function |Tuzhilkin Ivan| done | test blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`key`| Function | Lobah Mikhail | done | pass | |
-|`id`| Function | Erokhin Ilya | done | pass |  |
+|`onDragEnd`| Function | Lobah Mikhail | done | failed | won't work because of guozejun changes, commented ViewAbstract static methods code |
+|`allowDrop`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`draggable`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`dragPreview0`| Function |Lobah Mikhail | done | test blocked | UT done Lobah Mikhail CustomBuilder, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`dragPreview1`| Function | Lobah Mikhail | done | test blocked | UT done Lobah Mikhail CustomBuilder, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, not implemented |
+|`onPreDrag`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`linearGradient`| Function |Roman Sedaikin | done | failed | commented ViewAbstract static methods code |
+|`sweepGradient0`| Function |Roman Sedaikin | done | failed | commented ViewAbstract static methods code |
+|`radialGradient`| Function |Erokhin Ilya | done | failed | commented ViewAbstract static methods code |
+|`motionPath`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`shadow`| Function |Roman Sedaikin | done | failed | commented ViewAbstract static methods code |
+|`clip`| Function | Dudkin Sergey | done |  | clip1, clip2 not implemented |
+|`clipShape`| Function | Tuzhilkin Ivan | testskipped | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`mask`| Function | Maksimov Nikita | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`maskShape`| Function |Tuzhilkin Ivan| done | test blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`key`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`id`| Function | Erokhin Ilya | done | failed | commented ViewAbstract static methods code |
 |`geometryTransition0`| Function | Lobah Mikhail | testskipped | test blocked | no method found test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG |
-|`geometryTransition1`| Function | Lobah Mikhail | testskipped | failed | OHOSUI-2375, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG|
+|`geometryTransition1`| Function | Lobah Mikhail | testskipped | failed | OHOSUI-2375, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG, commented ViewAbstract static methods code |
 |`stateStyles`| Function | managed side | managed side | test blocked | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
-|`restoreId`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`sphericalEffect`| Function | Lobah Mikhail | done | pass | |
-|`lightUpEffect`| Function | Lobah Mikhail | done | pass | |
-|`pixelStretchEffect`| Function | Lobah Mikhail | done | pass | |
-|`accessibilityGroup0`| Function |Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityGroup1`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityText0`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityText1`| Function |Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityNextFocusId`| Function | Lobah Mikhail| done| test blocked | Not exists on FB, no accessibility srvice on FB |
-|`accessibilityDefaultFocus`| Function | Lobah Mikhail| blocked IDL | test blocked IDL | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00|
-|`accessibilityUseSamePage`| Function | Lobah Mikhail| done| test blocked | Not exists on FB, no accessibility srvice on FB |
-|`accessibilityScrollTriggerable`| Function | Tuzhilkin Ivan | done | test blocked | WRONG_GENERATION: parameter should be Opt, need cherry-pick to feature_branch, no accessibility srvice on FB |
-|`accessibilityRole`| Function | Lobah Mikhail| done| test blocked | Not exists on FB, no accessibility srvice on FB|
-|`onAccessibilityFocus`| Function | Evstigneev Roman | done | test blocked | feature: API not present, no accessibility srvice on FB |
-|`accessibilityTextHint`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityDescription0`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityDescription1`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityLevel`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityVirtualNode`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilityChecked`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`accessibilitySelected`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`obscured`| Function |Dmitry A Smirnov | done | pass | |
-|`reuseId`| Function |managed side | managed side |  | not implemented in ace_engine|
+|`restoreId`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`sphericalEffect`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`lightUpEffect`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`pixelStretchEffect`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
+|`accessibilityGroup0`| Function |Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`accessibilityGroup1`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`accessibilityText0`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`accessibilityText1`| Function |Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`accessibilityNextFocusId`| Function | Lobah Mikhail| done| test blocked | Not exists on FB, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code |
+|`accessibilityDefaultFocus`| Function | Lobah Mikhail| blocked IDL | test blocked IDL | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00, commented ViewAbstractModelNG static methods code |
+|`accessibilityUseSamePage`| Function | Lobah Mikhail| done| test blocked | Not exists on FB, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code |
+|`accessibilityScrollTriggerable`| Function | Tuzhilkin Ivan | done | test blocked | WRONG_GENERATION: parameter should be Opt, need cherry-pick to feature_branch, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code |
+|`accessibilityRole`| Function | Lobah Mikhail| done| test blocked | Not exists on FB, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code |
+|`onAccessibilityFocus`| Function | Evstigneev Roman | done | test blocked | feature: API not present, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code |
+|`accessibilityTextHint`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`accessibilityDescription0`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`accessibilityDescription1`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`accessibilityLevel`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`accessibilityVirtualNode`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`accessibilityChecked`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`accessibilitySelected`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`obscured`| Function |Dmitry A Smirnov | done | failed | commented ViewAbstract static methods code |
+|`reuseId`| Function |managed side | managed side | | not implemented in ace_engine |
 |`reuse`| Function |managed side | managed side | | to be removed from CAPI generation |
 |`renderFit`| Function | Dmitry A Smirnov| done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`gestureModifier`| Function | Erokhin Ilya | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
-|`backgroundBrightness`| Function | Skroba Gleb | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`gestureModifier`| Function | Erokhin Ilya | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, failed | commented ViewAbstract static methods code |
+|`backgroundBrightness`| Function | Skroba Gleb | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`onGestureJudgeBegin`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
 |`onGestureRecognizerJudgeBegin0`| Function | Skroba Gleb | done | Samarin Sergey | UT by Vadim Voronov  |
 |`onGestureRecognizerJudgeBegin1`| Function | Skroba Gleb | done | Samarin Sergey | UT by Vadim Voronov  |
 |`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | Samarin Sergey |  |
 |`monopolizeEvents`| Function | Erokhin Ilya | done | pass | UT by Vadim Voronov |
 |`onTouchIntercept`| Function | Andrey Khudenkikh | done | pass | EVENT |
-|`onSizeChange`| Function | Dmitry A Smirnov| done | failed | issue OHOSUI-2216|
-|`accessibilityFocusDrawLevel`| Function | Tuzhilkin Ivan | done | test blocked | need cherry-pick to feature_branch, test blocked since no accessibility service on FB |
-|`customProperty`| Function | Dmitry A Smirnov| in progress | test blocked | need clarify bridge implementation, test blocked by FrameNode.getCustomProperty |
+|`onSizeChange`| Function | Dmitry A Smirnov| done | failed | issue OHOSUI-2216, commented ViewAbstract static methods code |
+|`accessibilityFocusDrawLevel`| Function | Tuzhilkin Ivan | done | test blocked | need cherry-pick to feature_branch, test blocked since no accessibility service on FB, commented ViewAbstract static methods code |
+|`customProperty`| Function | Dmitry A Smirnov| in progress | test blocked | need clarify bridge implementation, test blocked by FrameNode.getCustomProperty, commented ViewAbstract static methods code |
 |`expandSafeArea`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`background`| Function | Lobah Mikhail | done | test blocked | UT done Lobah Mikhail, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`backgroundImage0`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`background`| Function | Lobah Mikhail | done | test blocked | UT done Lobah Mikhail, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`backgroundImage0`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`backgroundImage1`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`backgroundBlurStyle`| Function | Skroba Gleb | done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`backgroundBlurStyle`| Function | Skroba Gleb | done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`foregroundBlurStyle`| Function | Evstigneev Roman | in progress | | |
-|`focusScopeId`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
+|`focusScopeId`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`focusScopePriority`| Function | Dmitry A Smirnov| done | pass | |
 |`gesture`| Function | Erokhin Ilya | testskipped | pass |  |
 |`priorityGesture`| Function | Erokhin Ilya | testskipped |  |  |
 |`parallelGesture`| Function | Erokhin Ilya | testskipped | Samarin Sergey |  |
 |`blur`| Function | Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`linearGradientBlur`| Function |Lobah Mikhail | done | pass | |
+|`linearGradientBlur`| Function |Lobah Mikhail | done | failed | linearGradientBlur1 not implemented |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
 |`backdropBlur`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`sharedTransition`|Function|Skroba Gleb | done | test blocked | navigation between pages does not work to check transition |
+|`sharedTransition`|Function|Skroba Gleb | done | test blocked | navigation between pages does not work to check transition, commented ViewAbstract static methods code |
 |`chainMode`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`overlay`| Function | Lobah Mikhail | blocked IDL | pass | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the 'Ark_ComponentContent' class without stubs is required.|
+|`dragPreviewOptions`| Function | Erokhin Ilya | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`overlay`| Function | Lobah Mikhail | blocked IDL | failed | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the 'Ark_ComponentContent' class without stubs is required, commented ViewAbstract static methods code |
 |`blendMode`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`advancedBlendMode`| Function | Erokhin Ilya |in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`bindTips`| Function | Tuzhilkin Ivan | in progress | | only for generation > 125|
-|`bindPopup`| Function | Erokhin Ilya | done | test blocked | fixes of issues were provided by our team, https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL2K, https://gitee.com/openharmony/arkui_ace_engine/issues/IBY31B, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`bindPopup`| Function | Erokhin Ilya | done | test blocked | fixes of issues were provided by our team, https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL2K, https://gitee.com/openharmony/arkui_ace_engine/issues/IBY31B, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`bindMenu0`| Function | Erokhin Ilya | blocked IDL | test blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`bindMenu1`| Function | Erokhin Ilya | blocked IDL | test blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`bindContextMenu0`| Function | Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`bindContextMenu1`| Function | Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`bindContentCover0`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov |
-|`bindContentCover1`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov |
-|`bindSheet`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onVisibleAreaChange`| Function | Erokhin Ilya | done | pass | |
-|`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | done | | need cherry-pick to feature_branch |
-|`keyboardShortcut`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`bindContentCover0`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov, commented ViewAbstractModelNG static methods code |
+|`bindContentCover1`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov, commented ViewAbstractModelNG static methods code |
+|`bindSheet`| Function | Erokhin Ilya | testskipped | test blocked | UT in progress Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`onVisibleAreaChange`| Function | Erokhin Ilya | done | failed | commented ViewAbstract static methods code |
+|`onVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | done | failed | need cherry-pick to feature_branch, commented ViewAbstract static methods code |
+|`keyboardShortcut`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |*CommonShapeMethod*|*Component*|Skroba Gleb| done |  |  |
 |`construct`| Function |Skroba Gleb| done |  | empty implementation, functional is supported by managed side |
 |`stroke`|Function| Skroba Gleb | done | pass |  |
