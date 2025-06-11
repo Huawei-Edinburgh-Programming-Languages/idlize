@@ -140,13 +140,23 @@ class IdlProcessingManager {
     passes: IdlProcessingPass<any>[] = []
     orderedPasses: IdlProcessingPass<any>[][] = []
 
+    peerlibrary: idl.PeerLibrary
+
+    constructor() {
+        // Only resolution is used for now, so choosing idl.Language.TS does not have language-specific effects
+        this.peerlibrary = new idl.PeerLibrary(idl.Language.TS)
+    }
+
     addFile(fileName: string, parseOnly?: boolean): void {
         try {
             let parsed = new Parsed(fileName)
             this.entries.push(parsed)
             this.entriesByPath.set(fileName, parsed)
-            if (!parseOnly) {
+            if (parseOnly) {
+                this.peerlibrary.auxFiles.push(parsed.idlFile)
+            } else {
                 this.entriesToValidate.push(parsed)
+                this.peerlibrary.files.push(parsed.idlFile)
             }
             parsed.load()
             this.idlFiles.push(parsed.idlFile)

@@ -35,16 +35,9 @@ enumPass.on({kind: idl.IDLKind.Enum}).after = (node, st) => {
     }
 }
 
-let namedDecls = [idl.IDLKind.Namespace, idl.IDLKind.Const, idl.IDLKind.Property, idl.IDLKind.Interface, idl.IDLKind.Method, idl.IDLKind.Callable, idl.IDLKind.Typedef, idl.IDLKind.Enum]
-let collectPass = startingPass("collectPass", ()=>({names: new Set<string>()}))
-collectPass.on({}).before = (node, st) => {
-    if (namedDecls.includes(node.kind) && node.name) {
-        st.names.add(node.name)
-    }
-}
+// let namedDecls = [idl.IDLKind.Namespace, idl.IDLKind.Const, idl.IDLKind.Property, idl.IDLKind.Interface, idl.IDLKind.Method, idl.IDLKind.Callable, idl.IDLKind.Typedef, idl.IDLKind.Enum]
 
-let resolvePass = dependentPass("resolvePass", [collectPass], () => ({typeParameters: new Set<string>(), names: collectPass.state.names}))
-resolvePass.mode = "testreference"
+let resolvePass = startingPass("resolvePass", () => ({typeParameters: new Set<string>()}))
 function extParam(param: string) {
     const extendsIdx = param.indexOf('extends')
     if (extendsIdx !== -1) {
@@ -68,7 +61,7 @@ resolvePass.on({kind: idl.IDLKind.ReferenceType}).before = (node, st) => {
     if (!node.name || node.name == "Object" || node.name == "__TOP__" || st.typeParameters.has(node.name)) {
         return
     }
-    if (!st.names.has(node.name)) {
+    if (!idlManager.peerlibrary.resolveTypeReference(node as idl.IDLReferenceType)) {
         UnresolvedReference.reportDiagnosticMessage(node)
     }
 }
