@@ -1408,22 +1408,22 @@
 |`inputFilter`| Function | Spirin Andrey | done |  | UT Kovalev Sergey |
 |`customKeyboard`| Function | Lobah Mikhail | done |  |   |
 |`showCounter`| Function | Lobah Mikhail| done| | https://gitee.com/openharmony/arkui_ace_engine/issues/IB3V0N |
-|*TextPicker*| *Component* |Ekaterina Stepanova | in progress | Ekaterina Stepanova |  |
-|`construct`| Function | Tuzhilkin Ivan| done | Ekaterina Stepanova |   |
-|`setTextPickerOptions`| Function | Tuzhilkin Ivan| done | Ekaterina Stepanova |   |
-|`defaultPickerItemHeight`| Function |Ekaterina Stepanova | done | Ekaterina Stepanova |  |
-|`canLoop`| Function |Ekaterina Stepanova | done | Ekaterina Stepanova |  |
-|`disappearTextStyle`|Function |Ekaterina Stepanova | done | Ekaterina Stepanova |  |
-|`textStyle`| Function |Ekaterina Stepanova | done | Ekaterina Stepanova |  |
-|`selectedTextStyle`| Function | Ekaterina Stepanova| done | Ekaterina Stepanova |  |
+|*TextPicker*| *Component* | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`construct`| Function | Tuzhilkin Ivan | done | pass |  |
+|`setTextPickerOptions`| Function | Tuzhilkin Ivan | done | failed | OHOSUI-2386 multi column picker not working |
+|`defaultPickerItemHeight`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`canLoop`| Function | Ekaterina Stepanova | done | pass |  |
+|`disappearTextStyle`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`textStyle`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`selectedTextStyle`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
 |`disableTextStyleAnimation`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
 |`defaultTextStyle`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
-|`onChange`| Function | Tuzhilkin Ivan| done | Ekaterina Stepanova |  |
+|`onChange`| Function | Tuzhilkin Ivan | done | Ekaterina Stepanova |  |
 |`onScrollStop`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
 |`onEnterSelectedArea`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
-|`selectedIndex`| Function |Ekaterina Stepanova | done | Ekaterina Stepanova |  |
-|`divider`| Function |Ekaterina Stepanova | done | Ekaterina Stepanova |  |
-|`gradientHeight`| Function | Ekaterina Stepanova| done | Ekaterina Stepanova |  |
+|`selectedIndex`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`divider`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`gradientHeight`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
 |`enableHapticFeedback`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
 |*TextTimer*| *Component* |Ekaterina Stepanova| blocked IDL |  |  |
