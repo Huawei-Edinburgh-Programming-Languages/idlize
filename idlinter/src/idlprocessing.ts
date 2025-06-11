@@ -140,9 +140,6 @@ class IdlProcessingManager {
     passes: IdlProcessingPass<any>[] = []
     orderedPasses: IdlProcessingPass<any>[][] = []
 
-    // to remove
-    currentEntry!: Parsed
-
     addFile(fileName: string, parseOnly?: boolean): void {
         try {
             let parsed = new Parsed(fileName)
@@ -178,7 +175,6 @@ class IdlProcessingManager {
             }
 
             for (let entry of this.entries) {
-                this.currentEntry = entry
                 idl.forEachChild(entry.idlFile,
                     n => passes.forEach(p => {
                         try { p.dispatch(n, true) }

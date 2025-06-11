@@ -14,6 +14,7 @@
  */
 
 import { MessageSeverity, DiagnosticMessage, Location, DiagnosticResults, DiagnosticException } from "./diagnostictypes"
+import { AutoLocations, locationsFromAuto } from "./parser"
 
 /**
  * Index for DiagnosticMessageKind by code
@@ -62,7 +63,7 @@ export class DiagnosticMessageKind {
         messageByCode.set(code, this)
     }
 
-    generateDiagnosticMessage(locations: Location[], mainMessage?: string, additionalMessage?: string): DiagnosticMessage {
+    generateDiagnosticMessage(locations: AutoLocations, mainMessage?: string, additionalMessage?: string): DiagnosticMessage {
         let msg: DiagnosticMessage = {
             severity: this.severity,
             code: this.code,
@@ -71,18 +72,18 @@ export class DiagnosticMessageKind {
             parts: []
         }
         let first = true
-        for (let l of locations) {
+        for (let l of locationsFromAuto(locations)) {
             msg.parts.push({location: l, message: first ? (mainMessage ?? this.mainMessageTemplate) : (additionalMessage ?? this.additionalMessageTemplate)})
             first = false
         }
         return msg
     }
 
-    pushDiagnosticMessage(diagnosticResult: DiagnosticResults, locations: Location[], mainMessage?: string, additionalMessage?: string): void {
+    pushDiagnosticMessage(diagnosticResult: DiagnosticResults, locations: AutoLocations, mainMessage?: string, additionalMessage?: string): void {
         diagnosticResult.push(this.generateDiagnosticMessage(locations, mainMessage, additionalMessage))
     }
 
-    throwDiagnosticMessage(locations: Location[], mainMessage?: string, additionalMessage?: string): void {
+    throwDiagnosticMessage(locations: AutoLocations, mainMessage?: string, additionalMessage?: string): void {
         throw new DiagnosticException(this.generateDiagnosticMessage(locations, mainMessage, additionalMessage))
     }
 }

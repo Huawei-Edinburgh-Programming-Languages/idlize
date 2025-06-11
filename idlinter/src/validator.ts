@@ -31,7 +31,7 @@ enumPass.on({kind: idl.IDLKind.EnumMember}).after = (node, st) => {
 enumPass.on({kind: idl.IDLKind.Enum}).after = (node, st) => {
     let nodes = st.enums.get(node)!
     if (nodes.length == 2) {
-        InconsistentEnum.pushDiagnosticMessage(idlManager.results, [locationForNode(idlManager.currentEntry, node, "name"), locationForNode(idlManager.currentEntry, nodes[0]), locationForNode(idlManager.currentEntry, nodes[1])])
+        InconsistentEnum.pushDiagnosticMessage(idlManager.results, [locationForNode(node, "name"), nodes[0], nodes[1]])
     }
 }
 
@@ -69,14 +69,7 @@ resolvePass.on({kind: idl.IDLKind.ReferenceType}).before = (node, st) => {
         return
     }
     if (!st.names.has(node.name)) {
-        // Later: somehow provide _common_ solution for absense of lexicalInfo or "inheritance" in place of lexicalInfo
-        let location = locationForNode(idlManager.currentEntry, node)
-        if (!location.range) {
-            location = locationForNode(idlManager.currentEntry, node.parent!)
-        }
-        // console.log(JSON.stringify(idlManager.currentEntry.lexicalInfo.get(node)))
-        // console.log(JSON.stringify(idlManager.currentEntry.lexicalInfo.get(node.parent!)))
-        UnresolvedReference.pushDiagnosticMessage(idlManager.results, [location])
+        UnresolvedReference.pushDiagnosticMessage(idlManager.results, [node])
     }
 }
 resolvePass.on({}).after = (node, st) => {
@@ -110,12 +103,12 @@ attrPass.on({}).before = (node, st) => {
     }
     let valids = ohosValidAttributes.get(node.kind)
     if (!valids) {
-        WrongAttributePlacement.pushDiagnosticMessage(idlManager.results, [locationForNode(idlManager.currentEntry, node)], `Attributes not allowed on ${node.kind}`)
+        WrongAttributePlacement.pushDiagnosticMessage(idlManager.results, node, `Attributes not allowed on ${node.kind}`)
         return
     }
     for (let attr of node.extendedAttributes) {
         if (!valids.includes(attr.name)) {
-            WrongAttributeName.pushDiagnosticMessage(idlManager.results, [locationForNode(idlManager.currentEntry, node, "name")], `Attribute "${attr.name}" not allowed on ${node.kind}`)
+            WrongAttributeName.pushDiagnosticMessage(idlManager.results, locationForNode(node, "name"), `Attribute "${attr.name}" not allowed on ${node.kind}`)
         }
     }
 }
