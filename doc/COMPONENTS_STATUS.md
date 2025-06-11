@@ -402,8 +402,8 @@
 |*EmbeddedComponent*| *Component* | Ekaterina Stepanova | blocked IDL |  | |
 |`construct`| Function | Ekaterina Stepanova | in progress |  |  |
 |`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | in progress |  |  |
-|`onTerminated`| Function | Ekaterina Stepanova | in progress | Kovalev Sergey  |  |
-|`onError`| Function |Skroba Gleb | testskipped | Kovalev Sergey |  |
+|`onTerminated`| Function | Ekaterina Stepanova | in progress |  |  |
+|`onError`| Function |Skroba Gleb | testskipped |  |  |
 |*Flex*| *Component* | Kovalev Sergey | done | |  |
 |`construct`| Function | Kovalev Sergey | done | pass |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done | pass |  |
@@ -1906,11 +1906,11 @@
 |`invalidate`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | test blocked |OHOSUI-2171 |
 |`ctor`| Function |Andrey Khudenkikh | done |  | |
-|`translate`| Function | Andrey Khudenkikh | done |  | |
+|`translate`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
 |`rotate`| Function | Andrey Khudenkikh | done | failed| OHOSUI-2171|
-|`scale`| Function | Andrey Khudenkikh | done | | |
-|`opacity`| Function | Andrey Khudenkikh | done | | |
-|`move`| Function | Andrey Khudenkikh | done | | |
+|`scale`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
+|`opacity`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
+|`move`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
 |`asymmetric`| Function | Andrey Khudenkikh | done | | |
 |`animation`| Function | Andrey Khudenkikh | done |failed | OHOSUI-2171|
 |`combine`| Function | Andrey Khudenkikh | done | failed| OHOSUI-2171|
