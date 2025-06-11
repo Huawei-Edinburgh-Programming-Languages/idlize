@@ -42,12 +42,6 @@ abstract class CommonLayoutBase implements LayoutManagerStrategy {
     }
 }
 
-function componentToModifier(component: string) {
-    if (component.endsWith("Attribute"))
-        component = component.substring(0, component.length - 9)
-    return `Ark${component}Modifier`
-}
-
 export class TsLayout extends CommonLayoutBase {
     private tsInternalPaths = new Map<string, string>([
         ["SerializerBase", "@koalaui/interop"],
@@ -102,9 +96,6 @@ class ArkTsLayout extends CommonLayoutBase {
     // replace point symbol inside names, but not when it is a part of path
     readonly replacePattern = /(\.)[^\.\/]/g
     resolve(target: idl.LayoutTargetDescription): string {
-        if (target.hint === 'component.modfiier') {
-            return `modifiers/${componentToModifier(target.node.name)}`;
-        }
         if (target.node.name === NativeModule.Generated.name)
             return `#components`
         if (this.arkTSInternalPaths.has(target.node.name))

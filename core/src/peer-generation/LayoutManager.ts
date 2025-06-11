@@ -27,7 +27,6 @@ export type LayoutTargetDescriptionHint =
       'component.implementation'
     | 'component.interface'
     | 'component.function'
-    | 'component.modfiier'
 
 export interface LayoutTargetDescription {
     node: IDLEntry
