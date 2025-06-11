@@ -856,8 +856,8 @@
 |`keyboardAppearance`| Function | Dudkin Sergey|done | | needs merging to FB|
 |`stopBackPress`| Function | Dudkin Sergey| done | | needs merging to FB|
 |`bindSelectionMenu`| Function | Dmitry A Smirnov| done |  |  |
-|`customKeyboard`| Function | Dmitry A Smirnov| done |  |  |
-|`placeholder`| Function | Dudkin Sergey| done |  |  |
+|`customKeyboard`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, Cannot find method 'customKeyboard |
+|`placeholder`| Function | Dudkin Sergey| done | failed | pass for String, failed for resourceStr |
 |*RichText*| *Component* | Dudkin Sergey| done | pass |  |
 |`construct`| Function | Dudkin Sergey| done | pass |  |
 |`setRichTextOptions`| Function | Dudkin Sergey| done | pass |  |
