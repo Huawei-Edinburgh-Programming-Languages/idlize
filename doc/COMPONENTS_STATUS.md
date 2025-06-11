@@ -878,8 +878,8 @@
 |`construct`| Function | Dmitry A Smirnov| done |  | |
 |`setRowSplitOptions`| Function | Dmitry A Smirnov| done | failed | OHOSUI-2201 Text in rowSplit does not appear |
 |`resizeable`| Function | Dmitry A Smirnov| done | failed | OHOSUI-2202 resizeable does not work |
-|*SaveButton*| *Component* | Samarin Sergey| done |  |  |
-|`construct`| Function |Samarin Sergey| done |  |  |
+|*SaveButton*| *Component* | Samarin Sergey| done | out of scope |  |
+|`construct`| Function |Samarin Sergey| done | out of scope |  |
 |`setSaveButtonOptions0`| Function | Samarin Sergey| done | pass |  |
 |`setSaveButtonOptions`| Function | Samarin Sergey| done | pass |  |
 |`onClick`| Function | Samarin Sergey | testskipped | pass |  |
@@ -1167,7 +1167,7 @@
 |`maxFontScale`| Function | Kovalev Sergey | done  | |
 |`symbolEffect`| Function |Andrey Khudenkikh | done |  |  |
 |*SymbolSpan*| *Component* |Dmitry A Smirnov| done |  |  |
-|`construct`| Function |Dmitry A Smirnov| done |  |  |
+|`construct`| Function |Dmitry A Smirnov| done | pass |  |
 |`setSymbolSpanOptions`| Function |Dmitry A Smirnov| done | pass |   |
 |`fontSize`| Function |Dmitry A Smirnov| done | pass |  |
 |`fontColor`| Function |Dmitry A Smirnov| done | pass |  |
