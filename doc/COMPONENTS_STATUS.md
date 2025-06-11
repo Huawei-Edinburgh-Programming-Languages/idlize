@@ -2335,7 +2335,7 @@
 |`start`| Function | Kovalev Sergey | done |  | depricated |
 |`pause`| Function | Kovalev Sergey | done |  | depricated |
 |`stop`| Function | Kovalev Sergey | done |  | depricated |
-|*ListScroller*| *Class* |Morozov Sergey | done|  |  |
+|*ListScroller*| *Class* |Morozov Sergey | done| Politov Mikhail |  |
 |`ctor`| Function | Morozov Sergey | done | | |
 |`getItemRectInGroup`| Function |Morozov Sergey | done | | |
 |`scrollToItemInGroup`| Function |Morozov Sergey | done | | |
