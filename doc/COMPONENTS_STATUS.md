@@ -815,9 +815,9 @@
 |*RelativeContainer*| *Component* | Dmitry A Smirnov | done | blocked |  https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`construct`| Function |Dmitry A Smirnov | done |  |  |
 |`setRelativeContainerOptions`| Function | Dmitry A Smirnov | done | | |
-|`guideLine`| Function | Dmitry A Smirnov | done | blocked | |
-|`barrier0`| Function |Dmitry A Smirnov | done | blocked | |
-|`barrier1`| Function | Dmitry A Smirnov | done | blocked | |
+|`guideLine`| Function | Dmitry A Smirnov | done | blocked | LinkerUnresolvedClassError message: arkui.component.common.arkui$component$common$AlignRuleParam|
+|`barrier0`| Function |Dmitry A Smirnov | done | blocked | LinkerUnresolvedClassError message: arkui.component.common.arkui$component$common$AlignRuleParam|
+|`barrier1`| Function | Dmitry A Smirnov | done | blocked | LinkerUnresolvedClassError message: arkui.component.common.arkui$component$common$AlignRuleParam|
 |*RemoteWindow*| *Component* | Spirin Andrey | done |  | |
 |`construct`| Function |Spirin Andrey | done |  | |
 |`setRemoteWindowOptions`| Function | Spirin Andrey | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+) |
