@@ -2853,7 +2853,7 @@
 |`getImageBounds`| Function | | |
 |*VisualEffect*| *Class* |  |  |
 |`ctor`| Function | | |
-|`backgroundColorBlender`| Function |  | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
+|`backgroundColorBlender`| Function |  | | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
 |*Matrix4Transit*| *Class* | Samarin Sergey | testskipped | | |
 |`ctor`| Function |Samarin Sergey | done | |
 |`copy`| Function | Samarin Sergey | done | | |
