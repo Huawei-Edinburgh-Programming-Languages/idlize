@@ -154,7 +154,7 @@ class IdlProcessingManager {
             if (e.diagnosticMessage != null) {
                 this.results.push(e.diagnosticMessage)
             } else {
-                UnknownError.pushDiagnosticMessage(this.results, [{documentPath: fileName}], e.message ?? "")
+                UnknownError.reportDiagnosticMessage([{documentPath: fileName}], e.message ?? "")
             }
         }
     }
@@ -178,11 +178,11 @@ class IdlProcessingManager {
                 idl.forEachChild(entry.idlFile,
                     n => passes.forEach(p => {
                         try { p.dispatch(n, true) }
-                        catch (e: any) { ProcessingError.pushDiagnosticMessage(this.results, [{documentPath: entry.idlFile.fileName!}], `Pass "${p.name}": ${e.message}`) }
+                        catch (e: any) { ProcessingError.reportDiagnosticMessage([{documentPath: entry.idlFile.fileName!}], `Pass "${p.name}": ${e.message}`) }
                     }),
                     n => passes.forEach(p => {
                         try { p.dispatch(n) }
-                        catch (e: any) { ProcessingError.pushDiagnosticMessage(this.results, [{documentPath: entry.idlFile.fileName!}], `Pass "${p.name}": ${e.message}`) }
+                        catch (e: any) { ProcessingError.reportDiagnosticMessage([{documentPath: entry.idlFile.fileName!}], `Pass "${p.name}": ${e.message}`) }
                     })
                 )
             }

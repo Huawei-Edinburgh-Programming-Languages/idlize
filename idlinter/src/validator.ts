@@ -31,7 +31,7 @@ enumPass.on({kind: idl.IDLKind.EnumMember}).after = (node, st) => {
 enumPass.on({kind: idl.IDLKind.Enum}).after = (node, st) => {
     let nodes = st.enums.get(node)!
     if (nodes.length == 2) {
-        InconsistentEnum.pushDiagnosticMessage(idlManager.results, [locationForNode(node, "name"), nodes[0], nodes[1]])
+        InconsistentEnum.reportDiagnosticMessage([locationForNode(node, "name"), nodes[0], nodes[1]])
     }
 }
 
@@ -69,7 +69,7 @@ resolvePass.on({kind: idl.IDLKind.ReferenceType}).before = (node, st) => {
         return
     }
     if (!st.names.has(node.name)) {
-        UnresolvedReference.pushDiagnosticMessage(idlManager.results, [node])
+        UnresolvedReference.reportDiagnosticMessage(node)
     }
 }
 resolvePass.on({}).after = (node, st) => {
@@ -103,12 +103,12 @@ attrPass.on({}).before = (node, st) => {
     }
     let valids = ohosValidAttributes.get(node.kind)
     if (!valids) {
-        WrongAttributePlacement.pushDiagnosticMessage(idlManager.results, node, `Attributes not allowed on ${node.kind}`)
+        WrongAttributePlacement.reportDiagnosticMessage(node, `Attributes not allowed on ${node.kind}`)
         return
     }
     for (let attr of node.extendedAttributes) {
         if (!valids.includes(attr.name)) {
-            WrongAttributeName.pushDiagnosticMessage(idlManager.results, locationForNode(node, "name"), `Attribute "${attr.name}" not allowed on ${node.kind}`)
+            WrongAttributeName.reportDiagnosticMessage(locationForNode(node, "name"), `Attribute "${attr.name}" not allowed on ${node.kind}`)
         }
     }
 }

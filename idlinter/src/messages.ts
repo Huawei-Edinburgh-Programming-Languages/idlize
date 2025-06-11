@@ -14,6 +14,7 @@
  */
 
 import { MessageSeverity, DiagnosticMessage, Location, DiagnosticResults, DiagnosticException } from "./diagnostictypes"
+import { idlManager } from "./idlprocessing"
 import { AutoLocations, locationsFromAuto } from "./parser"
 
 /**
@@ -79,8 +80,8 @@ export class DiagnosticMessageKind {
         return msg
     }
 
-    pushDiagnosticMessage(diagnosticResult: DiagnosticResults, locations: AutoLocations, mainMessage?: string, additionalMessage?: string): void {
-        diagnosticResult.push(this.generateDiagnosticMessage(locations, mainMessage, additionalMessage))
+    reportDiagnosticMessage(locations: AutoLocations, mainMessage?: string, additionalMessage?: string): void {
+        idlManager.results.push(this.generateDiagnosticMessage(locations, mainMessage, additionalMessage))
     }
 
     throwDiagnosticMessage(locations: AutoLocations, mainMessage?: string, additionalMessage?: string): void {
