@@ -110,6 +110,14 @@ export class MaterializedMethod extends PeerMethod {
         }
         return privateMethod
     }
+
+    setOverloadIndex(index: number) {
+        this.overloadIndex = index
+    }
+
+    getOverloadPostfix(): string {
+        return this.overloadIndex == undefined ? "" : `${this.overloadIndex}`
+    }
 }
 
 export function copyMaterializedMethod(method: MaterializedMethod, overrides: {

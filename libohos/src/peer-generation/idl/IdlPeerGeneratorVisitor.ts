@@ -190,21 +190,25 @@ export class IdlPeerProcessor {
         }
 
         let constructors: idl.IDLConstructor[] = decl.constructors
-        if (constructors.length == 0 && decl.callables.length > 0) {
-            const first = decl.callables[0]
-            const constructor = idl.createConstructor(
-                [...first.parameters],
-                first.returnType,
-                {
-                    documentation: first.documentation,
-                    extendedAttributes: first.extendedAttributes,
-                    fileName: first.fileName
-                }
-            )
-            constructors = [constructor]
+        if (constructors.length == 0 && !isStaticMaterialized) {
+            if (decl.callables.length > 0) {
+                const first = decl.callables[0]
+                const constructor = idl.createConstructor(
+                    [...first.parameters],
+                    first.returnType,
+                    {
+                        documentation: first.documentation,
+                        extendedAttributes: first.extendedAttributes,
+                        fileName: first.fileName
+                    }
+                )
+                constructors = [constructor]
+            } else {
+                constructors = [idl.createConstructor([], idl.IDLVoidType)]
+            }
         }
-        // const mConstructor = isStaticMaterialized ? undefined : this.makeMaterializedMethod(decl, constructor, fullCName, implemenationParentName)
         const mConstructors = isStaticMaterialized ? [] : constructors.map(c => this.makeMaterializedMethod(decl, c, fullCName, implemenationParentName))
+        if (mConstructors.length > 1) mConstructors.forEach((c, i) => { c.setOverloadIndex(i) })
         const mFinalizer = isStaticMaterialized ? undefined : new MaterializedMethod(fullCName, implemenationParentName,[], idl.IDLPointerType, false,
             new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
         const mFields = propertiesFromInterface.concat(decl.properties)
