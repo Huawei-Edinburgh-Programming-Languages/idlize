@@ -522,7 +522,7 @@
 |`draggable`| Function | Evstigneev Roman | done | pass |   |
 |`pointLight`| Function | Evstigneev Roman | done | pass |    |
 |`edgeAntialiasing`| Function | Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`onComplete`| Function | Evstigneev Roman | done | failed | |
+|`onComplete`| Function | Evstigneev Roman | done | failed | OHOSUI-2409 |
 |`onError`| Function | Evstigneev Roman | done | pass | |
 |`onFinish`| Function | Evstigneev Roman | done | failed | same in urkui |
 |`enableAnalyzer`| Function | Evstigneev Roman | done | pass | |
