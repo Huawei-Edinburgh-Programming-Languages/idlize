@@ -1470,25 +1470,25 @@
 |*Video*| *Component* | Erokhin Ilya | blocked AceEngine|  |  |
 |`construct`| Function |Erokhin Ilya | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
 |`setVideoOptions`| Function | Erokhin Ilya | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
-|`muted`| Function | Erokhin Ilya | done |  |  |
-|`autoPlay`| Function | Erokhin Ilya | done |  |  |
-|`controls`| Function | Erokhin Ilya | done |  |  |
-|`loop`| Function | Erokhin Ilya | done |  |  |
-|`objectFit`| Function | Erokhin Ilya | done |  |  |
+|`muted`| Function | Erokhin Ilya | done | Pavelyev Ivan |  |
+|`autoPlay`| Function | Erokhin Ilya | done | Pavelyev Ivan |  |
+|`controls`| Function | Erokhin Ilya | done | Pavelyev Ivan |  |
+|`loop`| Function | Erokhin Ilya | done | Pavelyev Ivan |  |
+|`objectFit`| Function | Erokhin Ilya | done | Pavelyev Ivan |  |
 |`onStart`| Function | Erokhin Ilya | done | pass |  |
 |`onPause`| Function | Erokhin Ilya | done | pass |  |
-|`onFinish`| Function | Erokhin Ilya | done |  |  |
-|`onFullscreenChange`| Function | Erokhin Ilya | done |  |  |
+|`onFinish`| Function | Erokhin Ilya | done | Pavelyev Ivan |  |
+|`onFullscreenChange`| Function | Erokhin Ilya | done | Pavelyev Ivan |  |
 |`onPrepared`| Function | Erokhin Ilya | done | pass |  |
-|`onSeeking`| Function | Erokhin Ilya | done |  |  |
-|`onSeeked`| Function | Erokhin Ilya | done |  |  |
-|`onUpdate`| Function | Erokhin Ilya | done |  |  |
+|`onSeeking`| Function | Erokhin Ilya | done | Pavelyev Ivan |  |
+|`onSeeked`| Function | Erokhin Ilya | done | Pavelyev Ivan |  |
+|`onUpdate`| Function | Erokhin Ilya | done | Pavelyev Ivan |  |
 |`onError`| Function | Erokhin Ilya | done | pass |  |
-|`onStop`| Function | Erokhin Ilya | done |  |  |
+|`onStop`| Function | Erokhin Ilya | done | Pavelyev Ivan |  |
 |`enableAnalyzer`| Function | Erokhin Ilya | done | pass |  |
 |`analyzerConfig`| Function | Erokhin Ilya | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
-|`surfaceBackgroundColor`| Function | Kovalev Sergey | done | | |
-|`enableShortcutKey`| Function | Kovalev Sergey | done | | |
+|`surfaceBackgroundColor`| Function | Kovalev Sergey | done | Pavelyev Ivan | |
+|`enableShortcutKey`| Function | Kovalev Sergey | done | Pavelyev Ivan | |
 |*WaterFlow*| *Component* | Kovalev Sergey | done |  |  |
 |`construct`| Function | Kovalev Sergey | done | pass | |
 |`setWaterFlowOptions`| Function | Kovalev Sergey | done | pass | |
