@@ -75,8 +75,10 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         const peerPtr = "peerPtr"
         const sig = new NamedMethodSignature(idl.IDLVoidType, [idl.IDLPointerType], [peerPtr])
         const className = clazz.getImplementationName()
-        const initMethod = new Method("initPeer", sig, [MethodModifier.PRIVATE])
-        if (collapseCtors) return
+        if (collapseCtors) {
+            this.printCollapsedCtors(clazz)
+            return
+        }
         // constructor with peerPtr
         this.printer.writeConstructorImplementation(className, sig, writer => {
             if (hasSuperClass) {
@@ -96,7 +98,15 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             }
         })
     }
-    printCtor(clazz: MaterializedClass, ctor: MaterializedMethod, collapseCtors: boolean) {
+    printCollapsedCtors(clazz: MaterializedClass) {
+        for(const ctor of clazz.ctors) {
+            
+        }
+        for (const grouped of groupOverloads(clazz.ctors)) {
+            this.overloadsPrinter.printGroupedComponentOverloads(clazz, grouped)
+        }
+    }
+    printCtor(clazz: MaterializedClass, ctor: MaterializedMethod) {
 
         const config = peerGeneratorConfiguration()
 
@@ -344,8 +354,10 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             this.printFields(clazz)
 
             this.printBaseCtor(clazz, collapseConstructors, superClassName != undefined)
-            for (const ctor of clazz.ctors) {
-                this.printCtor(clazz, ctor, collapseConstructors)
+            if (!collapseConstructors) {
+                for (const ctor of clazz.ctors) {
+                    this.printCtor(clazz, ctor)
+                }
             }
 
             if (clazz.finalizer) printPeerFinalizer(clazz, writer)
@@ -470,10 +482,13 @@ function writeFromPtrMethod(clazz: MaterializedClass, writer: LanguageWriter, co
     const fromPtrSig = new NamedMethodSignature(clazzRefType, [idl.IDLPointerType], ["ptr"])
     writer.writeMethodImplementation(new Method("fromPtr", fromPtrSig, [MethodModifier.PUBLIC, MethodModifier.STATIC], classTypeParameters), writer => {
         const objVar = `obj`
+        const argsCount = collapseCtors ? Math.max(...clazz.ctors.map(ctor => ctor.method.signature.args.length)) : 0
+        const args = [...Array(argsCount).fill("undefined"), "ptr"]
         writer.writeStatement(writer.makeAssign(objVar,
             clazzRefType,
             //TODO: Need to pass IDLType instead of string to makeNewObject
-            writer.makeNewObject(writer.getNodeName(clazzRefType), [writer.makeString("ptr")]),
+            //writer.makeNewObject(writer.getNodeName(clazzRefType), [writer.makeString("ptr")]),
+            writer.makeNewObject(writer.getNodeName(clazzRefType), args.map(arg => writer.makeString(arg))),
             true)
         )
         // writer.writeStatement(
@@ -490,7 +505,7 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
         printJavaImports(this.printer, imports)
     }
 
-    override printCtor(clazz: MaterializedClass, ctor: MaterializedMethod, collapseCtors: boolean): void {
+    override printCtor(clazz: MaterializedClass, ctor: MaterializedMethod): void {
         const emptyParameterType = createReferenceType(ARK_MATERIALIZEDBASE_EMPTY_PARAMETER)
         const ctorPostfix = `_${clazz.className.toLowerCase()}`
         const implementationClassName = clazz.getImplementationName()
