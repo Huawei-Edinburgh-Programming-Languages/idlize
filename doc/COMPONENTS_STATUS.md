@@ -1775,16 +1775,16 @@
 |`setAntialias`| Function | Vadim Voronov | done | | |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | blocked IDL | Vadim Voronov | |
 |`ctor`| Function |Vadim Voronov | done |  | |
-|`drawImage0`| Function |Vadim Voronov | done | failed | |
-|`drawImage1`| Function  | Vadim Voronov | done | failed | |
-|`drawImage2`| Function  | Vadim Voronov | done | failed | |
-|`beginPath`| Function  | Vadim Voronov | done  | failed | |
-|`clip0`| Function  | Vadim Voronov | done  | failed | |
-|`clip1`| Function  | Vadim Voronov | done  | failed | |
-|`fill0`| Function  | Vadim Voronov | done  | failed | |
-|`fill1`| Function  | Vadim Voronov | done  |  failed | |
-|`stroke0`| Function  | Vadim Voronov | done  | failed | |
-|`stroke1`| Function  | Vadim Voronov | done  |  failed | |
+|`drawImage0`| Function |Vadim Voronov | done | failed | compilation error new ImageBitmap() |
+|`drawImage1`| Function  | Vadim Voronov | done | failed | compilation error new ImageBitmap() |
+|`drawImage2`| Function  | Vadim Voronov | done | failed | compilation error new ImageBitmap() |
+|`beginPath`| Function  | Vadim Voronov | done  | failed | lack of methods CanvasPath methods in CanvasRenderer interface |
+|`clip0`| Function  | Vadim Voronov | done  | failed |  lack of methods CanvasPath methods in CanvasRenderer interface  |
+|`clip1`| Function  | Vadim Voronov | done  | failed | lack of methods CanvasPath methods in CanvasRenderer interface  |
+|`fill0`| Function  | Vadim Voronov | done  | failed |  lack of methods CanvasPath methods in CanvasRenderer interface |
+|`fill1`| Function  | Vadim Voronov | done  |  failed |  lack of methods CanvasPath methods in CanvasRenderer interface |
+|`stroke0`| Function  | Vadim Voronov | done  | failed |  lack of methods CanvasPath methods in CanvasRenderer interface |
+|`stroke1`| Function  | Vadim Voronov | done  |  failed | lack of methods CanvasPath methods in CanvasRenderer interface  |
 |`createLinearGradient`| Function  | Vadim Voronov | done | | |
 |`createPattern`| Function  | Vadim Voronov | done | | |
 |`createRadialGradient`| Function  | Vadim Voronov | done | |  |
