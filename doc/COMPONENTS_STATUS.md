@@ -812,12 +812,12 @@
 |`pullToRefresh`| Function |Politov Mikhail | done | failed | is not called in demo |
 |`onOffsetChange`| Function |Politov Mikhail | done | failed | Ois not called in demo |
 |`pullDownRatio`| Function |Politov Mikhail | done | failed | is not called in demo |
-|*RelativeContainer*| *Component* | Dmitry A Smirnov | done | failed | is not called in demo |
+|*RelativeContainer*| *Component* | Dmitry A Smirnov | done | blocked |  https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`construct`| Function |Dmitry A Smirnov | done |  |  |
-|`setRelativeContainerOptions`| Function | Dmitry A Smirnov | done |  |  |
-|`guideLine`| Function | Dmitry A Smirnov | done | failed | is not called in demo |
-|`barrier0`| Function |Dmitry A Smirnov | done | failed | is not called in demo |
-|`barrier1`| Function | Dmitry A Smirnov | done | failed | is not called in demo |
+|`setRelativeContainerOptions`| Function | Dmitry A Smirnov | done | | |
+|`guideLine`| Function | Dmitry A Smirnov | done | blocked | |
+|`barrier0`| Function |Dmitry A Smirnov | done | blocked | |
+|`barrier1`| Function | Dmitry A Smirnov | done | blocked | |
 |*RemoteWindow*| *Component* | Spirin Andrey | done |  | |
 |`construct`| Function |Spirin Andrey | done |  | |
 |`setRemoteWindowOptions`| Function | Spirin Andrey | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+) |
