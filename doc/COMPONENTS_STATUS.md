@@ -1775,16 +1775,16 @@
 |`setAntialias`| Function | Vadim Voronov | done | | |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | blocked IDL | Vadim Voronov | |
 |`ctor`| Function |Vadim Voronov | done |  | |
-|`drawImage0`| Function |Vadim Voronov | done |  | |
-|`drawImage1`| Function  | Vadim Voronov | done |  | |
-|`drawImage2`| Function  | Vadim Voronov | done |  | |
-|`beginPath`| Function  | Vadim Voronov | done  |  | |
-|`clip0`| Function  | Vadim Voronov | done  |  | |
-|`clip1`| Function  | Vadim Voronov | done  |  | |
-|`fill0`| Function  | Vadim Voronov | done  |  | |
-|`fill1`| Function  | Vadim Voronov | done  |  | |
-|`stroke0`| Function  | Vadim Voronov | done  |  | |
-|`stroke1`| Function  | Vadim Voronov | done  |  | |
+|`drawImage0`| Function |Vadim Voronov | done | failed | |
+|`drawImage1`| Function  | Vadim Voronov | done | failed | |
+|`drawImage2`| Function  | Vadim Voronov | done | failed | |
+|`beginPath`| Function  | Vadim Voronov | done  | failed | |
+|`clip0`| Function  | Vadim Voronov | done  | failed | |
+|`clip1`| Function  | Vadim Voronov | done  | failed | |
+|`fill0`| Function  | Vadim Voronov | done  | failed | |
+|`fill1`| Function  | Vadim Voronov | done  |  failed | |
+|`stroke0`| Function  | Vadim Voronov | done  | failed | |
+|`stroke1`| Function  | Vadim Voronov | done  |  failed | |
 |`createLinearGradient`| Function  | Vadim Voronov | done | | |
 |`createPattern`| Function  | Vadim Voronov | done | | |
 |`createRadialGradient`| Function  | Vadim Voronov | done | |  |
@@ -1797,9 +1797,9 @@
 |`putImageData1`| Function  | Vadim Voronov | done   |  |  |
 |`getLineDash`| Function  | Vadim Voronov |  done | |  |
 |`setLineDash`| Function  | Vadim Voronov | done |  | |
-|`clearRect`| Function  | Vadim Voronov | done |  | |
-|`fillRect`| Function  | Vadim Voronov | done |  | |
-|`strokeRect`| Function  | Vadim Voronov | done |  | |
+|`clearRect`| Function  | Vadim Voronov | done | pass | |
+|`fillRect`| Function  | Vadim Voronov | done | pass | |
+|`strokeRect`| Function  | Vadim Voronov | done | pass | |
 |`restore`| Function  | Vadim Voronov | done |  | |
 |`save`| Function  | Vadim Voronov | done |  | |
 |`fillText`| Function  | Vadim Voronov | done |  | |
