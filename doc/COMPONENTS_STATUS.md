@@ -1775,16 +1775,16 @@
 |`setAntialias`| Function | Vadim Voronov | done | | |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | blocked IDL | Vadim Voronov | |
 |`ctor`| Function |Vadim Voronov | done |  | |
-|`drawImage0`| Function |Vadim Voronov | done | failed | compilation error new ImageBitmap() |
-|`drawImage1`| Function  | Vadim Voronov | done | failed | compilation error new ImageBitmap() |
-|`drawImage2`| Function  | Vadim Voronov | done | failed | compilation error new ImageBitmap() |
-|`beginPath`| Function  | Vadim Voronov | done  | failed | lack of CanvasPath methods in CanvasRenderer interface |
-|`clip0`| Function  | Vadim Voronov | done  | failed |  lack of CanvasPath methods in CanvasRenderer interface  |
-|`clip1`| Function  | Vadim Voronov | done  | failed | lack of CanvasPath methods in CanvasRenderer interface  |
-|`fill0`| Function  | Vadim Voronov | done  | failed |  lack of CanvasPath methods in CanvasRenderer interface |
-|`fill1`| Function  | Vadim Voronov | done  | failed |  lack of CanvasPath methods in CanvasRenderer interface |
-|`stroke0`| Function  | Vadim Voronov | done | failed |  lack of CanvasPath methods in CanvasRenderer interface |
-|`stroke1`| Function  | Vadim Voronov | done | failed | lack of CanvasPath methods in CanvasRenderer interface  |
+|`drawImage0`| Function |Vadim Voronov | done | failed | bug hos2416 compilation error |
+|`drawImage1`| Function  | Vadim Voronov | done | failed | bug hos2416 compilation error |
+|`drawImage2`| Function  | Vadim Voronov | done | failed | bug hos2416 compilation error |
+|`beginPath`| Function  | Vadim Voronov | done  | failed | bug hos2417 no methods from CanvasPath interface|
+|`clip0`| Function  | Vadim Voronov | done  | failed | bug hos2417 no methods from CanvasPath interface|
+|`clip1`| Function  | Vadim Voronov | done  | failed | bug hos2417 no methods from CanvasPath interface|
+|`fill0`| Function  | Vadim Voronov | done  | failed | bug hos2417 no methods from CanvasPath interface|
+|`fill1`| Function  | Vadim Voronov | done  | failed | bug hos2417 no methods from CanvasPath interface|
+|`stroke0`| Function  | Vadim Voronov | done | failed | bug hos2417 no methods from CanvasPath interface|
+|`stroke1`| Function  | Vadim Voronov | done | failed | bug hos2417 no methods from CanvasPath interface|
 |`createLinearGradient`| Function  | Vadim Voronov | done | | |
 |`createPattern`| Function  | Vadim Voronov | done | | |
 |`createRadialGradient`| Function  | Vadim Voronov | done | |  |
