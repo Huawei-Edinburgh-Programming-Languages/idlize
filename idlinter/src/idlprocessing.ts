@@ -134,7 +134,6 @@ class IdlProcessingManager {
     entries: Parsed[] = []
     entriesByPath: Map<string, Parsed> = new Map()
     entriesToValidate: Parsed[] = []
-    idlFiles: idl.IDLFile[] = []
     results: DiagnosticResults = new DiagnosticResults()
     
     passes: IdlProcessingPass<any>[] = []
@@ -152,14 +151,13 @@ class IdlProcessingManager {
             let parsed = new Parsed(fileName)
             this.entries.push(parsed)
             this.entriesByPath.set(fileName, parsed)
+            parsed.load()
             if (parseOnly) {
                 this.peerlibrary.auxFiles.push(parsed.idlFile)
             } else {
                 this.entriesToValidate.push(parsed)
                 this.peerlibrary.files.push(parsed.idlFile)
             }
-            parsed.load()
-            this.idlFiles.push(parsed.idlFile)
         } catch (e: any) {
             if (e.diagnosticMessage != null) {
                 this.results.push(e.diagnosticMessage)

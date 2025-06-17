@@ -20,7 +20,7 @@ import { DuplicateIdentifier, InconsistentEnum, LoadingError, ProcessingError, U
 import { dependentPass, idlManager, IdlProcessingPass, startingPass } from "./idlprocessing"
 import { IdlNodeAny } from "./idltypes"
 
-let enumPass = startingPass("diagPass", () => ({enums: new Map<idl.IDLNode, IdlNodeAny[]>}))
+const enumPass = startingPass("diagPass", () => ({enums: new Map<idl.IDLNode, IdlNodeAny[]>()}))
 enumPass.on({kind: idl.IDLKind.Enum}).before = (node, st) => st.enums.set(node, [])
 enumPass.on({kind: idl.IDLKind.EnumMember}).after = (node, st) => {
     let nodes = st.enums.get(node.parent!)!
@@ -37,7 +37,7 @@ enumPass.on({kind: idl.IDLKind.Enum}).after = (node, st) => {
 
 // let namedDecls = [idl.IDLKind.Namespace, idl.IDLKind.Const, idl.IDLKind.Property, idl.IDLKind.Interface, idl.IDLKind.Method, idl.IDLKind.Callable, idl.IDLKind.Typedef, idl.IDLKind.Enum]
 
-let resolvePass = startingPass("resolvePass", () => ({typeParameters: new Set<string>()}))
+const resolvePass = startingPass("resolvePass", () => ({typeParameters: new Set<string>()}))
 function extParam(param: string) {
     const extendsIdx = param.indexOf('extends')
     if (extendsIdx !== -1) {
@@ -74,7 +74,7 @@ resolvePass.on({}).after = (node, st) => {
     }
 }
 
-let ohosValidAttributes = new Map([
+const ohosValidAttributes = new Map([
             [idl.IDLKind.Import, ["Deprecated", "Documentation"]],
             [idl.IDLKind.Namespace, ["DefaultExport", "Deprecated", "Documentation", "VerbatimDts"]],
             [idl.IDLKind.Const, ["DefaultExport", "Deprecated", "Documentation"]],
@@ -88,7 +88,7 @@ let ohosValidAttributes = new Map([
             [idl.IDLKind.EnumMember, ["OriginalEnumMemberName", "Deprecated", "Documentation"]],
             [idl.IDLKind.Constructor, ["Deprecated", "Documentation"]]
 ])
-let attrPass = startingPass("attrPass", () => {})
+const attrPass = startingPass("attrPass", () => {})
 attrPass.mode = "ohos"
 attrPass.on({}).before = (node, st) => {
     if(!node.extendedAttributes || node.extendedAttributes.length == 0) {
@@ -106,7 +106,7 @@ attrPass.on({}).before = (node, st) => {
     }
 }
 
-let genPass = dependentPass("genPass", [enumPass], ()=>({lines: ([] as string[])}))
+const genPass = dependentPass("genPass", [enumPass], ()=>({lines: ([] as string[])}))
 genPass.mode = "gendemo"
 genPass.on({kind: idl.IDLKind.File}).before = (node, st) => { st.lines = [] }
 genPass.on({kind: idl.IDLKind.Enum}).before = (node, st) => st.lines.push(`enum ${node.name} {`)
