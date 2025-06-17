@@ -2336,11 +2336,11 @@
 |`pause`| Function | Kovalev Sergey | done |  | depricated |
 |`stop`| Function | Kovalev Sergey | done |  | depricated |
 |*ListScroller*| *Class* |Morozov Sergey | done| Politov Mikhail |  |
-|`ctor`| Function | Morozov Sergey | done | | |
-|`getItemRectInGroup`| Function |Morozov Sergey | done | | |
-|`scrollToItemInGroup`| Function |Morozov Sergey | done | | |
-|`closeAllSwipeActions`| Function |Morozov Sergey | done | | |
-|`getVisibleListContentInfo`| Function |Morozov Sergey | done | | |
+|`ctor`| Function | Morozov Sergey | done | done | |
+|`getItemRectInGroup`| Function |Morozov Sergey | done | blocked | |
+|`scrollToItemInGroup`| Function |Morozov Sergey | done | blocked | |
+|`closeAllSwipeActions`| Function |Morozov Sergey | done | blocked | |
+|`getVisibleListContentInfo`| Function |Morozov Sergey | done | done | |
 |*Matrix2D*| *Class* | Vadim Voronov | done |  |  |
 |`ctor`| Function |  Vadim Voronov | done |  | |
 |`identity`| Function | Vadim Voronov | done |  | |
