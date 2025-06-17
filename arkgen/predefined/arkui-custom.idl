@@ -30,7 +30,6 @@ interface SystemOps {
     static void setFrameCallback(Callback_Number_Void onFrameCallback, Callback_Number_Void onIdleCallback, number delayTime);
     static LengthMetricsCustom resoureToLengthMetrics(Resource res);
     static sequence<number> colorMetricsResourceColor(Resource color);
-    static sequence<number> colorMetricsBlendColor(long color, long overlayColor);
 };
 
 [Entity=Class]
