@@ -2340,7 +2340,7 @@
 |`getItemRectInGroup`| Function |Morozov Sergey | done | blocked | |
 |`scrollToItemInGroup`| Function |Morozov Sergey | done | blocked | |
 |`closeAllSwipeActions`| Function |Morozov Sergey | done | blocked | |
-|`getVisibleListContentInfo`| Function |Morozov Sergey | done | done | |
+|`getVisibleListContentInfo`| Function |Morozov Sergey | done | blocked | |
 |*Matrix2D*| *Class* | Vadim Voronov | done |  |  |
 |`ctor`| Function |  Vadim Voronov | done |  | |
 |`identity`| Function | Vadim Voronov | done |  | |
@@ -2909,7 +2909,7 @@
 |`getStyledString`| Function | Maksimov Nikita | done |  | |
 |`getSelection`| Function |Dudkin Sergey| done |  | |
 |`onContentChanged`| Function | Dudkin Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB944G + |
-|*Scroller*| *Class* | Erokhin Ilya | done |  |  |
+|*Scroller*| *Class* | Erokhin Ilya | done | Politov Mikhail |  |
 |`ctor`| Function | Erokhin Ilya | done |  |  |
 |`scrollTo`| Function | Erokhin Ilya | done |  |  |
 |`scrollEdge`| Function | Erokhin Ilya | done |  |  |
