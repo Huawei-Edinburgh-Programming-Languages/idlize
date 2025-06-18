@@ -1785,16 +1785,16 @@
 |`fill1`| Function  | Vadim Voronov | done  | failed | bug hos2417 no methods from CanvasPath interface|
 |`stroke0`| Function  | Vadim Voronov | done | failed | bug hos2417 no methods from CanvasPath interface|
 |`stroke1`| Function  | Vadim Voronov | done | failed | bug hos2417 no methods from CanvasPath interface|
-|`createLinearGradient`| Function  | Vadim Voronov | done | | |
-|`createPattern`| Function  | Vadim Voronov | done | | |
-|`createRadialGradient`| Function  | Vadim Voronov | done | |  |
-|`createConicGradient`| Function  | Vadim Voronov | done | |  |
-|`createImageData0`| Function  | Vadim Voronov | done | |  |
-|`createImageData1`| Function  | Vadim Voronov | done | |  |
-|`getImageData`| Function  | Vadim Voronov | done | | |
-|`getPixelMap`| Function  | Vadim Voronov | done | | |
-|`putImageData0`| Function  | Vadim Voronov | done   |  |  |
-|`putImageData1`| Function  | Vadim Voronov | done   |  |  |
+|`createLinearGradient`| Function  | Vadim Voronov | done | pass | |
+|`createPattern`| Function  | Vadim Voronov | done | failed | bug hos2416 compilation error |
+|`createRadialGradient`| Function  | Vadim Voronov | done | pass |  |
+|`createConicGradient`| Function  | Vadim Voronov | done | pass |  |
+|`createImageData0`| Function  | Vadim Voronov | done | failed | bug hos2422 |
+|`createImageData1`| Function  | Vadim Voronov | done | failed | bug hos2422 |
+|`getImageData`| Function  | Vadim Voronov | done | pass | |
+|`getPixelMap`| Function  | Vadim Voronov | done | failed | bug hos2423 |
+|`putImageData0`| Function  | Vadim Voronov | done | failed | bug hos2422 |
+|`putImageData1`| Function  | Vadim Voronov | done | pass |  |
 |`getLineDash`| Function  | Vadim Voronov |  done | |  |
 |`setLineDash`| Function  | Vadim Voronov | done |  | |
 |`clearRect`| Function  | Vadim Voronov | done | pass | |
@@ -1813,7 +1813,7 @@
 |`setTransform1`| Function  | Vadim Voronov | done |  | |
 |`transform`| Function  | Vadim Voronov | done |  | |
 |`translate`| Function  | Vadim Voronov | done |  | |
-|`setPixelMap`| Function  | Vadim Voronov | done |  |  |
+|`setPixelMap`| Function  | Vadim Voronov | done | failed | bug hos2423 |
 |`transferFromImageBitmap`| Function  | Vadim Voronov | done |  | |
 |`saveLayer`| Function  | Vadim Voronov | done |  | |
 |`restoreLayer`| Function  | Vadim Voronov | done |  | |
