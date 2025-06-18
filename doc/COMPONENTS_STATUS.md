@@ -1774,7 +1774,7 @@
 |`getAntialias`| Function | Vadim Voronov | done | | |
 |`setAntialias`| Function | Vadim Voronov | done | | |
 |*CanvasRenderer*| *Class*  | Vadim Voronov | blocked IDL | Vadim Voronov | |
-|`ctor`| Function |Vadim Voronov | done |  | |
+|`ctor`| Function |Vadim Voronov | done | pass | |
 |`drawImage0`| Function |Vadim Voronov | done | failed | bug hos2416 compilation error |
 |`drawImage1`| Function  | Vadim Voronov | done | failed | bug hos2416 compilation error |
 |`drawImage2`| Function  | Vadim Voronov | done | failed | bug hos2416 compilation error |
