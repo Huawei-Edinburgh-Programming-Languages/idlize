@@ -574,48 +574,48 @@
 |`indicatorStyle`| Function | Kovalev Sergey | done |  | depricated |
 |`indicatorLoop`| Function | Kovalev Sergey | done |  | depricated |
 |`onChange`| Function | Kovalev Sergey | done |  | depricated |
-|*List*|*Component*|Morozov Sergey| done |  |  |
-|`construct`| Function |Morozov Sergey| done |  |  |
-|`setListOptions`|Function|Morozov Sergey| done |  |  |
-|`alignListItem`|Function|Morozov Sergey| done |  |  |
-|`listDirection`|Function|Morozov Sergey| done |  |  |
-|`contentStartOffset`|Function|Morozov Sergey| done |  |  |
-|`contentEndOffset`|Function|Morozov Sergey| done |  |  |
+|*List*|*Component*|Morozov Sergey| done | Evstigneev Roman |  |
+|`construct`| Function |Morozov Sergey| done | in progress |  |
+|`setListOptions`|Function|Morozov Sergey| done | in progress |  |
+|`alignListItem`|Function|Morozov Sergey| done | in progress |  |
+|`listDirection`|Function|Morozov Sergey| done | in progress |  |
+|`contentStartOffset`|Function|Morozov Sergey| done | in progress   |  |
+|`contentEndOffset`|Function|Morozov Sergey| done | in progress   |  |
 |`divider`|Function|Morozov Sergey| done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`multiSelectable`|Function|Morozov Sergey| done |  |  |
-|`cachedCount0`|Function|Morozov Sergey| done |  |  |
-|`cachedCount1`| Function |Morozov Sergey| done |  |  |
-|`chainAnimation`|Function|Morozov Sergey| done |  |  |
-|`chainAnimationOptions`|Function|Morozov Sergey| done |  |  |
-|`sticky`|Function|Morozov Sergey| done |  |  |
-|`scrollSnapAlign`|Function|Morozov Sergey| done |  |  |
-|`childrenMainSize`|Function|Morozov Sergey| done |  |  |
-|`maintainVisibleContentPosition`|Function|Morozov Sergey| done |  |  |
-|`stackFromEnd`| Function | Samarin Sergey | done | | |
-|`onScrollIndex`|Function|Morozov Sergey| done |  |  |
-|`onScrollVisibleContentChange`|Function|Morozov Sergey| done |  |  |
-|`onItemMove`|Function| Skroba Gleb | done |  |   |
-|`onItemDragStart`|Function| Skroba Gleb | done |  |   |
-|`onItemDragEnter`|Function|Morozov Sergey| done |  |  |
-|`onItemDragMove`|Function|Morozov Sergey| done |  |  |
-|`onItemDragLeave`|Function|Morozov Sergey| done |  |  |
-|`onItemDrop`|Function|Morozov Sergey| done |  |  |
-|`onScrollFrameBegin`|Function| Skroba Gleb | done |  |   |
+|`multiSelectable`|Function|Morozov Sergey| done | in progress |  |
+|`cachedCount0`|Function|Morozov Sergey| done | in progress |  |
+|`cachedCount1`| Function |Morozov Sergey| done | in progress |  |
+|`chainAnimation`|Function|Morozov Sergey| done | in progress |  |
+|`chainAnimationOptions`|Function|Morozov Sergey| done | in progress |  |
+|`sticky`|Function|Morozov Sergey| done | in progress |  |
+|`scrollSnapAlign`|Function|Morozov Sergey| done | in progress |  |
+|`childrenMainSize`|Function|Morozov Sergey| done | in progress |  |
+|`maintainVisibleContentPosition`|Function|Morozov Sergey| done | in progress |  |
+|`stackFromEnd`| Function | Samarin Sergey | done | in progress | |
+|`onScrollIndex`|Function|Morozov Sergey| done | in progress |  |
+|`onScrollVisibleContentChange`|Function|Morozov Sergey| done | in progress |  |
+|`onItemMove`|Function| Skroba Gleb | done | in progress |   |
+|`onItemDragStart`|Function| Skroba Gleb | done | in progress |   |
+|`onItemDragEnter`|Function|Morozov Sergey| done | in progress |  |
+|`onItemDragMove`|Function|Morozov Sergey| done | in progress |  |
+|`onItemDragLeave`|Function|Morozov Sergey| done | in progress |  |
+|`onItemDrop`|Function|Morozov Sergey| done | in progress |  |
+|`onScrollFrameBegin`|Function| Skroba Gleb | done | in progress |   |
 |`onWillScroll`| Function | | | | |
 |`onDidScroll`| Function | | | | |
-|`lanes`|Function|Morozov Sergey| done |  |  |
-|*ListItem*|*Component*|Morozov Sergey| done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`construct`| Function |Morozov Sergey| done |  |  |
+|`lanes`|Function|Morozov Sergey| done | in progress |  |
+|*ListItem*|*Component*|Morozov Sergey| done | Evstigneev Roman, test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`construct`| Function |Morozov Sergey| done | in progress |  |
 |`setListItemOptions`| Function | Morozov Sergey| done |  | deprecated for SetListItemOptions1Impl |
-|`selectable`|Function|Morozov Sergey| done |  |  |
-|`selected`|Function|Morozov Sergey| done |  |  |
-|`swipeAction`|Function|Samarin Sergey| done |  |  |
-|`onSelect`|Function|Morozov Sergey| done |  |  |
-|*ListItemGroup*|*Component*|Morozov Sergey| done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`construct`| Function |Morozov Sergey| done |  |  |
-|`setListItemGroupOptions`|Function|Dmitry A Smirnov | done |  |   |
-|`divider`|Function|Morozov Sergey| done |  |  |
-|`childrenMainSize`|Function|Morozov Sergey| done |  |  |
+|`selectable`|Function|Morozov Sergey| done | in progress |  |
+|`selected`|Function|Morozov Sergey| done | in progress |  |
+|`swipeAction`|Function|Samarin Sergey| done | in progress |  |
+|`onSelect`|Function|Morozov Sergey| done | in progress |  |
+|*ListItemGroup*|*Component*|Morozov Sergey| done | Evstigneev Roman, test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`construct`| Function |Morozov Sergey| done | in progress |  |
+|`setListItemGroupOptions`|Function|Dmitry A Smirnov | done | in progress |   |
+|`divider`|Function|Morozov Sergey| done | in progress |  |
+|`childrenMainSize`|Function|Morozov Sergey| done | in progress |  |
 |*LoadingProgress*|*Component*| Samarin Sergey | done | Samarin Sergey |  |
 |`construct`| Function | Samarin Sergey | done | pass |  |
 |`setLoadingProgressOptions`|Function| Samarin Sergey | done | pass |  |
