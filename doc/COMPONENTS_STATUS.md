@@ -913,16 +913,16 @@
 |*Search*|*Component*| Evstigneev Roman | blocked IDL |  |  |
 |`construct`| Function |Evstigneev Roman | done | pass |   |
 |`setSearchOptions`|Function| Evstigneev Roman | done | pass |   |
-|`fontColor`|Function| Evstigneev Roman | done |  |  |
+|`fontColor`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
 |`searchIcon`|Function| Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAYXQ8 (+)|
 |`cancelButton`|Function| Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB |
-|`textIndent`|Function| Evstigneev Roman | done |  |  |
+|`textIndent`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
 |`onEditChange`|Function| Evstigneev Roman | done |  |  |
-|`selectedBackgroundColor`|Function| Evstigneev Roman | done |  |  |
-|`caretStyle`|Function| Evstigneev Roman | done |  |  |
-|`placeholderColor`|Function| Evstigneev Roman | done |  |  |
-|`placeholderFont`|Function| Evstigneev Roman | done |  |  |
-|`textFont`|Function| Evstigneev Roman | done |  |  |
+|`selectedBackgroundColor`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
+|`caretStyle`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
+|`placeholderColor`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
+|`placeholderFont`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
+|`textFont`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
 |`enterKeyType`|Function| Evstigneev Roman | done |  |  |
 |`onSubmit`| Function |Evstigneev Roman | done |  |  |
 |`onChange`|Function| Evstigneev Roman | done |  |  |
