@@ -1795,16 +1795,16 @@
 |`getPixelMap`| Function  | Vadim Voronov | done | failed | bug hos2423 |
 |`putImageData0`| Function  | Vadim Voronov | done | failed | bug hos2422 |
 |`putImageData1`| Function  | Vadim Voronov | done | pass |  |
-|`getLineDash`| Function  | Vadim Voronov |  done | |  |
-|`setLineDash`| Function  | Vadim Voronov | done |  | |
+|`getLineDash`| Function  | Vadim Voronov |  done | failed | bug hos2440 |
+|`setLineDash`| Function  | Vadim Voronov | done | pass | |
 |`clearRect`| Function  | Vadim Voronov | done | pass | |
 |`fillRect`| Function  | Vadim Voronov | done | pass | |
 |`strokeRect`| Function  | Vadim Voronov | done | pass | |
-|`restore`| Function  | Vadim Voronov | done |  | |
-|`save`| Function  | Vadim Voronov | done |  | |
-|`fillText`| Function  | Vadim Voronov | done |  | |
-|`measureText`| Function  | Vadim Voronov | done |  |  |
-|`strokeText`| Function  | Vadim Voronov | done |  | |
+|`restore`| Function  | Vadim Voronov | done | pass | |
+|`save`| Function  | Vadim Voronov | done | pass | |
+|`fillText`| Function  | Vadim Voronov | done | pass | |
+|`measureText`| Function  | Vadim Voronov | done | failed | bug hos2441 |
+|`strokeText`| Function  | Vadim Voronov | done | pass | |
 |`getTransform`| Function  | Vadim Voronov | done | |  |
 |`resetTransform`| Function  | Vadim Voronov | done |  | |
 |`rotate`| Function  | Vadim Voronov | done |  | |
@@ -1824,10 +1824,10 @@
 |`setGlobalAlpha`| Function  | Vadim Voronov | done |  | |
 |`getGlobalCompositeOperation`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setGlobalCompositeOperation`| Function  | Vadim Voronov | done |  | |
-|`getFillStyle`| Function | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setFillStyle`| Function  | Vadim Voronov | done |  | |
-|`getStrokeStyle`| Function | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setStrokeStyle`| Function  | Vadim Voronov | done |  | |
+|`getFillStyle`| Function | Vadim Voronov | blocked IDL | failed | bug hos2442, to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
+|`setFillStyle`| Function  | Vadim Voronov | done | pass | |
+|`getStrokeStyle`| Function | Vadim Voronov | blocked IDL | failed | bug hos2442, to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
+|`setStrokeStyle`| Function  | Vadim Voronov | done | pass | |
 |`getFilter`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setFilter`| Function  | Vadim Voronov | done |  | |
 |`getImageSmoothingEnabled`| Function  | Vadim Voronov | done |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
@@ -1840,8 +1840,8 @@
 |`setLineDashOffset`| Function  | Vadim Voronov | done |  | |
 |`getLineJoin`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setLineJoin`| Function  | Vadim Voronov | done |  |   |
-|`getLineWidth`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
-|`setLineWidth`| Function  | Vadim Voronov | done |  | |
+|`getLineWidth`| Function  | Vadim Voronov | blocked IDL | failed | bug hos2442, to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
+|`setLineWidth`| Function  | Vadim Voronov | done | pass | |
 |`getMiterLimit`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setMiterLimit`| Function  | Vadim Voronov | done |  | |
 |`getShadowBlur`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
