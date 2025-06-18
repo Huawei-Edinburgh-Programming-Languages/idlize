@@ -1257,7 +1257,7 @@
 |`fontWeight`| Function | Samarin Sergey | done | failed |  |
 |`selection`| Function |Samarin Sergey | done | pass | |
 |`bindSelectionMenu`| Function | Lobah Mikhail | done |  |  |
-|*TextArea*|*Component*|Tuzhilkin Ivan| blocked IDL |  |  |
+|*TextArea*|*Component*|Tuzhilkin Ivan| done |  |  |
 |`construct`| Function | Tuzhilkin Ivan| done | pass | |
 |`setTextAreaOptions`|Function|Tuzhilkin Ivan| done | pass | |
 |`placeholderColor`|Function|Tuzhilkin Ivan| done | pass | |
