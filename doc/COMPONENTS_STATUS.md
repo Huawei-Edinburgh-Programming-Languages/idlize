@@ -524,7 +524,7 @@
 |`edgeAntialiasing`| Function | Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`onComplete`| Function | Evstigneev Roman | done | failed | OHOSUI-2409 |
 |`onError`| Function | Evstigneev Roman | done | pass | |
-|`onFinish`| Function | Evstigneev Roman | done | failed | same in urkui, https://gitee.com/openharmony/arkui_ace_engine/issues/ICG623 |
+|`onFinish`| Function | Evstigneev Roman | done | failed | same in ArkUI, https://gitee.com/openharmony/arkui_ace_engine/issues/ICG623 |
 |`enableAnalyzer`| Function | Evstigneev Roman | done | pass | |
 |`analyzerConfig`| Function | Evstigneev Roman | blocked AceEngine | test blocked | methods is not implemented, https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (+) |
 |`resizable`| Function | Evstigneev Roman | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
