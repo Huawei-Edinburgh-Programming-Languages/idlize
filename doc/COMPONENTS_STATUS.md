@@ -284,9 +284,9 @@
 |`gestureModifier`| Function | Erokhin Ilya | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7, failed | commented ViewAbstract static methods code |
 |`backgroundBrightness`| Function | Skroba Gleb | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`onGestureJudgeBegin`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
-|`onGestureRecognizerJudgeBegin0`| Function | Skroba Gleb | done | Samarin Sergey | UT by Vadim Voronov  |
-|`onGestureRecognizerJudgeBegin1`| Function | Skroba Gleb | done | Samarin Sergey | UT by Vadim Voronov  |
-|`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | Samarin Sergey |  |
+|`onGestureRecognizerJudgeBegin0`| Function | Skroba Gleb | done | failed | runtime linker issue |
+|`onGestureRecognizerJudgeBegin1`| Function | Skroba Gleb | done | test blocked | test blocked by `id` interface |
+|`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | test blocked | test blocked by `id` interface |
 |`monopolizeEvents`| Function | Erokhin Ilya | done | pass | UT by Vadim Voronov |
 |`onTouchIntercept`| Function | Andrey Khudenkikh | done | pass | EVENT |
 |`onSizeChange`| Function | Dmitry A Smirnov| done | failed | issue OHOSUI-2216, commented ViewAbstract static methods code |
@@ -302,7 +302,7 @@
 |`focusScopePriority`| Function | Dmitry A Smirnov| done | pass | |
 |`gesture`| Function | Erokhin Ilya | testskipped | pass |  |
 |`priorityGesture`| Function | Erokhin Ilya | testskipped |  |  |
-|`parallelGesture`| Function | Erokhin Ilya | testskipped | Samarin Sergey |  |
+|`parallelGesture`| Function | Erokhin Ilya | testskipped | test blocked | test blocked by `id` interface |
 |`blur`| Function | Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`linearGradientBlur`| Function |Lobah Mikhail | done | failed | linearGradientBlur1 not implemented |
 |`systemBarEffect`| Function | Lobah Mikhail | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
