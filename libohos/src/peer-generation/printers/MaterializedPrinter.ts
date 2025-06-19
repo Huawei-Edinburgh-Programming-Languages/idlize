@@ -195,6 +195,14 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             )
             // TBD: rewrite this(...) call for Kotlin
             writer.writeExpressionStatement(writer.makeThisCall([ctorCall]))
+            this.collectExtraCallbacks(clazz)
+            if (this.extraAssignCallbacks.length > 0) {
+                this.extraAssignCallbacks.map((item) => {
+                    writer.writeStatement(
+                        writer.makeAssign(`this.${item.callback}`, undefined, writer.makeString(`this.${item.method}`), false)
+                    )
+                })
+            }
         })
     }
 
