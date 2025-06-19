@@ -63,7 +63,7 @@
 |`stateEffect`| Function |Evstigneev Roman | done | pass |  |
 |`buttonStyle`| Function |Evstigneev Roman | done | pass |  |
 |`controlSize`| Function |Evstigneev Roman | done | pass |  |
-|`role`| Function | Evstigneev Roman | done | Tuzhilkin Ivan |  |
+|`role`| Function | Evstigneev Roman | done | pass |  |
 |`fontColor`| Function | Evstigneev Roman | testskipped | pass | Ace issue fixed, test in progress Evstigneev Roman |
 |`fontSize`| Function | Evstigneev Roman | testskipped | pass | Ace issue fixed, test in progress Evstigneev Roman |
 |`fontWeight`| Function |Evstigneev Roman | testskipped | pass | Ace issue fixed, test in progress Evstigneev Roman |
