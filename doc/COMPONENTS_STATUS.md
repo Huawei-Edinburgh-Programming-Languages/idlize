@@ -1911,7 +1911,7 @@
 |`scale`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
 |`opacity`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
 |`move`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
-|`asymmetric`| Function | Andrey Khudenkikh | done | | |
+|`asymmetric`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
 |`animation`| Function | Andrey Khudenkikh | done |failed | OHOSUI-2171|
 |`combine`| Function | Andrey Khudenkikh | done | failed| OHOSUI-2171|
 |`getIDENTITY`| Function | Andrey Khudenkikh | done | | |
