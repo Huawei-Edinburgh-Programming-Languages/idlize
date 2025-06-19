@@ -1904,23 +1904,23 @@
 |`getDrawFront`| Function | Erokhin Ilya | blocked IDL | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, https://gitee.com/nikolay-igotti/idlize/issues/IBAFYT |
 |`setDrawFront`| Function | | | | |
 |`invalidate`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | test blocked |OHOSUI-2171 |
+|*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | Sergey Kovalev |OHOSUI-2171 |
 |`ctor`| Function |Andrey Khudenkikh | done |  | |
-|`translate`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
+|`translate`| Function | Andrey Khudenkikh | done | failed | |
 |`rotate`| Function | Andrey Khudenkikh | done | failed| OHOSUI-2171|
-|`scale`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
-|`opacity`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
-|`move`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
+|`scale`| Function | Andrey Khudenkikh | done | failed | |
+|`opacity`| Function | Andrey Khudenkikh | done | failed | |
+|`move`| Function | Andrey Khudenkikh | done | failed | |
 |`asymmetric`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
 |`animation`| Function | Andrey Khudenkikh | done |failed | OHOSUI-2171|
 |`combine`| Function | Andrey Khudenkikh | done | failed| OHOSUI-2171|
-|`getIDENTITY`| Function | Andrey Khudenkikh | done | | |
+|`getIDENTITY`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
 |`setIDENTITY`| Function | | |
-|`getOPACITY`| Function | Andrey Khudenkikh | done | | |
+|`getOPACITY`| Function | Andrey Khudenkikh | done | Sergey Kovalev |  |
 |`setOPACITY`| Function | | |
-|`getSLIDE`| Function | Andrey Khudenkikh | done | | |
+|`getSLIDE`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
 |`setSLIDE`| Function | | |
-|`getSLIDE_SWITCH`| Function | Andrey Khudenkikh | done | | |
+|`getSLIDE_SWITCH`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
 |`setSLIDE_SWITCH`| Function | | |
 |*BaseEvent*| *Class* | Politov Mikhail | in progress |  | |
 |`ctor`| Function |Politov Mikhail | done |  | |
