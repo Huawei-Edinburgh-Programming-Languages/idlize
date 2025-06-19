@@ -1094,15 +1094,15 @@
 |`setSpanOptions`| Function |Politov Mikhail | done | pass |  |
 |`font`| Function | Politov Mikhail | done | pass |  |
 |`fontColor`| Function |Politov Mikhail | done | pass |  |
-|`fontSize`| Function |Politov Mikhail | done | pass |  |
+|`fontSize`| Function |Politov Mikhail | done | Olga Daryina |  |
 |`fontStyle`| Function |Politov Mikhail | done | pass |  |
-|`fontWeight`| Function |Politov Mikhail | done | pass |  |
-|`fontFamily`| Function |Politov Mikhail | done | pass |  |
+|`fontWeight`| Function |Politov Mikhail | done | Olga Daryina |  |
+|`fontFamily`| Function |Politov Mikhail | done | Olga Daryina |  |
 |`decoration`| Function | Politov Mikhail | done | pass |  |
-|`letterSpacing`| Function |Politov Mikhail | done | pass |  |
+|`letterSpacing`| Function |Politov Mikhail | done | Olga Daryina |  |
 |`textCase`| Function | Politov Mikhail | done | pass |  |
 |`lineHeight`| Function | Politov Mikhail | done | pass |  |
-|`textShadow`| Function | Politov Mikhail | testskipped | pass | test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
+|`textShadow`| Function | Politov Mikhail | testskipped | Olga Daryina | test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
 |*Stack*| *Component* | Korobeinikov Evgeny | done | pass |  |
 |`construct`| Function |Korobeinikov Evgeny | done | pass |  |
 |`setStackOptions` | Function | Korobeinikov Evgeny | done | pass |  |
