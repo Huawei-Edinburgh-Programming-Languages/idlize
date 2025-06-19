@@ -2910,17 +2910,17 @@
 |`getSelection`| Function |Dudkin Sergey| done |  | |
 |`onContentChanged`| Function | Dudkin Sergey| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB944G + |
 |*Scroller*| *Class* | Erokhin Ilya | done | Politov Mikhail |  |
-|`ctor`| Function | Erokhin Ilya | done |  |  |
-|`scrollTo`| Function | Erokhin Ilya | done |  |  |
-|`scrollEdge`| Function | Erokhin Ilya | done |  |  |
-|`fling`| Function | Erokhin Ilya | done |  |  |
-|`scrollPage`| Function | Erokhin Ilya | done |  |  |
-|`currentOffset`| Function | Skroba Gleb | done | | |
-|`scrollToIndex`| Function | Erokhin Ilya | done |  | |
-|`scrollBy`| Function | Erokhin Ilya | done |  |  |
-|`isAtEnd`| Function | Erokhin Ilya | done |  |  |
-|`getItemRect`| Function | Skroba Gleb | done | | |
-|`getItemIndex`| Function | Erokhin Ilya | done |  |  |
+|`ctor`| Function | Erokhin Ilya | done | pass |  |
+|`scrollTo`| Function | Erokhin Ilya | done | pass |  |
+|`scrollEdge`| Function | Erokhin Ilya | done | pass |  |
+|`fling`| Function | Erokhin Ilya | done | pass |  |
+|`scrollPage`| Function | Erokhin Ilya | done | pass |  |
+|`currentOffset`| Function | Skroba Gleb | done | pass | |
+|`scrollToIndex`| Function | Erokhin Ilya | done | pass | |
+|`scrollBy`| Function | Erokhin Ilya | done | pass |  |
+|`isAtEnd`| Function | Erokhin Ilya | done | pass |  |
+|`getItemRect`| Function | Skroba Gleb | done | | pass |
+|`getItemIndex`| Function | Erokhin Ilya | done | pass |  |
 |*SearchController*| *Class* |Evstigneev Roman | done |  |  |
 |`ctor`| Function |Evstigneev Roman | done |  |  |
 |`caretPosition`| Function |Evstigneev Roman | done |  |  |
