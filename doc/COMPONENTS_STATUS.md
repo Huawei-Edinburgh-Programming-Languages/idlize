@@ -1215,7 +1215,7 @@
 |`construct`| Function |  Kirill Kirichenko | done | pass |  |
 |`setTextOptions`| Function | Kirill Kirichenko | done | pass  |  |
 |`fontColor`| Function |Samarin Sergey | done | pass |  |
-|`fontSize`| Function |Samarin Sergey | done | pass |  |
+|`fontSize`| Function |Samarin Sergey | done | Olga Daryina |  |
 |`minFontSize`| Function |Samarin Sergey | done | pass |  |
 |`maxFontSize`| Function |Samarin Sergey | done | pass |  |
 |`minFontScale`| Function |Samarin Sergey | done | pass |  |
