@@ -286,7 +286,7 @@
 |`onGestureJudgeBegin`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
 |`onGestureRecognizerJudgeBegin0`| Function | Skroba Gleb | done | failed | runtime linker issue |
 |`onGestureRecognizerJudgeBegin1`| Function | Skroba Gleb | done | test blocked | test blocked by `id` interface |
-|`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | test blocked | test blocked by `id` interface |
+|`shouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | test blocked | test blocked by `id` interface |
 |`monopolizeEvents`| Function | Erokhin Ilya | done | pass | UT by Vadim Voronov |
 |`onTouchIntercept`| Function | Andrey Khudenkikh | done | pass | EVENT |
 |`onSizeChange`| Function | Dmitry A Smirnov| done | failed | issue OHOSUI-2216, commented ViewAbstract static methods code |
