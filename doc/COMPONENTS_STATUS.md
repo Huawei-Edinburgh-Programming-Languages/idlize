@@ -1411,13 +1411,13 @@
 |*TextPicker*| *Component* | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
 |`construct`| Function | Tuzhilkin Ivan | done | pass |  |
 |`setTextPickerOptions`| Function | Tuzhilkin Ivan | done | failed | OHOSUI-2386 multi column picker not working |
-|`defaultPickerItemHeight`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`defaultPickerItemHeight`| Function | Ekaterina Stepanova | done | pass |  |
 |`canLoop`| Function | Ekaterina Stepanova | done | pass |  |
-|`disappearTextStyle`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
-|`textStyle`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
-|`selectedTextStyle`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
-|`disableTextStyleAnimation`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
-|`defaultTextStyle`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
+|`disappearTextStyle`| Function | Ekaterina Stepanova | done | pass |  |
+|`textStyle`| Function | Ekaterina Stepanova | done | pass |  |
+|`selectedTextStyle`| Function | Ekaterina Stepanova | done | pass |  |
+|`disableTextStyleAnimation`| Function | Kovalev Sergey | done | pass |  |
+|`defaultTextStyle`| Function | Kovalev Sergey | done | failed | API is present on Upstream only |
 |`onChange`| Function | Tuzhilkin Ivan | done | Ekaterina Stepanova |  |
 |`onScrollStop`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
 |`onEnterSelectedArea`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
