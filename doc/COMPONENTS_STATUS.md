@@ -1418,12 +1418,12 @@
 |`selectedTextStyle`| Function | Ekaterina Stepanova | done | pass |  |
 |`disableTextStyleAnimation`| Function | Kovalev Sergey | done | pass |  |
 |`defaultTextStyle`| Function | Kovalev Sergey | done | failed | API is present on Upstream only |
-|`onChange`| Function | Tuzhilkin Ivan | done | Ekaterina Stepanova |  |
-|`onScrollStop`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
-|`onEnterSelectedArea`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
-|`selectedIndex`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`onChange`| Function | Tuzhilkin Ivan | done | pass |  |
+|`onScrollStop`| Function | Kovalev Sergey | done | pass |  |
+|`onEnterSelectedArea`| Function | Kovalev Sergey | done | pass |  |
+|`selectedIndex`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova | Note: number type passed, need to check also with number[] once multi-column picker works (OHOSUI-2386) |
 |`divider`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
-|`gradientHeight`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`gradientHeight`| Function | Ekaterina Stepanova | done | pass |  |
 |`enableHapticFeedback`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
 |`digitalCrownSensitivity`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
 |*TextTimer*| *Component* |Ekaterina Stepanova| blocked IDL |  |  |
