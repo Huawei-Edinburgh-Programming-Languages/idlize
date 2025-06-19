@@ -377,12 +377,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
             if (idl.isReferenceType(prop.type)) {
                 const decl = this.peerLibrary.resolveTypeReference(prop.type) ?? throwException("Extra method can only be in")
                 if (idl.isCallback(decl)) {
-                    let args: string = ""
-                    decl.parameters.forEach((parameter, index) => {
-                        const head = (index == 0) ? "" : " "
-                        const tail = (index == (decl.parameters.length - 1)) ? "" : ","
-                        args += `${head}${parameter.name}: ${this.convertType(parameter.type)}${tail}`
-                    })
+                    const args = decl.parameters.map(param => `${param.name}: ${this.convertType(param.type)}`).join(', ')
                     const method = indentedBy(`${extraMethod}(${args}): ${this.convertType(decl.returnType)}`, 1)
                     result = result.concat(method)
                 }
