@@ -65,7 +65,7 @@ export class MaterializedMethod extends PeerMethod {
     }
 
     override dummyReturnValue(resolver: ReferenceResolver): string | undefined {
-        if (this.method.name === "ctor") return `(Ark_${this.originalParentName}) 100`
+        if (this.method.name === "ctor") return `reinterpret_cast<Ark_${this.originalParentName}>(DUMMY_RET_VAL_100)`
         if (this.method.name === "getFinalizer") return `fnPtr<KNativePointer>(dummyClassFinalizer)`
         return undefined;
     }
