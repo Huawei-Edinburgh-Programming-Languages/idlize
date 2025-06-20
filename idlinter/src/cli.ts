@@ -21,10 +21,10 @@ import "./validator"
 import { outputReadableResult } from "./formatter"
 
 const options = program
-    .version("0.0.3")
+    .version("0.0.5")
     .option("--check <path>", "Path to single .idl file or directory to recursively scan for .idl for validation")
     .option("--load <path>", "Path to single .idl file or directory to recursively scan for .idl for loading and symbol search\n(only those also mentioned in --check will be checked)")
-    .option("--mode <mode>", "Enable custom validation mode (currently under construction).")
+    .option("--features <features...>", "Enable additional validation features\n(build-dependent, currently you can use '--feature ohos' OHOS-related validations).")
     .addHelpText("after", "\nExit codes are (1) for invalid paths and (2) in case of errors/fatals found in .idl files.")
     .parse()
     .opts()
@@ -68,7 +68,7 @@ function main() {
     if (options.load != null) {
         loadFiles = listIdl(options.load, "--load", checkFiles)
     }
-    idlManager.mode = options.mode ?? ""
+    idlManager.features = options.features ?? []
     processIdl(checkFiles, loadFiles)
     if (idlManager.results.hasErrors) {
         process.exit(2)

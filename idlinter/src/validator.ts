@@ -17,7 +17,7 @@ import * as idl from "@idlizer/core"
 import * as fs from "fs"
 import { Parsed, locationForNode } from "./parser"
 import { DuplicateIdentifier, InconsistentEnum, LoadingError, ProcessingError, UnknownError, UnresolvedReference, WrongAttributeName, WrongAttributePlacement } from "./messages"
-import { dependentPass, idlManager, IdlProcessingPass, startingPass } from "./idlprocessing"
+import { idlManager, startingPass, dependentPass } from "./idlprocessing"
 import { IdlNodeAny } from "./idltypes"
 
 const enumPass = startingPass("diagPass", () => ({enums: new Map<idl.IDLNode, IdlNodeAny[]>()}))
@@ -89,7 +89,7 @@ const ohosValidAttributes = new Map([
             [idl.IDLKind.Constructor, ["Deprecated", "Documentation"]]
 ])
 const attrPass = startingPass("attrPass", () => {})
-attrPass.mode = "ohos"
+attrPass.feature = "ohos"
 attrPass.on({}).before = (node, st) => {
     if(!node.extendedAttributes || node.extendedAttributes.length == 0) {
         return
@@ -107,7 +107,7 @@ attrPass.on({}).before = (node, st) => {
 }
 
 const genPass = dependentPass("genPass", [enumPass], ()=>({lines: ([] as string[])}))
-genPass.mode = "gendemo"
+genPass.feature = "gendemo"
 genPass.on({kind: idl.IDLKind.File}).before = (node, st) => { st.lines = [] }
 genPass.on({kind: idl.IDLKind.Enum}).before = (node, st) => st.lines.push(`enum ${node.name} {`)
 genPass.on({kind: idl.IDLKind.EnumMember}).after = (node, st) => st.lines.push(`    ${node.name} = ${node.initializer},`)

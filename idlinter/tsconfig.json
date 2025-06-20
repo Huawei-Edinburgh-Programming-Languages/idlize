@@ -4,6 +4,7 @@
 	"experimentalDecorators": true,
         "lib": ["ESNext", "ESNext.WeakRef"],
         "moduleResolution": "node",
+        "noErrorTruncation": true,
         "composite": true,
         "incremental": true,
         "declarationMap": true,
