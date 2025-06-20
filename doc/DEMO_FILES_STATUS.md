@@ -135,7 +135,7 @@
 | ListItemGroupTest.ets | |
 | ListItemTest.ets | |
 | ListTest.ets | |
-| LoadingProgressTest.ets | |
+| LoadingProgressTest.ets | Samarin Sergey |
 | LocationButtonTest.ets | |
 | MarqueeTest.ets | |
 | MenuItemGroupTest.ets | |
