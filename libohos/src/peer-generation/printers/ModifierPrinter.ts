@@ -66,7 +66,7 @@ class ReturnValueConvertor implements TypeConvertor<string | undefined> {
     convertTypeReference(type: IDLReferenceType): string | undefined {
         const decl = this.resolver.resolveTypeReference(type)
         if (decl && isInterface(decl) && isMaterialized(decl, this.resolver)) {
-            return `(${this.retTypeConverter.convert(type)}) 300`
+            return `reinterpret_cast<${this.retTypeConverter.convert(type)}>(DUMMY_RET_VAL_300)`
         }
         return this.mkObject()
     }

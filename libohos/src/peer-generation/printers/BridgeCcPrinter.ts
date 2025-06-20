@@ -62,9 +62,10 @@ export class BridgeCcVisitor {
     // TODO: may be this is another method of ArgConvertor?
     private generateApiArgument(argConvertor: ArgConvertor): string {
         const nameConverter = this.library.createTypeNameConvertor(Language.CPP)
-        const prefix = argConvertor.isPointerType() ? `(const ${nameConverter.convert(argConvertor.nativeType())}*)&`: "    "
+        const prefix = argConvertor.isPointerType() ? `reinterpret_cast<${nameConverter.convert(argConvertor.nativeType())}*>(&`: "    "
+        const postfix = argConvertor.isPointerType() ? ')' : ''
         if (argConvertor.useArray)
-            return `${prefix}${this.escapeKeyword(argConvertor.param)}_value`
+            return `${prefix}${this.escapeKeyword(argConvertor.param)}_value${postfix}`
         else
             return `${argConvertor.convertorArg(this.escapeKeyword(argConvertor.param), this.generatedApi)}`
     }

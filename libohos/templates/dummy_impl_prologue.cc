@@ -28,6 +28,9 @@
 #include "dynamic-loader.h"
 #include "%API_GENERATED%.h"
 
+static const int DUMMY_RET_VAL_100 = 100;
+static const int DUMMY_RET_VAL_300 = 300;
+
 #undef max
 
 // For logging we use operations exposed via interop, SetLoggerSymbol() is called
@@ -751,7 +754,7 @@ Ark_Int32 MeasureNode(Ark_VMContext vmContext, Ark_NodeHandle node, Ark_Float32*
 }
 
 Ark_Int32 LayoutNode(Ark_VMContext vmContext, Ark_NodeHandle node, Ark_Float32 (*data)[2]) {
-    return AsNode(node)->layout(vmContext, (Ark_Float32*)data);
+    return AsNode(node)->layout(vmContext, reinterpret_cast<Ark_Float32*>(data));
 }
 
 Ark_Int32 DrawNode(Ark_VMContext vmContext, Ark_NodeHandle node, Ark_Float32* data) {
