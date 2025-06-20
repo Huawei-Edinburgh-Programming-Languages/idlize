@@ -932,19 +932,19 @@
 |`onCut`|Function| Evstigneev Roman | done |  |  |
 |`onPaste`|Function| Evstigneev Roman | done |  |  |
 |`copyOption`|Function| Evstigneev Roman | done |  |  |
-|`maxLength`|Function| Evstigneev Roman | done |  |  |
-|`textAlign`|Function| Evstigneev Roman | done |  |  |
+|`maxLength`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
+|`textAlign`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
 |`enableKeyboardOnFocus`|Function| Evstigneev Roman | done |  |  |
 |`selectionMenuHidden`|Function| Evstigneev Roman | done |  |  |
-|`minFontSize`|Function| Evstigneev Roman | done |  |  |
-|`maxFontSize`|Function| Evstigneev Roman | done |  |  |
-|`minFontScale`| Function | Kovalev Sergey | done |  | |
-|`maxFontScale`| Function | Kovalev Sergey | done |  | |
+|`minFontSize`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
+|`maxFontSize`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
+|`minFontScale`| Function | Kovalev Sergey | done | Pavelyev Ivan | |
+|`maxFontScale`| Function | Kovalev Sergey | done | Pavelyev Ivan | |
 |`decoration`|Function| Evstigneev Roman | done | pass |  |
 |`letterSpacing`|Function| Evstigneev Roman | done | pass |  |
 |`lineHeight`|Function| Evstigneev Roman | done | pass |  |
 |`type`|Function| Evstigneev Roman | done |  |  |
-|`fontFeature`|Function| Evstigneev Roman | done |  |  |
+|`fontFeature`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
 |`onWillInsert`|Function| Skroba Gleb | done |  |   |
 |`onDidInsert`|Function| Evstigneev Roman | done |  |  |
 |`onWillDelete`|Function| Skroba Gleb | done |  |   |
