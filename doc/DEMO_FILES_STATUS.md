@@ -13,22 +13,22 @@
 | BlankTest.ets | |
 | ButtonTest.ets | |
 | CalendarPickerTest.ets | |
-| CanvasRendererBeginPath.test.ets | |
-| CanvasRendererClip.test.ets | |
-| CanvasRendererDrawImage.test.ets | |
-| CanvasRendererFillStrokeText.test.ets | |
-| CanvasRendererFill.test.ets | |
-| CanvasRendererGradients.test.ets | |
-| CanvasRendererImageData.test.ets | |
-| CanvasRendererLineDashSaveRestore.test.ets | |
-| CanvasRendererLineDashTextFillStrokeMeasure.test.ets | |
-| CanvasRendererPattern.test.ets | |
-| CanvasRendererPixelMap.test.ets | |
-| CanvasRendererStroke.test.ets | |
-| CanvasRenderingContext2DAttachDetach.test.ets | |
-| CanvasRenderingContext2DIMageAnalyzer.test..ets | |
-| CanvasRenderingContext2DRect.test.ets | |
-| Canvas.test.ets | |
+| CanvasRendererBeginPath.test.ets | Vadim Voronov |
+| CanvasRendererClip.test.ets | Vadim Voronov |
+| CanvasRendererDrawImage.test.ets | Vadim Voronov |
+| CanvasRendererFillStrokeText.test.ets | Vadim Voronov |
+| CanvasRendererFill.test.ets | Vadim Voronov |
+| CanvasRendererGradients.test.ets | Vadim Voronov |
+| CanvasRendererImageData.test.ets | Vadim Voronov |
+| CanvasRendererLineDashSaveRestore.test.ets | Vadim Voronov |
+| CanvasRendererLineDashTextFillStrokeMeasure.test.ets | Vadim Voronov |
+| CanvasRendererPattern.test.ets | Vadim Voronov |
+| CanvasRendererPixelMap.test.ets | Vadim Voronov |
+| CanvasRendererStroke.test.ets | Vadim Voronov |
+| CanvasRenderingContext2DAttachDetach.test.ets | Vadim Voronov |
+| CanvasRenderingContext2DIMageAnalyzer.test..ets | Vadim Voronov |
+| CanvasRenderingContext2DRect.test.ets | Vadim Voronov |
+| Canvas.test.ets | Vadim Voronov |
 | CheckboxGroupTest.ets | |
 | CheckboxTest.ets | |
 | CircleTest.ets | |
@@ -91,7 +91,7 @@
 | ContainerSpan.test.ets | |
 | CounterTest.ets | |
 | DataPanelTest.ets | |
-| DatePicker.test.ets | |
+| DatePicker.test.ets | Vadim Voronov |
 | DirectionalEdgesTTest.ets | |
 | DisplayPriority.test.ets | |
 | Divider.test.ets | |
@@ -110,7 +110,7 @@
 | ForegroundBlurStyle.test.ets | |
 | ForegroundColor.test.ets | |
 | ForegroundEffect.test.ets | |
-| FormComponentTest.ets | |
+| FormComponentTest.ets | Vadim Voronov |
 | FormLink.ets | |
 | GaugeTest.ets | |
 | gestureTests
