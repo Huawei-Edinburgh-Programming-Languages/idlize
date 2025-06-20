@@ -1417,15 +1417,15 @@
 |`textStyle`| Function | Ekaterina Stepanova | done | pass |  |
 |`selectedTextStyle`| Function | Ekaterina Stepanova | done | pass |  |
 |`disableTextStyleAnimation`| Function | Kovalev Sergey | done | pass |  |
-|`defaultTextStyle`| Function | Kovalev Sergey | done | failed | API is present on Upstream only |
+|`defaultTextStyle`| Function | Kovalev Sergey | done | pass |  |
 |`onChange`| Function | Tuzhilkin Ivan | done | pass |  |
 |`onScrollStop`| Function | Kovalev Sergey | done | pass |  |
 |`onEnterSelectedArea`| Function | Kovalev Sergey | done | pass |  |
 |`selectedIndex`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova | Note: number type passed, need to check also with number[] once multi-column picker works (OHOSUI-2386) |
-|`divider`| Function | Ekaterina Stepanova | done | Ekaterina Stepanova |  |
+|`divider`| Function | Ekaterina Stepanova | done | blocked | API mismatch (image from 17.06.25) https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`gradientHeight`| Function | Ekaterina Stepanova | done | pass |  |
-|`enableHapticFeedback`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
-|`digitalCrownSensitivity`| Function | Kovalev Sergey | done | Ekaterina Stepanova | API is present on Upstream only |
+|`enableHapticFeedback`| Function | Kovalev Sergey | done | pass |  |
+|`digitalCrownSensitivity`| Function | Kovalev Sergey | done | pass |  |
 |*TextTimer*| *Component* |Ekaterina Stepanova| blocked IDL |  |  |
 |`construct`| Function | Ekaterina Stepanova| done | pass |  |
 |`setTextTimerOptions`| Function |Ekaterina Stepanova| done | pass |  |
