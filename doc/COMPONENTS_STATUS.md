@@ -1906,21 +1906,21 @@
 |`invalidate`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | Sergey Kovalev |OHOSUI-2171 |
 |`ctor`| Function |Andrey Khudenkikh | done |  | |
-|`translate`| Function | Andrey Khudenkikh | done | failed | |
+|`translate`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2171 |
 |`rotate`| Function | Andrey Khudenkikh | done | failed| OHOSUI-2171|
-|`scale`| Function | Andrey Khudenkikh | done | failed | |
-|`opacity`| Function | Andrey Khudenkikh | done | failed | |
-|`move`| Function | Andrey Khudenkikh | done | failed | |
-|`asymmetric`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
+|`scale`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2171|
+|`opacity`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2171|
+|`move`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2171|
+|`asymmetric`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2171|
 |`animation`| Function | Andrey Khudenkikh | done |failed | OHOSUI-2171|
 |`combine`| Function | Andrey Khudenkikh | done | failed| OHOSUI-2171|
-|`getIDENTITY`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
+|`getIDENTITY`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2171|
 |`setIDENTITY`| Function | | |
-|`getOPACITY`| Function | Andrey Khudenkikh | done | Sergey Kovalev |  |
+|`getOPACITY`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2171|
 |`setOPACITY`| Function | | |
-|`getSLIDE`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
+|`getSLIDE`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2171|
 |`setSLIDE`| Function | | |
-|`getSLIDE_SWITCH`| Function | Andrey Khudenkikh | done | Sergey Kovalev | |
+|`getSLIDE_SWITCH`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2171|
 |`setSLIDE_SWITCH`| Function | | |
 |*BaseEvent*| *Class* | Politov Mikhail | in progress |  | |
 |`ctor`| Function |Politov Mikhail | done |  | |
