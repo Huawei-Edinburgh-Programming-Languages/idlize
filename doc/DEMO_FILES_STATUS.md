@@ -170,7 +170,7 @@
 | Row.ets | |
 | rowSplit.ets | |
 | SaveButton.ets | |
-| ScrollableCommonMethod.test.ets | |
+| ScrollableCommonMethod.test.ets | Mikhail Politov |
 | ScrollBarTest.ets | |
 | Scroller.test.ets | |
 | ScrollTest.ets | |
@@ -188,9 +188,9 @@
 | Tabs.test.ets | |
 | TabsTransition.ets | |
 | TextArea.test.ets | |
-| TextClock.test.ets | |
-| TextInput.test.ets | |
-| TextPicker.test.ets | |
+| TextClock.test.ets | Mikhail Politov |
+| TextInput.test.ets | Mikhail Politov |
+| TextPicker.test.ets | Mikhail Politov |
 | TextTest.ets | |
 | TextTimer.test.ets | |
 | TimePicker.ets | |
