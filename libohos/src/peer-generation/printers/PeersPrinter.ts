@@ -238,7 +238,7 @@ class PeerFileVisitor {
                 break
             }
             case Language.ARKTS: {
-                imports.addFeature(NativeModule.Generated.name, "#components")
+                imports.addFeature(NativeModule.Generated.name, `./peers/${NativeModule.Generated.name}`)
                 break;
             }
         }

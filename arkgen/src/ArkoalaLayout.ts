@@ -96,7 +96,7 @@ class ArkTsLayout extends CommonLayoutBase {
     readonly replacePattern = /(\.)[^\.\/]/g
     resolve(target: idl.LayoutTargetDescription): string {
         if (target.node.name === NativeModule.Generated.name)
-            return `#components`
+            return `peers/${NativeModule.Generated.name}`
         if (this.arkTSInternalPaths.has(target.node.name))
             return this.arkTSInternalPaths.get(target.node.name)!
 
@@ -227,7 +227,6 @@ export class CJLayout extends CommonLayoutBase {
 
 export class KotlinLayout extends CommonLayoutBase {
     protected KotlinInternalPaths = new Map<string, string>([
-        ["TypeChecker", "#components"],
         ["Serializer", "Serializer"],
         ["Deserializer", "Deserializer"],
         ["CallbackKind", "CallbackKind"],
