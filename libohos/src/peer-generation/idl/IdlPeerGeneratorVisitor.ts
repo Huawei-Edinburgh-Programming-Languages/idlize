@@ -211,7 +211,8 @@ export class IdlPeerProcessor {
             }
         }
         const mConstructors = isStaticMaterialized ? [] : constructors.map(c => this.makeMaterializedMethod(decl, c, fullCName, implemenationParentName))
-        if (mConstructors.length > 1) mConstructors.forEach((c, i) => { c.setOverloadIndex(i) })
+        const isCtorOverloaded = mConstructors.length > 1
+        if (isCtorOverloaded) mConstructors.forEach((c, i) => { c.setOverloadIndex(i, isCtorOverloaded) })
         const mFinalizer = isStaticMaterialized ? undefined : new MaterializedMethod(fullCName, implemenationParentName,[], idl.IDLPointerType, false,
             new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
         const mFields = propertiesFromInterface.concat(decl.properties)

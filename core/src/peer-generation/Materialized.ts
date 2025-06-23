@@ -36,6 +36,7 @@ export class MaterializedField {
 }
 
 export class MaterializedMethod extends PeerMethod {
+    private isOverloaded: boolean = false
     constructor(
         originalParentName: string,
         public implementationParentName: string,
@@ -121,12 +122,13 @@ export class MaterializedMethod extends PeerMethod {
         return copyMaterializedMethod(this, { method: method })
     }
 
-    setOverloadIndex(index: number) {
+    setOverloadIndex(index: number, isOverloaded: boolean) {
         this.overloadIndex = index
+        this.isOverloaded = isOverloaded
     }
 
     getOverloadPostfix(): string {
-        return this.overloadIndex == undefined ? "" : `${this.overloadIndex}`
+        return (this.isOverloaded) || (this.overloadIndex != undefined) ? `${this.overloadIndex}` : ""
     }
 }
 

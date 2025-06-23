@@ -119,4 +119,8 @@ export class PeerMethod {
     setSameOverloadIndex(copyFrom: PeerMethod) {
         this.overloadIndex = copyFrom.overloadIndex
     }
+
+    getOverloadPostfix(): string {
+        return ""
+    }
 }

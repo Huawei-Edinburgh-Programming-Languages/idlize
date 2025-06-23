@@ -72,6 +72,8 @@ import {
   testLength
 } from '#compat'
 
+import { IDLCheckConstructor } from '#compat'
+
 import { ImportedHookValue } from "#compat"
 import { DTSHookClass, DTSHookValue } from "#compat"
 
@@ -230,6 +232,11 @@ function checkLength() {
     assertEQ(true, res)
     res = testLength(2, 456.789)
     assertEQ(true, res)
+}
+
+function checkConstructors() {
+  const c1 = new IDLCheckConstructor(true)
+  assertEQ(true, c1.flag)
 }
 
 function checkDataInterfaces() {
@@ -503,6 +510,7 @@ export function run() {
   suite.addTest("checkForceCallback", checkForceCallback)
   suite.addTest("checkEnum", checkEnum)
   suite.addTest("checkLength", checkLength)
+  suite.addTest("checkConstructors", checkConstructors)
   suite.addTest("checkClassWithComplexPropertyType", checkClassWithComplexPropertyType)
   suite.addTest("checkDataInterfaces", checkDataInterfaces)
   suite.addTest("checkStaticMaterialized", checkStaticMaterialized)
