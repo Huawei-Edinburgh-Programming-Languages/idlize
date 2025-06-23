@@ -1,0 +1,82 @@
+clang: warning: treating 'c-header' input as 'c++-header' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+TranslationUnitDecl 0x27ac3e08 <<invalid sloc>> <invalid sloc>
+|-TypedefDecl 0x27ac4670 <<invalid sloc>> <invalid sloc> implicit __int128_t '__int128'
+| `-BuiltinType 0x27ac43d0 '__int128'
+|-TypedefDecl 0x27ac46e0 <<invalid sloc>> <invalid sloc> implicit __uint128_t 'unsigned __int128'
+| `-BuiltinType 0x27ac43f0 'unsigned __int128'
+|-TypedefDecl 0x27ac4a58 <<invalid sloc>> <invalid sloc> implicit __NSConstantString '__NSConstantString_tag'
+| `-RecordType 0x27ac47d0 '__NSConstantString_tag'
+|   `-CXXRecord 0x27ac4738 '__NSConstantString_tag'
+|-TypedefDecl 0x27ac4af0 <<invalid sloc>> <invalid sloc> implicit __builtin_ms_va_list 'char *'
+| `-PointerType 0x27ac4ab0 'char *'
+|   `-BuiltinType 0x27ac3eb0 'char'
+|-TypedefDecl 0x27b094b8 <<invalid sloc>> <invalid sloc> implicit __builtin_va_list '__va_list_tag[1]'
+| `-ConstantArrayType 0x27b09460 '__va_list_tag[1]' 1 
+|   `-RecordType 0x27ac4be0 '__va_list_tag'
+|     `-CXXRecord 0x27ac4b48 '__va_list_tag'
+|-CXXRecordDecl 0x27b09510 <simple.h:2:1, col:7> col:7 class A
+|-CXXRecordDecl 0x27b095c0 <line:3:1, col:7> col:7 class B
+|-CXXRecordDecl 0x27b09670 <line:4:1, col:7> col:7 class C
+|-CXXRecordDecl 0x27b09720 prev 0x27b09510 <line:6:1, line:9:1> line:6:7 referenced class A definition
+| |-DefinitionData polymorphic literal has_constexpr_non_copy_move_ctor can_const_default_init
+| | |-DefaultConstructor exists non_trivial constexpr needs_implicit defaulted_is_constexpr
+| | |-CopyConstructor simple non_trivial has_const_param implicit_has_const_param
+| | |-MoveConstructor exists simple non_trivial
+| | |-CopyAssignment simple non_trivial has_const_param implicit_has_const_param
+| | |-MoveAssignment exists simple non_trivial
+| | `-Destructor simple irrelevant trivial
+| |-CXXRecordDecl 0x27b09818 <col:1, col:7> col:7 implicit class A
+| |-AccessSpecDecl 0x27b098a8 <line:7:1, col:7> col:1 public
+| |-CXXMethodDecl 0x27b09950 <line:8:5, col:27> col:17 inspect 'int () const' virtual
+| |-CXXMethodDecl 0x27b09a48 <line:6:7> col:7 implicit constexpr operator= 'A &(const A &)' inline default noexcept-unevaluated 0x27b09a48
+| | `-ParmVarDecl 0x27b09b58 <col:7> col:7 'const A &'
+| |-CXXMethodDecl 0x27b09bf8 <col:7> col:7 implicit constexpr operator= 'A &(A &&)' inline default noexcept-unevaluated 0x27b09bf8
+| | `-ParmVarDecl 0x27b09d08 <col:7> col:7 'A &&'
+| |-CXXDestructorDecl 0x27b09da0 <col:7> col:7 implicit ~A 'void ()' inline default trivial noexcept-unevaluated 0x27b09da0
+| |-CXXConstructorDecl 0x27b393c0 <col:7> col:7 implicit constexpr A 'void (const A &)' inline default noexcept-unevaluated 0x27b393c0
+| | `-ParmVarDecl 0x27b394d8 <col:7> col:7 'const A &'
+| `-CXXConstructorDecl 0x27b39548 <col:7> col:7 implicit constexpr A 'void (A &&)' inline default noexcept-unevaluated 0x27b39548
+|   `-ParmVarDecl 0x27b39658 <col:7> col:7 'A &&'
+|-CXXRecordDecl 0x27b09eb0 prev 0x27b095c0 <line:11:1, line:18:1> line:11:7 class B definition
+| |-DefinitionData polymorphic has_user_declared_ctor can_const_default_init
+| | |-DefaultConstructor defaulted_is_constexpr
+| | |-CopyConstructor non_trivial has_const_param needs_overload_resolution implicit_has_const_param
+| | |-MoveConstructor exists non_trivial user_declared
+| | |-CopyAssignment non_trivial has_const_param needs_overload_resolution implicit_has_const_param
+| | |-MoveAssignment
+| | `-Destructor simple irrelevant trivial
+| |-public 'A'
+| |-CXXRecordDecl 0x27b09fe8 <col:1, col:7> col:7 implicit referenced class B
+| |-AccessSpecDecl 0x27b0a078 <line:12:1, col:7> col:1 public
+| |-CXXConstructorDecl 0x27b0a1d8 <line:13:5, col:20> col:5 B 'void (B &&)' delete
+| | `-ParmVarDecl 0x27b0a0d8 <col:7, col:9> col:11 'B &&'
+| |-CXXMethodDecl 0x27b39060 <line:15:5, col:19> col:9 f 'int (int, int)'
+| | |-ParmVarDecl 0x27b0a2a0 <col:11> col:14 'int'
+| | `-ParmVarDecl 0x27b0a320 <col:16> col:19 'int'
+| |-CXXMethodDecl 0x27b391e8 <line:16:5, col:23> col:10 g 'void (void *)'
+| | `-ParmVarDecl 0x27b39128 <col:12, col:18> col:18 param 'void *'
+| |-CXXMethodDecl 0x27b392e0 <line:17:5, col:13> col:9 h 'int () const'
+| |-CXXConstructorDecl 0x27b396d8 <line:11:7> col:7 implicit constexpr B 'void (const B &)' inline default_delete noexcept-unevaluated 0x27b396d8
+| | `-ParmVarDecl 0x27b397e8 <col:7> col:7 'const B &'
+| |-CXXMethodDecl 0x27b39898 <col:7> col:7 implicit operator= 'B &(const B &)' inline default_delete noexcept-unevaluated 0x27b39898
+| | `-ParmVarDecl 0x27b399a8 <col:7> col:7 'const B &'
+| `-CXXDestructorDecl 0x27b39a30 <col:7> col:7 implicit ~B 'void ()' inline default trivial noexcept-unevaluated 0x27b39a30
+`-CXXRecordDecl 0x27b39b10 prev 0x27b09670 <line:20:1, line:23:1> line:20:7 class C definition
+  |-DefinitionData polymorphic literal has_constexpr_non_copy_move_ctor can_const_default_init
+  | |-DefaultConstructor exists non_trivial constexpr needs_implicit defaulted_is_constexpr
+  | |-CopyConstructor simple non_trivial has_const_param needs_implicit implicit_has_const_param
+  | |-MoveConstructor exists simple non_trivial needs_implicit
+  | |-CopyAssignment simple non_trivial has_const_param implicit_has_const_param
+  | |-MoveAssignment exists simple non_trivial
+  | `-Destructor simple irrelevant trivial
+  |-public 'A'
+  |-CXXRecordDecl 0x27b39c48 <col:1, col:7> col:7 implicit class C
+  |-AccessSpecDecl 0x27b39cd8 <line:21:1, col:7> col:1 public
+  |-CXXMethodDecl 0x27b39d50 <line:22:5, col:25> col:9 inspect 'int () const'
+  | |-Overrides: [ 0x27b09950 A::inspect 'int () const' ]
+  | `-OverrideAttr 0x27b39df0 <col:25>
+  |-CXXMethodDecl 0x27b39ea8 <line:20:7> col:7 implicit constexpr operator= 'C &(const C &)' inline default noexcept-unevaluated 0x27b39ea8
+  | `-ParmVarDecl 0x27b39fb8 <col:7> col:7 'const C &'
+  |-CXXMethodDecl 0x27b3a890 <col:7> col:7 implicit constexpr operator= 'C &(C &&)' inline default noexcept-unevaluated 0x27b3a890
+  | `-ParmVarDecl 0x27b3a998 <col:7> col:7 'C &&'
+  `-CXXDestructorDecl 0x27b3aa30 <col:7> col:7 implicit ~C 'void ()' inline default trivial noexcept-unevaluated 0x27b3aa30

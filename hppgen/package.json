@@ -1,0 +1,28 @@
+{
+  "name": "hppgen",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/main.js",
+  "scripts": {
+    "compile": "npm run compile -C ../core && rollup -c"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^24.0.3",
+    "typescript": "^5.8.3",
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-replace": "^5.0.7",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-inject": "^5.0.0",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.24.4"
+  },
+  "dependencies": {
+    "@idlizer/core": "2.1.7+devel"
+  }
+}
