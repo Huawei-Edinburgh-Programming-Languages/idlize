@@ -120,7 +120,7 @@
 | Grid.test.ets | |
 | HoverEventTest.ets | |
 | HyperlinkTest.ets | |
-| Image2Test.ets | |
+| Image2Test.ets | Pavelyev Ivan |
 | Image3ColorFilter.test.ets | |
 | Image4.test.ets | |
 | ImageAnimator.test.ets | |
@@ -128,7 +128,7 @@
 | ImageEvents.test.ets | |
 | ImageSpan2.test.ets | |
 | ImageSpan.test.ets | |
-| ImageTest.ets | |
+| ImageTest.ets | Pavelyev Ivan |
 | IndicatorComponent.test.ets | |
 | KeyboardShortcutTest.ets | |
 | Line.ets | |
