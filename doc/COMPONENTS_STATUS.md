@@ -943,7 +943,7 @@
 |`decoration`|Function| Evstigneev Roman | done | pass |  |
 |`letterSpacing`|Function| Evstigneev Roman | done | pass |  |
 |`lineHeight`|Function| Evstigneev Roman | done | pass |  |
-|`type`|Function| Evstigneev Roman | done |  |  |
+|`type`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
 |`fontFeature`|Function| Evstigneev Roman | done | Pavelyev Ivan |  |
 |`onWillInsert`|Function| Skroba Gleb | done |  |   |
 |`onDidInsert`|Function| Evstigneev Roman | done |  |  |
