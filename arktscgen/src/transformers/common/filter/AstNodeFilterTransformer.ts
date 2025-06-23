@@ -27,6 +27,7 @@ export class AstNodeFilterTransformer extends BaseInterfaceFilterTransformer {
         // TODO: fix
         if (name === "Program") return false
         if (name === "ArkTsConfig") return false
+        if (name === "ASTVerifier") return false
         console.log(`FILTERED (AST) ${name}`)
         return true
     }

@@ -72,6 +72,7 @@ export class Typechecker {
         // TODO: fix
         if (node === "Program") return true
         if (node === "ArkTsConfig") return true
+        if (node === "ASTVerifier") return true
         return false
     }
 
