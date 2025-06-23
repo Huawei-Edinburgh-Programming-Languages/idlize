@@ -97,7 +97,7 @@
 | Divider.test.ets | |
 | DnD_2.ets | |
 | DnD.ets | |
-| DragPreviewTest.ets | |
+| DragPreviewTest.ets | Pavelyev Ivan |
 | EffectComponentTest2.ets | |
 | EffectComponentTest.ets | |
 | EllipseTest.ets | |
