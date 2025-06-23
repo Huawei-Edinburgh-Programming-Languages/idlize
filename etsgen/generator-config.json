@@ -102,9 +102,6 @@
     "ForceCallback": {
         "EditMenuOptions.onCreateMenu": "",
         "EditMenuOptions.onMenuItemClick": "",
-        "XComponentController.onSurfaceCreated": "",
-        "XComponentController.onSurfaceChanged": "",
-        "XComponentController.onSurfaceDestroyed": "",
         "DrawModifier.drawBehind": "ExtraMethod",
         "DrawModifier.drawContent": "ExtraMethod",
         "DrawModifier.drawFront": "ExtraMethod",

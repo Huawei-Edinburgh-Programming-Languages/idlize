@@ -52,11 +52,6 @@
     ],
     "forceCallback": {
         "EditMenuOptions": [],
-        "XComponentController": [
-            "onSurfaceCreated",
-            "onSurfaceChanged",
-            "onSurfaceDestroyed"
-        ],
         "DrawModifier": [
             "drawBehind",
             "drawContent",
@@ -366,6 +361,21 @@
         "ImageSpan": {
             "setImageSpanOptions": {
                 "hookName": "hookSetImageSpanOptions"
+            }
+        },
+        "Shape": {
+            "setShapeOptions": {
+                "hookName": "hookSetShapeOptions"
+            }
+        },
+        "Video": {
+            "setVideoOptions": {
+                "hookName": "hookSetVideoOptions"
+            }
+        },
+        "XComponent": {
+            "setXComponentOptions": {
+                "hookName": "hookSetXComponentOptions"
             }
         }
     },
