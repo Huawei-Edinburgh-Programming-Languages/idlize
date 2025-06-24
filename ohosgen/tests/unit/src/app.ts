@@ -235,8 +235,13 @@ function checkLength() {
 }
 
 function checkConstructors() {
+  const c0 = new IDLCheckConstructor(372)
+  assertEQ(372, c0.count)
   const c1 = new IDLCheckConstructor(true)
   assertEQ(true, c1.flag)
+  const c2 = new IDLCheckConstructor(483, true)
+  assertEQ(483, c2.count)
+  assertEQ(true, c2.flag)
 }
 
 function checkDataInterfaces() {

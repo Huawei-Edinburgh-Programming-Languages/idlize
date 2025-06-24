@@ -391,13 +391,17 @@ public:
     IDLCheckConstructorPeer(const OH_Number c, const OH_Boolean f) : count(c), flag(f) {}
 };
 
-OH_UNIT_IDLCheckConstructorHandle IDLCheckConstructor_construct0Impl(OH_Boolean flag) {
+OH_UNIT_IDLCheckConstructorHandle IDLCheckConstructor_construct0Impl(const OH_Number* count) {
+    return (OH_UNIT_IDLCheckConstructorHandle) new IDLCheckConstructorPeer(*count, false);
+}
+OH_UNIT_IDLCheckConstructorHandle IDLCheckConstructor_construct1Impl(OH_Boolean flag) {
     const OH_Number zero =  {.tag = INTEROP_TAG_INT32, .i32 = 0};
     return (OH_UNIT_IDLCheckConstructorHandle) new IDLCheckConstructorPeer(zero, flag);
 }
-OH_UNIT_IDLCheckConstructorHandle IDLCheckConstructor_construct1Impl(const OH_Number* count, OH_Boolean flag) {
+OH_UNIT_IDLCheckConstructorHandle IDLCheckConstructor_construct2Impl(const OH_Number* count, OH_Boolean flag) {
     return (OH_UNIT_IDLCheckConstructorHandle) new IDLCheckConstructorPeer(*count, flag);
 }
+
 void IDLCheckConstructor_destructImpl(OH_UNIT_IDLCheckConstructorHandle thisPtr) {
 }
 OH_Boolean IDLCheckConstructor_getFlagImpl(OH_NativePointer thisPtr)
