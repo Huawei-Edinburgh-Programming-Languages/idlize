@@ -383,17 +383,12 @@ OH_UNIT_IDLStringEnum GlobalScope_idlCheckStringEnumsImpl(OH_UNIT_IDLStringEnum 
 }
 
 // Constructors
-
 class IDLCheckConstructorPeer
 {
-    public:
-        OH_Boolean flag;
-        OH_Number count;
-
-        IDLCheckConstructorPeer(const OH_Number c, const OH_Boolean  f) {
-            count = c;
-            flag = f;
-        }
+public:
+    OH_Boolean flag;
+    OH_Number count;
+    IDLCheckConstructorPeer(const OH_Number c, const OH_Boolean f) : count(c), flag(f) {}
 };
 
 OH_UNIT_IDLCheckConstructorHandle IDLCheckConstructor_construct0Impl(OH_Boolean flag) {
