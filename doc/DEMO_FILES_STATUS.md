@@ -176,15 +176,15 @@
 | ScrollTest.ets | |
 | SearchTest.ets | |
 | SelectTest.ets | |
-| Shape.test.ets | |
+| Shape.test.ets | Alexander Porodin |
 | SideBarContainer.ets | |
 | SliderTest.ets | |
-| SpanTest.ets | |
+| SpanTest.ets | Olga Daryina |
 | Stack.ets | |
 | StepperTest.ets | |
 | Swiper.test.ets | |
-| SymbolGlyph.ets | |
-| SymbolSpan.ets | |
+| SymbolGlyph.ets | Olga Daryina |
+| SymbolSpan.ets | Olga Daryina |
 | Tabs.test.ets | |
 | TabsTransition.ets | |
 | TextArea.test.ets | |
