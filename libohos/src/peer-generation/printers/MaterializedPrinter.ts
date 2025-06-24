@@ -110,14 +110,16 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         }
         const peerPtr = "peerPtr"
         const peerPtrExpr = this.printer.makeString(peerPtr)
-        const params = [...Array(this.maxCtorParams).fill(0).map((_, i) => `_${i}`), peerPtr]
-        const types = [...Array(this.maxCtorParams).fill(idl.IDLBooleanType), idl.IDLPointerType]
+        // const params = [...Array(this.maxCtorParams).fill(0).map((_, i) => `_${i}`), peerPtr]
+        // const types = [...Array(this.maxCtorParams).fill(idl.IDLBooleanType), idl.IDLPointerType]
+        const params = [peerPtr]
+        const types = [idl.IDLPointerType]
         const sig = new NamedMethodSignature(idl.IDLVoidType, types, params)
         this.printer.writeConstructorImplementation(className, sig, writer => {
             if (!hasSuperClass) {
                 this.assignFinalizable(className, peerPtr, writer)
             }
-        }, this.getSuperDelegationCall(this.printer, clazz, peerPtrExpr, collapseCtors, superClassName))
+        }, this.getSuperDelegationCall(this.printer, clazz, peerPtrExpr, collapseCtors, superClassName), [MethodModifier.INTERNAL])
     }
 
     printCollapsedCtors(clazz: MaterializedClass, superClassName?: string) {
@@ -149,9 +151,9 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         const dimensions = [...superDecl.constructors.map(it => it.parameters.length)]
         const argsCount = dimensions.length == 0 ? 0 : Math.max(...dimensions)
         const args = [
-            ...Array(argsCount)
-                .fill(collapseCtors ? "undefined" : "false")
-                .map(it => writer.makeString(it)),
+            // ...Array(argsCount)
+            //     .fill(collapseCtors ? "undefined" : "false")
+            //     .map(it => writer.makeString(it)),
             peerPtrExpr
         ]
         return { delegationArgs: args, delegationName: superClassName }
@@ -208,7 +210,8 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             ctorSig.args.map((_, index) => writer.makeString(ctorSig.argsNames[index]))
         )
 
-        const ctorArgs = [...Array(this.maxCtorParams).fill(writer.makeString("false")), ctorCall]
+        // const ctorArgs = [...Array(this.maxCtorParams).fill(writer.makeString("false")), ctorCall]
+        const ctorArgs = [ctorCall]
         this.printer.writeConstructorImplementation(this.namespacePrefix.concat(implementationClassName), ctorSig, writer => {
             const key = nsPath.map(it => it.name).concat([implementationClassName, 'constructor']).join('.')
             injectPatch(writer, key, config.patchMaterialized)
@@ -535,7 +538,8 @@ function writeFromPtrMethod(clazz: MaterializedClass, writer: LanguageWriter, co
     const fromPtrSig = new NamedMethodSignature(clazzRefType, [idl.IDLPointerType], ["ptr"])
     writer.writeMethodImplementation(new Method("fromPtr", fromPtrSig, [MethodModifier.PUBLIC, MethodModifier.STATIC], classTypeParameters), writer => {
         const defaultArg = collapseCtors ? "undefined" : "false"
-        const args = [...Array(maxCtorParams).fill(defaultArg), "ptr"]
+        // const args = [...Array(maxCtorParams).fill(defaultArg), "ptr"]
+        const args = ["ptr"]
         writer.writeStatement(writer.makeReturn(writer.makeNewObject(writer.getNodeName(clazzRefType), args.map(arg => writer.makeString(arg)))))
     })
 }

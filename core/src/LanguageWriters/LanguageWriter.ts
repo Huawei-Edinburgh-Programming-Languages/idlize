@@ -358,6 +358,7 @@ export enum MethodModifier {
     PUBLIC,
     PRIVATE,
     PROTECTED,
+    INTERNAL,
     STATIC,
     NATIVE,
     INLINE,

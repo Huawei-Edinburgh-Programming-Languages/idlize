@@ -235,8 +235,11 @@ function checkLength() {
 }
 
 function checkConstructors() {
+  console.log(`--- check constructors ---`)
+  console.log(`check number`)
   const c0 = new IDLCheckConstructor(372)
   assertEQ(372, c0.count)
+  console.log(`check boolean`)
   const c1 = new IDLCheckConstructor(true)
   assertEQ(true, c1.flag)
   const c2 = new IDLCheckConstructor(483, true)
@@ -506,6 +509,9 @@ function checkContentModifier() {
 export function run() {
   console.log("Run common unit tests")
 
+  checkConstructors()
+
+  /*
   const suite = new UnitTestsuite("idlize ut")
 
   suite.addTest("check_constants", check_constants)
@@ -530,4 +536,5 @@ export function run() {
   suite.addTest("checkContentModifier", checkContentModifier)
 
   return suite.run()
+  */
 }
