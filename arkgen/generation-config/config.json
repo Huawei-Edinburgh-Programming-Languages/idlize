@@ -277,7 +277,10 @@
         "Button": {
             "contentModifier": {
                 "hookName": "hookButtonContentModifier"
-            }
+            },
+            "attributeModifier": {
+                "hookName": "hookAttributeModifier"
+            } 
         },
         "Checkbox": {
             "contentModifier": {
@@ -322,6 +325,11 @@
         "Slider": {
             "contentModifier": {
                 "hookName": "hookSliderContentModifier"
+            }
+        },
+         "Text": {
+            "attributeModifier": {
+                "hookName": "hookAttributeModifier"
             }
         },
         "TextClock": {
