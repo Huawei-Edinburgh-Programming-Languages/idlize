@@ -205,12 +205,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         const writer = this.printer
 
         const ctorCall = writer.makeMethodCall(implementationClassName, `ctor${ctor.getOverloadPostfix()}`,
-            ctorSig.args.map((it, index) => {
-                const arg = writer.makeString(ctorSig.argsNames[index])
-                if (idl.isOptionalType(it))
-                    return arg
-                return writer.makeUnwrapOptional(arg)
-            })
+            ctorSig.args.map((_, index) => writer.makeString(ctorSig.argsNames[index]))
         )
 
         const ctorArgs = [...Array(this.maxCtorParams).fill(writer.makeString("false")), ctorCall]
