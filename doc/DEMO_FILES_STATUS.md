@@ -150,7 +150,7 @@
 | PanelTest.ets | |
 | PasteButtonTest.ets | |
 | Path.ets | |
-| PatternLock.test.ets | |
+| PatternLock.test.ets | Smirnov Dmitry |
 | PluginComponentUser.ets | |
 | Polygon.test.ets | |
 | Polyline.test.ets | |
