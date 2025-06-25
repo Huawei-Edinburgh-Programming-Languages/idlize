@@ -2,6 +2,8 @@ package idlize.stdlib;
 
 [TSType=RuntimeType, CPPType=RuntimeType]
 interface RuntimeType {};
+[TSType=MaterializedBaseTag]
+interface MaterializedBaseTag {};
 [TSType=Materialized, CPPType=Materialized]
 interface Materialized {};
 [TSType=CallbackResource, CPPType=CallbackResource]
