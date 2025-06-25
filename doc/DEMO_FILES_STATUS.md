@@ -122,10 +122,10 @@
 | HyperlinkTest.ets | |
 | Image2Test.ets | Pavelyev Ivan |
 | Image3ColorFilter.test.ets | |
-| Image4.test.ets | |
+| Image4.test.ets | Pavelyev Ivan |
 | ImageAnimator.test.ets | |
 | ImageBitmap.ets | |
-| ImageEvents.test.ets | |
+| ImageEvents.test.ets | Pavelyev Ivan |
 | ImageSpan2.test.ets | |
 | ImageSpan.test.ets | |
 | ImageTest.ets | Pavelyev Ivan |
