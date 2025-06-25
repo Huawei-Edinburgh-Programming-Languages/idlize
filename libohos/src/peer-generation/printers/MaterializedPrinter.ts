@@ -110,8 +110,10 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         }
         const peerPtr = "peerPtr"
         const peerPtrExpr = this.printer.makeString(peerPtr)
-        const params = [...Array(this.maxCtorParams).fill(0).map((_, i) => `_${i}`), peerPtr]
-        const types = [...Array(this.maxCtorParams).fill(idl.IDLBooleanType), idl.IDLPointerType]
+        // const params = [...Array(this.maxCtorParams).fill(0).map((_, i) => `_${i}`), peerPtr]
+        // const types = [...Array(this.maxCtorParams).fill(idl.IDLBooleanType), idl.IDLPointerType]
+        const params = ["tag", peerPtr]
+        const types = [idl.createReferenceType("MaterializedBaseTag"), idl.IDLPointerType]
         const sig = new NamedMethodSignature(idl.IDLVoidType, types, params)
         this.printer.writeConstructorImplementation(className, sig, writer => {
             if (!hasSuperClass) {
@@ -148,13 +150,15 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
 
         const dimensions = [...superDecl.constructors.map(it => it.parameters.length)]
         const argsCount = dimensions.length == 0 ? 0 : Math.max(...dimensions)
-        const args = [
-            ...Array(argsCount)
-                .fill(collapseCtors ? "undefined" : "false")
-                .map(it => writer.makeString(it)),
-            peerPtrExpr
-        ]
-        return { delegationArgs: args, delegationName: superClassName }
+        const leadingArgs = (collapseCtors ? Array(argsCount).fill("undefined") : ["MaterializedBaseTag.NOP"]).map(it => writer.makeString(it))
+
+        // const args = [
+        //     ...Array(argsCount)
+        //         .fill(collapseCtors ? "undefined" : "false")
+        //         .map(it => writer.makeString(it)),
+        //     peerPtrExpr
+        // ]
+        return { delegationArgs: [...leadingArgs, peerPtrExpr], delegationName: superClassName }
     }
 
     printCollapsedCtor(clazz: MaterializedClass, ctor: Method, ctorPostfix: string, superClassName?: string) {
@@ -208,7 +212,8 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             ctorSig.args.map((_, index) => writer.makeString(ctorSig.argsNames[index]))
         )
 
-        const ctorArgs = [...Array(this.maxCtorParams).fill(writer.makeString("false")), ctorCall]
+        //const ctorArgs = [...Array(this.maxCtorParams).fill(writer.makeString("false")), ctorCall]
+        const ctorArgs = [writer.makeString("MaterializedBaseTag.NOP"), ctorCall]
         this.printer.writeConstructorImplementation(this.namespacePrefix.concat(implementationClassName), ctorSig, writer => {
             const key = nsPath.map(it => it.name).concat([implementationClassName, 'constructor']).join('.')
             injectPatch(writer, key, config.patchMaterialized)
@@ -465,6 +470,10 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             'KPointer',
         ], '@koalaui/interop')
         this.collector.addFeatures(['MaterializedBase'], '@koalaui/interop')
+        // Use collapseCtors
+        if (this.library.language != Language.TS) {
+            this.collector.addFeatures(['MaterializedBaseTag'], '@koalaui/interop')
+        } 
         this.collector.addFeatures(['unsafeCast'], '@koalaui/common')
         collectDeclItself(this.library, idl.createReferenceType("CallbackKind"), this.collector)
         this.collector.addFeatures(['int32', 'int64', 'float32'], '@koalaui/common')
@@ -534,8 +543,10 @@ function writeFromPtrMethod(clazz: MaterializedClass, writer: LanguageWriter, co
         : idl.createReferenceType(clazz.decl, clazz.generics?.map(it => idl.createTypeParameterReference(it)))
     const fromPtrSig = new NamedMethodSignature(clazzRefType, [idl.IDLPointerType], ["ptr"])
     writer.writeMethodImplementation(new Method("fromPtr", fromPtrSig, [MethodModifier.PUBLIC, MethodModifier.STATIC], classTypeParameters), writer => {
-        const defaultArg = collapseCtors ? "undefined" : "false"
-        const args = [...Array(maxCtorParams).fill(defaultArg), "ptr"]
+        // const defaultArg = collapseCtors ? "undefined" : "false"
+        // const args = [...Array(maxCtorParams).fill(defaultArg), "ptr"]
+        const defaultArg = collapseCtors ? "undefined" : "MaterializedBaseTag.NOP"
+        const args = [...(collapseCtors ? Array(maxCtorParams).fill(defaultArg) : [defaultArg]), "ptr"]
         writer.writeStatement(writer.makeReturn(writer.makeNewObject(writer.getNodeName(clazzRefType), args.map(arg => writer.makeString(arg)))))
     })
 }
