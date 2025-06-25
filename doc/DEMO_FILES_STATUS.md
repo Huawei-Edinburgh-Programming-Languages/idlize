@@ -174,7 +174,7 @@
 | ScrollBarTest.ets | |
 | Scroller.test.ets | |
 | ScrollTest.ets | |
-| SearchTest.ets | |
+| SearchTest.ets | Pavelyev Ivan |
 | SelectTest.ets | |
 | Shape.test.ets | Alexander Porodin |
 | SideBarContainer.ets | |
