@@ -39,7 +39,7 @@ interface FrameNode {
     // ([TypeArguments="LengthMetrics"] SizeT) getUserConfigSize();
     String getId();
     number getUniqueId();
-    // String getNodeType();
+    String getNodeType();
     number getOpacity();
     boolean isVisible();
     boolean isClipToFrame();
@@ -54,11 +54,11 @@ interface FrameNode {
     // void onDraw(DrawContext context);
     // void onMeasure(LayoutConstraint constraint);
     // void onLayout(Position position);
-    // void setMeasuredSize(Size size);
-    // void setLayoutPosition(Position position);
-    // void measure(LayoutConstraint constraint);
-    // void layout(Position position);
-    // void setNeedsLayout();
+    void setMeasuredSize(Size size);
+    void setLayoutPosition(Position position);
+    void measure(LayoutConstraint constraint);
+    void layout(Position position);
+    void setNeedsLayout();
     // Position getPositionToScreen();
     Position getPositionToWindowWithTransform();
     // Position getPositionToParentWithTransform();
@@ -76,4 +76,5 @@ interface FrameNode {
     void reuse();
     void recycle();
     static pointer getFrameNodePtr(FrameNode node);
+    static FrameNode createTypedFrameNode(String type);
 };
