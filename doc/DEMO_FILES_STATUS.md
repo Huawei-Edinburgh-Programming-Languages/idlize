@@ -194,7 +194,7 @@
 | TextTest.ets | |
 | TextTimer.test.ets | |
 | TimePicker.ets | |
-| Toggle.ets | |
+| Toggle.ets | Evstigneev Roman |
 | TransformRotateScaleTranslate.test.ets | |
 | TransitionEffect.test.ets | |
 | UICommonEventTest.ets | |
