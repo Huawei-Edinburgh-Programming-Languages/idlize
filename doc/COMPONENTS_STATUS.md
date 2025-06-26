@@ -1127,7 +1127,8 @@
 |`setSwiperOptions`| Function | Skroba Gleb | done | pass  |  |
 |`index`| Function | Skroba Gleb| done | pass |  |
 |`interval`| Function | Skroba Gleb| done | pass |  |
-|`indicator`| Function |  Skroba Gleb| done | pass |  |
+|`indicator0`| Function |  Skroba Gleb| done | pass |  |
+|`indicator1`| Function |  Skroba Gleb| done | pass |  |
 |`loop`| Function | Skroba Gleb| done | pass |  |
 |`duration`| Function | Skroba Gleb | done | pass |  |
 |`vertical`| Function | Skroba Gleb | done | pass |  |
