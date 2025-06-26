@@ -50,7 +50,7 @@ export enum Token {
   tEnd = 101
 };
 
-const keywords = new Map<string, Token>([
+const g_keywords = new Map<string, Token>([
   ["async", Token.tAsync],
   ["attribute", Token.tAttribute],
   ["callback", Token.tCallback],
@@ -79,6 +79,25 @@ const keywords = new Map<string, Token>([
   ["typedef", Token.tTypedef],
   ["unrestricted", Token.tUnrestricted],
 ]);
+
+let g_lastId = 0;
+let g_words = new Map<string, number>([
+//  ["word", id]
+]);
+
+function getWord(word: string): number {
+  const val = g_words.get(word);
+  if (g_words.has(word) && val !== undefined)
+    return +val;
+  else
+    return -1;
+}
+
+function addWord(word: string): number {
+  g_lastId++;
+  g_words.set(word, g_lastId);
+  return g_lastId;
+}
 
 let g_text: string;
 let g_pos: number = 0;
@@ -111,7 +130,8 @@ export function getToken(): Token {
     g_row++;
   }
 
-  while (c == ' ') {
+  // spaces
+  while (c == ' ' || c == '\t') {
     c = g_text[g_pos++];
   }
 
@@ -122,7 +142,16 @@ export function getToken(): Token {
       res += c;
       c = g_text[g_pos++];
     }
+    // Is it keyword?
+    const val = g_keywords.get(res);
+    if (g_keywords.has(res) && val !== undefined)
+      return val;
+
+    // Ok, it is some identifier...
     g_token_text = res;
+    let word_id: number = getWord(res);
+    if (word_id < 0)
+      word_id = addWord(res);
     return Token.tId;
   }
 

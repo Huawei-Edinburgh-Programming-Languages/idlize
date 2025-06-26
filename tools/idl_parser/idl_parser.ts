@@ -3,6 +3,7 @@ import * as lex from "./idl_lexer";
 
 function test() {
   const s: string = "int i = 0; while (i < 10) print(i++);";
+
   lex.init(s);
   console.log(s);
 
