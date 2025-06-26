@@ -404,6 +404,10 @@
         "arkui": {
             "name": "arkui",
             "packages": [""]
+        },
+        "global": {
+            "name": "global",
+            "packages": ["global.resource"]
         }
     },
     "currentModulePackagesPaths": {

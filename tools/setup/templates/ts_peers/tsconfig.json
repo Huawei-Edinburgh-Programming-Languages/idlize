@@ -17,7 +17,8 @@
         "module": "CommonJS",
         "paths": {
             "@arkoala/arkui": ["./generated/sig/arkoala/arkui/src", "./"],
-            "@arkoala/arkui/*": ["./generated/sig/arkoala/arkui/src/*", "./*"]
+            "@arkoala/arkui/*": ["./generated/sig/arkoala/arkui/src/*", "./*"],
+            "@global.resource": ["./generated/sig/arkoala/external/src/global.ts"]
         },
     },
     "include": [

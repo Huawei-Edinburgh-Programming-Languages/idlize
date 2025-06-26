@@ -26,6 +26,8 @@ import {
     isInIdlize,
     isInIdlizeInternal,
     isInCurrentModule,
+    isInMainModule,
+    getModuleFor,
     isExternalType,
     LayoutNodeRole,
     PeerClass,
@@ -75,7 +77,13 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         if (target?.name != node.name || idl.getNamespaceName(target)) return undefined
         const currentModule = this.peerLibrary.layout.resolve({node: node, role: LayoutNodeRole.INTERFACE})
         const targetModule = this.peerLibrary.layout.resolve({node: target, role: LayoutNodeRole.INTERFACE})
-        const relative = ImportsCollector.resolveRelative(currentModule, targetModule)!
+
+        const nodeModulde = getModuleFor(node)
+        const targetModulde = getModuleFor(target)
+        const relative = (targetModulde.name == nodeModulde.name)
+            ? ImportsCollector.resolveRelative(currentModule, targetModule)!
+            : `@${idl.getPackageName(target)}`
+
         return `export { ${node.name} } from "${relative}"`
     }
 
@@ -616,6 +624,12 @@ export class TSInterfacesVisitor implements InterfacesVisitor {
         for (const entries of moduleToEntries.values()) {
             const seenNames = new Set<string>()
             for (const entry of entries) {
+
+                if (!isInMainModule(entry)) {
+                    // Skip entry declaration for the external module
+                    continue
+                }
+
                 const imports = new ImportsCollector()
                 const writer = createLanguageWriter(this.peerLibrary.language, this.peerLibrary)
 
@@ -1097,6 +1111,12 @@ export class ArkTSInterfacesVisitor implements InterfacesVisitor {
                 if (idl.isImport(entry)) {
                     continue
                 }
+
+                if (!isInMainModule(entry)) {
+                    // Skip entry declaration for the external module
+                    continue
+                }
+
                 const imports = new ImportsCollector()
                 const writer = this.peerLibrary.createLanguageWriter()
 
