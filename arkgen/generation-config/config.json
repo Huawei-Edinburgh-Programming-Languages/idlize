@@ -382,7 +382,6 @@
         }
     },
     "patchMaterialized": {},
-    "CollapseOverloadsARKTS": true,
     "forceContext": [
         "LoadUserView",
         "MeasureLayoutAndDraw",
