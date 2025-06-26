@@ -159,8 +159,7 @@ export class FactoryPrinter extends SingleFilePrinter {
                         this.writer.makeFunctionCall(
                             FactoryPrinter.callUniversalCreate(node),
                             node.properties
-                                .map(it => it.name)
-                                .map(mangleIfKeyword)
+                                .map(it => mangleIfKeyword(it.name))
                                 .map(it => this.writer.makeString(it))
                         ),
                         this.writer.makeString(FactoryConstructions.original)
@@ -186,6 +185,12 @@ export class FactoryPrinter extends SingleFilePrinter {
         if (creates.length !== 1) {
             return undefined
         }
+
+        if (node.name === 'LabelledStatement') {
+            node.properties.forEach(prop => console.log(`PROP => ${prop.name}`))
+            console.log('===');
+        }
+
         if (node.properties.length !== creates[0].parameters.length) {
             return undefined
         }

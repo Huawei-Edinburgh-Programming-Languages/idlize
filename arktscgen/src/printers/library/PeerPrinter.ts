@@ -23,6 +23,7 @@ import {
     IDLMethod,
     IDLParameter,
     IDLPointerType,
+    IDLReferenceType,
     IDLType,
     IDLUndefinedType,
     IDLVoidType,
@@ -32,6 +33,7 @@ import {
     MethodModifier,
     MethodSignature,
     throwException,
+    isReferenceType,
     TSLanguageWriter
 } from "@idlizer/core"
 import { flattenType, makeMethod, nodeNamespace, nodeType, parent } from "../../utils/idl"
@@ -271,52 +273,62 @@ export class PeerPrinter extends SingleFilePrinter {
     }
 
     private printCreateOrUpdate(node: IDLMethod): void {
-        this.writer.writeMethodImplementation(
-            makeMethod(
-                PeersConstructions.createOrUpdate(
-                    this.node.name,
-                    node.name
-                ),
-                node.parameters.map(it => createParameter(it.name, flattenType(it.type))),
-                flattenType(node.returnType),
-                [MethodModifier.STATIC]
-            ),
-            () => {
-                const newExpr = this.writer.makeNewObject(
-                    this.node.name, [
-                        this.writer.makeFunctionCall(
-                            this.writer.makeString(
-                                PeersConstructions.callBinding(
-                                    this.node.name,
-                                    node.name,
-                                    nodeNamespace(this.node)
-                                )
-                            ),
-                            this.makeBindingArguments(node.parameters)
-                        ),
-                    ]
-                )
+        const ModifierFlagsTypeName = 'Es2pandaModifierFlags'
+        //node.parameters.forEach(param => console.log(`${isReferenceType(param.type) ? (param.type as IDLReferenceType).name : ''}`))
 
-                if (isReal(this.node)) {
-                    const varName = 'result'
-                    this.writer.writeStatements(
-                        this.writer.makeAssign(
-                            varName, createReferenceType(this.node.name), newExpr, true
-                        ),
-                        this.writer.makeStatement(
-                            this.writer.makeMethodCall(varName, PeersConstructions.setChildrenParentPtrMethod, [])
-                        ),
-                        this.writer.makeReturn(
-                            this.writer.makeString(varName)
-                        ),
-                    )
-                } else {
-                    this.writer.writeStatement(
-                        this.writer.makeReturn(newExpr)
-                    )
-                }
-            }
+        const parameters: IDLParameter[] = [...node.parameters,
+            createParameter('modifiers', createReferenceType(ModifierFlagsTypeName))
+        ]
+
+        //node.
+        const paramString = parameters.filter(p => isReferenceType(p.type))
+            .map(param => (param.type as IDLReferenceType).name).join(', ')
+        console.log(`${paramString}`);
+
+        const method = makeMethod(
+            PeersConstructions.createOrUpdate(
+                this.node.name,
+                node.name
+            ),
+            node.parameters
+                .map(it => createParameter(it.name, flattenType(it.type))),
+            flattenType(node.returnType),
+            [MethodModifier.STATIC]
         )
+
+        this.writer.writeMethodImplementation(method, () => {
+            const newExpr = this.writer.makeNewObject(this.node.name, [
+                this.writer.makeFunctionCall(
+                    this.writer.makeString(
+                        PeersConstructions.callBinding(
+                            this.node.name,
+                            node.name,
+                            nodeNamespace(this.node)
+                        )
+                    ),
+                    this.makeBindingArguments(node.parameters)
+                ),
+            ])
+
+            if (isReal(this.node)) {
+                const varName = 'result'
+                this.writer.writeStatements(
+                    this.writer.makeAssign(
+                        varName, createReferenceType(this.node.name), newExpr, true
+                    ),
+                    this.writer.makeStatement(
+                        this.writer.makeMethodCall(varName, PeersConstructions.setChildrenParentPtrMethod, [])
+                    ),
+                    this.writer.makeReturn(
+                        this.writer.makeString(varName)
+                    ),
+                )
+            } else {
+                this.writer.writeStatement(
+                    this.writer.makeReturn(newExpr)
+                )
+            }
+        })
     }
 
     private makeBindingArguments(parameters: IDLParameter[]): LanguageExpression[] {
