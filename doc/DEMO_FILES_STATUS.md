@@ -11,7 +11,7 @@
 | BadgeTest.ets | |
 | BaseSpanTest.ets | |
 | BlankTest.ets | |
-| ButtonTest.ets | |
+| ButtonTest.ets | Ivan Tuzhilkin |
 | CalendarPickerTest.ets | |
 | CanvasRendererBeginPath.test.ets | Vadim Voronov |
 | CanvasRendererClip.test.ets | Vadim Voronov |
