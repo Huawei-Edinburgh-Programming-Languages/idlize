@@ -25,6 +25,7 @@ import {
     IDLPointerType,
     IDLReferenceType,
     IDLType,
+    IDLEntry,
     IDLUndefinedType,
     IDLVoidType,
     IndentedPrinter,
@@ -93,13 +94,26 @@ export class PeerPrinter extends SingleFilePrinter {
 
     protected writer = new TSLanguageWriter(
         new IndentedPrinter(),
-        createEmptyReferenceResolver(),
-        { convert: (node: IDLType) => composedConvertType(
+        {
+            resolveTypeReference(type: IDLReferenceType, terminalImports?: boolean): IDLEntry | undefined {
+                console.log(`resolve TYPE: ${type.name}`);
+                return undefined
+            },
+            toDeclaration(type: IDLType) {
+                console.log(`toDecl TYPE: ${type.kind}`);
+                return type
+            }
+        },
+        { convert: (node: IDLType) => {
+            const result = composedConvertType(
                 new LibraryTypeConvertor(this.typechecker),
                 new ImporterTypeConvertor(this.importer, this.typechecker),
                 node
             )
-        }
+            console.log(`CONVERT: ${node.kind} -> ${result.toString()}`);
+            
+            return result
+        }}
     )
 
     private printPeer(): void {
