@@ -20,16 +20,10 @@ import { idlManager } from "./idlprocessing"
 import "./validator"
 import { outputReadableResult } from "./formatter"
 
-const options = program
-    .version("0.0.5")
-    .option("--check <path>", "Path to single .idl file or directory to recursively scan for .idl for validation")
-    .option("--load <path>", "Path to single .idl file or directory to recursively scan for .idl for loading and symbol search\n(only those also mentioned in --check will be checked)")
-    .option("--features <features...>", "Enable additional validation features\n(build-dependent, currently you can use '--feature ohos' OHOS-related validations).")
-    .addHelpText("after", "\nExit codes are (1) for invalid paths and (2) in case of errors/fatals found in .idl files.")
-    .parse()
-    .opts()
-
 function processIdl(checkFiles: Set<string>, loadFiles: Set<string>) {
+
+    performance.mark("procStart")
+
     for (let ent of checkFiles) {
         idlManager.addFile(ent)
     }
@@ -37,6 +31,12 @@ function processIdl(checkFiles: Set<string>, loadFiles: Set<string>) {
         idlManager.addFile(ent, true)
     }
     idlManager.runPasses()
+
+    performance.mark("procEnd")
+    performance.measure("proc", "procStart", "procEnd")
+    const measure = performance.getEntriesByName("proc")[0];
+    //console.log(`Processing duration: ${measure.duration} milliseconds`);
+
     outputReadableResult(idlManager.results)
 }
 
@@ -56,7 +56,23 @@ function listIdl(listPath: string, what: string, excluding?: Set<string>): Set<s
     process.exit(1)
 }
 
-function main() {
+function idlinterMain() {
+    const cmd = program
+        .version("0.0.6")
+        .option("--check <path>", "Path to single .idl file or directory to recursively scan for .idl for validation")
+        .option("--load <path>", "Path to single .idl file or directory to recursively scan for .idl for loading and symbol search\n(only those also mentioned in --check will be checked)")
+        .option("--features <features...>", "Enable additional validation features,\nincluding:\n" + idlManager.featuresHelp)
+        .addHelpText("after", "\nExit codes are (1) for invalid arguments and (2) in case of errors/fatals found in .idl files.")
+
+    const options = cmd.parse().opts()
+
+    try {
+        idlManager.activeFeatures = options.features ?? []
+    } catch (e: any) {
+        console.error(e.message)
+        process.exit(1)
+    }
+
     let checkFiles = new Set<string>()
     let loadFiles = new Set<string>()
     if (options.check == null && options.load == null) {
@@ -68,13 +84,14 @@ function main() {
     if (options.load != null) {
         loadFiles = listIdl(options.load, "--load", checkFiles)
     }
-    idlManager.features = options.features ?? []
+
     processIdl(checkFiles, loadFiles)
+
     if (idlManager.results.hasErrors) {
         process.exit(2)
     }
 }
 
 if (require.main === module) {
-    main()
+    idlinterMain()
 }

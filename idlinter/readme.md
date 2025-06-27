@@ -27,12 +27,14 @@ Usage: idlinter [options]
 Options:
   -V, --version             output the version number
   --check <path>            Path to single .idl file or directory to recursively scan for .idl for validation
-  --load <path>             Path to single .idl file or directory to recursively scan for .idl for loading and symbol
-                            search
+  --load <path>             Path to single .idl file or directory to recursively scan for .idl for loading and symbol search
                             (only those also mentioned in --check will be checked)
-  --features <features...>  Enable additional validation features
-                            (build-dependent, currently you can use '--feature ohos' OHOS-related validations).
+  --features <features...>  Enable additional validation features,
+                            including:
+                            ohos  OHOS-specific checks
   -h, --help                display help for command
 
-Exit codes are (1) for invalid paths and (2) in case of errors/fatals found in .idl files.
+Exit codes are (1) for invalid arguments and (2) in case of errors/fatals found in .idl files.
 ```
+
+For architecture overview and extensions how-to see [architecture-and-extensions.md](architecture-and-extensions.md)

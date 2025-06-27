@@ -72,7 +72,6 @@ class IdlProcessignProxy<State> {
 export class IdlProcessingPass<State> {
     name: string
     dependencies: IdlProcessingPass<any>[]
-    feature?: string
     order: number
     stateMaker: () => State
     rulesBefore: IdlProcessingRule<State>[] = []
@@ -144,14 +143,18 @@ function appendTo<K, V>(map: Map<K, V[]>, key: K, value: V): void {
     }
 }
 
-class IdlProcessingManager {
-    features: string[] = []
+export class IdlProcessingManager {
     entries: Parsed[] = []
     entriesByPath: Map<string, Parsed> = new Map()
     entriesToValidate: Parsed[] = []
     results: DiagnosticResults = new DiagnosticResults()
-    
+
+    featuresByName: Map<string, string> = new Map()
+    _activeFeatures: string[] = []
+
     passes: IdlProcessingPass<any>[] = []
+    passesByName: Map<string, IdlProcessingPass<any>> = new Map()
+    activePasses: Set<IdlProcessingPass<any>> = new Set()
     orderedPasses: IdlProcessingPass<any>[][] = []
 
     peerlibrary: idl.PeerLibrary
@@ -182,14 +185,32 @@ class IdlProcessingManager {
         }
     }
 
-    addPass(pass: IdlProcessingPass<any>): void {
-        this.passes.push(pass)
+    _markActive(pass: IdlProcessingPass<any>) {
+        if (this.activePasses.has(pass)) {
+            return
+        }
+        this.activePasses.add(pass)
+        for (const dep of pass.dependencies) {
+            this._markActive(dep)
+        }
     }
 
     runPasses(): void {
+        for (const pass of this.passes) {
+            if (pass.name.indexOf(".") == -1) {
+                this._markActive(pass)
+                continue
+            }
+            for (const feature of this._activeFeatures) {
+                if (pass.name.startsWith(feature + ".")) {
+                    this._markActive(pass)
+                }
+            }
+        }
+
         let maxOrder = Math.max(0, ...this.passes.map(x => x.order))
         for (let i = 0; i < maxOrder; ++i) {
-            this.orderedPasses.push(this.passes.filter(x => (!x.feature || this.features.includes(x.feature)) && x.order == i + 1))
+            this.orderedPasses.push(this.passes.filter(x => (this.activePasses.has(x)) && x.order == i + 1))
         }
 
         for (let passes of this.orderedPasses) {
@@ -201,11 +222,11 @@ class IdlProcessingManager {
                 idl.forEachChild(entry.idlFile,
                     n => passes.forEach(p => {
                         try { p.dispatch(n, true) }
-                        catch (e: any) { ProcessingError.reportDiagnosticMessage([{documentPath: entry.idlFile.fileName!}], `Pass "${p.name}": ${e.message}`) }
+                        catch (e: any) { ProcessingError.reportDiagnosticMessage([{documentPath: entry.fileName}], `Pass "${p.name}": ${e.message}`) }
                     }),
                     n => passes.forEach(p => {
                         try { p.dispatch(n) }
-                        catch (e: any) { ProcessingError.reportDiagnosticMessage([{documentPath: entry.idlFile.fileName!}], `Pass "${p.name}": ${e.message}`) }
+                        catch (e: any) { ProcessingError.reportDiagnosticMessage([{documentPath: entry.fileName}], `Pass "${p.name}": ${e.message}`) }
                     })
                 )
             }
@@ -215,18 +236,57 @@ class IdlProcessingManager {
             }
         }
     }
+
+    newFeature(name: string, description: string): void {
+        if (this.featuresByName.has(name)) {
+            throw new Error(`Feature "${name}" uses duplicate feature name`)
+        }
+        let dot = name.lastIndexOf(".")
+        if (dot != -1 && !this.featuresByName.has(name.substring(0, dot))) {
+            throw new Error(`Feature "${name}" references unexisting parent feature`)
+        }
+        if (this.passesByName.has(name)) {
+            throw new Error(`Feature "${name}" uses duplicate pass name`)
+        }
+        this.featuresByName.set(name, description);
+    }
+
+    newPass<State>(name: string, dependencies: IdlProcessingPass<any>[], stateMaker: () => State): IdlProcessingPass<State> {
+        let pass = new IdlProcessingPass<State>(name, [], stateMaker)
+        if (this.passesByName.has(pass.name)) {
+            throw new Error(`Pass "${pass.name}" uses duplicate pass name`)
+        }
+        if (this.featuresByName.has(pass.name)) {
+            throw new Error(`Pass "${pass.name}" uses duplicate feature name`)
+        }
+        let dot = pass.name.lastIndexOf(".")
+        if (dot != -1 && pass.name[0] != "." && !this.featuresByName.has(pass.name.substring(0, dot))) {
+            throw new Error(`Pass "${pass.name}" references unexisting parent feature`)
+        }
+        this.passes.push(pass)
+        return pass
+    }
+
+    set activeFeatures(value: string[]) {
+        for (const feature of value) {
+            if (!this.featuresByName.has(feature)) {
+                throw new Error(`Feature "${feature}" does not exist`)
+            }
+        }
+        this._activeFeatures = value
+    }
+
+    get activeFeatures(): string[] {
+        return this._activeFeatures
+    }
+
+    get featuresHelp(): string {
+        const lines: string[] = []
+        for (const [k, v] of this.featuresByName) {
+            lines.push(`${k}  ${v}`)
+        }
+        return lines.join("\n")
+    }
 }
 
 export let idlManager = new IdlProcessingManager()
-
-export function startingPass<State>(name: string, stateMaker: () => State): IdlProcessingPass<State> {
-    let pass = new IdlProcessingPass<State>(name, [], stateMaker)
-    idlManager.addPass(pass)
-    return pass
-}
-
-export function dependentPass<State>(name: string, dependencies: IdlProcessingPass<any>[], stateMaker: () => State): IdlProcessingPass<State> {
-    let pass = new IdlProcessingPass<State>(name, dependencies, stateMaker)
-    idlManager.addPass(pass)
-    return pass
-}
