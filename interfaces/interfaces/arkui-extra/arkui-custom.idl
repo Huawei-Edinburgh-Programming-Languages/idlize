@@ -189,3 +189,15 @@ interface BuilderNodeOps {
     boolean postTouchEvent(TouchEvent event);
     pointer setRootFrameNodeInBuilderNode(pointer node);
 };
+
+[Entity=Class]
+interface NodeContainerOps {
+    static void addNodeContainerRootNode(pointer self, pointer child);
+    static void setAboutToAppear(pointer self, Callback_Void value);
+    static void setAboutToDisappear(pointer self, Callback_Void value);
+    static void setAboutToResize(pointer self, Callback_Size_Void value);
+    static void setOnAttach(pointer self, Callback_Void value);
+    static void setOnDetach(pointer self, Callback_Void value);
+    static void setOnTouchEvent(pointer self, optional Callback_TouchEvent_Void value);
+};
+callback Callback_Size_Void = void (Size size);
