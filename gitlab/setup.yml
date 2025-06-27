@@ -3,7 +3,7 @@ include:
 
 .panda:
     script:
-    - PANDA_SDK_VERSION=1.5.0-dev.32627 npm run panda:sdk:check-install --prefix ./external/incremental/tools/panda
+    - PANDA_SDK_VERSION=next npm run panda:sdk:check-install --prefix ./external/incremental/tools/panda
 
 libarkts regenerate:
     stage: build
