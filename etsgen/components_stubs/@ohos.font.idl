@@ -1,6 +1,27 @@
 package ohos.font;
 
 namespace font {
+    /**
+    * The font API declaration, part for M2 app
+    */
+    [Entity=Interface]
+    interface FontOptions {
+        attribute (String or Resource) familyName;
+        attribute (String or Resource) familySrc;
+    };
+    [Entity=Interface]
+    interface FontInfo {
+        attribute String path;
+        attribute String postScriptName;
+        attribute String fullName;
+        attribute String family;
+        attribute String subfamily;
+        attribute number weight;
+        attribute number width;
+        attribute boolean italic;
+        attribute boolean monoSpace;
+        attribute boolean symbolic;
+    };
     [Entity=Interface]
     interface UIFontFallbackInfo {
         attribute String language;
@@ -39,5 +60,8 @@ namespace font {
         attribute sequence<UIFontFallbackGroupInfo> fallbackGroups;
     };
 
+    void registerFont(FontOptions options);
+    sequence<String> getSystemFontList();
+    FontInfo getFontByName(String fontName);
     UIFontConfig getUIFontConfig();
 };
