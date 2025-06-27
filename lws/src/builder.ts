@@ -16,45 +16,53 @@
 import * as lw from './lws'
 
 export const E = {
-  v: (name: string): lw.VariableExpression => ({
+  v: (name: string, annotations: lw.Annotation[] = []): lw.VariableExpression => ({
     kind: lw.LWKind.VariableExpression,
     name,
+    annotations,
   }),
-  c: (value: string | number): lw.ConstantExpression => ({
+  c: (value: string | number, annotations: lw.Annotation[] = []): lw.ConstantExpression => ({
     kind: lw.LWKind.ConstantExpression,
     value: value.toString(),
+    annotations,
   }),
-  s: (value: string): lw.StringExpression => ({
+  s: (value: string, annotations: lw.Annotation[] = []): lw.StringExpression => ({
     kind: lw.LWKind.StringExpression,
     value,
+    annotations,
   }),
-  unary: (op: string, expression: lw.LWExpression): lw.UnaryExpression => ({
+  unary: (op: string, expression: lw.LWExpression, annotations: lw.Annotation[] = []): lw.UnaryExpression => ({
     kind: lw.LWKind.UnaryExpression,
     expression,
     op,
+    annotations,
   }),
-  bin: (op: string, left: lw.LWExpression, right: lw.LWExpression): lw.BinaryExpression => ({
+  bin: (op: string, left: lw.LWExpression, right: lw.LWExpression, annotations: lw.Annotation[] = []): lw.BinaryExpression => ({
     kind: lw.LWKind.BinaryExpression,
     op,
     left,
     right,
+    annotations,
   }),
-  call: (callee: lw.LWExpression, args: lw.LWExpression[], typeArgs?: lw.LWType[]): lw.CallExpression => ({
+  call: (callee: lw.LWExpression, args: lw.LWExpression[], typeArgs?: lw.LWType[], annotations: lw.Annotation[] = []): lw.CallExpression => ({
     kind: lw.LWKind.CallExpression,
     args,
     callee,
     typeArgs,
+    annotations,
   }),
-  get: (base: lw.LWExpression, accessor: string): lw.AccessorExpression => ({
+  get: (base: lw.LWExpression, accessor: string, annotations: lw.Annotation[] = []): lw.AccessorExpression => ({
     kind: lw.LWKind.AccessorExpression,
     base,
     accessor,
+    annotations,
   }),
-  instance: (name: string, args: lw.LWExpression[], typeArgs?: lw.LWType[]): lw.ConstructorExpression => ({
+  instance: (name: string, args: lw.LWExpression[], typeArgs?: lw.LWType[], annotations: lw.Annotation[] = []): lw.ConstructorExpression => ({
     kind: lw.LWKind.ConstructorExpression,
     args,
     name,
     typeArgs,
+    annotations,
   }),
 }
 
@@ -83,7 +91,7 @@ export const S = {
     condition,
     body,
   }),
-  if: (condition:lw.LWExpression, thenBody:lw.LWStatement, elseBody?:lw.LWStatement): lw.IfStatement => ({
+  if: (condition: lw.LWExpression, thenBody: lw.LWStatement, elseBody?: lw.LWStatement): lw.IfStatement => ({
     kind: lw.LWKind.IfStatement,
     condition,
     thenBody,
@@ -92,7 +100,7 @@ export const S = {
 }
 
 export const T = {
-  c: (name:string, ...args:lw.LWType[]): lw.ConstType | lw.AppType => {
+  c: (name: string, ...args: lw.LWType[]): lw.ConstType | lw.AppType => {
     if (args.length === 0) {
       return {
         kind: lw.LWKind.ConstType,
@@ -105,27 +113,27 @@ export const T = {
       args,
     }
   },
-  fn: (params:[name:string, type:lw.LWType][], returnType:lw.LWType): lw.FuncType => ({
+  fn: (params: [name: string, type: lw.LWType][], returnType: lw.LWType): lw.FuncType => ({
     kind: lw.LWKind.FuncType,
     params: params.map(([name, type]) => ({ name, type })),
     returnType
   }),
 }
 
-export const DD = (generics:lw.GenericDescriptor[]) => ({
-  union: (name:string, variants:lw.UnionDeclaration['variants']): lw.UnionDeclaration => ({
+export const DD = (generics: lw.GenericDescriptor[]) => ({
+  union: (name: string, variants: lw.UnionDeclaration['variants']): lw.UnionDeclaration => ({
     kind: lw.LWKind.UnionDeclaration,
     generics,
     name,
     variants,
   }),
-  struct: (name: string, members:lw.StructureDeclaration['members']): lw.StructureDeclaration => ({
+  struct: (name: string, members: lw.StructureDeclaration['members']): lw.StructureDeclaration => ({
     kind: lw.LWKind.StructureDeclaration,
     generics,
     name,
     members,
   }),
-  class: (name:string, fields:lw.ClassDeclaration['fields'], methods:lw.FunctionDeclaration[], more?:lw.ClassDeclaration['oop']): lw.ClassDeclaration => ({
+  class: (name: string, fields: lw.ClassDeclaration['fields'], methods: lw.FunctionDeclaration[], more?: lw.ClassDeclaration['oop']): lw.ClassDeclaration => ({
     kind: lw.LWKind.ClassDeclaration,
     generics,
     name,
@@ -133,18 +141,18 @@ export const DD = (generics:lw.GenericDescriptor[]) => ({
     methods,
     oop: more
   }),
-  ns: (name:string, members:lw.LWDeclaration[]): lw.NamespaceDeclaration => ({
+  ns: (name: string, members: lw.LWDeclaration[]): lw.NamespaceDeclaration => ({
     kind: lw.LWKind.NamespaceDeclaration,
     name,
     members,
   }),
-  type: (name:string, type:lw.LWType): lw.TypedefDeclaration => ({
+  type: (name: string, type: lw.LWType): lw.TypedefDeclaration => ({
     kind: lw.LWKind.TypedefDeclaration,
     generics,
     name,
     type,
   }),
-  func: (name:string, parameters:lw.FunctionDeclaration['parameters'], returnType:lw.LWType, body:lw.LWStatement): lw.FunctionDeclaration => ({
+  func: (name: string, parameters: lw.FunctionDeclaration['parameters'], returnType: lw.LWType, body: lw.LWStatement): lw.FunctionDeclaration => ({
     kind: lw.LWKind.FunctionDeclaration,
     generics,
     name,
@@ -154,3 +162,9 @@ export const DD = (generics:lw.GenericDescriptor[]) => ({
   })
 })
 export const D = DD([])
+
+export const utils = {
+  hasAnnotation(node: lw.LWExpression, annotation: string) {
+    return node.annotations.find(x => x.name === annotation)
+  }
+}

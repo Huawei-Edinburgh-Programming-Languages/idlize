@@ -50,6 +50,13 @@ export interface GenericDescriptor {
 
 ////////////////////////////////////////////////////////
 
+export interface Annotation {
+  name: string
+  value?: string
+}
+
+////////////////////////////////////////////////////////
+
 /**
  * Should be emulated as tagged union
  */
@@ -158,42 +165,50 @@ export type LWStatement =
 export interface VariableExpression {
   kind: LWKind.VariableExpression
   name: string
+  annotations: Annotation[]
 }
 export interface ConstantExpression {
   kind: LWKind.ConstantExpression
   value: string
+  annotations: Annotation[]
 }
 export interface StringExpression {
   kind: LWKind.StringExpression
   value: string
+  annotations: Annotation[]
 }
 export interface UnaryExpression {
   kind: LWKind.UnaryExpression
   expression: LWExpression
   op: string
+  annotations: Annotation[]
 }
 export interface BinaryExpression {
   kind: LWKind.BinaryExpression
   left: LWExpression
   op: string
   right: LWExpression
+  annotations: Annotation[]
 }
 export interface CallExpression {
   kind: LWKind.CallExpression
   callee: LWExpression
   args: LWExpression[]
   typeArgs?: LWType[]
+  annotations: Annotation[]
 }
 export interface AccessorExpression {
   kind: LWKind.AccessorExpression
   base: LWExpression
   accessor: string
+  annotations: Annotation[]
 }
 export interface ConstructorExpression {
   kind: LWKind.ConstructorExpression
   name: string
   args: LWExpression[]
   typeArgs?: LWType[]
+  annotations: Annotation[]
 }
 export type LWExpression =
     VariableExpression

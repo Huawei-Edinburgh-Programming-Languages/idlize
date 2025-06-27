@@ -18,11 +18,13 @@ import { EOL } from "node:os"
 export class TokenPrinter {
     private readonly tokens: string[][] = [[]]
 
-    put(...chunks:string[]) {
+    put(...chunks:string[]): this {
         this.tokens.at(-1)?.push(...chunks)
+        return this
     }
-    newline() {
+    newline(): this {
         this.tokens.push([])
+        return this
     }
 
     render(): string {
@@ -34,18 +36,18 @@ export class IndentPrinter extends TokenPrinter {
 
     private tabSize = 0
 
-    inc() {
+    inc(): this {
         this.tabSize++
         return this
     }
-    dec() {
+    dec(): this {
         this.tabSize--
         return this
     }
 
-    override newline() {
+    override newline(): this {
         super.newline()
-        this.put(' '.repeat(this.tabSize))
+        this.put(' '.repeat(this.tabSize * 2))
         return this
     }
 }

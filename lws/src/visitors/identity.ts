@@ -12,5 +12,252 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import * as lw from '../lws'
 
-export class IdentityTransformer {}
+function over<T, U>(x:T|undefined, f:(x:T) => U): U|undefined {
+  if (x === undefined) {
+    return undefined
+  }
+  return f(x)
+}
+
+export class IdentityTransformer {
+  goUnionDeclaration(decl:lw.UnionDeclaration): lw.UnionDeclaration {
+    return {
+      kind: decl.kind,
+      generics: decl.generics,
+      name: decl.name,
+      variants: decl.variants.map(v => ({
+        name: v.name,
+        type: this.goType(v.type)
+      }))
+    }
+  }
+  goStructureDeclaration(decl:lw.StructureDeclaration): lw.StructureDeclaration {
+    return {
+      kind: decl.kind,
+      generics: decl.generics,
+      name: decl.name,
+      members: decl.members.map(m => ({
+        name: m.name,
+        type: this.goType(m.type)
+      })),
+    }
+  }
+  goClassDeclaration(decl:lw.ClassDeclaration): lw.ClassDeclaration {
+    return {
+      kind: decl.kind,
+      generics: decl.generics,
+      name: decl.name,
+      fields: decl.fields.map(f => ({
+        name: f.name,
+        type: this.goType(f.type)
+      })),
+      methods: decl.methods.map(m => this.goFunctionDeclaration(m)),
+      oop: over(decl.oop, oop => ({
+        sort: oop.sort,
+        base: over(oop.base, b => this.goType(b)),
+        implementations: oop.implementations?.map(imp => this.goType(imp))
+      }))
+    }
+  }
+  goNamespaceDeclaration(decl:lw.NamespaceDeclaration): lw.NamespaceDeclaration {
+    return {
+      kind: decl.kind,
+      name: decl.name,
+      members: decl.members.map(m => this.goDeclaration(m))
+    }
+  }
+  goTypedefDeclaration(decl:lw.TypedefDeclaration): lw.TypedefDeclaration {
+    return {
+      kind: decl.kind,
+      generics: decl.generics,
+      name: decl.name,
+      type: this.goType(decl.type)
+    }
+  }
+  goFunctionDeclaration(decl:lw.FunctionDeclaration): lw.FunctionDeclaration {
+    return {
+      kind: decl.kind,
+      generics: decl.generics,
+      name: decl.name,
+      parameters: decl.parameters.map(p => ({
+        name: p.name,
+        type: this.goType(p.type)
+      })),
+      returnType: this.goType(decl.returnType),
+      body: this.goStatement(decl.body)
+    }
+  }
+  goDeclaration(decl:lw.LWDeclaration): lw.LWDeclaration {
+    switch (decl.kind) {
+      case lw.LWKind.UnionDeclaration: return this.goUnionDeclaration(decl)
+      case lw.LWKind.StructureDeclaration: return this.goStructureDeclaration(decl)
+      case lw.LWKind.ClassDeclaration: return this.goClassDeclaration(decl)
+      case lw.LWKind.NamespaceDeclaration: return this.goNamespaceDeclaration(decl)
+      case lw.LWKind.TypedefDeclaration: return this.goTypedefDeclaration(decl)
+      case lw.LWKind.FunctionDeclaration: return this.goFunctionDeclaration(decl)
+    }
+  }
+
+  goDeclarationStatement(stmt:lw.DeclarationStatement): lw.DeclarationStatement {
+    return {
+      kind: stmt.kind,
+      mutable: stmt.mutable,
+      varName: stmt.varName,
+      varType: this.goType(stmt.varType),
+      expression: over(stmt.expression, e => this.goExpression(e))
+    }
+  }
+  goCompoundStatement(stmt:lw.CompoundStatement): lw.CompoundStatement {
+    return {
+      kind: stmt.kind,
+      statements: stmt.statements.map(s => this.goStatement(s))
+    }
+  }
+  goExpressionStatement(stmt:lw.ExpressionStatement): lw.ExpressionStatement {
+    return {
+      kind: stmt.kind,
+      expression: over(stmt.expression, e => this.goExpression(e))
+    }
+  }
+  goReturnStatement(stmt:lw.ReturnStatement): lw.ReturnStatement {
+    return {
+      kind: stmt.kind,
+      expression: over(stmt.expression, e => this.goExpression(e))
+    }
+  }
+  goLoopStatement(stmt:lw.LoopStatement): lw.LoopStatement {
+    return {
+      kind: stmt.kind,
+      condition: this.goExpression(stmt.condition),
+      body: this.goStatement(stmt.body)
+    }
+  }
+  goIfStatement(stmt:lw.IfStatement): lw.IfStatement {
+    return {
+      kind: stmt.kind,
+      condition: this.goExpression(stmt.condition),
+      thenBody: this.goStatement(stmt.thenBody),
+      elseBody: over(stmt.elseBody, eb => this.goStatement(eb))
+    }
+  }
+  goStatement(stmt:lw.LWStatement): lw.LWStatement {
+    switch (stmt.kind) {
+      case lw.LWKind.DeclarationStatement: return this.goDeclarationStatement(stmt)
+      case lw.LWKind.CompoundStatement: return this.goCompoundStatement(stmt)
+      case lw.LWKind.ExpressionStatement: return this.goExpressionStatement(stmt)
+      case lw.LWKind.ReturnStatement: return this.goReturnStatement(stmt)
+      case lw.LWKind.LoopStatement: return this.goLoopStatement(stmt)
+      case lw.LWKind.IfStatement: return this.goIfStatement(stmt)
+    }
+  }
+
+  goVariableExpression(expr:lw.VariableExpression): lw.VariableExpression {
+    return {
+      kind: expr.kind,
+      name: expr.name,
+      annotations: expr.annotations,
+    }
+  }
+  goConstantExpression(expr:lw.ConstantExpression): lw.ConstantExpression {
+    return {
+      kind: expr.kind,
+      value: expr.value,
+      annotations: expr.annotations,
+    }
+  }
+  goStringExpression(expr:lw.StringExpression): lw.StringExpression {
+    return {
+      kind: expr.kind,
+      value: expr.value,
+      annotations: expr.annotations,
+    }
+  }
+  goUnaryExpression(expr:lw.UnaryExpression): lw.UnaryExpression {
+    return {
+      kind: expr.kind,
+      op: expr.op,
+      expression: this.goExpression(expr.expression),
+      annotations: expr.annotations,
+    }
+  }
+  goBinaryExpression(expr:lw.BinaryExpression): lw.BinaryExpression {
+    return {
+      kind: expr.kind,
+      op: expr.op,
+      left: this.goExpression(expr.left),
+      right: this.goExpression(expr.right),
+      annotations: expr.annotations,
+    }
+  }
+  goCallExpression(expr:lw.CallExpression): lw.CallExpression {
+    return {
+      kind: expr.kind,
+      callee: this.goExpression(expr.callee),
+      args: expr.args.map(a => this.goExpression(a)),
+      typeArgs: expr.typeArgs?.map(t => this.goType(t)),
+      annotations: expr.annotations,
+    }
+  }
+  goAccessorExpression(expr:lw.AccessorExpression): lw.AccessorExpression {
+    return {
+      kind: expr.kind,
+      accessor: expr.accessor,
+      base: this.goExpression(expr.base),
+      annotations: expr.annotations,
+    }
+  }
+  goConstructorExpression(expr:lw.ConstructorExpression): lw.ConstructorExpression {
+    return {
+      kind: expr.kind,
+      name: expr.name,
+      args: expr.args.map(a => this.goExpression(a)),
+      typeArgs: expr.typeArgs?.map(t => this.goType(t)),
+      annotations: expr.annotations,
+    }
+  }
+  goExpression(expr:lw.LWExpression): lw.LWExpression {
+    switch (expr.kind) {
+      case lw.LWKind.VariableExpression: return this.goVariableExpression(expr)
+      case lw.LWKind.ConstantExpression: return this.goConstantExpression(expr)
+      case lw.LWKind.StringExpression: return this.goStringExpression(expr)
+      case lw.LWKind.UnaryExpression: return this.goUnaryExpression(expr)
+      case lw.LWKind.BinaryExpression: return this.goBinaryExpression(expr)
+      case lw.LWKind.CallExpression: return this.goCallExpression(expr)
+      case lw.LWKind.AccessorExpression: return this.goAccessorExpression(expr)
+      case lw.LWKind.ConstructorExpression: return this.goConstructorExpression(expr)
+    }
+  }
+
+  goConstType(type:lw.ConstType): lw.ConstType {
+    return {
+      kind: type.kind,
+      name: type.name
+    }
+  }
+  goFuncType(type:lw.FuncType): lw.FuncType {
+    return {
+      kind: type.kind,
+      params: type.params.map(p => ({
+        name: p.name,
+        type: this.goType(p.type)
+      })),
+      returnType: this.goType(type.returnType)
+    }
+  }
+  goAppType(type:lw.AppType): lw.AppType {
+    return {
+      kind: type.kind,
+      head: type.head,
+      args: type.args.map(t => this.goType(t))
+    }
+  }
+  goType(type:lw.LWType): lw.LWType {
+    switch (type.kind) {
+      case lw.LWKind.ConstType: return this.goConstType(type)
+      case lw.LWKind.AppType: return this.goAppType(type)
+      case lw.LWKind.FuncType: return this.goFuncType(type)
+    }
+  }
+}

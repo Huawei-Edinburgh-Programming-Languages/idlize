@@ -13,9 +13,16 @@
  * limitations under the License.
  */
 
+import { writeFileSync } from "node:fs"
 import { D, DD, E, S, T } from "./builder"
-import { TypeScriptPrinter } from "./printers/typescript"
-import { Ts, Vs } from "./stdlib"
+import { std, Ts, Vs } from "./stdlib"
+
+import { processNPrintCJ } from "./printers/translators/cangjie"
+import { processNPrintTS } from "./printers/translators/typescript"
+import { processNPrintCXX } from "./printers/translators/cxx"
+import { processNPrintJava } from "./printers/translators/java"
+import { processNPrintArkts } from "./printers/translators/arkts"
+import { dumpToString } from "./printers/dump"
 
 function main() {
   const test = D.ns('test', [
@@ -30,6 +37,18 @@ function main() {
           { name: 'mass', type: Ts.prim.int }
         ],
         [
+          D.func(
+            std.names.members.ctor,
+            [
+              { name: 'p', type: T.c('Point') },
+              { name: 'm', type: Ts.prim.int }
+            ],
+            Ts.prim.void,
+            S.block([
+              S.e(E.bin('=', E.get(Vs.self, 'position'), E.v('p'))),
+              S.e(E.bin('=', E.get(Vs.self, 'mass'), E.v('m'))),
+            ])
+          ),
           D.func('eat', [{ name: 'dm', type: Ts.prim.int }], Ts.prim.void, S.block([
             S.e(E.bin('=',
               E.get(Vs.self, 'mass'),
@@ -52,12 +71,20 @@ function main() {
             S.return(E.get(Vs.self, 'mass'))
           ]))
         ]
-    )
+    ),
   ])
 
-  const tsPrinter = new TypeScriptPrinter()
-  tsPrinter.printDeclaration(test)
-  const content = tsPrinter.render()
-  console.log(content)
+  const printers: [string, typeof processNPrintTS][] = [
+    ['test.ts', processNPrintTS],
+    ['test.cj', processNPrintCJ],
+    ['test.cpp', processNPrintCXX],
+    ['test.java', processNPrintJava],
+    ['test.ets', processNPrintArkts],
+    ['test.dump', dumpToString]
+  ]
+
+  printers.forEach(([name, printer]) => {
+    writeFileSync(`out/${name}`, printer(test), 'utf-8')
+  })
 }
 main()

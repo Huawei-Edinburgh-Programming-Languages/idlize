@@ -16,6 +16,10 @@
 import { E, T } from "./builder"
 import { LWType } from "./lws"
 
+const knownAnnotations = {
+    isPointerType: 'isPointerType'
+}
+
 const specialMemberNames = {
     ctor: '@constructor',
     deCtor: '@destructor',
@@ -36,18 +40,22 @@ const specialTypeNames = {
 
     union: '@UNION',
     intersection: '@INTERSECTION',
+
+    int: 'lws.int',
+    void: 'lws.void'
 }
 
 export const std = {
     names: {
         members: specialMemberNames,
         vars: specialVariables,
-        types: specialTypeNames
+        types: specialTypeNames,
+        annotations: knownAnnotations
     }
 }
 
 export const Vs = {
-    self: E.v(specialVariables.self),
+    self: E.v(specialVariables.self, [{ name: knownAnnotations.isPointerType }]),
     base: E.v(specialVariables.base),
     null: E.v(specialVariables.null),
     undef: E.v(specialVariables.undef),
@@ -74,8 +82,8 @@ const knownOperations = {
 export const Op = knownOperations
 
 const primitiveTypes = {
-    int: T.c('int'),
-    void: T.c('void'),
+    int: T.c(specialTypeNames.int),
+    void: T.c(specialTypeNames.void),
 }
 
 export const Ts = {
