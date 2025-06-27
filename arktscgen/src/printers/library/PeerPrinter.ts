@@ -35,7 +35,8 @@ import {
     MethodSignature,
     throwException,
     isReferenceType,
-    TSLanguageWriter
+    TSLanguageWriter,
+    TSTypeNameConvertor
 } from "@idlizer/core"
 import { flattenType, makeMethod, nodeNamespace, nodeType, parent } from "../../utils/idl"
 import { PeersConstructions } from "../../constuctions/PeersConstructions"
@@ -91,29 +92,39 @@ export class PeerPrinter extends SingleFilePrinter {
     private bindingReturnValueTypeConvertor = new BindingReturnValueTypeConvertor(this.typechecker)
 
     private parent = parent(this.node) ?? Config.defaultAncestor
-
-    protected writer = new TSLanguageWriter(
-        new IndentedPrinter(),
-        {
+    private resolver = {
             resolveTypeReference(type: IDLReferenceType, terminalImports?: boolean): IDLEntry | undefined {
-                console.log(`resolve TYPE: ${type.name}`);
+                console.log(`resolve TYPE: ${type.name}(${this.node2.name})`);
+                if (type.name.indexOf('this') >= 0) {
+                    //throw 'ffff'
+                    return this.node2
+                }
                 return undefined
             },
             toDeclaration(type: IDLType) {
                 console.log(`toDecl TYPE: ${type.kind}`);
                 return type
+            },
+            node2: this.node
+        }
+    private converter = new TSTypeNameConvertor(this.resolver)
+
+    protected writer = new TSLanguageWriter(
+        new IndentedPrinter(), this.resolver,
+        {
+            convert: (node: IDLType) => {
+                return this.converter.convert(node)
             }
-        },
-        { convert: (node: IDLType) => {
-            const result = composedConvertType(
-                new LibraryTypeConvertor(this.typechecker),
-                new ImporterTypeConvertor(this.importer, this.typechecker),
-                node
-            )
-            console.log(`CONVERT: ${node.kind} -> ${result.toString()}`);
-            
-            return result
-        }}
+            //convert: (node: IDLType) => {
+            //    const result = composedConvertType(
+            //        new LibraryTypeConvertor(this.typechecker),
+            //        new ImporterTypeConvertor(this.importer, this.typechecker),
+            //        node
+            //    )
+            //    console.log(`CONVERT: ${node.kind} -> ${result.toString()}`);
+            //    return result
+            //}
+        }
     )
 
     private printPeer(): void {
@@ -249,6 +260,8 @@ export class PeerPrinter extends SingleFilePrinter {
         this.writer.writeExpressionStatement(
             this.writer.makeString(`/** @deprecated */`)
         )
+        console.log(`printRegular: ${node.name}`);
+        
         this.writer.writeMethodImplementation(
             makeMethod(
                 peerMethod(node.name),

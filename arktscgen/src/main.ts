@@ -115,7 +115,7 @@ class PeerVisitor extends IVisitor {
     override onEnterInterface(node: core.IDLInterface): void {
         const printer = new pp.PeerPrinter(this.config, this.idl, node)
         const out = printer.print()
-        //console.log(out)
+        console.log(out)
     }
 
     override onEnterMethodDecl(node: core.IDLMethod): void {
@@ -160,7 +160,7 @@ function main() {
         new CodeFragmentOptions(options.optionsFile),
     )
     const idlPath = path.join(options.pandaSdkPath, pandaSdkIdlFilePath)
-    const [idlFile, tokenMap] = toIDLFile(idlPath, { inheritanceMode: 'single' })
+    const [idlFile, tokenMap] = toIDLFile('poor.idl', { inheritanceMode: 'single' })
 
     const v = new DelegateVisitor(
         new StdoutVisitor(),
