@@ -9,25 +9,6 @@ function Definitions() {
   //or empty
 }
 
-function Definition() {
-  CallbackOrInterfaceOrMixin();
-  Namespace();
-  Partial();
-  Dictionary();
-  Enum();
-  Typedef();
-  IncludesStatement();
-}
-
-function CallbackOrInterfaceOrMixin() {}
-
-function Namespace() {}
-function Partial() {}
-function Dictionary() {}
-function Enum() {}
-function Typedef() {}
-function IncludesStatement() {}
-
 function test() {
   const s: string = "int i = 0; while (i < 10) print(i++);";
 
@@ -48,13 +29,64 @@ test();
 
 ///////////////////////////////////////////////////////////////////////////////
 
+let g_lookahead: lex.Token;
 
+const g_char2token = new Map<string, Token>([
+  ["=", Token.tEq],
+  ["(", Token.tLBracket],
+  [")", Token.tRBracket],
+  ["{", Token.tLBrace],
+  ["}", Token.tRBrace],
+  ["<", Token.tLAngle],
+  [">", Token.tRAngle],
+  [":", Token.tColon],
+  [";", Token.tSemicolon],
+  [".", Token.tDot],
+  [",", Token.tComma],
+  ["+", Token.tPlus],
+  ["-", Token.tMinus],
+  ["*", Token.tAsterisk],
+  ["...", Token.tEllipsis],
+  ["?", Token.tQuestion],
+//["", Token.t],
+]);
 
+function Match(t: lex.Token) {
+  if (g_lookahead == t)
+     g_lookahead = lex.getToken();
+  else
+    console.log("Error. Waiting for: " + t ", but got " + g_lookahead);
+}
+
+function Match(t: string) {
+  if (g_char2token.has(t))
+    Match(g_char2token.get(t));
+  else
+    console.log("Error. Unknown symbol: " + t);
+}
+
+function Parse() {
+  const idl: string =
+`package arkui.component.idlize;
+import arkui.component.common;
+callback Callback_Extender_OnProgress = void (f32 value);`
+
+  lex.init(idl);
+
+  g_lookahead = lex.getToken();
+  while (g_lookahead != lex.Token.tError && g_lookahead != lex.Token.tEnd) {
+    console.log(g_lookahead);    
+    Definitions();
+    g_lookahead = lex.getToken();
+  }
+}
+
+// starting production
 function Definitions() {
   ExtendedAttributeList();
   Definition();
   Definitions();
-//    ε
+  // ε
 }
 
 function Definition() {
@@ -68,7 +100,7 @@ function Definition() {
 }
 
 function ArgumentNameKeyword() {
-    async
+/*    async
     attribute
     callback
     const
@@ -92,12 +124,12 @@ function ArgumentNameKeyword() {
     static
     stringifier
     typedef
-    unrestricted
+    unrestricted*/
 }
 
 function CallbackOrInterfaceOrMixin() {
-  callback CallbackRestOrInterface();
-  interface InterfaceOrMixin();
+  /*callback*/ CallbackRestOrInterface();
+  /*interface*/ InterfaceOrMixin();
 }
 
 function InterfaceOrMixin() {
@@ -106,15 +138,15 @@ function InterfaceOrMixin() {
 }
 
 function InterfaceRest() {
-  identifier Inheritance(); { InterfaceMembers(); } ;
+  Match("identifier"); Inheritance(); Match("{"); InterfaceMembers(); Match("}"); Match(";");
 }
 
 function Partial() {
-  partial PartialDefinition();
+  /*partial*/ PartialDefinition();
 }
 
 function PartialDefinition() {
-  interface PartialInterfaceOrPartialMixin();
+  /*interface*/ PartialInterfaceOrPartialMixin();
   PartialDictionary();
   Namespace();
 }
@@ -125,12 +157,12 @@ function PartialInterfaceOrPartialMixin() {
 }
 
 function PartialInterfaceRest() {
-  identifier { PartialInterfaceMembers(); } ;
+  Match("identifier"); Match("{"); PartialInterfaceMembers(); Match("}"); Match(";");
 }
 
 function InterfaceMembers() {
   ExtendedAttributeList(); InterfaceMember(); InterfaceMembers();
-  ε
+  // ε
 }
 
 function InterfaceMember() {
@@ -140,7 +172,7 @@ function InterfaceMember() {
 
 function PartialInterfaceMembers() {
   ExtendedAttributeList(); PartialInterfaceMember(); PartialInterfaceMembers();
-  ε
+  // ε
 }
 
 function PartialInterfaceMember() {
@@ -158,38 +190,38 @@ function PartialInterfaceMember() {
 }
 
 function Inheritance() {
-  : identifier
-  ε
+  Match(":"); Match("identifier");
+  // ε
 }
 
 function MixinRest() {
-  mixin identifier { MixinMembers(); } ;
+  Match("mixin"); Match("identifier"); Match("{"); MixinMembers(); Match("}") Match(";");
 }
 
 function MixinMembers() {
   ExtendedAttributeList(); MixinMember(); MixinMembers();
-  ε
+  // ε
 }
 
 function MixinMember() {
   Const();
   RegularOperation();
   Stringifier();
-  OptionalReadOnly AttributeRest();
+  /*OptionalReadOnly*/ AttributeRest();
 }
 
 function IncludesStatement() {
-  identifier includes identifier ;
+  Match("identifier"); Match("includes"); Match("identifier"); Match(";");
 }
 
 function CallbackRestOrInterface() {
   CallbackRest();
-  interface identifier { CallbackInterfaceMembers(); } ;
+  Match("interface"); Match("identifier"); Match("{"); CallbackInterfaceMembers(); Match("}"); Match(";");
 }
 
 function CallbackInterfaceMembers() {
   ExtendedAttributeList(); CallbackInterfaceMember(); CallbackInterfaceMembers();
-  ε
+  // ε
 }
 
 function CallbackInterfaceMember() {
@@ -198,34 +230,34 @@ function CallbackInterfaceMember() {
 }
 
 function Const() {
-  const ConstType(); identifier = ConstValue(); ;
+  Match("const"); ConstType(); Match("identifier"); Match("="); ConstValue(); Match(";");
 }
 
 function ConstValue() {
   BooleanLiteral();
   FloatLiteral();
-  integer
+  Match("integer");
 }
 
 function BooleanLiteral() {
-  true
-  false
+  //true
+  //false
 }
 
 function FloatLiteral() {
-  decimal
+  /*decimal
   -Infinity
   Infinity
-  NaN
+  NaN*/
 }
 
 function ConstType() {
   PrimitiveType();
-  identifier
+  Match("identifier");
 }
 
 function ReadOnlyMember() {
-  readonly ReadOnlyMemberRest();
+  Match("readonly"); ReadOnlyMemberRest();
 }
 
 function ReadOnlyMemberRest() {
@@ -239,35 +271,35 @@ function ReadWriteAttribute() {
 }
 
 function InheritAttribute() {
-  inherit AttributeRest();
+  Match("inherit"); AttributeRest();
 }
 
 function AttributeRest() {
-  attribute TypeWithExtendedAttributes(); AttributeName(); ;
+  Match("attribute"); TypeWithExtendedAttributes(); AttributeName(); Match(";");
 }
 
 function AttributeName() {
   AttributeNameKeyword();
-  identifier
+  Match("identifier");
 }
 
 function AttributeNameKeyword() {
-  async
-  required
+  //async
+  //required
 }
 
 function OptionalReadOnly() {
-  readonly
-  ε
+  Match("readonly");
+  // ε
 }
 
 function DefaultValue() {
   ConstValue();
-  string
+  /*string
   [ ]
   { }
   null
-  undefined
+  undefined*/
 }
 
 function Operation() {
@@ -276,7 +308,7 @@ function Operation() {
 }
 
 function RegularOperation() {
-  Type OperationRest();
+  Match("Type"); OperationRest();
 }
 
 function SpecialOperation() {
@@ -284,18 +316,18 @@ function SpecialOperation() {
 }
 
 function Special() {
-  getter
+  /*getter
   setter
-  deleter
+  deleter*/
 }
 
 function OperationRest() {
-  OptionalOperationName(); ( ArgumentList(); ) ;
+  OptionalOperationName(); Match("("); ArgumentList(); Match(")"); Match(";");
 }
 
 function OptionalOperationName() {
   OperationName();
-  ε
+  // ε
 }
 
 function OperationName() {
@@ -309,12 +341,12 @@ function OperationNameKeyword() {
 
 function ArgumentList() {
   Argument(); Arguments();
-  ε
+  // ε
 }
 
 function Arguments() {
   , Argument(); Arguments
-  ε
+  // ε
 }
 
 function Argument() {
@@ -323,34 +355,34 @@ function Argument() {
 
 function ArgumentRest() {
   optional TypeWithExtendedAttributes(); ArgumentName(); Default();
-  Type Ellipsis(); ArgumentName();
+  Match("Type"); Ellipsis(); ArgumentName();
 }
 
 function ArgumentName() {
   ArgumentNameKeyword();
-  identifier
+  Match("identifier");
 }
 
 function Ellipsis() {
-  ...
-  ε
+  //...
+  // ε
 }
 
 function Constructor() {
-  constructor ( ArgumentList(); ) ;
+  Match("constructor"); ( ArgumentList(); ) Match(";");
 }
 
 function Stringifier() {
-  stringifier StringifierRest();
+  Match("stringifier"); StringifierRest();
 }
 
 function StringifierRest() {
   OptionalReadOnly(); AttributeRest();
-  ;
+  Match(";");
 }
 
 function StaticMember() {
-  static StaticMemberRest();
+  Match("static"); StaticMemberRest();
 }
 
 function StaticMemberRest() {
@@ -359,21 +391,21 @@ function StaticMemberRest() {
 }
 
 function Iterable() {
-  iterable < TypeWithExtendedAttributes(); OptionalType(); > ;
+  Match("iterable"); Match("<"); TypeWithExtendedAttributes(); OptionalType(); Match(">"); Match(";");
 }
 
 function OptionalType() {
-  , TypeWithExtendedAttributes();
-  ε
+  Match(","); TypeWithExtendedAttributes();
+  // ε
 }
 
 function AsyncIterable() {
-  async iterable < TypeWithExtendedAttributes(); OptionalType(); > OptionalArgumentList(); ;
+  Match("async"); Match("iterable"); Match("<"); TypeWithExtendedAttributes(); OptionalType(); Match(">"); OptionalArgumentList(); Match(";");
 }
 
 function OptionalArgumentList() {
-  ( ArgumentList(); )
-  ε
+  Match("("); ArgumentList(); Match(")");
+  // ε
 }
 
 function ReadWriteMaplike() {
@@ -381,7 +413,7 @@ function ReadWriteMaplike() {
 }
 
 function MaplikeRest() {
-  maplike < TypeWithExtendedAttributes(); , TypeWithExtendedAttributes(); > ;
+  Match("maplike"); Match("<"); TypeWithExtendedAttributes(); Match(","); TypeWithExtendedAttributes(); Match(">"); Match(";");
 }
 
 function ReadWriteSetlike() {
@@ -389,31 +421,31 @@ function ReadWriteSetlike() {
 }
 
 function SetlikeRest() {
-  setlike < TypeWithExtendedAttributes(); > ;
+  Match("setlike"); Match("<"); TypeWithExtendedAttributes(); Match(">"); Match(";");
 }
 
 function Namespace() {
-  namespace identifier { NamespaceMembers(); } ;
+  Match("namespace"); Match("identifier"); Match("{"); NamespaceMembers(); Match("}"); Match(";");
 }
 
 function NamespaceMembers() {
   ExtendedAttributeList(); NamespaceMember(); NamespaceMembers();
-  ε
+  // ε
 }
 
 function NamespaceMember() {
   RegularOperation();
-  readonly AttributeRest();
+  Match("readonly"); AttributeRest();
   Const();
 }
 
 function Dictionary() {
-  dictionary identifier Inheritance(); { DictionaryMembers(); } ;
+  Match("dictionary"); Match("identifier"); Inheritance(); Match("{"); DictionaryMembers(); Match("}"); Match(";");
 }
 
 function DictionaryMembers() {
   DictionaryMember(); DictionaryMembers();
-  ε
+  // ε
 }
 
 function DictionaryMember() {
@@ -421,17 +453,17 @@ function DictionaryMember() {
 }
 
 function DictionaryMemberRest() {
-  required TypeWithExtendedAttributes(); identifier ;
-  Type(); identifier Default(); ;
+  Match("required"); TypeWithExtendedAttributes(); Match("identifier"); Match(";");
+  Type(); Match("identifier"); Default(); Match(";");
 }
 
 function PartialDictionary() {
-  dictionary identifier { DictionaryMembers(); } ;
+  Match("dictionary"); Match("identifier"); { DictionaryMembers(); } Match(";");
 }
 
 function Default() {
   = DefaultValue();
-  ε
+  // ε
 }
 
 function Enum() {
@@ -444,20 +476,20 @@ function EnumValueList() {
 
 function EnumValueListComma() {
   , EnumValueListString();
-  ε
+  // ε
 }
 
 function EnumValueListString() {
   string EnumValueListComma();
-  ε
+  // ε
 }
 
 function CallbackRest() {
-  identifier = Type(); ( ArgumentList(); ) ;
+  identifier = Type(); ( ArgumentList(); ) Match(";");
 }
 
 function Typedef() {
-  typedef TypeWithExtendedAttributes(); identifier ;
+  typedef TypeWithExtendedAttributes(); identifier Match(";");
 }
 
 function Type() {
@@ -486,7 +518,7 @@ function UnionMemberType() {
 
 function UnionMemberTypes() {
   or UnionMemberType(); UnionMemberTypes();
-  ε
+  // ε
 }
 
 function DistinguishableType() {
@@ -535,7 +567,7 @@ function IntegerType() {
 
 function OptionalLong() {
   long
-  ε
+  // ε
 }
 
 function StringType() {
@@ -554,7 +586,7 @@ function RecordType() {
 
 function Null() {
   ?
-  ε
+  // ε
 }
 
 function BufferRelatedType() {
@@ -577,12 +609,12 @@ function BufferRelatedType() {
 
 function ExtendedAttributeList() {
   [ ExtendedAttribute(); ExtendedAttributes(); ]
-  ε
+  // ε
 }
 
 function ExtendedAttributes() {
   , ExtendedAttribute(); ExtendedAttributes();
-  ε
+  // ε
 }
 
 function ExtendedAttribute() {
@@ -594,7 +626,7 @@ function ExtendedAttribute() {
 
 function ExtendedAttributeRest() {
   ExtendedAttribute();
-  ε
+  // ε
 }
 
 function ExtendedAttributeInner() {
@@ -602,92 +634,95 @@ function ExtendedAttributeInner() {
   [ ExtendedAttributeInner(); ] ExtendedAttributeInner();
   { ExtendedAttributeInner(); } ExtendedAttributeInner();
   OtherOrComma(); ExtendedAttributeInner();
-  ε
+  // ε
 }
 
 function Other() {
-  integer
-  decimal
-  identifier
-  string
-  other
-  -
-  -Infinity
-  .
-  ...
-  :
-  ;
-  <
-  =
-  >
-  ?
-  *
-  ByteString
-  DOMString
-  FrozenArray
-  Infinity
-  NaN
-  ObservableArray
-  Promise
-  USVString
-  any
-  bigint
-  boolean
-  byte
-  double
-  false
-  float
-  long
-  null
-  object
-  octet
-  or
-  optional
-  record
-  sequence
-  short
-  symbol
-  true
-  unsigned
-  undefined
-  ArgumentNameKeyword
-  BufferRelatedType
+  "integer"
+  "decimal"
+  "identifier"
+  "string"
+  "other"
+  "-"
+  "-Infinity"
+  "."
+  "..."
+  ":"
+  ";"
+  "<"
+  "="
+  ">"
+  "?"
+  "*"
+  "ByteString"
+  "DOMString"
+  "FrozenArray"
+  "Infinity"
+  "NaN"
+  "ObservableArray"
+  "Promise"
+  "USVString"
+  "any"
+  "bigint"
+  "boolean"
+  "byte"
+  "double"
+  "false"
+  "float"
+  "long"
+  "null"
+  "object"
+  "octet"
+  "or"
+  "optional"
+  "record"
+  "sequence"
+  "short"
+  "symbol"
+  "true"
+  "unsigned"
+  "undefined"
+  "ArgumentNameKeyword"
+  "BufferRelatedType"
 }
 
 function OtherOrComma() {
   Other();
-  ,
+  Match(",");
 }
 
 function IdentifierList() {
-  identifier Identifiers();
+  Match("identifier"); Identifiers();
 }
 
 function Identifiers() {
-  , identifier Identifiers();
-  ε
+  if (g_lookahead == ",") {
+    Match(","); Match("identifier"); Identifiers();
+  } else {
+    // ε
+  }
 }
 
 function ExtendedAttributeNoArgs() {
-  identifier
+  Match("identifier");
 }
 
 function ExtendedAttributeArgList() {
-  identifier ( ArgumentList(); )
+  Match("identifier"); Match("("); ArgumentList(); Match(")");
 }
 
 function ExtendedAttributeIdent() {
-  identifier = identifier
+  Match("identifier"); Match("="); Match("identifier");
 }
 
 function ExtendedAttributeWildcard() {
-  identifier = *
+  Match("identifier"); Match("="); Match("*");
 }
 
 function ExtendedAttributeIdentList() {
-  identifier = ( IdentifierList(); )
+  Match("identifier"); Match("="); Match("("); IdentifierList(); Match(")");
 }
 
 function ExtendedAttributeNamedArgList() {
-  identifier = identifier ( ArgumentList(); )
+  Match("identifier"); Match("="); Match("identifier"); Match("("); ArgumentList(); Match(")");
 }
