@@ -99,13 +99,13 @@ export function flattenType(type: IDLType): IDLType {
         return idl.createOptionalType(flattenType(type.type))
     if (isContainerType(type))
         return createContainerType(type.containerKind, type.elementType.map(flattenType))
-    if (idl.isReferenceType(type)) {
+    /*if (idl.isReferenceType(type)) {
         if (type.name.indexOf(".") > 0) {
             let result = idl.createReferenceType(baseName(type))
             //console.log(`flatten ${type.name} to ${result.name}`)
             return result
         }
-    }
+    }*/
     return type
 }
 
