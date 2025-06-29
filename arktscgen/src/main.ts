@@ -25,101 +25,31 @@ import { NonNullableOptions } from "./options/NonNullableOptions"
 import { CodeFragmentOptions } from "./options/CodeFragmentOptions"
 import { isReal } from "./general/common"
 import * as pp from "./printers/library/PeerPrinter";
+import { IVisitor } from './Visitor'
+import { PeerVisitor } from './PeerVisitor'
 
 const pandaSdkIdlFilePath = `ohos_arm64/include/tools/es2panda/generated/es2panda_lib/es2panda_lib.idl`
-
-export abstract class IVisitor {
-    onEnterNamespace(node: core.IDLNamespace): void {}
-    onEnterInterface(node: core.IDLInterface): void {}
-    onEnterMethodDecl(node: core.IDLMethod): void {}
-    //abstract onEnterPropertyDecl(node: core.IDLProperty): void
-    onLeaveNamespace(node: core.IDLNamespace): void {}
-
-    visit(node: IDLNode): void {
-        switch (node.kind) {
-            case core.IDLKind.File:
-                (node as core.IDLFile).entries.forEach(n => this.visit(n))
-                break;
-
-            case core.IDLKind.Namespace: {
-                const result = node as core.IDLNamespace
-                this.onEnterNamespace(result);
-                result.members.forEach(n => this.visit(n))
-                this.onLeaveNamespace(result);
-            } break;
-
-            case core.IDLKind.Interface: {
-                const result = node as core.IDLInterface
-
-                this.onEnterInterface(result)
-                this.registerInterface(result)
-
-                result.constructors.forEach(n => this.visit(n))
-                result.methods.forEach(n => this.visit(n))
-            } break;
-
-            case core.IDLKind.Method: {
-                const result = node as core.IDLMethod
-                this.onEnterMethodDecl(result);
-            } break;
-        }
-    }
-
-    private registerInterface(node: core.IDLInterface) : void {
-        const prefix = 'es2panda_'
-        const name = node.name.startsWith(prefix) ? node.name.slice(prefix.length) : node.name
-        const prev = this.interfaceDeclarations.get(name)
-
-        if (prev) {
-            console.log(`Already has a ${name}(${node.name})`);
-        } else {
-            this.interfaceDeclarations.set(name, node)
-        }
-    }
-
-    protected interfaceDeclarations = new Map<string, core.IDLInterface>()
-}
 
 class StdoutVisitor extends IVisitor {
     constructor() {
         super()
     }
 
-    override onEnterNamespace(node: core.IDLNamespace): void {
+    override onEnterNamespace(node: core.IDLNamespace): boolean {
         console.log(`namespace: ${node.name}`);
+        return true
     }
 
-    override onEnterInterface(node: core.IDLInterface): void {
+    override onEnterInterface(node: core.IDLInterface): boolean {
         //console.log(`interface: ${node.name}`);
         const inher = node.inheritance.map(it => it.name).join('+')
         if (inher.length) console.log(inher);
+        return true
     }
 
-    override onEnterMethodDecl(node: core.IDLMethod): void {
+    override onEnterMethodDecl(node: core.IDLMethod): boolean {
         //console.log(`method: ${node.name}`);
-    }
-}
-
-class PeerVisitor extends IVisitor {
-    constructor(
-        private config: Config,
-        private idl: core.IDLFile
-    ) {
-        super()
-    }
-
-    override onEnterNamespace(node: core.IDLNamespace): void {
-        console.log(`namespace: ${node.name}`);
-    }
-
-    override onEnterInterface(node: core.IDLInterface): void {
-        const printer = new pp.PeerPrinter(this.config, this.idl, node)
-        const out = printer.print()
-        console.log(out)
-    }
-
-    override onEnterMethodDecl(node: core.IDLMethod): void {
-        //console.log(`method: ${node.name}`);
+        return true
     }
 }
 
@@ -129,16 +59,19 @@ class DelegateVisitor extends IVisitor {
         this.delegates = delegates;
     }
 
-    onEnterNamespace(node: core.IDLNamespace): void {
+    onEnterNamespace(node: core.IDLNamespace): boolean {
         this.delegates.forEach(d => d.onEnterNamespace(node))
+        return true
     }
 
-    onEnterInterface(node: core.IDLInterface): void {
+    onEnterInterface(node: core.IDLInterface): boolean {
         this.delegates.forEach(d => d.onEnterInterface(node))
+        return true
     }
 
-    onEnterMethodDecl(node: core.IDLMethod): void {
+    onEnterMethodDecl(node: core.IDLMethod): boolean {
         this.delegates.forEach(d => d.onEnterMethodDecl(node))
+        return true
     }
 
     private delegates: IVisitor[] = []
