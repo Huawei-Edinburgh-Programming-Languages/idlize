@@ -206,6 +206,19 @@ index 94f24266a..a66c6d2d7 100644
  
  /**
   * Use the CustomDialogController class to display the custom pop-up window.
+diff --git a/api/@internal/component/ets/relative_container.d.ts b/api/@internal/component/ets/relative_container.d.ts
+index 1caa3043b..82659bec9 100644
+--- a/api/@internal/component/ets/relative_container.d.ts
++++ b/api/@internal/component/ets/relative_container.d.ts
+@@ -436,7 +436,7 @@ declare class RelativeContainerAttribute extends CommonMethod<RelativeContainerA
+    * @since arkts {'1.1':'12','1.2':'20'}
+    * @arkts 1.1&1.2
+    */
+-  barrier(barrierStyle: Array<LocalizedBarrierStyle>): RelativeContainerAttribute;
++  // barrier(barrierStyle: Array<LocalizedBarrierStyle>): RelativeContainerAttribute;
+ }
+ 
+ /**
 diff --git a/api/@internal/component/ets/repeat.d.ts b/api/@internal/component/ets/repeat.d.ts
 index 6af657932..81c455d53 100644
 --- a/api/@internal/component/ets/repeat.d.ts
