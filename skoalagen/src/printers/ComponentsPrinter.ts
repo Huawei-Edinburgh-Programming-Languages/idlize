@@ -14,19 +14,24 @@
  */
 
 import {
+    collapseSameMethodsIDL,
+    collectComponents,
+    collectDeclDependencies,
     collectPeersForFile,
-    componentToPeerClass,
     findComponentByType,
     groupOverloads,
+    groupOverloadsIDL,
     ImportsCollector,
     OverloadsPrinter,
     PrinterResult,
     TargetFile
 } from "@idlizer/libohos"
 import * as idl from "@idlizer/core"
+import { componentToPeerClass } from "./PeerPrinter"
 
 function generateComponentName(component: string) {
-    return `Sk${component}Component`
+    if (idl.isRoot(component)) return `ComponentBase`
+    return `${component}Component`
 }
 
 function componentToAttributesInterface(component: string) {
@@ -57,15 +62,26 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
     }
 
     private printImports(
-        peer: idl.PeerClass,
-        // component:IdlComponentDeclaration
+        peer: idl.PeerClass
     ): ImportsCollector {
         const imports = new ImportsCollector()
+
+        imports.addFeature('ComponentBase', '../ComponentBase')
+
+        const component = findComponentByType(this.library, idl.createReferenceType(peer.originalClassName!))!
+        collectDeclDependencies(this.library, component.attributeDeclaration, imports, { expandTypedefs: true })
+        component.attributeDeclaration.methods.forEach(method => {
+            method.parameters.map(p => p.type).concat([method.returnType]).forEach(type => {
+                collectDeclDependencies(this.library, type, (dep) => {
+                    collectDeclDependencies(this.library, dep, imports, { expandTypedefs: true })
+                }, { expandTypedefs: true })
+            })
+        })
         return imports
     }
 
     private overloadsPrinter(printer: idl.LanguageWriter) {
-        return new OverloadsPrinter(this.library, printer, this.library.language, true)
+        return new OverloadsPrinter(this.library, printer, this.library.language, false)
     }
 
     private printComponent(peer: idl.PeerClass): PrinterResult[] {
@@ -73,9 +89,8 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
         const printer = this.library.createLanguageWriter()
 
         const componentClassName = generateComponentName(peer.componentName)
-        const parentComponentClassName = peer.parentComponentName
+        const parentComponentClassName = peer.parentComponentName ? generateComponentName(peer.parentComponentName!) : `ComponentBase`
         const peerClassName = componentToPeerClass(peer.componentName)
-
         const component = findComponentByType(this.library, idl.createReferenceType(peer.originalClassName!))!
 
         if (!idl.isRoot(peer.componentName)) {
@@ -95,16 +110,10 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
                     )
                 )
                 for (const grouped of groupOverloads(peer.methods, this.library.language)) {
+                    if (grouped[0].method.name == "getFinalizer") continue // todo: rework
                     this.overloadsPrinter(printer).printGroupedComponentOverloads(peer.originalClassName!, grouped)
                 }
-
-                const attributesFinishSignature = new idl.MethodSignature(idl.IDLVoidType, [])
-                const applyAttributesFinish = 'applyAttributesFinish'
-                writer.writeMethodImplementation(new idl.Method(applyAttributesFinish, attributesFinishSignature, [idl.MethodModifier.PUBLIC]), (writer) => {
-                    writer.print('// we call this function outside of class, so need to make it public')
-                    writer.writeMethodCall('super', applyAttributesFinish, [])
-                })
-            }, parentComponentClassName, [componentToAttributesInterface(peer.originalClassName!)])
+            }, parentComponentClassName)
         }
 
         return [{

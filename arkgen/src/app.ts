@@ -131,7 +131,7 @@ export function arkgen(argv:string[]) {
         console.log(`IDLize version ${findVersion()}`)
     }
 
-    }
+
 
     if (options.idl2peer) {
         const outDir = options.outputDir ?? "./out"

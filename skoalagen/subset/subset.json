@@ -1,9 +1,10 @@
 {
     "subset": [
-        "generated/Finalizable.ts",
-        "generated/RefCounted.ts",
-        "generated/SerializerBase.ts",
-        "generated/generated-utils.ts"
+        "skoala-ts/Finalizable.ts",
+        "skoala-ts/RefCounted.ts",
+        "skoala-ts/SerializerBase.ts",
+        "skoala-ts/generated-utils.ts",
+        "skoala-ts/ComponentBase.ts"
     ],
     "generatedSubset": [
     ]

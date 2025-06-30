@@ -22,7 +22,9 @@ import {
     formatInputPaths,
     IDLVisitor,
     loadPeerConfiguration,
-    NativeModule
+    NativeModule,
+    DependencyProcessor,
+    isComponentDeclaration
 } from "@idlizer/libohos"
 
 import {
@@ -30,6 +32,7 @@ import {
     createInterface,
     defaultCompilerOptions,
     generate,
+    IDLEntry,
     IDLFile,
     IDLInterfaceSubkind,
     Language,
@@ -42,8 +45,8 @@ import {
     toIDLString
 } from "@idlizer/core"
 import { generateSkoalaFromIdl } from "./skoala"
-import { PeerProcessor } from "./PeerGeneratorVisitor"
 import { IdlSkoalaLibrary } from "./idlSkoalaLibrary"
+import { componentToPeerClass } from "./printers/PeerPrinter"
 
 const PREDEFINED_PATH = path.resolve(__dirname, '..', 'predefined')
 export function skoalaPredefinedFiles(): string[] {
@@ -130,8 +133,8 @@ export function skoalagen(argv: string[]) {
                 onEnd: (outDir) => {
                     fillGeneratedNativeModuleDeclaration(skoalaLibrary)
 
-                    const peerProcessor = new PeerProcessor(skoalaLibrary)
-                    peerProcessor.process()
+                    const depProcessor = new DependencyProcessor(skoalaLibrary)
+                    depProcessor.process()
 
                     generateSkoalaFromIdl({
                         outDir: outDir,
@@ -178,10 +181,23 @@ export function skoalagen(argv: string[]) {
     }
 }
 
+function createComponentPeers(library: LibraryInterface, synthesizedEntries: Map<string, IDLEntry>): void {
+    library.files.forEach(file => {
+        file.entries.forEach(it => {
+            if (isComponentDeclaration(library, it)) {
+                const peerName = componentToPeerClass(it.name.replace('Attribute', ''))
+                synthesizedEntries.set(peerName, createInterface(peerName, IDLInterfaceSubkind.Class))
+            }
+        })
+    })
+}
+
 function fillGeneratedNativeModuleDeclaration(library: LibraryInterface): void {
+    const synthesizedEntries = new Map<string, IDLEntry>()
+    createComponentPeers(library, synthesizedEntries)
     const declaration = createInterface(NativeModule.Generated.name, IDLInterfaceSubkind.Interface)
     const file = linkParentBack(
-        createFile([declaration], undefined, PACKAGE_IDLIZE_INTERNAL.split("."))
+        createFile([... synthesizedEntries.values(), declaration], undefined, PACKAGE_IDLIZE_INTERNAL.split("."))
     )
     library.files.push(file)
 }

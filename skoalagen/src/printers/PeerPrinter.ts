@@ -1,6 +1,10 @@
 import * as idl from '@idlizer/core'
 import { LibraryInterface } from "@idlizer/core";
-import { collectDeclDependencies, collectPeersForFile, componentToPeerClass, findComponentByName, findComponentByType, ImportsCollector, PrinterResult, TargetFile, writePeerMethod } from '@idlizer/libohos';
+import { collectDeclDependencies, collectDeclItself, collectPeersForFile, findComponentByName, findComponentByType, ImportsCollector, NativeModule, PrinterResult, TargetFile, writePeerMethod } from '@idlizer/libohos';
+
+export function componentToPeerClass(component: string) {
+    return `${component}Peer`
+}
 
 class PeerFileVisitor {
     constructor(
@@ -12,23 +16,48 @@ class PeerFileVisitor {
     protected generatePeerParentName(peer: idl.PeerClass): string {
         if (!peer.originalClassName)
             throw new Error(`${peer.componentName} is not supported, use 'uselessConstructorInterfaces' for now`)
-        // const parentRole = idl.determineParentRole(peer.originalClassName, peer.parentComponentName)
-        // if ([idl.InheritanceRole.Finalizable, idl.InheritanceRole.PeerNode].includes(parentRole)) {
-        //     return idl.InheritanceRole[parentRole]
-        // }
         const parent = peer.parentComponentName ?? idl.throwException(`Expected component to have parent`)
-        // return componentToPeerClass(parent)
         return parent
+    }
+
+    protected printPeerConstructor(peer: idl.PeerClass, printer: idl.LanguageWriter): void {
+        const signature = new idl.NamedMethodSignature(
+            idl.IDLVoidType,
+            [idl.maybeOptional(idl.IDLPointerType, true), idl.IDLBooleanType],
+            ['ptr', 'managed'],
+            [undefined, "true"])
+
+        const name = componentToPeerClass(peer.componentName)
+        printer.writeConstructorImplementation(
+            name, 
+            signature, (writer) => { },
+            { delegationArgs: [`ptr ?? ${name}.make()`, `${name}.getFinalizer()`, 'managed'].map(it => printer.makeString(it)), delegationName: peer.parentComponentName },
+            [idl.MethodModifier.PROTECTED])
+    }
+
+    protected printFinalizerMethod(peer: idl.PeerClass, printer: idl.LanguageWriter): void {
+        printer.writeMethodImplementation(
+            new idl.Method('getFinalizer',
+                new idl.MethodSignature(idl.IDLPointerType, []
+                ), [idl.MethodModifier.STATIC], []),
+            writer => writer.writeStatement(
+                writer.makeReturn(
+                    writer.makeNativeCall(NativeModule.Generated, `_${peer.componentName}_getFinalizer`, [])
+                )
+            )
+        )
     }
 
     protected printPeerMethod(method: idl.PeerMethod, printer: idl.LanguageWriter) {
         this.library.setCurrentContext(`${method.originalParentName}.${method.sig.name}`)
-        writePeerMethod(this.library, printer, method, true, this.dumpSerialized, "Attribute", "this.peer.ptr")
+        writePeerMethod(this.library, printer, method, true, this.dumpSerialized, "", "", method.returnType)
         this.library.setCurrentContext(undefined)
     }
 
     private printBody(peer: idl.PeerClass, writer: idl.LanguageWriter) {
-        // todo
+        this.printPeerConstructor(peer, writer);
+        this.printFinalizerMethod(peer, writer);
+
         (peer.methods as any[])
             .forEach(method => this.printPeerMethod(method, writer))
     }
@@ -42,6 +71,10 @@ class PeerFileVisitor {
     }
 
     protected printImports(peer: idl.PeerClass, imports: ImportsCollector): void {
+        imports.addFeature('KPointer', "@koalaui/interop")
+
+        collectDeclItself(this.library, idl.createReferenceType(NativeModule.Generated.name), imports)
+
         const component = findComponentByType(this.library, idl.createReferenceType(peer.originalClassName!))!
         collectDeclDependencies(this.library, component.attributeDeclaration, imports, { expandTypedefs: true })
         component.attributeDeclaration.methods.forEach(method => {

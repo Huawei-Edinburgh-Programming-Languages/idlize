@@ -35,17 +35,16 @@ export function createSkoalaInstall(options: {
 
 abstract class BaseSkoalaInstall implements SkoalaInstall {
     constructor(private outDir: string) {}
-    abstract get managedDir(): string
     get root(): string {
         return this.outDir
     }
     get nativeDir(): string {
-        return path.join(this.root, "native/src/generated")
+        return path.join(this.root, "./native/src/generated")
+    }
+    get managedDir(): string {
+        return path.join(this.root, "./skoala-ts/generated")
     }
 }
 
 class TSSkoalaInstall extends BaseSkoalaInstall {
-    get managedDir(): string {
-        return path.join(this.root, "src/generated")
-    }
 }

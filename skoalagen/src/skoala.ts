@@ -79,7 +79,7 @@ export function generateSkoalaFromIdl(
     library.setFileLayout(skoalaLayout(library, 'Sk'))
 
     install(
-        path.join(config.outDir, "./generated"),
+        path.join(config.outDir, "./skoala-ts/generated"),
         library,
         [
             createMaterializedPrinter(config.dumpSerialized),
@@ -87,12 +87,8 @@ export function generateSkoalaFromIdl(
             printGlobal,
             createSerializerPrinter(library.language, ""),
             createGeneratedNativeModulePrinter(NativeModule.Generated),
-            printComponents,
-            createInterfacePrinter(false),
-        ],
-        {
-
-        }
+            printComponents
+        ], {}
     )
 
     copySkoalaFiles({ onlyIntegrated: config.onlyIntegrated }, skoala)
