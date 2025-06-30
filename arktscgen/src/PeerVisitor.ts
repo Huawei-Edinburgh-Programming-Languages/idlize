@@ -1,18 +1,34 @@
 import * as core from "@idlizer/core"
-import { IVisitor } from "./Visitor"
+import { Declarations, Visitor } from "./Visitor"
 import { PeerGenerator, Body } from "./PeerGenerator";
 import { Config } from "./general/Config"
-import * as pp from "./printers/library/PeerPrinter";
 import { LanguageWriter } from "@idlizer/core";
 import { isReal } from "./general/common";
 import { PeersConstructions } from "./constuctions/PeersConstructions";
 
-export class PeerVisitor extends IVisitor {
+class SimpleConverter extends core.TSTypeNameConvertor {
+    constructor(resolver: core.ReferenceResolver) {
+        super(resolver)
+    }
+
+    override convertInterface(node: core.IDLInterface): string {
+        console.log(`convert ${node.name}`);
+        return super.convertInterface(node)
+    }
+
+    convertTypeReference(type: core.IDLReferenceType): string {
+        console.log(`convert ${type.name}`);
+        return super.convertTypeReference(type)
+    }
+}
+
+export class PeerVisitor extends Visitor {
     constructor(
         private config: Config,
-        private idl: core.IDLFile
+        private idl: core.IDLFile,
+        decls?: Declarations
     ) {
-        super()
+        super(decls)
     }
 
     override onEnterNamespace(node: core.IDLNamespace): boolean {
@@ -97,19 +113,19 @@ export class PeerVisitor extends IVisitor {
     }
 
     private resolver = {
-            resolveTypeReference(
-                type: core.IDLReferenceType,
-                terminalImports?: boolean
-            ): core.IDLEntry | undefined {
-                return this.self.resolveReference(type)
-            },
-            toDeclaration(type: core.IDLNode): core.IDLNode {
-                throw "Unused";
-            },
-            self : this,
-        }
+        resolveTypeReference(
+            type: core.IDLReferenceType,
+            terminalImports?: boolean
+        ): core.IDLEntry | undefined {
+            return this.visitor.resolveReference(type)
+        },
+        toDeclaration(type: core.IDLNode): core.IDLNode {
+            throw "Unused";
+        },
+        visitor: this,
+    }
 
-    private converter = new core.TSTypeNameConvertor(
+    private converter = new SimpleConverter(
         this.resolver
     )
 

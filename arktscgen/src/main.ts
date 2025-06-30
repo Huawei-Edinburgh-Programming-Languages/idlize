@@ -24,58 +24,10 @@ import { cliOptions } from "./options/cli-options"
 import { NonNullableOptions } from "./options/NonNullableOptions"
 import { CodeFragmentOptions } from "./options/CodeFragmentOptions"
 import { isReal } from "./general/common"
-import * as pp from "./printers/library/PeerPrinter";
-import { IVisitor } from './Visitor'
+import { Visitor } from './Visitor'
 import { PeerVisitor } from './PeerVisitor'
 
 const pandaSdkIdlFilePath = `ohos_arm64/include/tools/es2panda/generated/es2panda_lib/es2panda_lib.idl`
-
-class StdoutVisitor extends IVisitor {
-    constructor() {
-        super()
-    }
-
-    override onEnterNamespace(node: core.IDLNamespace): boolean {
-        console.log(`namespace: ${node.name}`);
-        return true
-    }
-
-    override onEnterInterface(node: core.IDLInterface): boolean {
-        //console.log(`interface: ${node.name}`);
-        const inher = node.inheritance.map(it => it.name).join('+')
-        if (inher.length) console.log(inher);
-        return true
-    }
-
-    override onEnterMethodDecl(node: core.IDLMethod): boolean {
-        //console.log(`method: ${node.name}`);
-        return true
-    }
-}
-
-class DelegateVisitor extends IVisitor {
-    constructor(...delegates: IVisitor[]) {
-        super()
-        this.delegates = delegates;
-    }
-
-    onEnterNamespace(node: core.IDLNamespace): boolean {
-        this.delegates.forEach(d => d.onEnterNamespace(node))
-        return true
-    }
-
-    onEnterInterface(node: core.IDLInterface): boolean {
-        this.delegates.forEach(d => d.onEnterInterface(node))
-        return true
-    }
-
-    onEnterMethodDecl(node: core.IDLMethod): boolean {
-        this.delegates.forEach(d => d.onEnterMethodDecl(node))
-        return true
-    }
-
-    private delegates: IVisitor[] = []
-}
 
 function main() {
     const options = cliOptions()
@@ -93,13 +45,13 @@ function main() {
         new CodeFragmentOptions(options.optionsFile),
     )
     const idlPath = path.join(options.pandaSdkPath, pandaSdkIdlFilePath)
-    const [idlFile, tokenMap] = toIDLFile('poor.idl', { inheritanceMode: 'single' })
-
-    const v = new DelegateVisitor(
-        new StdoutVisitor(),
-        new PeerVisitor(config, idlFile)
+    const [idlFile, tokenMap] = toIDLFile(
+        //'poor.idl',
+        idlPath,
+        { inheritanceMode: 'single' }
     )
-    v.visit(idlFile)
+
+    new PeerVisitor(config, idlFile).visit(idlFile)
 }
 
 main()

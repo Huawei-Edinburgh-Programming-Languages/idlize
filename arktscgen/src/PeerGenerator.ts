@@ -3,7 +3,6 @@ import { createParameter, IDLInterface, MethodSignature } from "@idlizer/core"
 import { PeersConstructions } from "./constuctions/PeersConstructions"
 import { mangleIfKeyword } from "./general/common"
 import { flattenType } from "./utils/idl"
-import { IVisitor } from "./Visitor"
 
 export interface Body {
     creates: core.Method[],
