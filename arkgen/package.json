@@ -69,7 +69,6 @@
     "compile": "npm run compile -C ../libohos && tsc && rollup -c",
     "clean": "rimraf build dist lib generated native/build* native/lib* native/cross* native/NativeBridge* native/ace* out external-subset",
     "run:all": "npm run compile && node . --dts2peer --base-dir ./,../sdk-patched/api,../sdk-patched/kits,../sdk-patched/arkts --input-dir ../sdk-patched/api/@internal/component/ets/,../sdk-patched/api/arkui,../sdk-patched/api/global --verify-idl --common-to-attributes --docs=opt",
-    "dts2skoala": "npm run compile && node . --dts2skoala --input-dir ./tests/mini_skoala/build/  --options-file ./generation-config/skoala-generator.json",
     "idl2peer:target": "node --stack_trace_limit=200 . --api-version 99 --dts2peer --base-dir ./,../sdk-patched/api,../sdk-patched/kits,../sdk-patched/arkts --input-dir ../sdk-patched/api/@internal/component/ets/,../sdk-patched/api/global --output-dir ./out/ts-peers/generated",
     "idl2peer:arkoala": "npm run idl2peer:target -- --generator-target arkoala --arkoala-destination out/ts-peers/generated/sig",
     "idl2peer:libace": "npm run idl2peer:target -- --generator-target libace --libace-destination out/ts-peers/generated/libace",

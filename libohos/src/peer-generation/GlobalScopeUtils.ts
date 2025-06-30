@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { createOutArgConvertor, MaterializedClass, MaterializedMethod, Method, MethodModifier, NamedMethodSignature, PeerLibrary, PeerMethod, PeerMethodArg, PeerMethodSignature } from "@idlizer/core";
+import { LibraryInterface, createOutArgConvertor, MaterializedClass, MaterializedMethod, Method, MethodModifier, NamedMethodSignature, PeerLibrary, PeerMethod, PeerMethodArg, PeerMethodSignature } from "@idlizer/core";
 import { createInterface, createMethod, getFQName, getNamespacesPathFor, IDLInterface, IDLInterfaceSubkind, IDLMethod, maybeOptional } from "@idlizer/core/idl";
 import { groupOverloadsIDL } from "./printers/OverloadsPrinter";
 
@@ -25,12 +25,12 @@ export function mangledGlobalScopeName(method:IDLMethod) {
     return nsPrefix + method.name
 }
 
-export function idlFreeMethodsGroupToLegacy(library: PeerLibrary, methods: IDLMethod[]): PeerMethod[] {
+export function idlFreeMethodsGroupToLegacy(library: LibraryInterface, methods: IDLMethod[]): PeerMethod[] {
     const groupedMethods = groupOverloadsIDL(methods, library.language)
     return groupedMethods.filter(it => it.length).flatMap(methods => idlFreeMethodToLegacy(library, methods))
 }
 
-export function idlMethodToMaterializedMethod(library: PeerLibrary, method:IDLMethod): MaterializedMethod {
+export function idlMethodToMaterializedMethod(library: LibraryInterface, method:IDLMethod): MaterializedMethod {
     return new MaterializedMethod(
         new PeerMethodSignature(
             mangledGlobalScopeName(method),
@@ -51,7 +51,7 @@ export function idlMethodToMaterializedMethod(library: PeerLibrary, method:IDLMe
     )
 }
 
-export function idlFreeMethodToLegacy(library: PeerLibrary, methods: IDLMethod[]): MaterializedMethod[] {
+export function idlFreeMethodToLegacy(library: LibraryInterface, methods: IDLMethod[]): MaterializedMethod[] {
     const peerMethods = methods.map(it => idlMethodToMaterializedMethod(library, it))
     PeerMethod.markAndGroupOverloads(peerMethods)
     return peerMethods

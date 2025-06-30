@@ -1,0 +1,10 @@
+{
+    "subset": [
+        "generated/Finalizable.ts",
+        "generated/RefCounted.ts",
+        "generated/SerializerBase.ts",
+        "generated/generated-utils.ts"
+    ],
+    "generatedSubset": [
+    ]
+}

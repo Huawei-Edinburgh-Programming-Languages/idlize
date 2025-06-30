@@ -23,6 +23,7 @@ import { PrimitiveTypesInstance } from "./PrimitiveType"
 import { ReferenceResolver } from "./ReferenceResolver"
 import { flattenUnionType } from './unions'
 import { PeerLibrary } from './PeerLibrary'
+import { LibraryInterface } from '../LibraryInterface'
 
 export class PeerMethodArg {
     constructor(
@@ -100,11 +101,11 @@ export class PeerMethod {
             sig.modifiers.push(MethodModifier.THROWS)
     }
 
-    argConvertors(library: PeerLibrary): ArgConvertor[] {
+    argConvertors(library: LibraryInterface): ArgConvertor[] {
         return this.sig.args.map(it => library.typeConvertor(it.name, it.type, false))
     }
 
-    argAndOutConvertors(library: PeerLibrary): ArgConvertor[] {
+    argAndOutConvertors(library: LibraryInterface): ArgConvertor[] {
         const convertors = this.argConvertors(library)
         const outArgConvertor = createOutArgConvertor(library, this.sig.returnType, this.sig.args.map(it => it.name))
         return outArgConvertor ? convertors.concat(outArgConvertor) : convertors

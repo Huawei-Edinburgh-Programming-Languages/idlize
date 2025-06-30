@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { generatorConfiguration, Language, isMaterialized, isExternalType, isBuilderClass, throwException, LanguageExpression, isInIdlize, isInIdlizeInternal, createLanguageWriter, lib, getExtractorName, getSerializerName, InterfaceConvertor, ProxyConvertor, PrintHint, CppLanguageWriter, isInCurrentModule } from '@idlizer/core'
+import { generatorConfiguration, Language, isMaterialized, isExternalType, isBuilderClass, throwException, LibraryInterface, LanguageExpression, isInIdlize, isInIdlizeInternal, createLanguageWriter, lib, getExtractorName, getSerializerName, InterfaceConvertor, ProxyConvertor, PrintHint, CppLanguageWriter, isInCurrentModule } from '@idlizer/core'
 import { ExpressionStatement, LanguageStatement, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter, PeerLibrary } from "@idlizer/core"
 import { peerGeneratorConfiguration } from '../../DefaultConfiguration'
@@ -47,7 +47,7 @@ class SerializerPrinter {
     public forwardDeclarations: CppLanguageWriter
 
     constructor(
-        private readonly library: PeerLibrary,
+        private readonly library: LibraryInterface,
         readonly language: Language,
     ) {
         this.forwardDeclarations = library.createLanguageWriter(Language.CPP) as CppLanguageWriter
@@ -358,7 +358,7 @@ if (this.writer.language == Language.CJ) {
 */
 
 export function createSerializerPrinter(language: Language, prefix: string): PrinterFunction {
-    return (library: PeerLibrary) => {
+    return (library: LibraryInterface) => {
         return new SerializerPrinter(library, language).print(prefix)
     }
 }
@@ -371,7 +371,7 @@ export function createCSerializerPrinter(library: PeerLibrary, language: Languag
     return serializers
 }
 
-export function getSerializerDeclarations(library: PeerLibrary, dependencyFilter: DependencyFilter): SerializableTarget[] {
+export function getSerializerDeclarations(library: LibraryInterface, dependencyFilter: DependencyFilter): SerializableTarget[] {
     const seenNames = new Set<string>()
     return collectDeclarationTargets(library)
         .map(it => it)
@@ -387,7 +387,7 @@ export function getSerializerDeclarations(library: PeerLibrary, dependencyFilter
         })
 }
 
-export function printSerializerImports(library: PeerLibrary, language: Language, collector: ImportsCollector) {
+export function printSerializerImports(library: LibraryInterface, language: Language, collector: ImportsCollector) {
     if (language === Language.TS || language === Language.ARKTS) {
         collector.addFeatures([
             "SerializerBase", "DeserializerBase", "CallbackResource", "InteropNativeModule", "MaterializedBase", "Tags", "RuntimeType", "runtimeType", "toPeerPtr", 'nullptr', 'KPointer'

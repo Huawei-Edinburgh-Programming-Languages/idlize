@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Copyright (c) 2024-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
 
 import * as webidl2 from "webidl2"
 import { indentedBy, isDefined, stringOrNone, throwException } from "./util";
-import { generateSyntheticIdlNodeName } from "./peer-generation/idl/common";
+import { generateSyntheticFunctionName, generateSyntheticIdlNodeName } from "./peer-generation/idl/common";
 import { IDLKeywords } from "./languageSpecificKeywords";
 
 export enum IDLKind {
@@ -1968,4 +1968,28 @@ export function extremumOfOrdinals(enumEntry: IDLEnum): {low: number, high: numb
         if (high < value) high = value
     })
     return {low, high}
+}
+
+export function createContinuationParameters(continuationType: IDLType): IDLParameter[] {
+    const continuationParameters: IDLParameter[] = []
+    if (isContainerType(continuationType) && IDLContainerUtils.isPromise(continuationType)) {
+        const errorType = createOptionalType(createContainerType("sequence", [IDLStringType]))
+        continuationParameters.push(createParameter("error", errorType, true))
+        const promise = continuationType as IDLContainerType
+        if (!isVoidType(promise.elementType[0])) {
+            const valueType = createOptionalType(promise.elementType[0])
+            continuationParameters.unshift(createParameter("value", valueType, true))
+        }
+    } else if (!isVoidType(continuationType))
+        continuationParameters.push(createParameter('value', continuationType))
+    return continuationParameters
+}
+
+export function createContinuationCallbackReference(continuationType: IDLType): IDLReferenceType {
+    const continuationParameters = createContinuationParameters(continuationType)
+    const syntheticName = generateSyntheticFunctionName(
+        continuationParameters,
+        IDLVoidType,
+    )
+    return createReferenceType(syntheticName)
 }

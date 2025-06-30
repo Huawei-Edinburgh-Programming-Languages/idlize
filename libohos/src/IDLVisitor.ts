@@ -266,7 +266,21 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
             ["Object", () => idl.IDLObjectType],
             ["double", () => idl.IDLF64Type],
             ["int", () => idl.IDLI32Type],
+
+            ["int32", () => idl.IDLI32Type],
+            ["uint32", () => idl.IDLU32Type],
+            ["uint8", () => idl.IDLU8Type],
+            ["int8", () => idl.IDLI8Type],
+
             ["float", () => idl.IDLF32Type],
+
+            ["float32", () => idl.IDLF32Type],
+            ["float64", () => idl.IDLF64Type],
+
+            ["pointer", () => idl.IDLPointerType],
+            ["KPointer", () => idl.IDLPointerType],
+            ["KNativePointer", () => idl.IDLPointerType],
+            
             ["ESObject", () => idl.IDLObjectType],
             ["string", () => idl.IDLStringType],
             ["Boolean", () => idl.IDLBooleanType], // nasty typo in SDK

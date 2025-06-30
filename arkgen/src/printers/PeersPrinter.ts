@@ -37,6 +37,7 @@ import {
     IDLPointerType,
     IDLStringType,
     IDLVoidType,
+    LibraryInterface,
 } from '@idlizer/core'
 import {
     ImportsCollector,
@@ -386,7 +387,7 @@ class PeersVisitor {
 }
 
 export function createPeersPrinter(dumpSerialized: boolean): PrinterFunction {
-    return (library: PeerLibrary) => new PeersVisitor(library, dumpSerialized).printPeers()
+    return (library: LibraryInterface) => new PeersVisitor(library as PeerLibrary, dumpSerialized).printPeers()
 }
 
 export function generateStyleParentClass(peer: PeerClass): string | undefined {

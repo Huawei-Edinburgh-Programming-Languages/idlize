@@ -15,11 +15,11 @@
 
 import { createReferenceType, IDLVoidType } from "@idlizer/core/idl"
 import { FieldModifier, LanguageExpression, LanguageWriter, Method, MethodSignature, NamedMethodSignature } from "@idlizer/core"
-import { NativeModule } from "../../peer-generation/NativeModule"
 import { capitalize, removeExt } from "@idlizer/core"
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass"
-import { IldSkoalaOutFile } from "../idl/idlSkoalaLibrary"
+import { IldSkoalaOutFile } from "../idlSkoalaLibrary"
 import { Skoala } from "../utils"
+import { NativeModule } from "@idlizer/libohos"
 
 
 export class TSWrappersVisitor {

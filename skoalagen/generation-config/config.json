@@ -1,0 +1,47 @@
+{
+    "TypePrefix": "Sk",
+    "LibraryPrefix": "",
+    "OptionalPrefix": "",
+    "GenerateUnused": false,
+    "ApiKind": 10,
+    "ApiVersion": 9999,
+    "CollapseOverloadsARKTS": true,
+    "dumpSerialized": false,
+    "rootComponents": [
+        "Finalizable",
+        "RefCounted"
+    ],
+    "cppPrefix": "",
+    "dummy": {
+        "ignoreMethods": {}
+    },
+    "boundProperties": {},
+    "standaloneComponents": [],
+    "parameterized": [],
+    "ignoreMaterialized": [],
+    "builderClasses": [],
+    "forceMaterialized": [],
+    "forceCallback": {},
+    "forceResource": [],
+    "forceContext": [],
+    "hooks": {},
+    "externalTypes": {},
+    "externalPackages": [],
+    "moduleName": "skoala",
+    "modules": {
+        "skoala": {
+            "name": "skoala",
+            "packages": [""]
+        }
+    },
+    "globalPackages": [
+        "idlize.stdlib",
+        "org.openharmony.idlize.predefined",
+        "org.openharmony.arkui"
+    ],
+    "IDLVisitor": {
+        "DeletedMethods": {},
+        "NameReplacements": {},
+        "TypeReplacementsFilePath": ""
+    }
+}

@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { IfStatement, isHeir, LanguageExpression, LanguageWriter, LayoutNodeRole, Method, MethodModifier, MethodSignature, PeerClass, PeerLibrary, PeerMethod } from "@idlizer/core";
+import { IfStatement, isHeir, LanguageExpression, LanguageWriter, LayoutNodeRole, LibraryInterface, Method, MethodModifier, MethodSignature, PeerClass, PeerLibrary, PeerMethod } from "@idlizer/core";
 import { collapseIdlPeerMethods, collectComponents, componentToPeerClass, findComponentByDeclaration, findComponentByName, groupOverloads, ImportsCollector, PrinterResult } from "@idlizer/libohos";
 import { collectPeersForFile } from "@idlizer/libohos";
 import { generateAttributeModifierSignature } from './ComponentsPrinter';
@@ -29,7 +29,7 @@ function getAttributeModifierClassName(method: PeerMethod): string {
 
 class ModifiersFileVisitor {
     constructor(
-        protected readonly library: PeerLibrary,
+        protected readonly library: LibraryInterface,
         private readonly file: idl.IDLFile,
     ) { }
 
@@ -212,7 +212,7 @@ class ModifiersFileVisitor {
 
 class ModifiersVisitor {
     constructor(
-        private readonly peerLibrary: PeerLibrary
+        private readonly peerLibrary: LibraryInterface
     ) { }
 
     printModifiers(): PrinterResult[] {
@@ -227,6 +227,6 @@ class ModifiersVisitor {
     }
 }
 
-export function printModifiers(peerLibrary: PeerLibrary): PrinterResult[] {
+export function printModifiers(peerLibrary: LibraryInterface): PrinterResult[] {
     return new ModifiersVisitor(peerLibrary).printModifiers()
 }

@@ -13,17 +13,15 @@
  * limitations under the License.
  */
 
-import { ImportFeature } from '../peer-generation/ImportsCollector'
-
 export namespace Skoala {
     export enum BaseClasses {
         Finalizable = "Finalizable",
         RefCounted = "RefCounted"
     }
-    export const NativeModuleImportFeature: ImportFeature = {
-        module: "@koalaui/arkoala",
-        feature: "nativeModule"
-    }
+    // export const NativeModuleImportFeature: ImportFeature = {
+    //     module: "@koalaui/arkoala",
+    //     feature: "nativeModule"
+    // }
     export const getFinalizer = "getFinalizer"
     export function nativeMethod(className: string, methodName: string) {
         return `_skoala_${className}_${methodName}`

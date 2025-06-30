@@ -195,7 +195,7 @@ class KotlinDependenciesCollector extends DependenciesCollector {
     }
 }
 
-export function createDependenciesCollector(library: PeerLibrary): DependenciesCollector {
+export function createDependenciesCollector(library: LibraryInterface): DependenciesCollector {
     switch (library.language) {
         case Language.TS: return new TSDependenciesCollector(library)
         case Language.ARKTS: return new TSDependenciesCollector(library)

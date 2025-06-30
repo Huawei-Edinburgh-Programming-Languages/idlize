@@ -22,7 +22,7 @@ import {
     NamedMethodSignature,
     StringExpression
 } from "../LanguageWriters";
-import { LanguageWriter, PeerClassBase, PeerMethod, PeerLibrary, ArgumentModifier, generatorHookName, PeerMethodSignature, PeerClass, MaterializedClass } from "@idlizer/core"
+import { LanguageWriter, PeerClassBase, PeerMethod, PeerLibrary, ArgumentModifier, generatorHookName, PeerMethodSignature, PeerClass, MaterializedClass, LibraryInterface } from "@idlizer/core"
 import { isDefined, Language, throwException, collapseTypes } from '@idlizer/core'
 import { ArgConvertor, UndefinedConvertor } from "@idlizer/core"
 import { ReferenceResolver, UnionRuntimeTypeChecker, zipMany } from "@idlizer/core";
@@ -126,7 +126,7 @@ export function collapseSameNamedMethods(methods: Method[], selectMaxMethodArgs?
     )
 }
 
-export function collapseIdlPeerMethods(library: PeerLibrary, overloads: PeerMethod[], selectMaxMethodArgs?: number[]): PeerMethod {
+export function collapseIdlPeerMethods(library: LibraryInterface, overloads: PeerMethod[], selectMaxMethodArgs?: number[]): PeerMethod {
     const method = collapseSameNamedMethods(overloads.map(it => it.method), selectMaxMethodArgs)
     const maxArgsLength = Math.max(...overloads.map(it => it.method.signature.args.length))
     const maxMethod = overloads.find(it => it.method.signature.args.length === maxArgsLength)!
@@ -250,7 +250,7 @@ export class OverloadsPrinter {
     private static undefinedConvertor: UndefinedConvertor | undefined
     private posfix: string = ""
 
-    constructor(private library: PeerLibrary, private printer: LanguageWriter, private language: Language, private isComponent: boolean, private useMemoM3: boolean) {
+    constructor(private library: LibraryInterface, private printer: LanguageWriter, private language: Language, private isComponent: boolean) {
         // TODO: UndefinedConvertor is not known during static initialization because of cyclic dependencies
         if (!OverloadsPrinter.undefinedConvertor) {
             OverloadsPrinter.undefinedConvertor = new UndefinedConvertor("OverloadsPrinter")
