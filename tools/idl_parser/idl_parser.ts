@@ -4,7 +4,7 @@ import * as lex from "./idl_lexer";
 let g_lookahead: lex.Token;
 
 const g_char2token = new Map<string, lex.Token>([
-  ["=", lex.Token.tEq],
+  ["=", lex.Token.tEqual],
   ["(", lex.Token.tLBracket],
   [")", lex.Token.tRBracket],
   ["{", lex.Token.tLBrace],
@@ -271,7 +271,7 @@ function CallbackInterfaceMember() {
 }
 
 function Const() {
-  Match("const"); ConstType(); Match(lex.Token.tId); Match(lex.Token.tEq); ConstValue(); Match(";");
+  Match("const"); ConstType(); Match(lex.Token.tId); Match(lex.Token.tEqual); ConstValue(); Match(";");
 }
 
 function ConstValue() {
@@ -513,7 +513,7 @@ function PartialDictionary() {
 }
 
 function Default() {
-  Match(lex.Token.tEq); DefaultValue();
+  Match(lex.Token.tEqual); DefaultValue();
   // ε
 }
 
@@ -536,7 +536,7 @@ function EnumValueListString() {
 }
 
 function CallbackRest() {
-  Match(lex.Token.tId); Match(lex.Token.tEq); Type(); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket); Match(";");
+  Match(lex.Token.tId); Match(lex.Token.tEqual); Type(); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket); Match(";");
 }
 
 function Typedef() {
@@ -796,17 +796,17 @@ function ExtendedAttributeArgList() {
 }
 
 function ExtendedAttributeIdent() {
-  Match(lex.Token.tId); Match(lex.Token.tEq); Match(lex.Token.tId);
+  Match(lex.Token.tId); Match(lex.Token.tEqual); Match(lex.Token.tId);
 }
 
 function ExtendedAttributeWildcard() {
-  Match(lex.Token.tId); Match(lex.Token.tEq); Match("*");
+  Match(lex.Token.tId); Match(lex.Token.tEqual); Match("*");
 }
 
 function ExtendedAttributeIdentList() {
-  Match(lex.Token.tId); Match(lex.Token.tEq); Match(lex.Token.tLBracket); IdentifierList(); Match(lex.Token.tRBracket);
+  Match(lex.Token.tId); Match(lex.Token.tEqual); Match(lex.Token.tLBracket); IdentifierList(); Match(lex.Token.tRBracket);
 }
 
 function ExtendedAttributeNamedArgList() {
-  Match(lex.Token.tId); Match(lex.Token.tEq); Match(lex.Token.tId); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket);
+  Match(lex.Token.tId); Match(lex.Token.tEqual); Match(lex.Token.tId); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket);
 }

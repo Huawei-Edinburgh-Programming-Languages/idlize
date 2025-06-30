@@ -35,7 +35,7 @@ export enum Token {
   tNumber = 29,
   tString = 30,
   tBoolean = 31,
-  tEq = 32,           // =
+  tEqual = 32,        // =
   tLBracket = 33,     // (
   tRBracket = 34,     // )
   tLBrace = 35,       // {
@@ -246,7 +246,7 @@ export function getToken(): Token {
 
   // other tokens
   if (c == '=')
-    return Token.tEq;
+    return Token.tEqual;
 
   if (c == '(')
     return Token.tLBracket;
