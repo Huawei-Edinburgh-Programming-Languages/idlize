@@ -25,7 +25,7 @@ export function mangledGlobalScopeName(method:IDLMethod) {
     return nsPrefix + method.name
 }
 
-export function idlFreeMethodsGroupToLegacy(library: PeerLibrary, methods: IDLMethod[]): PeerMethod[] {
+export function idlFreeMethodsGroupToLegacy(library: LibraryInterface, methods: IDLMethod[]): PeerMethod[] {
     const groupedMethods = groupOverloadsIDL(methods, library.language)
     return groupedMethods.filter(it => it.length).flatMap(idlFreeMethodToLegacy)
 }

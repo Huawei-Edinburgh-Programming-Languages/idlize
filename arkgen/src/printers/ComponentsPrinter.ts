@@ -23,7 +23,10 @@ import {
     MethodModifier,
     NamedMethodSignature,
     LayoutNodeRole,
-    getSuper
+    FieldModifier,
+    ArgumentModifier,
+    getSuper,
+    LibraryInterface
 } from '@idlizer/core'
 import {
     ARKOALA_PACKAGE,
@@ -57,7 +60,7 @@ export function generateArkComponentName(component: string) {
     return `Ark${component}Component`
 }
 
-function expandComponentWithSupers(library: PeerLibrary, decl: idl.IDLInterface): idl.IDLInterface[] {
+function expandComponentWithSupers(library: LibraryInterface, decl: idl.IDLInterface): idl.IDLInterface[] {
     const result: idl.IDLInterface[] = []
     while (decl) {
         const superResolved = getSuper(decl, library)
@@ -67,7 +70,7 @@ function expandComponentWithSupers(library: PeerLibrary, decl: idl.IDLInterface)
     return result
 }
 
-export function generateAttributeModifierSignature(library: PeerLibrary, component: IdlComponentDeclaration): MethodSignature {
+export function generateAttributeModifierSignature(library: LibraryInterface, component: IdlComponentDeclaration): MethodSignature {
     const modifiers = expandComponentWithSupers(library, component.attributeDeclaration).map(it =>
         idl.createReferenceType(getReferenceTo('AttributeModifier'),
             [idl.createReferenceType(componentToAttributesInterface(it.name))],
@@ -100,7 +103,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
     ) { }
 
     private overloadsPrinter(printer:LanguageWriter) {
-        return new OverloadsPrinter(this.library, printer, this.library.language, true, this.library.useMemoM3)
+        return new OverloadsPrinter(this.library, printer, this.library.language, true)
     }
 
     visit(): PrinterResult[] {
@@ -397,7 +400,7 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
     ) { }
 
     private overloadsPrinter(printer:LanguageWriter) {
-        return new OverloadsPrinter(this.library, printer, this.library.language, true, this.library.useMemoM3)
+        return new OverloadsPrinter(this.library, printer, this.library.language, true)
     }
 
     visit(): PrinterResult[] {
@@ -521,7 +524,7 @@ class KotlinComponentFileVisitor implements ComponentFileVisitor {
     ) { }
 
     private overloadsPrinter(printer:LanguageWriter) {
-        return new OverloadsPrinter(this.library, printer, this.library.language, true, this.library.useMemoM3)
+        return new OverloadsPrinter(this.library, printer, this.library.language, true)
     }
 
     visit(): PrinterResult[] {
@@ -575,14 +578,14 @@ class ComponentsVisitor {
     }
 }
 
-export function printComponents(peerLibrary: PeerLibrary): PrinterResult[] {
-    return new ComponentsVisitor(peerLibrary, { isDeclared: false }).printComponents()
+export function printComponents(peerLibrary: LibraryInterface): PrinterResult[] {
+    return new ComponentsVisitor(peerLibrary as PeerLibrary, { isDeclared: false }).printComponents()
 }
 
-export function printComponentsDeclarations(peerLibrary: PeerLibrary): PrinterResult[] {
+export function printComponentsDeclarations(peerLibrary: LibraryInterface): PrinterResult[] {
     // TODO: support other output languages
     if (![Language.TS, Language.ARKTS, Language.JAVA].includes(peerLibrary.language))
         return []
 
-    return new ComponentsVisitor(peerLibrary, { isDeclared: true }).printComponents()
+    return new ComponentsVisitor(peerLibrary as PeerLibrary, { isDeclared: true }).printComponents()
 }

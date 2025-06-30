@@ -13,18 +13,12 @@
  * limitations under the License.
  */
 
-export interface Thunk {
-    clean(): void
-}
+// import { Paint } from "./Paint"
+// import { Canvas } from "./Canvas"
+// import { Bitmap } from "./Bitmap"
+// import { SurfaceProps } from "./SurfaceProps"
+// import { uint8 } from "./utils"
 
-const registry = new FinalizationRegistry<Thunk>(
-    (thunk: Thunk) => { thunk.clean() }
-);
 
-export function finalizerRegister(target: object, thunk: Thunk) {
-    registry.register(target, thunk)
-}
-
-export function finalizerUnregister(target: object) {
-    registry.unregister(target)
-}
+export function testFun(): void
+export function rgbColor(r: uint8, g: uint8, b: uint8, a: uint8): void

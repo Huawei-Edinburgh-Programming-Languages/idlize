@@ -18,6 +18,7 @@ import { ArgConvertor, createOutArgConvertor } from "../LanguageWriters/ArgConve
 import { Method, MethodModifier } from "../LanguageWriters/LanguageWriter"
 import { isDefined } from "../util"
 import { PeerLibrary } from './PeerLibrary'
+import { LibraryInterface } from '../LibraryInterface'
 
 export class PeerMethodArg {
     constructor(
@@ -82,11 +83,11 @@ export class PeerMethod {
             sig.modifiers.push(MethodModifier.THROWS)
     }
 
-    argConvertors(library: PeerLibrary): ArgConvertor[] {
+    argConvertors(library: LibraryInterface): ArgConvertor[] {
         return this.sig.args.map(it => library.typeConvertor(it.name, it.type, false))
     }
 
-    argAndOutConvertors(library: PeerLibrary): ArgConvertor[] {
+    argAndOutConvertors(library: LibraryInterface): ArgConvertor[] {
         const convertors = this.argConvertors(library)
         const outArgConvertor = createOutArgConvertor(library, this.sig.returnType, this.sig.args.map(it => it.name))
         return outArgConvertor ? convertors.concat(outArgConvertor) : convertors

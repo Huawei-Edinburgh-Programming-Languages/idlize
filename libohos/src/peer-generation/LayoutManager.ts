@@ -32,10 +32,10 @@ export interface PrinterResult {
 }
 
 export interface PrinterClass {
-    print(library: PeerLibrary): PrinterResult[]
+    print(library: idl.LibraryInterface): PrinterResult[]
 }
 export interface PrinterFunction {
-    (library: PeerLibrary): PrinterResult[]
+    (library: idl.LibraryInterface): PrinterResult[]
 }
 export type Printer = PrinterClass | PrinterFunction
 
@@ -51,7 +51,7 @@ function isEntryExported(entry: idl.IDLEntry): boolean {
 
 export function install(
     outDir: string,
-    library: PeerLibrary,
+    library: idl.LibraryInterface,
     printers: Printer[],
     options?: {
         fileExtension?: string,
@@ -118,7 +118,7 @@ export function install(
     return installedToExport
 }
 
-function printWithNamespaces(library: PeerLibrary, results: PrinterResult[], options: { isDeclared: boolean }): string[] {
+function printWithNamespaces(library: idl.LibraryInterface, results: PrinterResult[], options: { isDeclared: boolean }): string[] {
     const resultsContent = library.createLanguageWriter()
     const resultsContentCache: string[] = []
     for (const record of results) {

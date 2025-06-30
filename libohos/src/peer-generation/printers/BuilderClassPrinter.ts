@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { removeExt, renameClassToBuilderClass, Language, generifiedTypeName, LayoutNodeRole, MethodSignature } from '@idlizer/core'
+import { removeExt, renameClassToBuilderClass, Language, generifiedTypeName, LayoutNodeRole, MethodSignature, LibraryInterface } from '@idlizer/core'
 import { MethodModifier, Method, Field, NamedMethodSignature } from "../LanguageWriters";
 import { LanguageWriter, PeerLibrary,
     BuilderClass, methodsGroupOverloads
@@ -409,8 +409,8 @@ class BuilderClassVisitor {
     }
 }
 
-export function printBuilderClasses(peerLibrary: PeerLibrary): PrinterResult[] {
-    const visitor = new BuilderClassVisitor(peerLibrary)
+export function printBuilderClasses(peerLibrary: LibraryInterface): PrinterResult[] {
+    const visitor = new BuilderClassVisitor(peerLibrary as PeerLibrary)
     const result = visitor.printBuilderClasses()
     return result
 }

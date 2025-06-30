@@ -104,7 +104,7 @@ function synthesizeCallbacks(library: LibraryInterface, orderer: DependencySorte
                 idl.forEachFunction(entry, function_ => {
                     const promise = idl.asPromise(function_.returnType)
                     if (promise) {
-                        const reference = library.createContinuationCallbackReference(promise)
+                        const reference = idl.createContinuationCallbackReference(promise)
                         const callback = library.resolveTypeReference(reference)
                         if (callback)
                             addCallback(callback as idl.IDLCallback)
@@ -113,7 +113,7 @@ function synthesizeCallbacks(library: LibraryInterface, orderer: DependencySorte
         }
     }
     for (const foundCallback of [...foundCallbacks]) {
-        const continuationRef = library.createContinuationCallbackReference(foundCallback.returnType)
+        const continuationRef = idl.createContinuationCallbackReference(foundCallback.returnType)
         const continuation = library.resolveTypeReference(continuationRef)
         if (continuation && idl.isCallback(continuation))
             addCallback(continuation)

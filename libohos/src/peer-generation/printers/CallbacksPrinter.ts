@@ -89,7 +89,7 @@ export function printCallbacksKinds(library: PeerLibrary, writer: LanguageWriter
 }
 
 export function createCallbackKindPrinter(language: Language): PrinterFunction {
-    return (library: PeerLibrary) => {
+    return (library: LibraryInterface) => {
         const writer = library.createLanguageWriter(language)
         const imports = new ImportsCollector()
         if (language === Language.ARKTS) {
@@ -123,7 +123,7 @@ export function createCallbackKindPrinter(language: Language): PrinterFunction {
 class DeserializeCallbacksVisitor {
     constructor(
         private readonly libraryName: string,
-        private readonly library: PeerLibrary,
+        private readonly library: LibraryInterface,
         readonly writer: LanguageWriter,
         readonly imports: ImportsCollector,
     ) {}
@@ -215,7 +215,7 @@ class DeserializeCallbacksVisitor {
             }
             const hasContinuation = !idl.isVoidType(callback.returnType)
             if (hasContinuation) {
-                const continuationReference = this.library.createContinuationCallbackReference(callback.returnType)
+                const continuationReference = idl.createContinuationCallbackReference(callback.returnType)
                 const convertor = this.library.typeConvertor(`continuation`, continuationReference)
                 if (convertor instanceof CallbackConvertor) {
                     writer.writeStatement(convertor.convertorDeserialize(`_continuation_buf`, `thisDeserializer`, (expr) => {
@@ -270,7 +270,7 @@ class DeserializeCallbacksVisitor {
                 }
                 const hasContinuation = !idl.isVoidType(callback.returnType)
                 if (hasContinuation) {
-                    const continuationReference = this.library.createContinuationCallbackReference(callback.returnType)
+                    const continuationReference = idl.createContinuationCallbackReference(callback.returnType)
                     const convertor = this.library.typeConvertor(`continuation`, continuationReference)
                     writer.writeStatement(convertor.convertorDeserialize(`_continuation_buf`, `thisDeserializer`, (expr) => {
                         return writer.makeAssign(`_continuation`, continuationReference, expr, true, false)
@@ -441,7 +441,7 @@ class ManagedCallCallbackVisitor {
         const args = callback.parameters.map(it => idl.maybeOptional(it.type!, it.isOptional))
         const argsNames = callback.parameters.map(it => it.name)
         if (!idl.isVoidType(callback.returnType)) {
-            args.push(this.library.createContinuationCallbackReference(callback.returnType))
+            args.push(idl.createContinuationCallbackReference(callback.returnType))
             argsNames.push(`continuation`)
         }
         const signature = new NamedMethodSignature(idl.IDLVoidType,
@@ -471,7 +471,7 @@ class ManagedCallCallbackVisitor {
         const args = callback.parameters.map(it => idl.maybeOptional(it.type!, it.isOptional))
         const argsNames = callback.parameters.map(it => it.name)
         if (!idl.isVoidType(callback.returnType)) {
-            args.push(this.library.createContinuationCallbackReference(callback.returnType))
+            args.push(idl.createContinuationCallbackReference(callback.returnType))
             argsNames.push(`continuation`)
         }
         const signature = new NamedMethodSignature(idl.IDLVoidType,
@@ -538,7 +538,7 @@ class ManagedCallCallbackVisitor {
 }
 
 export function createDeserializeAndCallPrinter(libraryName: string, language: Language): PrinterFunction {
-    return (library: PeerLibrary): PrinterResult[] => {
+    return (library: LibraryInterface): PrinterResult[] => {
         const writer = library.createLanguageWriter(language)
         const imports = new ImportsCollector()
         new DeserializeCallbacksVisitor(libraryName, library, writer, imports).visit()

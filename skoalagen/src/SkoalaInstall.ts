@@ -1,0 +1,51 @@
+/*
+ * Copyright (c) 2025 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import * as path from 'path'
+import { Language } from '@idlizer/core'
+
+export interface SkoalaInstall {
+    get root(): string
+    get managedDir(): string
+    get nativeDir(): string
+}
+
+export function createSkoalaInstall(options: {
+    outDir: string,
+    lang: Language
+}): SkoalaInstall {
+    switch (options.lang) {
+        case Language.TS:
+            return new TSSkoalaInstall(options.outDir)
+        default: throw new Error("Not implemented")
+    }
+}
+
+abstract class BaseSkoalaInstall implements SkoalaInstall {
+    constructor(private outDir: string) {}
+    abstract get managedDir(): string
+    get root(): string {
+        return this.outDir
+    }
+    get nativeDir(): string {
+        return path.join(this.root, "native/src/generated")
+    }
+}
+
+class TSSkoalaInstall extends BaseSkoalaInstall {
+    get managedDir(): string {
+        return path.join(this.root, "src/generated")
+    }
+}

@@ -38,7 +38,8 @@ import {
     zipStrip,
     zipMany,
     collapseTypes,
-    getSuper
+    getSuper,
+    LibraryInterface
 } from '@idlizer/core'
 import { PrinterFunction, PrinterResult } from '../LayoutManager'
 import { peerGeneratorConfiguration } from '../../DefaultConfiguration'
@@ -61,7 +62,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
     constructor(
         protected readonly writer: LanguageWriter,
         protected readonly seenInterfaceNames: Set<string>,
-        readonly peerLibrary: PeerLibrary,
+        readonly peerLibrary: LibraryInterface,
         readonly isDeclared: boolean,
     ) { }
 
@@ -553,7 +554,7 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
 
 class TSSyntheticGenerator extends DependenciesCollector {
     constructor(
-        library: PeerLibrary,
+        library: LibraryInterface,
         private readonly onSyntheticDeclaration: (entry: idl.IDLEntry) => void,
     ) {
         super(library)
@@ -568,7 +569,7 @@ class TSSyntheticGenerator extends DependenciesCollector {
 
 export class TSInterfacesVisitor implements InterfacesVisitor {
     constructor(
-        protected readonly peerLibrary: PeerLibrary,
+        protected readonly peerLibrary: LibraryInterface,
         protected readonly printClasses: boolean,
     ) { }
 
@@ -577,7 +578,7 @@ export class TSInterfacesVisitor implements InterfacesVisitor {
             || idl.isMethod(entry)
     }
 
-    protected getDeclConvertor(writer:LanguageWriter, seenNames:Set<string>, library:PeerLibrary, isDeclared:boolean): DeclarationConvertor<void> {
+    protected getDeclConvertor(writer:LanguageWriter, seenNames:Set<string>, library:LibraryInterface, isDeclared:boolean): DeclarationConvertor<void> {
         return new TSDeclConvertor(writer, seenNames, library, isDeclared)
     }
 
@@ -652,7 +653,7 @@ class JavaSyntheticGenerator extends DependenciesCollector {
     private readonly nameConvertor = this.library.createTypeNameConvertor(Language.JAVA)
 
     constructor(
-        library: PeerLibrary,
+        library: LibraryInterface,
         private readonly onSyntheticDeclaration: (entry: idl.IDLEntry) => void,
     ) {
         super(library)
@@ -685,7 +686,7 @@ class JavaSyntheticGenerator extends DependenciesCollector {
 class JavaDeclarationConvertor implements DeclarationConvertor<void> {
     private readonly nameConvertor = this.peerLibrary.createTypeNameConvertor(Language.JAVA)
     constructor(
-        private readonly peerLibrary: PeerLibrary,
+        private readonly peerLibrary: LibraryInterface,
         private readonly onNewDeclaration: (entry: idl.IDLEntry, declaration: JavaDeclaration) => void
     ) { }
     convertCallback(node: idl.IDLCallback): void {
@@ -940,7 +941,7 @@ class JavaDeclarationConvertor implements DeclarationConvertor<void> {
 
 export class JavaInterfacesVisitor implements InterfacesVisitor {
     constructor(
-        protected readonly peerLibrary: PeerLibrary
+        protected readonly peerLibrary: LibraryInterface
     ) { }
 
     printInterfaces() {
@@ -994,7 +995,7 @@ export class ArkTSDeclConvertor extends TSDeclConvertor {
 
 class ArkTSSyntheticGenerator extends DependenciesCollector {
     constructor(
-        library: PeerLibrary,
+        library: LibraryInterface,
         private readonly onSyntheticDeclaration: (entry: idl.IDLEntry) => void,
     ) {
         super(library)
@@ -1043,7 +1044,7 @@ class ArkTSSyntheticGenerator extends DependenciesCollector {
 
 export class ArkTSInterfacesVisitor implements InterfacesVisitor {
     constructor(
-        protected readonly peerLibrary: PeerLibrary,
+        protected readonly peerLibrary: LibraryInterface,
         protected readonly isDeclared: boolean,
         protected readonly printClasses: boolean,
     ) { }
@@ -1053,7 +1054,7 @@ export class ArkTSInterfacesVisitor implements InterfacesVisitor {
             || idl.isMethod(entry)
     }
 
-    protected getDeclConvertor(writer:LanguageWriter, seenNames:Set<string>, library:PeerLibrary, isDeclared:boolean): DeclarationConvertor<void> {
+    protected getDeclConvertor(writer:LanguageWriter, seenNames:Set<string>, library:LibraryInterface, isDeclared:boolean): DeclarationConvertor<void> {
         return new ArkTSDeclConvertor(writer, seenNames, library, isDeclared)
     }
 
@@ -1123,7 +1124,7 @@ export class ArkTSInterfacesVisitor implements InterfacesVisitor {
 
 export class CJInterfacesVisitor implements InterfacesVisitor {
     constructor(
-        protected readonly peerLibrary: PeerLibrary
+        protected readonly peerLibrary: LibraryInterface
     ) { }
 
     private shouldNotPrint(entry: idl.IDLEntry): boolean {
@@ -1192,7 +1193,7 @@ class CJSyntheticGenerator extends DependenciesCollector {
     private readonly nameConvertor = this.library.createTypeNameConvertor(Language.CJ)
 
     constructor(
-        library: PeerLibrary,
+        library: LibraryInterface,
         private readonly onSyntheticDeclaration: (entry: idl.IDLEntry) => void,
     ) {
         super(library)
@@ -1214,7 +1215,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
     constructor(
         protected readonly writer: LanguageWriter,
         protected readonly seenInterfaceNames: Set<string>,
-        readonly peerLibrary: PeerLibrary
+        readonly peerLibrary: LibraryInterface
     ) { }
 
     convertCallback(node: idl.IDLCallback): void {
@@ -1467,7 +1468,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
 
 export class KotlinInterfacesVisitor implements InterfacesVisitor {
     constructor(
-        protected readonly peerLibrary: PeerLibrary
+        protected readonly peerLibrary: LibraryInterface
     ) { }
 
     private shouldNotPrint(entry: idl.IDLEntry): boolean {
@@ -1535,7 +1536,7 @@ class KotlinSyntheticGenerator extends DependenciesCollector {
     private readonly nameConvertor = this.library.createTypeNameConvertor(Language.KOTLIN)
 
     constructor(
-        library: PeerLibrary,
+        library: LibraryInterface,
         private readonly onSyntheticDeclaration: (entry: idl.IDLEntry) => void,
     ) {
         super(library)
@@ -1557,7 +1558,7 @@ class KotlinDeclarationConvertor implements DeclarationConvertor<void> {
     constructor(
         protected readonly writer: LanguageWriter,
         protected readonly seenInterfaceNames: Set<string>,
-        readonly peerLibrary: PeerLibrary
+        readonly peerLibrary: LibraryInterface
     ) { }
 
     convertCallback(node: idl.IDLCallback): void {
@@ -1705,7 +1706,7 @@ class KotlinDeclarationConvertor implements DeclarationConvertor<void> {
 }
 
 
-function getVisitor(peerLibrary: PeerLibrary, isDeclarations:boolean, printClasses:boolean): InterfacesVisitor {
+function getVisitor(peerLibrary: LibraryInterface, isDeclarations:boolean, printClasses:boolean): InterfacesVisitor {
     if (peerLibrary.language == Language.TS) {
         return new TSInterfacesVisitor(peerLibrary, printClasses)
     }
@@ -1725,7 +1726,7 @@ function getVisitor(peerLibrary: PeerLibrary, isDeclarations:boolean, printClass
 }
 
 export function createInterfacePrinter(isDeclarations:boolean, printClasses:boolean): PrinterFunction {
-    return (library: PeerLibrary) => getVisitor(library, isDeclarations, printClasses).printInterfaces()
+    return (library: LibraryInterface) => getVisitor(library, isDeclarations, printClasses).printInterfaces()
 }
 
 // interface PredefinedPath {

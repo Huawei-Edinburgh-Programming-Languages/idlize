@@ -67,7 +67,7 @@ export interface ArgConvertor {
     getObjectAccessor(languge: Language, value: string, args?: Record<string, string>, writer?: LanguageWriter): string
 }
 
-export function isDirectConvertedType(originalType: idl.IDLType|undefined, library: PeerLibrary): boolean {
+export function isDirectConvertedType(originalType: idl.IDLType|undefined, library: LibraryInterface): boolean {
     const debug = false
     if (originalType == undefined) return true // TODO: is it correct?
     if (debug) console.log(`IDL type ${idl.DebugUtils.debugPrintType(originalType)}`)
@@ -116,7 +116,7 @@ export function isVMContextMethod(method: Method | PeerMethodSignature): boolean
         generatorConfiguration().forceContext.includes(method.name)
 }
 
-export function isDirectMethod(method: Method, library: PeerLibrary): boolean {
+export function isDirectMethod(method: Method, library: LibraryInterface): boolean {
     if (isVMContextMethod(method)) {
         return false
     }
@@ -1194,7 +1194,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
 }
 
 export class ExternalTypeConvertor extends BaseArgConvertor {
-    constructor(private library:PeerLibrary, param: string, public declaration: idl.IDLInterface) {
+    constructor(private library: LibraryInterface, param: string, public declaration: idl.IDLInterface) {
         super(idl.createReferenceType(declaration), [RuntimeType.OBJECT], false, false, param)
         console.log(`ExternalType convertor for type: ${declaration.name}`)
     }
@@ -1371,7 +1371,7 @@ export class CallbackConvertor extends BaseArgConvertor {
         const hasContinuation = !idl.isVoidType(this.decl.returnType)
         let continuation: LanguageStatement[] = []
         if (hasContinuation) {
-            const continuationReference = this.library.createContinuationCallbackReference(this.decl.returnType)
+            const continuationReference = idl.createContinuationCallbackReference(this.decl.returnType)
             const continuationConvertor = this.library.typeConvertor(continuationCallbackName, continuationReference)
             const returnType = this.decl.returnType
             const optionalReturnType = idl.createOptionalType(this.decl.returnType)
@@ -1488,7 +1488,7 @@ export function generateCallbackAPIArguments(library: LibraryInterface, callback
     }))
     if (!idl.isVoidType(callback.returnType)) {
         const type = library.typeConvertor(`continuation`,
-            library.createContinuationCallbackReference(callback.returnType)!, false)
+            idl.createContinuationCallbackReference(callback.returnType)!, false)
         args.push(`const ${nameConvertor.convert(type.nativeType())} ${type.param}`)
     }
     return args
@@ -1505,11 +1505,11 @@ class PromiseOutArgConvertor extends BaseArgConvertor {
     callback: idl.IDLCallback
     isOut: true = true
     constructor(
-        private readonly library: PeerLibrary,
+        private readonly library: LibraryInterface,
         param: string,
         readonly promise: idl.IDLContainerType)
     {
-        super(library.createContinuationCallbackReference(promise), [RuntimeType.FUNCTION], false, true, param)
+        super(idl.createContinuationCallbackReference(promise), [RuntimeType.FUNCTION], false, true, param)
         const type = this.idlType as idl.IDLReferenceType
         const callbackEntry = library.resolveTypeReference(type)
         if (!callbackEntry)
@@ -1543,7 +1543,7 @@ class PromiseOutArgConvertor extends BaseArgConvertor {
     }
 }
 
-export function createOutArgConvertor(library: PeerLibrary, type: idl.IDLType|undefined, otherParams: string[]): ArgConvertor | undefined {
+export function createOutArgConvertor(library: LibraryInterface, type: idl.IDLType|undefined, otherParams: string[]): ArgConvertor | undefined {
     if (type && idl.isContainerType(type) && idl.IDLContainerUtils.isPromise(type)) {
         const param = (entropy: number) => `outputArgumentForReturningPromise${entropy || ''}`
         let paramEntropy = 0

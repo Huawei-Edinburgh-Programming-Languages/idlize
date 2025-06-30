@@ -1,13 +1,13 @@
 import * as idl from '@idlizer/core/idl'
-import { generateSyntheticFunctionName, maybeTransformManagedCallback, getInternalClassName, isMaterialized, PeerLibrary, PACKAGE_IDLIZE_INTERNAL, currentModule, isInCurrentModule, generatorConfiguration } from "@idlizer/core";
+import { generateSyntheticFunctionName, maybeTransformManagedCallback, getInternalClassName, isMaterialized, PeerLibrary, PACKAGE_IDLIZE_INTERNAL, currentModule, isInCurrentModule, generatorConfiguration, LibraryInterface } from "@idlizer/core";
 import { DependenciesCollector } from "./IdlDependenciesCollector";
 import { componentToPeerClass, componentToStyleClass } from '../printers/PeersPrinter';
 import { isComponentDeclaration } from '../ComponentsCollector';
 import { collectDeclarationTargetsUncached } from '../DeclarationTargetCollector';
 import { NativeModule } from '../NativeModule';
 
-function createContinuationCallbackIfNeeded(library: PeerLibrary, continuationType: idl.IDLType, synthesizedEntries: Map<string, idl.IDLEntry>): void {
-    const continuationParameters = library.createContinuationParameters(continuationType)
+function createContinuationCallbackIfNeeded(library: LibraryInterface, continuationType: idl.IDLType, synthesizedEntries: Map<string, idl.IDLEntry>): void {
+    const continuationParameters = idl.createContinuationParameters(continuationType)
     const syntheticName = generateSyntheticFunctionName(
         continuationParameters,
         idl.IDLVoidType,
@@ -30,7 +30,7 @@ function createContinuationCallbackIfNeeded(library: PeerLibrary, continuationTy
         synthesizedEntries.set(callback.name, callback)
     }
 }
-function createContinuationCallbacks(library: PeerLibrary, targets: idl.IDLNode[], synthesizedEntries: Map<string, idl.IDLEntry>): void {
+function createContinuationCallbacks(library: LibraryInterface, targets: idl.IDLNode[], synthesizedEntries: Map<string, idl.IDLEntry>): void {
     targets.forEach(entry => {
         if (idl.isCallback(entry)) {
             const transformedCallback = maybeTransformManagedCallback(entry, library) ?? entry
@@ -52,7 +52,7 @@ function createContinuationCallbacks(library: PeerLibrary, targets: idl.IDLNode[
 }
 
 class ImportsStubsGenerator extends DependenciesCollector {
-    constructor(library: PeerLibrary, private readonly synthesizedEntries: Map<string, idl.IDLEntry>) {
+    constructor(library: LibraryInterface, private readonly synthesizedEntries: Map<string, idl.IDLEntry>) {
         super(library)
     }
 
@@ -80,7 +80,7 @@ class ImportsStubsGenerator extends DependenciesCollector {
     }
 }
 
-function createImportsStubs(library: PeerLibrary, synthesizedEntries: Map<string, idl.IDLEntry>): void {
+function createImportsStubs(library: LibraryInterface, synthesizedEntries: Map<string, idl.IDLEntry>): void {
     const generator = new ImportsStubsGenerator(library, synthesizedEntries)
     for (const file of library.files) {
         for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
@@ -89,7 +89,7 @@ function createImportsStubs(library: PeerLibrary, synthesizedEntries: Map<string
     }
 }
 
-function createMaterializedInternal(library: PeerLibrary, targets: idl.IDLNode[], synthesizedEntries: Map<string, idl.IDLEntry>): void {
+function createMaterializedInternal(library: LibraryInterface, targets: idl.IDLNode[], synthesizedEntries: Map<string, idl.IDLEntry>): void {
     targets.forEach(entry => {
         if (idl.isInterface(entry) && isMaterialized(entry, library)) {
             const name = getInternalClassName(entry.name)
@@ -109,7 +109,7 @@ function createMaterializedInternal(library: PeerLibrary, targets: idl.IDLNode[]
     })
 }
 
-function createExternalModuleType(library: PeerLibrary, synthesizedEntries: Map<string, idl.IDLEntry>): void {
+function createExternalModuleType(synthesizedEntries: Map<string, idl.IDLEntry>): void {
     for (const name of generatorConfiguration().externalTypes.keys()) {
         synthesizedEntries.set(name, idl.createInterface(
             name,
@@ -126,7 +126,7 @@ function createExternalModuleType(library: PeerLibrary, synthesizedEntries: Map<
     }
 }
 
-function fillGeneratedNativeModuleDeclaration(library: PeerLibrary): void {
+function fillGeneratedNativeModuleDeclaration(library: LibraryInterface): void {
     const declaration = idl.createInterface(NativeModule.Generated.name, idl.IDLInterfaceSubkind.Interface)
     const file = idl.linkParentBack(
         idl.createFile([declaration], undefined, PACKAGE_IDLIZE_INTERNAL.split("."))
@@ -134,7 +134,7 @@ function fillGeneratedNativeModuleDeclaration(library: PeerLibrary): void {
     library.files.push(file)
 }
 
-function createComponentPeers(library: PeerLibrary, synthesizedEntries: Map<string, idl.IDLEntry>): void {
+function createComponentPeers(library: LibraryInterface, synthesizedEntries: Map<string, idl.IDLEntry>): void {
     library.files.forEach(file => {
         file.entries.forEach(it => {
             if (isComponentDeclaration(library, it)) {
@@ -155,7 +155,7 @@ export function fillSyntheticDeclarations(library: PeerLibrary) {
     createImportsStubs(library, synthesizedEntries)
     createMaterializedInternal(library, targets, synthesizedEntries)
     createComponentPeers(library, synthesizedEntries)
-    createExternalModuleType(library, synthesizedEntries)
+    createExternalModuleType(synthesizedEntries)
     fillGeneratedNativeModuleDeclaration(library)
     library.initSyntheticEntries(idl.linkParentBack(idl.createFile([...synthesizedEntries.values()])))
 }

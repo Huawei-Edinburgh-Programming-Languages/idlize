@@ -15,7 +15,7 @@
 
 import { Language, LanguageWriter, createLanguageWriter, Method, NamedMethodSignature, getSuper } from "@idlizer/core"
 import * as idl from '@idlizer/core/idl'
-import { IdlSkoalaLibrary } from "../idl/idlSkoalaLibrary"
+import { IdlSkoalaLibrary } from "../idlSkoalaLibrary"
 
 export function makeTSSerializerFromIdl(library: IdlSkoalaLibrary): string {
     let printer = createLanguageWriter(Language.TS, library)
