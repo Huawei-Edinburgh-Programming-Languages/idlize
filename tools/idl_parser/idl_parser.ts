@@ -1,16 +1,5 @@
 
 import * as lex from "./idl_lexer";
-/*
-function Definitions() {
-  while (1) {
-    ExtendedAttributeList();
-    Definition();
-  } //Definitions
-  //or empty
-}
-*/
-
-///////////////////////////////////////////////////////////////////////////////
 
 let g_lookahead: lex.Token;
 
@@ -20,6 +9,8 @@ const g_char2token = new Map<string, lex.Token>([
   [")", lex.Token.tRBracket],
   ["{", lex.Token.tLBrace],
   ["}", lex.Token.tRBrace],
+  ["[", lex.Token.tLSqrBracket],
+  ["]", lex.Token.tRSqrBracket],
   ["<", lex.Token.tLAngle],
   [">", lex.Token.tRAngle],
   [":", lex.Token.tColon],
@@ -35,10 +26,12 @@ const g_char2token = new Map<string, lex.Token>([
 
 function Match(tArg: lex.Token | string) {
   let tok: lex.Token;
+  let tok_name: string = "";
   if (typeof tArg === 'string') {
-    if (g_char2token.has(tArg))
+    if (g_char2token.has(tArg)) {
+      tok_name = " (" + tArg + ")";
       tok = g_char2token.get(tArg) ! ;
-    else {
+    } else {
       console.log("Error. Unknown symbol: " + tArg);
       tok = lex.Token.tError;
     }
@@ -46,62 +39,82 @@ function Match(tArg: lex.Token | string) {
     tok = tArg;
   }
 
-  if (g_lookahead == tok)
+  if (g_lookahead == tok) {
+     console.log("Match ok: " + tok + tok_name);
      g_lookahead = lex.getToken();
-  else {
-    throw new Error("Error. Waiting for: " + tok + ", but got " + g_lookahead);
+     console.log("new:  " + g_lookahead);
+  } else {
+    throw new Error("Match Error. Waiting for: " + tok + ", but got " + g_lookahead);
   }
 }
 
 export function Parse() {
   const idl: string =
 `package arkui.component.idlize;
-import arkui.component.common;
 callback Callback_Extender_OnProgress = void (f32 value);`
-
+//import arkui.component.common;
   console.log("Try to parse:");
   console.log(idl);
 
   lex.init(idl);
 
+  // Debug code
+  /*for (let i: number = 0; i < 10; i++) {
+    g_lookahead = lex.getToken();
+    console.log("LookAhead[" + i + "]: " + g_lookahead);
+  }
+  throw new Error("Done!");*/
+  // Debug code
+
+  let i = 0;
+
   g_lookahead = lex.getToken();
   while (g_lookahead != lex.Token.tError && g_lookahead != lex.Token.tEnd) {
-    console.log(g_lookahead);    
-    Definitions();
+    console.log("LookAhead: " + g_lookahead);
+    Definitions(); // starting production
     g_lookahead = lex.getToken();
+    i++;
+    if (i > 10)
+      break;
   }
+
+  console.log("The end!");
 }
 
 // starting production
 function Definitions() {
-  ExtendedAttributeList();
-  Definition();
-  Definitions();
+  do {
+    if (g_lookahead == lex.Token.tLSqrBracket)
+      ExtendedAttributeList();
+    Definition();
+  } while (g_lookahead != lex.Token.tEnd);
+  //Definitions();
   // ε
 }
 
 function Definition() {
   if (g_lookahead == lex.Token.tCallback ||
       g_lookahead == lex.Token.tMixin)
-    CallbackOrInterfaceOrMixin();
-
-  if (g_lookahead == lex.Token.tNamespace)
-    Namespace();
-
-  if (g_lookahead == lex.Token.tPartial)
-    Partial();
-
-  if (g_lookahead == lex.Token.tDictionary)
-    Dictionary();
-
-  if (g_lookahead == lex.Token.tEnum)
-    Enum();
-
-  if (g_lookahead == lex.Token.tTypedef)
-    Typedef();
-
-  if (g_lookahead == lex.Token.tIncludes)
-    IncludesStatement();
+    return CallbackOrInterfaceOrMixin();
+  else if (g_lookahead == lex.Token.tNamespace)
+    return Namespace();
+  else if (g_lookahead == lex.Token.tPartial)
+    return Partial();
+  else if (g_lookahead == lex.Token.tDictionary)
+    return Dictionary();
+  else if (g_lookahead == lex.Token.tEnum)
+    return Enum();
+  else if (g_lookahead == lex.Token.tTypedef)
+    return Typedef();
+  else if (g_lookahead == lex.Token.tIncludes)
+    return IncludesStatement();
+  else if (g_lookahead == lex.Token.tPackage)
+    return Package();
+  else {
+    let txt = "Got unexpected token: " + g_lookahead;
+    console.log(txt);
+    throw new Error(txt);
+  }
 }
 
 function ArgumentNameKeyword() {
@@ -134,10 +147,10 @@ function ArgumentNameKeyword() {
 
 function CallbackOrInterfaceOrMixin() {
   if (g_lookahead == lex.Token.tCallback) {
-    Match("callback"); CallbackRestOrInterface();
+    Match(lex.Token.tCallback); CallbackRestOrInterface();
   }
   if (g_lookahead == lex.Token.tMixin) {
-    Match("interface"); InterfaceOrMixin();
+    Match(lex.Token.tInterface); InterfaceOrMixin();
   }
 }
 
@@ -147,7 +160,7 @@ function InterfaceOrMixin() {
 }
 
 function InterfaceRest() {
-  Match("identifier"); Inheritance(); Match("{"); InterfaceMembers(); Match("}"); Match(";");
+  Match(lex.Token.tId); Inheritance(); Match("{"); InterfaceMembers(); Match("}"); Match(";");
 }
 
 function Partial() {
@@ -155,7 +168,7 @@ function Partial() {
 }
 
 function PartialDefinition() {
-  Match("interface"); PartialInterfaceOrPartialMixin();
+  Match(lex.Token.tInterface); PartialInterfaceOrPartialMixin();
   PartialDictionary();
   Namespace();
 }
@@ -166,11 +179,13 @@ function PartialInterfaceOrPartialMixin() {
 }
 
 function PartialInterfaceRest() {
-  Match("identifier"); Match("{"); PartialInterfaceMembers(); Match("}"); Match(";");
+  Match(lex.Token.tId); Match("{"); PartialInterfaceMembers(); Match("}"); Match(";");
 }
 
 function InterfaceMembers() {
-  ExtendedAttributeList(); InterfaceMember(); InterfaceMembers();
+  if (g_lookahead == lex.Token.tLSqrBracket)
+    ExtendedAttributeList();
+  InterfaceMember(); InterfaceMembers();
   // ε
 }
 
@@ -180,7 +195,9 @@ function InterfaceMember() {
 }
 
 function PartialInterfaceMembers() {
-  ExtendedAttributeList(); PartialInterfaceMember(); PartialInterfaceMembers();
+  if (g_lookahead == lex.Token.tLSqrBracket)
+    ExtendedAttributeList();
+  PartialInterfaceMember(); PartialInterfaceMembers();
   // ε
 }
 
@@ -199,16 +216,18 @@ function PartialInterfaceMember() {
 }
 
 function Inheritance() {
-  Match(":"); Match("identifier");
+  Match(":"); Match(lex.Token.tId);
   // ε
 }
 
 function MixinRest() {
-  Match("mixin"); Match("identifier"); Match("{"); MixinMembers(); Match("}"); Match(";");
+  Match("mixin"); Match(lex.Token.tId); Match("{"); MixinMembers(); Match("}"); Match(";");
 }
 
 function MixinMembers() {
-  ExtendedAttributeList(); MixinMember(); MixinMembers();
+  if (g_lookahead == lex.Token.tLSqrBracket)
+    ExtendedAttributeList();
+  MixinMember(); MixinMembers();
   // ε
 }
 
@@ -220,16 +239,29 @@ function MixinMember() {
 }
 
 function IncludesStatement() {
-  Match("identifier"); Match("includes"); Match("identifier"); Match(";");
+  Match(lex.Token.tId); Match("includes"); Match(lex.Token.tId); Match(";");
+}
+
+function Package() {
+  Match(lex.Token.tPackage);
+  while (1) {
+    Match(lex.Token.tId);
+    if (g_lookahead == lex.Token.tSemicolon)
+      break;
+    Match(lex.Token.tDot);
+  }
+  Match(";");
 }
 
 function CallbackRestOrInterface() {
   CallbackRest();
-  Match("interface"); Match("identifier"); Match("{"); CallbackInterfaceMembers(); Match("}"); Match(";");
+  Match(lex.Token.tInterface); Match(lex.Token.tId); Match("{"); CallbackInterfaceMembers(); Match("}"); Match(";");
 }
 
 function CallbackInterfaceMembers() {
-  ExtendedAttributeList(); CallbackInterfaceMember(); CallbackInterfaceMembers();
+  if (g_lookahead == lex.Token.tLSqrBracket)
+    ExtendedAttributeList();
+  CallbackInterfaceMember(); CallbackInterfaceMembers();
   // ε
 }
 
@@ -239,7 +271,7 @@ function CallbackInterfaceMember() {
 }
 
 function Const() {
-  Match("const"); ConstType(); Match("identifier"); Match("="); ConstValue(); Match(";");
+  Match("const"); ConstType(); Match(lex.Token.tId); Match("="); ConstValue(); Match(";");
 }
 
 function ConstValue() {
@@ -262,7 +294,7 @@ function FloatLiteral() {
 
 function ConstType() {
   PrimitiveType();
-  Match("identifier");
+  Match(lex.Token.tId);
 }
 
 function ReadOnlyMember() {
@@ -289,7 +321,7 @@ function AttributeRest() {
 
 function AttributeName() {
   AttributeNameKeyword();
-  Match("identifier");
+  Match(lex.Token.tId);
 }
 
 function AttributeNameKeyword() {
@@ -341,7 +373,7 @@ function OptionalOperationName() {
 
 function OperationName() {
   OperationNameKeyword();
-  Match("identifier");
+  Match(lex.Token.tId);
 }
 
 function OperationNameKeyword() {
@@ -359,7 +391,9 @@ function Arguments() {
 }
 
 function Argument() {
-  ExtendedAttributeList(); ArgumentRest();
+  if (g_lookahead == lex.Token.tLSqrBracket)
+    ExtendedAttributeList();
+  ArgumentRest();
 }
 
 function ArgumentRest() {
@@ -369,7 +403,7 @@ function ArgumentRest() {
 
 function ArgumentName() {
   ArgumentNameKeyword();
-  Match("identifier");
+  Match(lex.Token.tId);
 }
 
 function Ellipsis() {
@@ -438,11 +472,13 @@ function SetlikeRest() {
 }
 
 function Namespace() {
-  Match("namespace"); Match("identifier"); Match("{"); NamespaceMembers(); Match("}"); Match(";");
+  Match("namespace"); Match(lex.Token.tId); Match("{"); NamespaceMembers(); Match("}"); Match(";");
 }
 
 function NamespaceMembers() {
-  ExtendedAttributeList(); NamespaceMember(); NamespaceMembers();
+  if (g_lookahead == lex.Token.tLSqrBracket)
+    ExtendedAttributeList();
+  NamespaceMember(); NamespaceMembers();
   // ε
 }
 
@@ -453,7 +489,7 @@ function NamespaceMember() {
 }
 
 function Dictionary() {
-  Match("dictionary"); Match("identifier"); Inheritance(); Match("{"); DictionaryMembers(); Match("}"); Match(";");
+  Match("dictionary"); Match(lex.Token.tId); Inheritance(); Match("{"); DictionaryMembers(); Match("}"); Match(";");
 }
 
 function DictionaryMembers() {
@@ -462,16 +498,18 @@ function DictionaryMembers() {
 }
 
 function DictionaryMember() {
-  ExtendedAttributeList(); DictionaryMemberRest();
+  if (g_lookahead == lex.Token.tLSqrBracket)
+    ExtendedAttributeList();
+  DictionaryMemberRest();
 }
 
 function DictionaryMemberRest() {
-  Match("required"); TypeWithExtendedAttributes(); Match("identifier"); Match(";");
-  Type(); Match("identifier"); Default(); Match(";");
+  Match("required"); TypeWithExtendedAttributes(); Match(lex.Token.tId); Match(";");
+  Type(); Match(lex.Token.tId); Default(); Match(";");
 }
 
 function PartialDictionary() {
-  Match("dictionary"); Match("identifier"); { DictionaryMembers(); } Match(";");
+  Match("dictionary"); Match(lex.Token.tId); { DictionaryMembers(); } Match(";");
 }
 
 function Default() {
@@ -480,7 +518,7 @@ function Default() {
 }
 
 function Enum() {
-  Match("enum"); Match("identifier"); Match("{"); EnumValueList(); Match("}"); Match(";");
+  Match("enum"); Match(lex.Token.tId); Match("{"); EnumValueList(); Match("}"); Match(";");
 }
 
 function EnumValueList() {
@@ -498,11 +536,11 @@ function EnumValueListString() {
 }
 
 function CallbackRest() {
-  Match("identifier"); Match("="); Type(); Match("("); ArgumentList(); Match(")"); Match(";");
+  Match(lex.Token.tId); Match("="); Type(); Match("("); ArgumentList(); Match(")"); Match(";");
 }
 
 function Typedef() {
-  Match("typedef"); TypeWithExtendedAttributes(); Match("identifier"); Match(";");
+  Match("typedef"); TypeWithExtendedAttributes(); Match(lex.Token.tId); Match(";");
 }
 
 function Type() {
@@ -511,7 +549,9 @@ function Type() {
 }
 
 function TypeWithExtendedAttributes() {
-  ExtendedAttributeList(); Type();
+  if (g_lookahead == lex.Token.tLSqrBracket)
+    ExtendedAttributeList();
+  Type();
 }
 
 function SingleType() {
@@ -525,7 +565,9 @@ function UnionType() {
 }
 
 function UnionMemberType() {
-  ExtendedAttributeList(); DistinguishableType();
+  if (g_lookahead == lex.Token.tLSqrBracket)
+    ExtendedAttributeList();
+  DistinguishableType();
   UnionType(); Null();
 }
 
@@ -537,7 +579,7 @@ function UnionMemberTypes() {
 function DistinguishableType() {
   PrimitiveType(); Null();
   StringType(); Null();
-  Match("identifier"); Null();
+  Match(lex.Token.tId); Null();
   Match("sequence"); Match("<"); TypeWithExtendedAttributes(); Match(">"); Null();
   Match("async"); Match("iterable"); Match("<"); TypeWithExtendedAttributes(); Match(">"); Null();
   Match("object"); Null();
@@ -655,7 +697,7 @@ function ExtendedAttributeInner() {
 function Other() {
   "integer"
   "decimal"
-  "identifier"
+  lex.Token.tId
   "string"
   "other"
   "-"
@@ -707,37 +749,37 @@ function OtherOrComma() {
 }
 
 function IdentifierList() {
-  Match("identifier"); Identifiers();
+  Match(lex.Token.tId); Identifiers();
 }
 
 function Identifiers() {
   if (g_lookahead == lex.Token.tComma) {
-    Match(","); Match("identifier"); Identifiers();
+    Match(","); Match(lex.Token.tId); Identifiers();
   } else {
     // ε
   }
 }
 
 function ExtendedAttributeNoArgs() {
-  Match("identifier");
+  Match(lex.Token.tId);
 }
 
 function ExtendedAttributeArgList() {
-  Match("identifier"); Match("("); ArgumentList(); Match(")");
+  Match(lex.Token.tId); Match("("); ArgumentList(); Match(")");
 }
 
 function ExtendedAttributeIdent() {
-  Match("identifier"); Match("="); Match("identifier");
+  Match(lex.Token.tId); Match("="); Match(lex.Token.tId);
 }
 
 function ExtendedAttributeWildcard() {
-  Match("identifier"); Match("="); Match("*");
+  Match(lex.Token.tId); Match("="); Match("*");
 }
 
 function ExtendedAttributeIdentList() {
-  Match("identifier"); Match("="); Match("("); IdentifierList(); Match(")");
+  Match(lex.Token.tId); Match("="); Match("("); IdentifierList(); Match(")");
 }
 
 function ExtendedAttributeNamedArgList() {
-  Match("identifier"); Match("="); Match("identifier"); Match("("); ArgumentList(); Match(")");
+  Match(lex.Token.tId); Match("="); Match(lex.Token.tId); Match("("); ArgumentList(); Match(")");
 }

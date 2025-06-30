@@ -42,15 +42,17 @@ export enum Token {
   tRBrace = 36,    // }
   tLAngle = 37,    // <
   tRAngle = 38,    // >
-  tColon = 39,     // :
-  tSemicolon = 40, // ;
-  tDot = 41,       // .
-  tComma = 42,     // ,
-  tPlus = 43,      // +
-  tMinus = 44,     // -
-  tAsterisk = 45,  // *
-  tEllipsis = 46,  // ...
-  tQuestion = 47,  // ?
+  tLSqrBracket = 39,  // [
+  tRSqrBracket = 40,  // ]
+  tColon = 41,     // :
+  tSemicolon = 42, // ;
+  tDot = 43,       // .
+  tComma = 44,     // ,
+  tPlus = 45,      // +
+  tMinus = 46,     // -
+  tAsterisk = 47,  // *
+  tEllipsis = 48,  // ...
+  tQuestion = 49,  // ?
   tId = 99,
   tError = 100,
   tEnd = 101
@@ -92,8 +94,12 @@ let g_words = new Map<string, number>([
 ]);
 
 function getWord(word: string): number {
+  const has = g_words.has(word);
+  if (!has)
+    return -1;
+
   const val = g_words.get(word);
-  if (g_words.has(word) && val !== undefined)
+  if (val !== undefined)
     return +val;
   else
     return -1;
@@ -112,7 +118,7 @@ let g_row: number = 0;
 let g_token_text: string = "";
 
 export function init(text: string) {
-  g_text = text;
+  g_text = text + '\n';  // Some files have no EOL in the end, so we fix it here!
   g_pos = 0;
 }
 
@@ -126,38 +132,86 @@ function isDigit(c: string): boolean {
   return (c >= '0' && c <= '9');
 }
 
-export function getToken(): Token {
+let prev: string = ' ';  // TypeScript does not support static in functions :(
+
+function getChar(): string {
   if (g_pos >= g_text.length)
+    return '\0';
+  else
+    return g_text[g_pos++];
+}
+
+function returnChar() {
+  if (g_pos > 0)
+    g_pos--;
+  else
+    throw new Error("Can't decrement g_pos cause it's zero.");
+}
+
+export function getToken(): Token {
+  console.log("getToken <<<");
+  let c: string = getChar();
+  if (c == '\0') {
+    console.log(" return tEnd");
     return Token.tEnd;
-
-  let c: string = g_text[g_pos++];
-  if (c == '\n') {
-    g_col = 1;
-    g_row++;
   }
 
-  // spaces
-  while (c == ' ' || c == '\t') {
-    c = g_text[g_pos++];
+  // Linux EOL:   0A    LF \n
+  // Windows EOL: 0D 0A CR LF \r\n
+  // Mac:         0D ?  CR \r
+
+  // skip spaces and EOL
+  while (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
+    if (c == '\n' ||                   // Linux or second char on Windows
+        (c == '\r' && prev != '\n')) { // Mac, not Windows
+      g_col = 1;
+      g_row++;
+    }
+    prev = c; c = getChar();
+    if (c == '\0') {
+      console.log(" return tEnd");
+      return Token.tEnd;
+    }
   }
+
+  //console.log("now c has value: " + c);
 
   // words
   if (isLetter(c)) {
     let res: string = "";
     while (isLetter(c)) {
       res += c;
-      c = g_text[g_pos++];
+      prev = c; c = getChar();
+      if (c == '\0') {
+        console.log(" return tEnd");
+        return Token.tEnd;
+      }
     }
-    // Is it keyword?
-    const val = g_keywords.get(res);
-    if (g_keywords.has(res) && val !== undefined)
-      return val;
 
-    // Ok, it is some identifier...
+    console.log("Got word: \'" + res + "\' on line " + g_row);
+    //console.log(" c has value: " + c);
+
+    // Is it keyword?
+    if (g_keywords.has(res)) {
+      const kw = g_keywords.get(res);
+      if (kw !== undefined) {
+        const t: Token = kw;
+        console.log("Keyword: " + t);
+        return t;
+      }
+    }
+
+    // Ok, this is some identifier...
     g_token_text = res;
     let word_id: number = getWord(res);
     if (word_id < 0)
       word_id = addWord(res);
+
+    // Now we have to return last symbol into input stream
+    // otherwise symbol will be lose during 'return Token.tId;'
+    prev = ' ';
+    returnChar();
+
     return Token.tId;
   }
 
@@ -166,7 +220,7 @@ export function getToken(): Token {
     let res: string = "";
     while (isDigit(c) || c == '.') {
       res += c;
-      c = g_text[g_pos++];
+      prev = c; c = getChar();
     }
     g_token_text = res;
     return Token.tNumber;
@@ -191,6 +245,11 @@ export function getToken(): Token {
   if (c == '>')
     return Token.tRAngle;
 
+  if (c == '[')
+    return Token.tLSqrBracket;
+  if (c == ']')
+    return Token.tRSqrBracket;
+
   if (c == ':')
     return Token.tColon;
   if (c == ';')
@@ -214,5 +273,6 @@ export function getToken(): Token {
     return Token.tQuestion;
 
   console.log("Unknown sym: \'" + c + "\'");
+  console.log("code: ", c.charCodeAt(0));
   return Token.tError;
 }
