@@ -24,6 +24,13 @@ import { ReferenceResolver } from "./ReferenceResolver"
 import { flattenUnionType } from './unions'
 import { PeerLibrary } from './PeerLibrary'
 
+export class OverloadInfo {
+    constructor(
+        public readonly overloadAlias: string,
+        public readonly overloadPrio: number
+    ) {}
+}
+
 export class PeerMethodArg {
     constructor(
         public readonly name: string,
@@ -92,6 +99,7 @@ export class PeerMethod {
         public returnType: IDLType,
         public isCallSignature: boolean,
         public method: Method,
+        public overloadInfo?: OverloadInfo,
     ) { 
         // todo remove me
         if (method.modifiers?.includes(MethodModifier.FORCE_CONTEXT))

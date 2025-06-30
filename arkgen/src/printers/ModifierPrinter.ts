@@ -116,7 +116,7 @@ class ModifiersFileVisitor {
         const parentSet = this.generateAttributeSetParentName(peer)
 
         type attributeType = [PeerMethod, string[], idl.IDLType[], PeerMethod[]]
-        const attributeTypes: Map<string, attributeType> = new Map
+        const attributeTypes: Array<attributeType> = new Array
 
         const attributeFilter = (name: string) => {
             return name.startsWith('set') && name.endsWith('Options')
@@ -132,7 +132,7 @@ class ModifiersFileVisitor {
                 args.push(conv.param)
                 return idl.maybeOptional(method.method.signature.args[index], method.method.signature.isArgOptional(index))
             })
-            attributeTypes.set(method.method.name, [method, args, types, m])
+            attributeTypes.push([method, args, types, [method]])
         })
 
         printer.writeClass(this.generateAttributeSetName(componentAttribute.name), (writer) => {
@@ -157,7 +157,7 @@ class ModifiersFileVisitor {
                 new MethodSignature(idl.IDLVoidType, [idl.createReferenceType(componentAttribute)], [], [], [], ['component'])),
                 writer => {
                     const statements: IfStatement[] = []
-                    attributeTypes.forEach((attribute, name) => {
+                    attributeTypes.forEach((attribute) => {
                         // TODO: handle overload condition 
                         if (attribute[3].length != 1 || attribute[0].method.signature.returnType !== idl.IDLThisType) {
                             return;

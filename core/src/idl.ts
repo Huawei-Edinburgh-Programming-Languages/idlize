@@ -83,6 +83,8 @@ export enum IDLExtendedAttributes {
     VerbatimDts = "VerbatimDts",
     HandWrittenImplementation = "HandWrittenImplementation",
     ExtraMethod = "ExtraMethod",
+    OverLoadPrio = "OverLoadPrio",
+    Alias = "Alias"
 }
 
 export enum IDLAccessorAttribute {
@@ -575,6 +577,10 @@ export function isNamespace(node: IDLNode): node is IDLNamespace {
 
 export function isSyntheticEntry(node: IDLNode): boolean {
     return isDefined(node.extendedAttributes?.find(it => it.name === IDLExtendedAttributes.Synthetic))
+}
+
+export function isOverload(node: IDLNode): boolean {
+    return isDefined(node.extendedAttributes?.find(it => it.name === IDLExtendedAttributes.Alias))
 }
 
 export function isOptionalType(type: IDLNode): type is IDLOptionalType {

@@ -1,5 +1,5 @@
 import * as path from "path"
-import { ArgumentModifier, capitalize, getSuper, isDefined, LibraryInterface, Method, NamedMethodSignature, PeerClass, PeerLibrary, PeerMethod, PeerMethodArg, PeerMethodSignature, warn } from "@idlizer/core";
+import { ArgumentModifier, capitalize, getSuper, isDefined, LibraryInterface, Method, NamedMethodSignature, OverloadInfo, PeerClass, PeerLibrary, PeerMethod, PeerMethodArg, PeerMethodSignature, warn } from "@idlizer/core";
 import * as idl from "@idlizer/core/idl"
 import { collectComponents, findComponentByDeclaration, findComponentByType, IdlComponentDeclaration } from "./ComponentsCollector";
 import { getMethodModifiers } from "./idl/IdlPeerGeneratorVisitor";
@@ -43,7 +43,7 @@ function processMethodOrCallable(library: PeerLibrary, method: idl.IDLMethod | i
     const newMethodName = isCallSignature
         ? methodName + overloadPostfix
         : `set${capitalize(methodName)}${overloadPostfix}`
-    return new PeerMethod(
+    return getOverloadInfo(method, new PeerMethod(
         new PeerMethodSignature(
             newMethodName,
             idl.getFQName(method.parent as idl.IDLInterface).split('.').concat(newMethodName).join('_'),
@@ -55,7 +55,7 @@ function processMethodOrCallable(library: PeerLibrary, method: idl.IDLMethod | i
         realRetType,
         isCallSignature,
         new Method(methodName!, signature, getMethodModifiers(method))
-    )
+    ), peer)
 }
 
 function fillInterface(library: PeerLibrary, peer: PeerClass, iface: idl.IDLInterface) {
@@ -67,6 +67,31 @@ function fillInterface(library: PeerLibrary, peer: PeerClass, iface: idl.IDLInte
     peer.methods.push(...overloadedMethods)
 }
 
+function getOverloadInfo(prop: idl.IDLNamedNode, peerMethod: PeerMethod, peerClass: PeerClass): PeerMethod {
+    if (!idl.isOverload(prop)) {
+        return peerMethod
+    }
+    let alias: string
+    let prio: number
+    prop.extendedAttributes!.forEach(ext => {
+        if (ext.name == idl.IDLExtendedAttributes.Alias) {
+            alias = ext.value!
+        }
+        if (ext.name == idl.IDLExtendedAttributes.OverLoadPrio) {
+            prio = Number(ext.value!)
+        }
+    })
+    const overloadInfo = new OverloadInfo(alias!, prio!)
+    peerMethod.overloadInfo = overloadInfo
+    peerMethod.method.name = alias!
+    if (peerClass.overloadInfo.has(prop.name)) {
+        peerClass.overloadInfo.get(prop.name)?.push(overloadInfo)
+    } else {
+        peerClass.overloadInfo.set(prop.name, new Array(overloadInfo))
+    }
+    return peerMethod
+}
+
 function processProperty(library: PeerLibrary, prop: idl.IDLProperty, peer: PeerClass, parentName?: string): PeerMethod | undefined {
     if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(prop.name))
         return
@@ -74,7 +99,7 @@ function processProperty(library: PeerLibrary, prop: idl.IDLProperty, peer: Peer
     const signature = new NamedMethodSignature(idl.IDLThisType, [idl.maybeOptional(prop.type, prop.isOptional)], ["value"])
     const overloadPostfix = PeerMethodSignature.generateOverloadPostfix(prop)
     const methodName = `set${capitalize(prop.name)}${overloadPostfix}`
-    return new PeerMethod(
+    return getOverloadInfo(prop, new PeerMethod(
         new PeerMethodSignature(
             methodName,
             idl.getFQName(prop.parent as idl.IDLInterface).split('.').concat(methodName).join('_'),
@@ -85,7 +110,7 @@ function processProperty(library: PeerLibrary, prop: idl.IDLProperty, peer: Peer
         originalParentName,
         idl.IDLVoidType,
         false,
-        new Method(prop.name, signature, []))
+        new Method(prop.name, signature, [])), peer)
 }
 
 function processOptionAttribute(seenAttributes: Set<string>, property: idl.IDLProperty, peer: PeerClass) {

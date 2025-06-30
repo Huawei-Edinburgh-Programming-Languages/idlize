@@ -201,6 +201,11 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             )
             for (const grouped of groupOverloads(peer.methods, this.library.language))
                 this.overloadsPrinter(printer).printGroupedComponentOverloads(peer.originalClassName!, grouped)
+            if (peer.overloadInfo) {
+                peer.overloadInfo.forEach((info, key) => {
+                    writer.writeLines(`overload ${key} {${info.sort((a, b) => a.overloadPrio - b.overloadPrio).map(o => o.overloadAlias).join(', ')}}`)
+                })
+            }
             // todo stub until we can process AttributeModifier
             if (!superDecl) {
                 writer.writeFieldDeclaration(`_modifier`, generateAttributeModifierSignature(this.library, component).args[0], undefined, true)
@@ -228,28 +233,6 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
             ],
             ['receiver', 'modifier']
         )
-        printer.writeFunctionImplementation(`with${component.name}Style`, withStyleMethodSignature, writer => {
-            const style = 'style'
-            writer.writeStatement(
-                writer.makeCondition(
-                    writer.makeString(`modifier !== undefined`),
-                    writer.makeBlock([
-                        writer.makeAssign(
-                            style,
-                            undefined,
-                            writer.makeNewObject(componentToStyleClass(component.attributeDeclaration.name)),
-                            true,
-                            false
-                        ),
-                        writer.makeCondition(writer.makeString(`modifier!.isUpdater`),
-                            writer.makeStatement(writer.makeMethodCall(`(modifier! as AttributeUpdater<${rootSuper.name}>)`, `initializeModifier`, [writer.makeString(style)])),
-                            writer.makeStatement(writer.makeMethodCall(`(modifier! as AttributeModifier<${rootSuper.name}>)`, `applyNormalAttribute`, [writer.makeString(style)])),
-                        ),
-                        writer.makeStatement(writer.makeMethodCall(style, 'apply', [writer.makeString('receiver')]))
-                    ])
-                )
-            )
-        })
 
         return [{
             collector: imports,

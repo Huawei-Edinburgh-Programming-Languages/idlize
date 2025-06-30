@@ -53,7 +53,7 @@ class StatusRecord {
         public type: string,
         public status: string,
         public src: string,
-    ) {}
+    ) { }
 
     ToString(): string {
         let statusStr = this.status ? `Deleted because of ${this.status}` : ''
@@ -83,7 +83,7 @@ class StatusTracker {
     }
 }
 
-function processFile(outDir: string, baseDir: string, file: string, configPath:string, config: ETSVisitorConfig, status: StatusTracker): IDLSuperFile {
+function processFile(outDir: string, baseDir: string, file: string, configPath: string, config: ETSVisitorConfig, status: StatusTracker): IDLSuperFile {
     let input = fs.readFileSync(file).toString()
     //let module = arkts.createETSModuleFromSource(input, arkts.Es2pandaContextState.ES2PANDA_STATE_PARSED)
     const configText = fs.readFileSync(configPath, 'utf-8')
@@ -110,7 +110,9 @@ function processFile(outDir: string, baseDir: string, file: string, configPath:s
     arkts.proceedToState(arkts.Es2pandaContextState.ES2PANDA_STATE_PARSED)
     const script = arkts.createETSModuleFromContext()
     let localStatus = new StatusTracker(status.enabled)
-    let idlVisitor = new IDLVisitor(baseDir, file, pathMap, config, localStatus)
+    let overloadVisitor = new OverLoadVisitor
+    overloadVisitor.visitor(script)
+    let idlVisitor = new IDLVisitor(baseDir, file, pathMap, config, localStatus, overloadVisitor.overloadMap)
     idlVisitor.visitor(script)
     const idlFile = idlVisitor.toIDLSuperFile()
     const fileRelativePath = path.relative(baseDir, file)
@@ -340,7 +342,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     private processNodeStack: arkts.AstNode[] = []
-    private processNode<T extends (...args: any[]) => any>(op: T, ...args: Parameters<T>): ReturnType<T> {
+    protected processNode<T extends (...args: any[]) => any>(op: T, ...args: Parameters<T>): ReturnType<T> {
         this.processNodeStack.unshift(args[0])
         let result = op.call(this, ...args)
         this.processNodeStack.shift()
@@ -375,6 +377,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         protected importPathMap: Map<string, string>,
         protected config: ETSVisitorConfig,
         protected status: StatusTracker,
+        protected overloadMap: OverloadMap = new OverloadMap,
     ) {
         super()
         this.fileName = this.originalFileName.replace(".d.ets", ".idl")
@@ -697,7 +700,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
         members?.forEach(member => this.processNode((member) => {
             if (arkts.isClassProperty(member)) {
-                 if (this.shouldNotProcessMember(scopeName, member.id!.name)) {
+                if (this.shouldNotProcessMember(scopeName, member.id!.name)) {
                     this.traceDeleted('DeletedMembers')
                     return
                 }
@@ -723,7 +726,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     if (arkts.hasModifierFlag(propType, arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_STATIC)) {
                         prop.isStatic = true
                     }
-                    prop.extendedAttributes?.push({name: idl.IDLExtendedAttributes.Accessor, value: idl.IDLAccessorAttribute.Getter})
+                    prop.extendedAttributes?.push({ name: idl.IDLExtendedAttributes.Accessor, value: idl.IDLAccessorAttribute.Getter })
                     prop.extendedAttributes.push(...this.traceAttrs())
                     properties.push(prop)
                     return
@@ -737,7 +740,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     if (arkts.hasModifierFlag(propType, arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_STATIC)) {
                         prop.isStatic = true
                     }
-                    prop.extendedAttributes.push({name: idl.IDLExtendedAttributes.Accessor, value: idl.IDLAccessorAttribute.Setter})
+                    prop.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Accessor, value: idl.IDLAccessorAttribute.Setter })
                     prop.extendedAttributes.push(...this.traceAttrs())
                     properties.push(prop)
                     return
@@ -788,6 +791,9 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 if (found) {
                     hasMemoAnnotation = true
                 }
+                return
+            }
+            if (arkts.isOverloadDeclaration(member)) {
                 return
             }
             console.error(member)
@@ -923,35 +929,41 @@ class IDLVisitor extends arkts.AbstractVisitor {
     } {
         let methodName = method.id!.name
         const extendedAttributes: idl.IDLExtendedAttribute[] = []
+        const [isOverload, overloadKey, index] = this.overloadMap.isOverLoadFunc(methodName)
+        if (isOverload) {
+            extendedAttributes.push({ name: idl.IDLExtendedAttributes.Alias, value: methodName },
+                { name: idl.IDLExtendedAttributes.OverLoadPrio, value: index.toString() })
+            methodName = overloadKey!
+        }
         const filteredParameters = method.function!.params.map(it => it as arkts.ETSParameterExpression)
-        .filter((param, paramIndex) => {
-            const paramName = param.name
-            let tag: string | undefined
-            if (arkts.isETSStringLiteralType(param.typeAnnotation)) {
-                tag = param.typeAnnotation.dumpSrc()
-            }
-            if (!tag) return true
-            const dtsTagIndexDefault = 0 // see idl.DtsTag specification
-            const dtsTagNameDefault = 'type' // see idl.DtsTag specification
-            let extendedAttributeValues: string[] = []
-            if (paramIndex != dtsTagIndexDefault || paramName != dtsTagNameDefault) {
-                extendedAttributeValues.push(paramIndex.toString())
-                extendedAttributeValues.push(paramName)
-            }
-            extendedAttributeValues.push(tag)
-            extendedAttributes.push({
-                name: idl.IDLExtendedAttributes.DtsTag,
-                value: extendedAttributeValues.map(value => value.replaceAll('|', '\\x7c')).join('|')
-            })
-            if (!extendedAttributes.some(it => it.name === idl.IDLExtendedAttributes.DtsName)) {
+            .filter((param, paramIndex) => {
+                const paramName = param.name
+                let tag: string | undefined
+                if (arkts.isETSStringLiteralType(param.typeAnnotation)) {
+                    tag = param.typeAnnotation.dumpSrc()
+                }
+                if (!tag) return true
+                const dtsTagIndexDefault = 0 // see idl.DtsTag specification
+                const dtsTagNameDefault = 'type' // see idl.DtsTag specification
+                let extendedAttributeValues: string[] = []
+                if (paramIndex != dtsTagIndexDefault || paramName != dtsTagNameDefault) {
+                    extendedAttributeValues.push(paramIndex.toString())
+                    extendedAttributeValues.push(paramName)
+                }
+                extendedAttributeValues.push(tag)
                 extendedAttributes.push({
-                    name: idl.IDLExtendedAttributes.DtsName,
-                    value: methodName,
+                    name: idl.IDLExtendedAttributes.DtsTag,
+                    value: extendedAttributeValues.map(value => value.replaceAll('|', '\\x7c')).join('|')
                 })
-            }
-            methodName = methodName + capitalize(tag.replaceAll('"', '').replaceAll("'", ''))
-            return false
-        })
+                if (!extendedAttributes.some(it => it.name === idl.IDLExtendedAttributes.DtsName)) {
+                    extendedAttributes.push({
+                        name: idl.IDLExtendedAttributes.DtsName,
+                        value: methodName,
+                    })
+                }
+                methodName = methodName + capitalize(tag.replaceAll('"', '').replaceAll("'", ''))
+                return false
+            })
         return {
             methodName: methodName,
             parameters: filteredParameters,
@@ -959,7 +971,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         }
     }
 
-    serializeMethod(method: arkts.MethodDefinition, parentName:string): idl.IDLMethod | idl.IDLConstructor {
+    serializeMethod(method: arkts.MethodDefinition, parentName: string): idl.IDLMethod | idl.IDLConstructor {
         const { set: paramsSet, parameters: typeParameters } = this.extractTypeParameters((method.value as arkts.FunctionExpression).function?.typeParams)
         return this.withTypeParamContext(paramsSet, () => {
             const { methodName, parameters: arktsParameters, extendedAttributes } = this.processMethodLiteralParameters(method)
@@ -1315,7 +1327,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         this.typeParamsStack.pop()
         return r
     }
-    withReplacementContext<T>(name: string, op: (found:boolean) => T): T {
+    withReplacementContext<T>(name: string, op: (found: boolean) => T): T {
         if (TypeParameterMap.has(name)) {
             const mapping = TypeParameterMap.get(name)!
             this.typeReplacements.push(mapping)
@@ -1353,7 +1365,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         }
     }
 
-    postprocessComponent(iface:idl.IDLInterface) {
+    postprocessComponent(iface: idl.IDLInterface) {
         iface.extendedAttributes ??= []
         iface.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Component })
     }
@@ -1377,7 +1389,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                         return
                     }
                     if (entry.name === componentAttributeName && idl.isInterface(entry)) {
-                         this.postprocessComponent(entry)
+                        this.postprocessComponent(entry)
                     }
                     if (idl.isCallback((entry))) {
                         let hasComponentInReferences = false
@@ -1460,7 +1472,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
             }
         ]
         for (const entry of this.entries) {
-            idl.forEachChild(entry, () => {}, (node) => mappers.forEach(it => it(node)))
+            idl.forEachChild(entry, () => { }, (node) => mappers.forEach(it => it(node)))
             mappers.forEach(it => it(entry))
         }
 
@@ -1470,18 +1482,18 @@ class IDLVisitor extends arkts.AbstractVisitor {
     /**
      * Just syntax equality
      */
-    private isTypesEq(a:idl.IDLType, b:idl.IDLType): boolean {
+    private isTypesEq(a: idl.IDLType, b: idl.IDLType): boolean {
         return idl.printType(a) === idl.printType(b)
     }
 
-    private isParametersEq(a:idl.IDLParameter, b:idl.IDLParameter): boolean {
+    private isParametersEq(a: idl.IDLParameter, b: idl.IDLParameter): boolean {
         return a.name === b.name
             && a.isOptional === b.isOptional
             && a.isVariadic === b.isVariadic
             && this.isTypesEq(a.type, b.type)
     }
 
-    private isMethodPerfectlyTheSame(a:idl.IDLMethod, b:idl.IDLMethod): boolean {
+    private isMethodPerfectlyTheSame(a: idl.IDLMethod, b: idl.IDLMethod): boolean {
         return a.name === b.name
             && a.parameters.length === b.parameters.length
             && zip(a.parameters, b.parameters).every(([x, y]) => this.isParametersEq(x, y))
@@ -1568,5 +1580,50 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
     private traceDeleted(reason: string) {
         this.saveStatus(reason)
+    }
+}
+
+class OverloadMap {
+    private _overloadMap: Map<string, Array<string>> = new Map
+    addOverloadMemeber(key: string, identifier: string) {
+        if (this._overloadMap.has(key)) {
+            this._overloadMap.get(key)?.push(identifier)
+            return;
+        }
+        this._overloadMap.set(key, new Array(identifier))
+    }
+    isOverLoadFunc(key: string): [boolean, string | undefined, number] {
+        for (let [k, s] of this._overloadMap) {
+            const index = s.findIndex(k => k === key)
+            if (index != -1) {
+                return [true, k, index]
+            }
+        }
+        return [false, undefined, -1]
+    }
+}
+
+class OverLoadVisitor extends arkts.AbstractVisitor {
+    _overloadMap: OverloadMap = new OverloadMap
+    get overloadMap(): OverloadMap {
+        return this._overloadMap
+    }
+    visitor(node: arkts.arkts.AstNode, options?: object): arkts.arkts.AstNode {
+        if (arkts.isOverloadDeclaration(node)) {
+            return this.visitOverloadDeclaration(node)
+        }
+        return this.visitEachChild(node)
+    }
+    visitOverloadDeclaration(declaration: arkts.OverloadDeclaration): arkts.OverloadDeclaration {
+        declaration.overloadedList.forEach(exp => {
+            if (arkts.isIdentifier(exp)) {
+                this._overloadMap.addOverloadMemeber(declaration.id!.name, exp.name)
+            } else if (arkts.isMemberExpression(exp)) {
+                console.log("Unimplemented memeber expresstion overload");
+            } else {
+                throw new Error("Unexpected overloadedList type");
+            }
+        })
+        return declaration;
     }
 }

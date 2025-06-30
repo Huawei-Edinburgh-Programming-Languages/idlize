@@ -15,7 +15,7 @@
 
 import { getFQName, IDLFile, IDLI32Type, IDLPointerType, IDLProperty } from "../idl"
 import { NumericConvertor, PointerConvertor } from "../LanguageWriters/ArgConvertors"
-import { PeerMethod, PeerMethodArg, PeerMethodSignature } from "./PeerMethod"
+import { PeerMethod, PeerMethodArg, PeerMethodSignature, OverloadInfo } from "./PeerMethod"
 import { Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters/LanguageWriter"
 
 export interface PeerClassBase {
@@ -27,6 +27,7 @@ export class PeerClass implements PeerClassBase {
         public readonly file: IDLFile,
         public readonly componentName: string,
         public readonly originalFilename: string,
+        public overloadInfo: Map<string, Array<OverloadInfo>> = new Map
     ) { }
 
     generatedName(isCallSignature: boolean): string{
