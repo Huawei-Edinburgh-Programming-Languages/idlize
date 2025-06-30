@@ -2,25 +2,6 @@ import * as core from "@idlizer/core"
 import { Declarations, Visitor } from "./Visitor"
 import { PeerGenerator, Body } from "./PeerGenerator";
 import { Config } from "./general/Config"
-import { LanguageWriter } from "@idlizer/core";
-import { isReal } from "./general/common";
-import { PeersConstructions } from "./constuctions/PeersConstructions";
-
-class SimpleConverter extends core.TSTypeNameConvertor {
-    constructor(resolver: core.ReferenceResolver) {
-        super(resolver)
-    }
-
-    override convertInterface(node: core.IDLInterface): string {
-        console.log(`convert ${node.name}`);
-        return super.convertInterface(node)
-    }
-
-    convertTypeReference(type: core.IDLReferenceType): string {
-        console.log(`convert ${type.name}`);
-        return super.convertTypeReference(type)
-    }
-}
 
 export class PeerVisitor extends Visitor {
     constructor(
@@ -33,22 +14,25 @@ export class PeerVisitor extends Visitor {
 
     override onEnterNamespace(node: core.IDLNamespace): boolean {
         console.log(`namespace: ${node.name}`);
-        return true
+        return ['', 'ir'].includes(node.name)
     }
 
     override onEnterInterface(node: core.IDLInterface): boolean{
+        const allowed = ['VariableDeclaration', 'NumberLiteral', 'LabelledStatement']
+        if (!allowed.includes(node.name)) return false
+
         const writer = new core.TSLanguageWriter(
             new core.IndentedPrinter(),
-            this.resolver,
-            this.converter
+            this.peerGenerator.resolver,
+            this.peerGenerator.converter
         )
 
-        writer.writeClass(
+        writer.writeClass( // TODO: move to generator, call just a peer.write(...)
             node.name,
             () => {
-                PeerGenerator.generateBody(node, (body: Body) => {
+                this.peerGenerator.writeBody(node, writer, (body: Body) => {
+                    // factory.ts
                     const creates = body.creates?.concat(...body.updates)
-                    creates?.forEach(m => this.writePeerCreateImpl(node, m, writer))
                     creates?.forEach(m => this.writeFactoryCreateImpl(node, m, this.factoryWriter))
                 })
             }
@@ -56,60 +40,20 @@ export class PeerVisitor extends Visitor {
 
         const out = writer.getOutput()
         console.log(`${out.join('\n')}`);
-
         return false
     }
 
     override onEnterMethodDecl(node: core.IDLMethod): boolean {
+        // Another way to gnerate methods
         //console.log(`method: ${node.name}`);
         return true
-    }
-
-    private writePeerCreateImpl(
-        iface: core.IDLInterface,
-        method: core.Method,
-        writer: LanguageWriter): void {
-        console.log(`method=${method}`);
-
-        const nativeCall = writer.makeFunctionCall(
-            writer.makeString('test'
-                //PeersConstructions.callBinding(
-                //    this.node.name,
-                //    node.name,
-                //    nodeNamespace(this.node)
-                //)
-            ),
-            //this.makeBindingArguments(node.parameters)
-            method.signature.argNames?.map(p => writer.makeString(p)) ?? []
-        )
-        const newExpr = writer.makeNewObject(iface.name, [nativeCall])
-
-        writer.writeMethodImplementation(method, () => {
-            if (isReal(iface)) {
-                const varName = 'result'
-                writer.writeStatements(
-                    writer.makeAssign(
-                        varName, core.createReferenceType(iface.name), newExpr, true
-                    ),
-                    writer.makeStatement(
-                        writer.makeMethodCall(varName, PeersConstructions.setChildrenParentPtrMethod, [])
-                    ),
-                    writer.makeReturn(
-                        writer.makeString(varName)
-                    ),
-                )
-            } else {
-                writer.writeStatement(
-                    writer.makeReturn(newExpr)
-                )
-            }
-        })
     }
 
     private writeFactoryCreateImpl(
         iface: core.IDLInterface,
         methods: core.Method,
-        writer: LanguageWriter): void {
+        writer: core.LanguageWriter): void {
+            // TODO:
     }
 
     private resolver = {
@@ -119,20 +63,26 @@ export class PeerVisitor extends Visitor {
         ): core.IDLEntry | undefined {
             return this.visitor.resolveReference(type)
         },
+
         toDeclaration(type: core.IDLNode): core.IDLNode {
             throw "Unused";
         },
+
+        isHeir(type: core.IDLInterface, name: string) {
+            return this.visitor.isHeir(type, name)
+        },
+
         visitor: this,
     }
 
-    private converter = new SimpleConverter(
+    private peerGenerator = new PeerGenerator(
         this.resolver
     )
 
     private factoryWriter = new core.TSLanguageWriter(
         new core.IndentedPrinter(),
-        this.resolver,
-        this.converter
+        this.peerGenerator.resolver,
+        this.peerGenerator.converter
     )
 }
 

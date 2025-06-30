@@ -1,0 +1,48 @@
+52c52
+<     static updateVariableDeclaration(original: VariableDeclaration | undefined, kind: Es2pandaVariableDeclarationKind, declarators: readonly VariableDeclarator[]): VariableDeclaration {
+---
+>     static updateVariableDeclaration(original: VariableDeclaration, kind: Es2pandaVariableDeclarationKind, declarators: readonly VariableDeclarator[]): VariableDeclaration {
+64c64
+<         return global.generatedEs2panda._VariableDeclarationKindConst(global.context, this.peer)
+---
+>         return global.generatedEs2panda._VariableDeclarationKind(global.context, this.peer)
+73c73,78
+<     emplaceAnnotations(source?: AnnotationUsage): this {
+---
+>     declaratorByName(name: string): this {
+>         global.generatedEs2panda._VariableDeclarationDeclaratorByName(global.context, this.peer, name)
+>         return this
+>     }
+>     /** @deprecated */
+>     emplaceAnnotations(source: AnnotationUsage): this {
+83c88
+<     setValueAnnotations(source: AnnotationUsage | undefined, index: number): this {
+---
+>     setValueAnnotations(source: AnnotationUsage, index: number): this {
+86a92,96
+>     /** @deprecated */
+>     transformAnnotations(cb: NodeTransformer, transformationName: string): this {
+>         global.generatedEs2panda._VariableDeclarationTransformAnnotations(global.context, this.peer, passNode(cb), transformationName)
+>         return this
+>     }
+104c114
+<     addAnnotations(annotations?: AnnotationUsage): this {
+---
+>     addAnnotations(annotations: AnnotationUsage): this {
+108,114c118,125
+<     protected readonly brandVariableDeclaration: undefined
+< }
+< export function isVariableDeclaration(node: object | undefined): node is VariableDeclaration {
+<     return node instanceof VariableDeclaration
+< }
+< if (!nodeByType.has(Es2pandaAstNodeType.AST_NODE_TYPE_VARIABLE_DECLARATION)) {
+<     nodeByType.set(Es2pandaAstNodeType.AST_NODE_TYPE_VARIABLE_DECLARATION, (peer: KNativePointer) => new VariableDeclaration(peer))
+---
+>     get jsDocInformation(): readonly JsDocInfo[] {
+>         return unpackNodeArray(global.generatedEs2panda._VariableDeclarationJsDocInformation(global.context, this.peer))
+>     }
+>     /** @deprecated */
+>     setJsDocInformation(jsDocInformation: readonly JsDocInfo[]): this {
+>         global.generatedEs2panda._VariableDeclarationSetJsDocInformation(global.context, this.peer, passNodeArray(jsDocInformation), jsDocInformation.length)
+>         return this
+>     }

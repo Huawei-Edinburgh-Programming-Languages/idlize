@@ -51,7 +51,8 @@ function main() {
         { inheritanceMode: 'single' }
     )
 
-    new PeerVisitor(config, idlFile).visit(idlFile)
+    const visitor = new PeerVisitor(config, idlFile)
+    visitor.visit(idlFile)
 }
 
 main()
