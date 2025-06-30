@@ -14,12 +14,12 @@
  */
 
 import * as idl from "@idlizer/core/idl"
-import { createFeatureNameConvertor, Language, convertDeclaration, LayoutNodeRole, isStaticMaterialized, lib, isExternalType, getExternalTypePackage } from "@idlizer/core"
+import { createFeatureNameConvertor, Language, convertDeclaration, LayoutNodeRole, isStaticMaterialized, lib, LibraryInterface, isExternalType, getExternalTypePackage } from "@idlizer/core"
 import { ImportFeature, ImportsCollector } from "./ImportsCollector"
 import { createDependenciesCollector, ArkTSInterfaceDependenciesCollector } from "./idl/IdlDependenciesCollector"
 import { getInternalClassName, isBuilderClass, isMaterialized, PeerLibrary, maybeTransformManagedCallback } from "@idlizer/core"
 
-export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | idl.IDLReferenceType): ImportFeature {
+export function convertDeclToFeature(library: LibraryInterface, node: idl.IDLEntry | idl.IDLReferenceType): ImportFeature {
     const featureNameConvertor = createFeatureNameConvertor(library.language)
     if (idl.isReferenceType(node)) {
         const decl = library.resolveTypeReference(node)
@@ -54,7 +54,7 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | 
 }
 
 export function collectDeclItself(
-    library: PeerLibrary,
+    library: LibraryInterface,
     node: idl.IDLEntry | idl.IDLReferenceType,
     emitter: ImportsCollector | ((entry: idl.IDLEntry | idl.IDLReferenceType) => void),
     options?: {
@@ -108,7 +108,7 @@ export function collectDeclItself(
 }
 
 export function collectDeclDependencies(
-    library: PeerLibrary,
+    library: LibraryInterface,
     node: idl.IDLNode,
     emitter: ImportsCollector | ((entry: idl.IDLEntry | idl.IDLReferenceType) => void),
     options?: {

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter, PeerClass, MaterializedClass, PeerLibrary } from '@idlizer/core'
+import { IndentedPrinter, PeerClass, MaterializedClass, PeerLibrary, LibraryInterface } from '@idlizer/core'
 import { makeFileNameFromClassName } from "../FileGenerators"
 import { collectPeersForFile } from '../PeersCollector'
 
@@ -21,7 +21,7 @@ export class MesonVisitor {
     printer = new IndentedPrinter()
 
     constructor(
-        protected library: PeerLibrary
+        protected library: LibraryInterface
     ) { }
 
     printPeerClassSourcePaths(clazz: PeerClass): void {
@@ -58,7 +58,7 @@ export class MesonVisitor {
     }
 }
 
-export function printMesonBuild(peerLibrary: PeerLibrary): string {
+export function printMesonBuild(peerLibrary: LibraryInterface): string {
     const visitor = new MesonVisitor(peerLibrary)
     visitor.printMesonBuildContent()
     return visitor.printer.getOutput().join("\n")

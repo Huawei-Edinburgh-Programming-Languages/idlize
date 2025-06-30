@@ -14,11 +14,11 @@
  */
 
 import * as idl from "@idlizer/core/idl"
-import { LanguageWriter, Method, MethodModifier, MethodSignature, NamedMethodSignature, PeerLibrary, PeerMethod } from "@idlizer/core"
+import { LanguageWriter, LibraryInterface, Method, MethodModifier, MethodSignature, NamedMethodSignature, PeerLibrary, PeerMethod } from "@idlizer/core"
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH, collectJavaImports, componentToPeerClass, printJavaImports, TargetFile, ARK_BASE, collectPeersForFile } from "@idlizer/libohos"
 import { generateArkComponentName } from "./ComponentsPrinter"
 
-export function makeJavaArkComponents(library: PeerLibrary): { targetFile: TargetFile, writer: LanguageWriter } {
+export function makeJavaArkComponents(library: LibraryInterface): { targetFile: TargetFile, writer: LanguageWriter } {
     const ark = 'Ark'
     const receiver = 'receiver'
     const create = 'create'

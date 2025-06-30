@@ -24,6 +24,7 @@ import { IndentedPrinter, camelCaseToUpperSnakeCase, maybeOptional, Language, Cp
     asPromise,
     generatorTypePrefix,
     isVMContextMethod,
+    LibraryInterface
 } from '@idlizer/core'
 import { getNodeTypes } from "../FileGenerators";
 import { peerGeneratorConfiguration} from "../../DefaultConfiguration";
@@ -59,7 +60,7 @@ export function generateCapiParameters(library: PeerLibrary, method: PeerMethod,
 
 export class HeaderVisitor {
     constructor(
-        private library: PeerLibrary,
+        private library: LibraryInterface,
         private api: IndentedPrinter,
         private modifiersList: IndentedPrinter,
         private accessorsList: IndentedPrinter,

@@ -14,7 +14,7 @@
  */
 import * as fs from "fs"
 import * as path from "path"
-import { IndentedPrinter, camelCaseToUpperSnakeCase, Language, PeerLibrary, createLanguageWriter, CppConvertor, PrimitiveTypesInstance } from "@idlizer/core"
+import { IndentedPrinter, camelCaseToUpperSnakeCase, Language, PeerLibrary, createLanguageWriter, CppConvertor, PrimitiveTypesInstance, LibraryInterface } from "@idlizer/core"
 import { Method, MethodSignature, NamedMethodSignature, PrinterLike } from "./LanguageWriters"
 import { CppLanguageWriter, LanguageWriter } from "@idlizer/core";
 import { peerGeneratorConfiguration } from "../DefaultConfiguration";
@@ -130,7 +130,7 @@ export function appendModifiersCommonPrologue(): LanguageWriter {
     return result
 }
 
-export function getNodeTypes(library: PeerLibrary): string[] {
+export function getNodeTypes(library: LibraryInterface): string[] {
     const components: string[] = []
     for (const file of library.files) {
         for (const peer of collectPeersForFile(library, file)) {
@@ -227,7 +227,7 @@ export function accessorStructList(lines: LanguageWriter): LanguageWriter {
     return result
 }
 
-export function makeCSerializers(library: PeerLibrary, structs: LanguageWriter, typedefs: IndentedPrinter): string {
+export function makeCSerializers(library: LibraryInterface, structs: LanguageWriter, typedefs: IndentedPrinter): string {
 
     const writeToString = library.createLanguageWriter(Language.CPP)
     const serializers = createCSerializerPrinter(library, Language.CPP, "")
@@ -335,7 +335,7 @@ ${content}
 `
 }
 
-export function makeCallbacksKinds(library: PeerLibrary, language: Language): string {
+export function makeCallbacksKinds(library: LibraryInterface, language: Language): string {
     const writer = library.createLanguageWriter(language)
     printCallbacksKindsImports(language, writer)
     printCallbacksKinds(library, writer)

@@ -38,7 +38,7 @@ export class SurfaceProps {
         flags: int32
     )
 
-    public static Default: Readonly<SurfaceProps>
+    public static readonly Default: SurfaceProps
 
     public get useDeviceIndependentFonts(): boolean 
 

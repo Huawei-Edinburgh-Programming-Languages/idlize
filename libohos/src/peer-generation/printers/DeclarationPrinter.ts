@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { CustomPrintVisitor as DtsPrintVisitor, isInIdlize, Language, PeerLibrary, sorted } from '@idlizer/core'
+import { CustomPrintVisitor as DtsPrintVisitor, isInIdlize, Language, LibraryInterface, PeerLibrary, sorted } from '@idlizer/core'
 import { LanguageWriter } from "@idlizer/core"
 import { DependenciesCollector } from "../idl/IdlDependenciesCollector"
 import { ImportsCollector } from "../ImportsCollector"
@@ -23,7 +23,7 @@ import { qualifiedName } from '@idlizer/core'
 
 class GeneratorSyntheticPrinter extends DependenciesCollector {
     constructor(
-        library: PeerLibrary,
+        library: LibraryInterface,
         private readonly onGeneratorSyntheticDependency: (entry: idl.IDLEntry) => void
     ) {
         super(library)
@@ -37,7 +37,7 @@ class GeneratorSyntheticPrinter extends DependenciesCollector {
     }
 }
 
-function printDeclarationIfNeeded(library: PeerLibrary, entry: idl.IDLEntry, seenNames: Set<String>): string {
+function printDeclarationIfNeeded(library: LibraryInterface, entry: idl.IDLEntry, seenNames: Set<String>): string {
     const scopedName = qualifiedName(entry, ".", "namespace.name")
     if (seenNames.has(scopedName))
         return ""
@@ -49,7 +49,7 @@ function printDeclarationIfNeeded(library: PeerLibrary, entry: idl.IDLEntry, see
     return text
 }
 
-export function printDeclarations(peerLibrary: PeerLibrary): Array<string> {
+export function printDeclarations(peerLibrary: LibraryInterface): Array<string> {
     const result = []
     const seenEntries = new Set<string>()
     const syntheticsGenerator = new GeneratorSyntheticPrinter(peerLibrary, (entry) => {
@@ -92,7 +92,7 @@ function printEnumsGlobalAssign(enums: idl.IDLEnum[], writer: LanguageWriter) {
     writer.print("})")
 }
 
-export function printEnumsImpl(peerLibrary: PeerLibrary, writer: LanguageWriter) {
+export function printEnumsImpl(peerLibrary: LibraryInterface, writer: LanguageWriter) {
     const seenNames = new Set<string>()
     const enums = new Array<idl.IDLEnum>()
     const imports = new ImportsCollector()

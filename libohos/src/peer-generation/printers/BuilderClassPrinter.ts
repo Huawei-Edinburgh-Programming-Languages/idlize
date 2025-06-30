@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { removeExt, renameClassToBuilderClass, Language, generifiedTypeName, LayoutNodeRole, MethodSignature } from '@idlizer/core'
+import { removeExt, renameClassToBuilderClass, Language, generifiedTypeName, LayoutNodeRole, MethodSignature, LibraryInterface } from '@idlizer/core'
 import { MethodModifier, Method, Field, NamedMethodSignature } from "../LanguageWriters";
 import { LanguageWriter, PeerLibrary,
     BuilderClass, methodsGroupOverloads
@@ -34,7 +34,7 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
     constructor(
         private readonly language: Language,
         private readonly builderClass: BuilderClass,
-        private readonly peerLibrary: PeerLibrary) { }
+        private readonly peerLibrary: LibraryInterface) { }
 
     private printBuilderClass(builderClass: BuilderClass, imports: ImportsCollector, content: LanguageWriter) {
         const writer = content
@@ -117,7 +117,7 @@ class JavaBuilderClassFileVisitor implements BuilderClassFileVisitor {
     private readonly printer: LanguageWriter = this.library.createLanguageWriter(this.library.language)
 
     constructor(
-        private readonly library: PeerLibrary,
+        private readonly library: LibraryInterface,
         private readonly builderClass: BuilderClass,
     ) { }
 
@@ -298,7 +298,7 @@ class JavaBuilderClassFileVisitor implements BuilderClassFileVisitor {
 
 class CJBuilderClassFileVisitor implements BuilderClassFileVisitor {
     constructor(
-        private readonly peerLibrary: PeerLibrary,
+        private readonly peerLibrary: LibraryInterface,
         private readonly builderClass: BuilderClass
     ) { }
 
@@ -379,7 +379,7 @@ class CJBuilderClassFileVisitor implements BuilderClassFileVisitor {
 
 class BuilderClassVisitor {
     constructor(
-        private readonly library: PeerLibrary,
+        private readonly library: LibraryInterface,
     ) { }
 
     printBuilderClasses(): PrinterResult[] {
@@ -409,7 +409,7 @@ class BuilderClassVisitor {
     }
 }
 
-export function printBuilderClasses(peerLibrary: PeerLibrary): PrinterResult[] {
+export function printBuilderClasses(peerLibrary: LibraryInterface): PrinterResult[] {
     const visitor = new BuilderClassVisitor(peerLibrary)
     const result = visitor.printBuilderClasses()
     return result

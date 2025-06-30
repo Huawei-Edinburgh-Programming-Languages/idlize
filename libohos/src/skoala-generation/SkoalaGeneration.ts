@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Copyright (c) 2024-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -40,8 +40,6 @@ export function generateIdlSkoala(outDir: string, skoalaLibrary: IdlSkoalaLibrar
         makeTSSerializerFromIdl(skoalaLibrary),
         true,
     )
-
-    copyToSkoala(path.join(__dirname, '..', 'skoala_lib'), skoala)
 }
 
 function writeFile(filename: string, content: string, integrated: boolean = true) {
@@ -52,26 +50,26 @@ function writeFile(filename: string, content: string, integrated: boolean = true
 export function printSkoala(library: IdlSkoalaLibrary): Map<TargetFile, LanguageWriter> {
     let result: Map<TargetFile, LanguageWriter> = new Map()
 
-    let wrVis = new TSWrappersVisitor()
-    for (let file of library.outFiles) {
-        const writer = createLanguageWriter(Language.TS, library)
-        wrVis.printImports(file, writer)
-        wrVis.printWrappers(file, writer)
-        result.set(
-            new TargetFile(file.baseName.replace(".d.ts", ".ts")),
-            writer
-        )
-    }
+    // let wrVis = new TSWrappersVisitor()
+    // for (let file of library.outFiles) {
+    //     const writer = createLanguageWriter(Language.TS, library)
+    //     wrVis.printImports(file, writer)
+    //     wrVis.printWrappers(file, writer)
+    //     result.set(
+    //         new TargetFile(file.baseName.replace(".d.ts", ".ts")),
+    //         writer
+    //     )
+    // }
 
-    const writer = createLanguageWriter(Language.TS, library)
-    let intVis = new SkoalaTSInterfacesVisitor(library)
-    for (let file of library.outFiles) {
-        intVis.printInterfaces(file, writer)
-    }
-    result.set(
-        new TargetFile('index-full.d.ts'),
-        writer
-    )
+    // const writer = createLanguageWriter(Language.TS, library)
+    // let intVis = new SkoalaTSInterfacesVisitor(library)
+    // for (let file of library.outFiles) {
+    //     intVis.printInterfaces(file, writer)
+    // }
+    // result.set(
+    //     new TargetFile('index-full.d.ts'),
+    //     writer
+    // )
 
     return result
 }

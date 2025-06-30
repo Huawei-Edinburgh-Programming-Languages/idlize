@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Copyright (c) 2024-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -52,21 +52,13 @@ class IdlSerializerPrinter {
             })
     }
 
-    private printImports(writer: LanguageWriter, serializerDeclarations?: Set<idl.IDLInterface>) {
+    private printImports(writer: LanguageWriter) {
         writer.print(`import { SerializerBase, Tags, RuntimeType, runtimeType, isInstanceOf } from "@koalaui/interop"`)
         writer.print(`import { int32, float32, unsafeCast } from "@koalaui/common"`)
-
-        // serializerDeclarations?.forEach(decl => {
-        //     const basename = path.basename(decl.fileName ?? "")
-        //     if (basename) {
-        //         const basenameNoExt = basename.slice(0, basename.indexOf('.'))
-        //         writer.print(`import { ${decl.name} } from "./${basenameNoExt}"`)
-        //     }
-        // })
     }
 
     print() {
-        this.printImports(this.writer, this.library.serializerDeclarations)
+        this.printImports(this.writer)
 
         const className = "Serializer"
         const superName = `${className}Base`

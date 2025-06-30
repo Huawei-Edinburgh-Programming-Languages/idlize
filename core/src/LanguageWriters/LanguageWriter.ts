@@ -879,6 +879,10 @@ export abstract class LanguageWriter {
     }
 }
 
+export function cleanPrefix(name: string, prefix: string): string {
+    return name.replace(prefix, "")
+}
+
 export function mangleMethodName(method: Method, id?: number): string {
     return `${method.name}${id ?? ""}`
 }

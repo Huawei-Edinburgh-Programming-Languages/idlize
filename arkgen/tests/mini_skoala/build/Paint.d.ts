@@ -15,7 +15,6 @@
 
 import { Finalizable } from "./Finalizable"
 import { pointer, KNativePointer, KPointer } from "./utils"
-import { nativeModule } from "@koalaui/arkoala"
 import { int32 } from "./utils"
 
 export class Paint extends Finalizable {

@@ -34,7 +34,7 @@ function toFileName(name:string) {
 
 abstract class CommonLayoutBase implements LayoutManagerStrategy {
     constructor(
-        protected library: PeerLibrary,
+        protected library: idl.LibraryInterface,
         protected prefix: string = "",
     ) {}
     abstract resolve(target: idl.LayoutTargetDescription): string
@@ -130,7 +130,7 @@ export class ArkTSComponentsLayout extends ArkTsLayout {
 }
 
 export class JavaLayout extends CommonLayoutBase {
-    constructor(library: PeerLibrary, prefix: string, private packagePath: string) {
+    constructor(library: idl.LibraryInterface, prefix: string, private packagePath: string) {
         super(library, prefix)
     }
     private getPath(file:string):string {
@@ -272,7 +272,7 @@ export class KotlinLayout extends CommonLayoutBase {
 
 ////////////////////////////////////////////////////////
 
-export function arkoalaLayout(library: PeerLibrary, prefix: string = '', packagePath: string = ''): LayoutManagerStrategy {
+export function arkoalaLayout(library: idl.LibraryInterface, prefix: string = '', packagePath: string = ''): LayoutManagerStrategy {
     switch(library.language) {
         case idl.Language.TS: return new TsLayout(library, prefix)
         case idl.Language.ARKTS: return new ArkTsLayout(library, prefix)

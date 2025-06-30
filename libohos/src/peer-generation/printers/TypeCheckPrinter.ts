@@ -6,7 +6,7 @@ import {
     MethodModifier,
     NamedMethodSignature
 } from "../LanguageWriters";
-import { LanguageWriter, LayoutNodeRole, PeerLibrary, createDeclarationNameConvertor, isExternalType, isInCurrentModule, isInIdlize, isStringEnumType } from "@idlizer/core"
+import { LanguageWriter, LayoutNodeRole, LibraryInterface, PeerLibrary, createDeclarationNameConvertor, isExternalType, isInCurrentModule, isInIdlize, isStringEnumType } from "@idlizer/core"
 import { Language } from "@idlizer/core"
 import { getExtAttribute, IDLBooleanType, isReferenceType } from "@idlizer/core/idl"
 import { convertDeclaration, generateEnumToNumericName, generateEnumFromNumericName } from '@idlizer/core';
@@ -17,7 +17,7 @@ import { PrinterResult } from "../LayoutManager";
 import { collectDeclarationTargets } from "../DeclarationTargetCollector";
 import { isComponentDeclaration } from "../ComponentsCollector";
 
-export function importTypeChecker(library: PeerLibrary, imports: ImportsCollector): void {
+export function importTypeChecker(library: LibraryInterface, imports: ImportsCollector): void {
     collectDeclItself(library, idl.createReferenceType("TypeChecker"), imports)
 }
 
@@ -39,7 +39,7 @@ class StructDescriptor {
     }
 }
 
-function collectFields(library: PeerLibrary, target: idl.IDLInterface, struct: StructDescriptor): void {
+function collectFields(library: LibraryInterface, target: idl.IDLInterface, struct: StructDescriptor): void {
     //TODO: is it need to collect conflicting declarations properties?
     // if (library.conflictedDeclarations.has(target)) {
     //     return
@@ -59,7 +59,7 @@ function collectFields(library: PeerLibrary, target: idl.IDLInterface, struct: S
     })
 }
 
-function makeStructDescriptor(library: PeerLibrary, target: idl.IDLEntry): StructDescriptor {
+function makeStructDescriptor(library: LibraryInterface, target: idl.IDLEntry): StructDescriptor {
     const result = new StructDescriptor()
     if (idl.isInterface(target)
         || idl.isSyntheticEntry(target)) {
@@ -70,7 +70,7 @@ function makeStructDescriptor(library: PeerLibrary, target: idl.IDLEntry): Struc
 
 class TypeCheckSyntheticCollector extends DependenciesCollector {
     constructor(
-        library: PeerLibrary,
+        library: LibraryInterface,
         private readonly onSyntheticDeclaration: (entry: idl.IDLInterface | idl.IDLContainerType) => void,
     ) {
         super(library)
@@ -87,7 +87,7 @@ class TypeCheckSyntheticCollector extends DependenciesCollector {
     }
 }
 
-function collectTypeCheckDeclarations(library: PeerLibrary): (idl.IDLInterface | idl.IDLEnum | idl.IDLContainerType)[] {
+function collectTypeCheckDeclarations(library: LibraryInterface): (idl.IDLInterface | idl.IDLEnum | idl.IDLContainerType)[] {
     const seenNames = new Set<string>()
     const res = new Array<idl.IDLInterface | idl.IDLEnum | idl.IDLContainerType>()
     const syntheticCollector = new TypeCheckSyntheticCollector(library, (entry) => {
@@ -139,7 +139,7 @@ function collectTypeCheckDeclarations(library: PeerLibrary): (idl.IDLInterface |
 
 abstract class TypeCheckerPrinter {
     constructor(
-        protected readonly library: PeerLibrary,
+        protected readonly library: LibraryInterface,
         public readonly imports: ImportsCollector,
         public readonly writer: LanguageWriter,
     ) {}
@@ -221,7 +221,7 @@ abstract class TypeCheckerPrinter {
 
 class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
     constructor(
-        library: PeerLibrary
+        library: LibraryInterface
     ) {
         super(library, new ImportsCollector(), library.createLanguageWriter(Language.ARKTS))
     }
@@ -359,7 +359,7 @@ class ARKTSTypeCheckerPrinter extends TypeCheckerPrinter {
 
 class TSTypeCheckerPrinter extends TypeCheckerPrinter {
     constructor(
-        library: PeerLibrary
+        library: LibraryInterface
     ) {
         super(library, new ImportsCollector(), library.createLanguageWriter(Language.TS))
     }
@@ -523,7 +523,7 @@ class TSTypeCheckerPrinter extends TypeCheckerPrinter {
     }
 }
 
-export function printTSTypeChecker(library: PeerLibrary): PrinterResult[] {
+export function printTSTypeChecker(library: LibraryInterface): PrinterResult[] {
     const checker = new TSTypeCheckerPrinter(library)
     checker.print()
     return [{
@@ -536,7 +536,7 @@ export function printTSTypeChecker(library: PeerLibrary): PrinterResult[] {
     }]
 }
 
-export function printArkTSTypeChecker(library: PeerLibrary): PrinterResult[] {
+export function printArkTSTypeChecker(library: LibraryInterface): PrinterResult[] {
     const checker = new ARKTSTypeCheckerPrinter(library)
     checker.print()
     return [{

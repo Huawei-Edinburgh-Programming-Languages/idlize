@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import { nativeModule } from "@koalaui/arkoala"
 import { Finalizable } from "./Finalizable"
 import { pointer } from "./utils"
 

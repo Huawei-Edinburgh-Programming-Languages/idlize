@@ -52,7 +52,7 @@ export class StructPrinter {
         return hasGenerics
     }
 
-    constructor(private library: PeerLibrary) { }
+    constructor(private library: LibraryInterface) { }
 
     private isPointerDeclaration(target: idl.IDLNode, isOptional: boolean = false): boolean {
         if (isOptional) return true
@@ -589,7 +589,7 @@ export function collectFunctions(decl: idl.IDLInterface, library: LibraryInterfa
     ]
 }
 
-export function generateStructs(library: PeerLibrary, structs: LanguageWriter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
+export function generateStructs(library: LibraryInterface, structs: LanguageWriter, typedefs: IndentedPrinter, writeToString: LanguageWriter) {
     new StructPrinter(library).generateStructs(structs, typedefs, writeToString)
 }
 

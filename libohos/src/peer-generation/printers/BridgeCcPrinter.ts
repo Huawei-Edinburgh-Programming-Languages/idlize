@@ -69,7 +69,7 @@ export class BridgeCcVisitor {
     protected argConvertor = CppInteropArgConvertor.INSTANCE
 
     constructor(
-        protected readonly library: PeerLibrary,
+        protected readonly library: idl.LibraryInterface,
         protected readonly callLog: boolean,
     ) {
         this.returnTypeConvertor = new BridgeReturnTypeConvertor(this.library)
@@ -390,24 +390,24 @@ export type BridgeApi = {
     custom: LanguageWriter;
 };
 
-export function printBridgeHeader(peerLibrary: PeerLibrary): BridgeApi {
+export function printBridgeHeader(peerLibrary: idl.LibraryInterface): BridgeApi {
     const visitor = new BridgeHeaderVisitor(peerLibrary)
     visitor.print()
     return { generated: visitor.generatedApi, custom: visitor.customApi }
 }
 
-export function printBridgeCc(peerLibrary: PeerLibrary, callLog: boolean): BridgeApi {
+export function printBridgeCc(peerLibrary: idl.LibraryInterface, callLog: boolean): BridgeApi {
     const visitor = new BridgeCcVisitor(peerLibrary, callLog)
     visitor.print()
     return { generated: visitor.generatedApi, custom: visitor.customApi }
 }
 
-export function printBridgeCcGenerated(peerLibrary: PeerLibrary, callLog: boolean): string {
+export function printBridgeCcGenerated(peerLibrary: idl.LibraryInterface, callLog: boolean): string {
     const { generated } = printBridgeCc(peerLibrary, callLog)
     return bridgeCcGeneratedDeclaration(generated.getOutput())
 }
 
-export function printBridgeCcCustom(peerLibrary: PeerLibrary, callLog: boolean): string {
+export function printBridgeCcCustom(peerLibrary: idl.LibraryInterface, callLog: boolean): string {
     const { custom } = printBridgeCc(peerLibrary, callLog)
     return bridgeCcCustomDeclaration(custom.getOutput())
 }

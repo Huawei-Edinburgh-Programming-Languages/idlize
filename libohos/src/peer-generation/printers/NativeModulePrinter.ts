@@ -27,6 +27,7 @@ import { BlockStatement, ExpressionStatement, IfStatement, LanguageWriter, Metho
     LayoutNodeRole,
     lib,
     createOutArgConvertor,
+    LibraryInterface
 } from "@idlizer/core"
 import * as idl from  '@idlizer/core/idl'
 import { NativeModule } from "../NativeModule";
@@ -41,7 +42,7 @@ class NativeModulePrinterBase {
     readonly nativeModule: LanguageWriter = this.library.createLanguageWriter(this.language)
 
     constructor(
-        protected readonly library: PeerLibrary,
+        protected readonly library: LibraryInterface,
         protected readonly language: Language,
     ) {}
 
@@ -72,7 +73,7 @@ class NativeModulePredefinedVisitor extends NativeModulePrinterBase {
     ])
 
     constructor(
-        library: PeerLibrary,
+        library: LibraryInterface,
         language: Language,
         private readonly entries: idl.IDLInterface[],
     ) {
@@ -121,7 +122,7 @@ class NativeModuleArkUIGeneratedVisitor extends NativeModulePrinterBase {
     private readonly interopRetConvertor = new InteropReturnTypeConvertor(this.library)
 
     constructor(
-        library: PeerLibrary,
+        library: LibraryInterface,
         language: Language,
     ) {
         super(library, language)
@@ -303,7 +304,7 @@ class CJNativeModuleArkUIGeneratedVisitor extends NativeModuleArkUIGeneratedVisi
     }
 }
 
-function createPredefinedNativeModuleVisitor(library: PeerLibrary, language: Language, entries: idl.IDLInterface[]): NativeModulePredefinedVisitor {
+function createPredefinedNativeModuleVisitor(library: LibraryInterface, language: Language, entries: idl.IDLInterface[]): NativeModulePredefinedVisitor {
     switch (language) {
         case Language.TS:
             return new TSNativeModulePredefinedVisitor(library, language, entries)
@@ -318,7 +319,7 @@ function createPredefinedNativeModuleVisitor(library: PeerLibrary, language: Lan
     }
 }
 
-function createArkUIGeneratedNativeModuleVisitor(library: PeerLibrary, language: Language): NativeModuleArkUIGeneratedVisitor {
+function createArkUIGeneratedNativeModuleVisitor(library: LibraryInterface, language: Language): NativeModuleArkUIGeneratedVisitor {
     switch (language) {
         case Language.TS:
             return new TSNativeModuleArkUIGeneratedVisitor(library, language)
@@ -333,7 +334,7 @@ function createArkUIGeneratedNativeModuleVisitor(library: PeerLibrary, language:
     }
 }
 
-function collectNativeModuleImports(module: NativeModuleType, imports: ImportsCollector, library:PeerLibrary) {
+function collectNativeModuleImports(module: NativeModuleType, imports: ImportsCollector, library:LibraryInterface) {
     if (library.language === Language.TS || library.language === Language.ARKTS) {
         imports.addFeatures([
             "KInt",
@@ -405,7 +406,7 @@ export function printArkUILibrariesLoader(file: SourceFile) {
     }
 }
 
-export function printPredefinedNativeModule(library: PeerLibrary, module: NativeModuleType): SourceFile {
+export function printPredefinedNativeModule(library: LibraryInterface, module: NativeModuleType): SourceFile {
     const language = library.language
     const entries = collectPredefinedNativeModuleEntries(library, module)
     const visitor = createPredefinedNativeModuleVisitor(library, language, entries)
@@ -423,7 +424,7 @@ export function printPredefinedNativeModule(library: PeerLibrary, module: Native
     return file
 }
 
-export function printTSPredefinedEmptyNativeModule(library: PeerLibrary, module: NativeModuleType): SourceFile {
+export function printTSPredefinedEmptyNativeModule(library: LibraryInterface, module: NativeModuleType): SourceFile {
     const entries = collectPredefinedNativeModuleEntries(library, module)
     const visitor = new TSNativeModulePredefinedVisitor(library, library.language, entries)
     visitor.visit()
@@ -435,7 +436,7 @@ export function printTSPredefinedEmptyNativeModule(library: PeerLibrary, module:
     return file
 }
 
-export function printCJPredefinedNativeFunctions(library: PeerLibrary, module: NativeModuleType): SourceFile {
+export function printCJPredefinedNativeFunctions(library: LibraryInterface, module: NativeModuleType): SourceFile {
     const entries = collectPredefinedNativeModuleEntries(library, module)
     const visitor = new CJNativeModulePredefinedVisitor(library, library.language, entries)
     visitor.visit()
@@ -478,7 +479,7 @@ export function createGeneratedNativeModulePrinter(module: NativeModuleType, mor
     }
 }
 
-export function printTSArkUIGeneratedEmptyNativeModule(library: PeerLibrary, module: NativeModuleType): SourceFile {
+export function printTSArkUIGeneratedEmptyNativeModule(library: LibraryInterface, module: NativeModuleType): SourceFile {
     const visitor = createArkUIGeneratedNativeModuleVisitor(library, library.language) as TSNativeModuleArkUIGeneratedVisitor
     visitor.visit()
     const file = SourceFile.make("", library.language, library)
@@ -490,7 +491,7 @@ export function printTSArkUIGeneratedEmptyNativeModule(library: PeerLibrary, mod
     return file
 }
 
-export function printCJArkUIGeneratedNativeFunctions(library: PeerLibrary, module: NativeModuleType): SourceFile {
+export function printCJArkUIGeneratedNativeFunctions(library: LibraryInterface, module: NativeModuleType): SourceFile {
     const visitor = new CJNativeModuleArkUIGeneratedVisitor(library, library.language)
     visitor.visit()
     const writer = library.createLanguageWriter(Language.CJ) as CJLanguageWriter
@@ -502,7 +503,7 @@ export function printCJArkUIGeneratedNativeFunctions(library: PeerLibrary, modul
     return file
 }
 
-export function collectPredefinedNativeModuleEntries(library: PeerLibrary, module: NativeModuleType): idl.IDLInterface[] {
+export function collectPredefinedNativeModuleEntries(library: LibraryInterface, module: NativeModuleType): idl.IDLInterface[] {
     const interopDeclarations = library.files
         .filter(it => isInIdlizeInterop(it))
         .flatMap(it => it.entries.filter(idl.isInterface))
@@ -519,12 +520,12 @@ export function collectPredefinedNativeModuleEntries(library: PeerLibrary, modul
 }
 
 export function makeInteropMethod(
-    library: PeerLibrary,
+    library: LibraryInterface,
     name: string,
     method: PeerMethod,
 ): Method
 export function makeInteropMethod(
-    library: PeerLibrary,
+    library: LibraryInterface,
     name: string,
     idlParameters: idl.IDLParameter[],
     idlReturnType: idl.IDLType | undefined,
@@ -537,7 +538,7 @@ export function makeInteropMethod(
     },
 ): Method
 export function makeInteropMethod(
-    library: PeerLibrary,
+    library: LibraryInterface,
     name: string,
     idlParametersOrMethod: idl.IDLParameter[] | PeerMethod,
     idlReturnType?: idl.IDLType | undefined,
@@ -567,7 +568,7 @@ export function makeInteropMethod(
 }
 
 function makeInteropMethodInner(
-    library: PeerLibrary,
+    library: LibraryInterface,
     name: string,
     idlParameters: idl.IDLParameter[],
     idlReturnType: idl.IDLType | undefined,
@@ -669,7 +670,7 @@ function getReturnValue(type: idl.IDLType): string {
     throw new Error(`Unknown return type: ${idl.IDLKind[type.kind]} ${idl.forceAsNamedNode(type).name}`)
 }
 
-function toNativeReturnType(returnType: idl.IDLType | undefined, library: PeerLibrary): idl.IDLType {
+function toNativeReturnType(returnType: idl.IDLType | undefined, library: LibraryInterface): idl.IDLType {
 
     if (!returnType) return idl.IDLVoidType
     if (returnType === idl.IDLThisType) {

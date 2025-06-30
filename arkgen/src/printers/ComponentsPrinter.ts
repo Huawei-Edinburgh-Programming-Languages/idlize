@@ -23,7 +23,8 @@ import {
     MethodModifier,
     NamedMethodSignature,
     LayoutNodeRole,
-    getSuper
+    getSuper,
+    LibraryInterface
 } from '@idlizer/core'
 import {
     ARKOALA_PACKAGE,
@@ -57,7 +58,7 @@ export function generateArkComponentName(component: string) {
     return `Ark${component}Component`
 }
 
-function expandComponentWithSupers(library: PeerLibrary, decl: idl.IDLInterface): idl.IDLInterface[] {
+function expandComponentWithSupers(library: LibraryInterface, decl: idl.IDLInterface): idl.IDLInterface[] {
     const result: idl.IDLInterface[] = []
     while (decl) {
         const superResolved = getSuper(decl, library)
@@ -67,7 +68,7 @@ function expandComponentWithSupers(library: PeerLibrary, decl: idl.IDLInterface)
     return result
 }
 
-export function generateAttributeModifierSignature(library: PeerLibrary, component: IdlComponentDeclaration): MethodSignature {
+export function generateAttributeModifierSignature(library: LibraryInterface, component: IdlComponentDeclaration): MethodSignature {
     const modifiers = expandComponentWithSupers(library, component.attributeDeclaration).map(it =>
         idl.createReferenceType(getReferenceTo('AttributeModifier'),
             [idl.createReferenceType(componentToAttributesInterface(it.name))],
@@ -92,7 +93,7 @@ interface ComponentFileVisitor {
 class TSComponentFileVisitor implements ComponentFileVisitor {
 
     constructor(
-        protected readonly library: PeerLibrary,
+        protected readonly library: LibraryInterface,
         protected readonly file: idl.IDLFile,
         protected readonly options: {
             isDeclared: boolean,
@@ -327,7 +328,7 @@ class JavaComponentFileVisitor implements ComponentFileVisitor {
     private readonly results: ComponentPrintResult[] = []
 
     constructor(
-        private readonly library: PeerLibrary,
+        private readonly library: LibraryInterface,
         private readonly file: idl.IDLFile,
     ) { }
 
@@ -389,7 +390,7 @@ class JavaComponentFileVisitor implements ComponentFileVisitor {
 class CJComponentFileVisitor implements ComponentFileVisitor {
 
     constructor(
-        protected readonly library: PeerLibrary,
+        protected readonly library: LibraryInterface,
         protected readonly file: idl.IDLFile,
         protected readonly options: {
             isDeclared: boolean,
@@ -513,7 +514,7 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
 class KotlinComponentFileVisitor implements ComponentFileVisitor {
 
     constructor(
-        protected readonly library: PeerLibrary,
+        protected readonly library: LibraryInterface,
         protected readonly file: idl.IDLFile,
         protected readonly options: {
             isDeclared: boolean,
@@ -539,7 +540,7 @@ class ComponentsVisitor {
     private readonly language = this.peerLibrary.language
 
     constructor(
-        private readonly peerLibrary: PeerLibrary,
+        private readonly peerLibrary: LibraryInterface,
         private options: {
             isDeclared: boolean
         }
@@ -575,11 +576,11 @@ class ComponentsVisitor {
     }
 }
 
-export function printComponents(peerLibrary: PeerLibrary): PrinterResult[] {
+export function printComponents(peerLibrary: LibraryInterface): PrinterResult[] {
     return new ComponentsVisitor(peerLibrary, { isDeclared: false }).printComponents()
 }
 
-export function printComponentsDeclarations(peerLibrary: PeerLibrary): PrinterResult[] {
+export function printComponentsDeclarations(peerLibrary: LibraryInterface): PrinterResult[] {
     // TODO: support other output languages
     if (![Language.TS, Language.ARKTS, Language.JAVA].includes(peerLibrary.language))
         return []

@@ -60,9 +60,6 @@ export class ArkoalaPeerLibrary extends PeerLibrary {
         }
         return super.createTypeNameConvertor(language)
     }
-    override typeConvertor(param: string, type: idl.IDLType, isOptionalParam = false): ArgConvertor {
-        return super.typeConvertor(param, type, isOptionalParam)
-    }
     override declarationConvertor(param: string, type: idl.IDLReferenceType, declaration: idl.IDLEntry | undefined): ArgConvertor {
         switch (type.name) {
             case `AnimationRange`:

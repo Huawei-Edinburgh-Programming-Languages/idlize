@@ -6,21 +6,21 @@ import { getMethodModifiers } from "./idl/IdlPeerGeneratorVisitor";
 import { peerGeneratorConfiguration } from "../DefaultConfiguration";
 
 const collectPeers_cache = new Map<LibraryInterface, PeerClass[]>()
-export function collectPeers(library: PeerLibrary): PeerClass[] {
+export function collectPeers(library: LibraryInterface): PeerClass[] {
     if (!collectPeers_cache.has(library))
         collectPeers_cache.set(library, collectComponents(library).map(it => generatePeer(library, it)))
     return collectPeers_cache.get(library)!
 }
 
-export function collectOrderedPeers(library: PeerLibrary): PeerClass[] {
+export function collectOrderedPeers(library: LibraryInterface): PeerClass[] {
     return Array.from(collectPeers(library)).sort((a, b) => a.componentName.localeCompare(b.componentName))
 }
 
-export function collectPeersForFile(library: PeerLibrary, file: idl.IDLFile): PeerClass[] {
+export function collectPeersForFile(library: LibraryInterface, file: idl.IDLFile): PeerClass[] {
     return collectPeers(library).filter(it => it.file === file)
 }
 
-function processMethodOrCallable(library: PeerLibrary, method: idl.IDLMethod | idl.IDLCallable, peer: PeerClass, parentName?: string): PeerMethod | undefined {
+function processMethodOrCallable(library: LibraryInterface, method: idl.IDLMethod | idl.IDLCallable, peer: PeerClass, parentName?: string): PeerMethod | undefined {
     if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(method.name!))
         return
     // Some method have other parents as part of their names
@@ -58,7 +58,7 @@ function processMethodOrCallable(library: PeerLibrary, method: idl.IDLMethod | i
     )
 }
 
-function fillInterface(library: PeerLibrary, peer: PeerClass, iface: idl.IDLInterface) {
+function fillInterface(library: LibraryInterface, peer: PeerClass, iface: idl.IDLInterface) {
     peer.originalInterfaceName = iface.name
     const peerMethods = iface.callables
         .map(it => processMethodOrCallable(library, it, peer, iface?.name))
@@ -67,7 +67,7 @@ function fillInterface(library: PeerLibrary, peer: PeerClass, iface: idl.IDLInte
     peer.methods.push(...overloadedMethods)
 }
 
-function processProperty(library: PeerLibrary, prop: idl.IDLProperty, peer: PeerClass, parentName?: string): PeerMethod | undefined {
+function processProperty(library: LibraryInterface, prop: idl.IDLProperty, peer: PeerClass, parentName?: string): PeerMethod | undefined {
     if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(prop.name))
         return
     const originalParentName = parentName ?? peer.originalClassName!
@@ -109,7 +109,7 @@ function createComponentAttributesDeclaration(clazz: idl.IDLInterface, peer: Pee
     })
 }
 
-function fillClass(library: PeerLibrary, peer: PeerClass, clazz: idl.IDLInterface) {
+function fillClass(library: LibraryInterface, peer: PeerClass, clazz: idl.IDLInterface) {
     peer.originalClassName = clazz.name
     const parentDecl = getSuper(clazz, library)
     // TODO: should we check other parents?
@@ -129,7 +129,7 @@ function fillClass(library: PeerLibrary, peer: PeerClass, clazz: idl.IDLInterfac
     createComponentAttributesDeclaration(clazz, peer)
 }
 
-function generatePeer(library: PeerLibrary, component: IdlComponentDeclaration): PeerClass {
+function generatePeer(library: LibraryInterface, component: IdlComponentDeclaration): PeerClass {
     if (!component.attributeDeclaration.fileName) {
         throw new Error("Expected parent of attributes to be a SourceFile, but fileName is undefined")
     }

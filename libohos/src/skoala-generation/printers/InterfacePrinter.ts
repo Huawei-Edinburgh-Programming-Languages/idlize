@@ -14,7 +14,7 @@
  */
 
 import { LanguageWriter } from "@idlizer/core"
-import { IldSkoalaOutFile, TSDeclConvertor, IdlSkoalaLibrary } from "../idl/idlSkoalaLibrary"
+import { IldSkoalaOutFile, IdlSkoalaLibrary } from "../idl/idlSkoalaLibrary"
 import * as idl from "@idlizer/core/idl"
 import { convertDeclaration } from "@idlizer/core"
 
@@ -23,11 +23,11 @@ export class SkoalaTSInterfacesVisitor {
     constructor(private library: IdlSkoalaLibrary) { }
 
     printInterfaces(file: IldSkoalaOutFile, writer: LanguageWriter) {
-        const typeConvertor = new TSDeclConvertor(writer, this.library)
-        file.declarations.forEach(it => {
-            if (!idl.isImport(it) && !idl.isSyntheticEntry(it)) {
-                convertDeclaration(typeConvertor, it)
-            }
-        })
+        // const typeConvertor = new TSDeclConvertor(writer, this.library)
+        // file.declarations.forEach(it => {
+        //     if (!idl.isImport(it) && !idl.isSyntheticEntry(it)) {
+        //         convertDeclaration(typeConvertor, it)
+        //     }
+        // })
     }
 }

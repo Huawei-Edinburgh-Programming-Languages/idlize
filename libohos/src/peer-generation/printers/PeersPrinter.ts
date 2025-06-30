@@ -28,7 +28,8 @@ import {
     isMaterializedType,
     isPrimitiveType,
     LayoutNodeRole,
-    PeerMethodSignature
+    PeerMethodSignature,
+    LibraryInterface
 } from '@idlizer/core'
 import {
     ExpressionStatement,
@@ -53,7 +54,7 @@ export function componentToStyleClass(component: string) {
 
 const returnValName = "retval"  // make sure this doesn't collide with parameter names!
 
-export function writePeerMethod(library: PeerLibrary, printer: LanguageWriter, method: PeerMethod, isIDL: boolean, dumpSerialized: boolean,
+export function writePeerMethod(library: LibraryInterface, printer: LanguageWriter, method: PeerMethod, isIDL: boolean, dumpSerialized: boolean,
     methodPostfix: string, ptr: string, returnType: IDLType = IDLVoidType, generics?: string[]
 ) {
     if (generatorHookName(method.originalParentName, method.method.name)) return
@@ -191,7 +192,7 @@ export function writePeerMethod(library: PeerLibrary, printer: LanguageWriter, m
     })
 }
 
-function makeDeserializedReturn(library: PeerLibrary, writer: LanguageWriter, returnType: IDLType): LanguageStatement[] {
+function makeDeserializedReturn(library: LibraryInterface, writer: LanguageWriter, returnType: IDLType): LanguageStatement[] {
     const deserializerName = `${returnValName}Deserializer`
     writer.writeStatement(
         writer.makeAssign(

@@ -13,14 +13,14 @@
  * limitations under the License.
  */
 
-import { LanguageWriter, PeerLibrary, PrimitiveTypeList } from "@idlizer/core";
+import { LanguageWriter, LibraryInterface, PeerLibrary, PrimitiveTypeList } from "@idlizer/core";
 import { DeclarationTargets } from "../DeclarationTargetCollector";
 
 export const SELECTOR_ID_PREFIX = "SELECTOR_ID_"
 
 class ConvertorsPrinter {
     constructor(
-        private readonly library: PeerLibrary,
+        private readonly library: LibraryInterface,
         private readonly writer: LanguageWriter,
     ) {}
 
@@ -126,7 +126,7 @@ class ConvertorsPrinter {
     }
 }
 
-export function writeConvertors(library: PeerLibrary, writer: LanguageWriter) {
+export function writeConvertors(library: LibraryInterface, writer: LanguageWriter) {
     const printer = new ConvertorsPrinter(library, writer)
     printer.print()
 }

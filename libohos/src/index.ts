@@ -69,7 +69,7 @@ export * from './skoala-generation/utils'
 export * from './skoala-generation/WrapperClass'
 export * from './skoala-generation/printers/WrappersPrinter'
 export * from './skoala-generation/printers/InterfacePrinter'
-export { IdlSkoalaLibrary, IldSkoalaOutFile, IdlWrapperProcessor } from './skoala-generation/idl/idlSkoalaLibrary'
+export { IdlSkoalaLibrary, IdlWrapperProcessor } from './skoala-generation/idl/idlSkoalaLibrary'
 export * from './skoala-generation/SkoalaInstall'
 export * from './skoala-generation/SkoalaGeneration'
 

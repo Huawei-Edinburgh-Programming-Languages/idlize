@@ -25,7 +25,7 @@ import { GlobalScopePeerName, idlFreeMethodToLegacy, mangledGlobalScopeName } fr
 import { importTypeChecker } from "./TypeCheckPrinter"
 import { peerGeneratorConfiguration } from "../../DefaultConfiguration"
 
-export function printGlobal(library: PeerLibrary): PrinterResult[] {
+export function printGlobal(library: idl.LibraryInterface): PrinterResult[] {
 
     const realizationHolder = idl.createInterface(
         GlobalScopePeerName,
@@ -163,7 +163,7 @@ function fillCommonImports(collector: ImportsCollector, language: idl.Language) 
     }
 }
 
-function fillPeerImports(collector: ImportsCollector, library: PeerLibrary) {
+function fillPeerImports(collector: ImportsCollector, library: idl.LibraryInterface) {
     fillCommonImports(collector, library.language)
     collector.addFeatures([
         'Finalizable',

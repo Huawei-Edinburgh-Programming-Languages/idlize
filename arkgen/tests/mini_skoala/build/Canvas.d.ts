@@ -15,7 +15,6 @@
 
 import { Finalizable } from "./Finalizable"
 import { pointer, KNativePointer, KPointer, withInt32Array, Access, getPtr } from "./utils"
-import { nativeModule } from "@koalaui/arkoala"
 import { uint32, float32 } from "./utils"
 
 import { Bitmap } from "./Bitmap"

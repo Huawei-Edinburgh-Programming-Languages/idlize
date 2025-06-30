@@ -13,30 +13,30 @@
  * limitations under the License.
  */
 
-type int = number
-type float = number
-type double = number
+// type int = number
+// type float = number
+// type double = number
 
-export type uint8 = int
-export type int32 = int
-export type uint32 = int
-export type float32 = float
-export type float64 = double
+// export type uint8 = int
+// export type int32 = int
+// export type uint32 = int
+// export type float32 = float
+// export type float64 = double
 
-export type KPointer = number | bigint
-export type pointer = KPointer
-export type KNativePointer = KPointer
-export type KFloat32ArrayPtr = int32 | Float32Array | null
+// export type KPointer = number | bigint
+// export type pointer = KPointer
+// export type KNativePointer = KPointer
+// export type KFloat32ArrayPtr = int32 | Float32Array | null
 
-export type TypedArray =
-    Uint8Array
-    | Int8Array
-    | Uint16Array
-    | Int16Array
-    | Uint32Array
-    | Int32Array
-    | Float32Array
-    | Float64Array
+// export type TypedArray =
+//     Uint8Array
+//     | Int8Array
+//     | Uint16Array
+//     | Int16Array
+//     | Uint32Array
+//     | Int32Array
+//     | Float32Array
+//     | Float64Array
     
 export type ExecWithLength<P, R> = (pointer: P, length: int32) => R
 declare function withArray<C extends TypedArray, R>(

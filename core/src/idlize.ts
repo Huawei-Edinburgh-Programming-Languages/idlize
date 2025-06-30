@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Huawei Device Co., Ltd.
+ * Copyright (c) 2024-2025 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -85,24 +85,27 @@ export function generate<T>(
     visitorFactory: (sourceFile: ts.SourceFile, program: ts.Program, compilerHost: ts.CompilerHost) => GenerateVisitor<T>,
     options: GenerateOptions<T>
 ): void {
-    if (options.enableLog) {
-        console.log("Starting generation process...")
+    const reportProcess = (...message: any[]) => {
+        if (options.enableLog) {
+            console.log(message)
+        }
     }
+
+    reportProcess("Starting generation process...")
 
     if (inputFiles.length === 0) {
         console.error("Error: No input files specified.")
         process.exit(1)
     }
 
-    let input: Set<string> = new Set<string>
-    let auxInput: Set<string> = new Set<string>
+    let input: Set<string> = new Set<string>()
+    let auxInput: Set<string> = new Set<string>()
 
     {
         const resolveOne = (file: string, tag: string) => {
             const fullPath = path.resolve(file)
             if (fs.existsSync(fullPath)) {
-                if (options.enableLog)
-                    console.log(`Including ${tag} file: ${fullPath}`)
+                reportProcess(`Including ${tag} file: ${fullPath}`)
                 return fullPath
             } else
                 console.warn(`Warning: ${tag} file does not exist: ${fullPath}`)
@@ -190,9 +193,7 @@ export function generate<T>(
         compilerHost
     )
 
-    if (options.enableLog) {
-        console.log("Initialized TypeScript program with input files:", input)
-    }
+    reportProcess("Initialized TypeScript program with input files:", input)
 
     if (outputDir && !fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true })
 
@@ -205,14 +206,13 @@ export function generate<T>(
         result: T,
         isAux: boolean
     }
+    // 1) main dts=>idl
     const dtsFileName2Visitor: { [key in string]: VisitorStaff } = {}
     for (const sourceFile of program.getSourceFiles()) {
         const resolvedSourceFileName = path.resolve(sourceFile.fileName)
 
         const isAux = !input.has(resolvedSourceFileName)
-        if (options.enableLog) {
-            console.log(`Processing ${isAux?"aux ":""}file: ${resolvedSourceFileName}`)
-        }
+        reportProcess(`Processing ${isAux ? "aux " : ""}file: ${resolvedSourceFileName}`)
 
         // Walk the tree to search for classes
         const visitor = visitorFactory(sourceFile, program, compilerHost)
@@ -224,23 +224,23 @@ export function generate<T>(
             isAux: isAux
         }
     }
-
+    // 2) second phase
     for (const resolvedSourceFileName in dtsFileName2Visitor) {
         const visitorStaff = dtsFileName2Visitor[resolvedSourceFileName]
         if (visitorStaff.visitor.visitPhase2)
             visitorStaff.result = visitorStaff.visitor.visitPhase2(dtsFileName2Visitor)
     }
-
+    // 3) add to library
     for (const resolvedSourceFileName in dtsFileName2Visitor) {
         const visitorStaff = dtsFileName2Visitor[resolvedSourceFileName]
         options.onSingleFile?.(visitorStaff.result, outputDir, visitorStaff.tsSourceFile, visitorStaff.isAux)
     }
 
+    // 4) IdlPeerProcessor::process()
+    // 4.1) generateTarget
     options.onEnd?.(outputDir)
 
-    if (options.enableLog) {
-        console.log("Generation completed.")
-    }
+    reportProcess("Generation completed.")
 }
 
 export const PACKAGE_IDLIZE_INTERNAL = "idlize.internal"

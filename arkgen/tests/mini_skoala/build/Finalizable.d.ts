@@ -14,9 +14,7 @@
  */
 
 import { pointer, nullptr } from "./utils"
-import { nativeModule } from "@koalaui/arkoala";
 import { Thunk } from "./Finalization";
-import { isNullPtr } from "@koalaui/interop"
 
 export abstract class FinalizableBase {
     createHandle(): string | undefined
@@ -31,7 +29,7 @@ export class Finalizable extends FinalizableBase {
 }
 
 export abstract class NativeThunk implements Thunk {
-    ptr:pointer
+    ptr: pointer
     finalizer: pointer
     name?: string
     clean(): void

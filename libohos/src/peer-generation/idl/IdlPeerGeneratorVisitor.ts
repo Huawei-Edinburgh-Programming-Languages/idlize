@@ -29,7 +29,8 @@ import {
     getSuperType,
     PeerMethodSignature,
     PeerMethodArg,
-    createOutArgConvertor
+    createOutArgConvertor,
+    LibraryInterface
 } from '@idlizer/core'
 import { ArgConvertor, PeerLibrary } from "@idlizer/core"
 import { peerGeneratorConfiguration} from "../../DefaultConfiguration";
@@ -54,7 +55,7 @@ class EmptyDependencyFilter implements DependencyFilter {
 
 class SyntheticDependencyConfigurableFilter implements DependencyFilter {
     constructor(
-        protected readonly library: PeerLibrary,
+        protected readonly library: LibraryInterface,
         private readonly config: {
             skipAnonymousInterfaces?: boolean,
             skipCallbacks?: boolean,
@@ -98,7 +99,7 @@ export class IdlPeerProcessor {
     private readonly dependencyFilter: DependencyFilter
 
     constructor(
-        private readonly library: PeerLibrary,
+        private readonly library: LibraryInterface,
     ) {
         this.dependencyFilter = createDependencyFilter(this.library)
     }
@@ -348,7 +349,7 @@ export class IdlPeerProcessor {
     }
 }
 
-export function createDependencyFilter(library: PeerLibrary): DependencyFilter {
+export function createDependencyFilter(library: LibraryInterface): DependencyFilter {
     switch (library.language) {
         case Language.TS:
             return new SyntheticDependencyConfigurableFilter(library,
@@ -369,27 +370,6 @@ export function createDependencyFilter(library: PeerLibrary): DependencyFilter {
     }
     // TODO: support other languages
     return new EmptyDependencyFilter()
-}
-
-export function isCommonMethodOrSubclass(library: PeerLibrary, decl?: idl.IDLEntry): boolean {
-    if (!decl || !idl.isInterface(decl))
-        return false
-    let isSubclass = isRoot(decl.name)
-    const superDecl = getSuper(decl, library)
-    if (superDecl) {
-        isSubclass ||= isCommonMethodOrSubclass(library, superDecl)
-    }
-    return isSubclass
-}
-
-export function isSourceDecl(node: idl.IDLEntry): boolean {
-    // if (isNamespace(node.parent))
-    //     return this.isSourceDecl(node.parent.parent)
-    // if (isTypeParameterType(node))
-    //     return false
-    // if (!ts.isSourceFile(node.parent))
-    //     throw 'Expected declaration to be at file root'
-    return !node.fileName?.endsWith('stdlib.d.ts')
 }
 
 function generateSignature(

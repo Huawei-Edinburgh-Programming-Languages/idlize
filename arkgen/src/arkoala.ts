@@ -14,7 +14,7 @@
  */
 import * as fs from "fs"
 import * as path from "path"
-import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration, CppConvertor, PeerMethod, MethodModifier, NativeModuleType, LayoutManager, ETSLanguageWriter } from '@idlizer/core'
+import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration, CppConvertor, PeerMethod, MethodModifier, NativeModuleType, LayoutManager, ETSLanguageWriter, LibraryInterface } from '@idlizer/core'
 import {
     dummyImplementations, gniFile, libraryCcDeclaration,
     makeArkuiModule, makeCallbacksKinds,
@@ -78,17 +78,17 @@ export function generateLibaceFromIdl(config: {
     apiVersion: number,
     commentedCode: boolean,
     outDir: string
-}, peerLibrary: PeerLibrary) {
+}, peerLibrary: LibraryInterface) {
     peerLibrary.name = 'libace'
     const libace = config.libaceDestination ?
         new LibaceInstall(config.libaceDestination, false) :
         new LibaceInstall(config.outDir, true)
 
     const gniSources = printGniSources(peerLibrary)
-    fs.writeFileSync(libace.gniComponents, gniFile(gniSources))
+    fs.writeFileSync(libace.gniComponents, gniFile(gniSources)) // node_interface.gni
 
     // printDelegatesAsMultipleFiles(peerLibrary, libace, { namespace: "OHOS::Ace::NG::GeneratedModifier" })
-    printRealModifiersAsMultipleFiles(peerLibrary, libace, {
+    printRealModifiersAsMultipleFiles(peerLibrary, libace, { // ./implementation/
         namespaces: {
             base: "OHOS::Ace::NG",
             generated: "OHOS::Ace::NG::GeneratedModifier"
@@ -101,15 +101,15 @@ export function generateLibaceFromIdl(config: {
 
     const converterNamespace = "OHOS::Ace::NG::Converter"
     const { api, converterHeader } = printUserConverter(libace.userConverterHeader, converterNamespace, config.apiVersion, peerLibrary)
-    fs.writeFileSync(libace.generatedArkoalaApi, api)
-    fs.writeFileSync(libace.userConverterHeader, converterHeader)
+    fs.writeFileSync(libace.generatedArkoalaApi, api) // arkoala_api_generated.h
+    fs.writeFileSync(libace.userConverterHeader, converterHeader) // converter_generated.h
 
     if (!config.libaceDestination) {
         const mesonBuild = printMesonBuild(peerLibrary)
         fs.writeFileSync(libace.mesonBuild, mesonBuildFile(mesonBuild))
     }
 
-    copyToLibace(fs.existsSync(Subset) ? Subset : External, libace)
+    copyToLibace(fs.existsSync(Subset) ? Subset : External, libace) // arkoala-macros.h
 }
 
 function copyArkoalaFiles(config: {
@@ -164,7 +164,7 @@ export function generateArkoalaFromIdl(config: {
     verbose: boolean,
     useTypeChecker: boolean,
 },
-    peerLibrary: PeerLibrary) {
+    peerLibrary: LibraryInterface) {
     const arkoala = config.arkoalaDestination ?
         createArkoalaInstall({ outDir: config.arkoalaDestination, lang: config.lang, test: false, useMemoM3: peerLibrary.useMemoM3}) :
         createArkoalaInstall({ outDir: config.outDir,             lang: config.lang, test: true,  useMemoM3: peerLibrary.useMemoM3 })
@@ -513,7 +513,7 @@ function copyToLibace(from: string, libace: LibaceInstall) {
 }
 
 class ArkoalaMultiFileModifiersVisitor extends MultiFileModifiersVisitor {
-    emitRealSync(library: PeerLibrary, libace: LibaceInstall, options: ModifierFileOptions): void {
+    emitRealSync(library: LibraryInterface, libace: LibaceInstall, options: ModifierFileOptions): void {
         const getterDeclarations = library.createLanguageWriter(Language.CPP)
 
         for (const [slug, state] of this.stateByFile) {
@@ -594,14 +594,14 @@ function printModifiersCommonImplFile(filePath: string, content: LanguageWriter,
     writer.printTo(filePath)
 }
 
-function printRealModifiersAsMultipleFiles(library: PeerLibrary, libace: LibaceInstall, options: ModifierFileOptions) {
+function printRealModifiersAsMultipleFiles(library: LibraryInterface, libace: LibaceInstall, options: ModifierFileOptions) {
     const visitor = new ArkoalaMultiFileModifiersVisitor(library)
     visitor.commentedCode = options.commentedCode
     visitor.printRealAndDummyModifiers()
     visitor.emitRealSync(library, libace, options)
 }
 
-function printUserConverter(headerPath: string, namespace: string, apiVersion: number, peerLibrary: PeerLibrary): { api: string, converterHeader: string } {
+function printUserConverter(headerPath: string, namespace: string, apiVersion: number, peerLibrary: LibraryInterface): { api: string, converterHeader: string } {
     const apiHeader = new IndentedPrinter()
     const modifierList = new IndentedPrinter()
     const accessorList = new IndentedPrinter()
@@ -620,7 +620,7 @@ function printUserConverter(headerPath: string, namespace: string, apiVersion: n
     return { api, converterHeader }
 }
 
-function printSerializers(apiVersion: number, peerLibrary: PeerLibrary): { api: string, serializers: string } {
+function printSerializers(apiVersion: number, peerLibrary: LibraryInterface): { api: string, serializers: string } {
     const apiHeader = new IndentedPrinter()
     const modifierList = new IndentedPrinter()
     const accessorList = new IndentedPrinter()
@@ -638,7 +638,7 @@ function printSerializers(apiVersion: number, peerLibrary: PeerLibrary): { api: 
     return { api, serializers }
 }
 
-function makeConverterHeader(path: string, namespace: string, library: PeerLibrary): LanguageWriter {
+function makeConverterHeader(path: string, namespace: string, library: LibraryInterface): LanguageWriter {
     const converter = new CppLanguageWriter(new IndentedPrinter(), library,
         new CppConvertor(library), ArkPrimitiveTypesInstance)
     converter.writeLines(cStyleCopyright)
@@ -672,7 +672,7 @@ function makeConverterHeader(path: string, namespace: string, library: PeerLibra
     return converter
 }
 
-function makeCSerializer(library: PeerLibrary, structs: LanguageWriter, typedefs: IndentedPrinter): string {
+function makeCSerializer(library: LibraryInterface, structs: LanguageWriter, typedefs: IndentedPrinter): string {
     return `
 #include "SerializerBase.h"
 #include "DeserializerBase.h"
@@ -684,9 +684,16 @@ ${makeCSerializers(library, structs, typedefs)}
 `
 }
 
-function makeAPI(apiVersion: number,
-    headers: PrinterLike, modifiers: PrinterLike, accessors: PrinterLike, events: PrinterLike,
-    nodeTypes: PrinterLike, structs: PrinterLike, typedefs: PrinterLike): string {
+function makeAPI(
+    apiVersion: number,
+    headers: PrinterLike, // Modifiers interface declarations
+    modifiers: PrinterLike, // modifiers pointers
+    accessors: PrinterLike, // accessors pointers
+    events: PrinterLike,
+    nodeTypes: PrinterLike, // for components types enum
+    structs: PrinterLike, // typedef struct
+    typedefs: PrinterLike
+): string {
     return `
 ${readTemplate('arkoala_api_prologue.h')
             .replaceAll(`%ARKUI_FULL_API_VERSION_VALUE%`, apiVersion.toString())

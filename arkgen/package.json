@@ -72,7 +72,7 @@
     "dts2skoala": "npm run compile && node . --dts2skoala --input-dir ./tests/mini_skoala/build/  --options-file ./generation-config/skoala-generator.json",
     "idl2peer:target": "node --stack_trace_limit=200 . --api-version 99 --dts2peer --base-dir ./,../sdk-patched/api,../sdk-patched/kits,../sdk-patched/arkts --input-dir ../sdk-patched/api/@internal/component/ets/,../sdk-patched/api/global --output-dir ./out/ts-peers/generated",
     "idl2peer:arkoala": "npm run idl2peer:target -- --generator-target arkoala --arkoala-destination out/ts-peers/generated/sig",
-    "idl2peer:libace": "npm run idl2peer:target -- --generator-target libace --libace-destination out/ts-peers/generated/libace",
+    "idl2peer:libace": "npm run compile && npm run idl2peer:target -- --generator-target libace --libace-destination out/ts-peers/generated/libace",
     "idl2peer:compile": "npm run compile && npm run idl2peer:libace && npm run idl2peer:arkoala && cd out/ts-peers && tsc -p . && rollup -c",
     "tracker": "npm run compile && node . --dts2peer --base-dir ./,../sdk-patched/api,../sdk-patched/kits,../sdk-patched/arkts --input-dir ../sdk-patched/api/@internal/component/ets/,../sdk-patched/api/global --output-dir ../doc --generator-target tracker --tracker-status ../doc/COMPONENTS_STATUS.md",
     "tracker:ets": "npm run compile && node . --idl2peer --reference-names generation-config/references/ets-sdk.refs.json --no-type-checker --input-files $(find ../etsgen/out/idl -type f | tr '\\n' ' ') --output-dir ../doc --generator-target tracker --tracker-status ../doc/COMPONENTS_STATUS.md",

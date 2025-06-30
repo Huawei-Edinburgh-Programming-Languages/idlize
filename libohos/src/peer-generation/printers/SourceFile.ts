@@ -16,12 +16,12 @@
 import { cStyleCopyright, makeIncludeGuardDefine } from "../FileGenerators"
 import { ImportsCollector } from "../ImportsCollector"
 import { CppLanguageWriter } from "../LanguageWriters"
-import { Language, LanguageWriter, CJLanguageWriter, ETSLanguageWriter, TSLanguageWriter, PeerLibrary } from "@idlizer/core"
+import { Language, LanguageWriter, CJLanguageWriter, ETSLanguageWriter, TSLanguageWriter, PeerLibrary, LibraryInterface } from "@idlizer/core"
 
 export abstract class SourceFile {
     public readonly content: LanguageWriter
 
-    public static make(name: string, language: Language, resolver: PeerLibrary): SourceFile {
+    public static make(name: string, language: Language, resolver: LibraryInterface): SourceFile {
         if (language === Language.CPP) {
             return new CppSourceFile(name, resolver)
         } else if (language === Language.TS) {
@@ -44,7 +44,7 @@ export abstract class SourceFile {
     constructor (
         public readonly name: string,
         public readonly language: Language,
-        protected readonly library: PeerLibrary // TODO try to avoid this dependency
+        protected readonly library: LibraryInterface // TODO try to avoid this dependency
     ) {
         this.content = library.createLanguageWriter(language)
     }
@@ -69,7 +69,7 @@ export class CppSourceFile extends SourceFile {
     public readonly includes: Set<string> = new Set();
     public readonly globalIncludes: Set<string> = new Set();
 
-    constructor(name: string, library: PeerLibrary) {
+    constructor(name: string, library: LibraryInterface) {
         super(name, Language.CPP, library)
     }
 
@@ -159,7 +159,7 @@ abstract class TsLikeSourceFile extends SourceFile {
 export class TsSourceFile extends TsLikeSourceFile {
     declare public readonly content: TSLanguageWriter
 
-    constructor(name: string, library: PeerLibrary) {
+    constructor(name: string, library: LibraryInterface) {
         super(name, Language.TS, library)
     }
 
@@ -171,7 +171,7 @@ export class TsSourceFile extends TsLikeSourceFile {
 export class ArkTSSourceFile extends TsLikeSourceFile {
     declare public readonly content: ETSLanguageWriter
 
-    constructor(name: string, library: PeerLibrary) {
+    constructor(name: string, library: LibraryInterface) {
         super(name, Language.ARKTS, library)
     }
 
@@ -183,7 +183,7 @@ export class ArkTSSourceFile extends TsLikeSourceFile {
 export class CJSourceFile extends SourceFile {
     declare public readonly content: CJLanguageWriter
 
-    constructor(name: string, library: PeerLibrary) {
+    constructor(name: string, library: LibraryInterface) {
         super(name, Language.CJ, library)
     }
 
@@ -209,7 +209,7 @@ export class JavaSourceFile extends SourceFile {
     declare public readonly content: CJLanguageWriter
     public packageName: string = "org.koalaui.arkoala";
 
-    constructor(name: string, library: PeerLibrary) {
+    constructor(name: string, library: LibraryInterface) {
         super(name, Language.JAVA, library)
     }
 

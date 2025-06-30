@@ -15,7 +15,6 @@
 
 import { Finalizable } from "./Finalizable"
 import { pointer, KNativePointer, KPointer } from "./utils"
-import { nativeModule } from "@koalaui/arkoala"
 
 declare class Bitmap extends Finalizable {
     constructor(ptr: pointer)

@@ -50,7 +50,7 @@ export class SurfaceProps {
         this.flags = flags
     }
 
-    public static Default: Readonly<SurfaceProps> = new SurfaceProps(PixelGeometry.RGB_V, SurfacePropsFlags.DynamicMSAA)
+    public static readonly Default: SurfaceProps = new SurfaceProps(PixelGeometry.RGB_V, SurfacePropsFlags.DynamicMSAA)
 
     public get useDeviceIndependentFonts(): boolean {
         return ((this.flags & SurfacePropsFlags.UseDeviceIndependentFonts) == SurfacePropsFlags.UseDeviceIndependentFonts)

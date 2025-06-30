@@ -32,6 +32,7 @@ import { createDestroyPeerMethod, MaterializedClass, MaterializedMethod, Indente
     PeerMethodSignature,
     capitalize,
     qualifiedName,
+    LibraryInterface
 } from '@idlizer/core'
 import { CppLanguageWriter, LanguageStatement, printMethodDeclaration } from "../LanguageWriters";
 import { DebugUtils, IDLImport, IDLAnyType, IDLBooleanType, IDLBufferType, IDLContainerType, IDLContainerUtils, IDLCustomObjectType, IDLFunctionType, IDLI32Type, IDLNumberType, IDLOptionalType, IDLPointerType, IDLPrimitiveType, IDLReferenceType, IDLStringType, IDLThisType, IDLType, IDLTypeParameterType, IDLUndefinedType, IDLUnionType, IDLUnknownType, isInterface, isOptionalType, isReferenceType, isTypeParameterType, isUnionType, getFQName, IDLObjectType } from '@idlizer/core/idl'
@@ -152,7 +153,7 @@ export class ModifierVisitor {
     commentedCode = true
 
     constructor(
-        protected library: PeerLibrary,
+        protected library: LibraryInterface,
         private isDummy: boolean = false
     ) { }
 
@@ -397,7 +398,7 @@ class AccessorVisitor extends ModifierVisitor {
     accessors = this.library.createLanguageWriter(Language.CPP)
     accessorList = this.library.createLanguageWriter(Language.CPP)
 
-    constructor(library: PeerLibrary) {
+    constructor(library: LibraryInterface) {
         super(library)
     }
 
@@ -526,7 +527,7 @@ export class MultiFileModifiersVisitor extends AccessorVisitor {
     }
 }
 
-export function printRealAndDummyModifiers(peerLibrary: PeerLibrary, isDummy: boolean = false): {dummy: LanguageWriter, real: LanguageWriter} {
+export function printRealAndDummyModifiers(peerLibrary: LibraryInterface, isDummy: boolean = false): {dummy: LanguageWriter, real: LanguageWriter} {
     const visitor = new ModifierVisitor(peerLibrary, isDummy)
     visitor.printRealAndDummyModifiers()
     const dummy =
@@ -536,7 +537,7 @@ export function printRealAndDummyModifiers(peerLibrary: PeerLibrary, isDummy: bo
     return {dummy, real}
 }
 
-export function printRealAndDummyAccessors(peerLibrary: PeerLibrary): {dummy: LanguageWriter, real: LanguageWriter} {
+export function printRealAndDummyAccessors(peerLibrary: LibraryInterface): {dummy: LanguageWriter, real: LanguageWriter} {
     const visitor = new AccessorVisitor(peerLibrary)
     peerLibrary.orderedMaterialized.forEach(c => visitor.printRealAndDummyAccessor(c))
     const globals = createGlobalScopeLegacy(peerLibrary)

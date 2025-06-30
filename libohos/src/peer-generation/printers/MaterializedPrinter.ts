@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { capitalize, stringOrNone, Language, generifiedTypeName, sanitizeGenerics, ArgumentModifier, generatorConfiguration, getSuper, ReferenceResolver, MaterializedMethod, DelegationType, LanguageExpression, DelegationCall, qualifiedName, PeerMethodSignature } from '@idlizer/core'
+import { capitalize, stringOrNone, Language, generifiedTypeName, sanitizeGenerics, ArgumentModifier, generatorConfiguration, getSuper, ReferenceResolver, MaterializedMethod, DelegationType, LanguageExpression, DelegationCall, LibraryInterface, qualifiedName, PeerMethodSignature } from '@idlizer/core'
 import { writePeerMethod } from "./PeersPrinter"
 import {
     FieldModifier,
@@ -60,7 +60,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
     private maxCtorParams: number = 0
 
     constructor(
-        protected readonly library: PeerLibrary,
+        protected readonly library: LibraryInterface,
         protected readonly clazz: MaterializedClass,
         protected readonly dumpSerialized: boolean
     ) {
@@ -694,7 +694,7 @@ class MaterializedVisitor implements PrinterClass {
     readonly materialized: Map<TargetFile, string[]> = new Map()
 
     constructor(
-        private readonly library: PeerLibrary,
+        private readonly library: LibraryInterface,
         private readonly dumpSerialized: boolean,
     ) { }
 
@@ -749,7 +749,7 @@ class MaterializedVisitor implements PrinterClass {
 }
 
 export function createMaterializedPrinter(dumpSerialized: boolean) {
-    return (peerLibrary: PeerLibrary) => LanguageWriter.relativeReferences(true, () =>
+    return (peerLibrary: LibraryInterface) => LanguageWriter.relativeReferences(true, () =>
         new MaterializedVisitor(peerLibrary, dumpSerialized).print())
 }
 

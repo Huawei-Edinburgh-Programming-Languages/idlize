@@ -1,3 +1,8 @@
 {
-    "TypePrefix": ""
+    "TypePrefix": "",
+    "rootComponents": [
+        "Finalizable",
+        "FinalizableBase",
+        "RefCounted"
+    ]
 }

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { IndentedPrinter, PeerClass, MaterializedClass, PeerLibrary } from '@idlizer/core'
+import { IndentedPrinter, PeerClass, MaterializedClass, PeerLibrary, LibraryInterface } from '@idlizer/core'
 import { makeFileNameFromClassName } from "../FileGenerators"
 import { collectPeersForFile } from '../PeersCollector'
 
@@ -21,7 +21,7 @@ export class GniVisitor {
     gni = new IndentedPrinter()
 
     constructor(
-        protected library: PeerLibrary
+        protected library: LibraryInterface
     ) { }
 
     printGniEntries(clazz: PeerClass): void {
@@ -59,7 +59,7 @@ export class GniVisitor {
     }
 }
 
-export function printGniSources(peerLibrary: PeerLibrary): string {
+export function printGniSources(peerLibrary: LibraryInterface): string {
     const visitor = new GniVisitor(peerLibrary)
     visitor.printGniSource()
     return visitor.gni.getOutput().join("\n")

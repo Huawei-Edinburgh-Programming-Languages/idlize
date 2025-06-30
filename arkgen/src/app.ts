@@ -1,6 +1,22 @@
+/*
+ * Copyright (c) 2025 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { program } from "commander"
 import * as fs from "fs"
 import * as path from "path"
+import * as ts from "typescript"
 import {
     generate,
     defaultCompilerOptions,
@@ -21,12 +37,13 @@ import {
     isSyntheticEntry,
     linkParentBack,
     transformMethodsAsync2ReturnPromise,
-    linearizeNamespaceMembers
+    linearizeNamespaceMembers,
+    toIDLString
 } from "@idlizer/core/idl"
 import { IDLVisitor, loadPeerConfiguration,
     generateTracker, IdlPeerProcessor, loadPlugin,
-    SkoalaDeserializerPrinter, IdlSkoalaLibrary, IldSkoalaOutFile, generateIdlSkoala,
-    IdlWrapperProcessor, fillSyntheticDeclarations,
+    IdlSkoalaLibrary,
+    fillSyntheticDeclarations,
     formatInputPaths,
     validatePaths,
     libohosPredefinedFiles,
@@ -132,8 +149,7 @@ export function arkgen(argv:string[]) {
             fs.mkdirSync(outputDir, { recursive: true })
         }
 
-        const generatedIDLMap = new Map<string, IDLEntry[]>()
-        const skoalaLibrary = new IdlSkoalaLibrary()
+        const skoalaLibrary = new IdlSkoalaLibrary(Language.TS, NativeModule.Interop)
 
         const { baseDirs, inputDirs, auxInputDirs, inputFiles, auxInputFiles } = formatInputPaths(options)
         validatePaths(baseDirs, "dir")
@@ -142,12 +158,20 @@ export function arkgen(argv:string[]) {
         validatePaths(inputFiles, "file")
         validatePaths(auxInputFiles, "file")
 
-        const dtsInputFiles = scanInputDirs(inputDirs, '.d.ts').concat(inputFiles)
-        const dtsAuxInputFiles = auxInputFiles
+        const allInput = scanInputDirs(inputDirs)
+            .concat(inputFiles)
+            .concat(libohosPredefinedFiles())
+        const dtsInputFiles = allInput.filter(it => it.endsWith('.d.ts'))
+        const idlInputFiles = allInput.filter(it => it.endsWith('.idl'))
+        const dtsAuxInputFiles = auxInputFiles.filter(it => it.endsWith('.d.ts'))
 
-        if (dtsInputFiles.length === 0) {
-            console.error("Error: No input directory or files provided.")
-            process.exit(1)
+        {
+            const pushOne = (idlFilename: string, resultFilesArray: IDLFile[]) => {
+                idlFilename = path.resolve(idlFilename)
+                const [file] = toIDLFile(idlFilename)
+                resultFilesArray.push(file)
+            }
+            idlInputFiles.forEach(idlFilename => pushOne(idlFilename, skoalaLibrary.files))
         }
 
         generate(
@@ -159,36 +183,36 @@ export function arkgen(argv:string[]) {
             path.resolve(__dirname, "..", "stdlib.d.ts"),
             (sourceFile, program, compilerHost) => new IDLVisitor(baseDirs, sourceFile, program, compilerHost, options, skoalaLibrary),
             {
-                compilerOptions: {
-                    ...defaultCompilerOptions,
-                    paths: {
-                        "@koalaui/common": ["../external/incremental/common/src"],
-                        "@koalaui/compat": ["../external/incremental/compat/src/typescript"],
-                        "@koalaui/interop": ["../external/interop/src/interop"],
-                        "@koalaui/arkoala": ["../external/arkoala-arkts/framework/src"],
-                    },
-                },
-                onSingleFile: (file: IDLFile, outputDirectory, sourceFile) => {
-                    const fileName = path.basename(sourceFile.fileName, ".d.ts")
+                compilerOptions: defaultCompilerOptions,
+                onSingleFile: (file: IDLFile, outputDirectory, sourceFile, isAux) => {
+                    linkParentBack(file)
 
-                    if (!generatedIDLMap.has(fileName)) {
-                        generatedIDLMap.set(fileName, [])
+                    if (!isAux) {
+                        skoalaLibrary.files.push(file)
+                    } else {
+                        skoalaLibrary.auxFiles.push(file)
                     }
 
-                    generatedIDLMap.get(fileName)?.push(...file.entries)
-                    skoalaLibrary.files.push(file)
-                    skoalaLibrary.outFiles.push(new IldSkoalaOutFile(file))
+                    saveIDL(file, baseDirs, path.join(outputDirectory, "./idl/"), sourceFile)
                 },
                 onEnd: (outDir) => {
-                    const wrapperProcessor = new IdlWrapperProcessor(skoalaLibrary)
-                    wrapperProcessor.process()
-                    generateIdlSkoala(outDir, skoalaLibrary, options)
+                    fillSyntheticDeclarations(skoalaLibrary)
 
-                    try {
-                        SkoalaDeserializerPrinter.generateDeserializer(outputDir, generatedIDLMap)
-                    } catch (error) {
-                        console.error("Error during deserializer generation:", error)
-                    }
+                    const peerProcessor = new IdlPeerProcessor(skoalaLibrary)
+                    peerProcessor.process()
+
+                    generateArkoalaFromIdl({
+                        outDir: outDir,
+                        arkoalaDestination: options.arkoalaDestination,
+                        nativeBridgeFile: options.nativeBridgePath,
+                        apiVersion: apiVersion,
+                        verbose: options.verbose ?? false,
+                        onlyIntegrated: options.onlyIntegrated ?? false,
+                        dumpSerialized: options.dumpSerialized ?? false,
+                        callLog: options.callLog ?? false,
+                        lang: Language.TS,
+                        useTypeChecker: options.typeChecker ?? true,
+                    }, skoalaLibrary)
 
                     console.log("All files processed.")
                 }
@@ -356,6 +380,31 @@ export function arkgen(argv:string[]) {
                 })
                 .catch(error => console.error(`Plugin ${options.plugin} not found: ${error}`))
         }
+    }
+
+    function saveIDL(file: IDLFile, baseDirs: string[], outputDir: string, sourceFile: ts.SourceFile) {
+        let fileName = sourceFile.fileName
+        baseDirs.forEach(dir => {
+            const nextFileName = path.relative(path.resolve(dir), sourceFile.fileName)
+            if (nextFileName.length < fileName.length) {
+                fileName = nextFileName
+            }
+        })
+
+        const basename = fileName.replace(/^\.*(\/|\\)/, '').replaceAll(path.sep, '.')
+        const outFile = path.join(
+            outputDir,
+            basename.replace(".d.ts", ".idl")
+        )
+
+        const generated = toIDLString(file, {
+            disableEnumInitializers: options.disableEnumInitializers ?? false
+        })
+
+        if (!fs.existsSync(path.dirname(outFile))) {
+            fs.mkdirSync(path.dirname(outFile), { recursive: true })
+        }
+        fs.writeFileSync(outFile, generated)
     }
 }
 
