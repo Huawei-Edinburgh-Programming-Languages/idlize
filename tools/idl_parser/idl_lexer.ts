@@ -35,25 +35,39 @@ export enum Token {
   tNumber = 29,
   tString = 30,
   tBoolean = 31,
-  tEq = 32,        // =
-  tLBracket = 33,  // (
-  tRBracket = 34,  // )
-  tLBrace = 35,    // {
-  tRBrace = 36,    // }
-  tLAngle = 37,    // <
-  tRAngle = 38,    // >
+  tEq = 32,           // =
+  tLBracket = 33,     // (
+  tRBracket = 34,     // )
+  tLBrace = 35,       // {
+  tRBrace = 36,       // }
+  tLAngle = 37,       // <
+  tRAngle = 38,       // >
   tLSqrBracket = 39,  // [
   tRSqrBracket = 40,  // ]
-  tColon = 41,     // :
-  tSemicolon = 42, // ;
-  tDot = 43,       // .
-  tComma = 44,     // ,
-  tPlus = 45,      // +
-  tMinus = 46,     // -
-  tAsterisk = 47,  // *
-  tEllipsis = 48,  // ...
-  tQuestion = 49,  // ?
-  tId = 99,
+  tColon = 41,        // :
+  tSemicolon = 42,    // ;
+  tDot = 43,          // .
+  tComma = 44,        // ,
+  tPlus = 45,         // +
+  tMinus = 46,        // -
+  tAsterisk = 47,     // *
+  tEllipsis = 48,     // ...
+  tQuestion = 49,     // ?
+
+  tSequence = 50,
+
+  tShort = 60,        // short
+  tLong = 61,         // long
+  tUnsigned = 62,     // unsigned
+
+  tFloat = 70,        // float
+  tDouble = 71,       // double
+
+  tByteString = 80,   // strings
+  tDOMString = 81,
+  tUSVString = 82,
+
+  tId = 99,           // identifier
   tError = 100,
   tEnd = 101
 };
@@ -86,6 +100,10 @@ const g_keywords = new Map<string, Token>([
   ["stringifier", Token.tStringifier],
   ["typedef", Token.tTypedef],
   ["unrestricted", Token.tUnrestricted],
+
+  ["short", Token.tShort],
+  ["long", Token.tLong],
+  ["unsigned", Token.tUnsigned],
 ]);
 
 let g_lastId = 0;

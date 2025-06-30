@@ -271,7 +271,7 @@ function CallbackInterfaceMember() {
 }
 
 function Const() {
-  Match("const"); ConstType(); Match(lex.Token.tId); Match("="); ConstValue(); Match(";");
+  Match("const"); ConstType(); Match(lex.Token.tId); Match(lex.Token.tEq); ConstValue(); Match(";");
 }
 
 function ConstValue() {
@@ -363,7 +363,7 @@ function Special() {
 }
 
 function OperationRest() {
-  OptionalOperationName(); Match("("); ArgumentList(); Match(")"); Match(";");
+  OptionalOperationName(); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket); Match(";");
 }
 
 function OptionalOperationName() {
@@ -386,7 +386,7 @@ function ArgumentList() {
 }
 
 function Arguments() {
-  Match(","); Argument(); Arguments();
+  Match(lex.Token.tComma); Argument(); Arguments();
   // ε
 }
 
@@ -416,7 +416,7 @@ function Ellipsis() {
 }
 
 function Constructor() {
-  Match("constructor"); Match("("); ArgumentList(); Match(")"); Match(";");
+  Match("constructor"); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket); Match(";");
 }
 
 function Stringifier() {
@@ -438,20 +438,20 @@ function StaticMemberRest() {
 }
 
 function Iterable() {
-  Match("iterable"); Match("<"); TypeWithExtendedAttributes(); OptionalType(); Match(">"); Match(";");
+  Match("iterable"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); OptionalType(); Match(lex.Token.tRAngle); Match(";");
 }
 
 function OptionalType() {
-  Match(","); TypeWithExtendedAttributes();
+  Match(lex.Token.tComma); TypeWithExtendedAttributes();
   // ε
 }
 
 function AsyncIterable() {
-  Match("async"); Match("iterable"); Match("<"); TypeWithExtendedAttributes(); OptionalType(); Match(">"); OptionalArgumentList(); Match(";");
+  Match("async"); Match("iterable"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); OptionalType(); Match(lex.Token.tRAngle); OptionalArgumentList(); Match(";");
 }
 
 function OptionalArgumentList() {
-  Match("("); ArgumentList(); Match(")");
+  Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket);
   // ε
 }
 
@@ -460,7 +460,7 @@ function ReadWriteMaplike() {
 }
 
 function MaplikeRest() {
-  Match("maplike"); Match("<"); TypeWithExtendedAttributes(); Match(","); TypeWithExtendedAttributes(); Match(">"); Match(";");
+  Match("maplike"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tComma); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Match(";");
 }
 
 function ReadWriteSetlike() {
@@ -468,7 +468,7 @@ function ReadWriteSetlike() {
 }
 
 function SetlikeRest() {
-  Match("setlike"); Match("<"); TypeWithExtendedAttributes(); Match(">"); Match(";");
+  Match("setlike"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Match(";");
 }
 
 function Namespace() {
@@ -513,7 +513,7 @@ function PartialDictionary() {
 }
 
 function Default() {
-  Match("="); DefaultValue();
+  Match(lex.Token.tEq); DefaultValue();
   // ε
 }
 
@@ -526,7 +526,7 @@ function EnumValueList() {
 }
 
 function EnumValueListComma() {
-  Match(","); EnumValueListString();
+  Match(lex.Token.tComma); EnumValueListString();
   // ε
 }
 
@@ -536,7 +536,7 @@ function EnumValueListString() {
 }
 
 function CallbackRest() {
-  Match(lex.Token.tId); Match("="); Type(); Match("("); ArgumentList(); Match(")"); Match(";");
+  Match(lex.Token.tId); Match(lex.Token.tEq); Type(); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket); Match(";");
 }
 
 function Typedef() {
@@ -561,7 +561,7 @@ function SingleType() {
 }
 
 function UnionType() {
-  Match("("); UnionMemberType(); Match("or"); UnionMemberType(); UnionMemberTypes(); Match(")");
+  Match(lex.Token.tLBracket); UnionMemberType(); Match("or"); UnionMemberType(); UnionMemberTypes(); Match(lex.Token.tRBracket);
 }
 
 function UnionMemberType() {
@@ -580,13 +580,13 @@ function DistinguishableType() {
   PrimitiveType(); Null();
   StringType(); Null();
   Match(lex.Token.tId); Null();
-  Match("sequence"); Match("<"); TypeWithExtendedAttributes(); Match(">"); Null();
-  Match("async"); Match("iterable"); Match("<"); TypeWithExtendedAttributes(); Match(">"); Null();
+  Match(lex.Token.tSequence); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
+  Match(lex.Token.tAsync); Match("iterable"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
   Match("object"); Null();
   Match("symbol"); Null();
   BufferRelatedType(); Null();
-  Match("FrozenArray"); Match("<"); TypeWithExtendedAttributes(); Match(">"); Null();
-  Match("ObservableArray"); Match("<"); TypeWithExtendedAttributes(); Match(">"); Null();
+  Match("FrozenArray"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
+  Match("ObservableArray"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
   RecordType(); Null();
   Match("undefined"); Null();
 }
@@ -601,47 +601,68 @@ function PrimitiveType() {
 }
 
 function UnrestrictedFloatType() {
-  Match("unrestricted"); FloatType();
-  FloatType();
+  if (g_lookahead == lex.Token.tUnrestricted) {
+    Match("unrestricted"); FloatType();
+  } else {
+    FloatType();
+  }
 }
 
 function FloatType() {
-  "float"
-  "double"
+  if (g_lookahead == lex.Token.tFloat) {
+    Match("float");
+  } else if (g_lookahead == lex.Token.tDouble) {
+    Match("double");
+  }
 }
 
 function UnsignedIntegerType() {
-  Match("unsigned"); IntegerType();
+  if (g_lookahead == lex.Token.tUnsigned) {
+    Match("unsigned"); IntegerType();
+  }
   IntegerType();
 }
 
 function IntegerType() {
-  Match("short");
-  Match("long"); OptionalLong();
+  if (g_lookahead == lex.Token.tShort) {
+    Match("short");
+  } else if (g_lookahead == lex.Token.tLong) {
+    Match("long");
+    OptionalLong();
+  }
 }
 
 function OptionalLong() {
-  Match("long");
-  // ε
+  if (g_lookahead == lex.Token.tLong) {
+    Match("long");
+  }
+  // | ε
 }
 
 function StringType() {
-  Match("ByteString");
-  Match("DOMString");
-  Match("USVString");
+  if (g_lookahead == lex.Token.tByteString) {
+    Match("ByteString");
+  } else if (g_lookahead == lex.Token.tDOMString) {
+    Match("DOMString");
+  } else if (g_lookahead == lex.Token.tUSVString) {
+    Match("USVString");
+  }
 }
 
 function PromiseType() {
-  Match("Promise"); Match("<"); Type(); Match(">");
+  Match("Promise"); Match(lex.Token.tLAngle); Type(); Match(lex.Token.tRAngle);
 }
 
 function RecordType() {
-  Match("record"); Match("<"); StringType(); Match(","); TypeWithExtendedAttributes(); Match(">");
+  Match("record"); Match(lex.Token.tLAngle); StringType(); Match(lex.Token.tComma); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle);
 }
 
 function Null() {
-  Match("?");
-  // ε
+  if (g_lookahead == lex.Token.tQuestion) {
+    Match(lex.Token.tQuestion);
+  } else {
+    // ε
+  }
 }
 
 function BufferRelatedType() {
@@ -665,17 +686,23 @@ function BufferRelatedType() {
 }
 
 function ExtendedAttributeList() {
-  Match("["); ExtendedAttribute(); ExtendedAttributes(); Match("]");
-  // ε
+  if (g_lookahead == lex.Token.tLSqrBracket) {
+    Match("["); ExtendedAttribute(); ExtendedAttributes(); Match("]");
+  } else {
+    // ε
+  }
 }
 
 function ExtendedAttributes() {
-  Match(","); ExtendedAttribute(); ExtendedAttributes();
-  // ε
+  if (g_lookahead == lex.Token.tComma) {
+    Match(lex.Token.tComma); ExtendedAttribute(); ExtendedAttributes();
+  } else {
+    // ε
+  }
 }
 
 function ExtendedAttribute() {
-  Match("("); ExtendedAttributeInner(); Match(")"); ExtendedAttributeRest();
+  Match(lex.Token.tLBracket); ExtendedAttributeInner(); Match(lex.Token.tRBracket); ExtendedAttributeRest();
   Match("["); ExtendedAttributeInner(); Match("]"); ExtendedAttributeRest();
   Match("{"); ExtendedAttributeInner(); Match("}"); ExtendedAttributeRest();
   Other(); ExtendedAttributeRest();
@@ -687,7 +714,7 @@ function ExtendedAttributeRest() {
 }
 
 function ExtendedAttributeInner() {
-  Match("("); ExtendedAttributeInner(); Match(")"); ExtendedAttributeInner();
+  Match(lex.Token.tLBracket); ExtendedAttributeInner(); Match(lex.Token.tRBracket); ExtendedAttributeInner();
   Match("["); ExtendedAttributeInner(); Match("]"); ExtendedAttributeInner();
   Match("{"); ExtendedAttributeInner(); Match("}"); ExtendedAttributeInner();
   OtherOrComma(); ExtendedAttributeInner();
@@ -745,7 +772,7 @@ function Other() {
 
 function OtherOrComma() {
   Other();
-  Match(",");
+  Match(lex.Token.tComma);
 }
 
 function IdentifierList() {
@@ -754,7 +781,7 @@ function IdentifierList() {
 
 function Identifiers() {
   if (g_lookahead == lex.Token.tComma) {
-    Match(","); Match(lex.Token.tId); Identifiers();
+    Match(lex.Token.tComma); Match(lex.Token.tId); Identifiers();
   } else {
     // ε
   }
@@ -765,21 +792,21 @@ function ExtendedAttributeNoArgs() {
 }
 
 function ExtendedAttributeArgList() {
-  Match(lex.Token.tId); Match("("); ArgumentList(); Match(")");
+  Match(lex.Token.tId); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket);
 }
 
 function ExtendedAttributeIdent() {
-  Match(lex.Token.tId); Match("="); Match(lex.Token.tId);
+  Match(lex.Token.tId); Match(lex.Token.tEq); Match(lex.Token.tId);
 }
 
 function ExtendedAttributeWildcard() {
-  Match(lex.Token.tId); Match("="); Match("*");
+  Match(lex.Token.tId); Match(lex.Token.tEq); Match("*");
 }
 
 function ExtendedAttributeIdentList() {
-  Match(lex.Token.tId); Match("="); Match("("); IdentifierList(); Match(")");
+  Match(lex.Token.tId); Match(lex.Token.tEq); Match(lex.Token.tLBracket); IdentifierList(); Match(lex.Token.tRBracket);
 }
 
 function ExtendedAttributeNamedArgList() {
-  Match(lex.Token.tId); Match("="); Match(lex.Token.tId); Match("("); ArgumentList(); Match(")");
+  Match(lex.Token.tId); Match(lex.Token.tEq); Match(lex.Token.tId); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket);
 }
