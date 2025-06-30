@@ -15,13 +15,13 @@
 
 import { writeFileSync } from "node:fs"
 import { D, DD, E, S, T } from "./builder"
-import { std, Ts, Vs } from "./stdlib"
+import { An, std, Ts, Vs } from "./stdlib"
 
 import { processNPrintCJ } from "./printers/translators/cangjie"
 import { processNPrintTS } from "./printers/translators/typescript"
 import { processNPrintCXX } from "./printers/translators/cxx"
 import { processNPrintJava } from "./printers/translators/java"
-import { processNPrintArkts } from "./printers/translators/arkts"
+import { processNPrintArkTS } from "./printers/translators/arkts"
 import { dumpToString } from "./printers/dump"
 
 function main() {
@@ -67,20 +67,28 @@ function main() {
               )
             ))
           ])),
-          D.func('poly', [{ name: 'x', type: T.c('T') }], Ts.prim.int, S.block([
+          DD([{ name: 'U' }]).func('poly', [{ name: 'x', type: T.c('T') }, { name: 'y', type: T.c('U') }], Ts.prim.int, S.block([
             S.return(E.get(Vs.self, 'mass'))
           ]))
         ]
     ),
+    D.class('Box', [], [
+      D.func('test1', [], Ts.prim.void, S.block([
+        S.declaration('p', Ts.ptr(T.c('Point')), true,
+          E.instance('Point', [ E.c(5, [An.named('x')]), E.c(5, [An.named('y')])], [], [An.asStruct()])
+        ),
+        S.e(E.call(Vs.print, [E.get(E.v('p'), 'x')]))
+      ]))
+    ])
   ])
 
   const printers: [string, typeof processNPrintTS][] = [
-    ['test.ts', processNPrintTS],
-    ['test.cj', processNPrintCJ],
-    ['test.cpp', processNPrintCXX],
-    ['test.java', processNPrintJava],
-    ['test.ets', processNPrintArkts],
-    ['test.dump', dumpToString]
+    [ 'test.ts'   , processNPrintTS    ],
+    [ 'test.cj'   , processNPrintCJ    ],
+    [ 'test.cpp'  , processNPrintCXX   ],
+    [ 'test.java' , processNPrintJava  ],
+    [ 'test.ets'  , processNPrintArkTS ],
+    [ 'test.dump' , dumpToString       ]
   ]
 
   printers.forEach(([name, printer]) => {

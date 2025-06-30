@@ -17,7 +17,7 @@ import { IndentPrinter } from "../indent";
 import * as lw from "../../lws"
 import { std } from "../../stdlib";
 import { IdentityTransformer } from "../../visitors/identity";
-import { T } from "../../builder";
+import { T, utils } from "../../builder";
 
 const varMapping = new Map([
   [std.names.vars.base, 'super'],
@@ -30,8 +30,8 @@ const varMapping = new Map([
 export class ConvertTSTypes extends IdentityTransformer {
   goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
-      case std.names.types.int: return T.c('number') as lw.ConstType
-      case std.names.types.void: return T.c('void') as lw.ConstType
+      case std.names.types.int: return T.cc('number')
+      case std.names.types.void: return T.cc('void')
     }
     return type
   }
@@ -63,7 +63,11 @@ export class TypeScriptPrinter {
       }
       case lw.LWKind.AppType: {
         // stdlib specification
-        // TODO
+        switch (type.head) {
+          case std.names.types.pointer: { this.printType(type.args[0]); return }
+          case std.names.types.reference: { this.printType(type.args[0]); return }
+          case std.names.types.constant: { this.printType(type.args[0]); return }
+        }
 
         this.p.put(type.head)
         this.p.put('<')
@@ -137,6 +141,22 @@ export class TypeScriptPrinter {
         break
       }
       case lw.LWKind.ConstructorExpression: {
+        if (utils.hasAnnotation(expression, std.names.annotations.asStruct)) {
+          this.p.put('{')
+          expression.args.forEach((arg, i) => {
+            if (i > 0) {
+              this.p.put(',', ' ')
+            }
+            const filedName = utils.getAnnotation(arg, std.names.annotations.named)
+            if (!filedName) {
+              throw new Error("!!!")
+            }
+            this.p.put(filedName, ':')
+            this.printExpression(arg)
+          })
+          this.p.put('}')
+          return
+        }
         this.p.put('new', ' ', expression.name)
         if (expression.typeArgs) {
           this.p.put('<')
@@ -188,6 +208,19 @@ export class TypeScriptPrinter {
         }
         break
       }
+      case lw.LWKind.DeclarationStatement: {
+        let specifier = 'const'
+        if (statement.mutable) {
+          specifier = 'let'
+        }
+        this.p.put(specifier, ' ', statement.varName, ':')
+        this.printType(statement.varType)
+        if (statement.expression) {
+          this.p.put(' ', '=', ' ')
+          this.printExpression(statement.expression)
+        }
+        break
+      }
     }
   }
 
@@ -199,7 +232,7 @@ export class TypeScriptPrinter {
   private printGeneric(generic: lw.GenericDescriptor) {
     this.p.put(generic.name)
   }
-  private printGenerics(generics: lw.GenericDescriptor[]) {
+  private maybePrintGenerics(generics: lw.GenericDescriptor[]) {
     if (generics.length > 0) {
       this.p.put('<')
       generics.forEach((gen, i) => {
@@ -234,7 +267,7 @@ export class TypeScriptPrinter {
           ? 'interface'
           : 'class'
         this.p.put('export', ' ', specifier, ' ', declaration.name)
-        this.printGenerics(declaration.generics)
+        this.maybePrintGenerics(declaration.generics)
         this.p.put(' ')
         if (declaration.oop !== undefined) {
           if (declaration.oop.base) {
@@ -296,6 +329,7 @@ export class TypeScriptPrinter {
         } else {
           this.p.put(declaration.name)
         }
+        this.maybePrintGenerics(declaration.generics)
         this.p.put('(')
         declaration.parameters.forEach((param, i) => {
           if (i > 0) {

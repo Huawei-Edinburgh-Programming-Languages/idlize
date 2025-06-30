@@ -23,15 +23,15 @@ const varMapping = new Map([
   [std.names.vars.base, 'base'],
   [std.names.vars.null, 'nullptr'],
   [std.names.vars.undef, 'nullptr'],
-  [std.names.vars.print, 'printf'],
+  [std.names.vars.print, 'System.out.println'],
   [std.names.vars.self, 'this'],
 ])
 
 export class ConvertJavaTypes extends IdentityTransformer {
   goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
-      case std.names.types.int: return T.c('int') as lw.ConstType
-      case std.names.types.void: return T.c('void') as lw.ConstType
+      case std.names.types.int: return T.cc('int')
+      case std.names.types.void: return T.cc('void')
     }
     return type
   }
@@ -179,6 +179,23 @@ export class JavaPrinter {
         this.p.put(';')
         break
       }
+      case lw.LWKind.DeclarationStatement: {
+        if (statement.mutable) {
+          this.p.put('final', ' ')
+          this.printType(statement.varType)
+          this.p.put(' ')
+        } else {
+          this.printType(statement.varType)
+          this.p.put(' ')
+        }
+        this.p.put(statement.varName)
+        if (statement.expression) {
+          this.p.put(' ', '=', ' ')
+          this.printExpression(statement.expression)
+        }
+        this.p.put(';')
+        break
+      }
     }
   }
 
@@ -187,6 +204,20 @@ export class JavaPrinter {
     this.printType(type)
     this.p.put(' ', name)
     this.p.put(';')
+  }
+  private maybePrintGenerics(generics: lw.GenericDescriptor[]): boolean {
+    if (generics.length > 0) {
+      this.p.put('<')
+      generics.forEach((g, i) => {
+        if (i > 0) {
+          this.p.put(',', ' ')
+        }
+        this.p.put(g.name)
+      })
+      this.p.put('>')
+      return true
+    }
+    return false
   }
   printDeclaration(declaration: lw.LWDeclaration) {
     switch (declaration.kind) {
@@ -211,16 +242,7 @@ export class JavaPrinter {
           ? 'interface'
           : 'class'
         this.p.put(specifier, ' ', declaration.name)
-        if (declaration.generics.length > 0) {
-          this.p.put('<')
-          declaration.generics.forEach((g, i) => {
-            if (i > 0) {
-              this.p.put(',', ' ')
-            }
-            this.p.put(g.name)
-          })
-          this.p.put('>')
-        }
+        this.maybePrintGenerics(declaration.generics)
         this.p.put(' ')
         if (declaration.oop !== undefined) {
           if (declaration.oop.base) {
@@ -275,6 +297,9 @@ export class JavaPrinter {
         if (isCtor) {
           this.p.put(this.parent.at(-1)!)
         } else {
+          if (this.maybePrintGenerics(declaration.generics)) {
+            this.p.put(' ')
+          }
           this.printType(declaration.returnType)
           this.p.put(' ', declaration.name)
         }

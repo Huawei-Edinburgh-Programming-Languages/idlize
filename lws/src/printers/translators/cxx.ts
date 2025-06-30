@@ -30,8 +30,8 @@ const varMapping = new Map([
 export class ConvertCXXTypes extends IdentityTransformer {
   goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
-      case std.names.types.int: return T.c('int') as lw.ConstType
-      case std.names.types.void: return T.c('void') as lw.ConstType
+      case std.names.types.int: return T.cc('int')
+      case std.names.types.void: return T.cc('void')
     }
     return type
   }
@@ -135,7 +135,7 @@ export class CXXPrinter {
       }
       case lw.LWKind.AccessorExpression: {
         this.printExpression(expression.base)
-        if (utils.hasAnnotation(expression.base, std.names.annotations.isPointerType)) {
+        if (utils.hasAnnotation(expression.base, std.names.annotations.ptrVal)) {
           this.p.put('->')
         } else {
           this.p.put('.')
@@ -226,6 +226,21 @@ export class CXXPrinter {
     this.printDirectType(type, name)
     this.p.put(';')
   }
+  private maybePrintGenerics(generics: lw.GenericDescriptor[]): boolean {
+    if (generics.length > 0) {
+      this.p.put('template', ' ', '<')
+      generics.forEach((g, i) => {
+        if (i > 0) {
+          this.p.put(',', ' ')
+        }
+        this.p.put('typename', ' ', g.name)
+      })
+      this.p.put('>')
+      this.p.newline()
+      return true
+    }
+    return false
+  }
   printDeclaration(declaration: lw.LWDeclaration) {
     switch (declaration.kind) {
       case lw.LWKind.UnionDeclaration: {
@@ -245,17 +260,7 @@ export class CXXPrinter {
         break
       }
       case lw.LWKind.ClassDeclaration: {
-        if (declaration.generics.length > 0) {
-          this.p.put('template', ' ', '<')
-          declaration.generics.forEach((g, i) => {
-            if (i > 0) {
-              this.p.put(',', ' ')
-            }
-            this.p.put('typename', ' ', g.name)
-          })
-          this.p.put('>')
-          this.p.newline()
-        }
+        this.maybePrintGenerics(declaration.generics)
         this.p.put('class', ' ', declaration.name)
         this.p.put(' ')
         if (declaration.oop !== undefined) {
@@ -310,6 +315,7 @@ export class CXXPrinter {
         break
       }
       case lw.LWKind.FunctionDeclaration: {
+        this.maybePrintGenerics(declaration.generics)
         const isCtor = std.names.members.ctor === declaration.name
         if (isCtor) {
           this.p.put(this.parent.at(-1)!)

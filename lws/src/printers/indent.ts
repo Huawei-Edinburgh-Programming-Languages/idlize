@@ -34,6 +34,10 @@ export class TokenPrinter {
 
 export class IndentPrinter extends TokenPrinter {
 
+    constructor(
+        private readonly tabLength = 2
+    ) { super() }
+
     private tabSize = 0
 
     inc(): this {
@@ -47,7 +51,7 @@ export class IndentPrinter extends TokenPrinter {
 
     override newline(): this {
         super.newline()
-        this.put(' '.repeat(this.tabSize * 2))
+        this.put(' '.repeat(this.tabSize * this.tabLength))
         return this
     }
 }

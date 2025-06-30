@@ -23,15 +23,15 @@ const varMapping = new Map([
   [std.names.vars.base, '/* not supported */'],
   [std.names.vars.null, '/* not supported */'],
   [std.names.vars.undef, '/* not supported */'],
-  [std.names.vars.print, 'printf'],
+  [std.names.vars.print, 'print'],
   [std.names.vars.self, 'this'],
 ])
 
 export class ConvertCJTypes extends IdentityTransformer {
   goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
-      case std.names.types.int: return T.c('Int32') as lw.ConstType
-      case std.names.types.void: return T.c('Unit') as lw.ConstType
+      case std.names.types.int: return T.cc('Int32')
+      case std.names.types.void: return T.cc('Unit')
     }
     return type
   }
@@ -136,7 +136,7 @@ export class CangjiePrinter {
         break
       }
       case lw.LWKind.ConstructorExpression: {
-        this.p.put('new', ' ', expression.name)
+        this.p.put(expression.name)
         if (expression.typeArgs) {
           this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
@@ -270,12 +270,16 @@ export class CangjiePrinter {
         break
       }
       case lw.LWKind.NamespaceDeclaration: {
+        this.p.put(`/* omitted namespace "${declaration.name}" */`)
+        this.p.newline()
         declaration.members.forEach((member, i) => {
           if (i > 0) {
             this.p.newline()
           }
           this.printDeclaration(member)
         })
+        this.p.newline()
+        this.p.put(`/* end of namespace "${declaration.name}" */`)
         break
       }
       case lw.LWKind.TypedefDeclaration: {
@@ -289,7 +293,9 @@ export class CangjiePrinter {
         if (isCtor) {
           this.p.put('public', ' ', 'init', '(')
         } else {
-          this.p.put('public', ' ', 'func', ' ', declaration.name, '(')
+          this.p.put('public', ' ', 'func', ' ', declaration.name)
+          this.printGenerics(declaration.generics)
+          this.p.put('(')
         }
         declaration.parameters.forEach((param, i) => {
           if (i > 0) {

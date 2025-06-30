@@ -14,10 +14,12 @@
  */
 
 import { E, T } from "./builder"
-import { LWType } from "./lws"
+import { Annotation, LWType } from "./lws"
 
 const knownAnnotations = {
-    isPointerType: 'isPointerType'
+    ptrVal: 'ptrVal',
+    asStruct: 'asStruct',
+    named: 'named'
 }
 
 const specialMemberNames = {
@@ -41,8 +43,10 @@ const specialTypeNames = {
     union: '@UNION',
     intersection: '@INTERSECTION',
 
-    int: 'lws.int',
-    void: 'lws.void'
+    auto: '@LW.AUTO',
+
+    int: '@LW.Int32',
+    void: '@LW.Void',
 }
 
 export const std = {
@@ -54,8 +58,14 @@ export const std = {
     }
 }
 
+export const An = {
+    ptrVal: (): Annotation => ({ name: knownAnnotations.ptrVal }),
+    asStruct: (): Annotation => ({ name: knownAnnotations.asStruct }),
+    named: (name:string): Annotation => ({ name: knownAnnotations.named, value: name })
+}
+
 export const Vs = {
-    self: E.v(specialVariables.self, [{ name: knownAnnotations.isPointerType }]),
+    self: E.v(specialVariables.self, [{ name: knownAnnotations.ptrVal }]),
     base: E.v(specialVariables.base),
     null: E.v(specialVariables.null),
     undef: E.v(specialVariables.undef),

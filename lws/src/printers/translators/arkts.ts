@@ -27,17 +27,17 @@ const varMapping = new Map([
   [std.names.vars.self, 'this'],
 ])
 
-export class ConvertArktsTypes extends IdentityTransformer {
+export class ConvertArkTSTypes extends IdentityTransformer {
   goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
-      case std.names.types.int: return T.c('double') as lw.ConstType
-      case std.names.types.void: return T.c('void') as lw.ConstType
+      case std.names.types.int: return T.cc('double')
+      case std.names.types.void: return T.cc('void')
     }
     return type
   }
 }
 
-export class ArktsPrinter {
+export class ArkTSPrinter {
   private readonly p = new IndentPrinter()
   private readonly scope: ('global' | 'member')[] = ['global']
 
@@ -296,6 +296,7 @@ export class ArktsPrinter {
         } else {
           this.p.put(declaration.name)
         }
+        this.printGenerics(declaration.generics)
         this.p.put('(')
         declaration.parameters.forEach((param, i) => {
           if (i > 0) {
@@ -326,12 +327,12 @@ export class ArktsPrinter {
   }
 }
 
-export function processNPrintArkts(chunk:lw.LWDeclaration) {
+export function processNPrintArkTS(chunk:lw.LWDeclaration) {
   let tree = chunk
 
-  tree = new ConvertArktsTypes().goDeclaration(tree)
+  tree = new ConvertArkTSTypes().goDeclaration(tree)
 
-  const printer = new ArktsPrinter()
+  const printer = new ArkTSPrinter()
   printer.printDeclaration(tree)
   return printer.render()
 }

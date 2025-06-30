@@ -100,6 +100,10 @@ export const S = {
 }
 
 export const T = {
+  cc: (name: string): lw.ConstType => ({
+    kind: lw.LWKind.ConstType,
+    name
+  }),
   c: (name: string, ...args: lw.LWType[]): lw.ConstType | lw.AppType => {
     if (args.length === 0) {
       return {
@@ -166,5 +170,8 @@ export const D = DD([])
 export const utils = {
   hasAnnotation(node: lw.LWExpression, annotation: string) {
     return node.annotations.find(x => x.name === annotation)
+  },
+  getAnnotation(node: lw.LWExpression, annotation: string) {
+    return node.annotations.find(x => x.name === annotation)?.value
   }
 }

@@ -44,20 +44,46 @@ export class DumpPrinter {
         // TODO
 
         this.p.put(type.head)
-        this.p.put('[')
+        this.p.put('(')
         type.args.forEach((arg, i) => {
           if (i > 0) {
             this.p.put(',', ' ')
           }
           this.printType(arg)
         })
-        this.p.put(']')
+        this.p.put(')')
         break
       }
     }
   }
 
+  private maybePrintAnnotations(expr: lw.LWExpression, wrap:boolean) {
+    if (expr.annotations.length > 0) {
+      this.p.put('[')
+      expr.annotations.forEach((ann, i) => {
+        if (i > 0) {
+          this.p.put(',', ' ')
+        }
+        this.p.put(ann.name)
+        if (ann.value) {
+          this.p.put('(', ann.value, ')')
+        }
+      })
+      this.p.put(']')
+      if (wrap) {
+        this.p.newline()
+      } else {
+        this.p.put(' ')
+      }
+    }
+  }
   printExpression(expression: lw.LWExpression) {
+    this.maybePrintAnnotations(
+      expression,
+      [
+        lw.LWKind.BinaryExpression,
+      ].includes(expression.kind)
+    )
     switch (expression.kind) {
       case lw.LWKind.ConstantExpression: {
         this.p.put(expression.value)
@@ -77,12 +103,13 @@ export class DumpPrinter {
         break
       }
       case lw.LWKind.BinaryExpression: {
-        this.p.put('(', ' ', expression.op)
+        this.p.put('(', expression.op)
         this.p.inc().newline()
         this.printExpression(expression.left)
-        this.p.put(',').newline()
+        this.p.newline()
         this.printExpression(expression.right)
-        this.p.put(')').dec()
+        this.p.dec().newline()
+        this.p.put(')')
         break
       }
       case lw.LWKind.AccessorExpression: {
@@ -92,15 +119,15 @@ export class DumpPrinter {
       }
       case lw.LWKind.CallExpression: {
         this.printExpression(expression.callee)
-        if (expression.typeArgs) {
-          this.p.put('[')
+        if (expression.typeArgs && expression.typeArgs.length > 0) {
+          this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
             if (i > 0) {
               this.p.put(',', ' ')
             }
             this.printType(type)
           })
-          this.p.put(']')
+          this.p.put('>')
         }
         this.p.put('(')
         expression.args.forEach((arg, i) => {
@@ -114,15 +141,15 @@ export class DumpPrinter {
       }
       case lw.LWKind.ConstructorExpression: {
         this.p.put('new', ' ', expression.name)
-        if (expression.typeArgs) {
-          this.p.put('[')
+        if (expression.typeArgs && expression.typeArgs.length > 0) {
+          this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
             if (i > 0) {
               this.p.put(',', ' ')
             }
             this.printType(type)
           })
-          this.p.put(']')
+          this.p.put('>')
         }
         this.p.put('(')
         expression.args.forEach((arg, i) => {
@@ -156,12 +183,27 @@ export class DumpPrinter {
           this.p.put(' ')
           this.printExpression(statement.expression)
         }
+        this.p.put(';')
         break
       }
       case lw.LWKind.ExpressionStatement: {
         if (statement.expression) {
           this.printExpression(statement.expression)
         }
+        this.p.put(';')
+        break
+      }
+      case lw.LWKind.DeclarationStatement: {
+        let specifier = statement.mutable
+          ? 'immutable'
+          : 'mutable'
+        this.p.put(specifier, ' ', statement.varName, ':')
+        this.printType(statement.varType)
+        if (statement.expression) {
+          this.p.put(' ', '<-', ' ')
+          this.printExpression(statement.expression)
+        }
+        this.p.put(';')
         break
       }
     }
@@ -172,7 +214,24 @@ export class DumpPrinter {
     this.p.put(':')
     this.printType(type)
   }
+  private maybePrintGenerics(decl: lw.LWDeclaration) {
+    if (decl.kind === lw.LWKind.NamespaceDeclaration) {
+      return
+    }
+    if (decl.generics.length > 0) {
+      this.p.put('generic', ' ', '<')
+      decl.generics.forEach((gen, i) => {
+        if (i > 0) {
+          this.p.put(',', ' ')
+        }
+        this.p.put(gen.name)
+      })
+      this.p.put('>')
+      this.p.newline()
+    }
+  }
   printDeclaration(declaration: lw.LWDeclaration) {
+    this.maybePrintGenerics(declaration)
     switch (declaration.kind) {
       case lw.LWKind.UnionDeclaration: {
         break
