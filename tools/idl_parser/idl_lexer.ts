@@ -175,26 +175,43 @@ export function getToken(): Token {
   // other tokens
   if (c == '=')
     return Token.tEq;
+
+  if (c == '(')
+    return Token.tLBracket;
+  if (c == ')')
+    return Token.tRBracket;
+
+  if (c == '{')
+    return Token.tLBrace;
+  if (c == '}')
+    return Token.tRBrace;
+
+  if (c == '<')
+    return Token.tLAngle;
+  if (c == '>')
+    return Token.tRAngle;
+
+  if (c == ':')
+    return Token.tColon;
   if (c == ';')
     return Token.tSemicolon;
 
-  if (c == '(')
-    return Token.tLBr;
-  if (c == ')')
-    return Token.tRBr;
-
-  if (c == '{')
-    return Token.tLCu;
-  if (c == '}')
-    return Token.tRCu;
-
-  if (c == '<')
-    return Token.tLAn;
-  if (c == '>')
-    return Token.tRAn;
+  if (c == '.')
+    return Token.tDot;
+  if (c == ',')
+    return Token.tComma;
 
   if (c == '+')
     return Token.tPlus;
+  if (c == '-')
+    return Token.tMinus;
+
+  if (c == '*')
+    return Token.tAsterisk;
+  if (c == '...')
+    return Token.tEllipsis;
+  if (c == '?')
+    return Token.tQuestion;
 
   console.log("Unknown sym: \'" + c + "\'");
   return Token.tError;

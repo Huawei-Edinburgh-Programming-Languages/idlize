@@ -8,68 +8,59 @@ function Definitions() {
   } //Definitions
   //or empty
 }
-
-function test() {
-  const s: string = "int i = 0; while (i < 10) print(i++);";
-
-  lex.init(s);
-  console.log(s);
-
-  Definitions();
-
-  let t: lex.Token;
-  do {
-    t = lex.getToken();
-    console.log(t);    
-  } while (t != lex.Token.tError && t != lex.Token.tEnd);
-}
-
-test();
 */
 
 ///////////////////////////////////////////////////////////////////////////////
 
 let g_lookahead: lex.Token;
 
-const g_char2token = new Map<string, Token>([
-  ["=", Token.tEq],
-  ["(", Token.tLBracket],
-  [")", Token.tRBracket],
-  ["{", Token.tLBrace],
-  ["}", Token.tRBrace],
-  ["<", Token.tLAngle],
-  [">", Token.tRAngle],
-  [":", Token.tColon],
-  [";", Token.tSemicolon],
-  [".", Token.tDot],
-  [",", Token.tComma],
-  ["+", Token.tPlus],
-  ["-", Token.tMinus],
-  ["*", Token.tAsterisk],
-  ["...", Token.tEllipsis],
-  ["?", Token.tQuestion],
-//["", Token.t],
+const g_char2token = new Map<string, lex.Token>([
+  ["=", lex.Token.tEq],
+  ["(", lex.Token.tLBracket],
+  [")", lex.Token.tRBracket],
+  ["{", lex.Token.tLBrace],
+  ["}", lex.Token.tRBrace],
+  ["<", lex.Token.tLAngle],
+  [">", lex.Token.tRAngle],
+  [":", lex.Token.tColon],
+  [";", lex.Token.tSemicolon],
+  [".", lex.Token.tDot],
+  [",", lex.Token.tComma],
+  ["+", lex.Token.tPlus],
+  ["-", lex.Token.tMinus],
+  ["*", lex.Token.tAsterisk],
+  ["...", lex.Token.tEllipsis],
+  ["?", lex.Token.tQuestion],
 ]);
 
-function Match(t: lex.Token) {
-  if (g_lookahead == t)
+function Match(tArg: lex.Token | string) {
+  let tok: lex.Token;
+  if (typeof tArg === 'string') {
+    if (g_char2token.has(tArg))
+      tok = g_char2token.get(tArg) ! ;
+    else {
+      console.log("Error. Unknown symbol: " + tArg);
+      tok = lex.Token.tError;
+    }
+  } else {
+    tok = tArg;
+  }
+
+  if (g_lookahead == tok)
      g_lookahead = lex.getToken();
-  else
-    console.log("Error. Waiting for: " + t ", but got " + g_lookahead);
+  else {
+    throw new Error("Error. Waiting for: " + tok + ", but got " + g_lookahead);
+  }
 }
 
-function Match(t: string) {
-  if (g_char2token.has(t))
-    Match(g_char2token.get(t));
-  else
-    console.log("Error. Unknown symbol: " + t);
-}
-
-function Parse() {
+export function Parse() {
   const idl: string =
 `package arkui.component.idlize;
 import arkui.component.common;
 callback Callback_Extender_OnProgress = void (f32 value);`
+
+  console.log("Try to parse:");
+  console.log(idl);
 
   lex.init(idl);
 
@@ -90,13 +81,27 @@ function Definitions() {
 }
 
 function Definition() {
-  CallbackOrInterfaceOrMixin();
-  Namespace();
-  Partial();
-  Dictionary();
-  Enum();
-  Typedef();
-  IncludesStatement();
+  if (g_lookahead == lex.Token.tCallback ||
+      g_lookahead == lex.Token.tMixin)
+    CallbackOrInterfaceOrMixin();
+
+  if (g_lookahead == lex.Token.tNamespace)
+    Namespace();
+
+  if (g_lookahead == lex.Token.tPartial)
+    Partial();
+
+  if (g_lookahead == lex.Token.tDictionary)
+    Dictionary();
+
+  if (g_lookahead == lex.Token.tEnum)
+    Enum();
+
+  if (g_lookahead == lex.Token.tTypedef)
+    Typedef();
+
+  if (g_lookahead == lex.Token.tIncludes)
+    IncludesStatement();
 }
 
 function ArgumentNameKeyword() {
@@ -128,8 +133,12 @@ function ArgumentNameKeyword() {
 }
 
 function CallbackOrInterfaceOrMixin() {
-  /*callback*/ CallbackRestOrInterface();
-  /*interface*/ InterfaceOrMixin();
+  if (g_lookahead == lex.Token.tCallback) {
+    Match("callback"); CallbackRestOrInterface();
+  }
+  if (g_lookahead == lex.Token.tMixin) {
+    Match("interface"); InterfaceOrMixin();
+  }
 }
 
 function InterfaceOrMixin() {
@@ -142,11 +151,11 @@ function InterfaceRest() {
 }
 
 function Partial() {
-  /*partial*/ PartialDefinition();
+  Match("partial"); PartialDefinition();
 }
 
 function PartialDefinition() {
-  /*interface*/ PartialInterfaceOrPartialMixin();
+  Match("interface"); PartialInterfaceOrPartialMixin();
   PartialDictionary();
   Namespace();
 }
@@ -195,7 +204,7 @@ function Inheritance() {
 }
 
 function MixinRest() {
-  Match("mixin"); Match("identifier"); Match("{"); MixinMembers(); Match("}") Match(";");
+  Match("mixin"); Match("identifier"); Match("{"); MixinMembers(); Match("}"); Match(";");
 }
 
 function MixinMembers() {
@@ -207,7 +216,7 @@ function MixinMember() {
   Const();
   RegularOperation();
   Stringifier();
-  /*OptionalReadOnly*/ AttributeRest();
+  OptionalReadOnly(); AttributeRest();
 }
 
 function IncludesStatement() {
@@ -332,11 +341,11 @@ function OptionalOperationName() {
 
 function OperationName() {
   OperationNameKeyword();
-  identifier
+  Match("identifier");
 }
 
 function OperationNameKeyword() {
-  includes
+  Match("includes");
 }
 
 function ArgumentList() {
@@ -345,7 +354,7 @@ function ArgumentList() {
 }
 
 function Arguments() {
-  , Argument(); Arguments
+  Match(","); Argument(); Arguments();
   // ε
 }
 
@@ -354,7 +363,7 @@ function Argument() {
 }
 
 function ArgumentRest() {
-  optional TypeWithExtendedAttributes(); ArgumentName(); Default();
+  Match("optional"); TypeWithExtendedAttributes(); ArgumentName(); Default();
   Match("Type"); Ellipsis(); ArgumentName();
 }
 
@@ -365,11 +374,15 @@ function ArgumentName() {
 
 function Ellipsis() {
   //...
+  if (g_lookahead == lex.Token.tEllipsis)
+    Match(lex.Token.tEllipsis);
+  else {
+  }
   // ε
 }
 
 function Constructor() {
-  Match("constructor"); ( ArgumentList(); ) Match(";");
+  Match("constructor"); Match("("); ArgumentList(); Match(")"); Match(";");
 }
 
 function Stringifier() {
@@ -462,34 +475,34 @@ function PartialDictionary() {
 }
 
 function Default() {
-  = DefaultValue();
+  Match("="); DefaultValue();
   // ε
 }
 
 function Enum() {
-  enum identifier { EnumValueList(); } ;
+  Match("enum"); Match("identifier"); Match("{"); EnumValueList(); Match("}"); Match(";");
 }
 
 function EnumValueList() {
-  string EnumValueListComma();
+  Match("string"); EnumValueListComma();
 }
 
 function EnumValueListComma() {
-  , EnumValueListString();
+  Match(","); EnumValueListString();
   // ε
 }
 
 function EnumValueListString() {
-  string EnumValueListComma();
+  Match("string"); EnumValueListComma();
   // ε
 }
 
 function CallbackRest() {
-  identifier = Type(); ( ArgumentList(); ) Match(";");
+  Match("identifier"); Match("="); Type(); Match("("); ArgumentList(); Match(")"); Match(";");
 }
 
 function Typedef() {
-  typedef TypeWithExtendedAttributes(); identifier Match(";");
+  Match("typedef"); TypeWithExtendedAttributes(); Match("identifier"); Match(";");
 }
 
 function Type() {
@@ -503,12 +516,12 @@ function TypeWithExtendedAttributes() {
 
 function SingleType() {
   DistinguishableType();
-  any
+  Match("any");
   PromiseType();
 }
 
 function UnionType() {
-  ( UnionMemberType(); or UnionMemberType(); UnionMemberTypes(); )
+  Match("("); UnionMemberType(); Match("or"); UnionMemberType(); UnionMemberTypes(); Match(")");
 }
 
 function UnionMemberType() {
@@ -517,79 +530,80 @@ function UnionMemberType() {
 }
 
 function UnionMemberTypes() {
-  or UnionMemberType(); UnionMemberTypes();
+  Match("or"); UnionMemberType(); UnionMemberTypes();
   // ε
 }
 
 function DistinguishableType() {
   PrimitiveType(); Null();
   StringType(); Null();
-  identifier Null();
-  sequence < TypeWithExtendedAttributes(); > Null();
-  async iterable < TypeWithExtendedAttributes(); > Null();
-  object Null();
-  symbol Null();
+  Match("identifier"); Null();
+  Match("sequence"); Match("<"); TypeWithExtendedAttributes(); Match(">"); Null();
+  Match("async"); Match("iterable"); Match("<"); TypeWithExtendedAttributes(); Match(">"); Null();
+  Match("object"); Null();
+  Match("symbol"); Null();
   BufferRelatedType(); Null();
-  FrozenArray(); < TypeWithExtendedAttributes(); > Null();
-  ObservableArray(); < TypeWithExtendedAttributes(); > Null();
+  Match("FrozenArray"); Match("<"); TypeWithExtendedAttributes(); Match(">"); Null();
+  Match("ObservableArray"); Match("<"); TypeWithExtendedAttributes(); Match(">"); Null();
   RecordType(); Null();
-  undefined Null();
+  Match("undefined"); Null();
 }
 
 function PrimitiveType() {
   UnsignedIntegerType();
   UnrestrictedFloatType();
-  boolean
-  byte
-  octet
-  bigint
+  "boolean"
+  "byte"
+  "octet"
+  "bigint"
 }
 
 function UnrestrictedFloatType() {
-  unrestricted FloatType();
+  Match("unrestricted"); FloatType();
   FloatType();
 }
 
 function FloatType() {
-  float
-  double
+  "float"
+  "double"
 }
 
 function UnsignedIntegerType() {
-  unsigned IntegerType();
+  Match("unsigned"); IntegerType();
   IntegerType();
 }
 
 function IntegerType() {
-  short
-  long OptionalLong();
+  Match("short");
+  Match("long"); OptionalLong();
 }
 
 function OptionalLong() {
-  long
+  Match("long");
   // ε
 }
 
 function StringType() {
-  ByteString();
-  DOMString();
-  USVString();
+  Match("ByteString");
+  Match("DOMString");
+  Match("USVString");
 }
 
 function PromiseType() {
-  Promise(); < Type(); >
+  Match("Promise"); Match("<"); Type(); Match(">");
 }
 
 function RecordType() {
-  record < StringType(); , TypeWithExtendedAttributes(); >
+  Match("record"); Match("<"); StringType(); Match(","); TypeWithExtendedAttributes(); Match(">");
 }
 
 function Null() {
-  ?
+  Match("?");
   // ε
 }
 
 function BufferRelatedType() {
+/*
   ArrayBuffer();
   SharedArrayBuffer();
   DataView();
@@ -605,22 +619,23 @@ function BufferRelatedType() {
   Float16Array();
   Float32Array();
   Float64Array();
+*/
 }
 
 function ExtendedAttributeList() {
-  [ ExtendedAttribute(); ExtendedAttributes(); ]
+  Match("["); ExtendedAttribute(); ExtendedAttributes(); Match("]");
   // ε
 }
 
 function ExtendedAttributes() {
-  , ExtendedAttribute(); ExtendedAttributes();
+  Match(","); ExtendedAttribute(); ExtendedAttributes();
   // ε
 }
 
 function ExtendedAttribute() {
-  ( ExtendedAttributeInner(); ) ExtendedAttributeRest();
-  [ ExtendedAttributeInner(); ] ExtendedAttributeRest();
-  { ExtendedAttributeInner(); } ExtendedAttributeRest();
+  Match("("); ExtendedAttributeInner(); Match(")"); ExtendedAttributeRest();
+  Match("["); ExtendedAttributeInner(); Match("]"); ExtendedAttributeRest();
+  Match("{"); ExtendedAttributeInner(); Match("}"); ExtendedAttributeRest();
   Other(); ExtendedAttributeRest();
 }
 
@@ -630,9 +645,9 @@ function ExtendedAttributeRest() {
 }
 
 function ExtendedAttributeInner() {
-  ( ExtendedAttributeInner(); ) ExtendedAttributeInner();
-  [ ExtendedAttributeInner(); ] ExtendedAttributeInner();
-  { ExtendedAttributeInner(); } ExtendedAttributeInner();
+  Match("("); ExtendedAttributeInner(); Match(")"); ExtendedAttributeInner();
+  Match("["); ExtendedAttributeInner(); Match("]"); ExtendedAttributeInner();
+  Match("{"); ExtendedAttributeInner(); Match("}"); ExtendedAttributeInner();
   OtherOrComma(); ExtendedAttributeInner();
   // ε
 }
@@ -696,7 +711,7 @@ function IdentifierList() {
 }
 
 function Identifiers() {
-  if (g_lookahead == ",") {
+  if (g_lookahead == lex.Token.tComma) {
     Match(","); Match("identifier"); Identifiers();
   } else {
     // ε
