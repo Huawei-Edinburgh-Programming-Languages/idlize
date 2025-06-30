@@ -31,10 +31,7 @@ export enum Token {
   tStringifier = 25,
   tTypedef = 26,
   tUnrestricted = 27,
-  tVoid = 28,
-  tNumber = 29,
-  tString = 30,
-  tBoolean = 31,
+
   tEqual = 32,        // =
   tLBracket = 33,     // (
   tRBracket = 34,     // )
@@ -54,29 +51,57 @@ export enum Token {
   tEllipsis = 48,     // ...
   tQuestion = 49,     // ?
 
-  tSequence = 50,
-
   tShort = 60,        // short
   tLong = 61,         // long
   tUnsigned = 62,     // unsigned
+  tBoolean = 63,
+  tByte = 64,
+  tOctet = 65,
+  tBigint = 66,
+  tFloat = 67,        // float
+  tDouble = 68,       // double
 
-  tFloat = 70,        // float
-  tDouble = 71,       // double
+  tString = 70,
+  tByteString = 71,   // strings
+  tDOMString = 72,
+  tUSVString = 73,
 
-  tByteString = 80,   // strings
-  tDOMString = 81,
-  tUSVString = 82,
+  tVoid = 80,
+  tUndefined = 81,
+  tNumber = 82,
+  tSequence = 83,
+  tFrozenArray = 84,
+  tObservableArray = 85,
+  tRecord = 86,
+  tObject = 87,       // I found this two types in standard but not in source code
+  tSymbol = 88,
 
-  tId = 99,           // identifier
-  tError = 100,
-  tEnd = 101
+  tArrayBuffer = 90,
+  tSharedArrayBuffer = 91,
+  tDataView = 92,
+  tInt8Array = 93,
+  tInt16Array = 94,
+  tInt32Array = 95,
+  tUint8Array = 96,
+  tUint16Array = 97,
+  tUint32Array = 98,
+  tUint8ClampedArray = 99,
+  tBigInt64Array = 100,
+  tBigUint64Array = 101,
+  tFloat16Array = 102,
+  tFloat32Array = 103,
+  tFloat64Array = 104,
+
+  tId = 999,           // identifier
+  tError = 1000,
+  tEnd = 1001
 };
 
 const g_keywords = new Map<string, Token>([
+  // ArgumentNameKeywords
   ["async", Token.tAsync],
   ["attribute", Token.tAttribute],
   ["callback", Token.tCallback],
-  ["class", Token.tClass],
   ["const", Token.tConst],
   ["constructor", Token.tConstructor],
   ["deleter", Token.tDeleter],
@@ -90,7 +115,6 @@ const g_keywords = new Map<string, Token>([
   ["maplike", Token.tMaplike],
   ["mixin",  Token.tMixin],
   ["namespace", Token.tNamespace],
-  ["package", Token.tPackage],
   ["partial", Token.tPartial],
   ["readonly", Token.tReadonly],
   ["required", Token.tRequired],
@@ -100,11 +124,94 @@ const g_keywords = new Map<string, Token>([
   ["stringifier", Token.tStringifier],
   ["typedef", Token.tTypedef],
   ["unrestricted", Token.tUnrestricted],
-
+  // Other tokens
+  ["class", Token.tClass],  // probably do not required
+  ["package", Token.tPackage],
   ["short", Token.tShort],
   ["long", Token.tLong],
   ["unsigned", Token.tUnsigned],
+  ["boolean", Token.tBoolean],
+  ["byte", Token.tByte],
+  ["octet", Token.tOctet],
+  ["bigint", Token.tBigint],
+
+  ["float", Token.tFloat],
+  ["double", Token.tDouble],
+
+  ["String", Token.tString],
+  ["ByteString", Token.tByteString],
+  ["DOMString", Token.tDOMString],
+  ["USVString", Token.tUSVString],
+
+  ["void", Token.tVoid],  // void type is replaced by undefined type
+                          // (c) https://github.com/w3c/webidl2.js?tab=readme-ov-file#errors
+  ["undefined", Token.tUndefined],
+  ["number", Token.tNumber],
+  ["sequence", Token.tSequence],
+  ["FrozenArray", Token.tFrozenArray],
+  ["ObservableArray", Token.tObservableArray],
+  ["record", Token.tRecord],
+  ["object", Token.tObject],
+  ["symbol", Token.tSymbol],
+
+  ["tArrayBuffer", Token.tArrayBuffer],
+  ["tSharedArrayBuffer", Token.tSharedArrayBuffer],
+  ["DataView", Token.tDataView],
+  ["Int8Array", Token.tInt8Array],
+  ["Int16Array", Token.tInt16Array],
+  ["Int32Array", Token.tInt32Array],
+  ["Uint8Array", Token.tUint8Array],
+  ["Uint16Array", Token.tUint16Array],
+  ["Uint32Array", Token.tUint32Array],
+  ["Uint8ClampedArray", Token.tUint8ClampedArray],
+  ["BigInt64Array", Token.tBigInt64Array],
+  ["BigUint64Array", Token.tBigUint64Array],
+  ["Float16Array", Token.tFloat16Array],
+  ["Float32Array", Token.tFloat32Array],
+  ["Float64Array", Token.tFloat64Array],
 ]);
+
+let g_ArgumentNameKeyword: Token[] = [
+  Token.tAsync, Token.tAttribute, Token.tCallback, Token.tConst, Token.tConstructor,
+  Token.tDeleter, Token.tDictionary, Token.tEnum, Token.tGetter, Token.tIncludes,
+  Token.tInherit, Token.tInterface, Token.tIterable, Token.tMaplike, Token.tMixin,
+  Token.tNamespace, Token.tPartial, Token.tReadonly, Token.tRequired, Token.tSetlike,
+  Token.tSetter, Token.tStatic, Token.tStringifier, Token.tTypedef, Token.tUnrestricted
+];
+
+export function IsItArgumentNameKeyword(value: Token): boolean {
+  return g_ArgumentNameKeyword.includes(value);
+}
+
+// Just a part of primitive types... Also we have UnsignedIntegerType and UnrestrictedFloatType
+let g_PrimitiveType: Token[] = [
+  Token.tBoolean, Token.tByte, Token.tOctet, Token.tBigint,
+  Token.tUnsigned, Token.tShort, Token.tLong  // TODO: check it!
+];
+
+export function IsItPrimitiveType(value: Token): boolean {
+  return g_PrimitiveType.includes(value);
+}
+
+let g_StringType: Token[] = [
+  Token.tByteString, Token.tDOMString, Token.tUSVString
+];
+
+export function IsItStringType(value: Token): boolean {
+  return g_StringType.includes(value);
+}
+
+let g_BufferRelatedType: Token[] = [
+  Token.tArrayBuffer, Token.tSharedArrayBuffer, Token.tDataView,
+  Token.tInt8Array, Token.tInt16Array, Token.tInt32Array,
+  Token.tUint8Array, Token.tUint16Array, Token.tUint32Array,
+  Token.tUint8ClampedArray, Token.tBigInt64Array, Token.tBigUint64Array,
+  Token.tFloat16Array, Token.tFloat32Array, Token.tFloat64Array
+];
+
+export function IsItBufferRelatedType(value: Token): boolean {
+  return g_BufferRelatedType.includes(value);
+}
 
 let g_lastId = 0;
 let g_words = new Map<string, number>([

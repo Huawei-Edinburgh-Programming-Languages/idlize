@@ -402,7 +402,8 @@ function ArgumentRest() {
 }
 
 function ArgumentName() {
-  ArgumentNameKeyword();
+  if (lex.IsItArgumentNameKeyword(g_lookahead))
+    Match(g_lookahead);  // hm-hm...
   Match(lex.Token.tId);
 }
 
@@ -577,32 +578,52 @@ function UnionMemberTypes() {
 }
 
 function DistinguishableType() {
-  PrimitiveType(); Null();
-  StringType(); Null();
-  Match(lex.Token.tId); Null();
-  Match(lex.Token.tSequence); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
-  Match(lex.Token.tAsync); Match("iterable"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
-  Match("object"); Null();
-  Match("symbol"); Null();
-  BufferRelatedType(); Null();
-  Match("FrozenArray"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
-  Match("ObservableArray"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
-  RecordType(); Null();
-  Match("undefined"); Null();
+  if (lex.IsItPrimitiveType(g_lookahead)) {
+    PrimitiveType(); Null();
+  } else if (lex.IsItStringType(g_lookahead)) {
+    StringType(); Null();
+  } else if (g_lookahead == lex.Token.tId) {
+    Match(lex.Token.tId); Null();
+  } else if (g_lookahead == lex.Token.tSequence) {
+    Match(lex.Token.tSequence); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
+  } else if (g_lookahead == lex.Token.tAsync) {
+    Match(lex.Token.tAsync); Match(lex.Token.tIterable); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
+  } else if (g_lookahead == lex.Token.tObject) {
+    Match(lex.Token.tObject); Null();
+  } else if (g_lookahead == lex.Token.tSymbol) {
+    Match(lex.Token.tSymbol); Null();
+  } else if (lex.IsItBufferRelatedType(g_lookahead)) {
+    BufferRelatedType(); Null();
+  } else if (g_lookahead == lex.Token.tFrozenArray) {
+    Match(lex.Token.tFrozenArray); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
+  } else if (g_lookahead == lex.Token.tObservableArray) {
+    Match(lex.Token.tObservableArray); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
+  } else if (g_lookahead == lex.Token.tRecord) {
+    RecordType(); Null();
+  } else if (g_lookahead == lex.Token.tVoid) {
+    Match(lex.Token.tVoid); Null();
+  } else {
+    Match(lex.Token.tUndefined); Null();
+  }
 }
 
 function PrimitiveType() {
   UnsignedIntegerType();
   UnrestrictedFloatType();
-  "boolean"
-  "byte"
-  "octet"
-  "bigint"
+  if (g_lookahead == lex.Token.tBoolean) {
+    Match(lex.Token.tBoolean);
+  } else if (g_lookahead == lex.Token.tByte) {
+    Match(lex.Token.tByte);
+  } else if (g_lookahead == lex.Token.tOctet) {
+    Match(lex.Token.tOctet);
+  } else if (g_lookahead == lex.Token.tBigint) {
+    Match(lex.Token.tBigint);
+  }
 }
 
 function UnrestrictedFloatType() {
   if (g_lookahead == lex.Token.tUnrestricted) {
-    Match("unrestricted"); FloatType();
+    Match(lex.Token.tUnrestricted); FloatType();
   } else {
     FloatType();
   }
@@ -610,42 +631,42 @@ function UnrestrictedFloatType() {
 
 function FloatType() {
   if (g_lookahead == lex.Token.tFloat) {
-    Match("float");
+    Match(lex.Token.tFloat);
   } else if (g_lookahead == lex.Token.tDouble) {
-    Match("double");
+    Match(lex.Token.tDouble);
   }
 }
 
 function UnsignedIntegerType() {
   if (g_lookahead == lex.Token.tUnsigned) {
-    Match("unsigned"); IntegerType();
+    Match(lex.Token.tUnsigned); IntegerType();
   }
   IntegerType();
 }
 
 function IntegerType() {
   if (g_lookahead == lex.Token.tShort) {
-    Match("short");
+    Match(lex.Token.tShort);
   } else if (g_lookahead == lex.Token.tLong) {
-    Match("long");
+    Match(lex.Token.tLong);
     OptionalLong();
   }
 }
 
 function OptionalLong() {
   if (g_lookahead == lex.Token.tLong) {
-    Match("long");
+    Match(lex.Token.tLong);
   }
   // | ε
 }
 
 function StringType() {
   if (g_lookahead == lex.Token.tByteString) {
-    Match("ByteString");
+    Match(lex.Token.tByteString);
   } else if (g_lookahead == lex.Token.tDOMString) {
-    Match("DOMString");
+    Match(lex.Token.tDOMString);
   } else if (g_lookahead == lex.Token.tUSVString) {
-    Match("USVString");
+    Match(lex.Token.tUSVString);
   }
 }
 
