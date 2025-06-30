@@ -53,7 +53,7 @@
 | CommonBorderImage.ets | |
 | CommonClipMaskAnimation.ets | |
 | CommonClipMaskShape.ets | |
-| CommonColorGradient.ets | |
+| CommonColorGradient.ets | Evstigneev Roman |
 | CommonCustomPropertyTest.ets | |
 | CommonDirectionAlign.ets | |
 | CommonDraggableDragPreviewOptionsOnDragStartEnd.ets | |
