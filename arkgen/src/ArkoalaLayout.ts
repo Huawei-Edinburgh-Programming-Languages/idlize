@@ -31,6 +31,21 @@ function toFileName(name:string) {
     return name.split(/[_-]/gi).map(it => idl.capitalize(it)).join('')
 }
 
+function customPathSuggestion(pkg: string): string | undefined {
+    const suggestions = peerGeneratorConfiguration().currentModulePackagesPaths
+    if (!suggestions)
+        return undefined
+    if ([...suggestions.keys()].filter(it => pkg.startsWith(it)).length > 1)
+        throw new Error(`Can not select appropriate prefix for package "${pkg}": found more that variants in "currentModulePackagesPaths"`)
+    for (const prefix of suggestions.keys()) {
+        if (pkg === prefix)
+            return suggestions.get(prefix)
+        if (pkg.startsWith(prefix))
+            return path.join(suggestions.get(prefix)!, pkg.substring(prefix.length + 1))
+    }
+    return undefined
+}
+
 abstract class CommonLayoutBase implements LayoutManagerStrategy {
     constructor(
         protected library: PeerLibrary,
@@ -103,6 +118,11 @@ class ArkTsLayout extends CommonLayoutBase {
 
         if (idl.isHandwritten(target.node) || peerGeneratorConfiguration().isHandWritten(target.node.name)) {
             return HandwrittenModule(this.library.language)
+        }
+        const packageName = idl.getPackageName(target.node)
+        let customPath: string | undefined
+        if (packageName && (customPath = customPathSuggestion(packageName))) {
+            return customPath
         }
         let pureFileName = idl.getFileFor(target.node)?.fileName
             ?.replaceAll('.d.ts', '')
