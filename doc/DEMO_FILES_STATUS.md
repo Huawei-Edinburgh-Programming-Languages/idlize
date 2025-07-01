@@ -8,7 +8,7 @@
 | BackgroundBlurEffectsBackgroundEffect.test.ets | |
 | BackgroundBlurEffectsBlurStyle.test.ets | |
 | BackgroundBlurStyle.test.ets | |
-| BadgeTest.ets | |
+| BadgeTest.ets | Alexander Porodin |
 | BaseSpanTest.ets | |
 | BlankTest.ets | |
 | ButtonTest.ets | Ivan Tuzhilkin |
