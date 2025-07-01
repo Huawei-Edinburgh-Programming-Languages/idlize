@@ -55,20 +55,20 @@
 |`setBlankOptions`| Function | Skroba Gleb | done | pass |  |
 |`color`| Function | Skroba Gleb | done | pass |  |
 |*Button*| *Component* | Evstigneev Roman | blocked IDL |  |  |
-|`construct`| Function | Evstigneev Roman | done |  pass |  |
-|`setButtonOptions0`| Function | Evstigneev Roman | done | pass |  |
-|`setButtonOptions1`| Function | Evstigneev Roman | done | pass |  |
-|`setButtonOptions2`| Function | Evstigneev Roman | done | pass |  |
-|`type`| Function | Evstigneev Roman | done | pass |  |
-|`stateEffect`| Function |Evstigneev Roman | done | pass |  |
-|`buttonStyle`| Function |Evstigneev Roman | done | pass |  |
-|`controlSize`| Function |Evstigneev Roman | done | pass |  |
-|`role`| Function | Evstigneev Roman | done | pass |  |
-|`fontColor`| Function | Evstigneev Roman | testskipped | pass | Ace issue fixed, test in progress Evstigneev Roman |
-|`fontSize`| Function | Evstigneev Roman | testskipped | pass | Ace issue fixed, test in progress Evstigneev Roman |
-|`fontWeight`| Function |Evstigneev Roman | testskipped | pass | Ace issue fixed, test in progress Evstigneev Roman |
-|`fontStyle`| Function |Evstigneev Roman | done | pass |  |
-|`fontFamily`| Function |Evstigneev Roman | done | pass |  |
+|`construct`| Function | Evstigneev Roman | done |  pass12 |  |
+|`setButtonOptions0`| Function | Evstigneev Roman | done | pass12 |  |
+|`setButtonOptions1`| Function | Evstigneev Roman | done | pass12 |  |
+|`setButtonOptions2`| Function | Evstigneev Roman | done | pass12 |  |
+|`type`| Function | Evstigneev Roman | done | pass12 |  |
+|`stateEffect`| Function |Evstigneev Roman | done | pass12 |  |
+|`buttonStyle`| Function |Evstigneev Roman | done | pass12 |  |
+|`controlSize`| Function |Evstigneev Roman | done | pass12 |  |
+|`role`| Function | Evstigneev Roman | done | pass12 |  |
+|`fontColor`| Function | Evstigneev Roman | testskipped | pass12 | Ace issue fixed, test in progress Evstigneev Roman |
+|`fontSize`| Function | Evstigneev Roman | testskipped | fail12 | Ace issue fixed, test in progress Evstigneev Roman, verification fail: working with string resources is not supported |
+|`fontWeight`| Function |Evstigneev Roman | testskipped | pass12 | Ace issue fixed, test in progress Evstigneev Roman |
+|`fontStyle`| Function |Evstigneev Roman | done | pass12 |  |
+|`fontFamily`| Function |Evstigneev Roman | done | pass12|  |
 |`contentModifier`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG (+) & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`labelStyle`| Function |Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`minFontScale`| Function | Kovalev Sergey | done |  | |
