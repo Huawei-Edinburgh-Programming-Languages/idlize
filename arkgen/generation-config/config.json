@@ -205,7 +205,8 @@
             "PageTransitionExitInterface",
             "CommonTransition",
             "wrapBuilder",
-            "ContentModifier"
+            "ContentModifier",
+            "DrawModifier"
         ],
         "ignoreEntry": [
             "Optional",
@@ -284,9 +285,9 @@
                 "hookName": "hookCheckBoxContentModifier"
             }
         },
-        "DataPanel": {
-            "contentModifier": {
-                "hookName": "hookDataPanelContentModifier"
+        "CommonMethod": {
+            "drawModifier": {
+                "hookName": "hookDrawModifier"
             }
         },
         "Gauge": {

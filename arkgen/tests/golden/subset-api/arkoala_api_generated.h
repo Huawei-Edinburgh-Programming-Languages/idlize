@@ -1167,8 +1167,7 @@ typedef struct Opt_DragItemInfo Opt_DragItemInfo;
 typedef struct DrawingRenderingContextPeer DrawingRenderingContextPeer;
 typedef struct DrawingRenderingContextPeer* Ark_DrawingRenderingContext;
 typedef struct Opt_DrawingRenderingContext Opt_DrawingRenderingContext;
-typedef struct DrawModifierPeer DrawModifierPeer;
-typedef struct DrawModifierPeer* Ark_DrawModifier;
+typedef struct Ark_DrawModifier Ark_DrawModifier;
 typedef struct Opt_DrawModifier Opt_DrawModifier;
 typedef struct Ark_EdgeOutlineStyles Ark_EdgeOutlineStyles;
 typedef struct Opt_EdgeOutlineStyles Opt_EdgeOutlineStyles;
@@ -7404,6 +7403,12 @@ typedef struct Opt_DrawingRenderingContext {
     Ark_Tag tag;
     Ark_DrawingRenderingContext value;
 } Opt_DrawingRenderingContext;
+typedef struct Ark_DrawModifier {
+    /* kind: Interface */
+    Callback_DrawContext_Void drawBehind;
+    Callback_DrawContext_Void drawContent;
+    Callback_DrawContext_Void drawFront;
+} Ark_DrawModifier;
 typedef struct Opt_DrawModifier {
     Ark_Tag tag;
     Ark_DrawModifier value;
@@ -11759,8 +11764,6 @@ typedef struct GENERATED_ArkUICommonMethodModifier {
                      const Opt_Union_Length_LayoutPolicy* value);
     void (*setHeight)(Ark_NativePointer node,
                       const Opt_Union_Length_LayoutPolicy* value);
-    void (*setDrawModifier)(Ark_NativePointer node,
-                            const Opt_DrawModifier* modifier);
     void (*setCustomProperty)(Ark_NativePointer node,
                               const Opt_String* name,
                               const Opt_Object* value);
@@ -13960,22 +13963,6 @@ typedef struct GENERATED_ArkUIDrawingRenderingContextAccessor {
     Ark_DrawingCanvas (*getCanvas)(Ark_DrawingRenderingContext peer);
 } GENERATED_ArkUIDrawingRenderingContextAccessor;
 
-typedef struct GENERATED_ArkUIDrawModifierAccessor {
-    void (*destroyPeer)(Ark_DrawModifier peer);
-    Ark_DrawModifier (*construct)();
-    Ark_NativePointer (*getFinalizer)();
-    void (*invalidate)(Ark_DrawModifier peer);
-    Callback_DrawContext_Void (*getDrawBehind)(Ark_DrawModifier peer);
-    void (*setDrawBehind)(Ark_DrawModifier peer,
-                          const Callback_DrawContext_Void* drawBehind);
-    Callback_DrawContext_Void (*getDrawContent)(Ark_DrawModifier peer);
-    void (*setDrawContent)(Ark_DrawModifier peer,
-                           const Callback_DrawContext_Void* drawContent);
-    Callback_DrawContext_Void (*getDrawFront)(Ark_DrawModifier peer);
-    void (*setDrawFront)(Ark_DrawModifier peer,
-                         const Callback_DrawContext_Void* drawFront);
-} GENERATED_ArkUIDrawModifierAccessor;
-
 typedef struct GENERATED_ArkUIEventEmulatorAccessor {
     void (*emitClickEvent)(Ark_NativePointer node,
                            Ark_ClickEvent event);
@@ -15335,7 +15322,6 @@ typedef struct GENERATED_ArkUIAccessors {
     const GENERATED_ArkUIDisappearSymbolEffectAccessor* (*getDisappearSymbolEffectAccessor)();
     const GENERATED_ArkUIDragEventAccessor* (*getDragEventAccessor)();
     const GENERATED_ArkUIDrawingRenderingContextAccessor* (*getDrawingRenderingContextAccessor)();
-    const GENERATED_ArkUIDrawModifierAccessor* (*getDrawModifierAccessor)();
     const GENERATED_ArkUIEventEmulatorAccessor* (*getEventEmulatorAccessor)();
     const GENERATED_ArkUIEventTargetInfoAccessor* (*getEventTargetInfoAccessor)();
     const GENERATED_ArkUIGestureEventAccessor* (*getGestureEventAccessor)();
