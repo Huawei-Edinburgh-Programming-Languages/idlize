@@ -221,6 +221,17 @@ export class TypeScriptPrinter {
         }
         break
       }
+      case lw.LWKind.IfStatement: {
+        this.p.put('if', '(')
+        this.printExpression(statement.condition)
+        this.p.put(')', ' ')
+        this.printStatement(statement.thenBody)
+        if (statement.elseBody) {
+          this.p.put(' ', 'else', ' ')
+          this.printStatement(statement.elseBody)
+        }
+        break
+      }
     }
   }
 

@@ -202,6 +202,18 @@ export class CangjiePrinter {
           this.p.put(' ', '=', ' ')
           this.printExpression(statement.expression)
         }
+        break
+      }
+      case lw.LWKind.IfStatement: {
+        this.p.put('if', '(')
+        this.printExpression(statement.condition)
+        this.p.put(')', ' ')
+        this.printStatement(statement.thenBody)
+        if (statement.elseBody) {
+          this.p.put(' ', 'else', ' ')
+          this.printStatement(statement.elseBody)
+        }
+        break
       }
     }
   }
@@ -342,7 +354,7 @@ export class CangjiePrinter {
   }
 }
 
-export function processNPrintCJ(chunk:lw.LWDeclaration) {
+export function processNPrintCJ(chunk: lw.LWDeclaration) {
   let tree = chunk
 
   tree = new ConvertCJTypes().goDeclaration(tree)

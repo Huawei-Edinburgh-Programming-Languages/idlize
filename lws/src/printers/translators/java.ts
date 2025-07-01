@@ -185,20 +185,28 @@ export class JavaPrinter {
         break
       }
       case lw.LWKind.DeclarationStatement: {
-        if (statement.mutable) {
+        if (!statement.mutable) {
           this.p.put('final', ' ')
-          this.printType(statement.varType)
-          this.p.put(' ')
-        } else {
-          this.printType(statement.varType)
-          this.p.put(' ')
         }
+        this.printType(statement.varType)
+        this.p.put(' ')
         this.p.put(statement.varName)
         if (statement.expression) {
           this.p.put(' ', '=', ' ')
           this.printExpression(statement.expression)
         }
         this.p.put(';')
+        break
+      }
+      case lw.LWKind.IfStatement: {
+        this.p.put('if', '(')
+        this.printExpression(statement.condition)
+        this.p.put(')', ' ')
+        this.printStatement(statement.thenBody)
+        if (statement.elseBody) {
+          this.p.put(' ', 'else', ' ')
+          this.printStatement(statement.elseBody)
+        }
         break
       }
     }

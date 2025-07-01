@@ -57,7 +57,7 @@ export class DumpPrinter {
     }
   }
 
-  private maybePrintAnnotations(expr: lw.LWExpression, wrap:boolean) {
+  private maybePrintAnnotations(expr: lw.LWExpression, wrap: boolean) {
     if (expr.annotations.length > 0) {
       this.p.put('[')
       expr.annotations.forEach((ann, i) => {
@@ -195,8 +195,8 @@ export class DumpPrinter {
       }
       case lw.LWKind.DeclarationStatement: {
         let specifier = statement.mutable
-          ? 'immutable'
-          : 'mutable'
+          ? 'mutable'
+          : 'immutable'
         this.p.put(specifier, ' ', statement.varName, ':')
         this.printType(statement.varType)
         if (statement.expression) {
@@ -204,6 +204,17 @@ export class DumpPrinter {
           this.printExpression(statement.expression)
         }
         this.p.put(';')
+        break
+      }
+      case lw.LWKind.IfStatement: {
+        this.p.put('if', '(')
+        this.printExpression(statement.condition)
+        this.p.put(')', ' ')
+        this.printStatement(statement.thenBody)
+        if (statement.elseBody) {
+          this.p.put(' ', 'else', ' ')
+          this.printStatement(statement.elseBody)
+        }
         break
       }
     }
@@ -313,7 +324,7 @@ export class DumpPrinter {
   }
 }
 
-export function dumpToString(chunk:lw.LWDeclaration) {
+export function dumpToString(chunk: lw.LWDeclaration) {
   const printer = new DumpPrinter()
   printer.printDeclaration(chunk)
   return printer.render()

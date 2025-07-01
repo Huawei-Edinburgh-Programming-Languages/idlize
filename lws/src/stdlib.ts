@@ -81,6 +81,11 @@ const knownOperations = {
     mod: '%',
     or: '||',
     and: '&&',
+    le: '<=',
+    lt: '<',
+    eq: '==',
+    gt: '>',
+    ge: '>=',
 
     // unary
     neg: '-',

@@ -15,7 +15,7 @@
 
 import { writeFileSync } from "node:fs"
 import { D, DD, E, S, T } from "./builder"
-import { An, std, Ts, Vs } from "./stdlib"
+import { An, Op, std, Ts, Vs } from "./stdlib"
 
 import { processNPrintCJ } from "./printers/translators/cangjie"
 import { processNPrintTS } from "./printers/translators/typescript"
@@ -78,6 +78,20 @@ function main() {
           E.instance('Point', [ E.c(5, [An.named('x')]), E.c(5, [An.named('y')])], [], [An.asStruct()])
         ),
         S.e(E.call(Vs.print, [E.get(E.v('p'), 'x')]))
+      ])),
+      D.func('test2', [], Ts.prim.void, S.block([
+        S.declaration('i', Ts.prim.int, true, E.c(0)),
+        S.if(E.bin(Op.lt, E.v('i'), E.c(42)), S.block([
+          S.e(E.call(Vs.print, [E.v('i')]))
+        ])),
+        S.if(E.bin(Op.eq, E.v('i'), E.c(42)),
+          S.block([
+            S.e(E.call(Vs.print, [E.v('i')]))
+          ]),
+          S.block([
+            S.e(E.bin('=', E.v('i'), E.bin('+', E.v('i'), E.c(1))))
+          ])
+        )
       ]))
     ])
   ])
