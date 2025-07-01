@@ -92,7 +92,9 @@ export enum Token {
   tFloat32Array = 103,
   tFloat64Array = 104,
 
-  tId = 999,           // identifier
+  tAny = 105,         // The any type is the union of all other possible non-union types.
+
+  tId = 999,          // identifier
   tError = 1000,
   tEnd = 1001
 };
@@ -169,6 +171,8 @@ const g_keywords = new Map<string, Token>([
   ["Float16Array", Token.tFloat16Array],
   ["Float32Array", Token.tFloat32Array],
   ["Float64Array", Token.tFloat64Array],
+
+  ["any", Token.tAny],
 ]);
 
 let g_ArgumentNameKeyword: Token[] = [
