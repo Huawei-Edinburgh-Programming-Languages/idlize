@@ -217,6 +217,13 @@ export class DumpPrinter {
         }
         break
       }
+      case lw.LWKind.LoopStatement: {
+        this.p.put('while', '(')
+        this.printExpression(statement.condition)
+        this.p.put(')', ' ')
+        this.printStatement(statement.body)
+        break
+      }
     }
   }
 

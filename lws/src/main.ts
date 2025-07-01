@@ -81,8 +81,8 @@ function main() {
       ])),
       D.func('test2', [], Ts.prim.void, S.block([
         S.declaration('i', Ts.prim.int, true, E.c(0)),
-        S.if(E.bin(Op.lt, E.v('i'), E.c(42)), S.block([
-          S.e(E.call(Vs.print, [E.v('i')]))
+        S.loop(E.bin(Op.lt, E.v('i'), E.c(42)), S.block([
+          S.e(E.bin('=', E.v('i'), E.bin('+', E.v('i'), E.c(1))))
         ])),
         S.if(E.bin(Op.eq, E.v('i'), E.c(42)),
           S.block([
