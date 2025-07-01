@@ -1,0 +1,8 @@
+package api.internal.component.ets;
+
+callback SwiperIndexCallback = void (number index);
+
+[Entity=Class]
+interface SwiperOps  {
+    static pointer registerIndexCallback(pointer node, number value, SwiperIndexCallback callback);
+};

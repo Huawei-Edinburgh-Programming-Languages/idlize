@@ -1,0 +1,8 @@
+package api.internal.component.ets;
+
+callback ListItemSelectedCallback = void (boolean selected);
+
+[Entity=Class]
+interface ListItemOps  {
+    static pointer registerSelectedCallback(pointer node, boolean value, ListItemSelectedCallback callback);
+};

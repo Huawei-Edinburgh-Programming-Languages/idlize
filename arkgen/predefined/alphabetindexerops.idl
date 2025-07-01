@@ -1,0 +1,8 @@
+package api.internal.component.ets;
+
+callback IndexerSelectedCallback = void (number index);
+
+[Entity=Class]
+interface AlphabetIndexerOps {
+    static pointer registerIndexerSelectedCallback(pointer node, number index, IndexerSelectedCallback callback);
+};
