@@ -342,6 +342,44 @@
             "contentModifier": {
                 "hookName": "hookToggleContentModifier"
             }
+        },
+        "waterFlow": {
+            "setWaterFlowOptionsAttribute": {
+                "hookName": "hookWaterFlowOptionsImpl"
+            }
+        },
+        "GridItem": {
+            "selected": {
+                "hookName": "hookGridItemAttributeSelectedImpl"
+            }
+        },
+        "ListItem": {
+            "selected": {
+                "hookName": "hookListItemAttributeSelectedImpl"
+            }
+        },
+        "Swiper": {
+            "index": {
+                "hookName": "hookSwiperAttributeIndexImpl"
+            }
+        },
+        "Refresh": {
+            "setRefreshOptions": {
+                "hookName": "hookRefreshAttributeRefreshingImpl"
+            }
+        },
+        "AlphabetIndexer": {
+            "setAlphabetIndexerOptions": {
+                "hookName": "hookAlphabetIndexerAttributeOptionsImpl"
+            },
+            "selected": {
+                "hookName": "hookAlphabetIndexerAttributeSelectedImpl"
+            }
+        },
+        "Tabs": {
+            "setTabsOptions": {
+                "hookName": "hookTabsAttributeIndexImpl"
+            }
         }
     },
     "externalTypes": {},
