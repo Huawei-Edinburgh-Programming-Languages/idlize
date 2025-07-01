@@ -18,11 +18,16 @@ import { isMaterialized, Language, LayoutManagerStrategy, LayoutNodeRole, PeerLi
 import * as idl from '@idlizer/core'
 import { isComponentDeclaration, NativeModule, peerGeneratorConfiguration } from '@idlizer/libohos'
 
+const BASE_PATH = 'generated'
+const getGeneratedFilePath = (p:string) => path.join(BASE_PATH, p)
+
 export const SyntheticModule = "./SyntheticDeclarations"
 export function HandwrittenModule(language: Language) {
+    // does this switch needed here?
     switch (language) {
-        case Language.TS: return "../handwritten"
-        case Language.ARKTS: return "../handwritten"
+        case Language.TS: return "./handwritten"
+        case Language.ARKTS: return "./handwritten"
+        case Language.KOTLIN: return "./handwritten"
         default: throw new Error("Not implemented")
     }
 }
@@ -61,10 +66,10 @@ export class TsLayout extends CommonLayoutBase {
     private tsInternalPaths = new Map<string, string>([
         ["SerializerBase", "@koalaui/interop"],
         ["DeserializerBase", "@koalaui/interop"],
-        ["CallbackKind", "peers/CallbackKind"],
-        ["deserializeAndCallCallback", "peers/CallbackDeserializeCall"],
-        ["checkArkoalaCallbacks", "../CallbacksChecker"],
-        ["CallbackTransformer", "../CallbackTransformer"],
+        ["CallbackKind", getGeneratedFilePath("peers/CallbackKind")],
+        ["deserializeAndCallCallback", getGeneratedFilePath("peers/CallbackDeserializeCall")],
+        ["checkArkoalaCallbacks", "./CallbacksChecker"],
+        ["CallbackTransformer", "./CallbackTransformer"],
     ])
 
     resolve(target: idl.LayoutTargetDescription): string {
@@ -94,7 +99,7 @@ export class TsLayout extends CommonLayoutBase {
             pureFileName = path.basename(pureFileName)
         }
         const entryName = pureFileName ?? target.node.name
-        return entryName
+        return getGeneratedFilePath(entryName)
     }
 }
 
@@ -103,10 +108,10 @@ class ArkTsLayout extends CommonLayoutBase {
         ["TypeChecker", "#components"],
         ["SerializerBase", "@koalaui/interop"],
         ["DeserializerBase", "@koalaui/interop"],
-        ["CallbackKind", "peers/CallbackKind"],
-        ["deserializeAndCallCallback", "peers/CallbackDeserializeCall"],
-        ["checkArkoalaCallbacks", "../CallbacksChecker"],
-        ["CallbackTransformer", "../CallbackTransformer"],
+        ["CallbackKind", getGeneratedFilePath("peers/CallbackKind")],
+        ["deserializeAndCallCallback", getGeneratedFilePath("peers/CallbackDeserializeCall")],
+        ["checkArkoalaCallbacks", "./CallbacksChecker"],
+        ["CallbackTransformer", "./CallbackTransformer"],
     ])
     // replace point symbol inside names, but not when it is a part of path
     readonly replacePattern = /(\.)[^\.\/]/g
@@ -132,18 +137,18 @@ class ArkTsLayout extends CommonLayoutBase {
             pureFileName = path.basename(pureFileName)
         }
         const entryName = pureFileName ?? target.node.name
-        return entryName
+        return getGeneratedFilePath(entryName)
     }
 }
 
 export class ArkTSComponentsLayout extends ArkTsLayout {
     protected arkTSInternalPaths = new Map<string, string>([
-        ["TSTypeChecker", "ts/type_check"],
-        ["ArkTSTypeChecker", "arkts/type_check"],
+        ["TSTypeChecker", getGeneratedFilePath("ts/type_check")],
+        ["ArkTSTypeChecker", getGeneratedFilePath("arkts/type_check")],
     ])
     resolve(target: idl.LayoutTargetDescription): string {
         if (target.node.name === NativeModule.Generated.name)
-            return `arkts/${NativeModule.Generated.name}`
+            return getGeneratedFilePath(`arkts/${NativeModule.Generated.name}`)
         return super.resolve(target)
     }
 }
@@ -257,8 +262,8 @@ export class KotlinLayout extends CommonLayoutBase {
         ["Deserializer", "Deserializer"],
         ["CallbackKind", "CallbackKind"],
         ["deserializeAndCallCallback", "CallbackDeserializeCall"],
-        ["checkArkoalaCallbacks", "../CallbacksChecker"],
-        ["CallbackTransformer", "../CallbackTransformer"],
+        ["checkArkoalaCallbacks", "./CallbacksChecker"],
+        ["CallbackTransformer", "./CallbackTransformer"],
     ])
     resolve(target: idl.LayoutTargetDescription): string {
         if (this.KotlinInternalPaths.has(target.node.name))

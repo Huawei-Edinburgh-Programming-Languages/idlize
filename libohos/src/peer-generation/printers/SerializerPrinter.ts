@@ -410,7 +410,7 @@ export function printSerializerImports(library: PeerLibrary, language: Language,
             collector.addFeatures(["KUint8ArrayPtr", "NativeBuffer", "InteropNativeModule"], "@koalaui/interop")
         }
         if (library.name === 'arkoala') {
-            collector.addFeature("CallbackTransformer", "../CallbackTransformer")
+            collector.addFeature("CallbackTransformer", "./CallbackTransformer")
         }
     }
 }

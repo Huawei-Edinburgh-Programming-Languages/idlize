@@ -67,7 +67,7 @@ import { makeJavaArkComponents } from "./printers/JavaPrinter"
 import { printModifiers } from "./printers/ModifierPrinter"
 import { arkoalaLayout, ArkTSComponentsLayout } from "./ArkoalaLayout"
 import { printETSDeclaration } from "./printers/StsComponentsPrinter"
-import {platform} from "node:os";
+import { platform } from "node:os";
 
 const External = path.join(__dirname, "../../external")
 const ExternalStubs = path.join(External, "subset")
@@ -166,8 +166,8 @@ export function generateArkoalaFromIdl(config: {
 },
     peerLibrary: PeerLibrary) {
     const arkoala = config.arkoalaDestination ?
-        createArkoalaInstall({ outDir: config.arkoalaDestination, lang: config.lang, test: false, useMemoM3: peerLibrary.useMemoM3}) :
-        createArkoalaInstall({ outDir: config.outDir,             lang: config.lang, test: true,  useMemoM3: peerLibrary.useMemoM3 })
+        createArkoalaInstall({ outDir: config.arkoalaDestination, lang: config.lang, test: false, useMemoM3: peerLibrary.useMemoM3 }) :
+        createArkoalaInstall({ outDir: config.outDir, lang: config.lang, test: true, useMemoM3: peerLibrary.useMemoM3 })
     // arkoala.createDirs([ARKOALA_PACKAGE_PATH, INTEROP_PACKAGE_PATH].map(dir => path.join(arkoala.javaDir, dir)))
 
     peerLibrary.name = 'arkoala'
@@ -199,29 +199,34 @@ export function generateArkoalaFromIdl(config: {
         arkoala.managedDir,
         peerLibrary,
         peerLibrary.language == Language.KOTLIN ?
-        [
-            // createMaterializedPrinter(config.dumpSerialized),
-            // createPeersPrinter(config.dumpSerialized),
-            createInterfacePrinter(false),
-            // printComponents,
-            // createSerializerPrinter(peerLibrary.language, ""),
-        ] :
-        [
-            createMaterializedPrinter(config.dumpSerialized),
-            createPeersPrinter(config.dumpSerialized),
-            createInterfacePrinter(false),
-            printComponents,
-            printModifiers,
-            printGlobal,
-            printBuilderClasses,
-            createSerializerPrinter(peerLibrary.language, ""),
-            ...spreadIfNotLang([Language.JAVA],
-                createDeserializeAndCallPrinter(peerLibrary.name, peerLibrary.language),
-            ),
-            ...spreadIfNotLang([Language.ARKTS],
-                createGeneratedNativeModulePrinter(NativeModule.Generated),
-            )
-        ]
+            [
+                createMaterializedPrinter(config.dumpSerialized),
+                createPeersPrinter(config.dumpSerialized),
+                createInterfacePrinter(false),
+                // printComponents,
+                // printGlobal,
+                // printBuilderClasses,
+                createSerializerPrinter(peerLibrary.language, ""),
+                ...spreadIfNotLang([Language.ARKTS],
+                    createGeneratedNativeModulePrinter(NativeModule.Generated),
+                )
+            ] :
+            [
+                createMaterializedPrinter(config.dumpSerialized),
+                createPeersPrinter(config.dumpSerialized),
+                createInterfacePrinter(false),
+                printComponents,
+                // printModifiers,
+                printGlobal,
+                printBuilderClasses,
+                createSerializerPrinter(peerLibrary.language, ""),
+                ...spreadIfNotLang([Language.JAVA],
+                    createDeserializeAndCallPrinter(peerLibrary.name, peerLibrary.language),
+                ),
+                ...spreadIfNotLang([Language.ARKTS],
+                    createGeneratedNativeModulePrinter(NativeModule.Generated),
+                )
+            ]
     ))
 
     if (peerLibrary.language === Language.ARKTS) {
@@ -236,7 +241,7 @@ export function generateArkoalaFromIdl(config: {
             { customLayout: new LayoutManager(new ArkTSComponentsLayout(peerLibrary)) }
         )
         if (peerLibrary.useMemoM3) {
-            install(
+            const installed = install(
                 arkoala.managedSdkDir,
                 peerLibrary,
                 [
@@ -247,6 +252,14 @@ export function generateArkoalaFromIdl(config: {
                     isDeclared: true,
                 }
             )
+            writeFile(
+                path.join(arkoala.managedSdkDir, 'generated', 'index' + peerLibrary.language.extension),
+                makeArkuiModule(installed, path.join(arkoala.managedSdkDir, 'generated')),
+                {
+                    onlyIntegrated: config.onlyIntegrated,
+                    integrated: true
+                }
+            )
         }
     }
 
@@ -254,7 +267,7 @@ export function generateArkoalaFromIdl(config: {
     if (peerLibrary.language == Language.TS || peerLibrary.language == Language.ARKTS) {
         let enumImpls = peerLibrary.createLanguageWriter()
         printEnumsImpl(peerLibrary, enumImpls)
-        enumImpls.printTo(path.join(arkoala.managedDir, 'EnumsImpl' + peerLibrary.language.extension))
+        enumImpls.printTo(path.join(arkoala.managedDir, 'generated', 'EnumsImpl' + peerLibrary.language.extension))
     }
 
     if (peerLibrary.language == Language.TS || peerLibrary.language == Language.ARKTS) {
@@ -322,11 +335,11 @@ export function generateArkoalaFromIdl(config: {
         const arkuiNativeModuleFile = printPredefinedNativeModule(peerLibrary, NativeModule.ArkUI)
         printArkUILibrariesLoader(arkuiNativeModuleFile)
         writeIntegratedFile(
-            path.join(arkoala.managedDir, 'arkts', NativeModule.ArkUI.name + peerLibrary.language.extension),
+            path.join(arkoala.managedDir, 'generated', 'arkts', NativeModule.ArkUI.name + peerLibrary.language.extension),
             arkuiNativeModuleFile.printToString(),
         )
         writeIntegratedFile(
-            path.join(arkoala.managedDir, 'arkts', NativeModule.Test.name + peerLibrary.language.extension),
+            path.join(arkoala.managedDir, 'generated', 'arkts', NativeModule.Test.name + peerLibrary.language.extension),
             printPredefinedNativeModule(peerLibrary, NativeModule.Test).printToString(),
         )
         // writeIntegratedFile(
@@ -334,14 +347,14 @@ export function generateArkoalaFromIdl(config: {
         //     printPredefinedNativeModule(peerLibrary, NativeModuleType.Interop).printToString(),
         // )
         writeFile(
-            path.join(arkoala.managedDir, 'index' + peerLibrary.language.extension),
-            makeArkuiModule(arkuiComponentsFiles.concat(installedFiles), arkoala.managedDir),
+            path.join(arkoala.managedDir, 'generated', 'index' + peerLibrary.language.extension),
+            makeArkuiModule(arkuiComponentsFiles.concat(installedFiles), path.join(arkoala.managedDir, 'generated')),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
             }
         )
-        writeFile(path.join(arkoala.managedDir, 'peers', 'CallbackKind' + peerLibrary.language.extension),
+        writeFile(path.join(arkoala.managedDir, 'generated', 'peers', 'CallbackKind' + peerLibrary.language.extension),
             makeCallbacksKinds(peerLibrary, peerLibrary.language),
             {
                 onlyIntegrated: config.onlyIntegrated,
