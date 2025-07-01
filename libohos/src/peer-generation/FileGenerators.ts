@@ -227,6 +227,7 @@ export function accessorStructList(lines: LanguageWriter): LanguageWriter {
     return result
 }
 
+// foo
 export function makeCSerializers(library: PeerLibrary, structs: LanguageWriter, typedefs: IndentedPrinter): string {
 
     const writeToString = library.createLanguageWriter(Language.CPP)
