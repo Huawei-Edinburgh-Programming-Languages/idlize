@@ -1,0 +1,10 @@
+package api.internal.component.ets;
+
+callback TabsIndexCallback = void (number index);
+
+[Entity=Class]
+interface TabsOps  {
+    static pointer registerBarMode(pointer node, (BarMode or undefined) value, (ScrollableBarModeOptions or undefined) options);
+    static pointer registerBarBackgroundBlurStyle(pointer node, (BlurStyle or undefined) style, (BackgroundBlurStyleOptions or undefined) options);
+    static pointer registerIndexCallback(pointer node, number value, TabsIndexCallback callback);
+};
