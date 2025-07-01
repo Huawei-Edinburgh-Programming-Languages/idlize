@@ -190,6 +190,6 @@ function fillPeerImports(collector: ImportsCollector, library: PeerLibrary) {
     }
     collectDeclItself(library, idl.createReferenceType(NativeModule.Generated.name), collector)
     if (library.name === 'arkoala') {
-        collector.addFeature('CallbackTransformer', '../CallbackTransformer')
+        collector.addFeature('CallbackTransformer', './CallbackTransformer')
     }
 }

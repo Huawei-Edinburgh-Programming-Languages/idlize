@@ -402,7 +402,7 @@
         }
     },
     "currentModulePackagesPaths": {
-        "arkui.component": "../component"
+        "arkui.component": "./component"
     },
     "currentModuleExportedPackages": [
         "arkui.component",
