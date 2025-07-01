@@ -17,7 +17,7 @@ import { IndentPrinter } from "../indent";
 import * as lw from "../../lws"
 import { std } from "../../stdlib";
 import { IdentityTransformer } from "../../visitors/identity";
-import { T, utils } from "../../builder";
+import { E, T, utils } from "../../builder";
 
 const varMapping = new Map([
   [std.names.vars.base, 'base'],
@@ -75,8 +75,25 @@ export class CXXPrinter {
         break
       }
       case lw.LWKind.AppType: {
-        /* std specification */
-        // todo
+        // stdlib specification
+        switch (type.head) {
+          case std.names.types.pointer: {
+            this.printAbstractType(type.args[0])
+            this.p.put('*')
+            return
+          }
+          case std.names.types.reference: {
+            this.printAbstractType(type.args[0])
+            this.p.put('&')
+            return
+          }
+          case std.names.types.constant: {
+            this.p.put('const', ' ')
+            this.printAbstractType(type.args[0])
+            return
+          }
+        }
+
         this.p.put(type.head)
         this.p.put('<')
         type.args.forEach((arg, i) => {
@@ -144,8 +161,20 @@ export class CXXPrinter {
         break
       }
       case lw.LWKind.CallExpression: {
+        if (
+          expression.callee.kind === lw.LWKind.VariableExpression
+          && expression.callee.name === std.names.vars.print
+        ) {
+          this.p.put('printf', '(', '"%d\\n"')
+          expression.args.forEach(arg => {
+            this.p.put(',', ' ')
+            this.printExpression(arg)
+          })
+          this.p.put(')')
+          return
+        }
         this.printExpression(expression.callee)
-        if (expression.typeArgs) {
+        if (expression.typeArgs && expression.typeArgs.length > 0) {
           this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
             if (i > 0) {
@@ -166,8 +195,19 @@ export class CXXPrinter {
         break
       }
       case lw.LWKind.ConstructorExpression: {
+        if (utils.hasAnnotation(expression, std.names.annotations.asStruct)) {
+          this.p.put('{')
+          expression.args.forEach((arg, i) => {
+            if (i > 0) {
+              this.p.put(',', ' ')
+            }
+            this.printExpression(arg)
+          })
+          this.p.put('}')
+          return
+        }
         this.p.put('new', ' ', expression.name)
-        if (expression.typeArgs) {
+        if (expression.typeArgs && expression.typeArgs.length > 0) {
           this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
             if (i > 0) {
@@ -214,6 +254,20 @@ export class CXXPrinter {
       }
       case lw.LWKind.ExpressionStatement: {
         if (statement.expression) {
+          this.printExpression(statement.expression)
+        }
+        this.p.put(';')
+        break
+      }
+      case lw.LWKind.DeclarationStatement: {
+        this.printDirectType(statement.varType, statement.varName)
+        if (statement.expression) {
+          if (!(
+            statement.expression.kind === lw.LWKind.ConstructorExpression
+            && utils.hasAnnotation(statement.expression, std.names.annotations.asStruct)
+          )) {
+            this.p.put(' ', '=', ' ')
+          }
           this.printExpression(statement.expression)
         }
         this.p.put(';')
@@ -354,5 +408,5 @@ export function processNPrintCXX(chunk: lw.LWDeclaration) {
 
   const printer = new CXXPrinter()
   printer.printDeclaration(tree)
-  return printer.render()
+  return '#include <cstdio>\n' + printer.render()
 }

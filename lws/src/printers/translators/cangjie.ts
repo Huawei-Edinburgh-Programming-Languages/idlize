@@ -62,7 +62,11 @@ export class CangjiePrinter {
       }
       case lw.LWKind.AppType: {
         // stdlib specification
-        // TODO
+        switch (type.head) {
+          case std.names.types.pointer: { this.printType(type.args[0]); return }
+          case std.names.types.reference: { this.printType(type.args[0]); return }
+          case std.names.types.constant: { this.printType(type.args[0]); return }
+        }
 
         this.p.put(type.head)
         this.p.put('<')
@@ -115,7 +119,7 @@ export class CangjiePrinter {
       }
       case lw.LWKind.CallExpression: {
         this.printExpression(expression.callee)
-        if (expression.typeArgs) {
+        if (expression.typeArgs && expression.typeArgs.length > 0) {
           this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
             if (i > 0) {
@@ -137,7 +141,7 @@ export class CangjiePrinter {
       }
       case lw.LWKind.ConstructorExpression: {
         this.p.put(expression.name)
-        if (expression.typeArgs) {
+        if (expression.typeArgs && expression.typeArgs.length > 0) {
           this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
             if (i > 0) {
@@ -186,6 +190,18 @@ export class CangjiePrinter {
           this.printExpression(statement.expression)
         }
         break
+      }
+      case lw.LWKind.DeclarationStatement: {
+        let specifier = 'let'
+        if (statement.mutable) {
+          specifier = 'var'
+        }
+        this.p.put(specifier, ' ', statement.varName, ':')
+        this.printType(statement.varType)
+        if (statement.expression) {
+          this.p.put(' ', '=', ' ')
+          this.printExpression(statement.expression)
+        }
       }
     }
   }

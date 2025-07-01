@@ -74,7 +74,7 @@ function main() {
     ),
     D.class('Box', [], [
       D.func('test1', [], Ts.prim.void, S.block([
-        S.declaration('p', Ts.ptr(T.c('Point')), true,
+        S.declaration('p', T.c('Point'), true,
           E.instance('Point', [ E.c(5, [An.named('x')]), E.c(5, [An.named('y')])], [], [An.asStruct()])
         ),
         S.e(E.call(Vs.print, [E.get(E.v('p'), 'x')]))

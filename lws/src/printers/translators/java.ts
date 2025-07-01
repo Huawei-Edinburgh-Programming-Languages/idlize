@@ -48,8 +48,13 @@ export class JavaPrinter {
         break
       }
       case lw.LWKind.AppType: {
-        /* std specification */
-        // todo
+        // stdlib specification
+        switch (type.head) {
+          case std.names.types.pointer: { this.printType(type.args[0]); return }
+          case std.names.types.reference: { this.printType(type.args[0]); return }
+          case std.names.types.constant: { this.printType(type.args[0]); return }
+        }
+
         this.p.put(type.head)
         this.p.put('<')
         type.args.forEach((arg, i) => {
@@ -105,7 +110,7 @@ export class JavaPrinter {
       }
       case lw.LWKind.CallExpression: {
         this.printExpression(expression.callee)
-        if (expression.typeArgs) {
+        if (expression.typeArgs && expression.typeArgs.length > 0) {
           this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
             if (i > 0) {
@@ -127,7 +132,7 @@ export class JavaPrinter {
       }
       case lw.LWKind.ConstructorExpression: {
         this.p.put('new', ' ', expression.name)
-        if (expression.typeArgs) {
+        if (expression.typeArgs && expression.typeArgs.length > 0) {
           this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
             if (i > 0) {
@@ -233,6 +238,28 @@ export class JavaPrinter {
           }
           this.printField(member.name, member.type)
         })
+        this.p.newline()
+        // structure constructor
+        this.p.put('public', ' ', declaration.name, '(')
+        this.p.inc().newline()
+        declaration.members.forEach((member, i) => {
+          if (i > 0) {
+            this.p.put(',').newline()
+          }
+          this.printType(member.type)
+          this.p.put(' ', member.name)
+        })
+        this.p.dec().newline()
+        this.p.put(')', ' ', '{')
+        this.p.inc().newline()
+        declaration.members.forEach((member, i) => {
+          if (i > 0) {
+            this.p.newline()
+          }
+          this.p.put('this', '.', member.name, ' ', '=', ' ', member.name, ';')
+        })
+        this.p.dec().newline()
+        this.p.put('}')
         this.p.dec().newline()
         this.p.put('}')
         break

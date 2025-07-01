@@ -17,7 +17,7 @@ import { IndentPrinter } from "../indent";
 import * as lw from "../../lws"
 import { std } from "../../stdlib";
 import { IdentityTransformer } from "../../visitors/identity";
-import { T } from "../../builder";
+import { T, utils } from "../../builder";
 
 const varMapping = new Map([
   [std.names.vars.base, 'super'],
@@ -63,7 +63,11 @@ export class ArkTSPrinter {
       }
       case lw.LWKind.AppType: {
         // stdlib specification
-        // TODO
+        switch (type.head) {
+          case std.names.types.pointer: { this.printType(type.args[0]); return }
+          case std.names.types.reference: { this.printType(type.args[0]); return }
+          case std.names.types.constant: { this.printType(type.args[0]); return }
+        }
 
         this.p.put(type.head)
         this.p.put('<')
@@ -116,7 +120,7 @@ export class ArkTSPrinter {
       }
       case lw.LWKind.CallExpression: {
         this.printExpression(expression.callee)
-        if (expression.typeArgs) {
+        if (expression.typeArgs && expression.typeArgs.length > 0) {
           this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
             if (i > 0) {
@@ -137,8 +141,24 @@ export class ArkTSPrinter {
         break
       }
       case lw.LWKind.ConstructorExpression: {
+        if (utils.hasAnnotation(expression, std.names.annotations.asStruct)) {
+          this.p.put('{')
+          expression.args.forEach((arg, i) => {
+            if (i > 0) {
+              this.p.put(',', ' ')
+            }
+            const filedName = utils.getAnnotation(arg, std.names.annotations.named)
+            if (!filedName) {
+              throw new Error("!!!")
+            }
+            this.p.put(filedName, ':')
+            this.printExpression(arg)
+          })
+          this.p.put('}')
+          return
+        }
         this.p.put('new', ' ', expression.name)
-        if (expression.typeArgs) {
+        if (expression.typeArgs && expression.typeArgs.length > 0) {
           this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
             if (i > 0) {
@@ -184,6 +204,19 @@ export class ArkTSPrinter {
       }
       case lw.LWKind.ExpressionStatement: {
         if (statement.expression) {
+          this.printExpression(statement.expression)
+        }
+        break
+      }
+      case lw.LWKind.DeclarationStatement: {
+        let specifier = 'const'
+        if (statement.mutable) {
+          specifier = 'let'
+        }
+        this.p.put(specifier, ' ', statement.varName, ':')
+        this.printType(statement.varType)
+        if (statement.expression) {
+          this.p.put(' ', '=', ' ')
           this.printExpression(statement.expression)
         }
         break
@@ -327,7 +360,7 @@ export class ArkTSPrinter {
   }
 }
 
-export function processNPrintArkTS(chunk:lw.LWDeclaration) {
+export function processNPrintArkTS(chunk: lw.LWDeclaration) {
   let tree = chunk
 
   tree = new ConvertArkTSTypes().goDeclaration(tree)
