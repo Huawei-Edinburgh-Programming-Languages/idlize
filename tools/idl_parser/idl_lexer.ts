@@ -244,11 +244,16 @@ let g_text: string;
 let g_pos: number = 0;
 let g_col: number = 0;
 let g_row: number = 0;
-let g_token_text: string = "";
+let g_tokenText: string = "";
+let g_lineStartPos = 0;
 
 export function init(text: string) {
   g_text = text + '\n';  // Some files have no EOL in the end, so we fix it here!
   g_pos = 0;
+  g_col = 0;
+  g_row = 0;
+  g_tokenText = "";
+  g_lineStartPos = 0;
 }
 
 function isLetter(c: string): boolean {
@@ -294,6 +299,7 @@ export function getToken(): Token {
     if (c == '\n' ||                   // Linux or second char on Windows
         (c == '\r' && prev != '\n')) { // Mac, not Windows
       g_col = 1;
+      g_lineStartPos = g_pos;
       g_row++;
     }
     prev = c; c = getChar();
@@ -331,7 +337,7 @@ export function getToken(): Token {
     }
 
     // Ok, this is some identifier...
-    g_token_text = res;
+    g_tokenText = res;
     let word_id: number = getWord(res);
     if (word_id < 0)
       word_id = addWord(res);
@@ -351,7 +357,7 @@ export function getToken(): Token {
       res += c;
       prev = c; c = getChar();
     }
-    g_token_text = res;
+    g_tokenText = res;
     return Token.tNumber;
   }
 
@@ -404,4 +410,22 @@ export function getToken(): Token {
   console.log("Unknown sym: \'" + c + "\'");
   console.log("code: ", c.charCodeAt(0));
   return Token.tError;
+}
+
+export function getCol() {
+  return g_pos - g_lineStartPos;
+}
+
+export function getRow() {
+  return g_row;
+}
+
+export function getLastLine(): string {
+  let line: string = "";
+  for (let i = g_lineStartPos; i < g_text.length; i++) {
+    if (g_text[i] == '\r' || g_text[i] == '\n')
+      break;
+    line += g_text[i];
+  }
+  return line;
 }

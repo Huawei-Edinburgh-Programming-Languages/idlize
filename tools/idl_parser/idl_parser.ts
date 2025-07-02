@@ -44,7 +44,11 @@ function Match(tArg: lex.Token | string) {
      g_lookahead = lex.getToken();
      console.log("new:  " + g_lookahead);
   } else {
-    throw new Error("Match Error. Waiting for: " + tok + ", but got " + g_lookahead);
+    let msg: string = "Match Error. Waiting for: " + tok + ", but got " + g_lookahead;
+    msg += " at pos: (" + lex.getCol() + ", " + lex.getRow() + ")\n";
+    msg += lex.getLastLine() + "\n";
+    msg += ' '.repeat(lex.getCol()) + "^";
+    throw new Error(msg);
   }
 }
 
