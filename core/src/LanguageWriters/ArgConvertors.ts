@@ -1095,9 +1095,8 @@ export class UnionConvertor extends BaseArgConvertor {
         return language === Language.CPP && args?.index ? `${value}.value${args.index}` : value
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        const checker = new UnionRuntimeTypeChecker(this.memberConvertors)
         return writer.makeNaryOp("||",
-            this.memberConvertors.map((_, n) => checker.makeDiscriminator(value, n, writer)))
+            this.memberConvertors.map((_, n) => this.unionChecker.makeDiscriminator(value, n, writer)))
     }
 }
 

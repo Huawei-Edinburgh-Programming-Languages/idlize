@@ -21,6 +21,7 @@ import { ArgConvertor, CustomTypeConvertor } from "../LanguageWriters/ArgConvert
 import { RuntimeType } from "../LanguageWriters/common";
 import { LibraryInterface } from "../LibraryInterface";
 import { ReferenceResolver } from "./ReferenceResolver";
+import { Language } from "../Language";
 
 export class UnionFlattener implements TypeConvertor<IDLType[]> {
     constructor(private resolver: ReferenceResolver) {}
@@ -89,7 +90,7 @@ export class UnionRuntimeTypeChecker {
     }
     makeDiscriminator(value: string, convertorIndex: number, writer: LanguageWriter): LanguageExpression {
         const convertor = this.convertors[convertorIndex]
-        if (this.conflictingConvertors.has(convertor) && writer.language.needsUnionDiscrimination) {
+        if (this.conflictingConvertors.has(convertor) && writer.language === Language.ARKTS) {
             const discriminator = convertor.unionDiscriminator(value, convertorIndex, writer, this.duplicateMembers)
             this.discriminators.push([discriminator, convertor, convertorIndex])
             if (discriminator) return discriminator
