@@ -57,7 +57,7 @@ function Match(tArg: lex.Token | string) {
      console.log("new:  " + g_lookahead);
   } else {
     let msg: string = "Match Error. Waiting for: " +
-                      tok + "(" + token2Name(tok) + ")" + ", but got " + 
+                      tok + "(\'" + token2Name(tok) + "\')" + ", but got " +
                       g_lookahead + "(\'" + token2Name(g_lookahead) + "\')";
 
     msg += " at pos: (" + lex.getCol() + ", " + lex.getRow() + ")\n";
@@ -274,8 +274,11 @@ function Package() {
 }
 
 function CallbackRestOrInterface() {
-  CallbackRest();
-  Match(lex.Token.tInterface); Match(lex.Token.tId); Match(lex.Token.tLBrace); CallbackInterfaceMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
+  if (g_lookahead == lex.Token.tInterface) {
+    Match(lex.Token.tInterface); Match(lex.Token.tId); Match(lex.Token.tLBrace); CallbackInterfaceMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
+  } else {
+    CallbackRest();
+  }
 }
 
 function CallbackInterfaceMembers() {
@@ -420,8 +423,11 @@ function Argument() {
 }
 
 function ArgumentRest() {
-  Match("optional"); TypeWithExtendedAttributes(); ArgumentName(); Default();
-  Match("Type"); Ellipsis(); ArgumentName();
+  if (g_lookahead == lex.Token.tOptional) {
+    Match(lex.Token.tOptional); TypeWithExtendedAttributes(); ArgumentName(); Default();
+  } else {
+    Match("Type"); Ellipsis(); ArgumentName();
+  }
 }
 
 function ArgumentName() {
@@ -533,12 +539,15 @@ function DictionaryMemberRest() {
 }
 
 function PartialDictionary() {
-  Match("dictionary"); Match(lex.Token.tId); { DictionaryMembers(); } Match(lex.Token.tSemicolon);
+  Match(lex.Token.tDictionary); Match(lex.Token.tId); Match(lex.Token.tLBrace); DictionaryMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
 }
 
 function Default() {
-  Match(lex.Token.tEqual); DefaultValue();
-  // ε
+  if (g_lookahead == lex.Token.tEqual) {
+    Match(lex.Token.tEqual); DefaultValue();
+  } else {
+    // ε
+  }
 }
 
 function Enum() {
@@ -580,7 +589,9 @@ function TypeWithExtendedAttributes() {
 
 function SingleType() {
   DistinguishableType();
-  Match(lex.Token.tAny);
+  if  (g_lookahead == lex.Token.tAny) {
+    Match(lex.Token.tAny);
+  }
   PromiseType();
 }
 
@@ -694,7 +705,9 @@ function StringType() {
 }
 
 function PromiseType() {
-  Match("Promise"); Match(lex.Token.tLAngle); Type(); Match(lex.Token.tRAngle);
+  if (g_lookahead == lex.Token.tPromise) {
+    Match(lex.Token.tPromise); Match(lex.Token.tLAngle); Type(); Match(lex.Token.tRAngle);
+  }
 }
 
 function RecordType() {

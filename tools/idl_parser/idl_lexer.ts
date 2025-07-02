@@ -75,6 +75,7 @@ export enum Token {
   tRecord = 86,
   tObject = 87,       // I found this two types in standard but not in source code
   tSymbol = 88,
+  tOptional = 89,
 
   tArrayBuffer = 90,
   tSharedArrayBuffer = 91,
@@ -93,6 +94,8 @@ export enum Token {
   tFloat64Array = 104,
 
   tAny = 105,         // The any type is the union of all other possible non-union types.
+
+  tPromise = 106,
 
   tId = 999,          // identifier
   tError = 1000,
@@ -155,6 +158,7 @@ const g_keywords = new Map<string, Token>([
   ["record", Token.tRecord],
   ["object", Token.tObject],
   ["symbol", Token.tSymbol],
+  ["optional", Token.tOptional],
 
   ["tArrayBuffer", Token.tArrayBuffer],
   ["tSharedArrayBuffer", Token.tSharedArrayBuffer],
@@ -173,6 +177,8 @@ const g_keywords = new Map<string, Token>([
   ["Float64Array", Token.tFloat64Array],
 
   ["any", Token.tAny],
+
+  ["Promise", Token.tPromise],
 ]);
 
 let g_ArgumentNameKeyword: Token[] = [
@@ -320,7 +326,7 @@ export function getToken(): Token {
   // words
   if (isLetter(c)) {
     let res: string = "";
-    while (isLetter(c)) {
+    while (isLetter(c) || isDigit(c)) {
       res += c;
       prev = c; c = getChar();
       if (c == '\0') {
