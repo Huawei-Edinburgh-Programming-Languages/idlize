@@ -14,8 +14,7 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { ArgConvertor, CustomTypeConvertor, isMaterialized,
-    isImportAttr, IdlNameConvertor, Language, PeerLibrary,
+import { ArgConvertor, CustomTypeConvertor, IdlNameConvertor, Language, PeerLibrary,
     LanguageWriter,
     IndentedPrinter,
     TSLanguageWriter,
@@ -25,11 +24,9 @@ import { ArgConvertor, CustomTypeConvertor, isMaterialized,
     ETSLanguageWriter,
     CJLanguageWriter,
     CJIDLTypeToForeignStringConvertor,
-    isBuilderClass,
     TSTypeNameConvertor,
     ETSTypeNameConvertor
 } from "@idlizer/core";
-import { ArkoalaImportTypeConvertor, ArkoalaInterfaceConvertor, ArkoalaMaterializedClassConvertor } from './ArkoalaArgConvertors';
 import { ArkoalaJavaTypeNameConvertor, ArkoalaCJTypeNameConvertor } from './ArkoalaTypeNameConvertors';
 import { ArkPrimitiveTypesInstance } from './ArkPrimitiveType';
 
@@ -60,29 +57,9 @@ export class ArkoalaPeerLibrary extends PeerLibrary {
         }
         return super.createTypeNameConvertor(language)
     }
-    override typeConvertor(param: string, type: idl.IDLType, isOptionalParam = false): ArgConvertor {
-        return super.typeConvertor(param, type, isOptionalParam)
-    }
     override declarationConvertor(param: string, type: idl.IDLReferenceType, declaration: idl.IDLEntry | undefined): ArgConvertor {
-        switch (type.name) {
-            case `AnimationRange`:
-                return new CustomTypeConvertor(param, "AnimationRange", false, "AnimationRange<number>")
-        }
-        if (declaration) {
-            if (isImportAttr(declaration))
-                return new ArkoalaImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
-
-            if (idl.isInterface(declaration)) {
-                if (isMaterialized(declaration, this)) {
-                    return new ArkoalaMaterializedClassConvertor(this, param, declaration)
-                }
-                if (!isBuilderClass(declaration) &&
-                    declaration.subkind === idl.IDLInterfaceSubkind.Interface)
-                {
-                    return new ArkoalaInterfaceConvertor(this, (declaration.name!), param, declaration)
-                }
-            }
-        }
-        return super.declarationConvertor(param, type, declaration)
+        return type.name === `AnimationRange`
+            ? new CustomTypeConvertor(param, "AnimationRange", false, "AnimationRange<number>")
+            : super.declarationConvertor(param, type, declaration)
     }
 }
