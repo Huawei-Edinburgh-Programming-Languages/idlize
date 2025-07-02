@@ -106,7 +106,7 @@
 | FocusStopFocuBox.test.ets | |
 | FocusTraversalGroup.test.ets | |
 | FocusTraversalToComponentsEffect.test.ets | |
-| FolderStack.ets | |
+| FolderStack.ets | Olga Daryina |
 | ForegroundBlurStyle.test.ets | |
 | ForegroundColor.test.ets | |
 | ForegroundEffect.test.ets | |
@@ -157,7 +157,7 @@
 | ProgressTest.ets | |
 | QRCode.test.ets | |
 | RadioTest.ets | |
-| rating.ets | |
+| rating.ets | Olga Daryina |
 | Refresh.test.ets | |
 | RelativeContainer2.test.ets | |
 | RelativeContainerTest2.ets | |
