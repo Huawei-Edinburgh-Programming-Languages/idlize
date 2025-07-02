@@ -702,7 +702,7 @@ export class ArrayConvertor extends ObjectArgConvertor {
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
-            [writer.instanceOf(this, value, duplicates)])
+            [writer.instanceOf(this, value, duplicates)])///see ETSLW
     }
     override getObjectAccessor(language: Language, value: string, args?: Record<string, string>): string {
         const array = language === Language.CPP ? ".array" : ""

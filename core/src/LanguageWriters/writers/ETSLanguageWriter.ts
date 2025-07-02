@@ -37,7 +37,8 @@ import {
     MaterializedClassConvertor,
     OptionConvertor,
     UnionConvertor,
-    BufferConvertor
+    BufferConvertor,
+    EnumConvertor
 } from "../ArgConvertors"
 import * as idl from '../../idl'
 import { convertDeclaration, IdlNameConvertor } from "../nameConvertor"
@@ -180,17 +181,6 @@ export function generateEnumFromNumericName(entry: idl.IDLEntry): string {
     return `${typeName}_FromNumeric`
 }
 
-export function makeArrayTypeCheckCall(
-    valueAccessor: string,
-    typeName: string,
-    writer: LanguageWriter) {
-    return writer.makeMethodCall(
-        "TypeChecker",
-        generateTypeCheckerName(typeName),
-        [writer.makeString(valueAccessor)
-    ])
-}
-
 ////////////////////////////////////////////////////////////////
 //                           WRITER                           //
 ////////////////////////////////////////////////////////////////
@@ -260,10 +250,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             return this.makeCast(this.makeString(value), destinationConvertor.idlType)
         }
         return super.makeValueFromOption(value, destinationConvertor)
-    }
-    override makeIsTypeCall(value: string, decl: idl.IDLInterface): LanguageExpression {
-        return makeInterfaceTypeCheckerCall(value, decl.name,
-            decl.properties.map(it => it.name), new Set(), this)
     }
     makeEnumEntity(enumEntity: IDLEnum, options: { isExport: boolean, isDeclare?: boolean }): LanguageStatement {
         return new ArkTSEnumEntityStatement(enumEntity, {
@@ -344,37 +330,13 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     override castToBoolean(value: string): string { return `${value} ? 1 : 0` }
 
     override instanceOf(convertor: ArgConvertor, value: string, duplicateMembers?: Set<string>): LanguageExpression {
-        if (convertor instanceof CustomTypeConvertor) {
-            return makeInterfaceTypeCheckerCall(value,
-                this.getNodeName(convertor.idlType),
-                [],
-                duplicateMembers!,
-                this)
-        }
-        if (convertor instanceof InterfaceConvertor || convertor instanceof MaterializedClassConvertor) {
-            return makeInterfaceTypeCheckerCall(value,
-                this.getNodeName(convertor.idlType),
-                convertor.declaration.properties.filter(it => !it.isStatic).map(it => it.name),
-                duplicateMembers!,
-                this)
-        }
-        if (convertor instanceof BufferConvertor) {
-            return makeInterfaceTypeCheckerCall(value,
-                this.getNodeName(convertor.idlType),
-                [],
-                new Set(),
-                this)
-        }
-        if (convertor instanceof AggregateConvertor) {
-            return makeInterfaceTypeCheckerCall(value,
-                convertor.aliasName !== undefined ? convertor.aliasName : this.getNodeName(convertor.idlType),
-                convertor.members.map(it => it[0]), duplicateMembers!, this)
-        }
+        // work around ArkTS compiler bugs
         if (convertor instanceof ArrayConvertor) {
-            return makeArrayTypeCheckCall(value, this.arrayConvertor.convert(convertor.idlType), this)
+            const arrayTypeName = this.arrayConvertor.convert(convertor.idlType)
+            return this.makeMethodCall("TypeChecker", generateTypeCheckerName(arrayTypeName), [this.makeString(value)])
         }
-        if (idl.isEnum(this.resolver.toDeclaration(convertor.nativeType()))) {
-            return makeEnumTypeCheckerCall(value, this.getNodeName(convertor.idlType), this)
+        if (convertor instanceof EnumConvertor && this.getNodeName(convertor.idlType) === "DragPreviewMode") {
+            return this.makeMethodCall("TypeChecker", "isDragPreviewMode", [this.makeString(value)])
         }
         return super.instanceOf(convertor, value, duplicateMembers)
     }
@@ -413,28 +375,4 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         this._isUseTypeChecker = prevIsUse
         return result
     }
-}
-
-function makeInterfaceTypeCheckerCall(
-    valueAccessor: string,
-    interfaceName: string,
-    allFields: string[],
-    duplicates: Set<string>,
-    writer: LanguageWriter,
-): LanguageExpression {
-    return writer.makeMethodCall(
-        "TypeChecker",
-        generateTypeCheckerName(interfaceName), [writer.makeString(valueAccessor),
-        ...allFields.map(it => {
-            return writer.makeString(duplicates.has(it) ? "true" : "false")
-        })
-    ])
-}
-
-export function makeEnumTypeCheckerCall(valueAccessor: string, enumName: string, writer: LanguageWriter): LanguageExpression {
-    return writer.makeMethodCall(
-        "TypeChecker",
-        generateTypeCheckerName(enumName),
-        [writer.makeString(valueAccessor)]
-    )
 }

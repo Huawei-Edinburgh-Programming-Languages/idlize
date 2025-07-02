@@ -778,9 +778,6 @@ export abstract class LanguageWriter {
         return this.makeString(`(${this.makeNaryOp("||",
             accessors.map(it => this.makeString(`${value}!.hasOwnProperty("${it}")`))).asString()})`)
     }
-    makeIsTypeCall(value: string, decl: idl.IDLInterface): LanguageExpression {
-        return this.makeString(`is${decl.name}(${value})`)
-    }
     makeEnumEntity(enumEntity: idl.IDLEnum, options: { isExport: boolean, isDeclare?: boolean }): LanguageStatement {
         return new TsEnumEntityStatement(enumEntity, { isExport: options.isExport, isDeclare: !!options.isDeclare })
     }
