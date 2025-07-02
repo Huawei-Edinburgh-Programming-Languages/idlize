@@ -12394,9 +12394,6 @@ typedef struct GENERATED_ArkUICommonMethodModifier {
                                const Opt_ResourceColor* value);
     void (*setPixelRound)(Ark_NativePointer node,
                           const Opt_PixelRoundPolicy* value);
-    void (*setBackgroundImage)(Ark_NativePointer node,
-                               const Opt_Union_ResourceStr_PixelMap* src,
-                               const Opt_ImageRepeat* repeat);
     void (*setBackgroundImageSize)(Ark_NativePointer node,
                                    const Opt_Union_SizeOptions_ImageSize* value);
     void (*setBackgroundImagePosition)(Ark_NativePointer node,
@@ -12498,15 +12495,6 @@ typedef struct GENERATED_ArkUICommonMethodModifier {
     void (*setTransition1)(Ark_NativePointer node,
                            const Opt_TransitionEffect* effect,
                            const Opt_TransitionFinishCallback* onFinish);
-    void (*setGesture)(Ark_NativePointer node,
-                       const Opt_GestureType* gesture,
-                       const Opt_GestureMask* mask);
-    void (*setPriorityGesture)(Ark_NativePointer node,
-                               const Opt_GestureType* gesture,
-                               const Opt_GestureMask* mask);
-    void (*setParallelGesture)(Ark_NativePointer node,
-                               const Opt_GestureType* gesture,
-                               const Opt_GestureMask* mask);
     void (*setBlur)(Ark_NativePointer node,
                     const Opt_Number* value,
                     const Opt_BlurOptions* options);
@@ -12610,24 +12598,16 @@ typedef struct GENERATED_ArkUICommonMethodModifier {
                            const Opt_Number* value);
     void (*setClickEffect)(Ark_NativePointer node,
                            const Opt_ClickEffect* value);
-    void (*setOnDragStart)(Ark_NativePointer node,
-                           const Opt_Type_CommonMethod_onDragStart_event* event);
     void (*setOnDragEnter)(Ark_NativePointer node,
                            const Opt_Callback_DragEvent_Opt_String_Void* event);
     void (*setOnDragMove)(Ark_NativePointer node,
                           const Opt_Callback_DragEvent_Opt_String_Void* event);
     void (*setOnDragLeave)(Ark_NativePointer node,
                            const Opt_Callback_DragEvent_Opt_String_Void* event);
-    void (*setOnDrop)(Ark_NativePointer node,
-                      const Opt_Callback_DragEvent_Opt_String_Void* event);
     void (*setOnDragEnd)(Ark_NativePointer node,
                          const Opt_Callback_DragEvent_Opt_String_Void* event);
-    void (*setAllowDrop)(Ark_NativePointer node,
-                         const Opt_Array_CustomObject* value);
     void (*setDraggable)(Ark_NativePointer node,
                          const Opt_Boolean* value);
-    void (*setDragPreview)(Ark_NativePointer node,
-                           const Opt_Union_CustomBuilder_DragItemInfo_String* value);
     void (*setDragPreviewOptions)(Ark_NativePointer node,
                                   const Opt_DragPreviewOptions* value,
                                   const Opt_DragInteractionOptions* options);
@@ -12697,8 +12677,6 @@ typedef struct GENERATED_ArkUICommonMethodModifier {
                          const Opt_Boolean* isShow,
                          const Opt_CustomNodeBuilder* builder,
                          const Opt_SheetOptions* options);
-    void (*setStateStyles)(Ark_NativePointer node,
-                           const Opt_StateStyles* value);
     void (*setRestoreId)(Ark_NativePointer node,
                          const Opt_Number* value);
     void (*setOnVisibleAreaChange)(Ark_NativePointer node,
@@ -12743,8 +12721,6 @@ typedef struct GENERATED_ArkUICommonMethodModifier {
                        const Opt_String* id);
     void (*setRenderFit)(Ark_NativePointer node,
                          const Opt_RenderFit* fitMode);
-    void (*setGestureModifier)(Ark_NativePointer node,
-                               const Opt_GestureModifier* modifier);
     void (*setBackgroundBrightness)(Ark_NativePointer node,
                                     const Opt_BackgroundBrightnessOptions* params);
     void (*setOnGestureJudgeBegin)(Ark_NativePointer node,
