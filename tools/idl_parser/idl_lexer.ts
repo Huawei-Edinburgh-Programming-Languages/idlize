@@ -217,6 +217,12 @@ export function IsItBufferRelatedType(value: Token): boolean {
   return g_BufferRelatedType.includes(value);
 }
 
+let g_Types: Token[] = [
+  Token.tShort, Token.tLong, Token.tUnsigned, Token.tBoolean,
+  Token.tByte, Token.tOctet, Token.tBigint, Token.tFloat, Token.tDouble,
+  Token.tString, Token.tVoid, Token.tNumber
+]
+
 let g_lastId = 0;
 let g_words = new Map<string, number>([
 //  ["word", id]

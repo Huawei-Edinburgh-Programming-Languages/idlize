@@ -9,10 +9,10 @@ const g_char2token = new Map<string, lex.Token>([
   [")", lex.Token.tRBracket],
   ["{", lex.Token.tLBrace],
   ["}", lex.Token.tRBrace],
-  ["[", lex.Token.tLSqrBracket],
-  ["]", lex.Token.tRSqrBracket],
   ["<", lex.Token.tLAngle],
   [">", lex.Token.tRAngle],
+  ["[", lex.Token.tLSqrBracket],
+  ["]", lex.Token.tRSqrBracket],
   [":", lex.Token.tColon],
   [";", lex.Token.tSemicolon],
   [".", lex.Token.tDot],
@@ -22,7 +22,19 @@ const g_char2token = new Map<string, lex.Token>([
   ["*", lex.Token.tAsterisk],
   ["...", lex.Token.tEllipsis],
   ["?", lex.Token.tQuestion],
+  ["any", lex.Token.tAny],
 ]);
+
+function token2Name(t: lex.Token): string {
+  let res: string = "-";
+  g_char2token.forEach((value, key) => {
+    if (value === t) {
+      res = key;
+    }
+  });
+
+  return res;
+}
 
 function Match(tArg: lex.Token | string) {
   let tok: lex.Token;
@@ -44,10 +56,14 @@ function Match(tArg: lex.Token | string) {
      g_lookahead = lex.getToken();
      console.log("new:  " + g_lookahead);
   } else {
-    let msg: string = "Match Error. Waiting for: " + tok + ", but got " + g_lookahead;
+    let msg: string = "Match Error. Waiting for: " +
+                      tok + "(" + token2Name(tok) + ")" + ", but got " + 
+                      g_lookahead + "(\'" + token2Name(g_lookahead) + "\')";
+
     msg += " at pos: (" + lex.getCol() + ", " + lex.getRow() + ")\n";
     msg += lex.getLastLine() + "\n";
-    msg += ' '.repeat(lex.getCol()) + "^";
+    msg += '-'.repeat(lex.getCol() - 1) + "^";  // -1 means that human start line from col == 1
+                                                // and there is no spaces (' ') to the left of the first column
     throw new Error(msg);
   }
 }
@@ -220,7 +236,7 @@ function PartialInterfaceMember() {
 }
 
 function Inheritance() {
-  Match(":"); Match(lex.Token.tId);
+  Match(lex.Token.tColon); Match(lex.Token.tId);
   // ε
 }
 
@@ -243,7 +259,7 @@ function MixinMember() {
 }
 
 function IncludesStatement() {
-  Match(lex.Token.tId); Match("includes"); Match(lex.Token.tId); Match(lex.Token.tSemicolon);
+  Match(lex.Token.tId); Match(lex.Token.tIncludes); Match(lex.Token.tId); Match(lex.Token.tSemicolon);
 }
 
 function Package() {
@@ -275,7 +291,7 @@ function CallbackInterfaceMember() {
 }
 
 function Const() {
-  Match("const"); ConstType(); Match(lex.Token.tId); Match(lex.Token.tEqual); ConstValue(); Match(lex.Token.tSemicolon);
+  Match(lex.Token.tConst); ConstType(); Match(lex.Token.tId); Match(lex.Token.tEqual); ConstValue(); Match(lex.Token.tSemicolon);
 }
 
 function ConstValue() {
