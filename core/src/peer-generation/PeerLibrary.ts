@@ -21,7 +21,7 @@ import { LanguageWriter } from '../LanguageWriters/LanguageWriter'
 import { createLanguageWriter, IdlNameConvertor } from '../LanguageWriters'
 import {
     BufferConvertor, CallbackConvertor, DateConvertor, MapConvertor, PointerConvertor, TupleConvertor, TypeAliasConvertor,
-    AggregateConvertor, StringConvertor, ClassConvertor, ArrayConvertor, FunctionConvertor, OptionConvertor,
+    AggregateConvertor, StringConvertor, ArrayConvertor, FunctionConvertor, OptionConvertor,
     NumberConvertor, NumericConvertor, CustomTypeConvertor, UnionConvertor, MaterializedClassConvertor,
     ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, VoidConvertor, ImportTypeConvertor, InterfaceConvertor, BigIntToU64Convertor,
     ObjectConvertor,
@@ -458,7 +458,7 @@ export class PeerLibrary implements LibraryInterface {
                 return new MaterializedClassConvertor(this, param, declaration)
             }
             if (isBuilderClass(declaration)) {
-                return new ClassConvertor(this, declarationName, param, declaration)
+                return new InterfaceConvertor(this, declarationName, param, declaration)
             }
             switch (declaration.subkind) {
                 case idl.IDLInterfaceSubkind.Interface:

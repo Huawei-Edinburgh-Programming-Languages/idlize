@@ -176,6 +176,12 @@ export abstract class BaseArgConvertor implements ArgConvertor {
     }
 }
 
+abstract class ObjectArgConvertor extends BaseArgConvertor {
+    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+        return writer.makeString(`${value} instanceof ${this.targetType(writer)}`)
+    }
+}
+
 export class BooleanConvertor extends BaseArgConvertor {
     constructor(param: string) {
         super(idl.IDLBooleanType, [RuntimeType.BOOLEAN], false, false, param)
@@ -269,7 +275,7 @@ export class StringConvertor extends BaseArgConvertor {
     }
 }
 
-export class EnumConvertor extends BaseArgConvertor {
+export class EnumConvertor extends ObjectArgConvertor {
     constructor(param: string, public enumEntry: idl.IDLEnum) {
         super(idl.createReferenceType(enumEntry),
             [idl.isStringEnum(enumEntry) ? RuntimeType.STRING : RuntimeType.NUMBER],
@@ -296,9 +302,6 @@ export class EnumConvertor extends BaseArgConvertor {
     }
     isPointerType(): boolean {
         return false
-    }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return writer.makeString(`${value} instanceof ${writer.getNodeName(this.idlType)}`)
     }
 }
 
@@ -468,7 +471,7 @@ export class PointerConvertor extends BaseArgConvertor {
     }
 }
 
-export class BufferConvertor extends BaseArgConvertor {
+export class BufferConvertor extends ObjectArgConvertor {
     constructor(param: string) {
         super(idl.IDLBufferType, [RuntimeType.OBJECT], false, true, param)
     }
@@ -493,12 +496,9 @@ export class BufferConvertor extends BaseArgConvertor {
     isPointerType(): boolean {
         return true
     }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return writer.makeString(`${value} instanceof NativeBuffer`);
-    }
 }
 
-export class AggregateConvertor extends BaseArgConvertor { //
+export class AggregateConvertor extends ObjectArgConvertor {
     protected memberConvertors: ArgConvertor[]
     public members: [string, boolean][] = []
     public readonly aliasName: string | undefined
@@ -581,15 +581,6 @@ export class AggregateConvertor extends BaseArgConvertor { //
     getMembers(): string[] {
         return this.members.map(it => it[0])
     }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        const uniqueFields = this.members.filter(it => !duplicates.has(it[0]))
-        return this.discriminatorFromFields(value,
-            writer,
-            uniqueFields,
-            it => it[0],
-            it => it[1],
-            duplicates)
-    }
 }
 
 export class TupleConvertor extends AggregateConvertor {
@@ -627,7 +618,7 @@ export class TupleConvertor extends AggregateConvertor {
     }
 }
 
-export class InterfaceConvertor extends BaseArgConvertor {
+export class InterfaceConvertor extends ObjectArgConvertor {
     constructor(private library: LibraryInterface, name: string /* change to IDLReferenceType */, param: string, public declaration: idl.IDLInterface) {
         super(idl.createReferenceType(declaration), [RuntimeType.OBJECT], false, true, param)
     }
@@ -659,26 +650,9 @@ export class InterfaceConvertor extends BaseArgConvertor {
     getMembers(): string[] {
         return this.declaration?.properties.map(it => it.name) ?? []
     }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        // Try to figure out interface by examining field sets
-        const uniqueFields = this.declaration?.properties.filter(it => !duplicates.has(it.name))
-        return writer.makeString(`${value} instanceof ${writer.getNodeName(this.idlType)}`)
-    }
 }
 
-export class ClassConvertor extends InterfaceConvertor {
-    constructor(library: LibraryInterface, name: string, param: string, declaration: idl.IDLInterface) {
-        super(library, name, param, declaration)
-    }
-    override unionDiscriminator(value: string,
-                                index: number,
-                                writer: LanguageWriter,
-                                duplicateMembers: Set<string>): LanguageExpression | undefined {
-        return writer.makeString(`${value} instanceof ${writer.getNodeName(this.idlType)}`)
-    }
-}
-
-export class ArrayConvertor extends BaseArgConvertor { //
+export class ArrayConvertor extends ObjectArgConvertor {
     elementConvertor: ArgConvertor
     constructor(private library: LibraryInterface, param: string, private type: idl.IDLContainerType, private elementType: idl.IDLType) {
         super(idl.createContainerType('sequence', [elementType]), [RuntimeType.OBJECT], false, true, param)
@@ -736,7 +710,7 @@ export class ArrayConvertor extends BaseArgConvertor { //
     }
 }
 
-export class MapConvertor extends BaseArgConvertor {
+export class MapConvertor extends ObjectArgConvertor {
     keyConvertor: ArgConvertor
     valueConvertor: ArgConvertor
     constructor(private library: LibraryInterface, param: string, type: idl.IDLType, public keyType: idl.IDLType, public valueType: idl.IDLType) {
@@ -801,9 +775,6 @@ export class MapConvertor extends BaseArgConvertor {
     }
     isPointerType(): boolean {
         return true
-    }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return writer.makeString(`${value} instanceof Map`)
     }
     override getObjectAccessor(language: Language, value: string, args?: Record<string, string>): string {
         return language === Language.CPP && args?.index && args?.field
@@ -1128,7 +1099,7 @@ export class FunctionConvertor extends BaseArgConvertor { //
     }
 }
 
-export class MaterializedClassConvertor extends BaseArgConvertor {
+export class MaterializedClassConvertor extends ObjectArgConvertor {
     constructor(private library: LibraryInterface, param: string, public declaration: idl.IDLInterface) {
         super(idl.createReferenceType(declaration), [RuntimeType.OBJECT], false, false, param)
     }
@@ -1165,12 +1136,9 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     isPointerType(): boolean {
         return false
     }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return writer.makeString(`${value} instanceof ${writer.getNodeName(this.idlType)}`)
-    }
 }
 
-export class ExternalTypeConvertor extends BaseArgConvertor {
+export class ExternalTypeConvertor extends ObjectArgConvertor {
     constructor(private library:PeerLibrary, param: string, public declaration: idl.IDLInterface) {
         super(idl.createReferenceType(declaration), [RuntimeType.OBJECT], false, false, param)
         console.log(`ExternalType convertor for type: ${declaration.name}`)
@@ -1212,9 +1180,6 @@ export class ExternalTypeConvertor extends BaseArgConvertor {
     }
     isPointerType(): boolean {
         return false
-    }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return writer.makeString(`${value} instanceof ${writer.getNodeName(this.idlType)}`)///targetType or rm?
     }
 }
 

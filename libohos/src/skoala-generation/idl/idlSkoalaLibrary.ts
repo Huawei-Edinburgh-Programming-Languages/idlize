@@ -39,7 +39,7 @@ import {
 import { WrapperClass, WrapperField, WrapperMethod } from "../WrapperClass";
 import { Skoala } from "../utils";
 import { Field, FieldModifier, LanguageExpression, LanguageStatement, LanguageWriter, Method, MethodModifier, NamedMethodSignature, NumberConvertor } from "@idlizer/core";
-import { ClassConvertor, StringConvertor, TypeAliasConvertor, UnionConvertor, CppNameConvertor,
+import { StringConvertor, TypeAliasConvertor, UnionConvertor, CppNameConvertor,
     ArgConvertor, BooleanConvertor, BaseArgConvertor, EnumConvertor, ExpressionAssigner, RuntimeType, UndefinedConvertor,
     convertDeclaration, convertType, DeclarationConvertor, IdlNameConvertor, TypeConvertor, generateSyntheticFunctionName
 } from "@idlizer/core"
@@ -205,12 +205,7 @@ export class IdlSkoalaLibrary implements LibraryInterface {
             if (processor?.isWrapper(declaration)) {
                 return new IdlWrapperClassConvertor(declarationName, param, this, declaration)
             }
-            switch (declaration.subkind) {
-                case idl.IDLInterfaceSubkind.Interface:
-                    return new InterfaceConvertor(this, declarationName, param, declaration)
-                case idl.IDLInterfaceSubkind.Class:
-                    return new ClassConvertor(this, declarationName, param, declaration)
-            }
+            return new InterfaceConvertor(this, declarationName, param, declaration)
         }
 
         if (idl.isTypedef(declaration)) {
