@@ -181,7 +181,7 @@
 | SliderTest.ets | |
 | SpanTest.ets | Olga Daryina |
 | Stack.ets | |
-| StepperTest.ets | |
+| StepperTest.ets | Ivan Tuzhilkin |
 | Swiper.test.ets | |
 | SymbolGlyph.ets | Olga Daryina |
 | SymbolSpan.ets | Olga Daryina |
