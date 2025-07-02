@@ -412,7 +412,9 @@ function ArgumentList() {
 }
 
 function Arguments() {
-  Match(lex.Token.tComma); Argument(); Arguments();
+  while (g_lookahead == lex.Token.tComma) {
+    Match(lex.Token.tComma); Argument();
+  }
   // ε
 }
 
