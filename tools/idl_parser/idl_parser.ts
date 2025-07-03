@@ -71,7 +71,7 @@ function Match(tArg: lex.Token | string) {
   }
 }
 
-export function Parse() {
+export function Parse(): idl.Definitions | null {
   const idl: string =
 `package arkui.component.idlize;
 callback Callback_Extender_OnProgress = void (f32 value);`
@@ -89,21 +89,15 @@ callback Callback_Extender_OnProgress = void (f32 value);`
   throw new Error("Done!");*/
   // Debug code
 
+  let defs: idl.Definitions | null = null;
+
   g_lookahead = lex.getToken();
   if (g_lookahead != lex.Token.tError && g_lookahead != lex.Token.tEnd) {
-    let defs: idl.Definitions = Definitions(); // starting production
-    if (defs) {
-      console.log("IDL has " + defs.nodes.length + " definitions");
-
-      for (let i = 0; i < defs.nodes.length; i++) {
-        console.log(i, defs.nodes[i].name());
-      }
-    } else {
-      console.log("defs is null");
-    }
+    defs = Definitions(); // starting production
   }
 
   console.log("The end!");
+  return defs;
 }
 
 // starting production
