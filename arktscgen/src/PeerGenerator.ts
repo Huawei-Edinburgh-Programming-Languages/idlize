@@ -2,9 +2,8 @@ import * as core from "@idlizer/core"
 import { Config } from "./general/Config"
 import { InteropConstructions } from "./constuctions/InteropConstructions"
 import { PeersConstructions } from "./constuctions/PeersConstructions"
-import { isCreateOrUpdate, isGetter, isReal, mangleIfKeyword, peerMethod, splitCreateOrUpdate } from "./general/common"
+import { isCreateOrUpdate, isReal, mangleIfKeyword, peerMethod, splitCreateOrUpdate } from "./general/common"
 import { flattenType, nodeNamespace, nodeType } from "./utils/idl";
-import { BranchStatement } from "@idlizer/core"
 
 export interface Body {
     creates: core.Method[],
@@ -43,46 +42,32 @@ export class PeerGenerator {
             return acc
         }, {} as Partial<Record<string, core.IDLMethod[]>>);
 
-        // Collapse overloads
+        // Filter out methods that should not be generated.
 
         methods.Create = this.ts_collapseOverloads(methods.Create ?? [])
         methods.Update = this.ts_collapseOverloads(methods.Update ?? [])
         methods.Getter = this.ts_collapseDuplicates(methods.Getter ?? [])
 
-        // Hacks section
-
-        // TODO: This was requested by Igor - add args to create/update methods and set/call corresponding
-        // props/setters. Factory.ts needs updated declarations.
-        const extraArgs = PeerGenerator.hack_extraArgs(iface)
-        const createOrUpdateName = (name: string) => PeersConstructions.createOrUpdate(iface.name, name)
+        // Make declarations. It is IMPORTANT to not modify its signatures here bc
+        // we could not generate the correct binding calls.
+        // A signature can be modified in generate methods only!
 
         const body = {
             creates: methods.Create
-                ?.map(m => PeerGenerator.makeMethod(
-                    m, createOrUpdateName(m.name), [core.MethodModifier.STATIC], extraArgs
-                )) ?? [],
+                ?.map(m => PeerGenerator.makeMethod(m, [core.MethodModifier.STATIC])) ?? [],
             updates: methods.Update
-                ?.map(m => PeerGenerator.makeMethod(
-                    m, createOrUpdateName(m.name), [core.MethodModifier.STATIC], extraArgs
-                )) ?? [],
+                ?.map(m => PeerGenerator.makeMethod(m, [core.MethodModifier.STATIC])) ?? [],
             getters: methods.Getter
-                ?.map(m => PeerGenerator.makeMethod(
-                    m, peerMethod(m.name), [core.MethodModifier.GETTER]
-                )) ?? [],
+                ?.map(m => PeerGenerator.makeMethod(m, [core.MethodModifier.GETTER])) ?? [],
             regular: methods.Regular
-                ?.map(m => PeerGenerator.makeMethod(
-                    m, peerMethod(m.name)
-                )) ?? [],
+                ?.map(m => PeerGenerator.makeMethod(m)) ?? [],
         }
 
         // See variable_declararion_old_vs_new.diff
         //
-        // TODO: Major! Method's name is modified before generation of binding call so
-        // we can call not a desired method (w/o Const suffix for example)
+        // TODO: More calls to native *Const methods! It exists filter for that!
         // TODO: Some parameters are unions (| undefined) or optional,
-        // there is no such flags in idl file for those parameteres
-        // TODO: Probably, the separation for getters and regulars in body
-        // is not needed.
+        // there is no such flags in idl file for those parameteres. It exists filter for that!
 
         // 1. Writing ctors
 
@@ -96,15 +81,8 @@ export class PeerGenerator {
 
         // 3. Writing getters and regular
 
-        const inFileOrder = iface.methods
-            .filter(m => !isCreateOrUpdate(m.name))
-            .map(m => peerMethod(m.name))
-            .reduce((acc, cur) => {
-                if (!acc.length || acc.at(-1) != cur) {
-                    acc.push(cur)
-                }
-                return acc
-            }, [] as string[])
+        const inFileOrder = this.ts_collapseDuplicates(iface.methods.filter(m => !isCreateOrUpdate(m.name)))
+            .map(m => m.name)
 
         // FIXME: !!!
         let getIndex = 0, regIndex = 0
@@ -127,20 +105,29 @@ export class PeerGenerator {
 
     // write/make methods were copy-pasted from PeerPrinter and modified to work with other types and
     // resolver
- 
+
     private writeCreateImpl(iface: core.IDLInterface, method: core.Method, writer: core.LanguageWriter): void {
-        const methodName = method.name.at(0)?.toUpperCase() + method.name.slice(1, 6)
         const nativeCall = writer.makeFunctionCall(
             writer.makeString(
                 PeersConstructions.callBinding(
                     iface.name,
-                    methodName,
+                    method.name,
                     nodeNamespace(iface)
                 )
             ),
             this.makeBindingArguments(method).map(p => writer.makeString(p)) ?? []
         )
         const newExpr = writer.makeNewObject(iface.name, [nativeCall])
+
+        // Modify method name and signature (if needed)
+
+        method.name = PeersConstructions.createOrUpdate(iface.name, method.name)
+
+        // TODO: This was requested by Igor - add args to create/update methods and set/call corresponding
+        // props/setters. Factory.ts needs updated declarations.
+        //const extraArgs = PeerGenerator.hack_extraArgs(iface)
+        //method.signature.args.push()
+        //const extraStatements: core.LanguageStatement[] = []
 
         writer.writeMethodImplementation(method, () => {
             if (isReal(iface)) {
@@ -152,6 +139,8 @@ export class PeerGenerator {
                     writer.makeStatement(
                         writer.makeMethodCall(varName, PeersConstructions.setChildrenParentPtrMethod, [])
                     ),
+                    // Hacks
+                    //...extraStatements,
                     writer.makeReturn(
                         writer.makeString(varName)
                     ),
@@ -203,12 +192,19 @@ export class PeerGenerator {
     }
 
     private writeGetterImpl(iface: core.IDLInterface, method: core.Method, writer: core.LanguageWriter): void {
+        const nativeCall = this.makeWrappedBindingCall(iface, method, writer, this.resolver)
+
+        // Modify method name and signature (if needed)
+
+        console.log(`${method.name} =>  ${peerMethod(method.name)}`);
+        method.name = peerMethod(method.name)
+
         writer.writeMethodImplementation(
             method,
             () => {
                 writer.writeStatement(
                     writer.makeReturn(
-                        this.makeWrappedBindingCall(iface, method, writer, this.resolver)
+                        nativeCall
                     )
                 )
             }
@@ -216,13 +212,19 @@ export class PeerGenerator {
     }
 
     private writeRegularImpl(iface: core.IDLInterface, method: core.Method, writer: core.LanguageWriter): void {
+        const nativeCall = this.makeWrappedBindingCall(iface, method, writer, this.resolver)
+
+        // Modify method name and signature (if needed)
+
+        method.name = peerMethod(method.name)
+        method.signature.returnType = flattenType(PeersConstructions.this.type)
+
         writer.writeExpressionStatement(
             writer.makeString(`/** @deprecated */`)
         )
-        method.signature.returnType = flattenType(PeersConstructions.this.type) // FIXME: put in writeBody
         writer.writeMethodImplementation(method, () => {
             writer.writeExpressionStatement(
-                this.makeWrappedBindingCall(iface, method, writer, this.resolver)
+                nativeCall
             )
             writer.writeStatement(
                 writer.makeReturn(
@@ -235,9 +237,23 @@ export class PeerGenerator {
     }
 
     public ts_collapseDuplicates(methods: readonly core.IDLMethod[]): core.IDLMethod[] {
-        const names = new Set<string>();
+        // Prefer non-const methods for native calls - from old filter.
+        const isConst = (str: string) => str.endsWith(Config.constPostfix)
+        const nonConst = new Set<string>()
+
+        methods.forEach((m) => {
+            if (!isConst(m.name)) {
+                nonConst.add(peerMethod(m.name))
+            }
+        })
+
+        const names = new Set<string>()
+        // Keep input order
         return methods.filter((m) => {
             const str = peerMethod(m.name)
+            if (nonConst.has(str) && isConst(m.name)) {
+                return false
+            }
             return !names.has(str) && (names.add(str), true)
         })
     }
@@ -255,7 +271,7 @@ export class PeerGenerator {
         method: core.Method,
         writer: core.LanguageWriter,
         resolver: Resolver): core.LanguageExpression {
-        const methodName = method.name.at(0)?.toUpperCase() + method.name.slice(1) // FIXME: move to callBinding
+        const methodName = method.name
         const nativeCall = writer.makeFunctionCall(
             PeersConstructions.callBinding(iface.name, methodName, nodeNamespace(iface)),
                 PeerGenerator.convertBindingArguments([core.IDLPointerType, ...method.signature.args],
@@ -340,16 +356,19 @@ export class PeerGenerator {
 
     private static makeMethod(
         method: core.IDLMethod,
-        name?: string,
-        modifiers?: core.MethodModifier[],
-        extraParams?: core.IDLParameter[]
+        modifiers?: core.MethodModifier[]
     ): core.Method {
-        const parameters = this.ts_removeArrayLengthParam(this.hack_removeContextParam(method.parameters))
-            .concat(...extraParams ?? [])
+        // We can make this modifications before generation of binding call bc
+        // they are generated in makeWrapperToNativeType() method. Just not to litter in all
+        // write* methods.
+        const parameters = this.ts_removeArrayLengthParam(
+            this.hack_removeContextParam(method.parameters)
+        )
         const argsModifiers = undefined // TODO: fix
+        parameters.forEach(p => {  if (core.isOptionalType(p.type)) throw ''; })
 
         return new core.Method(
-            name ?? method.name,
+            method.name,
             new core.MethodSignature(
                 flattenType(method.returnType),
                 parameters
@@ -455,5 +474,10 @@ class SimpleConverter extends core.TSTypeNameConvertor {
        }
        return super.convertPrimitiveType(type)
    }
+
+  override convertOptional(type: core.IDLOptionalType): string {
+      throw 'Optional'
+      return ''
+  }
 }
 

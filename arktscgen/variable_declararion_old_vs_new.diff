@@ -2,15 +2,19 @@
 <     static updateVariableDeclaration(original: VariableDeclaration | undefined, kind: Es2pandaVariableDeclarationKind, declarators: readonly VariableDeclarator[]): VariableDeclaration {
 ---
 >     static updateVariableDeclaration(original: VariableDeclaration, kind: Es2pandaVariableDeclarationKind, declarators: readonly VariableDeclarator[]): VariableDeclaration {
-64c64
-<         return global.generatedEs2panda._VariableDeclarationKindConst(global.context, this.peer)
+58c58
+<         return unpackNodeArray(global.generatedEs2panda._VariableDeclarationDeclarators(global.context, this.peer))
 ---
->         return global.generatedEs2panda._VariableDeclarationKind(global.context, this.peer)
+>         return unpackNodeArray(global.generatedEs2panda._VariableDeclarationDeclaratorsConst(global.context, this.peer))
+67c67
+<         return unpackNodeArray(global.generatedEs2panda._VariableDeclarationDecorators(global.context, this.peer))
+---
+>         return unpackNodeArray(global.generatedEs2panda._VariableDeclarationDecoratorsConst(global.context, this.peer))
 73c73,78
 <     emplaceAnnotations(source?: AnnotationUsage): this {
 ---
 >     declaratorByName(name: string): this {
->         global.generatedEs2panda._VariableDeclarationDeclaratorByName(global.context, this.peer, name)
+>         unpackNonNullableNode(global.generatedEs2panda._VariableDeclarationGetDeclaratorByNameConst(global.context, this.peer, name))
 >         return this
 >     }
 >     /** @deprecated */
