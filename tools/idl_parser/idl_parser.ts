@@ -23,10 +23,12 @@ const g_char2token = new Map<string, lex.Token>([
   ["...", lex.Token.tEllipsis],
   ["?", lex.Token.tQuestion],
   ["any", lex.Token.tAny],
+  ["Id", lex.Token.tId],
+  ["or", lex.Token.tOr],
 ]);
 
 function token2Name(t: lex.Token): string {
-  let res: string = "-";
+  let res: string = "??";
   g_char2token.forEach((value, key) => {
     if (value === t) {
       res = key;
@@ -81,7 +83,7 @@ callback Callback_Extender_OnProgress = void (f32 value);`
   // Debug code
   /*for (let i: number = 0; i < 10; i++) {
     g_lookahead = lex.getToken();
-    console.log("LookAhead[" + i + "]: " + g_lookahead);
+    console.log("LookAhead[" + i + "]: " + g_lookahead + " == \'" + token2Name(g_lookahead) + "\'");
   }
   throw new Error("Done!");*/
   // Debug code
@@ -90,7 +92,6 @@ callback Callback_Extender_OnProgress = void (f32 value);`
 
   g_lookahead = lex.getToken();
   while (g_lookahead != lex.Token.tError && g_lookahead != lex.Token.tEnd) {
-    console.log("LookAhead: " + g_lookahead);
     Definitions(); // starting production
     g_lookahead = lex.getToken();
     i++;
@@ -137,39 +138,10 @@ function Definition() {
   }
 }
 
-function ArgumentNameKeyword() {
-/*    async
-    attribute
-    callback
-    const
-    constructor
-    deleter
-    dictionary
-    enum
-    getter
-    includes
-    inherit
-    interface
-    iterable
-    maplike
-    mixin
-    namespace
-    partial
-    readonly
-    required
-    setlike
-    setter
-    static
-    stringifier
-    typedef
-    unrestricted*/
-}
-
 function CallbackOrInterfaceOrMixin() {
   if (g_lookahead == lex.Token.tCallback) {
     Match(lex.Token.tCallback); CallbackRestOrInterface();
-  }
-  if (g_lookahead == lex.Token.tMixin) {
+  } else if (g_lookahead == lex.Token.tMixin) {
     Match(lex.Token.tInterface); InterfaceOrMixin();
   }
 }
@@ -428,7 +400,7 @@ function ArgumentRest() {
   if (g_lookahead == lex.Token.tOptional) {
     Match(lex.Token.tOptional); TypeWithExtendedAttributes(); ArgumentName(); Default();
   } else {
-    Match("Type"); Ellipsis(); ArgumentName();
+    Match(lex.Token.tId); Ellipsis(); ArgumentName();  // I replace Type to Id
   }
 }
 
@@ -470,7 +442,7 @@ function StaticMemberRest() {
 }
 
 function Iterable() {
-  Match("iterable"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); OptionalType(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
+  Match(lex.Token.tIterable); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); OptionalType(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
 }
 
 function OptionalType() {
@@ -479,7 +451,7 @@ function OptionalType() {
 }
 
 function AsyncIterable() {
-  Match("async"); Match("iterable"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); OptionalType(); Match(lex.Token.tRAngle); OptionalArgumentList(); Match(lex.Token.tSemicolon);
+  Match(lex.Token.tAsync); Match(lex.Token.tIterable); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); OptionalType(); Match(lex.Token.tRAngle); OptionalArgumentList(); Match(lex.Token.tSemicolon);
 }
 
 function OptionalArgumentList() {
@@ -579,8 +551,9 @@ function Typedef() {
 }
 
 function Type() {
-  SingleType();
-  UnionType(); Null();
+  if (! SingleType()) {
+    UnionType(); Null();
+  }
 }
 
 function TypeWithExtendedAttributes() {
@@ -589,16 +562,23 @@ function TypeWithExtendedAttributes() {
   Type();
 }
 
-function SingleType() {
-  DistinguishableType();
-  if  (g_lookahead == lex.Token.tAny) {
+function SingleType(): boolean {
+  if (g_lookahead == lex.Token.tPromise) {
+    PromiseType();
+    return true;
+  } else if  (g_lookahead == lex.Token.tAny) {
     Match(lex.Token.tAny);
+    return true;
+  } else {
+    return DistinguishableType();
   }
-  PromiseType();
 }
 
 function UnionType() {
-  Match(lex.Token.tLBracket); UnionMemberType(); Match("or"); UnionMemberType(); UnionMemberTypes(); Match(lex.Token.tRBracket);
+  throw new Error("Debug me!!!");
+  if (g_lookahead == lex.Token.tLBracket) {
+    Match(lex.Token.tLBracket); UnionMemberType(); Match(lex.Token.tOr); UnionMemberType(); UnionMemberTypes(); Match(lex.Token.tRBracket);
+  }
 }
 
 function UnionMemberType() {
@@ -613,12 +593,13 @@ function UnionMemberTypes() {
   // ε
 }
 
-function DistinguishableType() {
+function DistinguishableType(): boolean {
+  let processed: boolean = true;
   if (lex.IsItPrimitiveType(g_lookahead)) {
     PrimitiveType(); Null();
   } else if (lex.IsItStringType(g_lookahead)) {
     StringType(); Null();
-  } else if (g_lookahead == lex.Token.tId) {
+  } else if (g_lookahead == lex.Token.tId) {  // ! кажется, именно это условие должно пропускать произвольный пользовательский тип!
     Match(lex.Token.tId); Null();
   } else if (g_lookahead == lex.Token.tSequence) {
     Match(lex.Token.tSequence); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
@@ -638,9 +619,12 @@ function DistinguishableType() {
     RecordType(); Null();
   } else if (g_lookahead == lex.Token.tVoid) {
     Match(lex.Token.tVoid); Null();
-  } else {
+  } else if (g_lookahead == lex.Token.tUndefined) {
     Match(lex.Token.tUndefined); Null();
+  } else {  // FIXME!!! костыль... нужен для того, чтобы снаружи можно было понять, удалось ли обработать текущий токен
+    processed = false;
   }
+  return processed;
 }
 
 function PrimitiveType() {

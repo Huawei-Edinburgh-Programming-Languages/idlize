@@ -31,6 +31,7 @@ export enum Token {
   tStringifier = 25,
   tTypedef = 26,
   tUnrestricted = 27,
+  tOr = 28,           // or
 
   tEqual = 32,        // =
   tLBracket = 33,     // (
@@ -60,8 +61,9 @@ export enum Token {
   tBigint = 66,
   tFloat = 67,        // float
   tDouble = 68,       // double
+  tStringLiteral = 69,// string literal, looks like: "str!"
 
-  tString = 70,
+  tString = 70,       // string type with name String
   tByteString = 71,   // strings
   tDOMString = 72,
   tUSVString = 73,
@@ -129,6 +131,7 @@ const g_keywords = new Map<string, Token>([
   ["stringifier", Token.tStringifier],
   ["typedef", Token.tTypedef],
   ["unrestricted", Token.tUnrestricted],
+  ["or", Token.tOr],
   // Other tokens
   ["class", Token.tClass],  // probably do not required
   ["package", Token.tPackage],
@@ -402,8 +405,20 @@ export function getToken(): Token {
   if (c == ';')
     return Token.tSemicolon;
 
-  if (c == '.')
-    return Token.tDot;
+  if (c == '.') {
+    const c2 = getChar();
+    const c3 = getChar();
+    if (c2 == '.' && c3 == '.') {
+      prev = ' ';
+      return Token.tEllipsis;
+    } else {
+      returnChar();
+      returnChar();
+      prev = '.';
+      return Token.tDot;
+    }
+  }
+
   if (c == ',')
     return Token.tComma;
 
