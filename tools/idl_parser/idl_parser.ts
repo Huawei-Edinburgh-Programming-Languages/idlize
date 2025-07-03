@@ -307,11 +307,11 @@ function ReadWriteAttribute() {
 }
 
 function InheritAttribute() {
-  Match(lex.Token.Inherit); AttributeRest();
+  Match(lex.Token.tInherit); AttributeRest();
 }
 
 function AttributeRest() {
-  Match(lex.Token.Attribute); TypeWithExtendedAttributes(); AttributeName(); Match(lex.Token.tSemicolon);
+  Match(lex.Token.tAttribute); TypeWithExtendedAttributes(); AttributeName(); Match(lex.Token.tSemicolon);
 }
 
 function AttributeName() {
@@ -325,7 +325,7 @@ function AttributeNameKeyword() {
 }
 
 function OptionalReadOnly() {
-  Match(lex.Token.Readonly);
+  Match(lex.Token.tReadonly);
   // ε
 }
 
