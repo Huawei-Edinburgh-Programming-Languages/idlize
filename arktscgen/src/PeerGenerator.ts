@@ -4,6 +4,8 @@ import { InteropConstructions } from "./constuctions/InteropConstructions"
 import { PeersConstructions } from "./constuctions/PeersConstructions"
 import { isCreateOrUpdate, isReal, mangleIfKeyword, peerMethod, splitCreateOrUpdate } from "./general/common"
 import { flattenType, nodeNamespace, nodeType } from "./utils/idl";
+import { isReferenceType } from "@idlizer/core"
+import { resolve } from "dns"
 
 export interface Body {
     creates: core.Method[],
@@ -13,7 +15,8 @@ export interface Body {
 }
 
 export interface Resolver extends core.ReferenceResolver {
-    isHeir(type: core.IDLInterface, name: string): boolean
+    isHeir(type: core.IDLReferenceType | core.IDLInterface, name: string): boolean
+    isPeer(type: core.IDLReferenceType | core.IDLInterface): boolean
 }
 
 export class PeerGenerator {
@@ -47,20 +50,33 @@ export class PeerGenerator {
         methods.Create = this.ts_collapseOverloads(methods.Create ?? [])
         methods.Update = this.ts_collapseOverloads(methods.Update ?? [])
         methods.Getter = this.ts_collapseDuplicates(methods.Getter ?? [])
+        //methods.Regular = this.ts_collapseDuplicates(methods.Regular ?? [])
 
         // Make declarations. It is IMPORTANT to not modify its signatures here bc
         // we could not generate the correct binding calls.
         // A signature can be modified in generate methods only!
 
+        const params = (method: core.IDLMethod) => {
+            // We can make this modifications before generation of binding call bc
+            // they are generated in makeWrapperToNativeType() method. Just not to litter in all
+            // write* methods.
+            return PeerGenerator.hack_makeNullable(
+                PeerGenerator.ts_removeArrayLengthParam(
+                    PeerGenerator.hack_removeContextParam(method.parameters)
+                ),
+                this.resolver
+            )
+        }
+
         const body = {
             creates: methods.Create
-                ?.map(m => PeerGenerator.makeMethod(m, [core.MethodModifier.STATIC])) ?? [],
+                ?.map(m => PeerGenerator.makeMethod(m, params(m), [core.MethodModifier.STATIC])),
             updates: methods.Update
-                ?.map(m => PeerGenerator.makeMethod(m, [core.MethodModifier.STATIC])) ?? [],
+                ?.map(m => PeerGenerator.makeMethod(m, params(m), [core.MethodModifier.STATIC])),
             getters: methods.Getter
-                ?.map(m => PeerGenerator.makeMethod(m, [core.MethodModifier.GETTER])) ?? [],
+                ?.map(m => PeerGenerator.makeMethod(m, params(m), [core.MethodModifier.GETTER])),
             regular: methods.Regular
-                ?.map(m => PeerGenerator.makeMethod(m)) ?? [],
+                ?.map(m => PeerGenerator.makeMethod(m, params(m))) ?? [],
         }
 
         // See variable_declararion_old_vs_new.diff
@@ -293,19 +309,21 @@ export class PeerGenerator {
     }
 
     public static makeWrapperToNativeType(name: string, type: core.IDLType, resolver: Resolver) : string | string[] {
-        if (type.kind == core.IDLKind.ReferenceType) {
+        if (core.isReferenceType(type)) {
             const ref = type as core.IDLReferenceType
             if (ref.name === Config.context) {
                 return PeersConstructions.context
             }
             const entry = resolver.resolveTypeReference(ref)
             return entry?.kind === core.IDLKind.Interface ? PeersConstructions.passNode(name) : name
+
+        } else if (core.isOptionalType(type)) {
+            return this.makeWrapperToNativeType(name, type.type, resolver)
+
         } else if (type.kind == core.IDLKind.ContainerType) {
-            return [
-                PeersConstructions.passNodeArray(name),
-                PeersConstructions.arrayLength(name)
-            ]
+            return [PeersConstructions.passNodeArray(name), PeersConstructions.arrayLength(name)]
         }
+
         return name
     }
 
@@ -320,9 +338,9 @@ export class PeerGenerator {
 
         } else if (core.isOptionalType(type)) {
             if (core.isReferenceType(type.type)) {
-            const refType = resolver.resolveTypeReference(type.type)
-            return refType && core.isInterface(refType) && resolver.isHeir(refType, Config.astNodeCommonAncestor) ?
-                PeersConstructions.unpackNullable : PeersConstructions.newOf(type.type.name)
+                const refType = resolver.resolveTypeReference(type.type)
+                return refType && core.isInterface(refType) && resolver.isHeir(refType, Config.astNodeCommonAncestor) ?
+                    PeersConstructions.unpackNullable : PeersConstructions.newOf(type.type.name)
             }
             core.throwException(`unexpected optional of non-reference type`)
 
@@ -354,18 +372,15 @@ export class PeerGenerator {
             })
     }
 
-    private static makeMethod(
+    public static makeMethod(
         method: core.IDLMethod,
+        replace?: core.IDLParameter[],
         modifiers?: core.MethodModifier[]
     ): core.Method {
-        // We can make this modifications before generation of binding call bc
-        // they are generated in makeWrapperToNativeType() method. Just not to litter in all
-        // write* methods.
-        const parameters = this.ts_removeArrayLengthParam(
-            this.hack_removeContextParam(method.parameters)
-        )
-        const argsModifiers = undefined // TODO: fix
-        parameters.forEach(p => {  if (core.isOptionalType(p.type)) throw ''; })
+        const parameters = replace ?? method.parameters
+        const optionals = parameters.map(p => core.isOptionalType(p.type) ? core.ArgumentModifier.OPTIONAL : undefined)
+        const index = optionals.lastIndexOf(undefined)
+        const argsModifiers = index > 0 ? optionals.fill(undefined, 0, index) : optionals
 
         return new core.Method(
             method.name,
@@ -407,6 +422,16 @@ export class PeerGenerator {
         }, [] as core.IDLParameter[])
     }
 
+    public static hack_makeNullable(parameters: readonly core.IDLParameter[], resolver: Resolver): core.IDLParameter[] {
+        return parameters.map(p => {
+            if (core.isReferenceType(p.type) &&
+                (resolver.isPeer(p.type) || resolver.isHeir(p.type, Config.astNodeCommonAncestor))) {
+                return core.createParameter(p.name, core.createOptionalType(p.type))
+            }
+            return core.createParameter(p.name, p.type)
+        })
+    }
+
     public static hack_isContextParam(param: core.IDLParameter): boolean {
         const iface = core.isReferenceType(param.type) ? (param.type as core.IDLReferenceType) : undefined
         return iface?.name == `${Config.dataClassPrefix}${Config.context}`
@@ -419,8 +444,6 @@ export class PeerGenerator {
 
     public static hack_extraArgs(node: core.IDLInterface): core.IDLParameter[]{
         return []
-        //return [core.createParameter('extra1', core.createReferenceType('GlobalContext')),
-        //    core.createParameter('extra2', core.createReferenceType('GlobalContext'))]
     }
 
     public converter = new SimpleConverter(this.resolver)
@@ -474,10 +497,5 @@ class SimpleConverter extends core.TSTypeNameConvertor {
        }
        return super.convertPrimitiveType(type)
    }
-
-  override convertOptional(type: core.IDLOptionalType): string {
-      throw 'Optional'
-      return ''
-  }
 }
 

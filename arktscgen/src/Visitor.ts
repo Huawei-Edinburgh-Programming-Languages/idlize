@@ -1,5 +1,5 @@
 import * as core from "@idlizer/core"
-import { IDLEntry, IDLFile } from "@idlizer/core"
+import { IDLEntry, IDLFile, IDLReferenceType } from "@idlizer/core"
 import { PeersConstructions } from "./constuctions/PeersConstructions";
 import { Config } from "./general/Config";
 
@@ -100,8 +100,16 @@ export class Visitor {
     }
 
 
-    public isHeir(iface: core.IDLInterface, name: string): boolean {
-        let queue: core.IDLInterface[] = [iface]
+    public isHeir(ref: core.IDLReferenceType | core.IDLInterface, name: string): boolean {
+        if (core.isReferenceType(ref)) {
+            const type = this.resolveReference(ref)
+            if (!type || !core.isInterface(type)) {
+                return false
+            }
+            ref = type
+        }
+
+        let queue: core.IDLInterface[] = [ref]
         while (queue.length) {
             const node = queue.shift()!
             if (node.name == name) {
@@ -114,6 +122,15 @@ export class Visitor {
                 .forEach(p => queue.push(p as core.IDLInterface))
         }
 
+        return false
+    }
+
+    public isPeer(ref: core.IDLReferenceType | core.IDLInterface): boolean {
+        if (ref.name === Config.astNodeCommonAncestor) return false // TODO: is handwritten
+        if (ref.name === Config.context) return false // TODO: is handwritten
+        if (this.isHeir(ref, Config.astNodeCommonAncestor)) return true
+        if (this.isHeir(ref, Config.defaultAncestor)) return true
+        if (["ArkTsConfig", "Program"].includes(ref.name)) return true // TODO: fix
         return false
     }
 

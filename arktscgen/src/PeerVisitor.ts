@@ -68,8 +68,12 @@ export class PeerVisitor extends Visitor {
             throw "Unused";
         },
 
-        isHeir(type: core.IDLInterface, name: string) {
+        isHeir(type: core.IDLReferenceType | core.IDLInterface, name: string) {
             return this.visitor.isHeir(type, name)
+        },
+
+        isPeer(ref: core.IDLReferenceType | core.IDLInterface) {
+            return this.visitor.isPeer(ref)
         },
 
         visitor: this,
