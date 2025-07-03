@@ -342,6 +342,31 @@
             "contentModifier": {
                 "hookName": "hookToggleContentModifier"
             }
+        },
+        "Search": {
+            "setSearchOptions": {
+                "hookName": "hookSetSearchOptions"
+            }
+        },
+        "TextInput": {
+            "setTextInputOptions": {
+                "hookName": "hookSetTextInputOptions"
+            }
+        },
+        "TextArea": {
+            "setTextAreaOptions": {
+                "hookName": "hookSetTextAreaOptions"
+            }
+        },
+        "ImageSpan": {
+            "alt": {
+                "hookName": "hookSetAlt"
+            }
+        },
+        "ImageSpan": {
+            "setImageSpanOptions": {
+                "hookName": "hookSetImageSpanOptions"
+            }
         }
     },
     "externalTypes": {},
