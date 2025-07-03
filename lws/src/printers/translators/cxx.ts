@@ -157,7 +157,13 @@ export class CXXPrinter {
         } else {
           this.p.put('.')
         }
-        this.p.put(expression.accessor)
+        if (typeof expression.accessor === 'string') {
+          this.p.put('.', expression.accessor)
+        } else {
+          this.p.put('[')
+          this.printExpression(expression.accessor)
+          this.p.put(']')
+        }
         break
       }
       case lw.LWKind.CallExpression: {

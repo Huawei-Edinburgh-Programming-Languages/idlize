@@ -51,7 +51,7 @@ export const E = {
     typeArgs,
     annotations,
   }),
-  get: (base: lw.LWExpression, accessor: string, annotations: lw.Annotation[] = []): lw.AccessorExpression => ({
+  get: (base: lw.LWExpression, accessor: string | lw.LWExpression, annotations: lw.Annotation[] = []): lw.AccessorExpression => ({
     kind: lw.LWKind.AccessorExpression,
     base,
     accessor,

@@ -200,7 +200,7 @@ export interface CallExpression {
 export interface AccessorExpression {
   kind: LWKind.AccessorExpression
   base: LWExpression
-  accessor: string
+  accessor: string | LWExpression
   annotations: Annotation[]
 }
 export interface ConstructorExpression {
