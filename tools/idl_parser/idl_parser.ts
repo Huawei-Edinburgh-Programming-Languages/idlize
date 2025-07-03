@@ -236,7 +236,7 @@ function IncludesStatement() {
 
 function Package() {
   Match(lex.Token.tPackage);
-  while (1) {
+  while (g_lookahead != lex.Token.tEnd) {
     Match(lex.Token.tId);
     if (g_lookahead == lex.Token.tSemicolon)
       break;
@@ -272,7 +272,7 @@ function Const() {
 function ConstValue() {
   BooleanLiteral();
   FloatLiteral();
-  Match("integer");
+  Match(lex.Token.tIntegerLiteral);  // terminal matched by the regular expressions
 }
 
 function BooleanLiteral() {
@@ -293,7 +293,7 @@ function ConstType() {
 }
 
 function ReadOnlyMember() {
-  Match("readonly"); ReadOnlyMemberRest();
+  Match(lex.Token.tReadonly); ReadOnlyMemberRest();
 }
 
 function ReadOnlyMemberRest() {
@@ -307,11 +307,11 @@ function ReadWriteAttribute() {
 }
 
 function InheritAttribute() {
-  Match("inherit"); AttributeRest();
+  Match(lex.Token.Inherit); AttributeRest();
 }
 
 function AttributeRest() {
-  Match("attribute"); TypeWithExtendedAttributes(); AttributeName(); Match(lex.Token.tSemicolon);
+  Match(lex.Token.Attribute); TypeWithExtendedAttributes(); AttributeName(); Match(lex.Token.tSemicolon);
 }
 
 function AttributeName() {
@@ -325,7 +325,7 @@ function AttributeNameKeyword() {
 }
 
 function OptionalReadOnly() {
-  Match("readonly");
+  Match(lex.Token.Readonly);
   // ε
 }
 
@@ -344,7 +344,7 @@ function Operation() {
 }
 
 function RegularOperation() {
-  Match("Type"); OperationRest();
+  Type(); OperationRest();
 }
 
 function SpecialOperation() {
@@ -375,7 +375,7 @@ function OperationName() {
 }
 
 function OperationNameKeyword() {
-  Match("includes");
+  Match(lex.Token.tIncludes);
 }
 
 function ArgumentList() {
@@ -420,11 +420,11 @@ function Ellipsis() {
 }
 
 function Constructor() {
-  Match("constructor"); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket); Match(lex.Token.tSemicolon);
+  Match(lex.Token.tConstructor); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket); Match(lex.Token.tSemicolon);
 }
 
 function Stringifier() {
-  Match("stringifier"); StringifierRest();
+  Match(lex.Token.tStringifier); StringifierRest();
 }
 
 function StringifierRest() {
@@ -433,7 +433,7 @@ function StringifierRest() {
 }
 
 function StaticMember() {
-  Match("static"); StaticMemberRest();
+  Match(lex.Token.tStatic); StaticMemberRest();
 }
 
 function StaticMemberRest() {
@@ -464,7 +464,7 @@ function ReadWriteMaplike() {
 }
 
 function MaplikeRest() {
-  Match("maplike"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tComma); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
+  Match(lex.Token.tMaplike); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tComma); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
 }
 
 function ReadWriteSetlike() {
@@ -472,11 +472,11 @@ function ReadWriteSetlike() {
 }
 
 function SetlikeRest() {
-  Match("setlike"); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
+  Match(lex.Token.tSetlike); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
 }
 
 function Namespace() {
-  Match("namespace"); Match(lex.Token.tId); Match(lex.Token.tLBrace); NamespaceMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
+  Match(lex.Token.tNamespace); Match(lex.Token.tId); Match(lex.Token.tLBrace); NamespaceMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
 }
 
 function NamespaceMembers() {
@@ -488,12 +488,12 @@ function NamespaceMembers() {
 
 function NamespaceMember() {
   RegularOperation();
-  Match("readonly"); AttributeRest();
+  Match(lex.Token.tReadonly); AttributeRest();
   Const();
 }
 
 function Dictionary() {
-  Match("dictionary"); Match(lex.Token.tId); Inheritance(); Match(lex.Token.tLBrace); DictionaryMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
+  Match(lex.Token.tDictionary); Match(lex.Token.tId); Inheritance(); Match(lex.Token.tLBrace); DictionaryMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
 }
 
 function DictionaryMembers() {
@@ -508,7 +508,7 @@ function DictionaryMember() {
 }
 
 function DictionaryMemberRest() {
-  Match("required"); TypeWithExtendedAttributes(); Match(lex.Token.tId); Match(lex.Token.tSemicolon);
+  Match(lex.Token.tRequired); TypeWithExtendedAttributes(); Match(lex.Token.tId); Match(lex.Token.tSemicolon);
   Type(); Match(lex.Token.tId); Default(); Match(lex.Token.tSemicolon);
 }
 
@@ -525,7 +525,7 @@ function Default() {
 }
 
 function Enum() {
-  Match("enum"); Match(lex.Token.tId); Match(lex.Token.tLBrace); EnumValueList(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
+  Match(lex.Token.tEnum); Match(lex.Token.tId); Match(lex.Token.tLBrace); EnumValueList(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
 }
 
 function EnumValueList() {
@@ -575,7 +575,6 @@ function SingleType(): boolean {
 }
 
 function UnionType() {
-  throw new Error("Debug me!!!");
   if (g_lookahead == lex.Token.tLBracket) {
     Match(lex.Token.tLBracket); UnionMemberType(); Match(lex.Token.tOr); UnionMemberType(); UnionMemberTypes(); Match(lex.Token.tRBracket);
   }
@@ -589,7 +588,7 @@ function UnionMemberType() {
 }
 
 function UnionMemberTypes() {
-  Match("or"); UnionMemberType(); UnionMemberTypes();
+  Match(lex.Token.tOr); UnionMemberType(); UnionMemberTypes();
   // ε
 }
 
@@ -697,7 +696,7 @@ function PromiseType() {
 }
 
 function RecordType() {
-  Match("record"); Match(lex.Token.tLAngle); StringType(); Match(lex.Token.tComma); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle);
+  Match(lex.Token.tRecord); Match(lex.Token.tLAngle); StringType(); Match(lex.Token.tComma); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle);
 }
 
 function Null() {
@@ -730,7 +729,7 @@ function BufferRelatedType() {
 
 function ExtendedAttributeList() {
   if (g_lookahead == lex.Token.tLSqrBracket) {
-    Match("["); ExtendedAttribute(); ExtendedAttributes(); Match("]");
+    Match(lex.Token.tLSqrBracket); ExtendedAttribute(); ExtendedAttributes(); Match(lex.Token.tRSqrBracket);
   } else {
     // ε
   }
@@ -746,7 +745,7 @@ function ExtendedAttributes() {
 
 function ExtendedAttribute() {
   Match(lex.Token.tLBracket); ExtendedAttributeInner(); Match(lex.Token.tRBracket); ExtendedAttributeRest();
-  Match("["); ExtendedAttributeInner(); Match("]"); ExtendedAttributeRest();
+  Match(lex.Token.tLSqrBracket); ExtendedAttributeInner(); Match(lex.Token.tRSqrBracket); ExtendedAttributeRest();
   Match(lex.Token.tLBrace); ExtendedAttributeInner(); Match(lex.Token.tRBrace); ExtendedAttributeRest();
   Other(); ExtendedAttributeRest();
 }
@@ -758,7 +757,7 @@ function ExtendedAttributeRest() {
 
 function ExtendedAttributeInner() {
   Match(lex.Token.tLBracket); ExtendedAttributeInner(); Match(lex.Token.tRBracket); ExtendedAttributeInner();
-  Match("["); ExtendedAttributeInner(); Match("]"); ExtendedAttributeInner();
+  Match(lex.Token.tLSqrBracket); ExtendedAttributeInner(); Match(lex.Token.tRSqrBracket); ExtendedAttributeInner();
   Match(lex.Token.tLBrace); ExtendedAttributeInner(); Match(lex.Token.tRBrace); ExtendedAttributeInner();
   OtherOrComma(); ExtendedAttributeInner();
   // ε
@@ -843,7 +842,7 @@ function ExtendedAttributeIdent() {
 }
 
 function ExtendedAttributeWildcard() {
-  Match(lex.Token.tId); Match(lex.Token.tEqual); Match("*");
+  Match(lex.Token.tId); Match(lex.Token.tEqual); Match(lex.Token.tAsterisk);
 }
 
 function ExtendedAttributeIdentList() {
