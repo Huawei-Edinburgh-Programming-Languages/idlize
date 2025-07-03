@@ -835,7 +835,7 @@ export abstract class LanguageWriter {
     makeStaticBlock(op: (writer: LanguageWriter) => void) {
         op(this)
     }
-    instanceOf(convertor: ArgConvertor, value: string, _duplicateMembers?: Set<string>): LanguageExpression {
+    instanceOf(convertor: ArgConvertor, value: string): LanguageExpression {
         return this.makeString(`${value} instanceof ${this.getNodeName(convertor.idlType)}`)
     }
     // The version of instanceOf() which does not use ArgConvertors

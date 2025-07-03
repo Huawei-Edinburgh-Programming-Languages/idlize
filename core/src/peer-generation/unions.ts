@@ -56,7 +56,6 @@ export class UnionFlattener implements TypeConvertor<IDLType[]> {
 
 export class UnionRuntimeTypeChecker {
     private conflictingConvertors: Set<ArgConvertor> = new Set()
-    private duplicateMembers: Set<string> = new Set()
     private discriminators: [LanguageExpression | undefined, ArgConvertor, number][] = []
 
     constructor(private convertors: ArgConvertor[]) {
@@ -71,28 +70,20 @@ export class UnionRuntimeTypeChecker {
                 else runtimeTypeConflicts.set(rtType, [conv])
             })
         })
-        runtimeTypeConflicts.forEach((convertors, rtType) => {
+        runtimeTypeConflicts.forEach(convertors => {
             if (convertors.length > 1) {
-                const allMembers: Set<string> = new Set()
-                if (rtType === RuntimeType.OBJECT) {
-                    convertors.forEach(convertor => {
-                        convertor.getMembers().forEach(member => {
-                            if (allMembers.has(member)) this.duplicateMembers.add(member)
-                            allMembers.add(member)
-                        })
-                    })
-                }
                 convertors.forEach(convertor => {
                     this.conflictingConvertors.add(convertor)
                 })
             }
         })
     }
-    makeDiscriminator(value: string, convertorIndex: number, writer: LanguageWriter): LanguageExpression {
+    makeDiscriminator(value: string, convertorIndex: number, writer: LanguageWriter, detectConflicts = false): LanguageExpression {
         const convertor = this.convertors[convertorIndex]
         if (this.conflictingConvertors.has(convertor) && writer.language === Language.ARKTS) {
-            const discriminator = convertor.unionDiscriminator(value, convertorIndex, writer, this.duplicateMembers)
-            this.discriminators.push([discriminator, convertor, convertorIndex])
+            const discriminator = convertor.unionDiscriminator(value, writer)
+            if (detectConflicts)
+                this.discriminators.push([discriminator, convertor, convertorIndex])
             if (discriminator) return discriminator
         }
         return writer.makeNaryOp("||", convertor.runtimeTypes.map((it, runtimeTypeIndex) =>
@@ -109,14 +100,13 @@ export class UnionRuntimeTypeChecker {
         if (this.discriminators.filter(([discriminator, _, __]) => discriminator === undefined).length > 1) {
             let report = `Union discrimination code can not be generated for \`${context}\`.\n`
             report += `Possible reasons for that are too similar or unresolved types in union (see below).\n`
-            report += ` #  | type                          | duplicated properties         | resolved | discriminator expression\n`
-            const properties = Array.from(this.duplicateMembers).join(",").padEnd(30)
+            report += ` #  | type                          | resolved | discriminator expression\n`
             this.discriminators.forEach(([discr, conv, n]) => {
                 const num = n.toString().padEnd(3)
                 const typename = conv.targetType(writer).padEnd(30)
                 const resolved = (conv instanceof CustomTypeConvertor ? "no" : "yes").padEnd(9)
                 const discriminator = discr ? discr.asString() : "<undefined>"
-                report += ` ${num}| ${typename}| ${properties}| ${resolved}| ${discriminator}\n`
+                report += ` ${num}| ${typename}| ${resolved}| ${discriminator}\n`
             })
             // throw new Error(report)
         }

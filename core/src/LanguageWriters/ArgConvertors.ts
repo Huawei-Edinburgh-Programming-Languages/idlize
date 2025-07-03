@@ -62,7 +62,7 @@ export interface ArgConvertor {
     nativeType(): idl.IDLType
     targetType(writer: LanguageWriter): string
     isPointerType(): boolean
-    unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression|undefined
+    unionDiscriminator(value: string, writer: LanguageWriter): LanguageExpression|undefined
     getMembers(): string[]
     getObjectAccessor(languge: Language, value: string, args?: Record<string, string>, writer?: LanguageWriter): string
 }
@@ -151,7 +151,7 @@ export abstract class BaseArgConvertor implements ArgConvertor {
     abstract convertorArg(param: string, writer: LanguageWriter): string
     abstract convertorSerialize(param: string, value: string, writer: LanguageWriter): void
     abstract convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement
-    unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression|undefined {
+    unionDiscriminator(value: string, writer: LanguageWriter): LanguageExpression|undefined {
         return undefined
     }
     getMembers(): string[] { return [] }
@@ -177,7 +177,7 @@ export abstract class BaseArgConvertor implements ArgConvertor {
 }
 
 abstract class ObjectArgConvertor extends BaseArgConvertor {
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+    override unionDiscriminator(value: string, writer: LanguageWriter): LanguageExpression | undefined {
         return writer.makeString(`${value} instanceof ${this.targetType(writer)}`)
     }
 }
@@ -268,7 +268,7 @@ export class StringConvertor extends BaseArgConvertor {
     isPointerType(): boolean {
         return true
     }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+    override unionDiscriminator(value: string, writer: LanguageWriter): LanguageExpression | undefined {
         return this.literalValue
             ? writer.makeString(`${value} === "${this.literalValue}"`)
             : undefined
@@ -700,9 +700,9 @@ export class ArrayConvertor extends ObjectArgConvertor {
     isPointerType(): boolean {
         return true
     }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+    override unionDiscriminator(value: string, writer: LanguageWriter): LanguageExpression | undefined {
         return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
-            [writer.instanceOf(this, value, duplicates)])///see ETSLW
+            [writer.instanceOf(this, value)])///see ETSLW
     }
     override getObjectAccessor(language: Language, value: string, args?: Record<string, string>): string {
         const array = language === Language.CPP ? ".array" : ""
@@ -850,8 +850,8 @@ export class ProxyConvertor extends BaseArgConvertor {
     isPointerType(): boolean {
         return this.convertor.isPointerType()
     }
-    unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
-        return this.convertor.unionDiscriminator(value, index, writer, duplicates)
+    override unionDiscriminator(value: string, writer: LanguageWriter): LanguageExpression | undefined {
+        return this.convertor.unionDiscriminator(value, writer)
     }
     getMembers(): string[] {
         return this.convertor.getMembers()
@@ -1008,7 +1008,7 @@ export class UnionConvertor extends BaseArgConvertor {
         printer.writeStatement(printer.makeUnionSelector(value, `${value}_type`))
         this.memberConvertors.forEach((it, index) => {
             const maybeElse = (index > 0 && this.memberConvertors[index - 1].runtimeTypes.length > 0) ? "else " : ""
-            const conditions = this.unionChecker.makeDiscriminator(value, index, printer)
+            const conditions = this.unionChecker.makeDiscriminator(value, index, printer, true)
             printer.print(`${maybeElse}if (${conditions.asString()}) {`)
             printer.pushIndent()
             printer.writeMethodCall(`${param}Serializer`, "writeInt8", [printer.castToInt(index.toString(), 8)])
@@ -1065,7 +1065,7 @@ export class UnionConvertor extends BaseArgConvertor {
     override getObjectAccessor(language: Language, value: string, args?: Record<string, string>): string {
         return language === Language.CPP && args?.index ? `${value}.value${args.index}` : value
     }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+    override unionDiscriminator(value: string, writer: LanguageWriter): LanguageExpression | undefined {
         return writer.makeNaryOp("||",
             this.memberConvertors.map((_, n) => this.unionChecker.makeDiscriminator(value, n, writer)))
     }

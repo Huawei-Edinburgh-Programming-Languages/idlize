@@ -548,7 +548,7 @@ export class CJLanguageWriter extends LanguageWriter {
         }
         throw new Error(`typeInstanceOf fails: not class or interface: ${this.getNodeName(type)}`)
     }
-    getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
+    getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
         return `${value}`
     }
     makeUndefined(): LanguageExpression {

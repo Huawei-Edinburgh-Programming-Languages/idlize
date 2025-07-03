@@ -241,7 +241,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             || convertor instanceof InterfaceConvertor
             || convertor instanceof MaterializedClassConvertor
             || convertor instanceof CustomTypeConvertor) {
-            return this.instanceOf(convertor, value, duplicates)
+            return this.instanceOf(convertor, value)
         }
         return this.makeString(`${value} instanceof ${convertor.targetType(this)}`)
     }
@@ -329,7 +329,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     override castToBoolean(value: string): string { return `${value} ? 1 : 0` }
 
-    override instanceOf(convertor: ArgConvertor, value: string, duplicateMembers?: Set<string>): LanguageExpression {
+    override instanceOf(convertor: ArgConvertor, value: string): LanguageExpression {
         // work around ArkTS compiler bugs
         if (convertor instanceof ArrayConvertor) {
             const arrayTypeName = this.arrayConvertor.convert(convertor.idlType)
@@ -338,7 +338,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         if (convertor instanceof EnumConvertor && this.getNodeName(convertor.idlType) === "DragPreviewMode") {
             return this.makeMethodCall("TypeChecker", "isDragPreviewMode", [this.makeString(value)])
         }
-        return super.instanceOf(convertor, value, duplicateMembers)
+        return super.instanceOf(convertor, value)
     }
     override typeInstanceOf(type: idl.IDLEntry, value: string, members?: string[]): LanguageExpression {
         if (!members || members.length === 0) {

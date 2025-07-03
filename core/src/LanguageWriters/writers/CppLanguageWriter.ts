@@ -393,7 +393,7 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     makeSetOptionTag(value: string, tag: LanguageExpression): LanguageStatement {
         return this.makeAssign(`${value}.tag`, undefined, tag, false)
     }
-    getObjectAccessor(convertor: BaseArgConvertor, value: string, args?: ObjectArgs): string {
+    getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
         return value
     }
     makeUndefined(): LanguageExpression {
