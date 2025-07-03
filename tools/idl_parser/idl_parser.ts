@@ -89,13 +89,18 @@ callback Callback_Extender_OnProgress = void (f32 value);`
   throw new Error("Done!");*/
   // Debug code
 
-  let i = 0;
-
   g_lookahead = lex.getToken();
   if (g_lookahead != lex.Token.tError && g_lookahead != lex.Token.tEnd) {
-    let def: idl.Definitions = Definitions(); // starting production
-    if (def)
-      console.log("Woohoo!");
+    let defs: idl.Definitions = Definitions(); // starting production
+    if (defs) {
+      console.log("IDL has " + defs.nodes.length + " definitions");
+
+      for (let i = 0; i < defs.nodes.length; i++) {
+        console.log(i, defs.nodes[i].name());
+      }
+    } else {
+      console.log("defs is null");
+    }
   }
 
   console.log("The end!");
@@ -103,11 +108,16 @@ callback Callback_Extender_OnProgress = void (f32 value);`
 
 // starting production
 function Definitions(): idl.Definitions {
-  let res: idl.Definitions = new idl.Definitions;
+  let res: idl.Definitions = new idl.Definitions();
   do {
     if (g_lookahead == lex.Token.tLSqrBracket)
       ExtendedAttributeList();
-    Definition();
+
+    let node: idl.Node | null = Definition();
+    if (node)
+      res.nodes.push(node);
+    else
+      console.log("Node is null");
   } while (g_lookahead != lex.Token.tEnd);
   //Definitions();
   // ε
@@ -141,7 +151,8 @@ function Definition(): idl.Node | null {
 
 function CallbackOrInterfaceOrMixin(): idl.Node | null {
   if (g_lookahead == lex.Token.tCallback) {
-    Match(lex.Token.tCallback); CallbackRestOrInterface();
+    Match(lex.Token.tCallback);
+    return CallbackRestOrInterface();
   } else if (g_lookahead == lex.Token.tMixin) {
     Match(lex.Token.tInterface); InterfaceOrMixin();
   }
@@ -254,11 +265,17 @@ function Package(): idl.Node | null {
   return null;
 }
 
-function CallbackRestOrInterface() {
+function CallbackRestOrInterface(): idl.Node | null {
   if (g_lookahead == lex.Token.tInterface) {
-    Match(lex.Token.tInterface); Match(lex.Token.tId); Match(lex.Token.tLBrace); CallbackInterfaceMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
+    Match(lex.Token.tInterface);
+    Match(lex.Token.tId);
+    Match(lex.Token.tLBrace);
+    CallbackInterfaceMembers();
+    Match(lex.Token.tRBrace);
+    Match(lex.Token.tSemicolon);
+    return null;
   } else {
-    CallbackRest();
+    return CallbackRest();
   }
 }
 
@@ -556,8 +573,19 @@ function EnumValueListString() {
   // ε
 }
 
-function CallbackRest() {
-  Match(lex.Token.tId); Match(lex.Token.tEqual); Type(); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket); Match(lex.Token.tSemicolon);
+function CallbackRest(): idl.Node | null {
+  if (g_lookahead != lex.Token.tId)
+    return null;
+
+  let res: idl.CallbackNode = new idl.CallbackNode();
+  Match(lex.Token.tId);
+  Match(lex.Token.tEqual);
+  Type();
+  Match(lex.Token.tLBracket);
+  ArgumentList();
+  Match(lex.Token.tRBracket);
+  Match(lex.Token.tSemicolon);
+  return res;
 }
 
 function Typedef(): idl.Node | null {

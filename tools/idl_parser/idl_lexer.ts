@@ -61,12 +61,13 @@ export enum Token {
   tBigint = 66,
   tFloat = 67,        // float
   tDouble = 68,       // double
-  tStringLiteral = 69,// string literal, looks like: "str!"
+  tStringLiteral = 69,  // string literal, looks like: "str!"
+  tIntegerLiteral = 70, // integer literal matched by the regular expressions
 
-  tString = 70,       // string type with name String
-  tByteString = 71,   // strings
-  tDOMString = 72,
-  tUSVString = 73,
+  tString = 75,       // string type with name String
+  tByteString = 76,   // strings
+  tDOMString = 77,
+  tUSVString = 78,
 
   tVoid = 80,
   tUndefined = 81,
