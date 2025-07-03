@@ -721,9 +721,6 @@ export abstract class LanguageWriter {
     writeNativeMethodDeclaration(method: Method): void {
         this.writeMethodDeclaration(method.name, method.signature)
     }
-    writeUnsafeNativeMethodDeclaration(name: string, signature: MethodSignature): void {
-        return
-    }
     pushIndent() {
         this.printer.pushIndent()
     }
@@ -739,21 +736,6 @@ export abstract class LanguageWriter {
     makeSignature(returnType: idl.IDLType, parameters: idl.IDLParameter[]): MethodSignature {
         return new MethodSignature(returnType,
             parameters.map(it => it.type!))
-    }
-    makeNamedSignature(returnType: idl.IDLType, parameters: idl.IDLParameter[]): NamedMethodSignature {
-        return NamedMethodSignature.make(
-            returnType,
-            parameters.map(it => ({
-                name: it.name,
-                type:  it.isOptional ? idl.createOptionalType(it.type!) : it.type!
-            }))
-        )
-    }
-    makeNativeMethodNamedSignature(returnType: idl.IDLType, parameters: idl.IDLParameter[]): NamedMethodSignature {
-        return this.makeNamedSignature(returnType, parameters)
-    }
-    makeSerializerConstructorSignatures(): NamedMethodSignature[] | undefined {
-        return undefined
     }
     mapFieldModifier(modifier: FieldModifier): string {
         return `${FieldModifier[modifier].toLowerCase()}`
@@ -793,16 +775,6 @@ export abstract class LanguageWriter {
     makeCastCustomObject(customName: string, _isGenericType: boolean): LanguageExpression {
         return this.makeString(customName)
     }
-    makeHasOwnProperty(value: string,
-                       _valueTypeName: string,
-                       property: string,
-                       propertyTypeName?: string): LanguageExpression {
-        const expressions = [this.makeString(`${value}.hasOwnProperty("${property}")`)]
-        if (propertyTypeName) {
-            expressions.push(this.makeString(`isInstanceOf("${propertyTypeName}", ${value}.${property})`))
-        }
-        return this.makeNaryOp("&&", expressions)
-    }
     discriminatorFromExpressions(value: string,
                                  runtimeType: RuntimeType,
                                  exprs: LanguageExpression[]): LanguageExpression {
@@ -830,15 +802,6 @@ export abstract class LanguageWriter {
     }
     instanceOf(value: string, type: idl.IDLType): LanguageExpression {
         return this.makeString(`${value} instanceof ${this.getNodeName(type)}`)
-    }
-    // The version of instanceOf() which does not use ArgConvertors
-    typeInstanceOf(type: idl.IDLEntry, value: string, members?: string[]): LanguageExpression {
-        return this.makeString(`${value} instanceof ${this.getNodeName(type)}`)
-    }
-
-    stringifyTypeOrEmpty(type: idl.IDLType | undefined): string {
-        if (type === undefined) return ""
-        return this.getNodeName(type)
     }
     /**
      * Writes `namespace <namespace> {` and adds extra indent

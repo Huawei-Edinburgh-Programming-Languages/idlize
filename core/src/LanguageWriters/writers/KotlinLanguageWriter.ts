@@ -436,9 +436,6 @@ export class KotlinLanguageWriter extends LanguageWriter {
     makeCast(value: LanguageExpression, node: idl.IDLNode, options?: MakeCastOptions): LanguageExpression {
         return this.makeString(`${value.asString()} as ${this.getNodeName(node)}`)
     }
-    typeInstanceOf(type: idl.IDLEntry, value: string, members?: string[]): LanguageExpression {
-        throw new Error("Not implemented")
-    }
     getObjectAccessor(convertor: ArgConvertor, value: string, args?: ObjectArgs): string {
         throw new Error("Not implemented")
     }

@@ -156,10 +156,9 @@ export class ETSLambdaExpression extends LambdaExpression {
 ////////////////////////////////////////////////////////////////
 
 export function generateTypeCheckerName(typeName: string): string {
-    typeName = typeName
+    return "is" + typeName
         .replaceAll('[]', 'BracketsArray')
-        .split('.').join('_')
-    return `is${typeName.replaceAll('[]', 'Brackets')}`
+        .replaceAll('.', '_')
 }
 
 export function generateEnumToNumericName(entry: idl.IDLEntry): string {
@@ -278,14 +277,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         }
         return super.makeCastCustomObject(customName, isGenericType)
     }
-    makeHasOwnProperty(value: string,
-                       valueTypeName: string,
-                       property: string,
-                       propertyTypeName: string): LanguageExpression {
-        return this.makeNaryOp("&&", [
-            this.makeString(`${value} instanceof ${valueTypeName}`),
-            this.makeString(`isInstanceOf("${propertyTypeName}", ${value}.${property})`)])
-    }
     makeEquals(args: LanguageExpression[]): LanguageExpression {
         // TODO: Error elimination: 'TypeError: Both operands have to be reference types'
         // the '==' operator must be used when one of the operands is a reference
@@ -312,15 +303,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         }
         return super.instanceOf(value, type)
     }
-    override typeInstanceOf(type: idl.IDLEntry, value: string, members?: string[]): LanguageExpression {
-        if (!members || members.length === 0) {
-            throw new Error("At least one member needs to provided to pass it to TypeChecker!")
-        }
-        const prop = members[0]
-        // Use the same typeInstanceOf<T>(...) method to compile the ETS code by two compilers ArkTS and TS
-        return this.makeString(`TypeChecker.typeInstanceOf<${this.getNodeName(type)}>(value, "${prop}")`)
-    }
-
     makeTypeCast(value: LanguageExpression, type: idl.IDLType, options?: MakeCastOptions): LanguageExpression {
         return this.makeString(`TypeChecker.typeCast<${this.getNodeName(type)}>(value)`)
     }
