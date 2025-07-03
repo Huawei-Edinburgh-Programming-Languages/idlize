@@ -273,6 +273,23 @@
         ]
     },
     "hooks": {
+        "CommonMethod": {
+            "advancedBlendMode": {
+                "hookName": "hookCommonMethodAdvancedBlendModeImpl"
+            },
+            "visualEffect": {
+                "hookName": "hookCommonMethodVisualEffectImpl"
+            },
+            "backgroundFilter": {
+                "hookName": "hookCommonMethodBackgroundFilterImpl"
+            },
+            "foregroundFilter": {
+                "hookName": "hookCommonMethodForegroundFilterImpl"
+            },
+            "compositingFilter": {
+                "hookName": "hookCommonMethodCompositingFilterImpl"
+            }
+        },
         "Button": {
             "contentModifier": {
                 "hookName": "hookButtonContentModifier"
@@ -417,7 +434,7 @@
             }
         }
     },
-    "externalTypes": {},
+    "externalTypes": {"ICurve" : "@ohos.curves"},
     "externalPackages": [],
     "materialized": {
         "ignoreReturnTypes": [
