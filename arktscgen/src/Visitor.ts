@@ -109,7 +109,7 @@ export class Visitor {
             ref = type
         }
 
-        let queue: core.IDLInterface[] = [ref]
+        const queue: core.IDLInterface[] = [ref]
         while (queue.length) {
             const node = queue.shift()!
             if (node.name == name) {
@@ -135,14 +135,19 @@ export class Visitor {
     }
 
     public resolveReference(ref: core.IDLReferenceType): core.IDLEntry | undefined {
-        const parts = this.hack_removeDataClassPrefix(ref).split('.')
+        const parts = this.hack_removeDataClassPrefix(ref).split('.', 2)
         const [ns, name] = parts.length == 1 ? ['', parts.at(0)] : parts
-        let symbol = this.declarations.get(ns)?.get(name!)
+        const cns = this.namespaces[this.namespaces.length - 1][0]
+
+        let symbol = this.declarations.get(ns || cns)?.get(name!)
         if (!symbol) {
-            // todo: if no namespace specified - use the current one instead hack
-            symbol = this.hack_resolveInAliasedNamespace(ns, name!)
+            // Lookup in global namespace if no namespace was specified
+            if (!ns.length) {
+                symbol = this.declarations.get('')?.get(name!)
+            }
+            //symbol = this.hack_resolveInAliasedNamespace(ns, name!)
             if (!symbol) {
-                console.log(`resolveReference: ${name} from '${ns}' => ${symbol}`);
+                console.log(`1. resolveReference: ${name} from '${ns}' => ${symbol}`);
                 this.unresolved.add(ref.name)
             }
         }
