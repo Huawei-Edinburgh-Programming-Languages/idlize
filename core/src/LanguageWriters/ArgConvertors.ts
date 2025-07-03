@@ -159,21 +159,6 @@ export abstract class BaseArgConvertor implements ArgConvertor {
         if (writer) return writer.getObjectAccessor(this, value, args)
         return this.useArray && args?.index ? `${value}[${args.index}]` : value
     }
-    protected discriminatorFromFields<T>(value: string,
-                                         writer: LanguageWriter,
-                                         uniqueFields: T[] | undefined,
-                                         nameAccessor: (field: T) => string,
-                                         optionalAccessor: (field: T) => boolean,
-                                         duplicates: Set<string>){
-        if (!uniqueFields || uniqueFields.length === 0) return undefined
-        const firstNonOptional = uniqueFields.find(it => !optionalAccessor(it))
-        return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT, [
-            writer.makeDiscriminatorFromFields(this,
-                value,
-                firstNonOptional ? [nameAccessor(firstNonOptional)] : uniqueFields.map(it => nameAccessor(it)),
-                duplicates)
-        ])
-    }
 }
 
 abstract class ObjectArgConvertor extends BaseArgConvertor {
@@ -702,7 +687,7 @@ export class ArrayConvertor extends ObjectArgConvertor {
     }
     override unionDiscriminator(value: string, writer: LanguageWriter): LanguageExpression | undefined {
         return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
-            [writer.instanceOf(this, value)])///see ETSLW
+            [writer.instanceOf(value, this.idlType)])
     }
     override getObjectAccessor(language: Language, value: string, args?: Record<string, string>): string {
         const array = language === Language.CPP ? ".array" : ""

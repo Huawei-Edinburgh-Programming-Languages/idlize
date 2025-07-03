@@ -533,9 +533,6 @@ export class KotlinLanguageWriter extends LanguageWriter {
     escapeKeyword(keyword: string): string {
         return keyword
     }
-    makeDiscriminatorConvertor(convertor: ArgConvertor, value: string, index: number): LanguageExpression | undefined {
-        throw new Error("Not implemented")
-    }
     makeStaticBlock(op: (writer: LanguageWriter) => void) {
         this.printer.print('companion object {')
         this.printer.pushIndent()

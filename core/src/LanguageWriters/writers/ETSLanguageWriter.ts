@@ -23,21 +23,13 @@ import {
     Method,
     MethodModifier,
     MethodSignature,
-    NamedMethodSignature,
     ObjectArgs
 } from "../LanguageWriter"
 import { TSCastExpression, TSLanguageWriter } from "./TsLanguageWriter"
-import { getExtAttribute, IDLEnum, IDLI32Type, IDLThisType, IDLType, IDLVoidType } from '../../idl'
 import {
     ArgConvertor,
-    AggregateConvertor,
-    ArrayConvertor,
-    CustomTypeConvertor,
-    InterfaceConvertor,
-    MaterializedClassConvertor,
     OptionConvertor,
     UnionConvertor,
-    BufferConvertor,
     EnumConvertor
 } from "../ArgConvertors"
 import * as idl from '../../idl'
@@ -45,7 +37,6 @@ import { convertDeclaration, IdlNameConvertor } from "../nameConvertor"
 import { createDeclarationNameConvertor } from "../../peer-generation/idl/IdlNameConvertor";
 import { Language } from "../../Language";
 import { RuntimeType } from "../common";
-import { throwException } from "../../util";
 import { ReferenceResolver } from "../../peer-generation/ReferenceResolver";
 
 ////////////////////////////////////////////////////////////////
@@ -54,7 +45,7 @@ import { ReferenceResolver } from "../../peer-generation/ReferenceResolver";
 
 export class EtsAssignStatement implements LanguageStatement {
     constructor(public variableName: string,
-                public type: IDLType | undefined,
+                public type: idl.IDLType | undefined,
                 public expression: LanguageExpression,
                 public isDeclared: boolean = true,
                 protected isConst: boolean = true) { }
@@ -85,7 +76,7 @@ class ArkTSMapForEachStatement implements LanguageStatement {
 
 export class ArkTSEnumEntityStatement implements LanguageStatement {
     constructor(
-        private readonly enumEntity: IDLEnum,
+        private readonly enumEntity: idl.IDLEnum,
         private readonly options: { isExport: boolean, isDeclare: boolean }
     ) {}
 
@@ -97,7 +88,7 @@ export class ArkTSEnumEntityStatement implements LanguageStatement {
             .flatMap((member, index) => {
                 const initText = member.initializer ?? index
                 const isTypeString = typeof initText !== "number"
-                const originalName = getExtAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
+                const originalName = idl.getExtAttribute(member, idl.IDLExtendedAttributes.OriginalEnumMemberName)
                 const res: {
                     name: string,
                     alias: string | undefined,
@@ -195,7 +186,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     fork(options?: { resolver?: ReferenceResolver }): LanguageWriter {
         return new ETSLanguageWriter(new IndentedPrinter(), options?.resolver ?? this.resolver, this.typeConvertor, this.arrayConvertor)
     }
-    makeAssign(variableName: string, type: IDLType | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
+    makeAssign(variableName: string, type: idl.IDLType | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new EtsAssignStatement(variableName, type, expr, isDeclared, isConst)
     }
     makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
@@ -233,25 +224,13 @@ export class ETSLanguageWriter extends TSLanguageWriter {
             ? this.makeString(`${enumName}.values()[${value.asString()}]`)
             : this.makeMethodCall(enumName, 'fromValue', [value])
     }
-    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => string},
-                                value: string,
-                                accessors: string[],
-                                duplicates: Set<string>): LanguageExpression {
-        if (convertor instanceof AggregateConvertor
-            || convertor instanceof InterfaceConvertor
-            || convertor instanceof MaterializedClassConvertor
-            || convertor instanceof CustomTypeConvertor) {
-            return this.instanceOf(convertor, value)
-        }
-        return this.makeString(`${value} instanceof ${convertor.targetType(this)}`)
-    }
     makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
         if (idl.isEnum(this.resolver.toDeclaration(destinationConvertor.nativeType()))) {
             return this.makeCast(this.makeString(value), destinationConvertor.idlType)
         }
         return super.makeValueFromOption(value, destinationConvertor)
     }
-    makeEnumEntity(enumEntity: IDLEnum, options: { isExport: boolean, isDeclare?: boolean }): LanguageStatement {
+    makeEnumEntity(enumEntity: idl.IDLEnum, options: { isExport: boolean, isDeclare?: boolean }): LanguageStatement {
         return new ArkTSEnumEntityStatement(enumEntity, {
             isExport: options?.isExport,
             isDeclare: !!options?.isDeclare,
@@ -264,11 +243,11 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         // ArkTS does not support - 'this.?'
         super.writeMethodCall(receiver, method, params, nullable && receiver !== "this")
     }
-    isQuickType(type: IDLType): boolean {
+    isQuickType(type: idl.IDLType): boolean {
         return idl.asPromise(type) == undefined
     }
     writeNativeMethodDeclaration(method: Method): void {
-        if (method.signature.returnType === IDLThisType) {
+        if (method.signature.returnType === idl.IDLThisType) {
             throw new Error('static method can not return this!')
         }
         this.writeMethodDeclaration(method.name, method.signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
@@ -278,7 +257,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
                               convertorIndex: number,
                               runtimeTypeIndex: number): LanguageExpression {
         if (idl.isEnum(this.resolver.toDeclaration(convertor.nativeType()))) {
-            return this.instanceOf(convertor, valueName)
+            return this.instanceOf(valueName, convertor.idlType)
         }
         // TODO: in ArkTS SerializerBase.runtimeType returns RuntimeType.OBJECT for enum type and not RuntimeType.NUMBER as in TS
         if (convertor instanceof UnionConvertor || convertor instanceof OptionConvertor) {
@@ -312,13 +291,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         // the '==' operator must be used when one of the operands is a reference
         return super.makeNaryOp('==', args)
     }
-    override makeDiscriminatorConvertor(convertor: ArgConvertor, value: string, index: number): LanguageExpression { //
-        return this.instanceOf(convertor, value);
-        // Or this ????????
-        // return this.discriminatorFromExpressions(value, RuntimeType.OBJECT, [
-        //     makeEnumTypeCheckerCall(value, this.getNodeName(convertor.idlType), this)
-        // ])
-    }
     override castToInt(value: string, bitness: 8 | 32): string {
         // This fix is used to avoid unnecessary writeInt8(value as int32) call, which is generated if value is already an int32
         // The explicit cast forces ui2abc to call valueOf on an int, which fails the compilation
@@ -329,16 +301,16 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     }
     override castToBoolean(value: string): string { return `${value} ? 1 : 0` }
 
-    override instanceOf(convertor: ArgConvertor, value: string): LanguageExpression {
+    override instanceOf(value: string, type: idl.IDLType): LanguageExpression {
         // work around ArkTS compiler bugs
-        if (convertor instanceof ArrayConvertor) {
-            const arrayTypeName = this.arrayConvertor.convert(convertor.idlType)
+        if (idl.IDLContainerUtils.isSequence(type)) {
+            const arrayTypeName = this.arrayConvertor.convert(type)
             return this.makeMethodCall("TypeChecker", generateTypeCheckerName(arrayTypeName), [this.makeString(value)])
         }
-        if (convertor instanceof EnumConvertor && this.getNodeName(convertor.idlType) === "DragPreviewMode") {
+        if (this.getNodeName(type) === "DragPreviewMode") {
             return this.makeMethodCall("TypeChecker", "isDragPreviewMode", [this.makeString(value)])
         }
-        return super.instanceOf(convertor, value)
+        return super.instanceOf(value, type)
     }
     override typeInstanceOf(type: idl.IDLEntry, value: string, members?: string[]): LanguageExpression {
         if (!members || members.length === 0) {

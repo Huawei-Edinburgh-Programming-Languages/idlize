@@ -774,10 +774,6 @@ export abstract class LanguageWriter {
         this.writeStatement(this.makeAssign(valueType, idl.IDLI32Type,
             this.makeFunctionCall("runtimeType", [this.makeString(value)]), false))
     }
-    makeDiscriminatorFromFields(convertor: {targetType: (writer: LanguageWriter) => string}, value: string, accessors: string[], duplicates: Set<string>): LanguageExpression {
-        return this.makeString(`(${this.makeNaryOp("||",
-            accessors.map(it => this.makeString(`${value}!.hasOwnProperty("${it}")`))).asString()})`)
-    }
     makeEnumEntity(enumEntity: idl.IDLEnum, options: { isExport: boolean, isDeclare?: boolean }): LanguageStatement {
         return new TsEnumEntityStatement(enumEntity, { isExport: options.isExport, isDeclare: !!options.isDeclare })
     }
@@ -815,9 +811,6 @@ export abstract class LanguageWriter {
             ...exprs
         ])
     }
-    makeDiscriminatorConvertor(_convertor: ArgConvertor, _value: string, _index: number): LanguageExpression | undefined {
-        return undefined
-    }
     makeNot(expr: LanguageExpression): LanguageExpression {
         return this.makeString(`!(${expr.asString()})`)
     }
@@ -835,8 +828,8 @@ export abstract class LanguageWriter {
     makeStaticBlock(op: (writer: LanguageWriter) => void) {
         op(this)
     }
-    instanceOf(convertor: ArgConvertor, value: string): LanguageExpression {
-        return this.makeString(`${value} instanceof ${this.getNodeName(convertor.idlType)}`)
+    instanceOf(value: string, type: idl.IDLType): LanguageExpression {
+        return this.makeString(`${value} instanceof ${this.getNodeName(type)}`)
     }
     // The version of instanceOf() which does not use ArgConvertors
     typeInstanceOf(type: idl.IDLEntry, value: string, members?: string[]): LanguageExpression {

@@ -464,29 +464,6 @@ export class TSLanguageWriter extends LanguageWriter {
         return TSKeywords.has(keyword) ? keyword + "_" : keyword
     }
 
-    makeDiscriminatorConvertor(convertor: ArgConvertor, value: string, index: number): LanguageExpression | undefined {
-        const convertorNativeType = convertor.nativeType()
-        const decl = this.resolver.resolveTypeReference(
-            idl.isReferenceType(convertorNativeType)
-                ? convertorNativeType
-                : idl.createReferenceType(this.getNodeName(convertorNativeType))
-        )
-        if (decl === undefined || !idl.isEnum(decl)) {
-            throwException(`The type reference ${decl?.name} must be Enum`)
-        }
-        const ordinal = idl.isStringEnum(decl)
-            ? this.i32FromEnum(
-                this.makeCast(this.makeString(this.getObjectAccessor(convertor, value)), convertor.idlType),
-                decl,
-            )
-            : this.makeUnionVariantCast(this.getObjectAccessor(convertor, value), this.getNodeName(idl.IDLI32Type), convertor, index)
-        const {low, high} = idl.extremumOfOrdinals(decl)
-        return this.discriminatorFromExpressions(value, convertor.runtimeTypes[0], [
-            this.makeNaryOp(">=", [ordinal, this.makeString(low.toString())]),
-            this.makeNaryOp("<=",  [ordinal, this.makeString(high.toString())])
-        ])
-    }
-
     override makeSerializerConstructorSignatures(): NamedMethodSignature[] | undefined {
         return [new NamedMethodSignature(idl.IDLVoidType, [], [])]
     }

@@ -345,7 +345,7 @@ export class IdlWrapperClassConvertor extends BaseArgConvertor {
     isPointerType(): boolean {
         return true
     }
-    override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+    override unionDiscriminator(value: string, writer: LanguageWriter): LanguageExpression | undefined {
         return writer.discriminatorFromExpressions(value, RuntimeType.OBJECT,
             [writer.makeString(`${value} instanceof ${writer.getNodeName(this.idlType)}`)])
     }
