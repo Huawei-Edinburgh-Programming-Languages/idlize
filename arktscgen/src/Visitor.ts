@@ -130,7 +130,11 @@ export class Visitor {
         if (ref.name === Config.context) return false // TODO: is handwritten
         if (this.isHeir(ref, Config.astNodeCommonAncestor)) return true
         if (this.isHeir(ref, Config.defaultAncestor)) return true
-        if (["ArkTsConfig", "Program"].includes(ref.name)) return true // TODO: fix
+        // TODO: Nodes that do not have parents have to be in this list
+        if (["ValidationInfo", "ArkTsConfig", "Program"].includes(ref.name)) return true // TODO: fix
+        //if (core.isInterface(ref)) {
+        //    throw `${ref.name}`
+        //}
         return false
     }
 

@@ -2,10 +2,8 @@ import * as core from "@idlizer/core"
 import { Config } from "./general/Config"
 import { InteropConstructions } from "./constuctions/InteropConstructions"
 import { PeersConstructions } from "./constuctions/PeersConstructions"
-import { isCreateOrUpdate, isReal, mangleIfKeyword, peerMethod, splitCreateOrUpdate } from "./general/common"
-import { flattenType, nodeNamespace, nodeType } from "./utils/idl";
-import { isReferenceType } from "@idlizer/core"
-import { resolve } from "dns"
+import { isCreateOrUpdate, isDataClass, isReal, mangleIfKeyword, peerMethod, splitCreateOrUpdate } from "./general/common"
+import { flattenType, nodeNamespace, nodeType, parent } from "./utils/idl";
 
 export interface Body {
     creates: core.Method[],
@@ -19,13 +17,42 @@ export interface Resolver extends core.ReferenceResolver {
     isPeer(type: core.IDLReferenceType | core.IDLInterface): boolean
 }
 
+export interface Importer {
+    importEnum(name: string): string
+    importPeer(name: string): string
+    importReexport(name: string): string
+}
+
 export class PeerGenerator {
     constructor(
-        public resolver: Resolver
+        public resolver: Resolver,
+        public importer: Importer
     ) {
     }
 
-    public writeBody(iface: core.IDLInterface, writer: core.LanguageWriter, written: (body: Body) => void) {
+    public writeClass(iface: core.IDLInterface, writer: core.LanguageWriter, written: (body: Body) => void) {
+        const parentName = (node: core.IDLInterface) => {
+            return this.importer.importPeer(parent(node) ?? Config.defaultAncestor)
+        }
+
+        writer.writeClass(
+            iface.name,
+            () => {
+                this.writeBody(iface, writer, written)
+            },
+            parentName(iface)
+        )
+
+        if (!isDataClass(iface)) {
+            this.writeTypeGuard(iface, writer)
+        }
+
+        if (isReal(iface)) {
+            this.writeAddToNodeMap(iface, writer)
+        }
+    }
+
+    private writeBody(iface: core.IDLInterface, writer: core.LanguageWriter, written: (body: Body) => void) {
         const methodTypes = ['Create', 'Update', 'Getter', 'Regular']
         const groupFn = (method: core.IDLMethod): string => {
             const [p1, p2, p3, p4] = methodTypes
@@ -97,8 +124,9 @@ export class PeerGenerator {
 
         // 3. Writing getters and regular
 
-        const inFileOrder = this.ts_collapseDuplicates(iface.methods.filter(m => !isCreateOrUpdate(m.name)))
-            .map(m => m.name)
+        const inFileOrder = this.ts_collapseDuplicates(
+            iface.methods.filter(m => !isCreateOrUpdate(m.name))
+        ).map(m => m.name)
 
         // FIXME: !!!
         let getIndex = 0, regIndex = 0
@@ -211,8 +239,6 @@ export class PeerGenerator {
         const nativeCall = this.makeWrappedBindingCall(iface, method, writer, this.resolver)
 
         // Modify method name and signature (if needed)
-
-        console.log(`${method.name} =>  ${peerMethod(method.name)}`);
         method.name = peerMethod(method.name)
 
         writer.writeMethodImplementation(
@@ -250,6 +276,51 @@ export class PeerGenerator {
                 )
             )
         })
+    }
+
+    private writeTypeGuard(iface: core.IDLInterface, writer: core.LanguageWriter): void {
+        writer.writeFunctionImplementation(
+            PeersConstructions.typeGuard.name(iface.name),
+            new core.MethodSignature(
+                core.createReferenceType(
+                    PeersConstructions.typeGuard.returnType(iface.name)
+                ),
+                [core.createReferenceType(PeersConstructions.typeGuard.parameter.type)],
+                undefined,
+                undefined,
+                undefined,
+                [PeersConstructions.typeGuard.parameter.name]
+            ),
+            () => {
+                writer.writeStatement(
+                    writer.makeReturn(
+                        writer.makeString(
+                            PeersConstructions.typeGuard.body(iface.name)
+                        )
+                    )
+                )
+            }
+        )
+    }
+
+    private writeAddToNodeMap(iface: core.IDLInterface, writer: core.LanguageWriter): void {
+        const value = nodeType(iface)
+        const idlEnum = this.resolver.resolveTypeReference(
+            core.createReferenceType(Config.nodeTypeAttribute)
+        )
+        const enumValue = value && idlEnum && core.isEnum(idlEnum) &&
+            idlEnum?.elements
+                .find(e => e.initializer?.toString() === value)
+                ?.name
+        if (enumValue === undefined) {
+            return
+        }
+        const qualified = `${this.importer.importEnum(Config.nodeTypeAttribute)}.${enumValue}`
+        writer.writeExpressionStatements(
+            writer.makeString(`if (!nodeByType.has(${qualified})) {`),
+            writer.makeString(`    nodeByType.set(${qualified}, (peer: KNativePointer) => new ${iface.name}(peer))`),
+            writer.makeString(`}`)
+        )
     }
 
     public ts_collapseDuplicates(methods: readonly core.IDLMethod[]): core.IDLMethod[] {
