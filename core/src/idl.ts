@@ -583,6 +583,10 @@ export function isOverload(node: IDLNode): boolean {
     return isDefined(node.extendedAttributes?.find(it => it.name === IDLExtendedAttributes.Alias))
 }
 
+export function isCallSignature(node: IDLNode): boolean {
+    return isDefined(node.extendedAttributes?.find(it => it.name === IDLExtendedAttributes.CallSignature))
+}
+
 export function isOptionalType(type: IDLNode): type is IDLOptionalType {
     return type.kind === IDLKind.OptionalType
 }

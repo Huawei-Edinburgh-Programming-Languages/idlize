@@ -133,4 +133,15 @@ export class PeerMethod {
     setSameOverloadIndex(copyFrom: PeerMethod) {
         this.overloadIndex = copyFrom.overloadIndex
     }
+
+    setOverloadInfo(info: OverloadInfo) {
+        this.overloadInfo = info;
+        // this.method.name = info.overloadAlias
+        console.log("setOverloadInfo", this.method.name)
+        if(this.isCallSignature) {
+            this.method.name = `set${capitalize(info.overloadAlias)}`
+        } else {
+            this.method.name = info.overloadAlias
+        }
+    }
 }

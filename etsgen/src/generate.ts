@@ -161,6 +161,7 @@ export function generateFromSts({ inputFiles, baseDir, outDir, etsConfigPath, co
     const library: IDLSuperFile[] = []
     let status = new StatusTracker(!!traceStatus)
     inputFiles.forEach(file => {
+        // if (!(file.includes("common") || file.includes("image"))) return;
         try {
             doJob(file, () => {
                 const idlFile = processFile(outDir, baseDir, file, etsConfigPath, config, status)
@@ -582,6 +583,12 @@ class IDLVisitor extends arkts.AbstractVisitor {
             )
             /* arkgen specialization */
             if (node.annotations.find(it => arkts.isIdentifier(it.expr) && it.expr.name === "ComponentBuilder")) {
+                const overloadInfo = this.overloadMap.isOverloadGlobalFunc(method.name)
+                if (overloadInfo[0]) {
+                    extendedAttributes.push({name: idl.IDLExtendedAttributes.Alias, value: method.name})
+                    extendedAttributes.push({name: idl.IDLExtendedAttributes.OverLoadPrio, value: overloadInfo[2]!.toString()})
+                    method.name = overloadInfo[1]!
+                }
                 const callable = idl.createCallable(
                     "invoke",
                     method.parameters.slice(0, method.parameters.length - 1),
@@ -922,17 +929,17 @@ class IDLVisitor extends arkts.AbstractVisitor {
         return declaration
     }
 
-    private processMethodLiteralParameters(method: arkts.MethodDefinition): {
+    private processMethodLiteralParameters(method: arkts.MethodDefinition, parentName: string): {
         methodName: string,
         parameters: arkts.ETSParameterExpression[],
         extendedAttributes: idl.IDLExtendedAttribute[],
     } {
         let methodName = method.id!.name
         const extendedAttributes: idl.IDLExtendedAttribute[] = []
-        const [isOverload, overloadKey, index] = this.overloadMap.isOverLoadFunc(methodName)
+        const [isOverload, overloadKey, index] = this.overloadMap.isOverloadMemeberFunc(parentName, methodName)
         if (isOverload) {
             extendedAttributes.push({ name: idl.IDLExtendedAttributes.Alias, value: methodName },
-                { name: idl.IDLExtendedAttributes.OverLoadPrio, value: index.toString() })
+                { name: idl.IDLExtendedAttributes.OverLoadPrio, value: index!.toString() })
             methodName = overloadKey!
         }
         const filteredParameters = method.function!.params.map(it => it as arkts.ETSParameterExpression)
@@ -974,7 +981,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
     serializeMethod(method: arkts.MethodDefinition, parentName: string): idl.IDLMethod | idl.IDLConstructor {
         const { set: paramsSet, parameters: typeParameters } = this.extractTypeParameters((method.value as arkts.FunctionExpression).function?.typeParams)
         return this.withTypeParamContext(paramsSet, () => {
-            const { methodName, parameters: arktsParameters, extendedAttributes } = this.processMethodLiteralParameters(method)
+            const { methodName, parameters: arktsParameters, extendedAttributes } = this.processMethodLiteralParameters(method, parentName)
             let traceAttrs = this.traceAttrs()
             extendedAttributes.push(...traceAttrs)
             return this.contextual.extend(methodName, () => {
@@ -1530,7 +1537,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         }
     }
 
-    private getNodeType(node: arkts.AstNode): string {
+    static getNodeType(node: arkts.AstNode): string {
         if (arkts.isClassDeclaration(node)) return 'class'
         if (arkts.isInterfaceDecl(node) || arkts.isTSInterfaceDeclaration(node)) return 'interface'
         if (arkts.isTSEnumDeclaration(node)) return 'enum_class'
@@ -1543,7 +1550,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         throw new Error("Unknown node type!")
     }
 
-    private getNodeName(node: arkts.AstNode): string {
+    static getNodeName(node: arkts.AstNode): string {
         if (arkts.isClassDeclaration(node)) return node.definition!.ident!.name
         if (arkts.isInterfaceDecl(node) || arkts.isTSInterfaceDeclaration(node)) return node.id!.name
         if (arkts.isTSEnumDeclaration(node)) return node.key!.name
@@ -1561,10 +1568,10 @@ class IDLVisitor extends arkts.AbstractVisitor {
         let fpkg = this.packageClause.join('.')
 
         const [node, ...tail] = this.processNodeStack
-        let name = this.getNodeName(node)
-        let parent = tail.map(it => this.getNodeName(it)).reverse().join('.')
+        let name = IDLVisitor.getNodeName(node)
+        let parent = tail.map(it => IDLVisitor.getNodeName(it)).reverse().join('.')
         if (parent == '') parent = 'unnamed'
-        let type = this.getNodeType(node)
+        let type = IDLVisitor.getNodeType(node)
 
         let ok = `${parent}:${name}`
         let override = (this.status.od.get(ok) ?? -1) + 1
@@ -1583,23 +1590,52 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 }
 
+type OverloadDeclarationInfo = Map<string, Array<string>>
 class OverloadMap {
-    private _overloadMap: Map<string, Array<string>> = new Map
-    addOverloadMemeber(key: string, identifier: string) {
-        if (this._overloadMap.has(key)) {
-            this._overloadMap.get(key)?.push(identifier)
+    // private _overloadMap: Map<string, Array<string>> = new Map
+    private _classOverloadInfo: Map<string, OverloadDeclarationInfo> = new Map
+    private _constructorOverloadInfo: Map<string, Array<OverloadDeclarationInfo>> = new Map
+    private _functionOverloadInfo: OverloadDeclarationInfo = new Map
+    addClassInterfaceOverloadMemeber(className: string, key: string, identifier: string) {
+        if (!this._classOverloadInfo.has(className)) {
+            const info: OverloadDeclarationInfo = new Map()
+            this._classOverloadInfo.set(className, info.set(key, new Array(identifier)))
             return;
         }
-        this._overloadMap.set(key, new Array(identifier))
+        if (!this._classOverloadInfo.get(className)!.has(key)) {
+            this._classOverloadInfo.get(className)!.set(key, new Array(identifier))
+            return;
+        }
+        this._classOverloadInfo.get(className)!.get(key)?.push(identifier)
     }
-    isOverLoadFunc(key: string): [boolean, string | undefined, number] {
-        for (let [k, s] of this._overloadMap) {
+    addOverloadFunction(key: string, identifier: string) {
+        if (this._functionOverloadInfo.has(key)) {
+            this._functionOverloadInfo.get(key)?.push(identifier)
+            return;
+        }
+        this._functionOverloadInfo.set(key, new Array(identifier))
+    }
+    // 0: is overload function or not, 1: overload key, 2: overload priority
+    isOverloadMemeberFunc(className: string, key: string): [boolean, string | undefined, number | undefined] {
+        if (!this._classOverloadInfo.has(className)) {
+            return [false, undefined, undefined]
+        }
+        for (let [k, s] of this._classOverloadInfo.get(className)!) {
             const index = s.findIndex(k => k === key)
             if (index != -1) {
                 return [true, k, index]
             }
         }
-        return [false, undefined, -1]
+        return [false, undefined, undefined]
+    }
+    isOverloadGlobalFunc(name: string): [boolean, string | undefined, number | undefined] {
+        for (let [k, s] of this._functionOverloadInfo) {
+            const index = s.findIndex(k => k === name)
+            if (index != -1) {
+                return [true, k, index]
+            }
+        }
+        return [false, undefined, undefined] 
     }
 }
 
@@ -1608,22 +1644,62 @@ class OverLoadVisitor extends arkts.AbstractVisitor {
     get overloadMap(): OverloadMap {
         return this._overloadMap
     }
+    _currentScope: Array<arkts.InterfaceDecl | arkts.ClassDeclaration | arkts.TSInterfaceDeclaration> = new Array
     visitor(node: arkts.arkts.AstNode, options?: object): arkts.arkts.AstNode {
+        if (arkts.isClassDeclaration(node)) {
+            return this.scoepdVisit(node);
+        }
+        if (arkts.isInterfaceDecl(node) || arkts.isTSInterfaceDeclaration(node)) {
+            return this.scoepdVisit(node);
+        }
         if (arkts.isOverloadDeclaration(node)) {
             return this.visitOverloadDeclaration(node)
         }
         return this.visitEachChild(node)
     }
+    scoepdVisit(node: arkts.InterfaceDecl | arkts.ClassDeclaration | arkts.TSInterfaceDeclaration) {
+        this._currentScope.push(node)
+        this.visitEachChild(node)
+        this._currentScope.pop()
+        return node;
+    }
     visitOverloadDeclaration(declaration: arkts.OverloadDeclaration): arkts.OverloadDeclaration {
+        if (declaration.isConstructorOverloadDeclaration) {
+
+        } else if (declaration.isFunctionOverloadDeclaration) {
+            this.handleFunctionOverloadList(declaration)
+        } else if (declaration.isClassMethodOverloadDeclaration) {
+            this.handleOverloadList(declaration)
+        } else if (declaration.isInterfaceMethodOverloadDeclaration) {
+            this.handleOverloadList(declaration)
+        }
+        return declaration;
+    }
+    handleOverloadList(declaration: arkts.OverloadDeclaration) {
+        const parent = this._currentScope.at(-1)!
+        // let t: arkts.AstNode = declaration;
+        // do {
+        //     if (!t.parent) {
+        //         break;
+        //     }
+        //     console.log(t.constructor.name)
+        //     t = t.parent
+        // } while (true)
         declaration.overloadedList.forEach(exp => {
             if (arkts.isIdentifier(exp)) {
-                this._overloadMap.addOverloadMemeber(declaration.id!.name, exp.name)
-            } else if (arkts.isMemberExpression(exp)) {
-                console.log("Unimplemented memeber expresstion overload");
+                this._overloadMap.addClassInterfaceOverloadMemeber(IDLVisitor.getNodeName(parent), declaration.id!.name, exp.name)
             } else {
                 throw new Error("Unexpected overloadedList type");
             }
         })
-        return declaration;
+    }
+    handleFunctionOverloadList(declaration: arkts.OverloadDeclaration) {
+        declaration.overloadedList.forEach(exp => {
+            if (arkts.isIdentifier(exp)) {
+                this._overloadMap.addOverloadFunction(declaration.id!.name, exp.name)
+            } else {
+                throw new Error("Unexpected overloadedList type");
+            }
+        })
     }
 }

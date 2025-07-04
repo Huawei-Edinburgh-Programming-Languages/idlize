@@ -22,15 +22,42 @@ export interface PeerClassBase {
     generatedName(isCallSignature: boolean): string
 }
 
+export class PeerClassOverLoad {
+    constructor(
+        public memberfunctions: Map<string, Array<OverloadInfo>> = new Map,
+        public callSignatures: Array<OverloadInfo> = new Array
+    ) { }
+
+    addMemeberFunctions(key: string, info: OverloadInfo) {
+        if (this.memberfunctions.has(key)) {
+            this.memberfunctions.get(key)?.push(info)
+        } else {
+            this.memberfunctions.set(key, new Array(info))
+        }
+    }
+
+    addCallSignature(info: OverloadInfo) {
+        this.callSignatures.push(info)
+    }
+
+    hasOverloadMemeberFunction(): boolean {
+        return this.memberfunctions.size !== 0
+    }
+
+    hasOverloadCallSignature(): boolean {
+        return this.callSignatures.length !== 0
+    }
+}
+
 export class PeerClass implements PeerClassBase {
     constructor(
         public readonly file: IDLFile,
         public readonly componentName: string,
         public readonly originalFilename: string,
-        public overloadInfo: Map<string, Array<OverloadInfo>> = new Map
+        public overloadInfo: PeerClassOverLoad = new PeerClassOverLoad
     ) { }
 
-    generatedName(isCallSignature: boolean): string{
+    generatedName(isCallSignature: boolean): string {
         return isCallSignature ? this.originalInterfaceName! : this.originalClassName!
     }
 

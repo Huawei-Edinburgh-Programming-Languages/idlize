@@ -82,12 +82,12 @@ function getOverloadInfo(prop: idl.IDLNamedNode, peerMethod: PeerMethod, peerCla
         }
     })
     const overloadInfo = new OverloadInfo(alias!, prio!)
-    peerMethod.overloadInfo = overloadInfo
-    peerMethod.method.name = alias!
-    if (peerClass.overloadInfo.has(prop.name)) {
-        peerClass.overloadInfo.get(prop.name)?.push(overloadInfo)
+    console.log("getOverloadInfo", overloadInfo.overloadAlias, overloadInfo.overloadPrio)
+    peerMethod.setOverloadInfo(overloadInfo)
+    if(idl.isCallSignature(prop)) {
+        peerClass.overloadInfo.addCallSignature(overloadInfo)
     } else {
-        peerClass.overloadInfo.set(prop.name, new Array(overloadInfo))
+        peerClass.overloadInfo.addMemeberFunctions(prop.name, overloadInfo)
     }
     return peerMethod
 }
