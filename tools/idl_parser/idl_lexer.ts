@@ -298,6 +298,10 @@ function returnChar() {
     throw new Error("Can't decrement g_pos cause it's zero.");
 }
 
+export function getTokenText(): string {
+  return g_tokenText;
+}
+
 export function getToken(): Token {
   console.log("getToken <<<");
   let c: string = getChar();

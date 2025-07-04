@@ -571,7 +571,7 @@ function CallbackRest(): idl.Node | null {
   if (g_lookahead != lex.Token.tId)
     return null;
 
-  let res: idl.CallbackNode = new idl.CallbackNode();
+  let res: idl.CallbackNode = new idl.CallbackNode(lex.getTokenText());
   Match(lex.Token.tId);
   Match(lex.Token.tEqual);
   Type();
