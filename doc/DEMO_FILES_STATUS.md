@@ -30,7 +30,7 @@
 | CanvasRenderingContext2DRect.test.ets | Vadim Voronov |
 | Canvas.test.ets | Vadim Voronov |
 | CheckboxGroupTest.ets | |
-| CheckboxTest.ets | |
+| CheckboxTest.ets | Ivan Tuzhilkin |
 | CircleTest.ets | Alexander Porodin |
 | ClickEffect.test.ets | |
 | Click.test.ets | |
