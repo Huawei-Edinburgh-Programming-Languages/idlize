@@ -1,4 +1,4 @@
-| FILE | responsible |
+|/FILE | responsible |
 |---|---|
 | AlphabetIndexerTest.ets | |
 | Animation.test.ets | |
@@ -31,7 +31,7 @@
 | Canvas.test.ets | Vadim Voronov |
 | CheckboxGroupTest.ets | |
 | CheckboxTest.ets | |
-| CircleTest.ets | |
+| CircleTest.ets | Alexander Porodin |
 | ClickEffect.test.ets | |
 | Click.test.ets | |
 | ColumnSplit.test.ets | |
@@ -137,7 +137,7 @@
 | ListTest.ets | |
 | LoadingProgressTest.ets | Samarin Sergey |
 | LocationButtonTest.ets | |
-| MarqueeTest.ets | |
+| MarqueeTest.ets | Alexander Porodin |
 | MenuItemGroupTest.ets | |
 | MenuItemTest.ets | |
 | MenuTest.ets | |
