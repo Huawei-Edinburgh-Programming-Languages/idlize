@@ -15,7 +15,7 @@
 
 import { IndentPrinter } from "../indent";
 import * as lw from "../../lws"
-import { std } from "../../stdlib";
+import { std, Ts } from "../../stdlib";
 import { IdentityTransformer } from "../../visitors/identity";
 import { E, T, utils } from "../../builder";
 
@@ -28,9 +28,10 @@ const varMapping = new Map([
 ])
 
 export class ConvertCXXTypes extends IdentityTransformer {
-  goConstType(type: lw.ConstType): lw.ConstType {
+  goConstType(type: lw.ConstType): lw.LWType {
     switch (type.name) {
       case std.names.types.int: return T.cc('int')
+      case std.names.types.string: return Ts.ptr(Ts.const(T.c('char')))
       case std.names.types.void: return T.cc('void')
     }
     return type
@@ -432,5 +433,5 @@ export function processNPrintCXX(chunk: lw.LWDeclaration) {
 
   const printer = new CXXPrinter()
   printer.printDeclaration(tree)
-  return '#include <cstdio>\n' + printer.render()
+  return printer.render()
 }

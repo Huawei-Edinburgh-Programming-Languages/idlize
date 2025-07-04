@@ -38,7 +38,7 @@ const specialTypeNames = {
     reference: '@REF',
     pointer: '@PTR',
 
-    hall: '@UNDEFINED',
+    hole: '@UNDEFINED',
 
     union: '@UNION',
     intersection: '@INTERSECTION',
@@ -46,6 +46,7 @@ const specialTypeNames = {
     auto: '@LW.AUTO',
 
     int: '@LW.Int32',
+    string: '@LW.String',
     void: '@LW.Void',
 }
 
@@ -98,6 +99,7 @@ export const Op = knownOperations
 
 const primitiveTypes = {
     int: T.c(specialTypeNames.int),
+    str: T.c(specialTypeNames.string),
     void: T.c(specialTypeNames.void),
 }
 

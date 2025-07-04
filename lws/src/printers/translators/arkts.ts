@@ -31,6 +31,7 @@ export class ConvertArkTSTypes extends IdentityTransformer {
   goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
       case std.names.types.int: return T.cc('double')
+      case std.names.types.string: return T.cc('string')
       case std.names.types.void: return T.cc('void')
     }
     return type

@@ -1,0 +1,18 @@
+package demo.test.simple;
+
+namespace structs {
+    interface Point {
+        attribute i32 x;
+        attribute i32 y;
+    };
+
+    interface Star {
+        attribute String name;
+        attribute Point location;
+    };
+
+    interface StarMap {
+        attribute sequence<Star> data;
+        void add(Star s);
+    };
+};

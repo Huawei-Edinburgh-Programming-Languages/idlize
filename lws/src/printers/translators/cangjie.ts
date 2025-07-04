@@ -31,6 +31,7 @@ export class ConvertCJTypes extends IdentityTransformer {
   goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
       case std.names.types.int: return T.cc('Int32')
+      case std.names.types.string: return T.cc('String')
       case std.names.types.void: return T.cc('Unit')
     }
     return type

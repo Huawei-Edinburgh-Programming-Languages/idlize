@@ -230,13 +230,13 @@ export class IdentityTransformer {
     }
   }
 
-  goConstType(type:lw.ConstType): lw.ConstType {
+  goConstType(type:lw.ConstType): lw.LWType {
     return {
       kind: type.kind,
       name: type.name
     }
   }
-  goFuncType(type:lw.FuncType): lw.FuncType {
+  goFuncType(type:lw.FuncType): lw.LWType {
     return {
       kind: type.kind,
       params: type.params.map(p => ({
@@ -246,7 +246,7 @@ export class IdentityTransformer {
       returnType: this.goType(type.returnType)
     }
   }
-  goAppType(type:lw.AppType): lw.AppType {
+  goAppType(type:lw.AppType): lw.LWType {
     return {
       kind: type.kind,
       head: type.head,
@@ -259,5 +259,14 @@ export class IdentityTransformer {
       case lw.LWKind.AppType: return this.goAppType(type)
       case lw.LWKind.FuncType: return this.goFuncType(type)
     }
+  }
+}
+
+export function transformer(...trans: IdentityTransformer[]) {
+  return (input:lw.LWDeclaration[]) => {
+    for (let tr of trans) {
+      input = input.map(x => tr.goDeclaration(x))
+    }
+    return input
   }
 }

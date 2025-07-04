@@ -13,100 +13,16 @@
  * limitations under the License.
  */
 
-import { writeFileSync } from "node:fs"
-import { D, DD, E, S, T } from "./builder"
-import { An, Op, std, Ts, Vs } from "./stdlib"
+export * from "./builder"
+export * from "./stdlib"
 
-import { processNPrintCJ } from "./printers/translators/cangjie"
-import { processNPrintTS } from "./printers/translators/typescript"
-import { processNPrintCXX } from "./printers/translators/cxx"
-import { processNPrintJava } from "./printers/translators/java"
-import { processNPrintArkTS } from "./printers/translators/arkts"
-import { dumpToString } from "./printers/dump"
+export { processNPrintCJ } from "./printers/translators/cangjie"
+export { processNPrintTS } from "./printers/translators/typescript"
+export { processNPrintCXX } from "./printers/translators/cxx"
+export { processNPrintJava } from "./printers/translators/java"
+export { processNPrintArkTS } from "./printers/translators/arkts"
+export { dumpToString } from "./printers/dump"
 
-function main() {
-  const test = D.ns('test', [
-    D.struct('Point', [
-      { name: 'x', type: Ts.prim.int },
-      { name: 'y', type: Ts.prim.int },
-    ]),
-    DD([{ name: 'T' }])
-      .class('Animal',
-        [
-          { name: 'position', type: T.c('Point') },
-          { name: 'mass', type: Ts.prim.int }
-        ],
-        [
-          D.func(
-            std.names.members.ctor,
-            [
-              { name: 'p', type: T.c('Point') },
-              { name: 'm', type: Ts.prim.int }
-            ],
-            Ts.prim.void,
-            S.block([
-              S.e(E.bin('=', E.get(Vs.self, 'position'), E.v('p'))),
-              S.e(E.bin('=', E.get(Vs.self, 'mass'), E.v('m'))),
-            ])
-          ),
-          D.func('eat', [{ name: 'dm', type: Ts.prim.int }], Ts.prim.void, S.block([
-            S.e(E.bin('=',
-              E.get(Vs.self, 'mass'),
-              E.bin('+',
-                E.get(Vs.self, 'mass'),
-                E.v('dm')
-              )
-            ))
-          ])),
-          D.func('move', [{ name: 'dx', type: Ts.prim.int }], Ts.prim.void, S.block([
-            S.e(E.bin('=',
-              E.get(E.get(Vs.self, 'position'), 'x'),
-              E.bin('+',
-                E.get(E.get(Vs.self, 'position'), 'x'),
-                E.v('dx')
-              )
-            ))
-          ])),
-          DD([{ name: 'U' }]).func('poly', [{ name: 'x', type: T.c('T') }, { name: 'y', type: T.c('U') }], Ts.prim.int, S.block([
-            S.return(E.get(Vs.self, 'mass'))
-          ]))
-        ]
-    ),
-    D.class('Box', [], [
-      D.func('test1', [], Ts.prim.void, S.block([
-        S.declaration('p', T.c('Point'), true,
-          E.instance('Point', [ E.c(5, [An.named('x')]), E.c(5, [An.named('y')])], [], [An.asStruct()])
-        ),
-        S.e(E.call(Vs.print, [E.get(E.v('p'), 'x')]))
-      ])),
-      D.func('test2', [], Ts.prim.void, S.block([
-        S.declaration('i', Ts.prim.int, true, E.c(0)),
-        S.loop(E.bin(Op.lt, E.v('i'), E.c(42)), S.block([
-          S.e(E.bin('=', E.v('i'), E.bin('+', E.v('i'), E.c(1))))
-        ])),
-        S.if(E.bin(Op.eq, E.v('i'), E.c(42)),
-          S.block([
-            S.e(E.call(Vs.print, [E.v('i')]))
-          ]),
-          S.block([
-            S.e(E.bin('=', E.v('i'), E.bin('+', E.v('i'), E.c(1))))
-          ])
-        )
-      ]))
-    ])
-  ])
+export * as lw from "./lws"
 
-  const printers: [string, typeof processNPrintTS][] = [
-    [ 'test.ts'   , processNPrintTS    ],
-    [ 'test.cj'   , processNPrintCJ    ],
-    [ 'test.cpp'  , processNPrintCXX   ],
-    [ 'test.java' , processNPrintJava  ],
-    [ 'test.ets'  , processNPrintArkTS ],
-    [ 'test.dump' , dumpToString       ]
-  ]
-
-  printers.forEach(([name, printer]) => {
-    writeFileSync(`out/${name}`, printer(test), 'utf-8')
-  })
-}
-main()
+export { IdentityTransformer, transformer } from "./visitors/identity"

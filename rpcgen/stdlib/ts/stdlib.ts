@@ -1,0 +1,3 @@
+
+class ByteReader {}
+class ByteWriter {}
