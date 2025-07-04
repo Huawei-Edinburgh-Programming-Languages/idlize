@@ -14,12 +14,18 @@
  */
 
 import { E, T } from "./builder"
-import { Annotation, LWType } from "./lws"
+import { Annotation, DecoratorKind, LWType, Modifier } from "./lws"
 
 const knownAnnotations = {
     ptrVal: 'ptrVal',
     asStruct: 'asStruct',
-    named: 'named'
+    named: 'named',
+    staticMethod: 'staticMethod',
+    stackInstance: 'stackInstance'
+}
+
+const knownModifiers = {
+    static: 'static',
 }
 
 const specialMemberNames = {
@@ -55,18 +61,25 @@ export const std = {
         members: specialMemberNames,
         vars: specialVariables,
         types: specialTypeNames,
-        annotations: knownAnnotations
+        annotations: knownAnnotations,
+        modifiers: knownModifiers,
     }
 }
 
 export const An = {
-    ptrVal: (): Annotation => ({ name: knownAnnotations.ptrVal }),
-    asStruct: (): Annotation => ({ name: knownAnnotations.asStruct }),
-    named: (name:string): Annotation => ({ name: knownAnnotations.named, value: name })
+    ptrVal: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.ptrVal }),
+    asStruct: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.asStruct }),
+    named: (name:string): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.named, value: name }),
+    staticMethod: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.staticMethod }),
+    stackInstance: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.stackInstance })
+}
+
+export const Md = {
+    static: (): Modifier => ({ kind: DecoratorKind.Modifier, name: knownModifiers.static })
 }
 
 export const Vs = {
-    self: E.v(specialVariables.self, [{ name: knownAnnotations.ptrVal }]),
+    self: E.v(specialVariables.self, [{ kind: DecoratorKind.Annotation, name: knownAnnotations.ptrVal }]),
     base: E.v(specialVariables.base),
     null: E.v(specialVariables.null),
     undef: E.v(specialVariables.undef),

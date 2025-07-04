@@ -30,7 +30,7 @@ function main() {
       { name: 'x', type: Ts.prim.int },
       { name: 'y', type: Ts.prim.int },
     ]),
-    DD([{ name: 'T' }])
+    DD({ generics: [{ name: 'T' }] })
       .class('Animal',
         [
           { name: 'position', type: T.c('Point') },
@@ -67,7 +67,7 @@ function main() {
               )
             ))
           ])),
-          DD([{ name: 'U' }]).func('poly', [{ name: 'x', type: T.c('T') }, { name: 'y', type: T.c('U') }], Ts.prim.int, S.block([
+          DD({ generics: [{ name: 'U' }] }).func('poly', [{ name: 'x', type: T.c('T') }, { name: 'y', type: T.c('U') }], Ts.prim.int, S.block([
             S.return(E.get(Vs.self, 'mass'))
           ]))
         ]

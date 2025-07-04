@@ -13,6 +13,10 @@ namespace structs {
 
     interface StarMap {
         attribute sequence<Star> data;
-        void add(Star s);
+    };
+
+    interface StarMapController {
+        void add(Star star);
+        i32 sum();
     };
 };

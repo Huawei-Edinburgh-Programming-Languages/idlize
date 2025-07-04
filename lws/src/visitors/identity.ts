@@ -26,6 +26,7 @@ export class IdentityTransformer {
     return {
       kind: decl.kind,
       generics: decl.generics,
+      modifiers: decl.modifiers,
       name: decl.name,
       variants: decl.variants.map(v => ({
         name: v.name,
@@ -37,6 +38,7 @@ export class IdentityTransformer {
     return {
       kind: decl.kind,
       generics: decl.generics,
+      modifiers: decl.modifiers,
       name: decl.name,
       members: decl.members.map(m => ({
         name: m.name,
@@ -48,6 +50,7 @@ export class IdentityTransformer {
     return {
       kind: decl.kind,
       generics: decl.generics,
+      modifiers: decl.modifiers,
       name: decl.name,
       fields: decl.fields.map(f => ({
         name: f.name,
@@ -72,6 +75,7 @@ export class IdentityTransformer {
     return {
       kind: decl.kind,
       generics: decl.generics,
+      modifiers: decl.modifiers,
       name: decl.name,
       type: this.goType(decl.type)
     }
@@ -80,6 +84,7 @@ export class IdentityTransformer {
     return {
       kind: decl.kind,
       generics: decl.generics,
+      modifiers: decl.modifiers,
       name: decl.name,
       parameters: decl.parameters.map(p => ({
         name: p.name,

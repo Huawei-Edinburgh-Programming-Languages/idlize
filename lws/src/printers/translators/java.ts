@@ -342,6 +342,12 @@ export class JavaPrinter {
         break
       }
       case lw.LWKind.FunctionDeclaration: {
+        declaration.modifiers.forEach(mod => {
+          switch (mod.name) {
+            case 'static': { this.p.put('static'); break }
+          }
+          this.p.put(' ')
+        })
         const isCtor = std.names.members.ctor === declaration.name
         if (isCtor) {
           this.p.put(this.parent.at(-1)!)

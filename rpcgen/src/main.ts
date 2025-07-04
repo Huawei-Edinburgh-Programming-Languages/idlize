@@ -15,8 +15,7 @@
 
 import { Language, NativeModuleType, PeerLibrary, toIDLFile } from "@idlizer/core"
 import * as idl from "@idlizer/core/idl"
-import { An, D, dumpToString, E, IdentityTransformer, lw, Op, processNPrintArkTS, processNPrintCJ, processNPrintCXX, processNPrintJava, processNPrintTS, S, T, transformer, Ts } from "lws"
-import { LWType } from "lws/dist/lws"
+import { An, D, DD, dumpToString, E, IdentityTransformer, lw, Md, Op, processNPrintArkTS, processNPrintCJ, processNPrintCXX, processNPrintJava, processNPrintTS, S, T, transformer, Ts } from "lws"
 import { copyFileSync, mkdirSync, readdirSync, statSync, writeFileSync } from "node:fs"
 import { EOL } from "node:os"
 import { dirname, join, normalize, relative, resolve } from "node:path"
@@ -36,6 +35,16 @@ function scan(root: string): string[] {
   return statSync(root).isDirectory()
     ? readdirSync(root).flatMap(p => scan(join(root, p)))
     : [root]
+}
+
+////////////////////////////////////////////////////////////////
+// names
+
+const ENC_METHOD = 'encode'
+const DEC_METHOD = 'decode'
+
+function encName(entry:idl.IDLEntry) {
+  return idl.getFQName(entry).split('.').at(-1)! + 'Encoder'
 }
 
 ////////////////////////////////////////////////////////////////
@@ -74,6 +83,17 @@ class GenLibrary extends PeerLibrary {
       return S.e(E.call(E.get(where, methodName), [what]))
     }
     if (idl.isContainerType(type)) {
+      if (idl.IDLContainerUtils.isSequence(type)) {
+        const sizeFnCall = E.call(E.get(what, 'size'), [])
+        return S.block([
+          S.declaration('i', Ts.prim.int, true, E.c(0)),
+          S.e(E.call(E.get(where, 'writeInt32'), [sizeFnCall])),
+          S.loop(E.bin(Op.lt, E.v('i'), sizeFnCall), S.block([
+            this.makeEncode(type.elementType[0], E.call(E.get(what, 'get'), [E.v('i')]), where),
+            S.e(E.bin('=', E.v('i'), E.bin('+', E.v('i'), E.c(1))))
+          ]))
+        ])
+      }
       return S.e()
     }
     if (idl.isReferenceType(type)) {
@@ -81,7 +101,7 @@ class GenLibrary extends PeerLibrary {
       if (!declaration) {
         throw new Error("WOW!")
       }
-      return S.e()
+      return S.e(E.call(E.get(E.v(encName(declaration)), ENC_METHOD, [An.staticMethod()]), [where, what]))
     }
     return S.e()
   }
@@ -98,6 +118,22 @@ class GenLibrary extends PeerLibrary {
       ]
     }
     if (idl.isContainerType(type)) {
+      if (idl.IDLContainerUtils.isSequence(type)) {
+        const arrayType = T.c('Array', this.toLWType(type.elementType[0]))
+        const [innerStmt, innerExpr] = this.makeDecode(type.elementType[0], where)
+        return [
+          [
+            S.declaration('i', Ts.prim.int, true, E.c(0)),
+            S.declaration('size', Ts.prim.int, true, E.call(E.get(where, 'readInt32'), [])),
+            S.declaration('array', arrayType, false, E.instance('Array', [], [this.toLWType(type.elementType[0])], [An.stackInstance()])),
+            S.loop(E.bin('<', E.v('i'), E.v('size')), S.block([
+              ...innerStmt,
+              S.e(E.call(E.get(E.v('array'), 'push'), [innerExpr]))
+            ]))
+          ],
+          E.v('array')
+        ]
+      }
       return [
         [],
         E.v('HEH')
@@ -110,7 +146,7 @@ class GenLibrary extends PeerLibrary {
       }
       return [
         [],
-        E.v('HEH')
+        E.call(E.get(E.v(encName(declaration)), DEC_METHOD, [An.staticMethod()]), [where])
       ]
     }
     return [
@@ -149,15 +185,18 @@ class Generator {
 
   private generateEncoders(entry: idl.IDLInterface): lw.LWDeclaration[] {
     return [
-      D.class(entry.name + 'Encoder', [], [
-        D.func('encode', [{ name: 'value', type: Ts.ref(Ts.const(this.typeOf(entry))) }], T.c(REFS.ByteWriter), S.block([
-          S.declaration('writer', T.c(REFS.ByteWriter), false, E.instance(REFS.ByteWriter, [])),
+      D.class(encName(entry), [], [
+        DD({ modifiers: [Md.static()] }).func(ENC_METHOD, [
+          { name: 'writer', type: Ts.ref(T.c(REFS.ByteWriter)) },
+          { name: 'value', type: Ts.ref(Ts.const(this.typeOf(entry))) },
+        ],
+          Ts.prim.void,
+        S.block(
           entry.properties.map(prop => {
             return this.library.makeEncode(prop.type, E.get(E.v('value'), prop.name), E.v('writer'))
           }),
-          S.return(E.v('writer'))
-        ].flat())),
-        D.func('decode', [{ name: 'reader', type: Ts.ref(T.c(REFS.ByteReader)) }], this.typeOf(entry), S.block([
+        )),
+        DD({ modifiers: [Md.static()] }).func(DEC_METHOD, [{ name: 'reader', type: Ts.ref(T.c(REFS.ByteReader)) }], this.typeOf(entry), S.block([
           entry.properties.flatMap(prop => {
             const [statements, expression] = this.library.makeDecode(prop.type, E.v('reader'))
             return [
@@ -223,42 +262,42 @@ const printers: TargetInfo[] = [
   {
     tag: 'ts',
     outDir: 'ts',
-    outFile: 'test.ts',
+    outFile: 'lib.ts',
     printer: processNPrintTS,
-    prefix: 'import { ByteWriter, ByteReader } from "./stdlib"'
+    prefix: 'import { ByteWriter, ByteReader, Array } from "./stdlib"'
   },
   {
     tag: 'cj',
     outDir: 'cj',
-    outFile: 'test.cj',
+    outFile: 'lib.cj',
     printer: processNPrintCJ,
     prefix: 'package test'
   },
   {
     tag: 'cpp',
     outDir: 'cpp',
-    outFile: 'test.cpp',
+    outFile: 'lib.cpp',
     printer: processNPrintCXX,
     prefix: `#include "stdlib.h"`
   },
   {
     tag: 'java',
     outDir: join('java', 'src', 'test'),
-    outFile: 'test.java',
+    outFile: 'lib.java',
     printer: processNPrintJava,
     prefix: 'package src.test;'
   },
   {
     tag: 'ets',
     outDir: 'ets',
-    outFile: 'test.ets',
+    outFile: 'lib.ets',
     printer: processNPrintArkTS,
     prefix: 'import { ByteWriter, ByteReader } from "./stdlib"'
   },
   {
     tag: 'dump',
     outDir: 'dump',
-    outFile: 'test.dump',
+    outFile: 'lib.dump',
     printer: dumpToString
   },
 ]

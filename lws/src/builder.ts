@@ -124,22 +124,30 @@ export const T = {
   }),
 }
 
-export const DD = (generics: lw.GenericDescriptor[]) => ({
+interface DDOptions {
+  generics?: lw.GenericDescriptor[]
+  modifiers?:lw.Modifier[]
+}
+
+export const DD = ({ generics = [], modifiers = [] }: DDOptions) => ({
   union: (name: string, variants: lw.UnionDeclaration['variants']): lw.UnionDeclaration => ({
     kind: lw.LWKind.UnionDeclaration,
     generics,
+    modifiers,
     name,
     variants,
   }),
   struct: (name: string, members: lw.StructureDeclaration['members']): lw.StructureDeclaration => ({
     kind: lw.LWKind.StructureDeclaration,
     generics,
+    modifiers,
     name,
     members,
   }),
   class: (name: string, fields: lw.ClassDeclaration['fields'], methods: lw.FunctionDeclaration[], more?: lw.ClassDeclaration['oop']): lw.ClassDeclaration => ({
     kind: lw.LWKind.ClassDeclaration,
     generics,
+    modifiers,
     name,
     fields,
     methods,
@@ -153,19 +161,21 @@ export const DD = (generics: lw.GenericDescriptor[]) => ({
   type: (name: string, type: lw.LWType): lw.TypedefDeclaration => ({
     kind: lw.LWKind.TypedefDeclaration,
     generics,
+    modifiers,
     name,
     type,
   }),
   func: (name: string, parameters: lw.FunctionDeclaration['parameters'], returnType: lw.LWType, body: lw.LWStatement): lw.FunctionDeclaration => ({
     kind: lw.LWKind.FunctionDeclaration,
     generics,
+    modifiers,
     name,
     parameters,
     returnType,
     body,
   })
 })
-export const D = DD([])
+export const D = DD({})
 
 export const utils = {
   hasAnnotation(node: lw.LWExpression, annotation: string) {

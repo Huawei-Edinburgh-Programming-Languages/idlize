@@ -345,6 +345,12 @@ export class ArkTSPrinter {
         break
       }
       case lw.LWKind.FunctionDeclaration: {
+        declaration.modifiers.forEach(mod => {
+          switch (mod.name) {
+            case 'static': { this.p.put('static'); break }
+          }
+          this.p.put(' ')
+        })
         if (this.scope.at(-1) !== 'member') {
           this.p.put('export', ' ', 'function', ' ')
         }

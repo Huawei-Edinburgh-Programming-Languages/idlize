@@ -50,7 +50,18 @@ export interface GenericDescriptor {
 
 ////////////////////////////////////////////////////////
 
+export enum DecoratorKind {
+  Annotation = "Annotation",
+  Modifier = "Modifier"
+}
+
 export interface Annotation {
+  kind: DecoratorKind.Annotation,
+  name: string
+  value?: string
+}
+export interface Modifier {
+  kind: DecoratorKind.Modifier,
   name: string
   value?: string
 }
@@ -63,6 +74,7 @@ export interface Annotation {
 export interface UnionDeclaration {
   kind: LWKind.UnionDeclaration
   generics: GenericDescriptor[]
+  modifiers: Modifier[]
   name: string
   variants: {
     name: string
@@ -72,6 +84,7 @@ export interface UnionDeclaration {
 export interface StructureDeclaration {
   kind: LWKind.StructureDeclaration
   generics: GenericDescriptor[]
+  modifiers: Modifier[]
   name: string
   members: {
     name: string
@@ -81,6 +94,7 @@ export interface StructureDeclaration {
 export interface ClassDeclaration {
   kind: LWKind.ClassDeclaration
   generics: GenericDescriptor[]
+  modifiers: Modifier[]
   name: string
   fields: {
     name: string
@@ -102,12 +116,14 @@ export interface NamespaceDeclaration {
 export interface TypedefDeclaration {
   kind: LWKind.TypedefDeclaration
   generics: GenericDescriptor[]
+  modifiers: Modifier[]
   name: string
   type: LWType
 }
 export interface FunctionDeclaration {
   kind: LWKind.FunctionDeclaration
   generics: GenericDescriptor[]
+  modifiers: Modifier[]
   name: string
   parameters: {
     name: string

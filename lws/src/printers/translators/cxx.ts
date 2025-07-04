@@ -153,13 +153,15 @@ export class CXXPrinter {
       }
       case lw.LWKind.AccessorExpression: {
         this.printExpression(expression.base)
-        if (utils.hasAnnotation(expression.base, std.names.annotations.ptrVal)) {
-          this.p.put('->')
-        } else {
-          this.p.put('.')
-        }
         if (typeof expression.accessor === 'string') {
-          this.p.put('.', expression.accessor)
+          if (utils.hasAnnotation(expression, std.names.annotations.staticMethod)) {
+            this.p.put('::')
+          } else if (utils.hasAnnotation(expression.base, std.names.annotations.ptrVal)) {
+            this.p.put('->')
+          } else {
+            this.p.put('.')
+          }
+          this.p.put(expression.accessor)
         } else {
           this.p.put('[')
           this.printExpression(expression.accessor)
@@ -203,6 +205,7 @@ export class CXXPrinter {
       }
       case lw.LWKind.ConstructorExpression: {
         if (utils.hasAnnotation(expression, std.names.annotations.asStruct)) {
+          this.p.put('(', expression.name, ')')
           this.p.put('{')
           expression.args.forEach((arg, i) => {
             if (i > 0) {
@@ -271,11 +274,23 @@ export class CXXPrinter {
         if (statement.expression) {
           if (!(
             statement.expression.kind === lw.LWKind.ConstructorExpression
-            && utils.hasAnnotation(statement.expression, std.names.annotations.asStruct)
+            && (
+              utils.hasAnnotation(statement.expression, std.names.annotations.asStruct)
+              || utils.hasAnnotation(statement.expression, std.names.annotations.stackInstance)
+            )
           )) {
             this.p.put(' ', '=', ' ')
+            this.printExpression(statement.expression)
+          } else {
+            this.p.put(' ', '{')
+            statement.expression.args.forEach((arg, i) => {
+              if (i > 0) {
+                this.p.put(',', ' ')
+              }
+              this.printExpression(arg)
+            })
+            this.p.put('}')
           }
-          this.printExpression(statement.expression)
         }
         this.p.put(';')
         break
@@ -395,6 +410,12 @@ export class CXXPrinter {
       }
       case lw.LWKind.FunctionDeclaration: {
         this.maybePrintGenerics(declaration.generics)
+        declaration.modifiers.forEach(mod => {
+          switch (mod.name) {
+            case 'static': { this.p.put('static'); break }
+          }
+          this.p.put(' ')
+        })
         const isCtor = std.names.members.ctor === declaration.name
         if (isCtor) {
           this.p.put(this.parent.at(-1)!)
