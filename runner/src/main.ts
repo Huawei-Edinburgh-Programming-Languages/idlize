@@ -67,6 +67,12 @@ function sdk(sdkPathInput:string, installPath12:string, installPath11:string) {
     commands.install({ sourceDir: sdkPath11, installPath: installPath11 })
 }
 
+///
+
+function about() {
+    console.log('Patch for SDK 36b93c92c175409123ccc4dc99779095ec018c0d')
+}
+
 /////////////////////////////////////////////////
 
 function main(argv:string[]) {
@@ -83,6 +89,10 @@ function main(argv:string[]) {
     program.command('sdk <sdk-path> <prepared-sdk-12> <prepared-sdk-11>')
         .description('prepares sdk')
         .action(sdk)
+
+    program.command('about')
+        .description('information about current configuration')
+        .action(about)
 
     program.parse(argv, { from: 'user' })
 }
