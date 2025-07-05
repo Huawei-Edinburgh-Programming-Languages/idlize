@@ -63,7 +63,9 @@
         "PinchGesture",
         "TapGesture",
         "_r",
-        "_rawfile"
+        "_rawfile",
+        "LazyGridLayoutAttribute",
+        "LazyVGridLayoutAttribute"
     ],
     "DeletedMembers": {
         "CommonMethod": [
