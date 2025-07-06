@@ -290,7 +290,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
         if (method.signature.returnType === IDLThisType) {
             throw new Error('static method can not return this!')
         }
-        this.writeMethodDeclaration(method.name, method.signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
+        this.writeMethodDeclaration(method.name, method.signature, { modifiers: [MethodModifier.STATIC, MethodModifier.NATIVE] })
     }
 
     makeUnionVariantCondition(convertor: ArgConvertor, valueName: string, valueType: string, type: string,

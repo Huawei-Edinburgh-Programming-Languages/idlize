@@ -363,8 +363,8 @@ export class CJLanguageWriter extends LanguageWriter {
         let prefix = this.makeFieldModifiersList(modifiers)
         this.printer.print(`${prefix ? prefix.concat(" ") : ""}var ${name}: ${this.getNodeName(idl.maybeOptional(type, optional))}${init}`)
     }
-    writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
-        this.writeDeclaration(name, signature, modifiers)
+    writeMethodDeclaration(name: string, signature: MethodSignature, options?: { modifiers?: MethodModifier[] }): void {
+        this.writeDeclaration(name, signature, options?.modifiers)
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: this) => void, delegationCall?: DelegationCall, modifiers?: MethodModifier[]) {
         let i = 1

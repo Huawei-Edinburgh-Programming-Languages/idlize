@@ -343,8 +343,8 @@ export class KotlinLanguageWriter extends LanguageWriter {
         let signature = method.signature
         this.writeMethodImplementation(new Method(name, signature, [MethodModifier.STATIC]), writer => {})
     }
-    writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
-        this.writeDeclaration(name, signature, true, false, modifiers)
+    writeMethodDeclaration(name: string, signature: MethodSignature, options?: { modifiers?: MethodModifier[] }): void {
+        this.writeDeclaration(name, signature, true, false, options?.modifiers)
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: this) => void, delegationCall?: DelegationCall, modifiers?: MethodModifier[]) {
         const delegationType = (delegationCall?.delegationType == DelegationType.THIS) ? "this" : "super"

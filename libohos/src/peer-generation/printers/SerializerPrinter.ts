@@ -62,7 +62,7 @@ class SerializerPrinter {
                 undefined,
                 [undefined /*return hint*/, PrintHint.AsReference]
             ), [MethodModifier.PUBLIC, MethodModifier.STATIC])
-        fdWriter.writeMethodDeclaration(signature.name, signature.signature, signature.modifiers)
+        fdWriter.writeMethodDeclaration(signature.name, signature.signature, {modifiers: signature.modifiers })
         writer.writeMethodImplementation(signature, writer => {
             if (isMaterialized(target, this.library)) {
                 this.generateMaterializedBodySerializer(writer)
@@ -157,7 +157,7 @@ class SerializerPrinter {
                 undefined,
                 [undefined /*return hint*/, PrintHint.AsReference]
             ), [MethodModifier.PUBLIC, MethodModifier.STATIC])
-        fdWriter.writeMethodDeclaration(signature.name, signature.signature, signature.modifiers)
+        fdWriter.writeMethodDeclaration(signature.name, signature.signature, { modifiers: signature.modifiers })
         writer.writeMethodImplementation(signature, writer => {
             if (isMaterialized(target, this.library)) {
                 this.generateMaterializedBodyDeserializer(writer, target)

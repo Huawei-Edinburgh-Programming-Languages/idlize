@@ -265,11 +265,11 @@ export class TSLanguageWriter extends LanguageWriter {
             writer.writeStatement(writer.makeThrowError("Not implemented"))
         })
     }
-    writeMethodDeclaration(name: string, signature: MethodSignature, modifiers?: MethodModifier[]): void {
-        this.writeDeclaration(name, signature, true, false, modifiers)
+    writeMethodDeclaration(name: string, signature: MethodSignature, options?: { modifiers?: MethodModifier[], isDeclared?: boolean, isExport?: boolean, generics?: string[] }): void {
+        this.writeDeclaration(name, signature, { needReturn: true, needBracket: false, needDeclare: options?.isDeclared, needExport: options?.isExport, modifiers: options?.modifiers, generics: options?.generics })
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: this) => void, delegationCall?: DelegationCall, modifiers?: MethodModifier[]) {
-        this.writeDeclaration(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + ' ' : ''}constructor`, signature, false, true)
+        this.writeDeclaration(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + ' ' : ''}constructor`, signature, { needReturn: false, needBracket: true })
         this.pushIndent()
         if (delegationCall) {
             const delegationType = (delegationCall?.delegationType == DelegationType.THIS) ? "this" : "super"
@@ -280,7 +280,7 @@ export class TSLanguageWriter extends LanguageWriter {
         this.printer.print(`}`)
     }
     writeMethodImplementation(method: Method, op: (writer: this) => void) {
-        this.writeDeclaration(method.name, method.signature, true, true, method.modifiers, method.generics)
+        this.writeDeclaration(method.name, method.signature, { needReturn: true, needBracket: true, modifiers: method.modifiers, generics: method.generics })
         this.pushIndent()
         op(this)
         this.popIndent()
@@ -324,24 +324,25 @@ export class TSLanguageWriter extends LanguageWriter {
     writeConstant(constName: string, constType: idl.IDLType, constVal?: string): void {
         this.print(`export const ${constName}: ${this.getNodeName(constType)}${constVal ? ' = ' + constVal : ''}`)
     }
-    private writeDeclaration(name: string, signature: MethodSignature, needReturn: boolean, needBracket: boolean, modifiers?: MethodModifier[], generics?: string[]) {
-        let prefix = !modifiers ? undefined : this.supportedModifiers
-            .filter(it => modifiers.includes(it))
+    private writeDeclaration(name: string, signature: MethodSignature, opt: { needReturn: boolean, needBracket: boolean, needDeclare?: boolean, needExport?: boolean, modifiers?: MethodModifier[], generics?: string[]}) {
+        let prefix = !opt.modifiers ? undefined : this.supportedModifiers
+            .filter(it => opt.modifiers!.includes(it))
             .map(it => this.mapMethodModifier(it)).join(" ")
-        if (modifiers?.includes(MethodModifier.GETTER)) {
+        if (opt.modifiers?.includes(MethodModifier.GETTER)) {
             prefix = `${prefix} get`
-        } else if (modifiers?.includes(MethodModifier.SETTER)) {
+        } else if (opt.modifiers?.includes(MethodModifier.SETTER)) {
             prefix = `${prefix} set`
-            needReturn = false
-        } else if (modifiers?.includes(MethodModifier.FREE)) {
-            prefix = `${needBracket ? "" : "declare "}function ${prefix}`
+            opt.needReturn = false
+        } else if (opt.modifiers?.includes(MethodModifier.FREE)) {
+            opt.needDeclare ??= !opt.needBracket
+            prefix = `${opt.needExport ? "export " : ""}${opt.needDeclare ? "declare " : ""}function ${prefix}`
         }
         prefix = prefix ? prefix.trim() + " " : ""
-        const typeParams = generics?.length ? `<${generics.join(", ")}>` : ""
+        const typeParams = opt.generics?.length ? `<${opt.generics.join(", ")}>` : ""
         const normalizedArgs = signature.args.map((it, i) =>
             idl.isOptionalType(it) && signature.isArgOptional(i) ? idl.maybeUnwrapOptionalType(it) : it
         )
-        this.printer.print(`${prefix}${name}${typeParams}(${normalizedArgs.map((it, index) => `${this.escapeKeyword(signature.argName(index))}${signature.isArgOptional(index) ? "?" : ``}: ${this.getNodeName(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${needReturn ? ": " + this.getNodeName(signature.returnType) : ""}${needBracket ? " {" : ""}`)
+        this.printer.print(`${prefix}${name}${typeParams}(${normalizedArgs.map((it, index) => `${this.escapeKeyword(signature.argName(index))}${signature.isArgOptional(index) ? "?" : ``}: ${this.getNodeName(it)}${signature.argDefault(index) ? ' = ' + signature.argDefault(index) : ""}`).join(", ")})${opt.needReturn ? ": " + this.getNodeName(signature.returnType) : ""}${opt.needBracket ? " {" : ""}`)
     }
     makeNull(): LanguageExpression {
         return new StringExpression("undefined")

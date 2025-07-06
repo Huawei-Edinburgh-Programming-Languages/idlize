@@ -173,7 +173,7 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
         this.printer.print(`${prefix} ${(this.getNodeName(type))} ${name}${initExpr ? ` = ${initExpr.asString()}` : ""};`)
     }
     writeNativeMethodDeclaration(method: Method): void {
-        this.writeMethodDeclaration(method.name, method.signature, [MethodModifier.STATIC, MethodModifier.NATIVE])
+        this.writeMethodDeclaration(method.name, method.signature, { modifiers: [MethodModifier.STATIC, MethodModifier.NATIVE] })
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: this) => void, delegationCall?: DelegationCall, modifiers?: MethodModifier[]) {
         this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') : ''} ${className}(${signature.args.map((it, index) => `${this.getNodeName(it)} ${signature.argName(index)}`).join(", ")}) {`)

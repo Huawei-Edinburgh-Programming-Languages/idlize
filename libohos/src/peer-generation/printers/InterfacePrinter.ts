@@ -532,7 +532,12 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
     }
 
     convertMethod(node: idl.IDLMethod): void {
-        this.writer.writeMethodDeclaration(node.name, this.writer.makeSignature(node.returnType, node.parameters), node.isFree ? [MethodModifier.FREE] : [])
+        this.writer.writeMethodDeclaration(node.name, this.writer.makeSignature(node.returnType, node.parameters), {
+            isDeclared: this.needDeclaredPrefix(node),
+            isExport: true,
+            modifiers: node.isFree ? [MethodModifier.FREE] : [],
+            generics: node.typeParameters,
+        })
     }
     convertConstant(node: idl.IDLConstant): void {}
     convertEnum(node: idl.IDLEnum): void {
@@ -1049,8 +1054,8 @@ export class ArkTSInterfacesVisitor implements InterfacesVisitor {
     ) { }
 
     private shouldNotPrint(entry: idl.IDLEntry): boolean {
-        return idl.isInterface(entry) && !this.isDeclared && (isMaterialized(entry, this.peerLibrary) || isBuilderClass(entry))
-            || idl.isMethod(entry)
+        return !this.isDeclared && idl.isInterface(entry) && (isMaterialized(entry, this.peerLibrary) || isBuilderClass(entry))
+            || !this.isDeclared && idl.isMethod(entry)
     }
 
     protected getDeclConvertor(writer:LanguageWriter, seenNames:Set<string>, library:PeerLibrary, isDeclared:boolean): DeclarationConvertor<void> {
