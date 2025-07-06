@@ -1,13 +1,18 @@
 import * as core from "@idlizer/core"
+import * as path from "node:path"
+import { readFileSync } from "node:fs";
 import { Declarations, Visitor } from "./Visitor"
-import { PeerGenerator, Body, Resolver, Importer } from "./PeerGenerator";
+import { PeerGenerator } from "./PeerGenerator";
 import { Config } from "./general/Config"
-import { baseName, parent } from "./utils/idl";
+import { Body, Importer, ImporterResolverProxy, Resolver, SimpleConverter } from "./general/types"
 import { PeersConstructions } from "./constuctions/PeersConstructions";
+import { FactoryConstructions } from "./constuctions/FactoryConstructions";
+import { FactoryGenerator } from "./FactoryGenerator";
 
 export class PeerVisitor extends Visitor {
     constructor(
         private config: Config,
+        private outDir: string,
         decls?: Declarations
     ) {
         super(decls)
@@ -23,7 +28,13 @@ export class PeerVisitor extends Visitor {
         if (!allowed.includes(node.name)) return false
 
         const importer = new ImporterResolverProxy(this.resolver, [node.name])
-        const peerGenerator = new PeerGenerator(importer, importer)
+        const peerGenerator = new PeerGenerator(
+            importer as Resolver,
+            this.converter,
+            importer,
+            this.config
+        )
+
         const writer = new core.TSLanguageWriter(
             new core.IndentedPrinter(),
             peerGenerator.resolver,
@@ -32,15 +43,12 @@ export class PeerVisitor extends Visitor {
 
         peerGenerator.writeClass(node, writer, (body: Body) => {
             // factory.ts
-            const creates = body.creates?.concat(...body.updates)
-            creates?.forEach(m => this.writeFactoryCreateImpl(node, m, this.factoryWriter))
+            this.writeFactoryCreateImpl(node, body, this.factoryWriter)
+            this.writeIndexFile(node, body)
         })
 
-        const out = writer.getOutput()
-        console.log(`${out.join('\n')}`);
-
-        const out2 = importer.asStrings()
-        console.log(`${out2.join('\n')}`);
+        const filePath = path.join(this.outDir, 'peer', `${node.name}.ts`)
+        this.writeFile(filePath, 'peer.ts', writer, importer)
 
         return false
     }
@@ -51,11 +59,37 @@ export class PeerVisitor extends Visitor {
         return true
     }
 
-    private writeFactoryCreateImpl(
-        iface: core.IDLInterface,
-        methods: core.Method,
-        writer: core.LanguageWriter): void {
-            // TODO:
+    private writeIndexFile(iface: core.IDLInterface, body: Body): void {
+    }
+
+    private writeFactoryCreateImpl(iface: core.IDLInterface, body: Body, writer: core.LanguageWriter): void {
+        FactoryGenerator.write(iface, body, writer, this.converter)
+    }
+
+    private writeFile(
+        filePath: string,
+        templateName: string,
+        writer: core.LanguageWriter,
+        importer: ImporterResolverProxy,
+        prologue?: string[],
+        epilogue?: string[]): void
+    {
+        const template = readFileSync(this.resolvePath(`../templates/${templateName}`), 'utf-8')
+        const contents = [
+            (prologue ?? []),
+            importer.asStrings(),
+            writer.getOutput(),
+            (epilogue ?? [])
+        ]
+            .map(arr => arr.join('\n'))
+            .join('\n')
+
+        console.log(`${filePath}\n${template.replaceAll('%GENERATED_PART%', contents)}`);
+        // core.forceWriteFile(filePath, template.replaceAll('%GENERATED_PART%', contents))
+    }
+
+    private resolvePath(rel: string): string {
+        return path.join(__dirname, rel)
     }
 
     private resolver = {
@@ -81,85 +115,19 @@ export class PeerVisitor extends Visitor {
         visitor: this,
     }
 
+    private converter = new SimpleConverter(
+        this.resolver
+    )
+
+    private factoryImporter = new ImporterResolverProxy(
+        this.resolver
+    )
+
     private factoryWriter = new core.TSLanguageWriter(
         new core.IndentedPrinter(),
-        core.createEmptyReferenceResolver(),
-        new core.TSTypeNameConvertor(core.createEmptyReferenceResolver())
+        this.factoryImporter,
+        this.converter
     )
+
+    private indexContent: string[] = []
 }
-
-class ImporterResolverProxy implements Resolver, Importer {
-    constructor(
-        private resolver: Resolver,
-        private _seen: string[]
-    ) {}
-
-    resolveTypeReference(
-        type: core.IDLReferenceType,
-        terminalImports?: boolean
-    ): core.IDLEntry | undefined {
-        const entry = this.resolver.resolveTypeReference(type, terminalImports)
-        console.log(`importer=${type.name} => ${entry}`)
-        if (!entry) {
-            return undefined
-        }
-
-        if (core.isEnum(entry)) {
-            this.importEnum(entry.name)
-
-        } else if (core.isInterface(entry) && this.resolver.isPeer(entry)) {
-            this.importPeer(entry.name)
-        }
-
-        return entry
-    }
-
-    toDeclaration(type: core.IDLNode): core.IDLNode {
-        return this.resolver.toDeclaration(type)
-    }
-
-    isHeir(type: core.IDLReferenceType | core.IDLInterface, name: string): boolean {
-        return this.resolver.isHeir(type, name)
-    }
-
-    isPeer(type: core.IDLReferenceType | core.IDLInterface): boolean {
-        return this.resolver.isPeer(type)
-    }
-
-    importEnum(name: string): string {
-        return this.import(name, '../Es2PandaEnums')
-    }
-
-    importPeer(name: string): string {
-        return this.import(name, name)
-    }
-
-    importReexport(name: string): string {
-        return this.import(name, '../reexport')
-    }
-
-    public asStrings(): string[] {
-        return this.imports.sort()
-    }
-
-    private import(name: string, from: string): string {
-        if (this.seen.has(name)) {
-            return name
-        }
-
-        this.seen.add(name);
-        this.imports.push(
-            PeersConstructions.import(name, from)
-        )
-        return name
-    }
-
-    private seen = new Set<string>([
-        Config.astNodeCommonAncestor,
-        Config.defaultAncestor,
-        ...this._seen
-    ])
-
-    private imports: string[] = []
-}
-

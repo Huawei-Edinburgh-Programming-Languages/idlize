@@ -1,32 +1,17 @@
 import * as core from "@idlizer/core"
 import { Config } from "./general/Config"
+import { Body, Importer, Resolver } from "./general/types"
+import { isCreateOrUpdate, isDataClass, isReal, mangleIfKeyword, peerMethod } from "./general/common"
+import { flattenType, nodeNamespace, nodeType, parent } from "./utils/idl";
 import { InteropConstructions } from "./constuctions/InteropConstructions"
 import { PeersConstructions } from "./constuctions/PeersConstructions"
-import { isCreateOrUpdate, isDataClass, isReal, mangleIfKeyword, peerMethod, splitCreateOrUpdate } from "./general/common"
-import { flattenType, nodeNamespace, nodeType, parent } from "./utils/idl";
-
-export interface Body {
-    creates: core.Method[],
-    updates: core.Method[],
-    getters: core.Method[],
-    regular: core.Method[],
-}
-
-export interface Resolver extends core.ReferenceResolver {
-    isHeir(type: core.IDLReferenceType | core.IDLInterface, name: string): boolean
-    isPeer(type: core.IDLReferenceType | core.IDLInterface): boolean
-}
-
-export interface Importer {
-    importEnum(name: string): string
-    importPeer(name: string): string
-    importReexport(name: string): string
-}
 
 export class PeerGenerator {
     constructor(
         public resolver: Resolver,
-        public importer: Importer
+        public converter: core.IdlNameConvertor,
+        public importer: Importer,
+        public config: Config
     ) {
     }
 
@@ -470,6 +455,22 @@ export class PeerGenerator {
         )
     }
 
+    public static cloneMethod(src: Readonly<core.Method>, name?: string, retType?: core.IDLType): core.Method {
+        const sig = src.signature
+        return new core.Method(
+            name ?? src.name,
+            new core.MethodSignature(
+                retType ?? sig.returnType,
+                [...sig.args],
+                sig.defaults? [...sig.defaults] : undefined,
+                sig.argsModifiers?.flatMap(a => a.length ? a.at(0) : undefined),
+                sig.printHints ? [...sig.printHints] : undefined,
+                sig.argNames ? [...sig.argNames] : undefined
+            ),
+            src.modifiers ? [...src.modifiers] : undefined
+        )
+    }
+
     public static isGetter(method: core.IDLMethod): boolean {
         if (method.extendedAttributes?.some((attr) => {
             return attr.name == 'get'
@@ -516,57 +517,5 @@ export class PeerGenerator {
     public static hack_extraArgs(node: core.IDLInterface): core.IDLParameter[]{
         return []
     }
-
-    public converter = new SimpleConverter(this.resolver)
-}
-
-class SimpleConverter extends core.TSTypeNameConvertor {
-    constructor(resolver: core.ReferenceResolver) {
-        super(resolver)
-    }
-
-    override convertInterface(node: core.IDLInterface): string {
-        // todo: copypaste
-        const prefix = Config.dataClassPrefix
-        const result = node.name.startsWith(prefix) ? node.name.slice(prefix.length) : node.name
-        console.log(`convert ${node.name} => ${result}`);
-        return result
-    }
-
-    override convertTypeReference(type: core.IDLReferenceType): string {
-        // todo: copypaste
-        const prefix = Config.dataClassPrefix
-        let result = type.name.startsWith(prefix) ? type.name.slice(prefix.length) : type.name
-        result = result.split('.').at(-1)!
-        //console.log(`convert ${type.name} => ${result}(idl: ${super.convertTypeReference(type)})`);
-        return result
-    }
-
-   override convertContainer(type: core.IDLContainerType): string {
-       if (core.IDLContainerUtils.isSequence(type)) {
-            return `readonly ${super.convert(type.elementType[0])}[]`
-       }
-       return super.convertContainer(type)
-   }
-
-    override convertPrimitiveType(type: core.IDLPrimitiveType): string {
-        switch (type) {
-            case core.IDLI8Type:
-            case core.IDLU8Type:
-            case core.IDLI16Type:
-            case core.IDLU16Type:
-            case core.IDLU32Type:
-            case core.IDLI64Type:
-            case core.IDLU64Type:
-            case core.IDLF64Type:
-            case core.IDLNumberType:
-            case core.IDLI32Type:
-            case core.IDLF32Type:
-                return 'number'
-            case core.IDLPointerType:
-                return 'KNativePointer'
-       }
-       return super.convertPrimitiveType(type)
-   }
 }
 

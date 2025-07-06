@@ -99,7 +99,6 @@ export class Visitor {
         }
     }
 
-
     public isHeir(ref: core.IDLReferenceType | core.IDLInterface, name: string): boolean {
         if (core.isReferenceType(ref)) {
             const type = this.resolveReference(ref)
