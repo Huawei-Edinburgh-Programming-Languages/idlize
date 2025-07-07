@@ -185,7 +185,7 @@
 | Swiper.test.ets | |
 | SymbolGlyph.ets | Olga Daryina |
 | SymbolSpan.ets | Olga Daryina |
-| Tabs.test.ets | |
+| Tabs.test.ets | Andrey Khudenkikh |
 | TabsTransition.ets | |
 | TextArea.test.ets | |
 | TextClock.test.ets | Mikhail Politov |
