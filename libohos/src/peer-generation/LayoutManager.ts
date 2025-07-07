@@ -50,7 +50,9 @@ function isEntryExported(entry: idl.IDLEntry): boolean {
 }
 
 export function install(
-    outDir: string,
+    outBaseDir: string,
+    outSubDir: string,
+    outDir2: string,
     library: PeerLibrary,
     printers: Printer[],
     options?: {
@@ -77,6 +79,9 @@ export function install(
     // print
     const installedToExport: string[] = []
     Array.from(storage.entries()).forEach(([filePath, results]) => {
+
+        const module = results.length > 0 ? idl.getModuleFor(results[0].over.node).name : "arkui"
+        const outDir = `${outBaseDir}/${module}${outSubDir.length > 0 ? "/" : ""}${outSubDir}`
         const installPath = join(outDir, filePath) + (options?.fileExtension ?? library.language.extension)
         if (!results.every(it => !!it.private || !isEntryExported(it.over.node))) {
             installedToExport.push(installPath)

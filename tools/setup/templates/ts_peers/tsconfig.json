@@ -18,7 +18,7 @@
         "paths": {
             "@arkoala/arkui": ["./generated/sig/arkoala/arkui/src", "./"],
             "@arkoala/arkui/*": ["./generated/sig/arkoala/arkui/src/*", "./*"],
-            "@global.resource": ["./generated/sig/arkoala/external/src/global.ts"]
+            "@global.resource": ["./generated/sig/arkoala/global/src/generated/resource"]
         },
     },
     "include": [

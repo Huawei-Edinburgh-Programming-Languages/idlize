@@ -42,6 +42,7 @@ import { qualifiedName } from "../peer-generation/idl/common";
 import { PeerLibrary } from "../peer-generation/PeerLibrary";
 import { LayoutNodeRole } from "../peer-generation/LayoutManager";
 import { PeerMethodSignature } from "../peer-generation/PeerMethod";
+import { isInMainModule } from "../peer-generation/modules";
 
 export function getSerializerName(declaration:idl.IDLEntry) {
     return `${idl.getQualifiedName(declaration, "namespace.name").split('.').join('_')}_serializer`;
@@ -643,6 +644,16 @@ export class TupleConvertor extends AggregateConvertor {
     }
 }
 
+function addAccessorImport(declaration: idl.IDLInterface, accessorName: string, library: LibraryInterface, writer: LanguageWriter) {
+    // TBD: implement properly with  imports collectors
+    // which are not placed in core modules
+    if (!isInMainModule(declaration)) {
+        writer.addFeature(accessorName, `@${idl.getPackageName(declaration)}`)
+        return
+    }
+    writer.addFeature(accessorName, library.layout.resolve({ node: declaration, role: LayoutNodeRole.SERIALIZER }))
+}
+
 export class InterfaceConvertor extends BaseArgConvertor {
     constructor(private library: LibraryInterface, name: string /* change to IDLReferenceType */, param: string, public declaration: idl.IDLInterface) {
         super(idl.createReferenceType(declaration), [RuntimeType.OBJECT], false, true, param)
@@ -653,12 +664,12 @@ export class InterfaceConvertor extends BaseArgConvertor {
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         const accessor = getSerializerName(this.declaration)
-        printer.addFeature(accessor, this.library.layout.resolve({ node: this.declaration, role: LayoutNodeRole.SERIALIZER }))
+        addAccessorImport(this.declaration, accessor, this.library, printer)
         printer.writeStaticMethodCall(accessor, 'write', [`${param}Serializer`, value])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const accessor = getSerializerName(this.declaration)
-        writer.addFeature(accessor, this.library.layout.resolve({ node: this.declaration, role: LayoutNodeRole.SERIALIZER }))
+        addAccessorImport(this.declaration, accessor, this.library, writer)
         return assigneer(writer.makeStaticMethodCall(accessor, 'read', [writer.makeString(deserializerName)]))
     }
     nativeType(): idl.IDLType {
@@ -1165,12 +1176,12 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         const accessorRoot = getSerializerName(this.declaration)
-        printer.addFeature(accessorRoot, this.library.layout.resolve({ node: this.declaration, role: LayoutNodeRole.SERIALIZER }))
+        addAccessorImport(this.declaration, accessorRoot, this.library, printer)
         printer.writeStaticMethodCall(accessorRoot, 'write', [`${param}Serializer`, value])
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const accessorRoot = getSerializerName(this.declaration)
-        writer.addFeature(accessorRoot, this.library.layout.resolve({ node: this.declaration, role: LayoutNodeRole.SERIALIZER }))
+        addAccessorImport(this.declaration, accessorRoot, this.library, writer)
         const readStatement = writer.makeCast(
             writer.makeStaticMethodCall(accessorRoot, "read", [writer.makeString(deserializerName)]),
             this.declaration)
@@ -1216,7 +1227,7 @@ export class ExternalTypeConvertor extends BaseArgConvertor {
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): void {
         const accessor = getSerializerName(this.declaration)
-        printer.addFeature(accessor, this.library.layout.resolve({ node: this.declaration, role: LayoutNodeRole.SERIALIZER }))
+        addAccessorImport(this.declaration, accessor, this.library, printer)
         printer.writeStatement(
             printer.makeStatement(
                 printer.makeStaticMethodCall(accessor, 'write', [
@@ -1226,7 +1237,7 @@ export class ExternalTypeConvertor extends BaseArgConvertor {
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const accessor = getSerializerName(this.declaration)
-        writer.addFeature(accessor, this.library.layout.resolve({ node: this.declaration, role: LayoutNodeRole.SERIALIZER }))
+        addAccessorImport(this.declaration, accessor, this.library, writer)
         const readStatement = writer.makeCast(
             writer.makeStaticMethodCall(accessor, 'read', [writer.makeString(deserializerName)]),
             this.declaration

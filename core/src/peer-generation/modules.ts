@@ -44,6 +44,11 @@ export function currentModule(): ModuleConfiguration {
     return result
 }
 
+export function isInExternalModule(node: idl.IDLNode): boolean {
+    // TBD: use external module property
+    return false
+}
+
 export function isInCurrentModule(node: idl.IDLNode): boolean
 export function isInCurrentModule(packageName: string): boolean
 export function isInCurrentModule(nodeOrPackage: idl.IDLNode | string): boolean {

@@ -19,6 +19,8 @@ import { Install, TargetFile } from '@idlizer/libohos'
 
 export interface ArkoalaInstall {
     get root(): string
+    get managedBaseDir(): string
+    get managedSubDir(): string
     get managedDir(): string
     get managedSdkDir(): string
     get nativeDir(): string
@@ -51,6 +53,10 @@ export function createArkoalaInstall(options: {
 
 abstract class BaseArkoalaInstall implements ArkoalaInstall {
     constructor(private outDir: string, private test: boolean) {}
+    abstract get managedBaseDir(): string
+    get managedSubDir(): string {
+        return "src"
+    }
     abstract get managedDir(): string
     abstract get managedSdkDir(): string
     abstract get tsTypesDir(): string
@@ -64,6 +70,9 @@ abstract class BaseArkoalaInstall implements ArkoalaInstall {
 }
 
 class TSArkoalaInstall extends BaseArkoalaInstall {
+    get managedBaseDir(): string {
+        return path.join(this.root, "arkoala")
+    }
     get managedDir(): string {
         return path.join(this.root, "arkoala/arkui/src")
     }
@@ -79,6 +88,9 @@ class TSArkoalaInstall extends BaseArkoalaInstall {
 }
 
 class ArkTSArkoalaInstall extends BaseArkoalaInstall {
+    get managedBaseDir(): string {
+        return path.join(this.root, "arkoala-arkts")
+    }
     get managedDir(): string {
         return path.join(this.root, "arkoala-arkts/arkui/src")
     }
@@ -94,12 +106,18 @@ class ArkTSArkoalaInstall extends BaseArkoalaInstall {
 }
 
 class ArkTSM3ArkoalaInstall extends ArkTSArkoalaInstall {
+    get managedSubDir(): string {
+        return "src/ets"
+    }
     get managedDir(): string {
         return path.join(this.root, "arkoala-arkts/arkui/src/ets")
     }
 }
 
 class JavaArkoalaInstall extends BaseArkoalaInstall {
+    get managedBaseDir(): string {
+        return path.join(this.root, "arkoala-arkts/framework/java")
+    }
     get managedDir(): string {
         return path.join(this.root, "arkoala-arkts/framework/java/src")
     }
@@ -115,6 +133,9 @@ class JavaArkoalaInstall extends BaseArkoalaInstall {
 }
 
 class CJArkoalaInstall extends BaseArkoalaInstall {
+    get managedBaseDir(): string {
+        return path.join(this.root, "arkoala-arkts/framework/java")
+    }
     get managedDir(): string {
         return path.join(this.root, "arkoala-arkts/framework/java/src")
     }
@@ -130,6 +151,9 @@ class CJArkoalaInstall extends BaseArkoalaInstall {
 }
 
 class KotlinArkoalaInstall extends BaseArkoalaInstall {
+    get managedBaseDir(): string {
+        return path.join(this.root, "arkoala-kotlin/framework/kotlin")
+    }
     get managedDir(): string {
         return path.join(this.root, "arkoala-kotlin/framework/kotlin/src")
     }

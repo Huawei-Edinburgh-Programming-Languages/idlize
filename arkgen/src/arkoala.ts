@@ -196,6 +196,8 @@ export function generateArkoalaFromIdl(config: {
         return []
     }
     const installedFiles = ETSLanguageWriter.useTypeChecker(config.useTypeChecker, () => install(
+        arkoala.managedBaseDir,
+        arkoala.managedSubDir,
         arkoala.managedDir,
         peerLibrary,
         peerLibrary.language == Language.KOTLIN ?
@@ -234,6 +236,8 @@ export function generateArkoalaFromIdl(config: {
 
     if (peerLibrary.language === Language.ARKTS) {
         install(
+            arkoala.managedBaseDir,
+            arkoala.managedSubDir,
             arkoala.managedDir,
             peerLibrary,
             [
@@ -245,6 +249,8 @@ export function generateArkoalaFromIdl(config: {
         )
         if (peerLibrary.useMemoM3) {
             const installed = install(
+                arkoala.managedBaseDir,
+                arkoala.managedSubDir,
                 arkoala.managedSdkDir,
                 peerLibrary,
                 [
