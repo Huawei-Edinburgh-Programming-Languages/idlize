@@ -1183,21 +1183,21 @@
 |`onWillHide`| Function |Evstigneev Roman | done |  |  |
 |*Tabs*| *Component* | Tuzhilkin Ivan | done |  |  |
 |`construct`| Function |Tuzhilkin Ivan | done | pass |  |
-|`setTabsOptions`| Function | Skroba Gleb | done | Andrey Khudenkikh |  |
+|`setTabsOptions`| Function | Skroba Gleb | done | pass |  |
 |`vertical`| Function | Tuzhilkin Ivan | done | pass |  |
 |`barPosition`| Function | Tuzhilkin Ivan | done | pass |  |
 |`scrollable`| Function | Tuzhilkin Ivan | done | pass |  |
-|`barWidth`| Function | Tuzhilkin Ivan | done | Andrey Khudenkikh |  |
-|`barHeight`| Function | Tuzhilkin Ivan | done  | Andrey Khudenkikh |
-|`animationDuration`| Function | Tuzhilkin Ivan | done | Andrey Khudenkikh | |
-|`animationMode`| Function | Tuzhilkin Ivan | done | Andrey Khudenkikh |  |
+|`barWidth`| Function | Tuzhilkin Ivan | done | pass |  |
+|`barHeight`| Function | Tuzhilkin Ivan | done  | pass |
+|`animationDuration`| Function | Tuzhilkin Ivan | done | failed | |
+|`animationMode`| Function | Tuzhilkin Ivan | done | failed |  |
 |`edgeEffect`| Function | Tuzhilkin Ivan | done | Andrey Khudenkikh |  |
-|`onChange`| Function | Tuzhilkin Ivan | done | Andrey Khudenkikh |  |
-|`onSelected`| Function |Erokhin Ilya | done | Andrey Khudenkikh| |
+|`onChange`| Function | Tuzhilkin Ivan | done | pass |  |
+|`onSelected`| Function |Erokhin Ilya | done | pass | |
 |`onTabBarClick`| Function | Tuzhilkin Ivan | done |  |  |
-|`onUnselected`| Function |Erokhin Ilya | done |Andrey Khudenkikh | |
-|`onAnimationStart`| Function | Tuzhilkin Ivan | done | Andrey Khudenkikh |  |
-|`onAnimationEnd`| Function | Tuzhilkin Ivan | done | Andrey Khudenkikh |  |
+|`onUnselected`| Function |Erokhin Ilya | done | pass | |
+|`onAnimationStart`| Function | Tuzhilkin Ivan | done | failed |  |
+|`onAnimationEnd`| Function | Tuzhilkin Ivan | done | failed |  |
 |`onGestureSwipe`| Function | Tuzhilkin Ivan | done | Andrey Khudenkikh |  |
 |`fadingEdge`| Function | Tuzhilkin Ivan | done | pass |  |
 |`divider`| Function | Tuzhilkin Ivan | done | failed |  |
@@ -1208,10 +1208,10 @@
 |`barBackgroundBlurStyle0`|  Function | Tuzhilkin Ivan | done | Andrey Khudenkikh |  |
 |`barBackgroundBlurStyle1`| Function | Tuzhilkin Ivan | done | Andrey Khudenkikh |  |
 |`barBackgroundEffect`| Function | Tuzhilkin Ivan | done | Andrey Khudenkikh | |
-|`pageFlipMode`| Function | Lobah Mikhail| done| | Not exists on FB|
+|`pageFlipMode`| Function | Lobah Mikhail| done| | Not exists on FB |
 |`onContentWillChange`| Function | Dudkin Sergey | done | Andrey Khudenkikh | |
 |`barMode`| Function |Tuzhilkin Ivan | done | failed |  |
-|`cachedMaxCount`| Function | Erokhin Ilya| done | Andrey Khudenkikh | |
+|`cachedMaxCount`| Function | Erokhin Ilya| done | failed | |
 |*Text*| *Component* | Samarin Sergey | blocked IDL |  | |
 |`construct`| Function |  Kirill Kirichenko | done | pass |  |
 |`setTextOptions`| Function | Kirill Kirichenko | done | pass  |  |
