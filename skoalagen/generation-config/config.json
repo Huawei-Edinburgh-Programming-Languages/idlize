@@ -1,5 +1,5 @@
 {
-    "TypePrefix": "Sk",
+    "TypePrefix": "OH_",
     "LibraryPrefix": "",
     "OptionalPrefix": "",
     "GenerateUnused": false,
@@ -40,7 +40,11 @@
         "org.openharmony.arkui"
     ],
     "IDLVisitor": {
-        "DeletedMethods": {},
+        "DeletedMethods": {
+            "Bitmap": ["getFinalizer"],
+            "Canvas": ["getFinalizer"],
+            "Paint": ["getFinalizer"]
+        },
         "NameReplacements": {},
         "TypeReplacementsFilePath": ""
     }

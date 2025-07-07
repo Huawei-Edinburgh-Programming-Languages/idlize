@@ -13,15 +13,6 @@
  * limitations under the License.
  */
 
-    
-export type ExecWithLength<P, R> = (pointer: P, length: int32) => R
-declare function withArray<C extends TypedArray, R>(
-    data: C | undefined,
-    exec: ExecWithLength<C | null, R>
-): R
-export function withInt32Array<T>(data: Int32Array | undefined, access: Access, exec: ExecWithLength<Int32Array | null, T>)
-export function withFloat32Array<T>(data: Float32Array | undefined, access: Access, exec: ExecWithLength<Float32Array | null, T>)
-
 export enum Access {
     READ = 1, // 1 << 0,
     WRITE = 2, // 1 << 1,
@@ -43,7 +34,6 @@ export declare class Point {
     static fromArray(points: Float32Array): Array<Point>;
 }
 
-declare function Array_from_number(data: float64[]): Array<float64>
 export declare class Matrix33 {
     readonly array: Float32Array;
     constructor(array?: Float32Array);
@@ -55,11 +45,3 @@ export declare class Matrix33 {
     makeConcat(rhs: Matrix33): Matrix33;
     makeTranspose(): Matrix33;
 }
-
-export function ptrToString(ptr: KPointer)
-export function className(object?: Object): string
-export class Wrapper {
-    ptr: KPointer
-    toString(): string
-}
-export function getPtr(value: Wrapper|undefined): KPointer

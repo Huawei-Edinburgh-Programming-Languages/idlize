@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { MaterializedClass, MaterializedMethod, Method, MethodModifier, NamedMethodSignature, PeerLibrary, PeerMethod, PeerMethodArg, PeerMethodSignature } from "@idlizer/core";
+import { LibraryInterface, MaterializedClass, MaterializedMethod, Method, MethodModifier, NamedMethodSignature, PeerLibrary, PeerMethod, PeerMethodArg, PeerMethodSignature } from "@idlizer/core";
 import { createInterface, createMethod, getFQName, getNamespacesPathFor, IDLInterface, IDLInterfaceSubkind, IDLMethod, maybeOptional } from "@idlizer/core/idl";
 import { groupOverloadsIDL } from "./printers/OverloadsPrinter";
 

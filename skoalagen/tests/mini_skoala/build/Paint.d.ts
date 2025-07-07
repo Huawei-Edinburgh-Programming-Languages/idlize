@@ -13,8 +13,7 @@
  * limitations under the License.
  */
 
-import { Finalizable } from "./Finalizable"
-// import { KNativePointer, pointer} from "@koalaui/interop"
+import { Finalizable } from "index"
 
 export class Paint extends Finalizable {
     constructor(ptr: pointer)

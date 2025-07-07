@@ -16,6 +16,9 @@
 import { Finalizable } from "@koalaui/interop"
 
 export class ComponentBase {
+    constructor(peer?: Finalizable) {
+        if (peer) this.setPeer(peer)
+    }
     protected peer?: Finalizable
     setPeer(peer: Finalizable) {
         this.peer = peer

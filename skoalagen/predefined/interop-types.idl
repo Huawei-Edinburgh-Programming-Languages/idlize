@@ -1,7 +1,7 @@
 package idlize.internal;
 
-interface Finalizable {};
-interface RefCounted {};
+// interface Finalizable {};
+// interface RefCounted {};
 interface SerializerBase {};
 interface DeserializerBase {};
 interface deserializeAndCallCallback {};

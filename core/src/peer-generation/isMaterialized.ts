@@ -43,10 +43,6 @@ export function isMaterialized(declaration: idl.IDLInterface, resolver: Referenc
         }
     }
 
-    if (idl.hasExtAttribute(declaration, idl.IDLExtendedAttributes.Component)) {
-        return false
-    }
-
     if (generatorConfiguration().forceCallback.get(declaration.name)?.length === 0) {
         return false
     }

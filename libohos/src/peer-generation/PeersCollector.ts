@@ -29,7 +29,7 @@ function processMethodOrCallable(library: LibraryInterface, method: idl.IDLMetho
     const isCallSignature = idl.isCallable(method)
     const methodName = isCallSignature ? `set${capitalize(peer.componentName)}Options` : method.name
     const retType = method.returnType!
-    const isThisRet = isCallSignature || idl.isNamedNode(retType) && (retType.name === peer.originalClassName || retType.name === "T" || retType === idl.IDLThisType)
+    const isThisRet = !method.isStatic && (isCallSignature || idl.isNamedNode(retType) && (retType.name === peer.originalClassName || retType.name === "T" || retType === idl.IDLThisType))
     const originalParentName = parentName ?? peer.originalClassName!
     const signature = new NamedMethodSignature(
         (isThisRet ? idl.IDLThisType : retType) ?? method.returnType!,

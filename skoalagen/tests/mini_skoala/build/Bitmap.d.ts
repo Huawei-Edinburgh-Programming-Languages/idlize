@@ -13,10 +13,11 @@
  * limitations under the License.
  */
 
-import { Finalizable } from "./Finalizable"
+// import { Finalizable } from "./Finalizable"
 // import { KNativePointer, pointer } from "@koalaui/interop"
+import { Finalizable } from "index"
 
-declare class Bitmap extends Finalizable {
+export declare class Bitmap extends Finalizable {
     constructor(ptr: pointer)
     public static getFinalizer(): KNativePointer
     public static make(): Bitmap

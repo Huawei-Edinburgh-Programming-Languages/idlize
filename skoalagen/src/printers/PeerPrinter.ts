@@ -1,6 +1,7 @@
 import * as idl from '@idlizer/core'
 import { LibraryInterface } from "@idlizer/core";
 import { collectDeclDependencies, collectDeclItself, collectPeersForFile, findComponentByName, findComponentByType, ImportsCollector, NativeModule, PrinterResult, TargetFile, writePeerMethod } from '@idlizer/libohos';
+import { Skoala } from '../utils';
 
 export function componentToPeerClass(component: string) {
     return `${component}Peer`
@@ -29,7 +30,7 @@ class PeerFileVisitor {
 
         const name = componentToPeerClass(peer.componentName)
         printer.writeConstructorImplementation(
-            name, 
+            name,
             signature, (writer) => { },
             { delegationArgs: [`ptr ?? ${name}.make()`, `${name}.getFinalizer()`, 'managed'].map(it => printer.makeString(it)), delegationName: peer.parentComponentName },
             [idl.MethodModifier.PROTECTED])
@@ -50,7 +51,7 @@ class PeerFileVisitor {
 
     protected printPeerMethod(method: idl.PeerMethod, printer: idl.LanguageWriter) {
         this.library.setCurrentContext(`${method.originalParentName}.${method.sig.name}`)
-        writePeerMethod(this.library, printer, method, true, this.dumpSerialized, "", "", method.returnType)
+        writePeerMethod(this.library, printer, method, true, this.dumpSerialized, "", "", method.method.signature.returnType)
         this.library.setCurrentContext(undefined)
     }
 
@@ -87,23 +88,24 @@ class PeerFileVisitor {
     }
 
     printFile(): PrinterResult[] {
-        return collectPeersForFile(this.library, this.file)
+        const peers = collectPeersForFile(this.library, this.file)
             .filter(it => !idl.isRoot(it.componentName))
-            .map(peer => {
-                const component = findComponentByName(this.library, peer.componentName)
-                const imports = new ImportsCollector()
-                const content = this.library.createLanguageWriter(this.library.language)
-                this.printImports(peer, imports)
-                this.printPeer(peer, content)
-                return {
-                    over: {
-                        node: component!.attributeDeclaration,
-                        role: idl.LayoutNodeRole.PEER,
-                    },
-                    collector: imports,
-                    content
-                }
-            })
+
+        return peers.map(peer => {
+            const component = findComponentByName(this.library, peer.componentName)
+            const imports = new ImportsCollector()
+            const content = this.library.createLanguageWriter(this.library.language)
+            this.printImports(peer, imports)
+            this.printPeer(peer, content)
+            return {
+                over: {
+                    node: component!.attributeDeclaration,
+                    role: idl.LayoutNodeRole.PEER,
+                },
+                collector: imports,
+                content
+            }
+        })
     }
 }
 

@@ -23,6 +23,9 @@ export namespace Skoala {
     //     feature: "nativeModule"
     // }
     export const getFinalizer = "getFinalizer"
+    export function isInnerFunction(name: string): boolean {
+        return (name == getFinalizer)
+    }
     export function nativeMethod(className: string, methodName: string) {
         return `_skoala_${className}_${methodName}`
     }

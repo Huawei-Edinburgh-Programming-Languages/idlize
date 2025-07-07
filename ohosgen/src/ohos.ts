@@ -29,6 +29,7 @@ import {
     IDLEntry,
     LayoutNodeRole,
     IDLPointerType,
+    LibraryInterface,
 } from "@idlizer/core";
 import {
     writeIntegratedFile,
@@ -55,7 +56,7 @@ import { generateNativeOhos, suggestLibraryName } from './OhosNativeVisitor';
 import { ohosLayout } from './OhosLayout';
 import { printDataClasses } from './OhosDataClassVisitor';
 
-function printCallbackChecker(peerLibrary: PeerLibrary): PrinterResult[] {
+function printCallbackChecker(peerLibrary: LibraryInterface): PrinterResult[] {
     const content = peerLibrary.createLanguageWriter(peerLibrary.language)
     content.writeLines(readLangTemplate('CallbacksChecker', peerLibrary.language))
     const imports = new ImportsCollector()
@@ -72,10 +73,10 @@ function printCallbackChecker(peerLibrary: PeerLibrary): PrinterResult[] {
     }]
 }
 
-export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: PeerGeneratorConfiguration) {
+export function generateOhos(outDir: string, peerLibrary: LibraryInterface, config: PeerGeneratorConfiguration) {
     const origGenConfig = generatorConfiguration()
     setDefaultConfiguration(config)
-    peerLibrary.setFileLayout(ohosLayout(peerLibrary))
+    peerLibrary.setFileLayout(ohosLayout(peerLibrary as PeerLibrary))
 
     const ohos = new OhosInstall(outDir, peerLibrary.language)
 
@@ -122,7 +123,7 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
     // NATIVE
     /////////////////////////////////////////
 
-    const native = generateNativeOhos(peerLibrary)
+    const native = generateNativeOhos(peerLibrary as PeerLibrary)
     for (const [ file, content ] of native) {
         writeIntegratedFile(ohos.native(file), content)
     }

@@ -13,12 +13,7 @@
  * limitations under the License.
  */
 
-// import { pointer } from "@koalaui/interop"
-import { RefCounted } from "./RefCounted"
-// import { Canvas } from "./Canvas"
-// import { Rect } from "./Rect"
-// import { Matrix33 } from "./utils"
-// import { int32 } from "./utils"
+import { RefCounted } from "index"
 
 export declare class Drawable extends RefCounted {
     constructor(ptr: pointer);
@@ -31,16 +26,17 @@ export declare abstract class CustomDrawable extends Drawable {
     boundsRect?: Rect;
     abstract onDraw(canvas: Canvas): void;
     abstract onGetBounds(): Rect;
+    static make(): CustomDrawable
     constructor(ptr: pointer);
     onDrawCallback(thizz: CustomDrawable): void;
     onGetBoundsCallback(thizz: CustomDrawable): void;
     get bounds(): Rect | undefined;
-    static makeRectDrawable(drawableType: int32): RectCustomDrawable
     notifyDrawingChanged(): void;
 }
 
 declare class RectCustomDrawable extends CustomDrawable {
     public onDraw(canvas: Canvas): void
     public onGetBounds(): Rect
+    static make(): RectCustomDrawable
 }
 //# sourceMappingURL=Drawable.d.ts.map

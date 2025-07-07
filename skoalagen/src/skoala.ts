@@ -16,11 +16,10 @@
 import * as path from "path"
 import * as fs from "fs"
 import { Language, LibraryInterface } from "@idlizer/core";
-import { copyFile, createGeneratedNativeModulePrinter, createMaterializedPrinter, createSerializerPrinter, install, NativeModule, printGlobal } from "@idlizer/libohos";
+import { copyFile, createGeneratedNativeModulePrinter, createInterfacePrinter, createMaterializedPrinter, createSerializerPrinter, install, NativeModule, printGlobal } from "@idlizer/libohos";
 import { skoalaLayout } from "./SkoalaLayout";
 import { printComponents } from "./printers/ComponentsPrinter"
 import { createSkoalaInstall, SkoalaInstall } from "./SkoalaInstall";
-import { createInterfacePrinter } from "./printers/InterfacePrinter";
 import { createPeersPrinter } from "./printers/PeerPrinter";
 
 const Subset = path.join(__dirname, "../subset")
@@ -82,12 +81,13 @@ export function generateSkoalaFromIdl(
         path.join(config.outDir, "./skoala-ts/generated"),
         library,
         [
-            createMaterializedPrinter(config.dumpSerialized),
-            createPeersPrinter(config.dumpSerialized),
             printGlobal,
             createSerializerPrinter(library.language, ""),
+            createInterfacePrinter(false, false),
+            createMaterializedPrinter(config.dumpSerialized),
+            createPeersPrinter(config.dumpSerialized),
+            printComponents,
             createGeneratedNativeModulePrinter(NativeModule.Generated),
-            printComponents
         ], {}
     )
 

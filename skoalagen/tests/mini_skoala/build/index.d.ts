@@ -13,12 +13,17 @@
  * limitations under the License.
  */
 
-// import { Paint } from "./Paint"
-// import { Canvas } from "./Canvas"
-// import { Bitmap } from "./Bitmap"
-// import { SurfaceProps } from "./SurfaceProps"
-// import { uint8 } from "./utils"
+export * from "./Bitmap"
+export * from "./Canvas"
+export * from "./Drawable"
+export * from "./Paint"
+export * from "./PixelGeometry"
+export * from "./Rect"
+export * from "./SurfaceProps"
+export * from "./utils"
 
+export class Finalizable {}
+export class RefCounted {}
 
 export function testFun(): void
 export function rgbColor(r: uint8, g: uint8, b: uint8, a: uint8): void

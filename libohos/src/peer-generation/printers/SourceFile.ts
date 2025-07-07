@@ -16,7 +16,7 @@
 import { cStyleCopyright, makeIncludeGuardDefine } from "../FileGenerators"
 import { ImportsCollector } from "../ImportsCollector"
 import { CppLanguageWriter } from "../LanguageWriters"
-import { Language, LanguageWriter, CJLanguageWriter, ETSLanguageWriter, TSLanguageWriter, PeerLibrary } from "@idlizer/core"
+import { Language, LanguageWriter, CJLanguageWriter, ETSLanguageWriter, TSLanguageWriter, PeerLibrary, LibraryInterface } from "@idlizer/core"
 
 export abstract class SourceFile {
     public readonly content: LanguageWriter

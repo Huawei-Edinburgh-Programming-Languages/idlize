@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import { FieldModifier, IDLInterface, IDLMethod, IDLProperty, isBuilderClass, isClassSubkind, isInterface, isMaterialized, Language, LanguageWriter, LayoutNodeRole, lib, linearizeNamespaceMembers, maybeOptional, MethodModifier, NamedMethodSignature, PeerLibrary } from "@idlizer/core";
+import { FieldModifier, IDLInterface, IDLMethod, IDLProperty, isBuilderClass, isClassSubkind, isInterface, isMaterialized, Language, LanguageWriter, LayoutNodeRole, lib, LibraryInterface, linearizeNamespaceMembers, maybeOptional, MethodModifier, NamedMethodSignature, PeerLibrary } from "@idlizer/core";
 import { allowsOverloads, collapseSameMethodsIDL, collectDeclDependencies, groupOverloadsIDL, groupSameSignatureMethodsIDL, ImportsCollector, peerGeneratorConfiguration, PrinterResult } from "@idlizer/libohos";
 
-export function printDataClasses(library:PeerLibrary): PrinterResult[] {
+export function printDataClasses(library: LibraryInterface): PrinterResult[] {
     return library.files.flatMap(file => {
         return linearizeNamespaceMembers(file.entries).flatMap(entry => {
             if (!isInterface(entry)) {
@@ -51,7 +51,7 @@ export function printDataClasses(library:PeerLibrary): PrinterResult[] {
     })
 }
 
-function printInterfaceBody(library: PeerLibrary, entry: IDLInterface, printer: LanguageWriter): void {
+function printInterfaceBody(library: LibraryInterface, entry: IDLInterface, printer: LanguageWriter): void {
     entry.properties.forEach(prop => {
         const defValue = peerGeneratorConfiguration().constants.get(`${entry.name}.${prop.name}`)
         const initExpr = defValue != undefined ? printer.makeString(defValue) : undefined
@@ -77,7 +77,7 @@ function printInterfaceBody(library: PeerLibrary, entry: IDLInterface, printer: 
 }
 
 
-function printCollapsedOverloads(library: PeerLibrary, methods: IDLMethod[], printer: LanguageWriter) {
+function printCollapsedOverloads(library: LibraryInterface, methods: IDLMethod[], printer: LanguageWriter) {
     if (methods.some(it => it.isStatic))
         return
     const method = collapseSameMethodsIDL(methods, library.language)

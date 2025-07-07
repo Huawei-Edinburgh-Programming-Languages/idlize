@@ -13,15 +13,9 @@
  * limitations under the License.
  */
 
-import { Finalizable } from "./Finalizable"
-// import { KNativePointer, pointer } from "@koalaui/interop"
-// import { uint32, float32 } from "./utils"
+import { Finalizable } from "index"
 
-// import { Bitmap } from "./Bitmap"
-// import { SurfaceProps } from "./SurfaceProps"
-// import { Paint } from "./Paint"
-
-declare class Canvas extends Finalizable {
+export declare class Canvas extends Finalizable {
     constructor(ptr: pointer, managed?: boolean)
     static getFinalizer(): KNativePointer 
     static makeFromBitmap(bitmap: Bitmap, surfaceProps: SurfaceProps): Canvas 
