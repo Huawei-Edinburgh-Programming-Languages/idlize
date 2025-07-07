@@ -51,6 +51,7 @@ export enum Token {
   tAsterisk = 47,     // *
   tEllipsis = 48,     // ...
   tQuestion = 49,     // ?
+  tDiv = 50,          // /
 
   tShort = 60,        // short
   tLong = 61,         // long
@@ -102,7 +103,10 @@ export enum Token {
 
   tId = 999,          // identifier
   tError = 1000,
-  tEnd = 1001
+  tEnd = 1001,
+  tNeedRepeat = 1002, // Lexer can skip comment, spaces, etc.
+                      // But it can't process comment ... spaces ... comment ... spaces ... some good token.
+                      // Sometimes we should call getToken many times to get something useful.
 };
 
 const g_keywords = new Map<string, Token>([
@@ -262,6 +266,7 @@ let g_col: number = 0;
 let g_row: number = 0;
 let g_tokenText: string = "";
 let g_lineStartPos = 0;
+let prev: string = ' ';  // TypeScript does not support static in functions :(
 
 export function init(text: string) {
   g_text = text + '\n';  // Some files have no EOL in the end, so we fix it here!
@@ -282,8 +287,6 @@ function isDigit(c: string): boolean {
   return (c >= '0' && c <= '9');
 }
 
-let prev: string = ' ';  // TypeScript does not support static in functions :(
-
 function getChar(): string {
   if (g_pos >= g_text.length)
     return '\0';
@@ -292,10 +295,15 @@ function getChar(): string {
 }
 
 function returnChar() {
-  if (g_pos > 0)
+  if (g_pos > 0) {
     g_pos--;
-  else
+    if (g_pos > 0)
+      prev = g_text[g_pos - 1];
+    else
+      prev = ' ';
+  } else {
     throw new Error("Can't decrement g_pos cause it's zero.");
+  }
 }
 
 export function getTokenText(): string {
@@ -304,6 +312,18 @@ export function getTokenText(): string {
 
 export function getToken(): Token {
   console.log("getToken <<<");
+  let t: Token = getTokenInternal();
+  while (t == Token.tNeedRepeat) {
+    console.log("tNeedRepeat found, g_pos = ", g_pos);
+    t = getTokenInternal();
+  }
+
+  console.log(t);
+
+  return t;
+}
+
+function getTokenInternal(): Token {
   let c: string = getChar();
   if (c == '\0') {
     console.log(" return tEnd");
@@ -315,6 +335,7 @@ export function getToken(): Token {
   // Mac:         0D ?  CR \r
 
   // skip spaces and EOL
+  console.log("skip spaces...");
   while (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
     if (c == '\n' ||                   // Linux or second char on Windows
         (c == '\r' && prev != '\n')) { // Mac, not Windows
@@ -329,7 +350,31 @@ export function getToken(): Token {
     }
   }
 
-  //console.log("now c has value: " + c);
+  // skip comments
+  if (c == '/') {
+    const c2 = getChar();
+    if (c2 == '/') {  // Okay, start of one line comment was found
+      do {
+        c = getChar();
+        console.log("skip ", c);
+      } while (c != '\n' && c != '\r' && c != '\0');  // while not EOL and not EOF
+
+      returnChar();  // we use CR LF to calculate strings so we have to return it back
+      return Token.tNeedRepeat;
+
+    } else if (c2 == '*') {  // Okay, multiline comment was found
+      prev = c2; c = getChar();
+      do {
+        prev = c; c = getChar();
+      } while ( ! (prev == '*' && c == '/') && c != '\0');  // while not "*/" and not EOF
+
+      return Token.tNeedRepeat;
+
+    } else {  // comment not found
+      returnChar();  // Comment not found. Have to return c2 char
+      return Token.tDiv;
+    }
+  }
 
   // words
   if (isLetter(c)) {
@@ -344,7 +389,6 @@ export function getToken(): Token {
     }
 
     console.log("Got word: \'" + res + "\' on line " + g_row);
-    //console.log(" c has value: " + c);
 
     // Is it keyword?
     if (g_keywords.has(res)) {
@@ -364,7 +408,6 @@ export function getToken(): Token {
 
     // Now we have to return last symbol into input stream
     // otherwise symbol will be lose during 'return Token.tId;'
-    prev = ' ';
     returnChar();
 
     return Token.tId;
@@ -379,6 +422,19 @@ export function getToken(): Token {
     }
     g_tokenText = res;
     return Token.tNumber;
+  }
+
+  // String Literal
+  if (c == '\"') {
+    let res: string = c;  // first "
+    prev = c; c = getChar();
+    while (c != '\"') {
+      res += c;
+    }
+    res += c;  // last "
+    prev = c;
+    g_tokenText = res;
+    return Token.tStringLiteral;
   }
 
   // other tokens
@@ -434,14 +490,11 @@ export function getToken(): Token {
 
   if (c == '*')
     return Token.tAsterisk;
-  if (c == '...')
-    return Token.tEllipsis;
   if (c == '?')
     return Token.tQuestion;
 
-  console.log("Unknown sym: \'" + c + "\'");
-  console.log("code: ", c.charCodeAt(0));
-  return Token.tError;
+  // TODO: Probably c is some unknown char and we have to process it (and return tError).
+  return Token.tNeedRepeat;
 }
 
 export function getCol() {

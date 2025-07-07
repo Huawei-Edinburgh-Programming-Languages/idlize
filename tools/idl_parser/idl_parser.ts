@@ -73,7 +73,7 @@ function Match(tArg: lex.Token | string) {
 
 export function Parse(): idl.Definitions | null {
   const idl: string =
-`package arkui.component.idlize;
+`package arkui.component.idlize; /* test */
 callback Callback_Extender_OnProgress = void (f32 value);`
 //import arkui.component.common;
   console.log("Try to parse:");
@@ -554,7 +554,8 @@ function Enum(): idl.Node | null {
 }
 
 function EnumValueList() {
-  Match("string"); EnumValueListComma();
+  Match(lex.Token.tStringLiteral);
+  EnumValueListComma();
 }
 
 function EnumValueListComma() {
