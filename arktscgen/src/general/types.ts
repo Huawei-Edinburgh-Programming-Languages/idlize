@@ -35,7 +35,7 @@ export class SimpleConverter extends core.TSTypeNameConvertor {
     private dropNsAndDataPrefix(node: core.IDLNamedNode): string {
         const prefix = Config.dataClassPrefix
         let result = node.name.split('.').at(-1)! // drop namespace
-        result = result.startsWith(prefix) ? result.slice(prefix.length) : result
+        //result = result.startsWith(prefix) ? result.slice(prefix.length) : result
         //console.log(`convert ${node.name} => ${result}`);
         return result
     }
