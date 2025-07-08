@@ -10,7 +10,7 @@
             "@koalaui/common": ["../../../../../../../../external/incremental/common/src"],
             "@koalaui/compat": ["../../../../../../../../external/incremental/compat/src/arkts"],
             "@koalaui/runtime": ["../../../../../../../../external/incremental/runtime/src"],
-            "@global.resource": ["../../../../../../../../external/subset/arkoala-arkts/external/src"]
+            "@global.resource": ["out/ets-arkts-peers/generated/sig/arkoala-arkts/global/src/generated"]
         }
     },
     "include": [
