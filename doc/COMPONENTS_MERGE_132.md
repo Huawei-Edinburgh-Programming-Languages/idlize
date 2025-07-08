@@ -501,7 +501,7 @@
 
 | security_component_method_modifier.cpp | |
 
-| select_modifier.cpp | |
+| select_modifier.cpp | Samarin Sergey |
 
 | shader_effect_accessor.cpp | |
 
