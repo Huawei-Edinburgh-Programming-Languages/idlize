@@ -38,21 +38,21 @@
 
 | builder_node_ops_accessor.cpp | Sergey Kovalev |
 
-| button_modifier.cpp | Erokhin Ilya |
+| button_modifier.cpp | Erokhin Ilya - done |
 
-| calendar_controller_accessor.cpp | Erokhin Ilya |
+| calendar_controller_accessor.cpp | Erokhin Ilya - done |
 
-| calendar_modifier.cpp | Erokhin Ilya |
+| calendar_modifier.cpp | Erokhin Ilya - done |
 
-| calendar_picker_dialog_accessor.cpp | Erokhin Ilya |
+| calendar_picker_dialog_accessor.cpp | Erokhin Ilya - done |
 
-| calendar_picker_modifier.cpp | Erokhin Ilya |
+| calendar_picker_modifier.cpp | Erokhin Ilya - done |
 
-| canvas_accessor.cpp | Erokhin Ilya |
+| canvas_accessor.cpp | Erokhin Ilya - something new |
 
 | canvas_gradient_accessor.cpp | Vadim Voronov |
 
-| canvas_modifier.cpp | Erokhin Ilya |
+| canvas_modifier.cpp | Erokhin Ilya - done |
 
 | canvas_path_accessor.cpp | Vadim Voronov |
 
@@ -66,7 +66,7 @@
 
 | checkbox_modifier.cpp | Evstigneev Roman - on review|
 
-| children_main_size_accessor.cpp | |
+| children_main_size_accessor.cpp | Erokhin Ilya |
 
 | circle_modifier.cpp | Evstigneev Roman - on review |
 
@@ -92,23 +92,23 @@
 
 | common_shape_method_modifier.cpp | Evstigneev Roman - on review |
 
-| component_content_accessor.cpp | |
+| component_content_accessor.cpp | Erokhin Ilya |
 
-| component_root_modifier.cpp | |
+| component_root_modifier.cpp | Erokhin Ilya |
 
-| console_message_accessor.cpp | |
+| console_message_accessor.cpp | Erokhin Ilya |
 
-| container_span_modifier.cpp | |
+| container_span_modifier.cpp | Erokhin Ilya |
 
-| content_modifier_helper_accessor.cpp | |
+| content_modifier_helper_accessor.cpp | Erokhin Ilya |
 
-| context_accessor.cpp | |
+| context_accessor.cpp | Erokhin Ilya |
 
-| controller_handler_accessor.cpp | |
+| controller_handler_accessor.cpp | Erokhin Ilya |
 
-| counter_modifier.cpp | |
+| counter_modifier.cpp | Erokhin Ilya |
 
-| custom_dialog_controller_accessor.cpp | |
+| custom_dialog_controller_accessor.cpp | Erokhin Ilya |
 
 | custom_layout_root_modifier.cpp | |
 
