@@ -24,7 +24,7 @@
 |*ContainerSpan*| |
 |*Counter*| |
 |*DataPanel*| |
-|*DatePicker*| |
+|*DatePicker*| Vadim Voronov |
 |*Divider*| |
 |*EffectComponent*| |
 |*Ellipse*| |
