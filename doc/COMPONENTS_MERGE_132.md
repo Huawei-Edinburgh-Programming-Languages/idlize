@@ -30,7 +30,7 @@
 
 | base_span_modifier.cpp | |
 
-| blank_modifier.cpp | |
+| blank_modifier.cpp | Sergey Kovalev |
 
 | bounce_symbol_effect_accessor.cpp | |
 
