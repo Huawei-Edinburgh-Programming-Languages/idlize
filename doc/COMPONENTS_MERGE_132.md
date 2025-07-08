@@ -74,9 +74,9 @@
 
 | click_event_accessor.cpp | Evstigneev Roman |
 
-| client_authentication_handler_accessor.cpp | Evstigneev Roman |
+| client_authentication_handler_accessor.cpp | Evstigneev Roman - web |
 
-| color_content_accessor.cpp | Evstigneev Roman |
+| color_content_accessor.cpp | Evstigneev Roman - new gen file |
 
 | color_filter_accessor.cpp | Evstigneev Roman |
 
