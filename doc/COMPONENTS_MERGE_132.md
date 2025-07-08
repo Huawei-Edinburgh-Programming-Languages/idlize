@@ -58,9 +58,9 @@
 
 | canvas_pattern_accessor.cpp | Erokhin Ilya |
 
-| canvas_renderer_accessor.cpp | |
+| canvas_renderer_accessor.cpp | Vadim Voronov |
 
-| canvas_rendering_context2d_accessor.cpp | |
+| canvas_rendering_context2d_accessor.cpp | Vadim Voronov |
 
 | checkbox_group_modifier.cpp | Evstingeev Roman |
 
@@ -134,7 +134,7 @@
 
 | draw_context_accessor.cpp | |
 
-| drawing_rendering_context_accessor.cpp | |
+| drawing_rendering_context_accessor.cpp | Vadim Voronov |
 
 | draw_modifier_accessor.cpp | |
 
@@ -311,7 +311,7 @@
 
 | mask_filter_accessor.cpp | |
 
-| matrix2d_accessor.cpp | |
+| matrix2d_accessor.cpp | Vadim Voronov |
 
 | matrix4_transit_accessor.cpp | Samarin Sergey |
 
@@ -371,7 +371,7 @@
 
 | paste_button_modifier.cpp | |
 
-| path2d_accessor.cpp | |
+| path2d_accessor.cpp | Vadim Voronov |
 
 | path_accessor.cpp | |
 
