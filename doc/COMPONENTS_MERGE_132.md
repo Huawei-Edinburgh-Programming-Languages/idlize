@@ -20,23 +20,23 @@
 
 | base_context_accessor.cpp | Erokhin Ilya |
 
-| base_event_accessor.cpp | |
+| base_event_accessor.cpp | Sergey Kovalev |
 
-| base_gesture_event_accessor.cpp | |
+| base_gesture_event_accessor.cpp | Sergey Kovalev |
 
-| baseline_offset_style_accessor.cpp | |
+| baseline_offset_style_accessor.cpp | Sergey Kovalev |
 
-| base_shape_accessor.cpp | |
+| base_shape_accessor.cpp |Sergey Kovalev |
 
-| base_span_modifier.cpp | |
+| base_span_modifier.cpp | Sergey Kovalev |
 
 | blank_modifier.cpp | Sergey Kovalev |
 
-| bounce_symbol_effect_accessor.cpp | |
+| bounce_symbol_effect_accessor.cpp | Sergey Kovalev|
 
-| brush_accessor.cpp | |
+| brush_accessor.cpp | Sergey Kovalev |
 
-| builder_node_ops_accessor.cpp | |
+| builder_node_ops_accessor.cpp | Sergey Kovalev |
 
 | button_modifier.cpp | |
 
