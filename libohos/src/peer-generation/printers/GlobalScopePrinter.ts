@@ -50,7 +50,8 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
                         const decl = library.resolveTypeReference(type)
                         if (decl) {
                             // TBD: define right global scope source declaration
-                            collectDeclItself(library, realizationHolder, decl, peerImports)
+                            //collectDeclItself(library, realizationHolder, decl, peerImports)
+                            collectDeclItself(library, decl, decl, peerImports)
                             collectDeclDependencies(library, decl, peerImports)
                         }
                     }

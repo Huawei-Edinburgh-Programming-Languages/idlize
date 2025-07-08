@@ -1,6 +1,10 @@
 import { generatorConfiguration, ModuleConfiguration } from "../config"
 import * as idl from "../idl"
 
+export function getModules() {
+    return generatorConfiguration().modules.values()
+}
+
 export function isInModule(node: idl.IDLNode, module: ModuleConfiguration): boolean
 export function isInModule(packageName: string, module: ModuleConfiguration): boolean
 export function isInModule(nodeOrPackage: idl.IDLNode | string, module: ModuleConfiguration): boolean {

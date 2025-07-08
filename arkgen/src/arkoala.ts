@@ -14,7 +14,7 @@
  */
 import * as fs from "fs"
 import * as path from "path"
-import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration, CppConvertor, PeerMethod, MethodModifier, NativeModuleType, LayoutManager, ETSLanguageWriter } from '@idlizer/core'
+import { Language, IndentedPrinter, PeerLibrary, CppLanguageWriter, createEmptyReferenceResolver, LanguageWriter, ReferenceResolver, Method, MethodSignature, PrintHint, PrinterLike, NamedMethodSignature, printMethodDeclaration, CppConvertor, PeerMethod, MethodModifier, NativeModuleType, LayoutManager, ETSLanguageWriter, getModules, currentModule } from '@idlizer/core'
 import {
     dummyImplementations, gniFile, libraryCcDeclaration,
     makeArkuiModule, makeCallbacksKinds,
@@ -195,7 +195,11 @@ export function generateArkoalaFromIdl(config: {
             return data
         return []
     }
+
+    for (const module of getModules()) {
+
     const installedFiles = ETSLanguageWriter.useTypeChecker(config.useTypeChecker, () => install(
+        module,
         arkoala.managedBaseDir,
         arkoala.managedSubDir,
         arkoala.managedDir,
@@ -234,8 +238,25 @@ export function generateArkoalaFromIdl(config: {
         ]
     ))
 
+        if ([Language.TS, Language.ARKTS].includes(peerLibrary.language)) {
+            // const subDir = arkoala.managedSubDir.length > 0? `/${arkoala.managedSubDir}`: ``
+            // const arkoalaDir = `${arkoala.managedBaseDir}/${module.name}/src${subDir}`
+            const arkoalaDir = `${arkoala.managedBaseDir}/${module.name}/src`
+            writeFile(
+                path.join(arkoalaDir, 'generated', 'index' + peerLibrary.language.extension),
+                makeArkuiModule(arkuiComponentsFiles.concat(installedFiles), path.join(arkoala.managedDir, 'generated')),
+                {
+                    onlyIntegrated: config.onlyIntegrated,
+                    integrated: true
+                }
+            )
+
+        }
+    }
+
     if (peerLibrary.language === Language.ARKTS) {
         install(
+            currentModule(),
             arkoala.managedBaseDir,
             arkoala.managedSubDir,
             arkoala.managedDir,
@@ -249,6 +270,7 @@ export function generateArkoalaFromIdl(config: {
         )
         if (peerLibrary.useMemoM3) {
             const installed = install(
+                currentModule(),
                 arkoala.managedBaseDir,
                 arkoala.managedSubDir,
                 arkoala.managedSdkDir,
@@ -325,14 +347,14 @@ export function generateArkoalaFromIdl(config: {
         //     }
         // )
         // index not printed
-        writeFile(
-            path.join(arkoala.managedDir, 'generated', 'index' + peerLibrary.language.extension),
-            makeArkuiModule(arkuiComponentsFiles.concat(installedFiles), path.join(arkoala.managedDir, 'generated')),
-            {
-                onlyIntegrated: config.onlyIntegrated,
-                integrated: true
-            }
-        )
+        // writeFile(
+        //     path.join(arkoala.managedDir, 'generated', 'index' + peerLibrary.language.extension),
+        //     makeArkuiModule(arkuiComponentsFiles.concat(installedFiles), path.join(arkoala.managedDir, 'generated')),
+        //     {
+        //         onlyIntegrated: config.onlyIntegrated,
+        //         integrated: true
+        //     }
+        // )
         writeFile(path.join(arkoala.managedDir, 'generated', "peers", 'CallbackKind' + peerLibrary.language.extension),
             makeCallbacksKinds(peerLibrary, peerLibrary.language),
             {
@@ -355,14 +377,14 @@ export function generateArkoalaFromIdl(config: {
         //     arkoala.arktsLib(new TargetFile(NativeModuleType.Interop.name, 'arkts')),
         //     printPredefinedNativeModule(peerLibrary, NativeModuleType.Interop).printToString(),
         // )
-        writeFile(
-            path.join(arkoala.managedDir, 'generated', 'index' + peerLibrary.language.extension),
-            makeArkuiModule(arkuiComponentsFiles.concat(installedFiles), path.join(arkoala.managedDir, 'generated')),
-            {
-                onlyIntegrated: config.onlyIntegrated,
-                integrated: true
-            }
-        )
+        // writeFile(
+        //     path.join(arkoala.managedDir, 'generated', 'index' + peerLibrary.language.extension),
+        //     makeArkuiModule(arkuiComponentsFiles.concat(installedFiles), path.join(arkoala.managedDir, 'generated')),
+        //     {
+        //         onlyIntegrated: config.onlyIntegrated,
+        //         integrated: true
+        //     }
+        // )
         writeFile(path.join(arkoala.managedDir, 'generated', 'peers', 'CallbackKind' + peerLibrary.language.extension),
             makeCallbacksKinds(peerLibrary, peerLibrary.language),
             {

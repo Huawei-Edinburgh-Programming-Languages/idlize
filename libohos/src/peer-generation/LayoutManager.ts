@@ -50,6 +50,7 @@ function isEntryExported(entry: idl.IDLEntry): boolean {
 }
 
 export function install(
+    module: idl.ModuleConfiguration,
     outBaseDir: string,
     outSubDir: string,
     outDir2: string,
@@ -61,10 +62,12 @@ export function install(
         isDeclared?: boolean,
     }): string[] {
     const storage = new Map<string, PrinterResult[]>()
-
     // groupBy
     const layout = options?.customLayout ?? library.layout
-    printers.flatMap(it => typeof it === 'function' ? it(library) : it.print(library)).forEach(it => {
+    printers.flatMap(it => typeof it === 'function' ? it(library) : it.print(library))
+        // TBD: put GlobalScope to a separate module
+        .filter(it => idl.isInModule(it.over.node, module) || it.over.node.name == "GlobalScope")
+        .forEach(it => {
         const resolved = layout.resolve(it.over)
         if (resolved == '') {
             throw new Error(`Cannot resolve location for ${idl.getFQName(it.over.node)}`)

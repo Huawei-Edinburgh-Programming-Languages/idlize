@@ -586,6 +586,7 @@
         "arkui.component": "./component"
     },
     "currentModuleExportedPackages": [
+        "global.resource",
         "arkui.component",
         "internal.component.ets",
         "arkui.idlize"
