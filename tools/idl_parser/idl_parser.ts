@@ -30,6 +30,9 @@ const g_char2token = new Map<string, lex.Token>([
   ["package", lex.Token.tPackage],
   ["callback", lex.Token.tCallback],
   ["interface", lex.Token.tInterface],
+  ["void", lex.Token.tVoid],
+  ["constructor", lex.Token.tConstructor],
+  ["includes", lex.Token.tIncludes],
 ]);
 
 function token2Name(t: lex.Token): string {
@@ -176,7 +179,10 @@ function InterfaceOrMixin(): idl.Node | null {
 
 function InterfaceRest(): idl.Node | null {
   let res: idl.InterfaceNode = new idl.InterfaceNode();
-  Match(lex.Token.tId); Inheritance(); Match(lex.Token.tLBrace); InterfaceMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
+  if (g_lookahead == lex.Token.tId) {
+    //    identifier Inheritance { InterfaceMembers } ;
+    Match(lex.Token.tId); Inheritance(); Match(lex.Token.tLBrace); InterfaceMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
+  }
   return res;
 }
 
@@ -200,30 +206,51 @@ function PartialInterfaceRest() {
   Match(lex.Token.tId); Match(lex.Token.tLBrace); PartialInterfaceMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
 }
 
+//InterfaceMembers ::
+//    ExtendedAttributeList InterfaceMember InterfaceMembers
+
 function InterfaceMembers() {
   if (g_lookahead == lex.Token.tLSqrBracket)
     ExtendedAttributeList();
-  InterfaceMember(); InterfaceMembers();
+
+  let rpt: boolean;
+  do {
+    rpt = InterfaceMember();
+  } while (rpt);
   // ε
 }
 
-function InterfaceMember() {
-  PartialInterfaceMember();
-  Constructor();
+const g_PartialFirstTokens: lex.Token[] = [
+  lex.Token.tConst, lex.Token.tLBracket, lex.Token.tStringifier, lex.Token.tStatic,
+  lex.Token.tIterable, lex.Token.tAsync, lex.Token.tReadonly, lex.Token.tAttribute,
+  lex.Token.tMaplike, lex.Token.tSetlike, lex.Token.tInherit
+];
+
+function InterfaceMember(): boolean {
+  if (g_PartialFirstTokens.includes(g_lookahead) ||
+      lex.IsItSingleType(g_lookahead)) {  // see Operation()
+    PartialInterfaceMember();
+    return true;
+  } else if (g_lookahead == lex.Token.tConstructor) {
+    Constructor();
+    return true;
+  }
+  return false;
 }
 
 function PartialInterfaceMembers() {
   if (g_lookahead == lex.Token.tLSqrBracket)
     ExtendedAttributeList();
-  PartialInterfaceMember(); PartialInterfaceMembers();
+
+  if (g_PartialFirstTokens.includes(g_lookahead) ||
+      lex.IsItSingleType(g_lookahead)) {  // see Operation()
+    PartialInterfaceMember(); PartialInterfaceMembers();
+  }
   // ε
 }
 
 function PartialInterfaceMember() {
-  if (g_lookahead == lex.Token.tConst) {
-    Const();
-  } else {}
-
+  Const();
   Operation();
   Stringifier();
   StaticMember();
@@ -338,7 +365,9 @@ function ConstType() {
 }
 
 function ReadOnlyMember() {
-  Match(lex.Token.tReadonly); ReadOnlyMemberRest();
+  if (g_lookahead == lex.Token.tReadonly) {
+    Match(lex.Token.tReadonly); ReadOnlyMemberRest();
+  }
 }
 
 function ReadOnlyMemberRest() {
@@ -352,11 +381,15 @@ function ReadWriteAttribute() {
 }
 
 function InheritAttribute() {
-  Match(lex.Token.tInherit); AttributeRest();
+  if (g_lookahead == lex.Token.tInherit) {
+    Match(lex.Token.tInherit); AttributeRest();
+  }
 }
 
 function AttributeRest() {
-  Match(lex.Token.tAttribute); TypeWithExtendedAttributes(); AttributeName(); Match(lex.Token.tSemicolon);
+  if (g_lookahead == lex.Token.tAttribute) {
+    Match(lex.Token.tAttribute); TypeWithExtendedAttributes(); AttributeName(); Match(lex.Token.tSemicolon);
+  }
 }
 
 function AttributeName() {
@@ -384,8 +417,10 @@ function DefaultValue() {
 }
 
 function Operation() {
-  RegularOperation();
-  SpecialOperation();
+  if (lex.IsItSingleType(g_lookahead) || g_lookahead == lex.Token.tLBracket) {
+    RegularOperation();
+  }
+  //SpecialOperation(); // Not in use yet.
 }
 
 function RegularOperation() {
@@ -420,7 +455,9 @@ function OperationName() {
 }
 
 function OperationNameKeyword() {
-  Match(lex.Token.tIncludes);
+  if (g_lookahead == lex.Token.tIncludes) {
+    Match(lex.Token.tIncludes);
+  }
 }
 
 function ArgumentList() {
@@ -465,11 +502,15 @@ function Ellipsis() {
 }
 
 function Constructor() {
-  Match(lex.Token.tConstructor); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket); Match(lex.Token.tSemicolon);
+  if (g_lookahead == lex.Token.  tConstructor) {
+    Match(lex.Token.tConstructor); Match(lex.Token.tLBracket); ArgumentList(); Match(lex.Token.tRBracket); Match(lex.Token.tSemicolon);
+  }
 }
 
 function Stringifier() {
-  Match(lex.Token.tStringifier); StringifierRest();
+  if (g_lookahead == lex.Token.tStringifier) {
+    Match(lex.Token.tStringifier); StringifierRest();
+  }
 }
 
 function StringifierRest() {
@@ -478,7 +519,9 @@ function StringifierRest() {
 }
 
 function StaticMember() {
-  Match(lex.Token.tStatic); StaticMemberRest();
+  if (g_lookahead == lex.Token.tStatic) {
+    Match(lex.Token.tStatic); StaticMemberRest();
+  }
 }
 
 function StaticMemberRest() {
@@ -487,7 +530,9 @@ function StaticMemberRest() {
 }
 
 function Iterable() {
-  Match(lex.Token.tIterable); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); OptionalType(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
+  if (g_lookahead == lex.Token.tIterable) {
+    Match(lex.Token.tIterable); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); OptionalType(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
+  }
 }
 
 function OptionalType() {
@@ -496,7 +541,9 @@ function OptionalType() {
 }
 
 function AsyncIterable() {
-  Match(lex.Token.tAsync); Match(lex.Token.tIterable); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); OptionalType(); Match(lex.Token.tRAngle); OptionalArgumentList(); Match(lex.Token.tSemicolon);
+  if (g_lookahead == lex.Token.tAsync) {
+    Match(lex.Token.tAsync); Match(lex.Token.tIterable); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); OptionalType(); Match(lex.Token.tRAngle); OptionalArgumentList(); Match(lex.Token.tSemicolon);
+  }
 }
 
 function OptionalArgumentList() {
@@ -509,7 +556,9 @@ function ReadWriteMaplike() {
 }
 
 function MaplikeRest() {
-  Match(lex.Token.tMaplike); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tComma); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
+  if (g_lookahead == lex.Token.tMaplike) {
+    Match(lex.Token.tMaplike); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tComma); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
+  }
 }
 
 function ReadWriteSetlike() {
@@ -517,7 +566,9 @@ function ReadWriteSetlike() {
 }
 
 function SetlikeRest() {
-  Match(lex.Token.tSetlike); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
+  if (g_lookahead == lex.Token.tSetlike) {
+    Match(lex.Token.tSetlike); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
+  }
 }
 
 function Namespace(): idl.Node | null {
@@ -627,14 +678,16 @@ function TypeWithExtendedAttributes() {
 }
 
 function SingleType(): boolean {
-  if (g_lookahead == lex.Token.tPromise) {
-    PromiseType();
-    return true;
+  if (lex.IsItDistinguishableType(g_lookahead)) {
+    return DistinguishableType();
   } else if  (g_lookahead == lex.Token.tAny) {
     Match(lex.Token.tAny);
     return true;
+  } else if (g_lookahead == lex.Token.tPromise) {
+    PromiseType();
+    return true;
   } else {
-    return DistinguishableType();
+    return false;
   }
 }
 
@@ -680,8 +733,6 @@ function DistinguishableType(): boolean {
     Match(lex.Token.tObservableArray); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Null();
   } else if (g_lookahead == lex.Token.tRecord) {
     RecordType(); Null();
-  } else if (g_lookahead == lex.Token.tVoid) {
-    Match(lex.Token.tVoid); Null();
   } else if (g_lookahead == lex.Token.tUndefined) {
     Match(lex.Token.tUndefined); Null();
   } else {  // FIXME!!! костыль... нужен для того, чтобы снаружи можно было понять, удалось ли обработать текущий токен
@@ -701,6 +752,8 @@ function PrimitiveType() {
     Match(lex.Token.tOctet);
   } else if (g_lookahead == lex.Token.tBigint) {
     Match(lex.Token.tBigint);
+  } else if (g_lookahead == lex.Token.tVoid) {  // we have void type but webidl havn't
+    Match(lex.Token.tVoid);
   }
 }
 

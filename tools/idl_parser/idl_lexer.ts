@@ -201,6 +201,12 @@ export function IsItArgumentNameKeyword(value: Token): boolean {
   return g_ArgumentNameKeyword.includes(value);
 }
 
+export function IsItSingleType(value: Token): boolean {
+  return IsItDistinguishableType(value) ||
+         value == Token.tAny ||
+         value == Token.tPromise;
+}
+
 export function IsItDistinguishableType(value: Token): boolean {
   return IsItPrimitiveType(value) ||
          IsItStringType(value) ||
@@ -224,7 +230,8 @@ let g_PrimitiveType: Token[] = [
 export function IsItPrimitiveType(value: Token): boolean {
   return IsItUnsignedIntegerType(value) ||
          IsItUnrestrictedFloatType(value) ||
-         g_PrimitiveType.includes(value);
+         g_PrimitiveType.includes(value) ||
+         value == Token.tVoid;
 }
 
 export function IsItUnsignedIntegerType(value: Token): boolean {
