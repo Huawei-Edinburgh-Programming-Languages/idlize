@@ -291,13 +291,13 @@
 
 | line_typeset_accessor.cpp | |
 
-| list_item_group_modifier.cpp | |
+| list_item_group_modifier.cpp | Sergey Morozov |
 
-| list_item_modifier.cpp | |
+| list_item_modifier.cpp | Sergey Morozov |
 
-| list_modifier.cpp | |
+| list_modifier.cpp | Sergey Morozov |
 
-| list_scroller_accessor.cpp | |
+| list_scroller_accessor.cpp | Sergey Morozov |
 
 | loading_progress_modifier.cpp | |
 
@@ -321,11 +321,11 @@
 
 | media_cached_image_modifier.cpp | |
 
-| menu_item_group_modifier.cpp | |
+| menu_item_group_modifier.cpp | Sergey Morozov |
 
-| menu_item_modifier.cpp | |
+| menu_item_modifier.cpp | Sergey Morozov |
 
-| menu_modifier.cpp | |
+| menu_modifier.cpp | Sergey Morozov |
 
 | mouse_event_accessor.cpp | |
 
