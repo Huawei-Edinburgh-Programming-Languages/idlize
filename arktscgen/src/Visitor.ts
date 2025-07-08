@@ -140,7 +140,7 @@ export class Visitor {
     }
 
     public resolveReference(ref: core.IDLReferenceType): core.IDLEntry | undefined {
-        const parts = this.hack_removeDataClassPrefix(ref).split('.', 2)
+        const parts = ref.name.split('.', 2) // this.hack_removeDataClassPrefix(ref).split('.', 2)
         const [ns, name] = parts.length == 1 ? ['', parts.at(0)] : parts
         const cns = this.namespaces[this.namespaces.length - 1][0]
 
@@ -150,17 +150,17 @@ export class Visitor {
             if (!ns.length) {
                 symbol = this.declarations.get('')?.get(name!)
             }
-            //symbol = this.hack_resolveInAliasedNamespace(ns, name!)
             if (!symbol) {
-                console.log(`1. resolveReference: ${name} from '${ns}' => ${symbol}`);
                 this.unresolved.add(ref.name)
+                throw `1. resolveReference: ${name} from '${ns}' => ${symbol}`
+                //console.log(`1. resolveReference: ${name} from '${ns}' => ${symbol}`);
             }
         }
         return symbol
     }
 
     private registerEntry(node: core.IDLEntry) : void {
-        const name = this.hack_removeDataClassPrefix(node)
+        const name = node.name //this.hack_removeDataClassPrefix(node)
         const ns = this.namespaces[this.namespaces.length - 1]
         const table = this.declarations.get(ns[0])!
 
