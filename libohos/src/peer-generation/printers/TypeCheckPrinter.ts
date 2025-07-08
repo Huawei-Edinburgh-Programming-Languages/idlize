@@ -18,7 +18,7 @@ import { collectDeclarationTargets } from "../DeclarationTargetCollector";
 import { isComponentDeclaration } from "../ComponentsCollector";
 
 export function importTypeChecker(library: PeerLibrary, imports: ImportsCollector): void {
-    collectDeclItself(library, idl.createReferenceType("TypeChecker"), imports)
+    collectDeclItself(library, idl.createReferenceType("TypeChecker"), idl.createReferenceType("TypeChecker"), imports)
 }
 
 class FieldRecord {
@@ -158,10 +158,10 @@ abstract class TypeCheckerPrinter {
                 dep.elementType.forEach(it => {
                     const resolved = idl.isReferenceType(it) ? this.library.resolveTypeReference(it) : undefined
                     if (resolved && idl.isEntry(resolved))
-                        collectDeclItself(this.library, resolved, this.imports)
+                        collectDeclItself(this.library, dep, resolved, this.imports)
                 })
             } else {
-                collectDeclItself(this.library, dep, this.imports)
+                collectDeclItself(this.library, dep, dep, this.imports)
                 collectDeclDependencies(this.library, dep, this.imports)
             }
         }

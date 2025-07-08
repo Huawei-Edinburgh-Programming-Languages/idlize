@@ -140,7 +140,7 @@ class DeserializeCallbacksVisitor {
         }
 
         if (this.writer.language === Language.TS || this.writer.language === Language.ARKTS) {
-            collectDeclItself(this.library, idl.createReferenceType("CallbackKind"), this.imports)
+            collectDeclItself(this.library, idl.createReferenceType("CallbackKind"), idl.createReferenceType("CallbackKind"), this.imports)
             this.imports.addFeatures(["int32", "float32", "int64"], "@koalaui/common")
             this.imports.addFeatures([
                 "ResourceHolder", "KInt", "KStringPtr", "wrapSystemCallback",
@@ -156,7 +156,8 @@ class DeserializeCallbacksVisitor {
             }
 
             for (const callback of collectUniqueCallbacks(this.library, { transformCallbacks: true })) {
-                collectDeclItself(this.library, callback, this.imports)
+                // TBD: make a separate module for callbacks to use them from other modules
+                collectDeclItself(this.library, callback, callback, this.imports)
                 collectDeclDependencies(this.library, callback, this.imports, { expandTypedefs: true })
             }
             if (this.writer.language === Language.TS && this.library.name !== 'arkoala') {
@@ -167,7 +168,8 @@ class DeserializeCallbacksVisitor {
         }
 
         if (this.writer.language === Language.ARKTS) {
-            collectDeclItself(this.library, idl.createReferenceType("TypeChecker"), this.imports)
+            // TBD: May be unnecessary TypeChecker import
+            collectDeclItself(this.library, idl.createReferenceType("TypeChecker"), idl.createReferenceType("TypeChecker"), this.imports)
         }
     }
 

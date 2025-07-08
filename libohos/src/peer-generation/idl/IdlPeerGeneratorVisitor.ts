@@ -435,16 +435,6 @@ export function getUniquePropertiesFromSuperTypes(declaration: idl.IDLInterface,
     return result
 }
 
-export function convertTypeToFeature(library: PeerLibrary, type: idl.IDLType): ImportFeature | undefined {
-    const typeReference = idl.isReferenceType(type)
-        ? library.resolveTypeReference(type)
-        : undefined
-    if (typeReference !== undefined) {
-        return convertDeclToFeature(library, typeReference)
-    }
-    return undefined
-}
-
 // function initCustomBuilderClasses(library: PeerLibrary) {
 //     function builderMethod(name: string, type: idl.IDLType): Method {
 //         return new Method(name, new NamedMethodSignature(idl.IDLThisType, [type], ["value"]))

@@ -98,7 +98,7 @@ class SerializerPrinter {
             if (idl.isReferenceType(type)) {
                 const resolved = this.library.resolveTypeReference(type)
                 if (resolved) {
-                    collectDeclItself(this.library, type, imports)
+                    collectDeclItself(this.library, target, type, imports)
                 }
             }
 
@@ -129,7 +129,7 @@ class SerializerPrinter {
     }
     private generateExternalTypeBodySerializer(target: idl.IDLInterface, writer: LanguageWriter, imports:ImportsCollector) {
         this.declareSerializer(writer)
-        collectDeclItself(this.library, target, imports)
+        collectDeclItself(this.library, target, target, imports)
         const valueExpr = writer.makeString("value")
         let peerExpr: LanguageExpression
         const extractor = `extractors.${getExtractorName(target, writer.language)}`
@@ -204,7 +204,7 @@ class SerializerPrinter {
                 if (idl.isReferenceType(type)) {
                     const resolved = this.library.resolveTypeReference(type)
                     if (resolved) {
-                        collectDeclItself(this.library, type, imports)
+                        collectDeclItself(this.library, target, type, imports)
                     }
                 }
                 let typeConvertor = this.library.typeConvertor(`value`, type, it.isOptional)
@@ -294,7 +294,7 @@ class SerializerPrinter {
         const writer = this.library.createLanguageWriter(this.language)
         const imports = new ImportsCollector()
 
-        collectDeclItself(this.library, target, imports)
+        collectDeclItself(this.library, target, target, imports)
 
         printSerializerImports(this.library, this.language, imports)
 
@@ -412,7 +412,8 @@ export function printSerializerImports(library: PeerLibrary, language: Language,
             collector.addFeature('Finalizable', '@koalaui/interop')
             collector.addFeatures(["NativeBuffer"], "@koalaui/interop")
         } else {
-            collectDeclItself(library, idl.createReferenceType("TypeChecker"), collector)
+            // TBD: use a separate module for the type checker
+            collectDeclItself(library, idl.createReferenceType("TypeChecker"), idl.createReferenceType("TypeChecker"), collector)
             collector.addFeatures(["KUint8ArrayPtr", "NativeBuffer", "InteropNativeModule"], "@koalaui/interop")
         }
     }

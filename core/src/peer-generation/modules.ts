@@ -9,6 +9,10 @@ export function isInModule(nodeOrPackage: idl.IDLNode | string, module: ModuleCo
     return module.packages.some(modulePackage => nodeOrPackage.startsWith(modulePackage))
 }
 
+export function isInTheSameModule(node1: idl.IDLNode, node2: idl.IDLNode, ): boolean {
+    return isInModule(node2, getModuleFor(node1))
+}
+
 export function getModuleFor(node: idl.IDLNode): ModuleConfiguration
 export function getModuleFor(packageName: string): ModuleConfiguration
 export function getModuleFor(nodeOrPackage: idl.IDLNode | string): ModuleConfiguration {

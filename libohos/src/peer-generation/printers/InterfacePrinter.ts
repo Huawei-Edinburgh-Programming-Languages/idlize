@@ -595,7 +595,7 @@ export class TSInterfacesVisitor implements InterfacesVisitor {
             if (this.shouldNotPrint(entry)) {
                 return
             }
-            const module = convertDeclToFeature(this.peerLibrary, entry).module
+            const module = convertDeclToFeature(this.peerLibrary, entry, entry).module
             if (!moduleToEntries.has(module))
                 moduleToEntries.set(module, [])
             if (moduleToEntries.get(module)!.some(it => idl.isEqualByQualifedName(it, entry, "namespace.name")))
@@ -1077,7 +1077,7 @@ export class ArkTSInterfacesVisitor implements InterfacesVisitor {
             if (this.shouldNotPrint(entry)) {
                 return
             }
-            const module = convertDeclToFeature(this.peerLibrary, entry).module
+            const module = convertDeclToFeature(this.peerLibrary, entry, entry).module
             if (!moduleToEntries.has(module))
                 moduleToEntries.set(module, [])
             if (moduleToEntries.get(module)!.some(it => idl.isEqualByQualifedName(it, entry)))
@@ -1158,7 +1158,7 @@ export class CJInterfacesVisitor implements InterfacesVisitor {
             if (this.shouldNotPrint(entry)) {
                 return
             }
-            const module = convertDeclToFeature(this.peerLibrary, entry).module
+            const module = convertDeclToFeature(this.peerLibrary, entry, entry).module
             if (!moduleToEntries.has(module))
                 moduleToEntries.set(module, [])
             if (moduleToEntries.get(module)!.some(it => idl.isEqualByQualifedName(it, entry, "namespace.name")))
@@ -1503,7 +1503,7 @@ export class KotlinInterfacesVisitor implements InterfacesVisitor {
             if (this.shouldNotPrint(entry)) {
                 return
             }
-            const module = convertDeclToFeature(this.peerLibrary, entry).module
+            const module = convertDeclToFeature(this.peerLibrary, entry, entry).module
             if (!moduleToEntries.has(module))
                 moduleToEntries.set(module, [])
             if (moduleToEntries.get(module)!.some(it => idl.isEqualByQualifedName(it, entry, "namespace.name")))

@@ -111,9 +111,9 @@ class PeerFileVisitor {
         }
 
         if (this.library.language === Language.TS || this.library.language === Language.ARKTS) {
-            collectDeclItself(this.library, idl.createReferenceType("CallbackKind"), imports)
+            collectDeclItself(this.library, idl.createReferenceType("CallbackKind"), idl.createReferenceType("CallbackKind"), imports)
             imports.addFeature('CallbackTransformer', './CallbackTransformer')
-            collectDeclItself(this.library, idl.createReferenceType(NativeModule.Generated.name), imports)
+            collectDeclItself(this.library, idl.createReferenceType(NativeModule.Generated.name), idl.createReferenceType(NativeModule.Generated.name), imports)
 
             const hookMethods = generatorConfiguration().hooks.get(peer.componentName)
             if (hookMethods) {

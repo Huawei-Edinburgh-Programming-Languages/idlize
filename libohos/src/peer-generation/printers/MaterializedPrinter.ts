@@ -483,7 +483,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
         })
         this.clazz.fields.forEach(field => {
             if (idl.isReferenceType(field.field.type)) {
-                collectDeclItself(this.library, field.field.type, imports, {
+                collectDeclItself(this.library, decl, field.field.type, imports, {
                     includeMaterializedInternals: true,
                     includeTransformedCallbacks: true
                 })
@@ -508,7 +508,7 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
         ], '@koalaui/interop')
         this.collector.addFeatures(['MaterializedBase'], '@koalaui/interop')
         this.collector.addFeatures(['unsafeCast'], '@koalaui/common')
-        collectDeclItself(this.library, idl.createReferenceType("CallbackKind"), this.collector)
+        collectDeclItself(this.library, idl.createReferenceType("CallbackKind"), idl.createReferenceType("CallbackKind"), this.collector)
         this.collector.addFeatures(['int32', 'int64', 'float32'], '@koalaui/common')
         this.collector.addFeatures(['NativeBuffer'], '@koalaui/interop')
         if (this.library.language === Language.ARKTS) {
@@ -531,7 +531,8 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             this.collector.addFeature("extractors", handwrittenPackage)
         }
         // specific runtime dependencies
-        collectDeclItself(this.library, idl.createReferenceType(NativeModule.Generated.name), this.collector)
+        // TBD
+        collectDeclItself(this.library, idl.createReferenceType(NativeModule.Generated.name), idl.createReferenceType(NativeModule.Generated.name), this.collector)
         if (this.library.name === 'arkoala') {
             this.collector.addFeatures(['CallbackTransformer'], './CallbackTransformer')
             if (this.library.language === Language.TS) {
@@ -646,7 +647,8 @@ class JavaMaterializedFileVisitor extends MaterializedFileVisitorBase {
 class ArkTSMaterializedFileVisitor extends TSMaterializedFileVisitor {
     protected collectImports(imports: ImportsCollector): void {
         super.collectImports(imports)
-        collectDeclItself(this.library, idl.createReferenceType("TypeChecker"), this.collector)
+        // TBD: May be unnecessary TypeChecker import
+        collectDeclItself(this.library, idl.createReferenceType("TypeChecker"), idl.createReferenceType("TypeChecker"), this.collector)
     }
 
     convertToPropertyType(field: MaterializedField): IDLType {

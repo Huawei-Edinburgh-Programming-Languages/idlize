@@ -118,8 +118,8 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
         imports.addFeatures(['int32', 'float32'], '@koalaui/common')
         imports.addFeatures(["KStringPtr", "KBoolean"], "@koalaui/interop")
         imports.addFeature('UICommonBase', './handwritten')
-        collectDeclItself(this.library, idl.createReferenceType(getReferenceTo('AttributeModifier')), imports)
-        collectDeclItself(this.library, idl.createReferenceType(getReferenceTo('AttributeUpdater')), imports)
+        collectDeclItself(this.library, idl.createReferenceType(getReferenceTo('AttributeModifier')), idl.createReferenceType(getReferenceTo('AttributeModifier')), imports)
+        collectDeclItself(this.library, idl.createReferenceType(getReferenceTo('AttributeUpdater')), idl.createReferenceType(getReferenceTo('AttributeUpdater')), imports)
         if (!this.options.isDeclared) {
             imports.addFeatures(["RuntimeType", "runtimeType"], "@koalaui/interop")
             imports.addFeatures(["NodeAttach", "remember"], "@koalaui/runtime")

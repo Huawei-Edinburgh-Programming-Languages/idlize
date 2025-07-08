@@ -32,7 +32,7 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
     )
 
     const peerImports = new ImportsCollector()
-    collectDeclItself(library, idl.createReferenceType(NativeModule.Generated.name), peerImports)
+    collectDeclItself(library, idl.createReferenceType(NativeModule.Generated.name), idl.createReferenceType(NativeModule.Generated.name), peerImports)
     const peerMethodWriter = library.createLanguageWriter()
 
     const printed = library.globals.flatMap(scope => {
@@ -49,7 +49,8 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
                     if (idl.isReferenceType(type)) {
                         const decl = library.resolveTypeReference(type)
                         if (decl) {
-                            collectDeclItself(library, decl, peerImports)
+                            // TBD: define right global scope source declaration
+                            collectDeclItself(library, realizationHolder, decl, peerImports)
                             collectDeclDependencies(library, decl, peerImports)
                         }
                     }
@@ -177,7 +178,7 @@ function fillPeerImports(collector: ImportsCollector, library: PeerLibrary) {
         'toPeerPtr',
     ], '@koalaui/interop')
     collector.addFeature('unsafeCast', '@koalaui/common')
-    collectDeclItself(library, idl.createReferenceType('CallbackKind'), collector)
+    collectDeclItself(library, idl.createReferenceType('CallbackKind'), idl.createReferenceType('CallbackKind'), collector)
     if (library.language === idl.Language.ARKTS) {
         collector.addFeature('NativeBuffer', '@koalaui/interop')
         importTypeChecker(library, collector)
@@ -185,7 +186,7 @@ function fillPeerImports(collector: ImportsCollector, library: PeerLibrary) {
     if (library.language === idl.Language.TS) {
         collector.addFeature('isInstanceOf', '@koalaui/interop')
     }
-    collectDeclItself(library, idl.createReferenceType(NativeModule.Generated.name), collector)
+    collectDeclItself(library, idl.createReferenceType(NativeModule.Generated.name), idl.createReferenceType(NativeModule.Generated.name), collector)
     if (library.name === 'arkoala') {
         collector.addFeature('CallbackTransformer', './CallbackTransformer')
     }

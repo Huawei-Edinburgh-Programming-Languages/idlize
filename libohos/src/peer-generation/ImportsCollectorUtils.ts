@@ -14,19 +14,19 @@
  */
 
 import * as idl from "@idlizer/core/idl"
-import { createFeatureNameConvertor, Language, convertDeclaration, LayoutNodeRole, isStaticMaterialized, lib, isExternalType, getExternalTypePackage, isInMainModule } from "@idlizer/core"
+import { createFeatureNameConvertor, Language, convertDeclaration, LayoutNodeRole, isStaticMaterialized, lib, isExternalType, getExternalTypePackage, isInTheSameModule } from "@idlizer/core"
 import { ImportFeature, ImportsCollector } from "./ImportsCollector"
 import { createDependenciesCollector, ArkTSInterfaceDependenciesCollector } from "./idl/IdlDependenciesCollector"
 import { getInternalClassName, isBuilderClass, isMaterialized, PeerLibrary, maybeTransformManagedCallback } from "@idlizer/core"
 
-export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | idl.IDLReferenceType): ImportFeature {
+export function convertDeclToFeature(library: PeerLibrary, source: idl.IDLNode, node: idl.IDLEntry | idl.IDLReferenceType): ImportFeature {
     const featureNameConvertor = createFeatureNameConvertor(library.language)
     if (idl.isReferenceType(node)) {
         const decl = library.resolveTypeReference(node)
         if (!decl) {
             throw new Error(`Expected to have an entry: ${node.name}`)
         }
-        return convertDeclToFeature(library, decl)
+        return convertDeclToFeature(library, source, decl)
     }
 
     // TBD: use modules for external types handling
@@ -40,11 +40,9 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | 
         }
     }
 
-    if (idl.isInterface(node)) {
-        // node from external module
-        if (!isInMainModule(node)) {
-            return { feature: node.name, module: `@${idl.getPackageName(node)}` }
-        }
+    if (!isInTheSameModule(source, node)) {
+        // TBD: Use module name
+        return { feature: node.name, module: `@${idl.getPackageName(node)}` }
     }
 
     let feature = convertDeclaration(featureNameConvertor, node)
@@ -65,6 +63,7 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | 
 
 export function collectDeclItself(
     library: PeerLibrary,
+    source: idl.IDLNode,
     node: idl.IDLEntry | idl.IDLReferenceType,
     emitter: ImportsCollector | ((entry: idl.IDLEntry | idl.IDLReferenceType) => void),
     options?: {
@@ -93,7 +92,7 @@ export function collectDeclItself(
             ) {
             return
         }
-        const feature = convertDeclToFeature(library, node)
+        const feature = convertDeclToFeature(library, source, node)
         emitter.addFeature(feature.feature, feature.module)
         if (options?.includeMaterializedInternals) {
             if (idl.isInterface(node) && isMaterialized(node, library) && !isBuilderClass(node) && !isStaticMaterialized(node, library)) {
@@ -109,7 +108,7 @@ export function collectDeclItself(
             if (idl.isCallback(node)) {
                 const maybeTransformed = maybeTransformManagedCallback(node, library)
                 if (maybeTransformed)
-                    collectDeclItself(library, maybeTransformed, emitter, options)
+                    collectDeclItself(library, source, maybeTransformed, emitter, options)
             }
         }
     } else {
@@ -141,7 +140,7 @@ export function collectDeclDependencies(
         }
     }
     for (const dep of deps) {
-        collectDeclItself(library, dep, emitter, {
+        collectDeclItself(library, node, dep, emitter, {
             includeMaterializedInternals: options?.includeMaterializedInternals,
             includeTransformedCallbacks: options?.includeTransformedCallbacks,
         })
