@@ -88,9 +88,9 @@
 
 | common_method_modifier.cpp | |
 
-| common_shape_accessor.cpp | |
+| common_shape_accessor.cpp | Evstigneev Roman |
 
-| common_shape_method_modifier.cpp | |
+| common_shape_method_modifier.cpp | Evstigneev Roman |
 
 | component_content_accessor.cpp | |
 
@@ -413,9 +413,9 @@
 
 | pulse_symbol_effect_accessor.cpp | |
 
-| qr_code_modifier.cpp | |
+| qr_code_modifier.cpp | Evstigneev Roman |
 
-| radio_modifier.cpp | |
+| radio_modifier.cpp | Evstigneev Roman |
 
 | rating_modifier.cpp | |
 
