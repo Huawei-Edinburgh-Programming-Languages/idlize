@@ -10,7 +10,7 @@
 |*Button*| |
 |*Calendar*| |
 |*CalendarPicker*| |
-|*Canvas*| |
+|*Canvas*| Vadim Voronov |
 |*Checkbox*| |
 |*CheckboxGroup*| |
 |*Circle*| |
@@ -148,18 +148,18 @@
 |*ScrollMotion*| |
 |*CalendarController*| |
 |*CalendarPickerDialog*| |
-|*CanvasGradient*| |
-|*CanvasPath*| |
-|*Path2D*| |
+|*CanvasGradient*|  Vadim Voronov  |
+|*CanvasPath*|  Vadim Voronov  |
+|*Path2D*|  Vadim Voronov  |
 |*CanvasPattern*| |
 |*ImageBitmap*| |
 |*ImageData*| |
 |*RenderingContextSettings*| |
-|*CanvasRenderer*| |
-|*CanvasRenderingContext2D*| |
-|*OffscreenCanvasRenderingContext2D*| |
-|*OffscreenCanvas*| |
-|*DrawingRenderingContext*| |
+|*CanvasRenderer*|  Vadim Voronov  |
+|*CanvasRenderingContext2D*|  Vadim Voronov  |
+|*OffscreenCanvasRenderingContext2D*|  Vadim Voronov  |
+|*OffscreenCanvas*|  Vadim Voronov  |
+|*DrawingRenderingContext*|  Vadim Voronov  |
 |*ICurve*| |
 |*DrawModifier*| |
 |*TransitionEffect*| |
@@ -206,7 +206,7 @@
 |*PanRecognizer*| |
 |*ImageAnalyzerController*| |
 |*ListScroller*| |
-|*Matrix2D*| |
+|*Matrix2D*|  Vadim Voronov  |
 |*NavDestinationContext*| |
 |*NavPathInfo*| |
 |*NavPathStack*| |
