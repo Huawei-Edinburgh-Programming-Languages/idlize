@@ -203,7 +203,7 @@
 
 | global_scope_ohos_arkui_component_snapshot_accessor.cpp | |
 
-| global_scope_ohos_arkui_performance_monitor_accessor.cpp | |
+| global_scope_ohos_arkui_performance_monitor_accessor.cpp | Vadim Voronov  |
 
 | global_scope_ohos_font_accessor.cpp | |
 
@@ -227,13 +227,13 @@
 
 | i_curve_accessor.cpp | |
 
-| image_analyzer_controller_accessor.cpp | |
+| image_analyzer_controller_accessor.cpp | Vadim Voronov |
 
 | image_animator_modifier.cpp | |
 
 | image_attachment_accessor.cpp | |
 
-| image_bitmap_accessor.cpp | |
+| image_bitmap_accessor.cpp | Vadim Voronov  |
 
 | image_data_accessor.cpp | |
 
@@ -349,9 +349,9 @@
 
 | node_content_accessor.cpp | |
 
-| offscreen_canvas_accessor.cpp | |
+| offscreen_canvas_accessor.cpp | Vadim Voronov |
 
-| offscreen_canvas_rendering_context2d_accessor.cpp | |
+| offscreen_canvas_rendering_context2d_accessor.cpp | Vadim Voronov  |
 
 | page_life_cycle_accessor.cpp | Politov Mikhail |
 
@@ -431,7 +431,7 @@
 
 | remote_window_modifier.cpp | |
 
-| rendering_context_settings_accessor.cpp | |
+| rendering_context_settings_accessor.cpp | Vadim Voronov |
 
 | render_node_accessor.cpp | |
 
