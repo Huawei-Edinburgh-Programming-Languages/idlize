@@ -353,21 +353,21 @@
 
 | offscreen_canvas_rendering_context2d_accessor.cpp | |
 
-| page_life_cycle_accessor.cpp | |
+| page_life_cycle_accessor.cpp | Politov Mikhail |
 
-| pan_gesture_event_accessor.cpp | |
+| pan_gesture_event_accessor.cpp | Politov Mikhail |
 
-| pan_gesture_interface_accessor.cpp | |
+| pan_gesture_interface_accessor.cpp | Politov Mikhail |
 
-| pan_gesture_options_accessor.cpp | |
+| pan_gesture_options_accessor.cpp | Politov Mikhail |
 
-| pan_recognizer_accessor.cpp | |
+| pan_recognizer_accessor.cpp | Politov Mikhail |
 
-| paragraph_accessor.cpp | |
+| paragraph_accessor.cpp | Politov Mikhail |
 
-| paragraph_builder_accessor.cpp | |
+| paragraph_builder_accessor.cpp | Politov Mikhail |
 
-| paragraph_style_accessor.cpp | |
+| paragraph_style_accessor.cpp | Politov Mikhail |
 
 | paste_button_modifier.cpp | |
 
