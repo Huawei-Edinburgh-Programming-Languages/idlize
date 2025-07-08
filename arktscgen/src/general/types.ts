@@ -174,6 +174,7 @@ export class InteropConvertor extends core.CppInteropArgConvertor {
             case core.IDLF32Type: return "KFloat"
             case core.IDLF16Type: return "short float"
             case core.IDLVoidType: return "void"
+            case core.IDLBooleanType: return 'KBoolean'
             default:
         }
         return super.convertPrimitiveType(type)

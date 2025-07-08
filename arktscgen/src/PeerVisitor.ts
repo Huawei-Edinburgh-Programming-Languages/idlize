@@ -1,12 +1,14 @@
 import * as core from "@idlizer/core"
 import * as path from "node:path"
 import { readFileSync } from "node:fs";
-import { Declarations, Visitor } from "./Visitor"
-import { PeerGenerator } from "./PeerGenerator";
 import { Config } from "./general/Config"
-import { Body, ImporterResolverProxy, InteropConvertor, Resolver, SimpleConverter } from "./general/types"
+import { Visitor } from "./Visitor"
+import { PeerGenerator } from "./PeerGenerator";
 import { FactoryGenerator } from "./FactoryGenerator";
 import { BridgesGenerator } from "./BridgesGenerator";
+import { Body, ImporterResolverProxy, InteropConvertor, Resolver, SimpleConverter } from "./general/types"
+import { BindingsConstructions } from "./constuctions/BindingsConstructions";
+import { fixEnumPrefix, isCreateOrUpdate, splitCreateOrUpdate } from "./general/common";
 
 export class PeerVisitor extends Visitor {
     constructor(
@@ -25,9 +27,11 @@ export class PeerVisitor extends Visitor {
         const allowed = ['VariableDeclaration', 'NumberLiteral', 'Identifier']
         if (!allowed.includes(node.name)) return false
 
-        // Native bridges generation
+        // Native bridges & bindings generation
 
         this.writeBridges(node)
+        this.writeBindings(node)
+        this.writeIndex(node)
 
         // Peer & co generation
 
@@ -46,25 +50,49 @@ export class PeerVisitor extends Visitor {
         )
 
         peerGenerator.writeClass(node, writer, (body: Body) => {
-            // factory.ts
             this.writeFactoryCreateImpl(node, body, this.factoryWriter)
-            this.writeIndexFile(node, body)
         })
-        this.writeFile(`src/generated/peers/${node.name}`, writer, 'peer.ts', importer)
+        //this.writeFile(`src/generated/peers/${node.name}`, writer, 'peer.ts', importer)
 
         return false
     }
 
+   override onEnterEnum(node: core.IDLEnum): boolean {
+       this.writeEnum(node)
+       return false
+   }
+
     override onDone(_: core.IDLFile): void {
-        this.writeFile('src/generated/factory.ts', this.factoryWriter, undefined, this.factoryImporter)
-        this.writeFile('src/generated/bridges.cc', this.bridgesWriter)
+        //this.writeFile('src/generated/factory.ts', this.factoryWriter, undefined, this.factoryImporter)
+        //this.writeFile('src/generated/bridges.cc', this.bridgesWriter)
+        this.writeFile('src/generated/Es2pandaNativeModule.ts', this.bindingsWriter)
+        //this.writeFile('src/generated/index.ts', this.indexContent)
+        this.writeFile('src/generated/Es2pandaEnums.ts', this.enumsWriter)
    }
 
     private writeFactoryCreateImpl(iface: core.IDLInterface, body: Body, writer: core.LanguageWriter): void {
         FactoryGenerator.write(iface, body, writer, this.converter)
     }
 
-    private writeIndexFile(iface: core.IDLInterface, body: Body): void {
+    private writeIndex(iface: core.IDLInterface): void {
+        this.indexContent.push(`export * from "./peers/${iface}.name}"`)
+    }
+
+    private writeEnum(node: core.IDLEnum): void {
+        const writer = this.enumsWriter
+        writer.writeEnum(fixEnumPrefix(node.name),
+            node.elements.map(elem => {
+                if (typeof elem.initializer !== 'number') {
+                    core.throwException(`unexpected initializer value: ${elem.initializer}`)
+                }
+                return { name: elem.name,
+                    stringId: undefined,
+                    numberId: elem.initializer,
+                }
+            }), {
+                isExport: true
+            }
+        )
     }
 
     private writeBridges(iface: core.IDLInterface): void {
@@ -82,7 +110,28 @@ export class PeerVisitor extends Visitor {
         this.bridgesGenerator.write(iface, body, this.bridgesWriter)
     }
 
-    private writeFile( relativeFilePath: string, writer: core.LanguageWriter, templateName_?: string, importer?: ImporterResolverProxy,
+    private writeBindings(iface: core.IDLInterface): void {
+        const writer = this.bindingsWriter
+        iface.methods.forEach((m, index) => {
+            const method = PeerGenerator.makeMethod(m)
+            if (isCreateOrUpdate(m.name)) {
+                const parts = splitCreateOrUpdate(m.name)
+                method.name = `_${parts.createOrUpdate}${iface.name}${parts.rest}`
+            } else {
+                method.name = `_${iface.name}${m.name}`
+                method.signature.args.splice(1, 0, core.createReferenceType(iface.name))
+                method.signature.argNames!.splice(1, 0, 'reciever')
+            }
+            writer.writeMethodImplementation(method, () => {
+                writer.writeExpressionStatement(
+                    writer.makeString(BindingsConstructions.unimplemented)
+                )
+            })
+        })
+    }
+
+    private writeFile(
+        relativeFilePath: string, writer: core.LanguageWriter, templateName_?: string, importer?: ImporterResolverProxy,
         prologue?: string[], epilogue?: string[]): void {
         const filePath = path.join(this.outDir, relativeFilePath)
         const templateName = templateName_ ?? path.basename(relativeFilePath)
@@ -96,7 +145,7 @@ export class PeerVisitor extends Visitor {
             .map(arr => arr.join('\n'))
             .join('\n')
 
-        console.log(`${filePath}\n${template.replaceAll('%GENERATED_PART%', contents)}`);
+        console.log(`${filePath}\n${contents}`);
         // core.forceWriteFile(filePath, template.replaceAll('%GENERATED_PART%', contents))
     }
 
@@ -134,18 +183,10 @@ export class PeerVisitor extends Visitor {
         visitor: this,
     }
 
-    private converter = new SimpleConverter(
-        this.resolver
-    )
+    private converter = new SimpleConverter(this.resolver)
+    private interopConverter = new InteropConvertor(this.resolver)
 
-    private interopConverter = new InteropConvertor(
-        this.resolver
-    )
-
-    private factoryImporter = new ImporterResolverProxy(
-        this.resolver
-    )
-
+    private factoryImporter = new ImporterResolverProxy(this.resolver)
     private factoryWriter = new core.TSLanguageWriter(
         new core.IndentedPrinter(),
         this.factoryImporter,
@@ -162,6 +203,18 @@ export class PeerVisitor extends Visitor {
         this.resolver,
         this.interopConverter,
         this.bridgesGenerator.primitives
+    )
+
+    private bindingsWriter = new core.TSLanguageWriter(
+        new core.IndentedPrinter(),
+        this.resolver,
+        this.interopConverter
+    )
+
+    private enumsWriter = new core.TSLanguageWriter(
+        new core.IndentedPrinter(),
+        this.resolver,
+        this.converter
     )
 
     private indexContent: string[] = []

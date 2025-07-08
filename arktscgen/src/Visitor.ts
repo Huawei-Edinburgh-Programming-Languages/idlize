@@ -15,6 +15,7 @@ export class Visitor {
 
     onEnterNamespace(node: core.IDLNamespace): boolean { return true }
     onEnterInterface(node: core.IDLInterface): boolean { return true }
+    onEnterEnum(node: core.IDLEnum): boolean { return true }
     onEnterMethodDecl(node: core.IDLMethod): boolean { return true }
     onExitNamespace(node: core.IDLNamespace): void {}
     onDone(node: core.IDLFile): void {}
@@ -59,6 +60,10 @@ export class Visitor {
 
             case core.IDLKind.Enum: {
                 const result = node as core.IDLEnum
+                const shouldVisitChildren = this.onEnterEnum(result);
+                if (shouldVisitChildren) {
+                    result.elements.forEach(n => this.visit(n))
+                }
             } break;
 
             case core.IDLKind.Method: {
