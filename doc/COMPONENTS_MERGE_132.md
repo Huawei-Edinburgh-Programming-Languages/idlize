@@ -68,9 +68,9 @@
 
 | children_main_size_accessor.cpp | |
 
-| circle_modifier.cpp | |
+| circle_modifier.cpp | Evstigneev Roman |
 
-| circle_shape_accessor.cpp | |
+| circle_shape_accessor.cpp | Evstigneev Roman |
 
 | click_event_accessor.cpp | |
 
