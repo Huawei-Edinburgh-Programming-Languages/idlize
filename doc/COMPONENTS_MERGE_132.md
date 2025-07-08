@@ -126,9 +126,9 @@
 
 | disappear_symbol_effect_accessor.cpp | |
 
-| divider_modifier.cpp | |
+| divider_modifier.cpp | Evstigneev Roman |
 
-| drag_event_accessor.cpp | |
+| drag_event_accessor.cpp | Evstigneev Roman |
 
 | drawable_descriptor_accessor.cpp | |
 
