@@ -201,14 +201,46 @@ export function IsItArgumentNameKeyword(value: Token): boolean {
   return g_ArgumentNameKeyword.includes(value);
 }
 
-// Just a part of primitive types... Also we have UnsignedIntegerType and UnrestrictedFloatType
+export function IsItDistinguishableType(value: Token): boolean {
+  return IsItPrimitiveType(value) ||
+         IsItStringType(value) ||
+         value == Token.tId ||
+         value == Token.tSequence ||
+         value == Token.tAsync ||
+         value == Token.tObject ||
+         value == Token.tSymbol ||
+         IsItBufferRelatedType(value) ||
+         value == Token.tFrozenArray ||
+         value == Token.tObservableArray ||
+         value == Token.tRecord ||
+         value == Token.tUndefined;
+}
+
+// Just a part of primitive types...
 let g_PrimitiveType: Token[] = [
-  Token.tBoolean, Token.tByte, Token.tOctet, Token.tBigint,
-  Token.tUnsigned, Token.tShort, Token.tLong  // TODO: check it!
+  Token.tBoolean, Token.tByte, Token.tOctet, Token.tBigint
 ];
 
 export function IsItPrimitiveType(value: Token): boolean {
-  return g_PrimitiveType.includes(value);
+  return IsItUnsignedIntegerType(value) ||
+         IsItUnrestrictedFloatType(value) ||
+         g_PrimitiveType.includes(value);
+}
+
+export function IsItUnsignedIntegerType(value: Token): boolean {
+  return value == Token.tUnsigned || IsItIntegerType(value);
+}
+
+export function IsItIntegerType(value: Token): boolean {
+  return value == Token.tShort || value == Token.tLong;
+}
+
+export function IsItUnrestrictedFloatType(value: Token): boolean {
+  return value == Token.tUnrestricted || IsItFloatType(value);
+}
+
+export function IsItFloatType(value: Token): boolean {
+  return value == Token.tFloat || value == Token.tDouble;
 }
 
 let g_StringType: Token[] = [
@@ -352,12 +384,15 @@ function getTokenInternal(): Token {
 
   // skip comments
   if (c == '/') {
+    console.log("Found start of comment...");
     const c2 = getChar();
     if (c2 == '/') {  // Okay, start of one line comment was found
       do {
         c = getChar();
         console.log("skip ", c);
       } while (c != '\n' && c != '\r' && c != '\0');  // while not EOL and not EOF
+
+      //console.log("Comment(1) finished at char: 0x%s", c.charCodeAt(0).toString(16));
 
       returnChar();  // we use CR LF to calculate strings so we have to return it back
       return Token.tNeedRepeat;
@@ -368,6 +403,7 @@ function getTokenInternal(): Token {
         prev = c; c = getChar();
       } while ( ! (prev == '*' && c == '/') && c != '\0');  // while not "*/" and not EOF
 
+      //console.log("Comment(2) finished at char: 0x%s", c.charCodeAt(0).toString(16));
       return Token.tNeedRepeat;
 
     } else {  // comment not found

@@ -24,6 +24,7 @@ const g_char2token = new Map<string, lex.Token>([
   ["...", lex.Token.tEllipsis],
   ["?", lex.Token.tQuestion],
   ["any", lex.Token.tAny],
+  ["const", lex.Token.tConst],
   ["Id", lex.Token.tId],
   ["or", lex.Token.tOr],
   ["package", lex.Token.tPackage],
@@ -130,7 +131,7 @@ function Definitions(): idl.Definitions {
 function Definition(node: idl.Definitions) {
   let chld: idl.Node | null = null;
   if (g_lookahead == lex.Token.tCallback ||
-      g_lookahead == lex.Token.tMixin) {
+      g_lookahead == lex.Token.tInterface) {
     chld = CallbackOrInterfaceOrMixin();
   } else if (g_lookahead == lex.Token.tNamespace) {
     chld = Namespace();
@@ -160,7 +161,7 @@ function CallbackOrInterfaceOrMixin(): idl.Node | null {
   if (g_lookahead == lex.Token.tCallback) {
     Match(lex.Token.tCallback);
     return CallbackRestOrInterface();
-  } else if (g_lookahead == lex.Token.tMixin) {
+  } else if (g_lookahead == lex.Token.tInterface) {
     Match(lex.Token.tInterface);
     return InterfaceOrMixin();
   } else {
@@ -219,7 +220,10 @@ function PartialInterfaceMembers() {
 }
 
 function PartialInterfaceMember() {
-  Const();
+  if (g_lookahead == lex.Token.tConst) {
+    Const();
+  } else {}
+
   Operation();
   Stringifier();
   StaticMember();
@@ -233,8 +237,11 @@ function PartialInterfaceMember() {
 }
 
 function Inheritance() {
-  Match(lex.Token.tColon); Match(lex.Token.tId);
-  // ε
+  if (g_lookahead == lex.Token.tColon) {
+    Match(lex.Token.tColon); Match(lex.Token.tId);
+  } else {
+    // ε
+  }
 }
 
 function MixinRest() {
@@ -302,7 +309,9 @@ function CallbackInterfaceMember() {
 }
 
 function Const() {
-  Match(lex.Token.tConst); ConstType(); Match(lex.Token.tId); Match(lex.Token.tEqual); ConstValue(); Match(lex.Token.tSemicolon);
+  if (g_lookahead == lex.Token.tConst) {
+    Match(lex.Token.tConst); ConstType(); Match(lex.Token.tId); Match(lex.Token.tEqual); ConstValue(); Match(lex.Token.tSemicolon);
+  }
 }
 
 function ConstValue() {
@@ -591,7 +600,7 @@ function CallbackRest(): idl.Node | null {
   let res: idl.CallbackNode = new idl.CallbackNode(lex.getTokenText());
   Match(lex.Token.tId);
   Match(lex.Token.tEqual);
-  const t = Type();
+  Type();
   Match(lex.Token.tLBracket);
   ArgumentList();
   Match(lex.Token.tRBracket);
