@@ -62,9 +62,9 @@
 
 | canvas_rendering_context2d_accessor.cpp | |
 
-| checkbox_group_modifier.cpp | |
+| checkbox_group_modifier.cpp | Evstingeev Roman |
 
-| checkbox_modifier.cpp | |
+| checkbox_modifier.cpp | Evstigneev Roman |
 
 | children_main_size_accessor.cpp | |
 
