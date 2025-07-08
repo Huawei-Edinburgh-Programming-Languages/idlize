@@ -66,7 +66,7 @@
 
 | checkbox_modifier.cpp | Evstigneev Roman - on review|
 
-| children_main_size_accessor.cpp | Erokhin Ilya |
+| children_main_size_accessor.cpp | Erokhin Ilya - done |
 
 | circle_modifier.cpp | Evstigneev Roman - on review |
 
@@ -92,27 +92,27 @@
 
 | common_shape_method_modifier.cpp | Evstigneev Roman - on review |
 
-| component_content_accessor.cpp | Erokhin Ilya |
+| component_content_accessor.cpp | Erokhin Ilya - done |
 
-| component_root_modifier.cpp | Erokhin Ilya |
+| component_root_modifier.cpp | Erokhin Ilya - done |
 
-| console_message_accessor.cpp | Erokhin Ilya |
+| console_message_accessor.cpp | WEB |
 
-| container_span_modifier.cpp | Erokhin Ilya |
+| container_span_modifier.cpp | Erokhin Ilya - done |
 
-| content_modifier_helper_accessor.cpp | Erokhin Ilya |
+| content_modifier_helper_accessor.cpp | Erokhin Ilya - done |
 
-| context_accessor.cpp | Erokhin Ilya |
+| context_accessor.cpp | Erokhin Ilya - done |
 
-| controller_handler_accessor.cpp | Erokhin Ilya |
+| controller_handler_accessor.cpp | WEB |
 
-| counter_modifier.cpp | Erokhin Ilya |
+| counter_modifier.cpp | Erokhin Ilya - done |
 
-| custom_dialog_controller_accessor.cpp | Erokhin Ilya |
+| custom_dialog_controller_accessor.cpp | Erokhin Ilya - done |
 
-| custom_layout_root_modifier.cpp | |
+| custom_layout_root_modifier.cpp | Erokhin Ilya - done |
 
-| custom_span_accessor.cpp | |
+| custom_span_accessor.cpp | Erokhin Ilya - done |
 
 | data_panel_modifier.cpp | Dudkin Sergey - it compiles and is ok |
 
