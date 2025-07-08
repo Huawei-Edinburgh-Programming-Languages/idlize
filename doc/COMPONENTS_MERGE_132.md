@@ -72,15 +72,15 @@
 
 | circle_shape_accessor.cpp | Evstigneev Roman |
 
-| click_event_accessor.cpp | |
+| click_event_accessor.cpp | Evstigneev Roman |
 
-| client_authentication_handler_accessor.cpp | |
+| client_authentication_handler_accessor.cpp | Evstigneev Roman |
 
-| color_content_accessor.cpp | |
+| color_content_accessor.cpp | Evstigneev Roman |
 
-| color_filter_accessor.cpp | |
+| color_filter_accessor.cpp | Evstigneev Roman |
 
-| color_metrics_accessor.cpp | |
+| color_metrics_accessor.cpp | Evstigneev Roman |
 
 | column_modifier.cpp | |
 
