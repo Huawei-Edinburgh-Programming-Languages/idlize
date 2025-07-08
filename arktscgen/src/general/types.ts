@@ -136,3 +136,46 @@ export class ImporterResolverProxy implements Resolver, Importer {
 
     private imports: string[] = []
 }
+
+export class InteropConvertor extends core.CppInteropArgConvertor {
+    constructor(
+        private resolver: Resolver,
+        public undefined = 'UNDEFINED*'
+    ) { super() }
+
+    override convertTypeReference(ref: core.IDLReferenceType): string {
+        const type = this.resolver.resolveTypeReference(ref)
+        if (!type) {
+           throw `Unresolved reference: ${ref.name}!`
+        } else if (core.isInterface(type)) {
+           return `KNativePointer`
+        } else if (core.isEnum(type)) {
+           return `KInt`
+        }
+        return this.undefined
+    }
+
+    override convertContainer(type: core.IDLContainerType): string {
+        if (core.IDLContainerUtils.isSequence(type)) {
+            return `KNativePointerArray`
+        }
+        return this.undefined
+    }
+
+   override convertOptional(type: core.IDLOptionalType): string {
+        return `KNativePointer`
+    }
+
+    override convertPrimitiveType(type: core.IDLPrimitiveType): string {
+        switch (type) {
+            case core.IDLU64Type: return "KULong"
+            case core.IDLU32Type: return "KUInt"
+            case core.IDLF64Type: return "KDouble"
+            case core.IDLF32Type: return "KFloat"
+            case core.IDLF16Type: return "short float"
+            case core.IDLVoidType: return "void"
+            default:
+        }
+        return super.convertPrimitiveType(type)
+    }
+}

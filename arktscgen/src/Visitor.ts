@@ -17,6 +17,7 @@ export class Visitor {
     onEnterInterface(node: core.IDLInterface): boolean { return true }
     onEnterMethodDecl(node: core.IDLMethod): boolean { return true }
     onExitNamespace(node: core.IDLNamespace): void {}
+    onDone(node: core.IDLFile): void {}
 
     visit(node: core.IDLNode): void {
         switch (node.kind) {
@@ -30,6 +31,7 @@ export class Visitor {
                 this.prepare(node)
                 this.namespaces = [['', undefined]];
                 (node as core.IDLFile).entries.forEach(n => this.visit(n))
+                this.onDone(node as core.IDLFile)
                 this.printStatistics()
             } break;
 

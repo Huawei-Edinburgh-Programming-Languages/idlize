@@ -38,31 +38,9 @@ export class PeerGenerator {
     }
 
     private writeBody(iface: core.IDLInterface, writer: core.LanguageWriter, written: (body: Body) => void) {
-        const methodTypes = ['Create', 'Update', 'Getter', 'Regular']
-        const groupFn = (method: core.IDLMethod): string => {
-            const [p1, p2, p3, p4] = methodTypes
-            if (method.name.startsWith(p1)) {
-                return p1
-            } else if (method.name.startsWith(p2)) {
-                return p2
-            }
-            else if (PeerGenerator.isGetter(method)) {
-                return p3
-            }
-            return p4
-        }
-
-        const methods = iface.methods.reduce((acc, method) => {
-            (acc[groupFn(method)] ??= []).push(method)
-            return acc
-        }, {} as Partial<Record<string, core.IDLMethod[]>>);
-
-        // Filter out methods that should not be generated.
-
-        methods.Create = this.ts_collapseOverloads(methods.Create ?? [])
-        methods.Update = this.ts_collapseOverloads(methods.Update ?? [])
-        methods.Getter = this.ts_collapseDuplicates(methods.Getter ?? [])
-        //methods.Regular = this.ts_collapseDuplicates(methods.Regular ?? [])
+        const methods = PeerGenerator.filterOutOverloads(
+            PeerGenerator.splitMethods(iface), this.converter
+        )
 
         // Make declarations. It is IMPORTANT to not modify its signatures here bc
         // we could not generate the correct binding calls.
@@ -70,8 +48,8 @@ export class PeerGenerator {
 
         const params = (method: core.IDLMethod) => {
             // We can make this modifications before generation of binding call bc
-            // they are generated in makeWrapperToNativeType() method. Just not to litter in all
-            // write* methods.
+            // context param is not used and length param is re-injected during generation
+            // of native calls.
             return PeerGenerator.hack_makeNullable(
                 PeerGenerator.ts_removeArrayLengthParam(
                     PeerGenerator.hack_removeContextParam(method.parameters)
@@ -91,12 +69,6 @@ export class PeerGenerator {
                 ?.map(m => PeerGenerator.makeMethod(m, params(m))) ?? [],
         }
 
-        // See variable_declararion_old_vs_new.diff
-        //
-        // TODO: More calls to native *Const methods! It exists filter for that!
-        // TODO: Some parameters are unions (| undefined) or optional,
-        // there is no such flags in idl file for those parameteres. It exists filter for that!
-
         // 1. Writing ctors
 
         this.writeCtorImpl(iface, writer)
@@ -109,11 +81,10 @@ export class PeerGenerator {
 
         // 3. Writing getters and regular
 
-        const inFileOrder = this.ts_collapseDuplicates(
+        const inFileOrder = PeerGenerator.ts_collapseDuplicates(
             iface.methods.filter(m => !isCreateOrUpdate(m.name))
         ).map(m => m.name)
 
-        // FIXME: !!!
         let getIndex = 0, regIndex = 0
         for (const name of inFileOrder) {
             if (name === body.getters[getIndex]?.name) {
@@ -203,7 +174,7 @@ export class PeerGenerator {
                                 writer.makeString(
                                     nodeType(iface)
                                         ?? core.throwException(`missing attribute node type: ${iface.name}`)
-                                ),
+                                )
                             ]
                         )
                     )
@@ -211,9 +182,7 @@ export class PeerGenerator {
                 writer.writeExpressionStatements(
                     writer.makeFunctionCall(
                         PeersConstructions.super,
-                        [
-                            writer.makeString(PeersConstructions.pointerParameter)
-                        ]
+                        [ writer.makeString(PeersConstructions.pointerParameter) ]
                     )
                 )
             }
@@ -226,16 +195,9 @@ export class PeerGenerator {
         // Modify method name and signature (if needed)
         method.name = peerMethod(method.name)
 
-        writer.writeMethodImplementation(
-            method,
-            () => {
-                writer.writeStatement(
-                    writer.makeReturn(
-                        nativeCall
-                    )
-                )
-            }
-        )
+        writer.writeMethodImplementation(method, () => {
+            writer.writeStatement(writer.makeReturn(nativeCall))
+        })
     }
 
     private writeRegularImpl(iface: core.IDLInterface, method: core.Method, writer: core.LanguageWriter): void {
@@ -250,15 +212,9 @@ export class PeerGenerator {
             writer.makeString(`/** @deprecated */`)
         )
         writer.writeMethodImplementation(method, () => {
-            writer.writeExpressionStatement(
-                nativeCall
-            )
+            writer.writeExpressionStatement(nativeCall)
             writer.writeStatement(
-                writer.makeReturn(
-                    writer.makeString(
-                        PeersConstructions.this.name
-                    )
-                )
+                writer.makeReturn(writer.makeString(PeersConstructions.this.name))
             )
         })
     }
@@ -267,22 +223,14 @@ export class PeerGenerator {
         writer.writeFunctionImplementation(
             PeersConstructions.typeGuard.name(iface.name),
             new core.MethodSignature(
-                core.createReferenceType(
-                    PeersConstructions.typeGuard.returnType(iface.name)
-                ),
+                core.createReferenceType(PeersConstructions.typeGuard.returnType(iface.name)),
                 [core.createReferenceType(PeersConstructions.typeGuard.parameter.type)],
-                undefined,
-                undefined,
-                undefined,
+                undefined, undefined, undefined,
                 [PeersConstructions.typeGuard.parameter.name]
             ),
             () => {
                 writer.writeStatement(
-                    writer.makeReturn(
-                        writer.makeString(
-                            PeersConstructions.typeGuard.body(iface.name)
-                        )
-                    )
+                    writer.makeReturn(writer.makeString(PeersConstructions.typeGuard.body(iface.name)))
                 )
             }
         )
@@ -308,7 +256,51 @@ export class PeerGenerator {
         )
     }
 
-    public ts_collapseDuplicates(methods: readonly core.IDLMethod[]): core.IDLMethod[] {
+    public static splitMethods(iface: core.IDLInterface, config?: Config): Record<string, core.IDLMethod[]> {
+        const methodTypes = ['Create', 'Update', 'Getter', 'Regular']
+        const groupFn = (method: core.IDLMethod): string => {
+            const [p1, p2, p3, p4] = methodTypes
+            if (method.name.startsWith(p1)) {
+                return p1
+            } else if (method.name.startsWith(p2)) {
+                return p2
+            }
+            else if (PeerGenerator.isGetter(method)) {
+                return p3
+            }
+            return p4
+        }
+
+        const isIgnored = (method: core.IDLMethod) => false // todo: use config
+        const methods = iface.methods.reduce((acc, method) => {
+            if (isIgnored(method)) {
+                return acc
+            }
+            (acc[groupFn(method)] ??= []).push(method)
+            return acc
+        }, {} as Record<string, core.IDLMethod[]>);
+
+        return methods
+    }
+
+    public static filterOutOverloads(
+        methods: Record<string, core.IDLMethod[]>, converter: core.IdlNameConvertor): Record<string, core.IDLMethod[]> {
+        methods.Create = this.ts_collapseOverloads(methods.Create ?? [], converter)
+        methods.Update = this.ts_collapseOverloads(methods.Update ?? [], converter)
+        methods.Getter = this.ts_collapseDuplicates(methods.Getter ?? [])
+        methods.Regular = methods.Regular ?? []
+
+        //const count = Object.values(methods).reduce((acc, v) => acc + v.length, 0)
+        //console.log(`Methods ${count} out of ${iface.methods.length}`);
+        return methods
+    }
+
+    public static sortInDeclarationOrder(methods: core.Method[], iface: core.IDLInterface): core.Method[] {
+        const names = iface.methods.map(m => m.name)
+        return methods.sort((a,b) => names.indexOf(a.name) - names.indexOf(b.name))
+    }
+
+    public static ts_collapseDuplicates(methods: readonly core.IDLMethod[]): core.IDLMethod[] {
         // Prefer non-const methods for native calls - from old filter.
         const isConst = (str: string) => str.endsWith(Config.constPostfix)
         const nonConst = new Set<string>()
@@ -330,10 +322,10 @@ export class PeerGenerator {
         })
     }
 
-    public ts_collapseOverloads(methods: readonly core.IDLMethod[]): core.IDLMethod[] {
+    public static ts_collapseOverloads(methods: readonly core.IDLMethod[], converter: core.IdlNameConvertor): core.IDLMethod[] {
         const types = new Set<string>();
         return methods.filter((m) => {
-            const str = m.parameters.map(p => this.converter.convert(p.type)).join('+')
+            const str = m.parameters.map(p => converter.convert(p.type)).join('+')
             return !types.has(str) && (types.add(str), true)
         })
     }

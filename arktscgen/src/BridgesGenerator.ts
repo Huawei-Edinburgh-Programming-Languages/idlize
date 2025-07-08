@@ -7,7 +7,8 @@ const Literals = BridgesConstructions;
 
 export class BridgesGenerator {
     constructor(
-        private resolver: Resolver
+        private resolver: Resolver,
+        private converter: core.IdlNameConvertor
     ) {
     }
 
@@ -126,7 +127,7 @@ export class BridgesGenerator {
         iface: core.IDLInterface, method: core.Method,  writer: core.CppLanguageWriter): core.LanguageExpression {
         const isVoid = method.signature.returnType === core.IDLVoidType
         const args = method.signature.args
-            .map(a => this.interopConverter.convert(a))
+            .map(a => this.converter.convert(a))
         return writer.makeString(
             `${Literals.interopMacro(isVoid, args.length)}(${args.join(', ')})`
         )
@@ -149,7 +150,7 @@ export class BridgesGenerator {
                 return `${Literals.astNode}*`
 
          } else if (!core.isReferenceType(ref)) {
-            return this.interopConverter.convert(ref)
+            return this.converter.convert(ref)
         }
 
         const type = this.resolver.resolveTypeReference(ref);
@@ -168,52 +169,8 @@ export class BridgesGenerator {
                 return name
             }
         }
-        return this.interopConverter.undefined
+        return this.primitives.Undefined.getText()
     }
 
-    public readonly interopConverter = new CppConvertor(this.resolver)
     public readonly primitives = new core.PrimitiveTypeList
-}
-
-export class CppConvertor extends core.CppInteropArgConvertor {
-    constructor(
-        private resolver: Resolver,
-        public undefined = 'UNDEFINED*'
-    ) { super() }
-
-    override convertTypeReference(ref: core.IDLReferenceType): string {
-        const type = this.resolver.resolveTypeReference(ref)
-        if (!type) {
-           throw `Unresolved reference: ${ref.name}!`
-        } else if (core.isInterface(type)) {
-           return `KNativePointer`
-        } else if (core.isEnum(type)) {
-           return `KInt`
-        }
-        return this.undefined
-    }
-
-    override convertContainer(type: core.IDLContainerType): string {
-        if (core.IDLContainerUtils.isSequence(type)) {
-            return `KNativePointerArray`
-        }
-        return this.undefined
-    }
-
-   override convertOptional(type: core.IDLOptionalType): string {
-        return `KNativePointer`
-    }
-
-    override convertPrimitiveType(type: core.IDLPrimitiveType): string {
-        switch (type) {
-            case core.IDLU64Type: return "KULong"
-            case core.IDLU32Type: return "KUInt"
-            case core.IDLF64Type: return "KDouble"
-            case core.IDLF32Type: return "KFloat"
-            case core.IDLF16Type: return "short float"
-            case core.IDLVoidType: return "void"
-            default:
-        }
-        return super.convertPrimitiveType(type)
-    }
 }
