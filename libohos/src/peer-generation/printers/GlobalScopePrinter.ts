@@ -77,12 +77,12 @@ export function printGlobal(library: idl.LibraryInterface): PrinterResult[] {
             /* global scope export function */
             LanguageWriter.relativeReferences(true, () => {
                 writer.writeFunctionImplementation(method.name, signature, w => {
-                    const call = w.makeMethodCall(realizationHolder.name, mangledGlobalScopeName(method.methods[0]), method.parameters.map(it => w.makeString(it.name)))
+                    const call = w.makeMethodCall(realizationHolder.name, mangledGlobalScopeName(method.method), method.parameters.map(it => w.makeString(it.name)))
                     const statement = method.returnType !== idl.IDLVoidType
                         ? w.makeReturn(call)
                         : w.makeStatement(call)
                     w.writeStatement(statement)
-                }, method.methods[0].typeParameters)
+                }, method.method.typeParameters)
             })
 
             /* global scope peer serialize function */

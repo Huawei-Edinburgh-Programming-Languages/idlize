@@ -55,6 +55,7 @@ import { OhosInstall } from "./OhosInstall"
 import { generateNativeOhos, suggestLibraryName } from './OhosNativeVisitor';
 import { ohosLayout } from './OhosLayout';
 import { printDataClasses } from './OhosDataClassVisitor';
+import { printComponentClasses } from './OhosComponentVisitor';
 
 function printCallbackChecker(peerLibrary: LibraryInterface): PrinterResult[] {
     const content = peerLibrary.createLanguageWriter(peerLibrary.language)
@@ -100,6 +101,7 @@ export function generateOhos(outDir: string, peerLibrary: LibraryInterface, conf
             createInterfacePrinter(false, false),
             printGlobal,
             printDataClasses,
+            printComponentClasses,
             createSerializerPrinter(peerLibrary.language, ""),
             printCallbackChecker,
             createDeserializeAndCallPrinter(peerLibrary.name, peerLibrary.language),

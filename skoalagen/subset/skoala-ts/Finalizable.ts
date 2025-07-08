@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { pointer,Finalizable as FinalizableBase, NativeThunk } from "@koalaui/interop"
+import { pointer, Finalizable as FinalizableBase, NativeThunk } from "@koalaui/interop"
 import { nativeModule } from "@koalaui/arkoala";
 
 export class NativeThunkImpl extends NativeThunk {

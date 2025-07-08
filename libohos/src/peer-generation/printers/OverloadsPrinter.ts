@@ -200,7 +200,7 @@ export function groupOverloadsIDL<T extends idl.IDLSignature>(methods: T[], lang
 }
 
 interface CollapsedMethod {
-    methods: idl.IDLMethod[]
+    method: idl.IDLMethod
     name: string
     parameters: idl.IDLParameter[]
     returnType: idl.IDLType
@@ -239,7 +239,7 @@ export function collapseSameMethodsIDL(methods:idl.IDLMethod[], language?: Langu
 
         const returnType = collapseReturnTypes(methods.map(it => it.returnType), language)
         return {
-            methods,
+            method: idl.createMethod(methods[0]?.name ?? "", parameters, returnType),
             parameters,
             name: methods[0]?.name ?? throwException('No method to collapse'),
             returnType: returnType
