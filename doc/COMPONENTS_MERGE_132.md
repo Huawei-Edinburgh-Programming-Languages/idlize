@@ -493,11 +493,11 @@
 
 | scroll_result_accessor.cpp | |
 
-| search_controller_accessor.cpp | |
+| search_controller_accessor.cpp | Evstigneev Roman |
 
-| search_modifier.cpp | |
+| search_modifier.cpp | Evstigneev Roman |
 
-| search_ops_accessor.cpp | |
+| search_ops_accessor.cpp | Evstigneev Roman |
 
 | security_component_method_modifier.cpp | |
 
