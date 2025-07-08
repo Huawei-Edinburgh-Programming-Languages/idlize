@@ -26,6 +26,9 @@ const g_char2token = new Map<string, lex.Token>([
   ["any", lex.Token.tAny],
   ["Id", lex.Token.tId],
   ["or", lex.Token.tOr],
+  ["package", lex.Token.tPackage],
+  ["callback", lex.Token.tCallback],
+  ["interface", lex.Token.tInterface],
 ]);
 
 function token2Name(t: lex.Token): string {
@@ -37,6 +40,10 @@ function token2Name(t: lex.Token): string {
   });
 
   return res;
+}
+
+function q(s: string) {
+  return "\'" + s + "\'";
 }
 
 function Match(tArg: lex.Token | string) {
@@ -55,13 +62,13 @@ function Match(tArg: lex.Token | string) {
   }
 
   if (g_lookahead == tok) {
-     console.log("Match ok: " + tok + tok_name);
+     console.log("Match ok: " + tok + tok_name + " " + q(token2Name(tok)));
      g_lookahead = lex.getToken();
      console.log("new:  " + g_lookahead);
   } else {
     let msg: string = "Match Error. Waiting for: " +
-                      tok + "(\'" + token2Name(tok) + "\')" + ", but got " +
-                      g_lookahead + "(\'" + token2Name(g_lookahead) + "\')";
+                      tok + " " + q(token2Name(tok)) + ", but got " +
+                      g_lookahead + " " + q(token2Name(g_lookahead));
 
     msg += " at pos: (" + lex.getCol() + ", " + lex.getRow() + ")\n";
     msg += lex.getLastLine() + "\n";
@@ -73,8 +80,14 @@ function Match(tArg: lex.Token | string) {
 
 export function Parse(): idl.Definitions | null {
   const idl: string =
-`package arkui.component.idlize; /* test */
-callback Callback_Extender_OnProgress = void (f32 value);`
+`package arkui.component.idlize;
+/* test */
+callback Callback_Extender_OnProgress = void (f32 value);
+interface Content {};
+interface Callback {
+    attribute Colors colors;
+    void invoke(T data);
+};`
 //import arkui.component.common;
   console.log("Try to parse:");
   console.log(idl);
@@ -108,9 +121,10 @@ function Definitions(): idl.Definitions {
       ExtendedAttributeList();
 
     let node: idl.Node | null = Definition();
-    if (node)
+    if (node) {
+      console.log("Node type:", typeof node);
       res.nodes.push(node);
-    else
+    } else
       console.log("Node is null");
   } while (g_lookahead != lex.Token.tEnd);
   //Definitions();
@@ -137,7 +151,7 @@ function Definition(): idl.Node | null {
   else if (g_lookahead == lex.Token.tPackage)
     return Package();
   else {
-    let txt = "Got unexpected token: " + g_lookahead;
+    let txt = "Got unexpected token: " + g_lookahead + " " + q(token2Name(g_lookahead));
     console.log(txt);
     throw new Error(txt);
   }
