@@ -1,24 +1,24 @@
 | File | Owner |
 
-| accessibility_hover_event_accessor.cpp | Erokhin Ilya |
+| accessibility_hover_event_accessor.cpp | Erokhin Ilya - done |
 
-| all_modifiers.cpp | Erokhin Ilya |
+| all_modifiers.cpp | Erokhin Ilya - should be generated |
 
-| alphabet_indexer_modifier.cpp | Erokhin Ilya |
+| alphabet_indexer_modifier.cpp | Erokhin Ilya - done |
 
-| animation_extender_accessor.cpp | Erokhin Ilya |
+| animation_extender_accessor.cpp | Erokhin Ilya - done |
 
-| animator_modifier.cpp | Erokhin Ilya |
+| animator_modifier.cpp | Erokhin Ilya - done |
 
-| appear_symbol_effect_accessor.cpp | Erokhin Ilya |
+| appear_symbol_effect_accessor.cpp | Erokhin Ilya - done |
 
-| axis_event_accessor.cpp | Erokhin Ilya |
+| axis_event_accessor.cpp | Erokhin Ilya - done |
 
-| background_color_style_accessor.cpp | Erokhin Ilya |
+| background_color_style_accessor.cpp | Erokhin Ilya - done |
 
-| badge_modifier.cpp | Erokhin Ilya |
+| badge_modifier.cpp | Erokhin Ilya - done |
 
-| base_context_accessor.cpp | Erokhin Ilya |
+| base_context_accessor.cpp | Erokhin Ilya - done |
 
 | base_event_accessor.cpp | Sergey Kovalev |
 
@@ -38,25 +38,25 @@
 
 | builder_node_ops_accessor.cpp | Sergey Kovalev |
 
-| button_modifier.cpp | |
+| button_modifier.cpp | Erokhin Ilya |
 
-| calendar_controller_accessor.cpp | |
+| calendar_controller_accessor.cpp | Erokhin Ilya |
 
-| calendar_modifier.cpp | |
+| calendar_modifier.cpp | Erokhin Ilya |
 
-| calendar_picker_dialog_accessor.cpp | |
+| calendar_picker_dialog_accessor.cpp | Erokhin Ilya |
 
-| calendar_picker_modifier.cpp | |
+| calendar_picker_modifier.cpp | Erokhin Ilya |
 
-| canvas_accessor.cpp | |
+| canvas_accessor.cpp | Erokhin Ilya |
 
-| canvas_gradient_accessor.cpp | |
+| canvas_gradient_accessor.cpp | Erokhin Ilya |
 
-| canvas_modifier.cpp | |
+| canvas_modifier.cpp | Erokhin Ilya |
 
-| canvas_path_accessor.cpp | |
+| canvas_path_accessor.cpp | Erokhin Ilya |
 
-| canvas_pattern_accessor.cpp | |
+| canvas_pattern_accessor.cpp | Erokhin Ilya |
 
 | canvas_renderer_accessor.cpp | |
 
