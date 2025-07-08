@@ -114,13 +114,13 @@
 
 | custom_span_accessor.cpp | |
 
-| data_panel_modifier.cpp | |
+| data_panel_modifier.cpp | Dudkin Sergey |
 
-| data_resubmission_handler_accessor.cpp | |
+| data_resubmission_handler_accessor.cpp | Dudkin Sergey |
 
-| date_picker_dialog_accessor.cpp | |
+| date_picker_dialog_accessor.cpp | Dudkin Sergey |
 
-| date_picker_modifier.cpp | |
+| date_picker_modifier.cpp | Dudkin Sergey |
 
 | decoration_style_accessor.cpp | |
 
