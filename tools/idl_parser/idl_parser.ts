@@ -120,41 +120,40 @@ function Definitions(): idl.Definitions {
     if (g_lookahead == lex.Token.tLSqrBracket)
       ExtendedAttributeList();
 
-    let node: idl.Node | null = Definition();
-    if (node) {
-      console.log("Node type:", typeof node);
-      res.nodes.push(node);
-    } else
-      console.log("Node is null");
+    Definition(res);
   } while (g_lookahead != lex.Token.tEnd);
   //Definitions();
   // ε
   return res;
 }
 
-function Definition(): idl.Node | null {
+function Definition(node: idl.Definitions) {
+  let chld: idl.Node | null = null;
   if (g_lookahead == lex.Token.tCallback ||
-      g_lookahead == lex.Token.tMixin)
-    return CallbackOrInterfaceOrMixin();
-  else if (g_lookahead == lex.Token.tNamespace)
-    return Namespace();
-  else if (g_lookahead == lex.Token.tPartial)
-    return Partial();
-  else if (g_lookahead == lex.Token.tDictionary)
-    return Dictionary();
-  else if (g_lookahead == lex.Token.tEnum)
-    return Enum();
-  else if (g_lookahead == lex.Token.tTypedef)
-    return Typedef();
-  else if (g_lookahead == lex.Token.tIncludes)
-    return IncludesStatement();
-  else if (g_lookahead == lex.Token.tPackage)
-    return Package();
-  else {
+      g_lookahead == lex.Token.tMixin) {
+    chld = CallbackOrInterfaceOrMixin();
+  } else if (g_lookahead == lex.Token.tNamespace) {
+    chld = Namespace();
+  } else if (g_lookahead == lex.Token.tPartial) {
+    chld = Partial();
+  } else if (g_lookahead == lex.Token.tDictionary) {
+    chld = Dictionary();
+  } else if (g_lookahead == lex.Token.tEnum) {
+    chld = Enum();
+  } else if (g_lookahead == lex.Token.tTypedef) {
+    chld = Typedef();
+  } else if (g_lookahead == lex.Token.tIncludes) {
+    chld = IncludesStatement();
+  } else if (g_lookahead == lex.Token.tPackage) {
+    chld = Package();
+  } else {
     let txt = "Got unexpected token: " + g_lookahead + " " + q(token2Name(g_lookahead));
     console.log(txt);
     throw new Error(txt);
   }
+
+  if (chld)
+    node.nodes.push(chld);
 }
 
 function CallbackOrInterfaceOrMixin(): idl.Node | null {
@@ -162,25 +161,27 @@ function CallbackOrInterfaceOrMixin(): idl.Node | null {
     Match(lex.Token.tCallback);
     return CallbackRestOrInterface();
   } else if (g_lookahead == lex.Token.tMixin) {
-    Match(lex.Token.tInterface); InterfaceOrMixin();
+    Match(lex.Token.tInterface);
+    return InterfaceOrMixin();
+  } else {
+    return null;
   }
-
-  return null;
 }
 
-function InterfaceOrMixin() {
-  InterfaceRest();
-  MixinRest();
+function InterfaceOrMixin(): idl.Node | null {
+  return InterfaceRest();
+  //MixinRest();  // Not in use yet.
 }
 
-function InterfaceRest() {
+function InterfaceRest(): idl.Node | null {
+  let res: idl.InterfaceNode = new idl.InterfaceNode();
   Match(lex.Token.tId); Inheritance(); Match(lex.Token.tLBrace); InterfaceMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
+  return res;
 }
 
 function Partial(): idl.Node | null {
+  throw new Error("Partial node has not processed yet");
   Match(lex.Token.tPartial); PartialDefinition();
-
-  return null;
 }
 
 function PartialDefinition() {
@@ -191,7 +192,7 @@ function PartialDefinition() {
 
 function PartialInterfaceOrPartialMixin() {
   PartialInterfaceRest();
-  MixinRest();
+  //MixinRest();  // Not in use yet.
 }
 
 function PartialInterfaceRest() {
@@ -255,12 +256,13 @@ function MixinMember() {
 }
 
 function IncludesStatement(): idl.Node | null {
+  let res: idl.IncludesNode = new idl.IncludesNode();
   Match(lex.Token.tId); Match(lex.Token.tIncludes); Match(lex.Token.tId); Match(lex.Token.tSemicolon);
-
-  return null;
+  return res;
 }
 
 function Package(): idl.Node | null {
+  let res: idl.PackageNode = new idl.PackageNode();
   Match(lex.Token.tPackage);
   while (g_lookahead != lex.Token.tEnd) {
     Match(lex.Token.tId);
@@ -269,8 +271,7 @@ function Package(): idl.Node | null {
     Match(lex.Token.tDot);
   }
   Match(lex.Token.tSemicolon);
-
-  return null;
+  return res;
 }
 
 function CallbackRestOrInterface(): idl.Node | null {
@@ -278,19 +279,20 @@ function CallbackRestOrInterface(): idl.Node | null {
     Match(lex.Token.tInterface);
     Match(lex.Token.tId);
     Match(lex.Token.tLBrace);
-    CallbackInterfaceMembers();
+    const res = CallbackInterfaceMembers();
     Match(lex.Token.tRBrace);
     Match(lex.Token.tSemicolon);
-    return null;
+    return res;
   } else {
     return CallbackRest();
   }
 }
 
-function CallbackInterfaceMembers() {
+function CallbackInterfaceMembers(): idl.Node | null {
   if (g_lookahead == lex.Token.tLSqrBracket)
     ExtendedAttributeList();
-  CallbackInterfaceMember(); CallbackInterfaceMembers();
+  CallbackInterfaceMember();
+  return CallbackInterfaceMembers();
   // ε
 }
 
@@ -509,9 +511,10 @@ function SetlikeRest() {
   Match(lex.Token.tSetlike); Match(lex.Token.tLAngle); TypeWithExtendedAttributes(); Match(lex.Token.tRAngle); Match(lex.Token.tSemicolon);
 }
 
-function Namespace() {
+function Namespace(): idl.Node | null {
+  let res: idl.NamespaceNode = new idl.NamespaceNode();
   Match(lex.Token.tNamespace); Match(lex.Token.tId); Match(lex.Token.tLBrace); NamespaceMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
-  return null;
+  return res;
 }
 
 function NamespaceMembers() {
@@ -528,9 +531,9 @@ function NamespaceMember() {
 }
 
 function Dictionary(): idl.Node | null {
+  let res: idl.DictionaryNode = new idl.DictionaryNode();
   Match(lex.Token.tDictionary); Match(lex.Token.tId); Inheritance(); Match(lex.Token.tLBrace); DictionaryMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
-
-  return null;
+  return res;
 }
 
 function DictionaryMembers() {
@@ -562,9 +565,8 @@ function Default() {
 }
 
 function Enum(): idl.Node | null {
-  Match(lex.Token.tEnum); Match(lex.Token.tId); Match(lex.Token.tLBrace); EnumValueList(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
-
-  return null;
+  throw new Error("Enum node has not processed yet");
+  //Match(lex.Token.tEnum); Match(lex.Token.tId); Match(lex.Token.tLBrace); EnumValueList(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
 }
 
 function EnumValueList() {
@@ -589,7 +591,7 @@ function CallbackRest(): idl.Node | null {
   let res: idl.CallbackNode = new idl.CallbackNode(lex.getTokenText());
   Match(lex.Token.tId);
   Match(lex.Token.tEqual);
-  Type();
+  const t = Type();
   Match(lex.Token.tLBracket);
   ArgumentList();
   Match(lex.Token.tRBracket);
@@ -598,9 +600,9 @@ function CallbackRest(): idl.Node | null {
 }
 
 function Typedef(): idl.Node | null {
+  let res: idl.TypedefNode = new idl.TypedefNode();
   Match(lex.Token.tTypedef); TypeWithExtendedAttributes(); Match(lex.Token.tId); Match(lex.Token.tSemicolon);
-
-  return null;
+  return res;
 }
 
 function Type() {

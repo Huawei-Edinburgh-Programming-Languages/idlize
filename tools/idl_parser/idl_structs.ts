@@ -34,7 +34,32 @@ export class CallbackNode extends Node {
   accept(v: NodeVisitor) { v.visitCallback() }
 }
 
+export class DictionaryNode extends Node {
+  name: string = "";
+}
+
+export class IncludesNode extends Node {
+  name: string = "";
+}
+
+export class InterfaceNode extends Node {
+  name: string = "";
+}
+
+export class NamespaceNode extends Node {
+  name: string = "";
+}
+
+export class PackageNode extends Node {
+  name: string = "";
+}
+
+export class TypedefNode extends Node {
+  name: string = "";
+}
+
 export class Definitions {
+  // list of nodes: CallbackNode, InterfaceNode, ...
   nodes: Node[] = [];
 
   accept(v: NodeVisitor) {}
