@@ -299,7 +299,7 @@
 
 | list_scroller_accessor.cpp | Sergey Morozov |
 
-| loading_progress_modifier.cpp | |
+| loading_progress_modifier.cpp | Samarin Sergey |
 
 | long_press_gesture_event_accessor.cpp | |
 
@@ -313,7 +313,7 @@
 
 | matrix2d_accessor.cpp | |
 
-| matrix4_transit_accessor.cpp | |
+| matrix4_transit_accessor.cpp | Samarin Sergey |
 
 | matrix_accessor.cpp | |
 
