@@ -128,7 +128,7 @@
 
 | divider_modifier.cpp | Evstigneev Roman |
 
-| drag_event_accessor.cpp | Evstigneev Roman |
+| drag_event_accessor.cpp | Evstigneev Roman - GetModifierKeyState has wrong generation |
 
 | drawable_descriptor_accessor.cpp | |
 
@@ -643,7 +643,7 @@
 
 | ui_extension_proxy_accessor.cpp | |
 
-| unified_data_accessor.cpp | |
+| unified_data_accessor.cpp | Evstigneev Roman |
 
 | url_style_accessor.cpp | |
 
