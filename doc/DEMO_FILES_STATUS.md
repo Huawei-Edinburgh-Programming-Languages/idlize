@@ -74,7 +74,7 @@
 | CommonOnVisibleAreaChange.test.ets | |
 | CommonOutline.test.ets | |
 | CommonOverlay.test.ets | |
-| CommonParallelGestures.ets | |
+| CommonParallelGestures.ets | Samarin Sergey |
 | CommonPart1.ets | |
 | CommonPart2.ets | |
 | CommonPixelRoundTest.ets | |
