@@ -54,7 +54,8 @@ function processMethodOrCallable(library: PeerLibrary, method: idl.IDLMethod | i
         originalParentName,
         realRetType,
         isCallSignature,
-        new Method(methodName!, signature, getMethodModifiers(method))
+        new Method(methodName!, signature, getMethodModifiers(method)),
+        !isCallSignature,
     )
 }
 
@@ -84,7 +85,8 @@ function processProperty(library: PeerLibrary, prop: idl.IDLProperty, peer: Peer
         originalParentName,
         idl.IDLVoidType,
         false,
-        new Method(prop.name, signature, []))
+        new Method(prop.name, signature, []),
+        true)
 }
 
 function processOptionAttribute(seenAttributes: Set<string>, property: idl.IDLProperty, peer: PeerClass) {
