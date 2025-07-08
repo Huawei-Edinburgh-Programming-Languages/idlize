@@ -114,13 +114,13 @@
 
 | custom_span_accessor.cpp | |
 
-| data_panel_modifier.cpp | Dudkin Sergey |
+| data_panel_modifier.cpp | Dudkin Sergey - it compiles and is ok |
 
-| data_resubmission_handler_accessor.cpp | Dudkin Sergey |
+| data_resubmission_handler_accessor.cpp | Dudkin Sergey - a missing file in new generation |
 
-| date_picker_dialog_accessor.cpp | Dudkin Sergey |
+| date_picker_dialog_accessor.cpp | Dudkin Sergey - too big difference after re-generation. Simple merge can’t be done. Missing ‘ShowImpl’ method.|
 
-| date_picker_modifier.cpp | Dudkin Sergey |
+| date_picker_modifier.cpp | Dudkin Sergey - it is ok and compiles, however missing methods: DisappearTextStyle0Impl, SelectedTextStyle0Impl,  DigitalCrownSensitivityImpl, EnableHapticFeedbackImpl |
 
 | decoration_style_accessor.cpp | |
 
