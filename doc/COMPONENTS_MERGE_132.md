@@ -156,26 +156,26 @@
 
 | extendable_component_accessor.cpp | |
 
-| file_selector_param_accessor.cpp | |
+| file_selector_param_accessor.cpp |Dmitry Smirnov |
 
-| file_selector_result_accessor.cpp | |
+| file_selector_result_accessor.cpp |Dmitry Smirnov |
 
-| flex_modifier.cpp | |
+| flex_modifier.cpp |Dmitry Smirnov |
 
-| flow_item_modifier.cpp | |
+| flow_item_modifier.cpp |Dmitry Smirnov |
 
-| focus_axis_event_accessor.cpp | |
+| focus_axis_event_accessor.cpp |Dmitry Smirnov |
 
-| focus_controller_accessor.cpp | |
+| focus_controller_accessor.cpp |Dmitry Smirnov |
 
-| folder_stack_modifier.cpp | |
+| folder_stack_modifier.cpp |Dmitry Smirnov |
 
-| font_accessor.cpp | |
+| font_accessor.cpp |Dmitry Smirnov |
 
-| font_collection_accessor.cpp | |
-| form_component_modifier.cpp | |
+| font_collection_accessor.cpp |Dmitry Smirnov |
+| form_component_modifier.cpp |Dmitry Smirnov |
 
-| form_link_modifier.cpp | |
+| form_link_modifier.cpp |Dmitry Smirnov |
 
 | frame_node_accessor.cpp | |
 
