@@ -50,13 +50,13 @@
 
 | canvas_accessor.cpp | Erokhin Ilya |
 
-| canvas_gradient_accessor.cpp | Erokhin Ilya |
+| canvas_gradient_accessor.cpp | Vadim Voronov |
 
 | canvas_modifier.cpp | Erokhin Ilya |
 
-| canvas_path_accessor.cpp | Erokhin Ilya |
+| canvas_path_accessor.cpp | Vadim Voronov |
 
-| canvas_pattern_accessor.cpp | Erokhin Ilya |
+| canvas_pattern_accessor.cpp | Vadim Voronov |
 
 | canvas_renderer_accessor.cpp | Vadim Voronov |
 
