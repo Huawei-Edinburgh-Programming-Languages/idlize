@@ -29,13 +29,8 @@ export function getModuleFor(nodeOrPackage: idl.IDLNode | string): ModuleConfigu
         throw new Error(`Package ${packageName} is not listed in any module`)
     }
 
-    if (applicableModules.length > 1) {
-        const externalModules = applicableModules.filter(module => module.name != config.moduleName)
-        if (externalModules.length > 1) {
-            throw new Error(`Package ${packageName} listed in ${externalModules.length} packages: ${externalModules.map(it => it.name).join(", ")}`)
-        }
-        return externalModules[0]
-    }
+    if (applicableModules.length > 1)
+        throw new Error(`Package ${packageName} listed in ${applicableModules.length} packages: ${applicableModules.map(it => it.name).join(", ")}`)
 
     return applicableModules[0]
 }
