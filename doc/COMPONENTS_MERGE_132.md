@@ -1,24 +1,24 @@
 | File | Owner |
 
-| accessibility_hover_event_accessor.cpp | |
+| accessibility_hover_event_accessor.cpp | Erokhin Ilya |
 
-| all_modifiers.cpp | |
+| all_modifiers.cpp | Erokhin Ilya |
 
-| alphabet_indexer_modifier.cpp | |
+| alphabet_indexer_modifier.cpp | Erokhin Ilya |
 
-| animation_extender_accessor.cpp | |
+| animation_extender_accessor.cpp | Erokhin Ilya |
 
-| animator_modifier.cpp | |
+| animator_modifier.cpp | Erokhin Ilya |
 
-| appear_symbol_effect_accessor.cpp | |
+| appear_symbol_effect_accessor.cpp | Erokhin Ilya |
 
-| axis_event_accessor.cpp | |
+| axis_event_accessor.cpp | Erokhin Ilya |
 
-| background_color_style_accessor.cpp | |
+| background_color_style_accessor.cpp | Erokhin Ilya |
 
-| badge_modifier.cpp | |
+| badge_modifier.cpp | Erokhin Ilya |
 
-| base_context_accessor.cpp | |
+| base_context_accessor.cpp | Erokhin Ilya |
 
 | base_event_accessor.cpp | |
 
