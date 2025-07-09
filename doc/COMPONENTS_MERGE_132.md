@@ -244,7 +244,7 @@
 
 | image_span_modifier.cpp | Vadim Voronov |
 
-| indicator_component_controller_accessor.cpp | |
+| indicator_component_controller_accessor.cpp | Vadim Voronov |
 
 | indicator_component_modifier.cpp |Dmitry Smirnov |
 
