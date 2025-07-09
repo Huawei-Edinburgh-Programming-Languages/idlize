@@ -292,7 +292,10 @@ export class ModifierVisitor {
                 }
             }
             if (this.commentedCode) {
-                this.real.print(`//${clazz?.componentName}ModelNG::Set${capitalize(method.sig.name)}(frameNode, convValue);`)
+                let v132_name = capitalize(method.sig.name)
+                if (method.v132_isComponentMethod)
+                    v132_name = v132_name.substring(3)
+                this.real.print(`//${clazz?.componentName}ModelNG::Set${v132_name}(frameNode, convValue);`)
             }
         }
     }
