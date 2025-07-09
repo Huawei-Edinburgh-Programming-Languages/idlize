@@ -138,23 +138,23 @@
 
 | draw_modifier_accessor.cpp | Erokhin Ilya - done |
 
-| edit_menu_options_accessor.cpp | Sergey Kovalev|
+| edit_menu_options_accessor.cpp | Sergey Kovalev - done|
 
-| effect_component_modifier.cpp | Sergey Kovalev|
+| effect_component_modifier.cpp | Sergey Kovalev - done|
 
-| ellipse_modifier.cpp | Sergey Kovalev|
+| ellipse_modifier.cpp | Sergey Kovalev - done|
 
-| ellipse_shape_accessor.cpp | Sergey Kovalev|
+| ellipse_shape_accessor.cpp | Sergey Kovalev - done|
 
-| embedded_component_modifier.cpp | Sergey Kovalev|
+| embedded_component_modifier.cpp | Sergey Kovalev - done|
 
-| event_emulator_accessor.cpp | Sergey Kovalev|
+| event_emulator_accessor.cpp | Sergey Kovalev - done|
 
-| event_result_accessor.cpp | Sergey Kovalev|
+| event_result_accessor.cpp | Sergey Kovalev - done|
 
-| event_target_info_accessor.cpp | Sergey Kovalev|
+| event_target_info_accessor.cpp | Sergey Kovalev - done|
 
-| extendable_component_accessor.cpp | Sergey Kovalev|
+| extendable_component_accessor.cpp | Sergey Kovalev - done|
 
 | file_selector_param_accessor.cpp |Dmitry Smirnov, misiing in gen|
 
@@ -648,25 +648,25 @@
 
 | url_style_accessor.cpp | Politov Mikhail |
 
-| user_data_span_accessor.cpp | |
+| user_data_span_accessor.cpp |Sergey Kovalev |
 
-| video_controller_accessor.cpp | |
+| video_controller_accessor.cpp |Sergey Kovalev |
 
-| video_modifier.cpp | |
+| video_modifier.cpp |Sergey Kovalev |
 
-| view_model_bridge.cpp | |
+| view_model_bridge.cpp |Sergey Kovalev |
 
-| visual_effect_accessor.cpp | |
+| visual_effect_accessor.cpp |Sergey Kovalev |
 
-| water_flow_modifier.cpp | |
+| water_flow_modifier.cpp |Sergey Kovalev |
 
-| water_flow_sections_accessor.cpp | |
+| water_flow_sections_accessor.cpp |Sergey Kovalev |
 
-| web_context_menu_param_accessor.cpp | |
+| web_context_menu_param_accessor.cpp |Sergey Kovalev |
 
-| web_context_menu_result_accessor.cpp | |
+| web_context_menu_result_accessor.cpp | Sergey Kovalev|
 
-| web_cookie_accessor.cpp | |
+| web_cookie_accessor.cpp |Sergey Kovalev |
 
 | web_keyboard_controller_accessor.cpp | |
 
