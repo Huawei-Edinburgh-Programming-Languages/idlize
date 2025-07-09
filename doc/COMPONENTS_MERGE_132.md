@@ -20,23 +20,23 @@
 
 | base_context_accessor.cpp | Erokhin Ilya - done |
 
-| base_event_accessor.cpp | Sergey Kovalev |
+| base_event_accessor.cpp | Sergey Kovalev - done|
 
-| base_gesture_event_accessor.cpp | Sergey Kovalev |
+| base_gesture_event_accessor.cpp | Sergey Kovalev - done|
 
-| baseline_offset_style_accessor.cpp | Sergey Kovalev |
+| baseline_offset_style_accessor.cpp | Sergey Kovalev - done|
 
-| base_shape_accessor.cpp |Sergey Kovalev |
+| base_shape_accessor.cpp |Sergey Kovalev - done|
 
-| base_span_modifier.cpp | Sergey Kovalev |
+| base_span_modifier.cpp | Sergey Kovalev - done|
 
-| blank_modifier.cpp | Sergey Kovalev |
+| blank_modifier.cpp | Sergey Kovalev - done|
 
-| bounce_symbol_effect_accessor.cpp | Sergey Kovalev|
+| bounce_symbol_effect_accessor.cpp | Sergey Kovalev- done|
 
-| brush_accessor.cpp | Sergey Kovalev |
+| brush_accessor.cpp | Sergey Kovalev - done|
 
-| builder_node_ops_accessor.cpp | Sergey Kovalev |
+| builder_node_ops_accessor.cpp | Sergey Kovalev - done|
 
 | button_modifier.cpp | Erokhin Ilya - done |
 
@@ -138,23 +138,23 @@
 
 | draw_modifier_accessor.cpp | |
 
-| edit_menu_options_accessor.cpp | |
+| edit_menu_options_accessor.cpp | Sergey Kovalev|
 
-| effect_component_modifier.cpp | |
+| effect_component_modifier.cpp | Sergey Kovalev|
 
-| ellipse_modifier.cpp | |
+| ellipse_modifier.cpp | Sergey Kovalev|
 
-| ellipse_shape_accessor.cpp | |
+| ellipse_shape_accessor.cpp | Sergey Kovalev|
 
-| embedded_component_modifier.cpp | |
+| embedded_component_modifier.cpp | Sergey Kovalev|
 
-| event_emulator_accessor.cpp | |
+| event_emulator_accessor.cpp | Sergey Kovalev|
 
-| event_result_accessor.cpp | |
+| event_result_accessor.cpp | Sergey Kovalev|
 
-| event_target_info_accessor.cpp | |
+| event_target_info_accessor.cpp | Sergey Kovalev|
 
-| extendable_component_accessor.cpp | |
+| extendable_component_accessor.cpp | Sergey Kovalev|
 
 | file_selector_param_accessor.cpp |Dmitry Smirnov, misiing in gen|
 
