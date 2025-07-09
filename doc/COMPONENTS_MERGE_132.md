@@ -260,25 +260,25 @@
 
 | layoutable_accessor.cpp |Dmitry Smirnov |
 
-| layout_callback_accessor.cpp | |
+| layout_callback_accessor.cpp | Evstigneev Roman |
 
-| layout_child_accessor.cpp | |
+| layout_child_accessor.cpp | Evstigneev Roman |
 
-| layout_manager_accessor.cpp | |
+| layout_manager_accessor.cpp | Evstigneev Roman |
 
-| layout_policy_accessor.cpp | |
+| layout_policy_accessor.cpp | Evstigneev Roman |
 
-| lazy_for_each_ops_accessor.cpp | |
+| lazy_for_each_ops_accessor.cpp | Evstigneev Roman |
 
-| lazy_grid_layout_modifier.cpp | |
+| lazy_grid_layout_modifier.cpp | Evstigneev Roman |
 
-| lazyv_grid_layout_modifier.cpp | |
+| lazyv_grid_layout_modifier.cpp | Evstigneev Roman |
 
-| length_metrics_accessor.cpp | |
+| length_metrics_accessor.cpp | Evstigneev Roman |
 
-| letter_spacing_style_accessor.cpp | |
+| letter_spacing_style_accessor.cpp | Evstigneev Roman |
 
-| life_cycle_accessor.cpp | |
+| life_cycle_accessor.cpp | Evstigneev Roman |
 
 | linear_gradient_accessor.cpp | |
 
