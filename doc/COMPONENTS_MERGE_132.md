@@ -246,19 +246,19 @@
 
 | indicator_component_controller_accessor.cpp | |
 
-| indicator_component_modifier.cpp | |
+| indicator_component_modifier.cpp |Dmitry Smirnov |
 
-| iui_context_accessor.cpp | |
+| iui_context_accessor.cpp |Dmitry Smirnov |
 
-| js_geolocation_accessor.cpp | |
+| js_geolocation_accessor.cpp |Dmitry Smirnov |
 
-| js_result_accessor.cpp | |
+| js_result_accessor.cpp |Dmitry Smirnov |
 
-| key_event_accessor.cpp | |
+| key_event_accessor.cpp | Dmitry Smirnov|
 
-| lattice_accessor.cpp | |
+| lattice_accessor.cpp |Dmitry Smirnov |
 
-| layoutable_accessor.cpp | |
+| layoutable_accessor.cpp |Dmitry Smirnov |
 
 | layout_callback_accessor.cpp | |
 
