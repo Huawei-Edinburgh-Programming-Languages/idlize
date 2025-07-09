@@ -155,10 +155,11 @@ export class Visitor {
             if (!ns.length) {
                 symbol = this.declarations.get('')?.get(name!)
             }
+            // todo: Add resolving with es2panda_ prefix for some types
             if (!symbol) {
                 this.unresolved.add(ref.name)
-                throw `1. resolveReference: ${name} from '${ns}' => ${symbol}`
-                //console.log(`1. resolveReference: ${name} from '${ns}' => ${symbol}`);
+                //throw `resolveReference: ${name} from '${ns}' => ${symbol}`
+                console.log(`resolveReference: ${name} from '${ns}' => ${symbol}`);
             }
         }
         return symbol
