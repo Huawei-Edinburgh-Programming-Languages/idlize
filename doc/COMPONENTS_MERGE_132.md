@@ -122,21 +122,21 @@
 
 | date_picker_modifier.cpp | Dudkin Sergey - it is ok and compiles, however missing methods: DisappearTextStyle0Impl, SelectedTextStyle0Impl,  DigitalCrownSensitivityImpl, EnableHapticFeedbackImpl |
 
-| decoration_style_accessor.cpp | Erokhin Ilya |
+| decoration_style_accessor.cpp | Erokhin Ilya - done |
 
-| disappear_symbol_effect_accessor.cpp | Erokhin Ilya |
+| disappear_symbol_effect_accessor.cpp | Erokhin Ilya - done |
 
 | divider_modifier.cpp | Evstigneev Roman - on review |
 
 | drag_event_accessor.cpp | Evstigneev Roman - GetModifierKeyState has wrong generation |
 
-| drawable_descriptor_accessor.cpp | Erokhin Ilya |
+| drawable_descriptor_accessor.cpp | Erokhin Ilya - done |
 
-| draw_context_accessor.cpp | Erokhin Ilya |
+| draw_context_accessor.cpp | Erokhin Ilya - done |
 
 | drawing_rendering_context_accessor.cpp | Vadim Voronov - done |
 
-| draw_modifier_accessor.cpp | Erokhin Ilya |
+| draw_modifier_accessor.cpp | Erokhin Ilya - done |
 
 | edit_menu_options_accessor.cpp | Sergey Kovalev|
 
@@ -210,15 +210,15 @@
 
 | global_scope_ohos_measure_utils_accessor.cpp | Sergey Kovalev|
 
-| grid_col_modifier.cpp | Erokhin Ilya |
+| grid_col_modifier.cpp | Erokhin Ilya - done |
 
-| grid_item_modifier.cpp | Erokhin Ilya |
+| grid_item_modifier.cpp | Erokhin Ilya - done |
 
-| grid_modifier.cpp | Erokhin Ilya |
+| grid_modifier.cpp | Erokhin Ilya - done |
 
-| grid_row_modifier.cpp | Erokhin Ilya |
+| grid_row_modifier.cpp | Erokhin Ilya - done |
 
-| hierarchical_symbol_effect_accessor.cpp | Erokhin Ilya |
+| hierarchical_symbol_effect_accessor.cpp | Erokhin Ilya - done |
 
 | hover_event_accessor.cpp | Vadim Voronov |
 
@@ -280,17 +280,17 @@
 
 | life_cycle_accessor.cpp | Evstigneev Roman |
 
-| linear_gradient_accessor.cpp | |
+| linear_gradient_accessor.cpp | Erokhin Ilya |
 
-| linear_indicator_controller_accessor.cpp | |
+| linear_indicator_controller_accessor.cpp | Erokhin Ilya |
 
-| linear_indicator_modifier.cpp | |
+| linear_indicator_modifier.cpp | Erokhin Ilya |
 
-| line_height_style_accessor.cpp | |
+| line_height_style_accessor.cpp | Erokhin Ilya |
 
-| line_modifier.cpp | |
+| line_modifier.cpp | Erokhin Ilya |
 
-| line_typeset_accessor.cpp | |
+| line_typeset_accessor.cpp | Erokhin Ilya |
 
 | list_item_group_modifier.cpp | Sergey Morozov |
 
@@ -304,13 +304,13 @@
 
 | long_press_gesture_event_accessor.cpp | Samarin Sergey |
 
-| long_press_gesture_interface_accessor.cpp | |
+| long_press_gesture_interface_accessor.cpp | Erokhin Ilya |
 
-| long_press_recognizer_accessor.cpp | |
+| long_press_recognizer_accessor.cpp | Erokhin Ilya |
 
-| marquee_modifier.cpp | |
+| marquee_modifier.cpp | Erokhin Ilya |
 
-| mask_filter_accessor.cpp | |
+| mask_filter_accessor.cpp | Erokhin Ilya |
 
 | matrix2d_accessor.cpp | Vadim Voronov - done |
 
