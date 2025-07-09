@@ -442,7 +442,7 @@
 
 | rich_editor_base_controller_accessor.cpp | |
 
-| rich_editor_controller_accessor.cpp | Samarin Sergey |
+| rich_editor_controller_accessor.cpp | INTEGRATED |
 
 | rich_editor_modifier.cpp | |
 
@@ -526,13 +526,13 @@
 
 | ssl_error_handler_accessor.cpp | |
 
-| stack_modifier.cpp | |
+| stack_modifier.cpp | Samarin Sergey |
 
 | state_styles_ops_accessor.cpp | |
 
-| stepper_item_modifier.cpp | |
+| stepper_item_modifier.cpp | Samarin Sergey |
 
-| stepper_modifier.cpp | |
+| stepper_modifier.cpp | Samarin Sergey |
 
 | styled_string_accessor.cpp | |
 
@@ -550,7 +550,7 @@
 
 | swipe_recognizer_accessor.cpp | |
 
-| swiper_modifier.cpp | |
+| swiper_modifier.cpp | INTEGRATED |
 
 | symbol_effect_accessor.cpp | |
 
@@ -586,7 +586,7 @@
 
 | text_clock_controller_accessor.cpp | |
 
-| text_clock_modifier.cpp | |
+| text_clock_modifier.cpp | Samarin Sergey |
 
 | text_content_controller_base_accessor.cpp | |
 
