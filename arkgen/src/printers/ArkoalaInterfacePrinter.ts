@@ -78,7 +78,7 @@ class ArkoalaTSDeclConvertor extends TSDeclConvertor {
             const target = 'target'
             const applySignature = new NamedMethodSignature(
                 idl.IDLVoidType,
-                [idl.createReferenceType(componentToAttributesInterface(component.attributeDeclaration.name))],
+                [idl.createReferenceType(component.attributeDeclaration)],
                 [target]
             )
             stylePrinter.writeMethodImplementation(new Method('apply', applySignature, [MethodModifier.PUBLIC]), writer => {

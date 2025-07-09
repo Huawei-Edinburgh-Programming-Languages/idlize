@@ -305,6 +305,7 @@ export class OverloadsPrinter {
                 this.printCollapsedOverloadsMethodBody(peer, collapsedMethod, methods, writer)
             }
             if (this.isComponent) {
+                this.printer.print(`/* ${idl.DebugUtils.debugPrintType(collapsedMethod.signature.returnType)} */`)
                 this.printer.popIndent()
                 this.printer.print(`}`)
                 this.printer.writeStatement(this.printer.makeReturn(collapsedMethod.signature.returnType == idl.IDLThisType ? this.printer.makeThis() : undefined))

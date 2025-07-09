@@ -241,6 +241,7 @@ export function arkgen(argv:string[]) {
                 verifyIDLLinter(file, idlLibrary, peerGeneratorConfiguration().linter)
             })
         }
+        idlLibrary.makeRefsFQ()
         inplaceArkoalaGenerics(idlLibrary)
         fillSyntheticDeclarations(idlLibrary)
         idlLibrary.enableCache()

@@ -23,7 +23,7 @@ import { ReferenceResolver } from './ReferenceResolver'
 export function isMaterialized(declaration: idl.IDLInterface, resolver: ReferenceResolver): boolean {
     if (!idl.isInterfaceSubkind(declaration) && !idl.isClassSubkind(declaration)) return false
     if (idl.isHandwritten(declaration) || isBuilderClass(declaration)) return false
-    if (generatorConfiguration().forceResource.includes(declaration.name)) {
+    if (generatorConfiguration().forceResource.includes(idl.getFQName(declaration))) {
         return false
     }
 

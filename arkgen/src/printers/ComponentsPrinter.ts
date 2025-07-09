@@ -70,7 +70,7 @@ function expandComponentWithSupers(library: PeerLibrary, decl: idl.IDLInterface)
 export function generateAttributeModifierSignature(library: PeerLibrary, component: IdlComponentDeclaration): MethodSignature {
     const modifiers = expandComponentWithSupers(library, component.attributeDeclaration).map(it =>
         idl.createReferenceType(getReferenceTo('AttributeModifier'),
-            [idl.createReferenceType(componentToAttributesInterface(it.name))],
+            [idl.createReferenceType(it)],
         )
     )
     return new NamedMethodSignature(
@@ -221,10 +221,10 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
         const withStyleMethodSignature = new NamedMethodSignature(
             IDLVoidType,
             [
-                idl.createReferenceType(componentToAttributesInterface(component.attributeDeclaration.name)),
+                idl.createReferenceType(component.attributeDeclaration),
                 idl.createUnionType([...expandComponentWithSupers(this.library, component.attributeDeclaration).map(it =>
                     idl.createReferenceType(getReferenceTo('AttributeModifier'),
-                    [idl.createReferenceType(componentToAttributesInterface(it.name))])), idl.IDLUndefinedType])
+                        [idl.createReferenceType(it)])), idl.IDLUndefinedType])
             ],
             ['receiver', 'modifier']
         )

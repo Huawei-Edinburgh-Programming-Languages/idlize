@@ -281,7 +281,6 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         const clazzRefType = clazz.isInterface
             ? idl.createReferenceType(getInternalClassName(clazz.className), clazz.generics?.map(it => idl.createTypeParameterReference(sanitizeGenerics(it))))
             : idl.createReferenceType(clazz.decl, clazz.generics?.map(it => idl.createTypeParameterReference(it)))
-        console.log(clazzRefType)
         const fromPtrSig = new NamedMethodSignature(clazzRefType, [idl.IDLPointerType], ["ptr"])
         writer.writeMethodImplementation(new Method("fromPtr", fromPtrSig, [MethodModifier.PUBLIC, MethodModifier.STATIC], classTypeParameters), writer => {
             const defaultArg = collapseCtors ? "undefined" : "false"
@@ -289,7 +288,6 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             writer.writeStatement(writer.makeReturn(writer.makeNewObject(writer.getNodeName(clazzRefType), args.map(arg => writer.makeString(arg)))))
         })
     }
-    
 
     printMethods(clazz: MaterializedClass) {
         clazz.methods.filter(m => !m.method.modifiers?.includes(MethodModifier.STATIC)).forEach(method => {

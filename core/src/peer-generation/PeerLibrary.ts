@@ -46,6 +46,8 @@ import { generatorConfiguration } from '../config'
 import { isExternalType } from './isExternalType'
 import { KotlinTypeNameConvertor } from '../LanguageWriters/convertors/KotlinConvertors'
 import { NativeModuleType } from '../LanguageWriters/common'
+import { applyTransformer } from '../transformer'
+import { FQReferenceMaker } from '../transformers/toFQRenamer'
 
 export interface GlobalScopeDeclarations {
     methods: idl.IDLMethod[]
@@ -111,7 +113,7 @@ export class PeerLibrary implements LibraryInterface {
     public getSyntheticData() {
         return this._syntheticFile.entries.filter(it => idl.isInterface(it)) as idl.IDLInterface[]
     }
-    public readonly files: idl.IDLFile[] = []
+    public files: idl.IDLFile[] = []
     public readonly auxFiles: idl.IDLFile[] = []
     public readonly builderClasses: Map<string, BuilderClass> = new Map()
     public get buildersToGenerate(): BuilderClass[] {
@@ -204,6 +206,10 @@ export class PeerLibrary implements LibraryInterface {
         this.referenceCache = new Map()
     }
 
+    makeRefsFQ() {
+        this.files = applyTransformer(new FQReferenceMaker(this), this.files)
+    }
+
     resolveTypeReference(type: idl.IDLReferenceType, singleStep?: boolean): idl.IDLEntry | undefined {
         const key = type.parent ? type : type.name // does entry have resolve context or just FQN
         let result: idl.IDLEntry | undefined = this.referenceCache?.has(key)
@@ -246,10 +252,6 @@ export class PeerLibrary implements LibraryInterface {
         return result
     }
 
-    private _useFallback = true
-    disableFallback() {
-        this._useFallback = false
-    }
     resolveNamedNode(target: string[], pov: idl.IDLNode | undefined = undefined): idl.IDLEntry | undefined {
         const qualifiedName = target.join(".")
         const entry = this._syntheticFile.entries.find(it => it.name === qualifiedName)
@@ -277,42 +279,6 @@ export class PeerLibrary implements LibraryInterface {
                     return result
             }
         }
-
-        // TODO: remove the next block after namespaces out of quarantine
-        if (this._useFallback) {
-            const povAsReadableString = pov
-                ? `'${idl.getFQName(pov)}'`
-                : "[root]"
-
-            // retry from root
-            pov = undefined
-            const resolveds: idl.IDLNode[] = []
-            for (let file of this.files) {
-                result = resolveNamedNode([...file.packageClause, ...target], pov, corpus)
-                if (result && idl.isEntry(result)) {
-                    // too much spam
-                    // console.warn(`WARNING: Type reference '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some package '${file.packageClause().join(".")}'`)
-                    resolveds.push(result)
-                }
-            }
-
-            // and from each namespace
-            const traverseNamespaces = (entry: idl.IDLEntry) => {
-                if (entry && idl.isNamespace(entry) && entry.members.length) {
-                    const resolved = resolveNamedNode([...idl.getNamespacesPathFor(entry).map(it => it.name), ...target], pov, corpus)
-                    if (resolved) {
-                        console.warn(`WARNING: Name '${qualifiedName}' is not resolved from ${povAsReadableString} but resolved from some namespace: '${idl.getNamespacesPathFor(resolved).map(obj => obj.name).join(".")}'`)
-                        resolveds.push(resolved)
-                    }
-                    entry.members.forEach(traverseNamespaces)
-                }
-            }
-            this.files.forEach(file => file.entries.forEach(traverseNamespaces))
-
-            for (const resolved of resolveds)
-                if (idl.isEntry(resolved))
-                    return resolved
-        }// end of block to remove
 
         return undefined
     }
@@ -495,11 +461,11 @@ export class PeerLibrary implements LibraryInterface {
 
     toDeclaration(type: idl.IDLType | idl.IDLTypedef | idl.IDLCallback | idl.IDLEnum | idl.IDLInterface): idl.IDLEntry | idl.IDLType {
         switch (type) {
-            case idl.IDLAnyType: return ArkCustomObject
+            case idl.IDLAnyType: return idl.IDLCustomObjectType
             case idl.IDLVoidType: return idl.IDLVoidType
             case idl.IDLUndefinedType: return idl.IDLUndefinedType
-            case idl.IDLUnknownType: return ArkCustomObject
-            // case idl.IDLObjectType: return ArkCustomObject
+            case idl.IDLUnknownType: return idl.IDLCustomObjectType
+            // case idl.IDLObjectType: return idl.IDLCustomObjectType
         }
         const typeName = idl.isNamedNode(type) ? type.name : undefined
         switch (typeName) {
@@ -509,13 +475,13 @@ export class PeerLibrary implements LibraryInterface {
         if (idl.isReferenceType(type)) {
             // TODO: remove all this!
             if (type.name === 'Date') {
-                return ArkDate
+                return idl.IDLDate
             }
             if (type.name === 'AnimationRange') {
-                return ArkCustomObject
+                return idl.IDLCustomObjectType
             }
             if (type.name === 'Function') {
-                return ArkFunction
+                return idl.IDLFunctionType
             }
             if (type.name === 'Optional') {
                 return this.toDeclaration((type as idl.IDLReferenceType).typeArguments![0])
@@ -526,14 +492,14 @@ export class PeerLibrary implements LibraryInterface {
             }
             if (decl && idl.isTypedef(decl) && isCyclicTypeDef(decl)) {
                 warn(`Cyclic typedef: ${idl.DebugUtils.debugPrintType(type)}`)
-                return ArkCustomObject
+                return idl.IDLCustomObjectType
             }
-            return !decl ? ArkCustomObject  // assume some builtin type
+            return !decl ? idl.IDLCustomObjectType  // assume some builtin type
                 : idl.isTypedef(decl) ? this.toDeclaration(decl.type)
                     : decl
         }
         if (isImportAttr(type)) {
-            return ArkCustomObject
+            return idl.IDLCustomObjectType
         }
         return type
     }
@@ -541,12 +507,6 @@ export class PeerLibrary implements LibraryInterface {
         this.layout = new LayoutManager(strategy)
     }
 }
-
-export const ArkInt32 = idl.IDLI32Type
-export const ArkInt64 = idl.IDLI64Type
-export const ArkFunction = idl.IDLFunctionType
-export const ArkDate = idl.IDLDate
-export const ArkCustomObject = idl.IDLCustomObjectType
 
 export function cleanPrefix(name: string, prefix: string): string {
     return name.replace(prefix, "")

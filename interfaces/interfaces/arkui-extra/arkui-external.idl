@@ -4,6 +4,9 @@ import arkui.component.units;
 import ohos.graphics.text.text;
 import arkui.component.enums;
 import ohos.multimedia.image.image;
+import ohos.measure.MeasureOptions as MeasureOptions;
+import ohos.font.FontOptions as FontOptions;
+import ohos.font.FontInfo as FontInfo;
 
 [Entity=Interface]
 interface WebHeader {

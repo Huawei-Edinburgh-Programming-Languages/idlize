@@ -102,7 +102,6 @@ function main() {
             resolver.files.push(result[0])
             return result
         })
-        resolver.disableFallback()
         let totalErrors = 0
         const errorRecords: [string, number][] = []
         files.forEach(([file, info]) => {

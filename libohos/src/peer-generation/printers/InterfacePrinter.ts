@@ -105,12 +105,12 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
     }
 
     convertInterface(node: idl.IDLInterface) {
-        // FQ_BUG: use fq names instead
-        if (this.seenInterfaceNames.has(node.name)) {
-            console.log(`interface name: '${node.name}' already exists`)
+        const fqName = idl.getFQName(node)
+        if (this.seenInterfaceNames.has(fqName)) {
+            console.log(`interface name: '${fqName}' already exists`)
             return;
         }
-        this.seenInterfaceNames.add(node.name)
+        this.seenInterfaceNames.add(fqName)
         let result: string | undefined
         if (this.isCallback(node)) {
             result = this.printCallback(node,
@@ -311,9 +311,9 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
     private toFQN(target: idl.IDLType): string {
         if (idl.isTypeParameterType(target)) return target.name
         if (!idl.isReferenceType(target)) throw Error(`Not a reference type: ${target}`)
-        const type = this.peerLibrary.resolveTypeReference(target)
-        if (!type) throw Error(`Unable to resolve the type: ${target.name}`)
-        return [...idl.getNamespacesPathFor(type), type.name].join(".")
+        const declaration = this.peerLibrary.resolveTypeReference(target)
+        if (!declaration) throw Error(`Unable to resolve the type: ${target.name}`)
+        return [...idl.getNamespacesPathFor(declaration).map(it => it.name), declaration.name].join(".")
     }
 
     protected printInterfaceName(idlInterface: idl.IDLInterface): string {
@@ -324,7 +324,9 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
             const typeParameter = types[0]
             const extendable = types[1]
             if (extendable != undefined) {
-                const type = this.peerLibrary.resolveTypeReference(idl.createReferenceType(extendable))
+                const ref = idl.createReferenceType(extendable)
+                ref.parent = idlInterface
+                const type = this.peerLibrary.resolveTypeReference(ref)
                 if (type !== undefined && idl.isEnum(type)) {
                     return typeParameter
                 }
@@ -339,8 +341,6 @@ export class TSDeclConvertor implements DeclarationConvertor<void> {
         superTypes?.forEach(it => {
             it = maybeRestoreGenerics(it, this.peerLibrary) ?? it
             const superDecl = this.peerLibrary.resolveTypeReference(it)
-            const parentTypeArgs = this.printTypeArguments(
-                (it as idl.IDLReferenceType)?.typeArguments?.map(it => this.toFQN(it)))
             const clause = nameConvertor.convert(it)
 
             const shouldPrintAsImplements = superDecl
@@ -1554,7 +1554,6 @@ export class KotlinInterfacesVisitor implements InterfacesVisitor {
                 collectDeclDependencies(this.peerLibrary, entry, imports)
 
                 const printVisitor = new KotlinDeclarationConvertor(writer, seenNames, this.peerLibrary)
-                console.log(entry.name, seenNames.size)
                 printVisitor.makeUnion(writer, entry)
 
                 result.push({

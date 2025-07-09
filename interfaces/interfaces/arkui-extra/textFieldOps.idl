@@ -1,4 +1,19 @@
 package api.internal.component.ets;
+import arkui.component.units.Length as Length;
+import arkui.component.units.Padding as Padding;
+import arkui.component.units.LocalizedPadding as LocalizedPadding;
+import arkui.component.units.ResourceStr as ResourceStr;
+import arkui.component.units.BorderOptions as BorderOptions;
+import arkui.component.units.LocalizedEdgeWidths as LocalizedEdgeWidths;
+import arkui.component.units.EdgeWidths as EdgeWidths;
+import arkui.component.units.EdgeColors as EdgeColors;
+import arkui.component.units.LocalizedEdgeColors as LocalizedEdgeColors;
+import arkui.component.units.EdgeStyles as EdgeStyles;
+import arkui.component.units.BorderRadiuses as BorderRadiuses;
+import arkui.component.units.LocalizedBorderRadiuses as LocalizedBorderRadiuses;
+import arkui.component.units.ResourceColor as ResourceColor;
+import arkui.component.common.LayoutPolicy as LayoutPolicy;
+import arkui.component.enums.BorderStyle as BorderStyle;
 
 callback TextFieldValueCallback = void (ResourceStr value);
 [Entity=Class]
