@@ -432,7 +432,7 @@
 
 | remote_window_modifier.cpp | INTEGRATED |
 
-| rendering_context_settings_accessor.cpp | Vadim Voronov |
+| rendering_context_settings_accessor.cpp | Vadim Voronov - done |
 
 | render_node_accessor.cpp | Samarin Sergey |
 
@@ -476,9 +476,9 @@
 
 | scene_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
-| screen_capture_handler_accessor.cpp | Vadim Voronov - on review |
+| screen_capture_handler_accessor.cpp | Vadim Voronov - done |
 
-| screen_modifier.cpp | Vadim Voronov - on review |
+| screen_modifier.cpp | Vadim Voronov - done |
 
 | scrollable_common_method_modifier.cpp | Andrey Khudenkikh - done  |
 
@@ -524,7 +524,7 @@
 
 | spring_prop_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
-| ssl_error_handler_accessor.cpp | Vadim Voronov - on review |
+| ssl_error_handler_accessor.cpp | Vadim Voronov - done |
 
 | stack_modifier.cpp | Samarin Sergey |
 
@@ -536,7 +536,7 @@
 
 | styled_string_accessor.cpp | Vadim Voronov - done by default nothing todo |
 
-| styled_string_controller_accessor.cpp | Vadim Voronov - on review|
+| styled_string_controller_accessor.cpp | Vadim Voronov - done|
 
 | submit_event_accessor.cpp | Samarin Sergey |
 
@@ -544,7 +544,7 @@
 
 | swipe_gesture_event_accessor.cpp | Samarin Sergey |
 
-| swiper_content_transition_proxy_accessor.cpp | Vadim Voronov - on review |
+| swiper_content_transition_proxy_accessor.cpp | Vadim Voronov - done |
 
 | swiper_controller_accessor.cpp | Andrey Khudenkikh - on review |
 
@@ -588,15 +588,15 @@
 
 | text_clock_modifier.cpp | Samarin Sergey |
 
-| text_content_controller_base_accessor.cpp | Vadim Voronov - on review 
+| text_content_controller_base_accessor.cpp | Vadim Voronov - done 
 
 | text_controller_accessor.cpp | Samarin Sergey |
 
-| text_edit_controller_ex_accessor.cpp | Vadim Voronov - on review |
+| text_edit_controller_ex_accessor.cpp | Vadim Voronov - done |
 
 | text_field_ops_accessor.cpp | Vadim Voronov - done by default nothing todo |
 
-| text_input_controller_accessor.cpp | Vadim Voronov - on review |
+| text_input_controller_accessor.cpp | Vadim Voronov - done |
 
 | text_input_modifier.cpp | Tuzhilkin Ivan, done|
 
@@ -604,11 +604,11 @@
 
 | text_menu_controller_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
-| text_menu_item_id_accessor.cpp | Vadim Voronov - on review |
+| text_menu_item_id_accessor.cpp | Vadim Voronov - done |
 
 | text_modifier.cpp | Tuzhilkin Ivan, done|
 
-| text_picker_dialog_accessor.cpp | Vadim Voronov - on review |
+| text_picker_dialog_accessor.cpp | Vadim Voronov - done |
 
 | text_picker_modifier.cpp | Ekaterina Stepanova - on review|
 
