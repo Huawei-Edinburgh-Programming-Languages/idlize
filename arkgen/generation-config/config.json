@@ -276,6 +276,9 @@
         "Button": {
             "contentModifier": {
                 "hookName": "hookButtonContentModifier"
+            },
+             "attributeModifier": {
+                "hookName": "hookButtonAttributeModifier"
             }
         },
         "Checkbox": {
@@ -411,8 +414,8 @@
                 "hookName": "hookAlphabetIndexerAttributeSelectedImpl"
             }
         },
-        "Tabs": {
-            "setTabsOptions": {
+        "Text": {
+            "attributeModifier": {
                 "hookName": "hookTabsAttributeIndexImpl"
             }
         }
