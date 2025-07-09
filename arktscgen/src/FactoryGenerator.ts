@@ -3,6 +3,7 @@ import { Body } from "./general/types"
 import { PeerGenerator } from "./PeerGenerator"
 import { PeersConstructions } from "./constuctions/PeersConstructions"
 import { FactoryConstructions } from "./constuctions/FactoryConstructions"
+import assert from "assert"
 
 export class FactoryGenerator {
     // todo: split body into methods
@@ -16,11 +17,14 @@ export class FactoryGenerator {
         const getType = (type: core.IDLType) => converter.convert(type)
         const getReturnType = (method: core.Method) => getType(method.signature.returnType)
 
+        const gettersNames = body.getters.map(m => m.name)
         const gettersTypes = body.getters.map(getReturnType)
         const methods = body.creates.filter(method => {
             const args = method.signature.args
             // todo: add arg name == getter name check
-            return args.length && args.every(a => gettersTypes.includes(getType(a)))
+            return args.length && args.every(
+                (a, index) => gettersTypes.includes(getType(a)) &&
+                    gettersNames.includes(method.signature.argNames![index]) )
         })
 
         //console.log(`methods: ${methods.map(m => m.name).join('+')}`);
@@ -52,15 +56,18 @@ export class FactoryGenerator {
 
         const argsKind = method.signature.args.map(getType)
         const getters = body.getters
-            .filter(m => argsKind.includes(getReturnType(m)))
+            .filter(m => argsKind.includes(getReturnType(m)) && method.signature.argNames?.includes(m.name))
             .sort((a, b) => argsKind.indexOf(getReturnType(a)) - argsKind.indexOf(getReturnType(b)))
+
+        //console.log(`${body.getters.map(a => a.name)}`);
+        //console.log(`${getters.length} === ${method.signature.argNames?.length}`);
+        assert(getters.length === method.signature.argNames?.length, `Failed method: ${iface.name}.${method.name}`)
 
         const conditionStmt = writer.makeCondition(
             writer.makeString(
                 FactoryConstructions.all(
                     method.signature.argNames
-                        ?.map((m, ind) => FactoryConstructions.isSame(m, getters.at(ind)!.name))
-                        ?? []
+                        ?.map((m, ind) => FactoryConstructions.isSame(m, getters.at(ind)!.name)) ?? []
                 )
             ),
             writer.makeReturn(
