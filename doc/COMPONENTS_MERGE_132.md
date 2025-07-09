@@ -280,17 +280,17 @@
 
 | life_cycle_accessor.cpp | Evstigneev Roman - NEW_GENERATE |
 
-| linear_gradient_accessor.cpp | Erokhin Ilya |
+| linear_gradient_accessor.cpp | Erokhin Ilya - done |
 
-| linear_indicator_controller_accessor.cpp | Erokhin Ilya |
+| linear_indicator_controller_accessor.cpp | Erokhin Ilya - done |
 
-| linear_indicator_modifier.cpp | Erokhin Ilya |
+| linear_indicator_modifier.cpp | Erokhin Ilya - done |
 
-| line_height_style_accessor.cpp | Erokhin Ilya |
+| line_height_style_accessor.cpp | Erokhin Ilya - done |
 
-| line_modifier.cpp | Erokhin Ilya |
+| line_modifier.cpp | Erokhin Ilya - done |
 
-| line_typeset_accessor.cpp | Erokhin Ilya |
+| line_typeset_accessor.cpp | Erokhin Ilya - done (new file) |
 
 | list_item_group_modifier.cpp | Sergey Morozov |
 
@@ -304,13 +304,13 @@
 
 | long_press_gesture_event_accessor.cpp | Samarin Sergey |
 
-| long_press_gesture_interface_accessor.cpp | Erokhin Ilya |
+| long_press_gesture_interface_accessor.cpp | Erokhin Ilya - done |
 
-| long_press_recognizer_accessor.cpp | Erokhin Ilya |
+| long_press_recognizer_accessor.cpp | Erokhin Ilya - done |
 
-| marquee_modifier.cpp | Erokhin Ilya |
+| marquee_modifier.cpp | Erokhin Ilya - done |
 
-| mask_filter_accessor.cpp | Erokhin Ilya |
+| mask_filter_accessor.cpp | Erokhin Ilya - done (new) |
 
 | matrix2d_accessor.cpp | Vadim Voronov - done |
 
@@ -396,23 +396,23 @@
 
 | pinch_recognizer_accessor.cpp | Lobah Mikhail|
 
-| pixel_map_accessor.cpp | |
+| pixel_map_accessor.cpp | Erokhin Ilya |
 
-| pixel_map_mock_accessor.cpp | |
+| pixel_map_mock_accessor.cpp | Erokhin Ilya |
 
-| plugin_component_modifier.cpp | |
+| plugin_component_modifier.cpp | Erokhin Ilya |
 
 | polygon_modifier.cpp | Politov Mikhail |
 
 | polyline_modifier.cpp | Politov Mikhail |
 
-| progress_mask_accessor.cpp | |
+| progress_mask_accessor.cpp | Erokhin Ilya |
 
-| progress_modifier.cpp | |
+| progress_modifier.cpp | Erokhin Ilya |
 
-| prompt_action_accessor.cpp | |
+| prompt_action_accessor.cpp | Erokhin Ilya |
 
-| pulse_symbol_effect_accessor.cpp | |
+| pulse_symbol_effect_accessor.cpp | Erokhin Ilya |
 
 | qr_code_modifier.cpp | Evstigneev Roman - done |
 
@@ -420,15 +420,15 @@
 
 | rating_modifier.cpp | Ekaterina Stepanova - on review |
 
-| rect_modifier.cpp | |
+| rect_modifier.cpp | Erokhin Ilya |
 
 | rect_shape_accessor.cpp | Samarin Sergey |
 
 | refresh_modifier.cpp | Ekaterina Stepanova - on review |
 
-| region_accessor.cpp | |
+| region_accessor.cpp | Erokhin Ilya |
 
-| relative_container_modifier.cpp | |
+| relative_container_modifier.cpp | Erokhin Ilya |
 
 | remote_window_modifier.cpp | |
 
