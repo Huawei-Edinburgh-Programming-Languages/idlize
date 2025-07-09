@@ -381,9 +381,19 @@
                 "hookName": "hookSetXComponentOptions"
             }
         },
-        "waterFlow": {
-            "setWaterFlowOptionsAttribute": {
+        "WaterFlow": {
+            "setWaterFlowOptions": {
                 "hookName": "hookWaterFlowOptionsImpl"
+            }
+        }, 
+        "List": {
+            "childrenMainSize": {
+                "hookName": "hookListChildrenMainSizeImpl"
+            }
+        },
+        "ListItemGroup": {
+            "childrenMainSize": {
+                "hookName": "hookListItemGroupChildrenMainSizeImpl"
             }
         },
         "GridItem": {
