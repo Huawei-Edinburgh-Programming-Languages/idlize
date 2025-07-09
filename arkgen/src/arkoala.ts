@@ -201,7 +201,7 @@ export function generateArkoalaFromIdl(config: {
     const installedFiles = ETSLanguageWriter.useTypeChecker(config.useTypeChecker, () => install(
         module,
         arkoala.managedBaseDir,
-        arkoala.managedSubDir,
+        arkoala.managedSrcDir,
         arkoala.managedDir,
         peerLibrary,
         peerLibrary.language == Language.KOTLIN ?
@@ -239,9 +239,7 @@ export function generateArkoalaFromIdl(config: {
     ))
 
         if ([Language.TS, Language.ARKTS].includes(peerLibrary.language)) {
-            // const subDir = arkoala.managedSubDir.length > 0? `/${arkoala.managedSubDir}`: ``
-            // const arkoalaDir = `${arkoala.managedBaseDir}/${module.name}/src${subDir}`
-            const arkoalaDir = `${arkoala.managedBaseDir}/${module.name}/src`
+            const arkoalaDir = `${arkoala.managedBaseDir}/${module.name}/${arkoala.managedSrcDir}`
             writeFile(
                 path.join(arkoalaDir, 'generated', 'index' + peerLibrary.language.extension),
                 makeArkuiModule(arkuiComponentsFiles.concat(installedFiles), path.join(arkoala.managedDir, 'generated')),
@@ -258,7 +256,7 @@ export function generateArkoalaFromIdl(config: {
         install(
             currentModule(),
             arkoala.managedBaseDir,
-            arkoala.managedSubDir,
+            arkoala.managedSrcDir,
             arkoala.managedDir,
             peerLibrary,
             [
@@ -272,7 +270,7 @@ export function generateArkoalaFromIdl(config: {
             const installed = install(
                 currentModule(),
                 arkoala.managedBaseDir,
-                arkoala.managedSubDir,
+                arkoala.managedSrcDir,
                 arkoala.managedSdkDir,
                 peerLibrary,
                 [

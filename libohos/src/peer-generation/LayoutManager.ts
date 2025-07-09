@@ -52,7 +52,7 @@ function isEntryExported(entry: idl.IDLEntry): boolean {
 export function install(
     module: idl.ModuleConfiguration,
     outBaseDir: string,
-    outSubDir: string,
+    outSrcDir: string,
     outDir: string,
     library: PeerLibrary,
     printers: Printer[],
@@ -84,7 +84,7 @@ export function install(
     Array.from(storage.entries()).forEach(([filePath, results]) => {
 
         const module = results.length > 0 ? idl.getModuleFor(results[0].over.node).name : idl.currentModule().name
-        const outDir = `${outBaseDir}/${module}${outSubDir.length > 0 ? "/" : ""}${outSubDir}`
+        const outDir = `${outBaseDir}/${module}/${outSrcDir}`
         const installPath = join(outDir, filePath) + (options?.fileExtension ?? library.language.extension)
         if (!results.every(it => !!it.private || !isEntryExported(it.over.node))) {
             installedToExport.push(installPath)

@@ -20,7 +20,7 @@ import { Install, TargetFile } from '@idlizer/libohos'
 export interface ArkoalaInstall {
     get root(): string
     get managedBaseDir(): string
-    get managedSubDir(): string
+    get managedSrcDir(): string
     get managedDir(): string
     get managedSdkDir(): string
     get nativeDir(): string
@@ -54,7 +54,7 @@ export function createArkoalaInstall(options: {
 abstract class BaseArkoalaInstall implements ArkoalaInstall {
     constructor(private outDir: string, private test: boolean) {}
     abstract get managedBaseDir(): string
-    get managedSubDir(): string {
+    get managedSrcDir(): string {
         return "src"
     }
     abstract get managedDir(): string
@@ -106,7 +106,7 @@ class ArkTSArkoalaInstall extends BaseArkoalaInstall {
 }
 
 class ArkTSM3ArkoalaInstall extends ArkTSArkoalaInstall {
-    get managedSubDir(): string {
+    get managedSrcDir(): string {
         return "src/ets"
     }
     get managedDir(): string {
