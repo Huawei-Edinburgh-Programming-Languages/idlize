@@ -480,19 +480,19 @@
 
 | screen_modifier.cpp | |
 
-| scrollable_common_method_modifier.cpp | Andrey Khudenkikh |
+| scrollable_common_method_modifier.cpp | Andrey Khudenkikh - on review |
 
-| scrollable_target_info_accessor.cpp | Andrey Khudenkikh |
+| scrollable_target_info_accessor.cpp | Andrey Khudenkikh - on review |
 
-| scroll_bar_modifier.cpp | Andrey Khudenkikh |
+| scroll_bar_modifier.cpp | Andrey Khudenkikh - on review |
 
-| scroller_accessor.cpp | Andrey Khudenkikh |
+| scroller_accessor.cpp | Andrey Khudenkikh - on review |
 
-| scroll_modifier.cpp | Andrey Khudenkikh |
+| scroll_modifier.cpp | Andrey Khudenkikh - on review |
 
-| scroll_motion_accessor.cpp | Andrey Khudenkikh |
+| scroll_motion_accessor.cpp | Andrey Khudenkikh - on review |
 
-| scroll_result_accessor.cpp | Andrey Khudenkikh |
+| scroll_result_accessor.cpp | Andrey Khudenkikh - on review |
 
 | search_controller_accessor.cpp | Evstigneev Roman - on review |
 
@@ -546,17 +546,17 @@
 
 | swiper_content_transition_proxy_accessor.cpp | |
 
-| swiper_controller_accessor.cpp | |
+| swiper_controller_accessor.cpp | Andrey Khudenkikh |
 
-| swipe_recognizer_accessor.cpp | |
+| swipe_recognizer_accessor.cpp | Andrey Khudenkikh |
 
 | swiper_modifier.cpp | INTEGRATED |
 
-| symbol_effect_accessor.cpp | |
+| symbol_effect_accessor.cpp | Andrey Khudenkikh |
 
-| symbol_glyph_modifier.cpp | |
+| symbol_glyph_modifier.cpp | Andrey Khudenkikh |
 
-| symbol_span_modifier.cpp | |
+| symbol_span_modifier.cpp | Andrey Khudenkikh |
 
 | system_ops_accessor.cpp | |
 
