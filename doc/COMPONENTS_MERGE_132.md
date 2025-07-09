@@ -662,15 +662,15 @@
 
 | water_flow_sections_accessor.cpp |Sergey Kovalev |
 
-| web_context_menu_param_accessor.cpp |Sergey Kovalev |
+| web_context_menu_param_accessor.cpp | |
 
-| web_context_menu_result_accessor.cpp | Sergey Kovalev|
+| web_context_menu_result_accessor.cpp | |
 
-| web_cookie_accessor.cpp |Sergey Kovalev |
+| web_cookie_accessor.cpp | |
 
-| web_keyboard_controller_accessor.cpp |Sergey Kovalev |
+| web_keyboard_controller_accessor.cpp | |
 
-| web_modifier.cpp |Sergey Kovalev |
+| web_modifier.cpp | |
 
 | web_resource_error_accessor.cpp | |
 
