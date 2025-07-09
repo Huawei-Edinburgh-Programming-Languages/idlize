@@ -430,21 +430,21 @@
 
 | relative_container_modifier.cpp | Erokhin Ilya |
 
-| remote_window_modifier.cpp | |
+| remote_window_modifier.cpp | INTEGRATED |
 
 | rendering_context_settings_accessor.cpp | Vadim Voronov |
 
-| render_node_accessor.cpp | |
+| render_node_accessor.cpp | Samarin Sergey |
 
-| replace_symbol_effect_accessor.cpp | |
+| replace_symbol_effect_accessor.cpp | Samarin Sergey |
 
-| restricted_worker_accessor.cpp | |
+| restricted_worker_accessor.cpp | done (not implemented on FB) |
 
-| rich_editor_base_controller_accessor.cpp | |
+| rich_editor_base_controller_accessor.cpp | INTEGRATED |
 
 | rich_editor_controller_accessor.cpp | INTEGRATED |
 
-| rich_editor_modifier.cpp | |
+| rich_editor_modifier.cpp | INTEGRATED |
 
 | rich_editor_styled_string_controller_accessor.cpp | |
 
@@ -466,7 +466,7 @@
 
 | row_split_modifier.cpp | Lobah Mikhail|
 
-| run_accessor.cpp | |
+| run_accessor.cpp | done (new file) |
 
 | sampling_options_accessor.cpp | |
 
