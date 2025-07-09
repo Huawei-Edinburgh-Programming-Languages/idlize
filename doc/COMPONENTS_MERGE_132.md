@@ -318,7 +318,7 @@
 
 | matrix_accessor.cpp | Samarin Sergey |
 
-| measurable_accessor.cpp | Lobah Mikhail|
+| measurable_accessor.cpp | Lobah Mikhail -- done|
 
 | media_cached_image_modifier.cpp | Lobah Mikhail|
 
