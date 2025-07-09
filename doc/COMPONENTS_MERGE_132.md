@@ -328,23 +328,23 @@
 
 | menu_modifier.cpp | Sergey Morozov |
 
-| mouse_event_accessor.cpp | Evstigneev Roman |
+| mouse_event_accessor.cpp | Evstigneev Roman - on review |
 
-| mutable_styled_string_accessor.cpp | Evstigneev Roman |
+| mutable_styled_string_accessor.cpp | Evstigneev Roman - on review |
 
-| nav_destination_context_accessor.cpp | Evstigneev Roman |
+| nav_destination_context_accessor.cpp | Evstigneev Roman - on review |
 
-| nav_destination_modifier.cpp | Evstigneev Roman |
+| nav_destination_modifier.cpp | Evstigneev Roman - on review |
 
-| nav_extender_accessor.cpp | Evstigneev Roman |
+| nav_extender_accessor.cpp | Evstigneev Roman - on review |
 
-| navigation_modifier.cpp | Evstigneev Roman |
+| navigation_modifier.cpp | Evstigneev Roman - on review |
 
-| navigation_transition_proxy_accessor.cpp | Evstigneev Roman |
+| navigation_transition_proxy_accessor.cpp | Evstigneev Roman - on review |
 
-| nav_path_info_accessor.cpp | Evstigneev Roman |
+| nav_path_info_accessor.cpp | Evstigneev Roman - on review |
 
-| nav_path_stack_accessor.cpp | Evstigneev Roman |
+| nav_path_stack_accessor.cpp | Evstigneev Roman - on review |
 
 | node_container_modifier.cpp | |
 
