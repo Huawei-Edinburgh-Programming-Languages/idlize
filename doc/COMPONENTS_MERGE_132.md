@@ -320,7 +320,7 @@
 
 | measurable_accessor.cpp | Lobah Mikhail -- done|
 
-| media_cached_image_modifier.cpp | Lobah Mikhail|
+| media_cached_image_modifier.cpp | Lobah Mikhail -- done|
 
 | menu_item_group_modifier.cpp | Sergey Morozov |
 
