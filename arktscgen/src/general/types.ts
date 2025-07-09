@@ -146,7 +146,7 @@ export class InteropConvertor extends core.CppInteropArgConvertor {
     override convertTypeReference(ref: core.IDLReferenceType): string {
         const type = this.resolver.resolveTypeReference(ref)
         if (!type) {
-           throw `Unresolved reference: ${ref.name}!`
+           //throw `Unresolved reference: ${ref.name}!`
         } else if (core.isInterface(type)) {
            return `KNativePointer`
         } else if (core.isEnum(type)) {
@@ -175,6 +175,12 @@ export class InteropConvertor extends core.CppInteropArgConvertor {
             case core.IDLF16Type: return "short float"
             case core.IDLVoidType: return "void"
             case core.IDLBooleanType: return 'KBoolean'
+
+            // todo: suspicious
+            case core.IDLI16Type: return "KShort"
+            case core.IDLU16Type: return "KUShort"
+            case core.IDLI8Type: return "char"
+            case core.IDLU8Type: return "std::byte"
             default:
         }
         return super.convertPrimitiveType(type)
