@@ -616,7 +616,7 @@
 
 | text_style_accessor.cpp | |
 
-| text_timer_controller_accessor.cpp | |
+| text_timer_controller_accessor.cpp | Dudkin Sergey |
 
 | text_timer_modifier.cpp | Dudkin Sergey |
 
