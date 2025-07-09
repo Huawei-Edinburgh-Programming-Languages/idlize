@@ -135,12 +135,16 @@ export class Visitor {
         if (ref.name === Config.astNodeCommonAncestor) return false // TODO: is handwritten
         if (ref.name === Config.context) return false // TODO: is handwritten
         if (this.isHeir(ref, Config.astNodeCommonAncestor)) return true
-        if (this.isHeir(ref, Config.defaultAncestor)) return true
+
+        //if (this.isHeir(ref, Config.defaultAncestor)) return true
+        const type = core.isReferenceType(ref) ? this.resolveReference(ref) : ref
+        if (type && core.isInterface(type) && type.inheritance.length === 0) {
+            console.log(`ArktsObject for ${type.name}`);
+            return true
+        }
+
         // TODO: Nodes that do not have parents have to be in this list
         if (["ValidationInfo", "ArkTsConfig", "Program"].includes(ref.name)) return true // TODO: fix
-        //if (core.isInterface(ref)) {
-        //    throw `${ref.name}`
-        //}
         return false
     }
 
