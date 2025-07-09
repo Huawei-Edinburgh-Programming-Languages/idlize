@@ -53,7 +53,7 @@ export function install(
     module: idl.ModuleConfiguration,
     outBaseDir: string,
     outSubDir: string,
-    outDir2: string,
+    outDir: string,
     library: PeerLibrary,
     printers: Printer[],
     options?: {

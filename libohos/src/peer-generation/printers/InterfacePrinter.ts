@@ -26,7 +26,6 @@ import {
     isInIdlize,
     isInIdlizeInternal,
     isInCurrentModule,
-    isInMainModule,
     getModuleFor,
     isExternalType,
     LayoutNodeRole,
@@ -625,11 +624,6 @@ export class TSInterfacesVisitor implements InterfacesVisitor {
             const seenNames = new Set<string>()
             for (const entry of entries) {
 
-                // if (!isInMainModule(entry)) {
-                //     // Skip entry declaration for the external module
-                //     continue
-                // }
-
                 const imports = new ImportsCollector()
                 const writer = createLanguageWriter(this.peerLibrary.language, this.peerLibrary)
 
@@ -1109,11 +1103,6 @@ export class ArkTSInterfacesVisitor implements InterfacesVisitor {
                 if (idl.isImport(entry)) {
                     continue
                 }
-
-                // if (!isInMainModule(entry)) {
-                //     // Skip entry declaration for the external module
-                //     continue
-                // }
 
                 const imports = new ImportsCollector()
                 const writer = this.peerLibrary.createLanguageWriter()

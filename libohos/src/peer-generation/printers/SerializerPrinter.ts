@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { generatorConfiguration, Language, isMaterialized, isExternalType, isBuilderClass, throwException, LanguageExpression, isInIdlize, isInIdlizeInternal, createLanguageWriter, lib, getExtractorName, getSerializerName, InterfaceConvertor, ProxyConvertor, PrintHint, CppLanguageWriter, isInExternalModule } from '@idlizer/core'
+import { generatorConfiguration, Language, isMaterialized, isExternalType, isBuilderClass, throwException, LanguageExpression, isInIdlize, isInIdlizeInternal, createLanguageWriter, lib, getExtractorName, getSerializerName, InterfaceConvertor, ProxyConvertor, PrintHint, CppLanguageWriter, isInCurrentModule } from '@idlizer/core'
 import { ExpressionStatement, LanguageStatement, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter, PeerLibrary } from "@idlizer/core"
 import { peerGeneratorConfiguration } from '../../DefaultConfiguration'
@@ -332,9 +332,6 @@ class SerializerPrinter {
             createSerializerDependencyFilter(this.language))
 
         return serializerDeclarations.flatMap(decl => {
-            if (this.language !== Language.CPP && isInExternalModule(decl)) {
-                return []
-            }
             if (isComponentDeclaration(this.library, decl)) {
                 return []
             }

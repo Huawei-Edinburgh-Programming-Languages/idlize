@@ -531,7 +531,6 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
             this.collector.addFeature("extractors", handwrittenPackage)
         }
         // specific runtime dependencies
-        // TBD
         collectDeclItself(this.library, idl.createReferenceType(NativeModule.Generated.name), idl.createReferenceType(NativeModule.Generated.name), this.collector)
         if (this.library.name === 'arkoala') {
             this.collector.addFeatures(['CallbackTransformer'], './CallbackTransformer')

@@ -346,15 +346,6 @@ export function generateArkoalaFromIdl(config: {
         //         message: "producing"
         //     }
         // )
-        // index not printed
-        // writeFile(
-        //     path.join(arkoala.managedDir, 'generated', 'index' + peerLibrary.language.extension),
-        //     makeArkuiModule(arkuiComponentsFiles.concat(installedFiles), path.join(arkoala.managedDir, 'generated')),
-        //     {
-        //         onlyIntegrated: config.onlyIntegrated,
-        //         integrated: true
-        //     }
-        // )
         writeFile(path.join(arkoala.managedDir, 'generated', "peers", 'CallbackKind' + peerLibrary.language.extension),
             makeCallbacksKinds(peerLibrary, peerLibrary.language),
             {
@@ -376,14 +367,6 @@ export function generateArkoalaFromIdl(config: {
         // writeIntegratedFile(
         //     arkoala.arktsLib(new TargetFile(NativeModuleType.Interop.name, 'arkts')),
         //     printPredefinedNativeModule(peerLibrary, NativeModuleType.Interop).printToString(),
-        // )
-        // writeFile(
-        //     path.join(arkoala.managedDir, 'generated', 'index' + peerLibrary.language.extension),
-        //     makeArkuiModule(arkuiComponentsFiles.concat(installedFiles), path.join(arkoala.managedDir, 'generated')),
-        //     {
-        //         onlyIntegrated: config.onlyIntegrated,
-        //         integrated: true
-        //     }
         // )
         writeFile(path.join(arkoala.managedDir, 'generated', 'peers', 'CallbackKind' + peerLibrary.language.extension),
             makeCallbacksKinds(peerLibrary, peerLibrary.language),
