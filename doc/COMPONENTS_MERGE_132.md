@@ -316,7 +316,7 @@
 
 | matrix4_transit_accessor.cpp | Samarin Sergey |
 
-| matrix_accessor.cpp | |
+| matrix_accessor.cpp | Samarin Sergey |
 
 | measurable_accessor.cpp | |
 
@@ -390,7 +390,7 @@
 
 | permission_request_accessor.cpp | |
 
-| pinch_gesture_event_accessor.cpp | |
+| pinch_gesture_event_accessor.cpp | Samarin Sergey |
 
 | pinch_gesture_interface_accessor.cpp | |
 
@@ -456,7 +456,7 @@
 
 | rotation_gesture_accessor.cpp | |
 
-| rotation_gesture_event_accessor.cpp | |
+| rotation_gesture_event_accessor.cpp | Samarin Sergey |
 
 | rotation_recognizer_accessor.cpp | |
 
@@ -542,7 +542,7 @@
 
 | swipe_gesture_accessor.cpp | |
 
-| swipe_gesture_event_accessor.cpp | |
+| swipe_gesture_event_accessor.cpp | Samarin Sergey |
 
 | swiper_content_transition_proxy_accessor.cpp | |
 
