@@ -565,19 +565,19 @@
 
 | tab_content_transition_proxy_accessor.cpp | |
 
-| tabs_controller_accessor.cpp | |
+| tabs_controller_accessor.cpp | Tuzhilkin Ivan, done |
 
-| tabs_modifier.cpp | |
+| tabs_modifier.cpp | Tuzhilkin Ivan |
 
-| tap_gesture_event_accessor.cpp | |
+| tap_gesture_event_accessor.cpp | Tuzhilkin Ivan |
 
-| tap_gesture_interface_accessor.cpp | |
+| tap_gesture_interface_accessor.cpp | Tuzhilkin Ivan |
 
-| tap_recognizer_accessor.cpp | |
+| tap_recognizer_accessor.cpp | Tuzhilkin Ivan |
 
-| text_area_controller_accessor.cpp | |
+| text_area_controller_accessor.cpp | Tuzhilkin Ivan |
 
-| text_area_modifier.cpp | |
+| text_area_modifier.cpp | Tuzhilkin Ivan, done|
 
 | text_base_controller_accessor.cpp | |
 
@@ -597,7 +597,7 @@
 
 | text_input_controller_accessor.cpp | |
 
-| text_input_modifier.cpp | |
+| text_input_modifier.cpp | Tuzhilkin Ivan, done|
 
 | text_line_accessor.cpp | |
 
@@ -605,7 +605,7 @@
 
 | text_menu_item_id_accessor.cpp | |
 
-| text_modifier.cpp | |
+| text_modifier.cpp | Tuzhilkin Ivan, done|
 
 | text_picker_dialog_accessor.cpp | |
 
@@ -681,7 +681,7 @@
 
 | window_scene_modifier.cpp | |
 
-| x_component_controller_accessor.cpp | |
+| x_component_controller_accessor.cpp | Tuzhilkin Ivan, done |
 
 | x_component_modifier.cpp | |
 
