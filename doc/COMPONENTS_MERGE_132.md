@@ -122,21 +122,21 @@
 
 | date_picker_modifier.cpp | Dudkin Sergey - it is ok and compiles, however missing methods: DisappearTextStyle0Impl, SelectedTextStyle0Impl,  DigitalCrownSensitivityImpl, EnableHapticFeedbackImpl |
 
-| decoration_style_accessor.cpp | |
+| decoration_style_accessor.cpp | Erokhin Ilya |
 
-| disappear_symbol_effect_accessor.cpp | |
+| disappear_symbol_effect_accessor.cpp | Erokhin Ilya |
 
 | divider_modifier.cpp | Evstigneev Roman - on review |
 
 | drag_event_accessor.cpp | Evstigneev Roman - GetModifierKeyState has wrong generation |
 
-| drawable_descriptor_accessor.cpp | |
+| drawable_descriptor_accessor.cpp | Erokhin Ilya |
 
-| draw_context_accessor.cpp | |
+| draw_context_accessor.cpp | Erokhin Ilya |
 
 | drawing_rendering_context_accessor.cpp | Vadim Voronov |
 
-| draw_modifier_accessor.cpp | |
+| draw_modifier_accessor.cpp | Erokhin Ilya |
 
 | edit_menu_options_accessor.cpp | Sergey Kovalev|
 
@@ -210,15 +210,15 @@
 
 | global_scope_ohos_measure_utils_accessor.cpp | Sergey Kovalev|
 
-| grid_col_modifier.cpp | |
+| grid_col_modifier.cpp | Erokhin Ilya |
 
-| grid_item_modifier.cpp | |
+| grid_item_modifier.cpp | Erokhin Ilya |
 
-| grid_modifier.cpp | |
+| grid_modifier.cpp | Erokhin Ilya |
 
-| grid_row_modifier.cpp | |
+| grid_row_modifier.cpp | Erokhin Ilya |
 
-| hierarchical_symbol_effect_accessor.cpp | |
+| hierarchical_symbol_effect_accessor.cpp | Erokhin Ilya |
 
 | hover_event_accessor.cpp | |
 
