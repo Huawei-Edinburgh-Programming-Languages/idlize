@@ -62,25 +62,25 @@
 
 | canvas_rendering_context2d_accessor.cpp | Vadim Voronov - done|
 
-| checkbox_group_modifier.cpp | Evstigneev Roman - on review |
+| checkbox_group_modifier.cpp | Evstigneev Roman - done |
 
-| checkbox_modifier.cpp | Evstigneev Roman - on review|
+| checkbox_modifier.cpp | Evstigneev Roman - done |
 
 | children_main_size_accessor.cpp | Erokhin Ilya - done |
 
-| circle_modifier.cpp | Evstigneev Roman - on review |
+| circle_modifier.cpp | Evstigneev Roman - done |
 
-| circle_shape_accessor.cpp | Evstigneev Roman - on review |
+| circle_shape_accessor.cpp | Evstigneev Roman - done |
 
-| click_event_accessor.cpp | Evstigneev Roman - on review |
+| click_event_accessor.cpp | Evstigneev Roman - done |
 
 | client_authentication_handler_accessor.cpp | Evstigneev Roman - web |
 
 | color_content_accessor.cpp | Evstigneev Roman - new gen file |
 
-| color_filter_accessor.cpp | Evstigneev Roman - on review |
+| color_filter_accessor.cpp | Evstigneev Roman - done |
 
-| color_metrics_accessor.cpp | Evstigneev Roman - on review |
+| color_metrics_accessor.cpp | Evstigneev Roman - done |
 
 | column_modifier.cpp | Lobah Mikhail|
 
@@ -88,9 +88,9 @@
 
 | common_method_modifier.cpp | Lobah Mikhail|
 
-| common_shape_accessor.cpp | Evstigneev Roman - on review |
+| common_shape_accessor.cpp | Evstigneev Roman - done |
 
-| common_shape_method_modifier.cpp | Evstigneev Roman - on review |
+| common_shape_method_modifier.cpp | Evstigneev Roman - done |
 
 | component_content_accessor.cpp | Erokhin Ilya - done |
 
@@ -126,7 +126,7 @@
 
 | disappear_symbol_effect_accessor.cpp | Erokhin Ilya - done |
 
-| divider_modifier.cpp | Evstigneev Roman - on review |
+| divider_modifier.cpp | Evstigneev Roman - done |
 
 | drag_event_accessor.cpp | Evstigneev Roman - GetModifierKeyState has wrong generation |
 
@@ -260,25 +260,25 @@
 
 | layoutable_accessor.cpp |Dmitry Smirnov |
 
-| layout_callback_accessor.cpp | Evstigneev Roman |
+| layout_callback_accessor.cpp | Evstigneev Roman - NEW_GENERATE |
 
-| layout_child_accessor.cpp | Evstigneev Roman |
+| layout_child_accessor.cpp | Evstigneev Roman - NEW_GENERATE |
 
 | layout_manager_accessor.cpp | Evstigneev Roman |
 
-| layout_policy_accessor.cpp | Evstigneev Roman |
+| layout_policy_accessor.cpp | Evstigneev Roman - NEW_GENERATE |
 
-| lazy_for_each_ops_accessor.cpp | Evstigneev Roman |
+| lazy_for_each_ops_accessor.cpp | Evstigneev Roman - INTEGRATED |
 
-| lazy_grid_layout_modifier.cpp | Evstigneev Roman |
+| lazy_grid_layout_modifier.cpp | Evstigneev Roman - INTEGRATED |
 
-| lazyv_grid_layout_modifier.cpp | Evstigneev Roman |
+| lazyv_grid_layout_modifier.cpp | Evstigneev Roman - INTEGRATED |
 
 | length_metrics_accessor.cpp | Evstigneev Roman |
 
 | letter_spacing_style_accessor.cpp | Evstigneev Roman |
 
-| life_cycle_accessor.cpp | Evstigneev Roman |
+| life_cycle_accessor.cpp | Evstigneev Roman - NEW_GENERATE |
 
 | linear_gradient_accessor.cpp | Erokhin Ilya |
 
@@ -328,23 +328,23 @@
 
 | menu_modifier.cpp | Sergey Morozov |
 
-| mouse_event_accessor.cpp | Evstigneev Roman - on review |
+| mouse_event_accessor.cpp | Evstigneev Roman - done |
 
-| mutable_styled_string_accessor.cpp | Evstigneev Roman - on review |
+| mutable_styled_string_accessor.cpp | Evstigneev Roman - done |
 
-| nav_destination_context_accessor.cpp | Evstigneev Roman - on review |
+| nav_destination_context_accessor.cpp | Evstigneev Roman - done |
 
-| nav_destination_modifier.cpp | Evstigneev Roman - on review |
+| nav_destination_modifier.cpp | Evstigneev Roman - done |
 
-| nav_extender_accessor.cpp | Evstigneev Roman - on review |
+| nav_extender_accessor.cpp | Evstigneev Roman - done |
 
-| navigation_modifier.cpp | Evstigneev Roman - on review |
+| navigation_modifier.cpp | Evstigneev Roman - done |
 
-| navigation_transition_proxy_accessor.cpp | Evstigneev Roman - on review |
+| navigation_transition_proxy_accessor.cpp | Evstigneev Roman - done |
 
-| nav_path_info_accessor.cpp | Evstigneev Roman - on review |
+| nav_path_info_accessor.cpp | Evstigneev Roman - done |
 
-| nav_path_stack_accessor.cpp | Evstigneev Roman - on review |
+| nav_path_stack_accessor.cpp | Evstigneev Roman - done |
 
 | node_container_modifier.cpp | |
 
@@ -374,21 +374,21 @@
 
 | path2d_accessor.cpp | Vadim Voronov - done |
 
-| path_accessor.cpp | |
+| path_accessor.cpp | Evstigneev Roman |
 
-| path_effect_accessor.cpp | |
+| path_effect_accessor.cpp | Evstigneev Roman |
 
-| path_modifier.cpp | |
+| path_modifier.cpp | Evstigneev Roman |
 
 | path_shape_accessor.cpp | Samarin Sergey |
 
-| pattern_lock_controller_accessor.cpp | |
+| pattern_lock_controller_accessor.cpp | Evstigneev Roman |
 
-| pattern_lock_modifier.cpp | |
+| pattern_lock_modifier.cpp | Evstigneev Roman |
 
-| pen_accessor.cpp | |
+| pen_accessor.cpp | Evstigneev Roman |
 
-| permission_request_accessor.cpp | |
+| permission_request_accessor.cpp | Evstigneev Roman |
 
 | pinch_gesture_event_accessor.cpp | Samarin Sergey |
 
@@ -414,9 +414,9 @@
 
 | pulse_symbol_effect_accessor.cpp | |
 
-| qr_code_modifier.cpp | Evstigneev Roman - on review |
+| qr_code_modifier.cpp | Evstigneev Roman - done |
 
-| radio_modifier.cpp | Evstigneev Roman - on review |
+| radio_modifier.cpp | Evstigneev Roman - done |
 
 | rating_modifier.cpp | Ekaterina Stepanova - on review |
 
@@ -494,11 +494,11 @@
 
 | scroll_result_accessor.cpp | Andrey Khudenkikh - on review |
 
-| search_controller_accessor.cpp | Evstigneev Roman - on review |
+| search_controller_accessor.cpp | Evstigneev Roman - done |
 
-| search_modifier.cpp | Evstigneev Roman - on review |
+| search_modifier.cpp | Evstigneev Roman - done |
 
-| search_ops_accessor.cpp | Evstigneev Roman - on review |
+| search_ops_accessor.cpp | Evstigneev Roman - done |
 
 | security_component_method_modifier.cpp | Samarin Sergey |
 
@@ -644,7 +644,7 @@
 
 | ui_extension_proxy_accessor.cpp | |
 
-| unified_data_accessor.cpp | Evstigneev Roman - on review |
+| unified_data_accessor.cpp | Evstigneev Roman - done |
 
 | url_style_accessor.cpp | Politov Mikhail |
 
