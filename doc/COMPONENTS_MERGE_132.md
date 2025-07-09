@@ -561,9 +561,9 @@
 
 | tab_bar_symbol_accessor.cpp | |
 
-| tab_content_modifier.cpp | |
+| tab_content_modifier.cpp | Tuzhilkin Ivan |
 
-| tab_content_transition_proxy_accessor.cpp | |
+| tab_content_transition_proxy_accessor.cpp | Tuzhilkin Ivan |
 
 | tabs_controller_accessor.cpp | Tuzhilkin Ivan, done |
 
