@@ -614,15 +614,15 @@
 
 | text_shadow_style_accessor.cpp | Politov Mikhail |
 
-| text_style_accessor.cpp | |
+| text_style_accessor.cpp | Evstigneev Roman |
 
 | text_timer_controller_accessor.cpp | Dudkin Sergey |
 
 | text_timer_modifier.cpp | Dudkin Sergey |
 
-| theme_control_accessor.cpp | |
+| theme_control_accessor.cpp | Evstigneev Roman |
 
-| time_picker_dialog_accessor.cpp | |
+| time_picker_dialog_accessor.cpp | Evstigneev Roman |
 
 | time_picker_modifier.cpp | Ekaterina Stepanova - on review|
 
@@ -630,7 +630,7 @@
 
 | touch_event_accessor.cpp | Samarin Sergey |
 
-| transition_effect_accessor.cpp | |
+| transition_effect_accessor.cpp | Evstigneev Roman |
 
 | typeface_accessor.cpp | Andrey Khudenkikh |
 
