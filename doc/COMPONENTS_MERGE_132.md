@@ -544,7 +544,7 @@
 
 | swipe_gesture_event_accessor.cpp | Samarin Sergey |
 
-| swiper_content_transition_proxy_accessor.cpp | |
+| swiper_content_transition_proxy_accessor.cpp | Vadim Voronov |
 
 | swiper_controller_accessor.cpp | Andrey Khudenkikh - on review |
 
@@ -588,7 +588,7 @@
 
 | text_clock_modifier.cpp | Samarin Sergey |
 
-| text_content_controller_base_accessor.cpp | |
+| text_content_controller_base_accessor.cpp | Vadim Voronov |
 
 | text_controller_accessor.cpp | Samarin Sergey |
 
