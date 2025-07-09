@@ -386,6 +386,10 @@ export class PeerGenerator {
     }
 
     public static makeWrapperFromNativeType(name: string, type: core.IDLType, resolver: Resolver) : string {
+        // todo: make it possible to fix that via LanguageWriter & converter
+        const hack_removePrefix = (name: string) =>
+            name.startsWith(Config.dataClassPrefix) ? name.slice(Config.dataClassPrefix.length) : name
+
         if (core.isReferenceType(type)) {
             const refType = resolver.resolveTypeReference(type)
             return refType && core.isInterface(refType) && resolver.isHeir(refType, Config.astNodeCommonAncestor) ?
@@ -398,7 +402,7 @@ export class PeerGenerator {
             if (core.isReferenceType(type.type)) {
                 const refType = resolver.resolveTypeReference(type.type)
                 return refType && core.isInterface(refType) && resolver.isHeir(refType, Config.astNodeCommonAncestor) ?
-                    PeersConstructions.unpackNullable : PeersConstructions.newOf(type.type.name)
+                    PeersConstructions.unpackNullable : PeersConstructions.newOf(hack_removePrefix(type.type.name))
             }
             core.throwException(`unexpected optional of non-reference type`)
 
