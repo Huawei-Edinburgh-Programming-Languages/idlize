@@ -82,11 +82,11 @@
 
 | color_metrics_accessor.cpp | Evstigneev Roman - done |
 
-| column_modifier.cpp | Lobah Mikhail|
+| column_modifier.cpp | Lobah Mikhail -- done|
 
 | column_split_modifier.cpp | Lobah Mikhail|
 
-| common_method_modifier.cpp | Lobah Mikhail|
+| common_method_modifier.cpp | Lobah Mikhail -- on reviev|
 
 | common_shape_accessor.cpp | Evstigneev Roman - done |
 
