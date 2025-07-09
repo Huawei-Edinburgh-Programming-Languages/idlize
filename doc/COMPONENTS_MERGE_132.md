@@ -50,17 +50,17 @@
 
 | canvas_accessor.cpp | Erokhin Ilya - something new |
 
-| canvas_gradient_accessor.cpp | Vadim Voronov |
+| canvas_gradient_accessor.cpp | Vadim Voronov - done |
 
 | canvas_modifier.cpp | Erokhin Ilya - done |
 
-| canvas_path_accessor.cpp | Vadim Voronov |
+| canvas_path_accessor.cpp | Vadim Voronov - done |
 
-| canvas_pattern_accessor.cpp | Vadim Voronov |
+| canvas_pattern_accessor.cpp | Vadim Voronov - done |
 
-| canvas_renderer_accessor.cpp | Vadim Voronov |
+| canvas_renderer_accessor.cpp | Vadim Voronov - done |
 
-| canvas_rendering_context2d_accessor.cpp | Vadim Voronov |
+| canvas_rendering_context2d_accessor.cpp | Vadim Voronov - done|
 
 | checkbox_group_modifier.cpp | Evstigneev Roman - on review |
 
@@ -134,7 +134,7 @@
 
 | draw_context_accessor.cpp | Erokhin Ilya |
 
-| drawing_rendering_context_accessor.cpp | Vadim Voronov |
+| drawing_rendering_context_accessor.cpp | Vadim Voronov - done |
 
 | draw_modifier_accessor.cpp | Erokhin Ilya |
 
@@ -204,7 +204,7 @@
 
 | global_scope_ohos_arkui_component_snapshot_accessor.cpp | Sergey Kovalev |
 
-| global_scope_ohos_arkui_performance_monitor_accessor.cpp | Vadim Voronov  |
+| global_scope_ohos_arkui_performance_monitor_accessor.cpp | Vadim Voronov - done |
 
 | global_scope_ohos_font_accessor.cpp | Sergey Kovalev|
 
@@ -228,13 +228,13 @@
 
 | i_curve_accessor.cpp | |
 
-| image_analyzer_controller_accessor.cpp | Vadim Voronov |
+| image_analyzer_controller_accessor.cpp | Vadim Voronov - done |
 
 | image_animator_modifier.cpp | |
 
 | image_attachment_accessor.cpp | |
 
-| image_bitmap_accessor.cpp | Vadim Voronov  |
+| image_bitmap_accessor.cpp | Vadim Voronov - done |
 
 | image_data_accessor.cpp | |
 
@@ -312,7 +312,7 @@
 
 | mask_filter_accessor.cpp | |
 
-| matrix2d_accessor.cpp | Vadim Voronov |
+| matrix2d_accessor.cpp | Vadim Voronov - done |
 
 | matrix4_transit_accessor.cpp | Samarin Sergey |
 
@@ -350,9 +350,9 @@
 
 | node_content_accessor.cpp | |
 
-| offscreen_canvas_accessor.cpp | Vadim Voronov |
+| offscreen_canvas_accessor.cpp | Vadim Voronov - done |
 
-| offscreen_canvas_rendering_context2d_accessor.cpp | Vadim Voronov  |
+| offscreen_canvas_rendering_context2d_accessor.cpp | Vadim Voronov - done |
 
 | page_life_cycle_accessor.cpp | Politov Mikhail |
 
@@ -372,7 +372,7 @@
 
 | paste_button_modifier.cpp | Samarin Sergey |
 
-| path2d_accessor.cpp | Vadim Voronov |
+| path2d_accessor.cpp | Vadim Voronov - done |
 
 | path_accessor.cpp | |
 
