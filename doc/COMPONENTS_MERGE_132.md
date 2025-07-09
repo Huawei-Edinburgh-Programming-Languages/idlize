@@ -444,7 +444,7 @@
 
 | rich_editor_controller_accessor.cpp | INTEGRATED |
 
-| rich_editor_modifier.cpp | INTEGRATED |
+| rich_editor_modifier.cpp | |
 
 | rich_editor_styled_string_controller_accessor.cpp | |
 
@@ -582,7 +582,7 @@
 
 | text_base_controller_accessor.cpp | Samarin Sergey |
 
-| text_blob_accessor.cpp | done (new file) |
+| text_blob_accessor.cpp | |
 
 | text_clock_controller_accessor.cpp | Samarin Sergey |
 
@@ -592,23 +592,23 @@
 
 | text_controller_accessor.cpp | Samarin Sergey |
 
-| text_edit_controller_ex_accessor.cpp | Samarin Sergey |
+| text_edit_controller_ex_accessor.cpp | |
 
-| text_field_ops_accessor.cpp | INTEGRATED |
+| text_field_ops_accessor.cpp | |
 
-| text_input_controller_accessor.cpp | Samarin Sergey |
+| text_input_controller_accessor.cpp | |
 
 | text_input_modifier.cpp | Tuzhilkin Ivan, done|
 
-| text_line_accessor.cpp | done (new file) |
+| text_line_accessor.cpp | |
 
-| text_menu_controller_accessor.cpp | done (new file) |
+| text_menu_controller_accessor.cpp | |
 
-| text_menu_item_id_accessor.cpp | Samarin Sergey |
+| text_menu_item_id_accessor.cpp | |
 
 | text_modifier.cpp | Tuzhilkin Ivan, done|
 
-| text_picker_dialog_accessor.cpp | Samarin Sergey |
+| text_picker_dialog_accessor.cpp | |
 
 | text_picker_modifier.cpp | Ekaterina Stepanova - on review|
 
@@ -622,7 +622,7 @@
 
 | theme_control_accessor.cpp | |
 
-| time_picker_dialog_accessor.cpp | Samarin Sergey |
+| time_picker_dialog_accessor.cpp | |
 
 | time_picker_modifier.cpp | Ekaterina Stepanova - on review|
 
@@ -632,17 +632,17 @@
 
 | transition_effect_accessor.cpp | |
 
-| typeface_accessor.cpp | |
+| typeface_accessor.cpp | Andrey Khudenkikh |
 
 | ui_common_event_accessor.cpp | Dudkin Sergey |
 
-| ui_context_accessor.cpp | |
+| ui_context_accessor.cpp | Andrey Khudenkikh |
 
-| ui_context_atomic_service_bar_accessor.cpp | |
+| ui_context_atomic_service_bar_accessor.cpp | Andrey Khudenkikh |
 
-| ui_extension_component_modifier.cpp | |
+| ui_extension_component_modifier.cpp | Andrey Khudenkikh |
 
-| ui_extension_proxy_accessor.cpp | |
+| ui_extension_proxy_accessor.cpp | Andrey Khudenkikh |
 
 | unified_data_accessor.cpp | Evstigneev Roman - done |
 
