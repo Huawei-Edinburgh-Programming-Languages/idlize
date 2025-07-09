@@ -418,13 +418,13 @@
 
 | radio_modifier.cpp | Evstigneev Roman - on review |
 
-| rating_modifier.cpp | Ekaterina Stepanova |
+| rating_modifier.cpp | Ekaterina Stepanova - on review |
 
 | rect_modifier.cpp | |
 
 | rect_shape_accessor.cpp | |
 
-| refresh_modifier.cpp | Ekaterina Stepanova |
+| refresh_modifier.cpp | Ekaterina Stepanova - on review |
 
 | region_accessor.cpp | |
 
@@ -610,7 +610,7 @@
 
 | text_picker_dialog_accessor.cpp | |
 
-| text_picker_modifier.cpp | Ekaterina Stepanova |
+| text_picker_modifier.cpp | Ekaterina Stepanova - on review|
 
 | text_shadow_style_accessor.cpp | |
 
@@ -624,9 +624,9 @@
 
 | time_picker_dialog_accessor.cpp | |
 
-| time_picker_modifier.cpp | Ekaterina Stepanova |
+| time_picker_modifier.cpp | Ekaterina Stepanova - on review|
 
-| toggle_modifier.cpp | Ekaterina Stepanova |
+| toggle_modifier.cpp | Ekaterina Stepanova - on review |
 
 | touch_event_accessor.cpp | |
 
