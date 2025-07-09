@@ -13,9 +13,11 @@ export class BridgesGenerator {
     }
 
     public write(iface: core.IDLInterface, body: Body, writer: core.CppLanguageWriter): void {
-        body.creates.forEach(m => this.writeCreate(iface, m, writer))
-        body.updates.forEach(m => this.writeCreate(iface, m, writer))
-        PeerGenerator.sortInDeclarationOrder(body.getters.concat(body.regular), iface)
+        body.creates?.forEach(m => this.writeCreate(iface, m, writer))
+        body.updates?.forEach(m => this.writeCreate(iface, m, writer))
+        const methods = Array.prototype.concat(body.getters ?? [], body.regular ?? [])
+        //console.log(`${body.getters?.length}, ${body.regular?.length} => ${methods.length}`);
+        PeerGenerator.sortInDeclarationOrder(methods, iface)
             .forEach(m => this.writeMethod(iface, m, writer))
     }
 
@@ -35,8 +37,7 @@ export class BridgesGenerator {
         writer.writeLines('')
     }
 
-    private writeMethod(iface: core.IDLInterface, methodOr: Readonly<core.Method>, writer: core.CppLanguageWriter): void {
-        const method = PeerGenerator.cloneMethod(methodOr)
+    private writeMethod(iface: core.IDLInterface, method: Readonly<core.Method>, writer: core.CppLanguageWriter): void {
         this.insertReceiverArgument(iface, method)
 
         const [needExtraArg, returnValue] = this.makeAndCastReturnValue(iface, method, writer)
