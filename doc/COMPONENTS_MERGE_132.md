@@ -176,19 +176,19 @@
 
 | form_component_modifier.cpp |Dmitry Smirnov, on review, WRONG_GEN, no ARK_FORM_DIMENSION_DIMENSION_2_1, no type LiteralDimension|
 
-| form_link_modifier.cpp |Dmitry Smirnov |
+| form_link_modifier.cpp |Dmitry Smirnov on reivew|
 
-| frame_node_accessor.cpp | Dmitry Smirnov |
+| frame_node_accessor.cpp | Dmitry Smirnov, allready  done |
 
-| friction_motion_accessor.cpp | Dmitry Smirnov|
+| friction_motion_accessor.cpp | Dmitry Smirnov, empty the same as FB|
 
-| full_screen_exit_handler_accessor.cpp |Dmitry Smirnov |
+| full_screen_exit_handler_accessor.cpp |Dmitry Smirnov on reivew|
 
-| gauge_modifier.cpp | Dmitry Smirnov |
+| gauge_modifier.cpp | Dmitry Smirnov, allready  done|
 
-| gesture_accessor.cpp | Dmitry Smirnov|
+| gesture_accessor.cpp | Dmitry Smirnov, misiing in FB|
 
-| gesture_event_accessor.cpp | Dmitry Smirnov |
+| gesture_event_accessor.cpp | Dmitry Smirnov on reivew|
 
 | gesture_group_interface_accessor.cpp | Sergey Kovalev |
 
