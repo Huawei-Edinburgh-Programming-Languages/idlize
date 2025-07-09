@@ -84,7 +84,7 @@
 
 | column_modifier.cpp | Lobah Mikhail -- done|
 
-| column_split_modifier.cpp | Lobah Mikhail|
+| column_split_modifier.cpp | Lobah Mikhail -- done|
 
 | common_method_modifier.cpp | Lobah Mikhail -- on reviev|
 
@@ -318,9 +318,9 @@
 
 | matrix_accessor.cpp | Samarin Sergey |
 
-| measurable_accessor.cpp | |
+| measurable_accessor.cpp | Lobah Mikhail|
 
-| media_cached_image_modifier.cpp | |
+| media_cached_image_modifier.cpp | Lobah Mikhail|
 
 | menu_item_group_modifier.cpp | Sergey Morozov |
 
@@ -346,9 +346,9 @@
 
 | nav_path_stack_accessor.cpp | Evstigneev Roman - done |
 
-| node_container_modifier.cpp | |
+| node_container_modifier.cpp | Lobah Mikhail|
 
-| node_content_accessor.cpp | |
+| node_content_accessor.cpp | Lobah Mikhail|
 
 | offscreen_canvas_accessor.cpp | Vadim Voronov - done |
 
@@ -392,9 +392,9 @@
 
 | pinch_gesture_event_accessor.cpp | Samarin Sergey |
 
-| pinch_gesture_interface_accessor.cpp | |
+| pinch_gesture_interface_accessor.cpp | Lobah Mikhail|
 
-| pinch_recognizer_accessor.cpp | |
+| pinch_recognizer_accessor.cpp | Lobah Mikhail|
 
 | pixel_map_accessor.cpp | |
 
@@ -450,9 +450,9 @@
 
 | rich_text_modifier.cpp | |
 
-| root_modifier.cpp | |
+| root_modifier.cpp | Lobah Mikhail|
 
-| root_scene_modifier.cpp | |
+| root_scene_modifier.cpp | Lobah Mikhail|
 
 | rotation_gesture_accessor.cpp | |
 
@@ -460,11 +460,11 @@
 
 | rotation_recognizer_accessor.cpp | |
 
-| round_rect_accessor.cpp | |
+| round_rect_accessor.cpp | Lobah Mikhail|
 
-| row_modifier.cpp | |
+| row_modifier.cpp | Lobah Mikhail|
 
-| row_split_modifier.cpp | |
+| row_split_modifier.cpp | Lobah Mikhail|
 
 | run_accessor.cpp | |
 
