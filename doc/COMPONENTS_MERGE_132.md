@@ -654,7 +654,7 @@
 
 | video_modifier.cpp |Sergey Kovalev |
 
-| view_model_bridge.cpp |Sergey Kovalev |
+| view_model_bridge.cpp | |
 
 | visual_effect_accessor.cpp |Sergey Kovalev |
 
@@ -668,9 +668,9 @@
 
 | web_cookie_accessor.cpp |Sergey Kovalev |
 
-| web_keyboard_controller_accessor.cpp | |
+| web_keyboard_controller_accessor.cpp |Sergey Kovalev |
 
-| web_modifier.cpp | |
+| web_modifier.cpp |Sergey Kovalev |
 
 | web_resource_error_accessor.cpp | |
 
