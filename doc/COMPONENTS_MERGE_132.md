@@ -220,29 +220,29 @@
 
 | hierarchical_symbol_effect_accessor.cpp | Erokhin Ilya |
 
-| hover_event_accessor.cpp | |
+| hover_event_accessor.cpp | Vadim Voronov |
 
-| http_auth_handler_accessor.cpp | |
+| http_auth_handler_accessor.cpp | Vadim Voronov |
 
-| hyperlink_modifier.cpp | |
+| hyperlink_modifier.cpp | Vadim Voronov  |
 
-| i_curve_accessor.cpp | |
+| i_curve_accessor.cpp | Vadim Voronov |
 
 | image_analyzer_controller_accessor.cpp | Vadim Voronov - done |
 
-| image_animator_modifier.cpp | |
+| image_animator_modifier.cpp | Vadim Voronov  |
 
-| image_attachment_accessor.cpp | |
+| image_attachment_accessor.cpp | Vadim Voronov |
 
 | image_bitmap_accessor.cpp | Vadim Voronov - done |
 
-| image_data_accessor.cpp | |
+| image_data_accessor.cpp | Vadim Voronov |
 
-| image_filter_accessor.cpp | |
+| image_filter_accessor.cpp | Vadim Voronov |
 
-| image_modifier.cpp | |
+| image_modifier.cpp | Vadim Voronov |
 
-| image_span_modifier.cpp | |
+| image_span_modifier.cpp | Vadim Voronov |
 
 | indicator_component_controller_accessor.cpp | |
 
