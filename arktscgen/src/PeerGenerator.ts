@@ -46,28 +46,35 @@ export class PeerGenerator {
         // we could not generate the correct binding calls.
         // A signature can be modified in generate methods only!
 
-        const params = (method: core.IDLMethod) => {
+        const hack_params = (method: core.IDLMethod) => {
             // We can make this modifications before generation of binding call bc
             // context param is not used and length param is re-injected during generation
             // of native calls.
-            return PeerGenerator.hack_makeNullable(
+            return PeerGenerator.hack_makeNullableParameters(
                 PeerGenerator.ts_removeArrayLengthParam(
                     PeerGenerator.hack_removeContextParam(method.parameters)
                 ),
                 this.resolver
             )
         }
+        const hack_returnValue = (method: core.Method) => {
+            method.signature.returnType =
+                PeerGenerator.hack_makeNullable(method.signature.returnType, this.resolver)
+        }
 
         const body = {
             creates: methods.Create
-                ?.map(m => PeerGenerator.makeMethod(m, params(m), [core.MethodModifier.STATIC])),
+                ?.map(m => PeerGenerator.makeMethod(m, hack_params(m), [core.MethodModifier.STATIC])),
             updates: methods.Update
-                ?.map(m => PeerGenerator.makeMethod(m, params(m), [core.MethodModifier.STATIC])),
+                ?.map(m => PeerGenerator.makeMethod(m, hack_params(m), [core.MethodModifier.STATIC])),
             getters: methods.Getter
-                ?.map(m => PeerGenerator.makeMethod(m, params(m), [core.MethodModifier.GETTER])),
+                ?.map(m => PeerGenerator.makeMethod(m, hack_params(m), [core.MethodModifier.GETTER])),
             regular: methods.Regular
-                ?.map(m => PeerGenerator.makeMethod(m, params(m))) ?? [],
+                ?.map(m => PeerGenerator.makeMethod(m, hack_params(m))) ?? [],
         }
+
+        body.getters.forEach(hack_returnValue)
+        body.regular.forEach(hack_returnValue)
 
         // 1. Writing ctors
 
@@ -338,12 +345,11 @@ export class PeerGenerator {
         const methodName = method.name
         const nativeCall = writer.makeFunctionCall(
             PeersConstructions.callBinding(iface.name, methodName, nodeNamespace(iface)),
-                PeerGenerator.convertBindingArguments([core.IDLPointerType, ...method.signature.args],
-                    [PeersConstructions.pointerUsage, ...method.signature.argNames ?? []],
-                    (a, b) => PeerGenerator.makeWrapperToNativeType(a, b, this.resolver)
+            PeerGenerator.convertBindingArguments([core.IDLPointerType, ...method.signature.args],
+                [PeersConstructions.pointerUsage, ...method.signature.argNames ?? []],
+                (a, b) => PeerGenerator.makeWrapperToNativeType(a, b, this.resolver)
             ).map(writer.makeString)
         )
-
         const wrapper = PeerGenerator.makeWrapperFromNativeType('', method.signature.returnType, resolver)
         return wrapper.length == 0 ? nativeCall : writer.makeFunctionCall(wrapper, [nativeCall])
     }
@@ -486,15 +492,21 @@ export class PeerGenerator {
         }, [] as core.IDLParameter[])
     }
 
-    public static hack_makeNullable(parameters: readonly core.IDLParameter[], resolver: Resolver): core.IDLParameter[] {
-        return parameters.map(p => {
-            if (core.isReferenceType(p.type) &&
-                (resolver.isPeer(p.type) || resolver.isHeir(p.type, Config.astNodeCommonAncestor))) {
-                return core.createParameter(p.name, core.createOptionalType(p.type))
-            }
-            return core.createParameter(p.name, p.type)
-        })
+    public static hack_makeNullableParameters(parameters: readonly core.IDLParameter[], resolver: Resolver): core.IDLParameter[] {
+        return parameters.map(p => core.createParameter(p.name, this.hack_makeNullable(p.type, resolver)))
     }
+
+    public static hack_makeNullable(type: Readonly<core.IDLType>, resolver: Resolver): core.IDLType {
+        // todo: Specify nullability conditions.
+        // Heir of an AstNode and not of an ArktsObject?
+        // todo: Use Config.
+        if (core.isReferenceType(type) &&
+            // FIXME: isPeer and heir of an ast node are duplicated conditions
+            (resolver.isPeer(type) || resolver.isHeir(type, Config.astNodeCommonAncestor))) {
+            return core.createOptionalType(type)
+        }
+        return type
+}
 
     public static hack_isContextParam(param: core.IDLParameter): boolean {
         const iface = core.isReferenceType(param.type) ? (param.type as core.IDLReferenceType) : undefined
@@ -510,4 +522,3 @@ export class PeerGenerator {
         return []
     }
 }
-
