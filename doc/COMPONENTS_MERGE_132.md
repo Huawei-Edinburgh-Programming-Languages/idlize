@@ -402,9 +402,9 @@
 
 | plugin_component_modifier.cpp | |
 
-| polygon_modifier.cpp | |
+| polygon_modifier.cpp | Politov Mikhail |
 
-| polyline_modifier.cpp | |
+| polyline_modifier.cpp | Politov Mikhail |
 
 | progress_mask_accessor.cpp | |
 
@@ -518,7 +518,7 @@
 
 | slider_modifier.cpp | |
 
-| span_modifier.cpp | |
+| span_modifier.cpp | Politov Mikhail |
 
 | spring_motion_accessor.cpp | |
 
@@ -612,7 +612,7 @@
 
 | text_picker_modifier.cpp | Ekaterina Stepanova |
 
-| text_shadow_style_accessor.cpp | |
+| text_shadow_style_accessor.cpp | Politov Mikhail |
 
 | text_style_accessor.cpp | |
 
@@ -646,7 +646,7 @@
 
 | unified_data_accessor.cpp | Evstigneev Roman - on review |
 
-| url_style_accessor.cpp | |
+| url_style_accessor.cpp | Politov Mikhail |
 
 | user_data_span_accessor.cpp | |
 
