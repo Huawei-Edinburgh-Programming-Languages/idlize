@@ -454,11 +454,11 @@
 
 | root_scene_modifier.cpp | Lobah Mikhail|
 
-| rotation_gesture_accessor.cpp | |
+| rotation_gesture_accessor.cpp | done (new file) |
 
 | rotation_gesture_event_accessor.cpp | Samarin Sergey |
 
-| rotation_recognizer_accessor.cpp | |
+| rotation_recognizer_accessor.cpp | Samarin Sergey |
 
 | round_rect_accessor.cpp | Lobah Mikhail|
 
@@ -538,9 +538,9 @@
 
 | styled_string_controller_accessor.cpp | |
 
-| submit_event_accessor.cpp | |
+| submit_event_accessor.cpp | Samarin Sergey |
 
-| swipe_gesture_accessor.cpp | |
+| swipe_gesture_accessor.cpp | done (new file) |
 
 | swipe_gesture_event_accessor.cpp | Samarin Sergey |
 
@@ -580,11 +580,11 @@
 
 | text_area_modifier.cpp | Tuzhilkin Ivan, done|
 
-| text_base_controller_accessor.cpp | |
+| text_base_controller_accessor.cpp | Samarin Sergey |
 
 | text_blob_accessor.cpp | |
 
-| text_clock_controller_accessor.cpp | |
+| text_clock_controller_accessor.cpp | Samarin Sergey |
 
 | text_clock_modifier.cpp | Samarin Sergey |
 
@@ -628,7 +628,7 @@
 
 | toggle_modifier.cpp | Ekaterina Stepanova - on review |
 
-| touch_event_accessor.cpp | |
+| touch_event_accessor.cpp | Samarin Sergey |
 
 | transition_effect_accessor.cpp | |
 
