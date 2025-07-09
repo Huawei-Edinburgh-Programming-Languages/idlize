@@ -504,19 +504,19 @@
 
 | select_modifier.cpp | Samarin Sergey |
 
-| shader_effect_accessor.cpp | |
+| shader_effect_accessor.cpp | Tuzhilkin Ivan|
 
-| shadow_layer_accessor.cpp | |
+| shadow_layer_accessor.cpp | Tuzhilkin Ivan|
 
-| shape_clip_accessor.cpp | |
+| shape_clip_accessor.cpp | Tuzhilkin Ivan |
 
-| shape_mask_accessor.cpp | |
+| shape_mask_accessor.cpp | Tuzhilkin Ivan |
 
-| shape_modifier.cpp | |
+| shape_modifier.cpp | Tuzhilkin Ivan|
 
-| side_bar_container_modifier.cpp | |
+| side_bar_container_modifier.cpp | Tuzhilkin Ivan |
 
-| slider_modifier.cpp | |
+| slider_modifier.cpp | Tuzhilkin Ivan |
 
 | span_modifier.cpp | Politov Mikhail |
 
@@ -562,21 +562,21 @@
 
 | tab_bar_symbol_accessor.cpp | |
 
-| tab_content_modifier.cpp | Tuzhilkin Ivan |
+| tab_content_modifier.cpp | Tuzhilkin Ivan, done |
 
-| tab_content_transition_proxy_accessor.cpp | Tuzhilkin Ivan |
+| tab_content_transition_proxy_accessor.cpp | Tuzhilkin Ivan, done |
 
 | tabs_controller_accessor.cpp | Tuzhilkin Ivan, done |
 
-| tabs_modifier.cpp | Tuzhilkin Ivan |
+| tabs_modifier.cpp | Tuzhilkin Ivan, done |
 
-| tap_gesture_event_accessor.cpp | Tuzhilkin Ivan |
+| tap_gesture_event_accessor.cpp | Tuzhilkin Ivan, done |
 
-| tap_gesture_interface_accessor.cpp | Tuzhilkin Ivan |
+| tap_gesture_interface_accessor.cpp | Tuzhilkin Ivan, done |
 
-| tap_recognizer_accessor.cpp | Tuzhilkin Ivan |
+| tap_recognizer_accessor.cpp | Tuzhilkin Ivan, done |
 
-| text_area_controller_accessor.cpp | Tuzhilkin Ivan |
+| text_area_controller_accessor.cpp | Tuzhilkin Ivan, done |
 
 | text_area_modifier.cpp | Tuzhilkin Ivan, done|
 
@@ -684,6 +684,6 @@
 
 | x_component_controller_accessor.cpp | Tuzhilkin Ivan, done |
 
-| x_component_modifier.cpp | |
+| x_component_modifier.cpp | Tuzhilkin Ivan |
 
 
