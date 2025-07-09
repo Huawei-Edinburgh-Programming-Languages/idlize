@@ -488,8 +488,8 @@ export class PeerGenerator {
 
     public static ts_removeArrayLengthParam(parameters: readonly core.IDLParameter[]): core.IDLParameter[] {
         return parameters.reduce((prev, curr) => {
-            const prevType = prev.at(-1)?.type
-            if (!(prevType && core.IDLContainerUtils.isSequence(prevType))) {
+            const prevName = prev.at(-1)?.name
+            if (!(prevName && curr.name === `${prevName}Len`)) { //core.IDLContainerUtils.isSequence(prevType))) {
                 prev.push(curr)
             }
             return prev
