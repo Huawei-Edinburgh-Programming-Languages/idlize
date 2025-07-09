@@ -468,17 +468,17 @@
 
 | run_accessor.cpp | done (new file) |
 
-| sampling_options_accessor.cpp | Vadim Voronov |
+| sampling_options_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
 | save_button_modifier.cpp | Samarin Sergey |
 
-| scale_symbol_effect_accessor.cpp | Vadim Voronov |
+| scale_symbol_effect_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
-| scene_accessor.cpp | Vadim Voronov |
+| scene_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
-| screen_capture_handler_accessor.cpp | Vadim Voronov |
+| screen_capture_handler_accessor.cpp | Vadim Voronov - on review |
 
-| screen_modifier.cpp | Vadim Voronov |
+| screen_modifier.cpp | Vadim Voronov - on review |
 
 | scrollable_common_method_modifier.cpp | Andrey Khudenkikh - done  |
 
@@ -520,23 +520,23 @@
 
 | span_modifier.cpp | Politov Mikhail |
 
-| spring_motion_accessor.cpp | Vadim Voronov |
+| spring_motion_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
-| spring_prop_accessor.cpp | Vadim Voronov |
+| spring_prop_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
-| ssl_error_handler_accessor.cpp | Vadim Voronov |
+| ssl_error_handler_accessor.cpp | Vadim Voronov - on review |
 
 | stack_modifier.cpp | Samarin Sergey |
 
-| state_styles_ops_accessor.cpp | Vadim Voronov |
+| state_styles_ops_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
 | stepper_item_modifier.cpp | Samarin Sergey |
 
 | stepper_modifier.cpp | Samarin Sergey |
 
-| styled_string_accessor.cpp | Vadim Voronov |
+| styled_string_accessor.cpp | Vadim Voronov - done by default nothing todo |
 
-| styled_string_controller_accessor.cpp | Vadim Voronov |
+| styled_string_controller_accessor.cpp | Vadim Voronov - on review|
 
 | submit_event_accessor.cpp | Samarin Sergey |
 
@@ -544,7 +544,7 @@
 
 | swipe_gesture_event_accessor.cpp | Samarin Sergey |
 
-| swiper_content_transition_proxy_accessor.cpp | Vadim Voronov |
+| swiper_content_transition_proxy_accessor.cpp | Vadim Voronov - on review |
 
 | swiper_controller_accessor.cpp | Andrey Khudenkikh - on review |
 
@@ -558,9 +558,9 @@
 
 | symbol_span_modifier.cpp | Andrey Khudenkikh - on review  |
 
-| system_ops_accessor.cpp | Vadim Voronov |
+| system_ops_accessor.cpp | Vadim Voronov - done by default nothing todo |
 
-| tab_bar_symbol_accessor.cpp | Vadim Voronov |
+| tab_bar_symbol_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
 | tab_content_modifier.cpp | Tuzhilkin Ivan, done |
 
@@ -582,33 +582,33 @@
 
 | text_base_controller_accessor.cpp | Samarin Sergey |
 
-| text_blob_accessor.cpp | Vadim Voronov |
+| text_blob_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
 | text_clock_controller_accessor.cpp | Samarin Sergey |
 
 | text_clock_modifier.cpp | Samarin Sergey |
 
-| text_content_controller_base_accessor.cpp | Vadim Voronov |
+| text_content_controller_base_accessor.cpp | Vadim Voronov - on review 
 
 | text_controller_accessor.cpp | Samarin Sergey |
 
-| text_edit_controller_ex_accessor.cpp | Vadim Voronov |
+| text_edit_controller_ex_accessor.cpp | Vadim Voronov - on review |
 
-| text_field_ops_accessor.cpp | Vadim Voronov |
+| text_field_ops_accessor.cpp | Vadim Voronov - done by default nothing todo |
 
-| text_input_controller_accessor.cpp | Vadim Voronov |
+| text_input_controller_accessor.cpp | Vadim Voronov - on review |
 
 | text_input_modifier.cpp | Tuzhilkin Ivan, done|
 
-| text_line_accessor.cpp | Vadim Voronov |
+| text_line_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
-| text_menu_controller_accessor.cpp | Vadim Voronov |
+| text_menu_controller_accessor.cpp | Vadim Voronov - done empty new file nothing todo |
 
-| text_menu_item_id_accessor.cpp | Vadim Voronov |
+| text_menu_item_id_accessor.cpp | Vadim Voronov - on review |
 
 | text_modifier.cpp | Tuzhilkin Ivan, done|
 
-| text_picker_dialog_accessor.cpp | Vadim Voronov |
+| text_picker_dialog_accessor.cpp | Vadim Voronov - on review |
 
 | text_picker_modifier.cpp | Ekaterina Stepanova - on review|
 
