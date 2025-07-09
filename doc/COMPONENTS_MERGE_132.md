@@ -190,25 +190,25 @@
 
 | gesture_event_accessor.cpp | Dmitry Smirnov |
 
-| gesture_group_interface_accessor.cpp | |
+| gesture_group_interface_accessor.cpp | Sergey Kovalev |
 
-| gesture_modifier_accessor.cpp | |
+| gesture_modifier_accessor.cpp | Sergey Kovalev |
 
-| gesture_ops_accessor.cpp | |
+| gesture_ops_accessor.cpp | Sergey Kovalev |
 
-| gesture_recognizer_accessor.cpp | |
+| gesture_recognizer_accessor.cpp | Sergey Kovalev |
 
-| gesture_style_accessor.cpp | |
+| gesture_style_accessor.cpp | Sergey Kovalev |
 
-| global_scope_accessor.cpp | |
+| global_scope_accessor.cpp | Sergey Kovalev |
 
-| global_scope_ohos_arkui_component_snapshot_accessor.cpp | |
+| global_scope_ohos_arkui_component_snapshot_accessor.cpp | Sergey Kovalev |
 
 | global_scope_ohos_arkui_performance_monitor_accessor.cpp | Vadim Voronov  |
 
-| global_scope_ohos_font_accessor.cpp | |
+| global_scope_ohos_font_accessor.cpp | Sergey Kovalev|
 
-| global_scope_ohos_measure_utils_accessor.cpp | |
+| global_scope_ohos_measure_utils_accessor.cpp | Sergey Kovalev|
 
 | grid_col_modifier.cpp | |
 
