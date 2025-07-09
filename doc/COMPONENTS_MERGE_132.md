@@ -170,9 +170,9 @@
 
 | folder_stack_modifier.cpp |Dmitry Smirnov, done |
 
-| font_accessor.cpp |Dmitry Smirnov misiing in FB|
+| font_accessor.cpp |Dmitry Smirnov, NEW_GENERATE|
 
-| font_collection_accessor.cpp |Dmitry Smirnov misiing in FB|
+| font_collection_accessor.cpp |Dmitry Smirnov, NEW_GENERATE|
 
 | form_component_modifier.cpp |Dmitry Smirnov, on review, WRONG_GEN, no ARK_FORM_DIMENSION_DIMENSION_2_1, no type LiteralDimension|
 
@@ -186,7 +186,7 @@
 
 | gauge_modifier.cpp | Dmitry Smirnov, allready  done|
 
-| gesture_accessor.cpp | Dmitry Smirnov, misiing in FB|
+| gesture_accessor.cpp | Dmitry Smirnov, NEW_GENERATE|
 
 | gesture_event_accessor.cpp | Dmitry Smirnov, done|
 
@@ -246,19 +246,19 @@
 
 | indicator_component_controller_accessor.cpp | Vadim Voronov |
 
-| indicator_component_modifier.cpp |Dmitry Smirnov |
+| indicator_component_modifier.cpp |Dmitry Smirnov, on review|
 
-| iui_context_accessor.cpp |Dmitry Smirnov |
+| iui_context_accessor.cpp |Dmitry Smirnov, allready done|
 
-| js_geolocation_accessor.cpp |Dmitry Smirnov |
+| js_geolocation_accessor.cpp |Dmitry Smirnov, on review|
 
-| js_result_accessor.cpp |Dmitry Smirnov |
+| js_result_accessor.cpp |Dmitry Smirnov, on review|
 
-| key_event_accessor.cpp | Dmitry Smirnov|
+| key_event_accessor.cpp | Dmitry Smirnov, on review|
 
-| lattice_accessor.cpp |Dmitry Smirnov |
+| lattice_accessor.cpp |Dmitry Smirnov, NEW_GENERATE |
 
-| layoutable_accessor.cpp |Dmitry Smirnov |
+| layoutable_accessor.cpp |Dmitry Smirnov, NEW_GENERATE |
 
 | layout_callback_accessor.cpp | Evstigneev Roman - NEW_GENERATE |
 
