@@ -1088,8 +1088,6 @@ export class ArkTSInterfacesVisitor implements InterfacesVisitor {
             registerEntry(entry)
         })
         for (const file of this.peerLibrary.files) {
-            if (!isInCurrentModule(file))
-                continue
             for (const entry of idl.linearizeNamespaceMembers(file.entries)) {
                 if (idl.isNamespace(entry) ||
                     idl.isImport(entry) ||
