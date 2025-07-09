@@ -160,15 +160,15 @@
 
 | file_selector_result_accessor.cpp |Dmitry Smirnov misiing in gen|
 
-| flex_modifier.cpp |Dmitry Smirnov, on review |
+| flex_modifier.cpp |Dmitry Smirnov, done |
 
-| flow_item_modifier.cpp |Dmitry Smirnov, on review |
+| flow_item_modifier.cpp |Dmitry Smirnov, done |
 
-| focus_axis_event_accessor.cpp |Dmitry Smirnov, on review |
+| focus_axis_event_accessor.cpp |Dmitry Smirnov, done |
 
-| focus_controller_accessor.cpp |Dmitry Smirnov, on review |
+| focus_controller_accessor.cpp |Dmitry Smirnov, done |
 
-| folder_stack_modifier.cpp |Dmitry Smirnov, on review |
+| folder_stack_modifier.cpp |Dmitry Smirnov, done |
 
 | font_accessor.cpp |Dmitry Smirnov misiing in FB|
 
@@ -178,17 +178,17 @@
 
 | form_link_modifier.cpp |Dmitry Smirnov |
 
-| frame_node_accessor.cpp | |
+| frame_node_accessor.cpp | Dmitry Smirnov |
 
-| friction_motion_accessor.cpp | |
+| friction_motion_accessor.cpp | Dmitry Smirnov|
 
-| full_screen_exit_handler_accessor.cpp | |
+| full_screen_exit_handler_accessor.cpp |Dmitry Smirnov |
 
-| gauge_modifier.cpp | |
+| gauge_modifier.cpp | Dmitry Smirnov |
 
-| gesture_accessor.cpp | |
+| gesture_accessor.cpp | Dmitry Smirnov|
 
-| gesture_event_accessor.cpp | |
+| gesture_event_accessor.cpp | Dmitry Smirnov |
 
 | gesture_group_interface_accessor.cpp | |
 
