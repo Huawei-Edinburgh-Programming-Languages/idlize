@@ -444,7 +444,7 @@
 
 | rich_editor_controller_accessor.cpp | INTEGRATED |
 
-| rich_editor_modifier.cpp | |
+| rich_editor_modifier.cpp | INTEGRATED |
 
 | rich_editor_styled_string_controller_accessor.cpp | |
 
@@ -582,7 +582,7 @@
 
 | text_base_controller_accessor.cpp | Samarin Sergey |
 
-| text_blob_accessor.cpp | |
+| text_blob_accessor.cpp | done (new file) |
 
 | text_clock_controller_accessor.cpp | Samarin Sergey |
 
@@ -592,23 +592,23 @@
 
 | text_controller_accessor.cpp | Samarin Sergey |
 
-| text_edit_controller_ex_accessor.cpp | |
+| text_edit_controller_ex_accessor.cpp | Samarin Sergey |
 
-| text_field_ops_accessor.cpp | |
+| text_field_ops_accessor.cpp | INTEGRATED |
 
-| text_input_controller_accessor.cpp | |
+| text_input_controller_accessor.cpp | Samarin Sergey |
 
 | text_input_modifier.cpp | Tuzhilkin Ivan, done|
 
-| text_line_accessor.cpp | |
+| text_line_accessor.cpp | done (new file) |
 
-| text_menu_controller_accessor.cpp | |
+| text_menu_controller_accessor.cpp | done (new file) |
 
-| text_menu_item_id_accessor.cpp | |
+| text_menu_item_id_accessor.cpp | Samarin Sergey |
 
 | text_modifier.cpp | Tuzhilkin Ivan, done|
 
-| text_picker_dialog_accessor.cpp | |
+| text_picker_dialog_accessor.cpp | Samarin Sergey |
 
 | text_picker_modifier.cpp | Ekaterina Stepanova - on review|
 
@@ -622,7 +622,7 @@
 
 | theme_control_accessor.cpp | |
 
-| time_picker_dialog_accessor.cpp | |
+| time_picker_dialog_accessor.cpp | Samarin Sergey |
 
 | time_picker_modifier.cpp | Ekaterina Stepanova - on review|
 
