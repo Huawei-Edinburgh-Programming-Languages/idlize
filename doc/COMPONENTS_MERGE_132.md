@@ -370,7 +370,7 @@
 
 | paragraph_style_accessor.cpp | Politov Mikhail |
 
-| paste_button_modifier.cpp | |
+| paste_button_modifier.cpp | Samarin Sergey |
 
 | path2d_accessor.cpp | Vadim Voronov |
 
@@ -470,7 +470,7 @@
 
 | sampling_options_accessor.cpp | |
 
-| save_button_modifier.cpp | |
+| save_button_modifier.cpp | Samarin Sergey |
 
 | scale_symbol_effect_accessor.cpp | |
 
@@ -500,7 +500,7 @@
 
 | search_ops_accessor.cpp | Evstigneev Roman - on review |
 
-| security_component_method_modifier.cpp | |
+| security_component_method_modifier.cpp | Samarin Sergey |
 
 | select_modifier.cpp | Samarin Sergey |
 
