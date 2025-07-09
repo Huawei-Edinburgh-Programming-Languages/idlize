@@ -53,7 +53,7 @@ function main() {
 
     const visitor = new PeerVisitor(
         config,
-        options.outputDir
+        `${options.outputDir}2/libarkts`
     )
     visitor.visit(idlFile)
 }

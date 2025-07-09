@@ -24,8 +24,7 @@ export class PeerVisitor extends Visitor {
     }
 
     override onEnterInterface(node: core.IDLInterface): boolean{
-        const allowed = ['VariableDeclaration', 'NumberLiteral', 'Identifier']
-        if (!allowed.includes(node.name)) return false
+        if (Ignored.has(node.name)) return false
 
         // Native bridges & bindings generation
 
@@ -52,7 +51,7 @@ export class PeerVisitor extends Visitor {
         peerGenerator.writeClass(node, writer, (body: Body) => {
             this.writeFactoryCreateImpl(node, body, this.factoryWriter)
         })
-        //this.writeFile(`src/generated/peers/${node.name}`, writer, 'peer.ts', importer)
+        this.writeFile(`src/generated/peers/${node.name}.ts`, writer, 'peer.ts', importer)
 
         return false
     }
@@ -63,8 +62,8 @@ export class PeerVisitor extends Visitor {
    }
 
     override onDone(_: core.IDLFile): void {
-        //this.writeFile('src/generated/factory.ts', this.factoryWriter, undefined, this.factoryImporter)
-        //this.writeFile('src/generated/bridges.cc', this.bridgesWriter)
+        this.writeFile('src/generated/factory.ts', this.factoryWriter, undefined, this.factoryImporter)
+        this.writeFile('src/generated/bridges.cc', this.bridgesWriter)
         this.writeFile('src/generated/Es2pandaNativeModule.ts', this.bindingsWriter)
         //this.writeFile('src/generated/index.ts', this.indexContent)
         this.writeFile('src/generated/Es2pandaEnums.ts', this.enumsWriter)
@@ -145,8 +144,8 @@ export class PeerVisitor extends Visitor {
             .map(arr => arr.join('\n'))
             .join('\n')
 
-        console.log(`${filePath}\n${contents}`);
-        // core.forceWriteFile(filePath, template.replaceAll('%GENERATED_PART%', contents))
+        //console.log(`${filePath}\n${contents}`);
+        core.forceWriteFile(filePath, template.replaceAll('%GENERATED_PART%', contents))
     }
 
     private resolvePath(rel: string): string {
@@ -219,3 +218,46 @@ export class PeerVisitor extends Visitor {
 
     private indexContent: string[] = []
 }
+
+const Ignored = new Set<string>([
+	'Annotated',
+	'AnnotationAllowed',
+	'es2panda_AstDumper',
+	'AstNodeForEachFunction',
+	'es2panda_AstNode',
+	'AstNode',
+	'es2panda_BoundContext',
+	'es2panda_CheckerContext',
+	'ClassBuilder',
+	'ClassInitializerBuilder',
+	'es2panda_Config',
+	'es2panda_Context',
+	'es2panda_ExternalSource',
+	'es2panda_FunctionSignature',
+	'es2panda_GlobalContext',
+	'es2panda_GlobalTypesHolder',
+	'es2panda_Impl',
+	'es2panda_ImportPathManager',
+	'JsDocAllowed',
+	'MethodBuilder',
+	'NodePredicate',
+	'NodeTransformer',
+	'NodeTraverser',
+	'es2panda_Options',
+	'es2panda_OverloadInfo',
+	'es2panda_Path',
+	'PropertyProcessor',
+	'PropertyTraverser',
+	'es2panda_RecordTable',
+	'es2panda_ResolveResult',
+	'es2panda_Scope',
+	'es2panda_Signature',
+	'es2panda_SrcDumper',
+	'Typed',
+	'es2panda_TypeRelation',
+	'es2panda_Type',
+	'es2panda_ValidationInfo',
+	'es2panda_Variable',
+	'VectorIterationGuard',
+	'VoidPtr',
+])
