@@ -442,7 +442,7 @@
 
 | rich_editor_base_controller_accessor.cpp | |
 
-| rich_editor_controller_accessor.cpp | |
+| rich_editor_controller_accessor.cpp | Samarin Sergey |
 
 | rich_editor_modifier.cpp | |
 
@@ -590,7 +590,7 @@
 
 | text_content_controller_base_accessor.cpp | |
 
-| text_controller_accessor.cpp | |
+| text_controller_accessor.cpp | Samarin Sergey |
 
 | text_edit_controller_ex_accessor.cpp | |
 
