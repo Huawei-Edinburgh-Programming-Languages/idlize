@@ -446,9 +446,9 @@
 
 | rich_editor_modifier.cpp | INTEGRATED |
 
-| rich_editor_styled_string_controller_accessor.cpp | |
+| rich_editor_styled_string_controller_accessor.cpp | Evstigneev Roman |
 
-| rich_text_modifier.cpp | |
+| rich_text_modifier.cpp | Evstigneev Roman |
 
 | root_modifier.cpp | Lobah Mikhail|
 
