@@ -220,31 +220,31 @@
 
 | hierarchical_symbol_effect_accessor.cpp | Erokhin Ilya - done |
 
-| hover_event_accessor.cpp | Vadim Voronov |
+| hover_event_accessor.cpp | Vadim Voronov - done |
 
-| http_auth_handler_accessor.cpp | Vadim Voronov |
+| http_auth_handler_accessor.cpp | Vadim Voronov - done |
 
-| hyperlink_modifier.cpp | Vadim Voronov  |
+| hyperlink_modifier.cpp | Vadim Voronov - done |
 
-| i_curve_accessor.cpp | Vadim Voronov |
+| i_curve_accessor.cpp | Vadim Voronov - done |
 
 | image_analyzer_controller_accessor.cpp | Vadim Voronov - done |
 
-| image_animator_modifier.cpp | Vadim Voronov  |
+| image_animator_modifier.cpp | Vadim Voronov - done  |
 
-| image_attachment_accessor.cpp | Vadim Voronov |
+| image_attachment_accessor.cpp | Vadim Voronov - done |
 
 | image_bitmap_accessor.cpp | Vadim Voronov - done |
 
-| image_data_accessor.cpp | Vadim Voronov |
+| image_data_accessor.cpp | Vadim Voronov - done |
 
-| image_filter_accessor.cpp | Vadim Voronov |
+| image_filter_accessor.cpp | Vadim Voronov - done |
 
-| image_modifier.cpp | Vadim Voronov |
+| image_modifier.cpp | Vadim Voronov - done |
 
-| image_span_modifier.cpp | Vadim Voronov |
+| image_span_modifier.cpp | Vadim Voronov - done |
 
-| indicator_component_controller_accessor.cpp | Vadim Voronov |
+| indicator_component_controller_accessor.cpp | Vadim Voronov - done |
 
 | indicator_component_modifier.cpp |Dmitry Smirnov, on review|
 
@@ -468,17 +468,17 @@
 
 | run_accessor.cpp | done (new file) |
 
-| sampling_options_accessor.cpp | |
+| sampling_options_accessor.cpp | Vadim Voronov |
 
 | save_button_modifier.cpp | Samarin Sergey |
 
-| scale_symbol_effect_accessor.cpp | |
+| scale_symbol_effect_accessor.cpp | Vadim Voronov |
 
-| scene_accessor.cpp | |
+| scene_accessor.cpp | Vadim Voronov |
 
-| screen_capture_handler_accessor.cpp | |
+| screen_capture_handler_accessor.cpp | Vadim Voronov |
 
-| screen_modifier.cpp | |
+| screen_modifier.cpp | Vadim Voronov |
 
 | scrollable_common_method_modifier.cpp | Andrey Khudenkikh - done  |
 
@@ -520,23 +520,23 @@
 
 | span_modifier.cpp | Politov Mikhail |
 
-| spring_motion_accessor.cpp | |
+| spring_motion_accessor.cpp | Vadim Voronov |
 
-| spring_prop_accessor.cpp | |
+| spring_prop_accessor.cpp | Vadim Voronov |
 
-| ssl_error_handler_accessor.cpp | |
+| ssl_error_handler_accessor.cpp | Vadim Voronov |
 
 | stack_modifier.cpp | Samarin Sergey |
 
-| state_styles_ops_accessor.cpp | |
+| state_styles_ops_accessor.cpp | Vadim Voronov |
 
 | stepper_item_modifier.cpp | Samarin Sergey |
 
 | stepper_modifier.cpp | Samarin Sergey |
 
-| styled_string_accessor.cpp | |
+| styled_string_accessor.cpp | Vadim Voronov |
 
-| styled_string_controller_accessor.cpp | |
+| styled_string_controller_accessor.cpp | Vadim Voronov |
 
 | submit_event_accessor.cpp | Samarin Sergey |
 
@@ -558,9 +558,9 @@
 
 | symbol_span_modifier.cpp | Andrey Khudenkikh - on review  |
 
-| system_ops_accessor.cpp | |
+| system_ops_accessor.cpp | Vadim Voronov |
 
-| tab_bar_symbol_accessor.cpp | |
+| tab_bar_symbol_accessor.cpp | Vadim Voronov |
 
 | tab_content_modifier.cpp | Tuzhilkin Ivan, done |
 
@@ -582,7 +582,7 @@
 
 | text_base_controller_accessor.cpp | Samarin Sergey |
 
-| text_blob_accessor.cpp | |
+| text_blob_accessor.cpp | Vadim Voronov |
 
 | text_clock_controller_accessor.cpp | Samarin Sergey |
 
@@ -592,23 +592,23 @@
 
 | text_controller_accessor.cpp | Samarin Sergey |
 
-| text_edit_controller_ex_accessor.cpp | |
+| text_edit_controller_ex_accessor.cpp | Vadim Voronov |
 
-| text_field_ops_accessor.cpp | |
+| text_field_ops_accessor.cpp | Vadim Voronov |
 
-| text_input_controller_accessor.cpp | |
+| text_input_controller_accessor.cpp | Vadim Voronov |
 
 | text_input_modifier.cpp | Tuzhilkin Ivan, done|
 
-| text_line_accessor.cpp | |
+| text_line_accessor.cpp | Vadim Voronov |
 
-| text_menu_controller_accessor.cpp | |
+| text_menu_controller_accessor.cpp | Vadim Voronov |
 
-| text_menu_item_id_accessor.cpp | |
+| text_menu_item_id_accessor.cpp | Vadim Voronov |
 
 | text_modifier.cpp | Tuzhilkin Ivan, done|
 
-| text_picker_dialog_accessor.cpp | |
+| text_picker_dialog_accessor.cpp | Vadim Voronov |
 
 | text_picker_modifier.cpp | Ekaterina Stepanova - on review|
 
