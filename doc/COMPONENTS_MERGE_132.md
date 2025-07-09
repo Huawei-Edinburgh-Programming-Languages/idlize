@@ -302,7 +302,7 @@
 
 | loading_progress_modifier.cpp | Samarin Sergey |
 
-| long_press_gesture_event_accessor.cpp | |
+| long_press_gesture_event_accessor.cpp | Samarin Sergey |
 
 | long_press_gesture_interface_accessor.cpp | |
 
@@ -380,7 +380,7 @@
 
 | path_modifier.cpp | |
 
-| path_shape_accessor.cpp | |
+| path_shape_accessor.cpp | Samarin Sergey |
 
 | pattern_lock_controller_accessor.cpp | |
 
@@ -422,7 +422,7 @@
 
 | rect_modifier.cpp | |
 
-| rect_shape_accessor.cpp | |
+| rect_shape_accessor.cpp | Samarin Sergey |
 
 | refresh_modifier.cpp | Ekaterina Stepanova - on review |
 
