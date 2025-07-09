@@ -105,6 +105,10 @@ export class PeerGenerator {
             }
         }
 
+        writer.writeProperty(PeersConstructions.brand(iface.name),
+             core.IDLUndefinedType, [core.FieldModifier.PROTECTED, core.FieldModifier.READONLY]
+        )
+
         // 4. Provide probably modified declarations to other generators
 
         written(body as Body)

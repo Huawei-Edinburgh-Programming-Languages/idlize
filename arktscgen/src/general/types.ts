@@ -103,7 +103,7 @@ export class ImporterResolverProxy implements Resolver, Importer {
     isPeer = this.resolver.isPeer.bind(this.resolver)
 
     importEnum(name: string): string {
-        return this.import(name, '../Es2PandaEnums')
+        return this.import(name, '../Es2pandaEnums')
     }
 
     importPeer(name: string): string {
@@ -111,7 +111,7 @@ export class ImporterResolverProxy implements Resolver, Importer {
     }
 
     importReexport(name: string): string {
-        return this.import(name, '../reexport')
+        return this.import(name, '../../reexport-for-generated')
     }
 
     public asStrings(): string[] {

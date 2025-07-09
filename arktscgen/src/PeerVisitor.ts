@@ -138,9 +138,11 @@ export class PeerVisitor extends Visitor {
         const contents = [
             (prologue ?? []),
             (importer?.asStrings() ?? []),
+            [''],
             writer.getOutput(),
             (epilogue ?? [])
         ]
+            .filter(arr => arr.length)
             .map(arr => arr.join('\n'))
             .join('\n')
 
