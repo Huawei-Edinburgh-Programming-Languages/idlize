@@ -634,7 +634,7 @@
 
 | typeface_accessor.cpp | |
 
-| ui_common_event_accessor.cpp | |
+| ui_common_event_accessor.cpp | Dudkin Sergey |
 
 | ui_context_accessor.cpp | |
 
