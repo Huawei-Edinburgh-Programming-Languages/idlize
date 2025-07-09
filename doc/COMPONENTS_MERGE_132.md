@@ -374,19 +374,19 @@
 
 | path2d_accessor.cpp | Vadim Voronov - done |
 
-| path_accessor.cpp | Evstigneev Roman |
+| path_accessor.cpp | Evstigneev Roman - INTEGRATED |
 
-| path_effect_accessor.cpp | Evstigneev Roman |
+| path_effect_accessor.cpp | Evstigneev Roman - NEW_GENERATE |
 
-| path_modifier.cpp | Evstigneev Roman |
+| path_modifier.cpp | Evstigneev Roman - INTEGRATED |
 
 | path_shape_accessor.cpp | Samarin Sergey |
 
 | pattern_lock_controller_accessor.cpp | Evstigneev Roman |
 
-| pattern_lock_modifier.cpp | Evstigneev Roman |
+| pattern_lock_modifier.cpp | Evstigneev Roman - INTEGRATED |
 
-| pen_accessor.cpp | Evstigneev Roman |
+| pen_accessor.cpp | Evstigneev Roman - NEW_GENERATE | 
 
 | permission_request_accessor.cpp | Evstigneev Roman |
 
