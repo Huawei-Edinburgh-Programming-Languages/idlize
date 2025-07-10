@@ -164,6 +164,8 @@ export class InteropConvertor extends core.CppInteropArgConvertor {
 
     override convertPrimitiveType(type: core.IDLPrimitiveType): string {
         switch (type) {
+            case core.IDLI64Type: return "KLong"
+            case core.IDLI32Type: return "KInt"
             case core.IDLU64Type: return "KULong"
             case core.IDLU32Type: return "KUInt"
             case core.IDLF64Type: return "KDouble"
@@ -176,10 +178,11 @@ export class InteropConvertor extends core.CppInteropArgConvertor {
             case core.IDLStringType: return 'KStringPtr&'
 
             // todo: suspicious
-            case core.IDLI16Type: return "KShort"
             case core.IDLU16Type: return "KUShort"
-            case core.IDLI8Type: return "char"
             case core.IDLU8Type: return "std::byte"
+            // todo: for clear diff (compat)
+            case core.IDLI16Type: return "KInt" // "KShort"
+            case core.IDLI8Type: return "KBoolean" // "char"
             default:
         }
         return super.convertPrimitiveType(type)
