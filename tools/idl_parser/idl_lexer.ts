@@ -332,11 +332,22 @@ function addWord(word: string): number {
   return g_lastId;
 }
 
+export class TokenData {
+  type: Token;
+  text: string;
+
+  constructor(type: Token, text: string = "") {
+    this.type = type;
+    this.text = text;
+  }
+};
+
+
 let g_text: string;
 let g_pos: number = 0;
 let g_col: number = 0;
 let g_row: number = 0;
-let g_tokenText: string = "";
+//let g_tokenText: string = "";
 let g_lineStartPos = 0;
 let prev: string = ' ';  // TypeScript does not support static in functions :(
 
@@ -345,7 +356,7 @@ export function init(text: string) {
   g_pos = 0;
   g_col = 0;
   g_row = 0;
-  g_tokenText = "";
+  //g_tokenText = "";
   g_lineStartPos = 0;
 }
 
@@ -359,11 +370,11 @@ function isDigit(c: string): boolean {
   return (c >= '0' && c <= '9');
 }
 
-export function getTokenText(): string {
+/*export function getTokenText(): string {
   return g_tokenText;
-}
+}*/
 
-export function getToken(): Token {
+export function getToken(): TokenData {
   console.log("getToken <<<");
 
   let nothing_found: boolean = false;
@@ -374,21 +385,23 @@ export function getToken(): Token {
       re.lastIndex = g_pos;
       const found = re.exec(g_text);
       if (found) {
-        g_tokenText = found[0];
-        g_pos += g_tokenText.length;
+        let tokenText: string = found[0];
+        g_pos += tokenText.length;
         if (kw.type == Token.tWhiteSpace ||
             kw.type == Token.tComment)
           break;
 
-        console.log(g_tokenText);
-        return kw.type;
+        console.log(tokenText);
+        return new TokenData(kw.type, tokenText);
       } else {
         nothing_found = false;
       }
     }
   }
 
-  return Token.tEnd;
+  //TokenData td;
+  //td.type = Token.tEnd;
+  return new TokenData(Token.tEnd);
 }
 
 export function getCol() {
