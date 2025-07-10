@@ -10,7 +10,8 @@ const Literals = BridgesConstructions;
 export class BridgesGenerator {
     constructor(
         private resolver: Resolver,
-        private converter: core.IdlNameConvertor
+        private converter: core.IdlNameConvertor,
+        private config: Config
     ) {
     }
 
@@ -52,7 +53,7 @@ export class BridgesGenerator {
 
     private writeCreate(iface: core.IDLInterface, method: Readonly<core.Method>, writer: core.CppLanguageWriter): void {
         const statements = this.makeArgumentStatements(iface, method, writer)
-        const implementationCall = this.makeImplMethodCall(iface, method, writer)
+        const implementationCall = this.makeImplCall(iface, method, writer)
 
         this.hack_simplifyReturnType(method)
 
@@ -74,7 +75,7 @@ export class BridgesGenerator {
 
         const [needExtraArg, returnValue] = this.makeAndCastReturnValue(iface, method, writer)
         const statements = this.makeArgumentStatements(iface, method, writer)
-        const implementationCall = this.makeImplGetterCall(iface, method, writer,
+        const implementationCall = this.makeImplCall(iface, method, writer,
                                                  needExtraArg ? [Literals.sequenceLengthPass] : [])
 
         this.hack_simplifyReturnType(method)
@@ -157,19 +158,14 @@ export class BridgesGenerator {
         return [false, writer.makeString(Literals.result)]
     }
 
-    private makeImplMethodCall(
-        iface: core.IDLInterface, method: core.Method,  writer: core.CppLanguageWriter): core.LanguageExpression {
+    private makeImplCall(
+        iface: core.IDLInterface, method: core.Method, writer: core.CppLanguageWriter, extraArgs?: string[]): core.LanguageExpression {
         const cap = core.capitalize
-        const argNames = method.signature.argNames!.map(a => this.convertArg(a))
-        const methodName = method.name.slice(this.methodPrefix.length)
-        return writer.makeString(`GetImpl()->${cap(methodName)}(${argNames.join(', ')})`)
-    }
-
-    private makeImplGetterCall(
-        iface: core.IDLInterface, method: core.Method, writer: core.CppLanguageWriter, extraArgs: string[]): core.LanguageExpression {
-        const cap = core.capitalize
-        const argNames = method.signature.argNames!.map(a => this.convertArg(a)).concat(extraArgs)
-        const methodName = method.name.slice(this.methodPrefix.length)
+        const argNames = method.signature.argNames!.map(a => this.convertArg(a)).concat(extraArgs ?? [])
+        let methodName = method.name.slice(this.methodPrefix.length)
+        if (this.config.irHack.isIrHackInterface(iface.name)) {
+            methodName = methodName.replace(iface.name, iface.name + 'Ir')
+        }
         return writer.makeString(`GetImpl()->${cap(methodName)}(${argNames.join(', ')})`)
     }
 

@@ -196,7 +196,8 @@ export class PeerVisitor extends Visitor {
 
     private bridgesGenerator = new BridgesGenerator(
         this.resolver,
-        this.interopConverter
+        this.interopConverter,
+        this.config
     )
 
     private bridgesWriter = new core.CppLanguageWriter(
