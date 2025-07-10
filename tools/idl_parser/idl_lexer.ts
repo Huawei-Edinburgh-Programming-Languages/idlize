@@ -335,10 +335,14 @@ function addWord(word: string): number {
 export class TokenData {
   type: Token;
   text: string;
+  col: number;
+  row: number;
 
-  constructor(type: Token, text: string = "") {
+  constructor(type: Token, text: string = "", col: number = 0, row: number = 0) {
     this.type = type;
     this.text = text;
+    this.col = col;
+    this.row = row;
   }
 };
 
@@ -348,7 +352,6 @@ let g_pos: number = 0;
 let g_col: number = 0;
 let g_row: number = 0;
 let g_lineStartPos = 0;
-let prev: string = ' ';  // TypeScript does not support static in functions :(
 
 export function init(text: string) {
   g_text = text + '\n';  // Some files have no EOL in the end, so we fix it here!
@@ -356,16 +359,6 @@ export function init(text: string) {
   g_col = 0;
   g_row = 0;
   g_lineStartPos = 0;
-}
-
-function isLetter(c: string): boolean {
-  return ((c >= 'a' && c <= 'z') ||
-          (c >= 'A' && c <= 'Z') ||
-          (c == '_' || c == '$'));
-}
-
-function isDigit(c: string): boolean {
-  return (c >= '0' && c <= '9');
 }
 
 export function getToken(): TokenData {
@@ -393,8 +386,6 @@ export function getToken(): TokenData {
     }
   }
 
-  //TokenData td;
-  //td.type = Token.tEnd;
   return new TokenData(Token.tEnd);
 }
 
