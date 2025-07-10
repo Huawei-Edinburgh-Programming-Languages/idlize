@@ -14,13 +14,13 @@
 |  form_link_modifier.cpp | | | 
 |  dialog_common.cpp | | | 
 |  common_method_modifier.cpp | Lobah Mikhail | | 
-|  circle_modifier.cpp | | | 
-|  button_modifier.cpp | | | 
+|  circle_modifier.cpp | Lobah Mikhail | | 
+|  button_modifier.cpp | Lobah Mikhail | | 
 |  bind_sheet_utils.cpp | | | 
-|  divider_modifier.cpp | | | 
+|  divider_modifier.cpp | Lobah Mikhail | | 
 |  effect_component_modifier.cpp | | | 
-|  checkbox_group_modifier.cpp | | | 
-|  checkbox_modifier.cpp | | | 
+|  checkbox_group_modifier.cpp | Lobah Mikhail | | 
+|  checkbox_modifier.cpp | Lobah Mikhail | | 
 |  column_modifier.cpp | Lobah Mikhail | | 
 |  data_panel_modifier.cpp | | | 
 |  image_animator_modifier.cpp | | | 
