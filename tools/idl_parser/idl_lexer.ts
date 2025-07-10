@@ -111,7 +111,7 @@ export enum Token {
   tEnd = 1001,
 };
 
-type TokenPattern = {
+export type TokenPattern = {
   pattern: RegExp;
   type: Token;
 };
@@ -359,218 +359,30 @@ function isDigit(c: string): boolean {
   return (c >= '0' && c <= '9');
 }
 
-function getChar(): string {
-  if (g_pos >= g_text.length)
-    return '\0';
-  else
-    return g_text[g_pos++];
-}
-
-function returnChar() {
-  if (g_pos > 0) {
-    g_pos--;
-    if (g_pos > 0)
-      prev = g_text[g_pos - 1];
-    else
-      prev = ' ';
-  } else {
-    throw new Error("Can't decrement g_pos cause it's zero.");
-  }
-}
-
 export function getTokenText(): string {
   return g_tokenText;
 }
 
 export function getToken(): Token {
   console.log("getToken <<<");
-  let t: Token = getTokenInternal();
-  while (t == Token.tNeedRepeat) {
-    console.log("tNeedRepeat found, g_pos = ", g_pos);
-    t = getTokenInternal();
-  }
 
-  console.log(t);
+  while (g_pos < g_text.length) {
+    let found: boolean = false;
 
-  return t;
-}
-
-function getTokenInternal(): Token {
-  let c: string = getChar();
-  if (c == '\0') {
-    console.log(" return tEnd");
-    return Token.tEnd;
-  }
-
-  // Linux EOL:   0A    LF \n
-  // Windows EOL: 0D 0A CR LF \r\n
-  // Mac:         0D ?  CR \r
-
-  // skip spaces and EOL
-  console.log("skip spaces...");
-  while (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
-    if (c == '\n' ||                   // Linux or second char on Windows
-        (c == '\r' && prev != '\n')) { // Mac, not Windows
-      g_col = 1;
-      g_lineStartPos = g_pos;
-      g_row++;
-    }
-    prev = c; c = getChar();
-    if (c == '\0') {
-      console.log(" return tEnd");
-      return Token.tEnd;
-    }
-  }
-
-  // skip comments
-  if (c == '/') {
-    console.log("Found start of comment...");
-    const c2 = getChar();
-    if (c2 == '/') {  // Okay, start of one line comment was found
-      do {
-        c = getChar();
-        console.log("skip ", c);
-      } while (c != '\n' && c != '\r' && c != '\0');  // while not EOL and not EOF
-
-      //console.log("Comment(1) finished at char: 0x%s", c.charCodeAt(0).toString(16));
-
-      returnChar();  // we use CR LF to calculate strings so we have to return it back
-      return Token.tNeedRepeat;
-
-    } else if (c2 == '*') {  // Okay, multiline comment was found
-      prev = c2; c = getChar();
-      do {
-        prev = c; c = getChar();
-      } while ( ! (prev == '*' && c == '/') && c != '\0');  // while not "*/" and not EOF
-
-      //console.log("Comment(2) finished at char: 0x%s", c.charCodeAt(0).toString(16));
-      return Token.tNeedRepeat;
-
-    } else {  // comment not found
-      returnChar();  // Comment not found. Have to return c2 char
-      return Token.tDiv;
-    }
-  }
-
-  // words
-  if (isLetter(c)) {
-    let res: string = "";
-    while (isLetter(c) || isDigit(c)) {
-      res += c;
-      prev = c; c = getChar();
-      if (c == '\0') {
-        console.log(" return tEnd");
-        return Token.tEnd;
+    for (const kw of g_keywords) {
+      const re = new RegExp(kw.pattern, "y");
+      re.lastIndex = g_pos;
+      const found = re.exec(g_text);
+      if (found) {
+        g_tokenText = found[0];
+        console.log(g_tokenText);
+        g_pos += g_tokenText.length;
+        return kw.type;
       }
     }
-
-    console.log("Got word: \'" + res + "\' on line " + g_row);
-
-    // Is it keyword?
-    if (g_keywords.has(res)) {
-      const kw = g_keywords.get(res);
-      if (kw !== undefined) {
-        const t: Token = kw;
-        console.log("Keyword: " + t);
-        return t;
-      }
-    }
-
-    // Ok, this is some identifier...
-    g_tokenText = res;
-    let word_id: number = getWord(res);
-    if (word_id < 0)
-      word_id = addWord(res);
-
-    // Now we have to return last symbol into input stream
-    // otherwise symbol will be lose during 'return Token.tId;'
-    returnChar();
-
-    return Token.tId;
   }
 
-  // numbers
-  if (isDigit(c)) {
-    let res: string = "";
-    while (isDigit(c) || c == '.') {
-      res += c;
-      prev = c; c = getChar();
-    }
-    g_tokenText = res;
-    return Token.tNumber;
-  }
-
-  // String Literal
-  if (c == '\"') {
-    let res: string = c;  // first "
-    prev = c; c = getChar();
-    while (c != '\"') {
-      res += c;
-    }
-    res += c;  // last "
-    prev = c;
-    g_tokenText = res;
-    return Token.tStringLiteral;
-  }
-
-  // other tokens
-  if (c == '=')
-    return Token.tEqual;
-
-  if (c == '(')
-    return Token.tLBracket;
-  if (c == ')')
-    return Token.tRBracket;
-
-  if (c == '{')
-    return Token.tLBrace;
-  if (c == '}')
-    return Token.tRBrace;
-
-  if (c == '<')
-    return Token.tLAngle;
-  if (c == '>')
-    return Token.tRAngle;
-
-  if (c == '[')
-    return Token.tLSqrBracket;
-  if (c == ']')
-    return Token.tRSqrBracket;
-
-  if (c == ':')
-    return Token.tColon;
-  if (c == ';')
-    return Token.tSemicolon;
-
-  if (c == '.') {
-    const c2 = getChar();
-    const c3 = getChar();
-    if (c2 == '.' && c3 == '.') {
-      prev = ' ';
-      return Token.tEllipsis;
-    } else {
-      returnChar();
-      returnChar();
-      prev = '.';
-      return Token.tDot;
-    }
-  }
-
-  if (c == ',')
-    return Token.tComma;
-
-  if (c == '+')
-    return Token.tPlus;
-  if (c == '-')
-    return Token.tMinus;
-
-  if (c == '*')
-    return Token.tAsterisk;
-  if (c == '?')
-    return Token.tQuestion;
-
-  // TODO: Probably c is some unknown char and we have to process it (and return tError).
-  return Token.tNeedRepeat;
+  return Token.tEnd;
 }
 
 export function getCol() {
