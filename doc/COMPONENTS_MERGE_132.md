@@ -338,8 +338,8 @@
 | 336 | web_modifier.cpp | Erokhin Ilya | |
 | 337 | web_resource_error_accessor.cpp | Erokhin Ilya | |
 | 338 | web_resource_request_accessor.cpp | Erokhin Ilya | |
-| 339 | web_resource_response_accessor.cpp | | |
-| 340 | webview_controller_accessor.cpp | | |
+| 339 | web_resource_response_accessor.cpp | Politov Mikhail | |
+| 340 | webview_controller_accessor.cpp | Politov Mikhail | |
 | 341 | window_scene_modifier.cpp | Vadim Voronov | |
 | 342 | x_component_controller_accessor.cpp | Tuzhilkin Ivan | ✅ done |
 | 343 | x_component_modifier.cpp | Tuzhilkin Ivan | ✅ done |
