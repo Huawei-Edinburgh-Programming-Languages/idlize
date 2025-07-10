@@ -271,12 +271,11 @@ export class PeerGenerator {
         const methodTypes = ['Create', 'Update', 'Getter', 'Regular']
         const groupFn = (method: core.IDLMethod): string => {
             const [p1, p2, p3, p4] = methodTypes
-            if (method.name.startsWith(p1)) {
-                return p1
-            } else if (method.name.startsWith(p2)) {
-                return p2
-            }
-            else if (PeerGenerator.isGetter(method)) {
+            // checking return value to match the iface name needs some hacks
+            if (isCreateOrUpdate(method.name)) {
+                return method.name.startsWith(p1) ? p1 : p2
+
+            } else if (PeerGenerator.isGetter(method)) {
                 return p3
             }
             return p4
