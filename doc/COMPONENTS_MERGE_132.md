@@ -324,13 +324,13 @@
 | ui_extension_proxy_accessor.cpp | Andrey Khudenkikh |
 | unified_data_accessor.cpp | Evstigneev Roman - done |
 | url_style_accessor.cpp | Politov Mikhail |
-| user_data_span_accessor.cpp |Sergey Kovalev |
-| video_controller_accessor.cpp |Sergey Kovalev |
-| video_modifier.cpp |Sergey Kovalev |
+| user_data_span_accessor.cpp |Sergey Kovalev - done |
+| video_controller_accessor.cpp |Sergey Kovalev - done |
+| video_modifier.cpp |Sergey Kovalev - done |
 | view_model_bridge.cpp | Vadim Voronov |
-| visual_effect_accessor.cpp |Sergey Kovalev |
-| water_flow_modifier.cpp |Sergey Kovalev |
-| water_flow_sections_accessor.cpp |Sergey Kovalev |
+| visual_effect_accessor.cpp |Sergey Kovalev - done |
+| water_flow_modifier.cpp |Sergey Kovalev - done |
+| water_flow_sections_accessor.cpp |Sergey Kovalev - done |
 | web_context_menu_param_accessor.cpp | Vadim Voronov |
 | web_context_menu_result_accessor.cpp | Vadim Voronov |
 | web_cookie_accessor.cpp | Vadim Voronov |
