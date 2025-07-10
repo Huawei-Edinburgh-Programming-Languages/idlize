@@ -215,11 +215,11 @@
 | 213 | refresh_modifier.cpp | Ekaterina Stepanova | on review |
 | 214 | region_accessor.cpp | Erokhin Ilya | done (new file) |
 | 215 | relative_container_modifier.cpp | Erokhin Ilya | done |
-| 216 | remote_window_modifier.cpp | | INTEGRATED |
+| 216 | remote_window_modifier.cpp | Samarin Sergey | INTEGRATED |
 | 217 | rendering_context_settings_accessor.cpp | Vadim Voronov | done |
 | 218 | render_node_accessor.cpp | Samarin Sergey | in progress |
 | 219 | replace_symbol_effect_accessor.cpp | Samarin Sergey | in progress |
-| 220 | restricted_worker_accessor.cpp | | done (not implemented on FB) |
+| 220 | restricted_worker_accessor.cpp | Samarin Sergey | done (not implemented on FB) |
 | 221 | rich_editor_base_controller_accessor.cpp | Evstigneev Roman | INTEGRATED |
 | 222 | rich_editor_controller_accessor.cpp | Evstigneev Roman | INTEGRATED |
 | 223 | rich_editor_modifier.cpp | Evstigneev Roman | INTEGRATED |
@@ -227,13 +227,13 @@
 | 225 | rich_text_modifier.cpp | Evstigneev Roman | done |
 | 226 | root_modifier.cpp | Lobah Mikhail | |
 | 227 | root_scene_modifier.cpp | Lobah Mikhail | |
-| 228 | rotation_gesture_accessor.cpp | | done (new file) |
+| 228 | rotation_gesture_accessor.cpp | Samarin Sergey | done (new file) |
 | 229 | rotation_gesture_event_accessor.cpp | Samarin Sergey | done |
 | 230 | rotation_recognizer_accessor.cpp | Samarin Sergey | done |
 | 231 | round_rect_accessor.cpp | Lobah Mikhail | |
 | 232 | row_modifier.cpp | Lobah Mikhail | |
 | 233 | row_split_modifier.cpp | Lobah Mikhail | |
-| 234 | run_accessor.cpp | | done (new file) |
+| 234 | run_accessor.cpp | Samarin Sergey | done (new file) |
 | 235 | sampling_options_accessor.cpp | Vadim Voronov | done empty new file nothing todo |
 | 236 | save_button_modifier.cpp | Samarin Sergey | done |
 | 237 | scale_symbol_effect_accessor.cpp | Vadim Voronov | done empty new file nothing todo |
@@ -270,12 +270,12 @@
 | 268 | styled_string_accessor.cpp | Vadim Voronov | done by default nothing todo |
 | 269 | styled_string_controller_accessor.cpp | Vadim Voronov | done |
 | 270 | submit_event_accessor.cpp | Samarin Sergey | done |
-| 271 | swipe_gesture_accessor.cpp | | done (new file) |
+| 271 | swipe_gesture_accessor.cpp | Samarin Sergey | done (new file) |
 | 272 | swipe_gesture_event_accessor.cpp | Samarin Sergey | done |
 | 273 | swiper_content_transition_proxy_accessor.cpp | Vadim Voronov | done |
 | 274 | swiper_controller_accessor.cpp | Andrey Khudenkikh | on review |
 | 275 | swipe_recognizer_accessor.cpp | Andrey Khudenkikh | on review |
-| 276 | swiper_modifier.cpp | | INTEGRATED |
+| 276 | swiper_modifier.cpp | Samarin Sergey | INTEGRATED |
 | 277 | symbol_effect_accessor.cpp | Andrey Khudenkikh | on review |
 | 278 | symbol_glyph_modifier.cpp | Andrey Khudenkikh | on review |
 | 279 | symbol_span_modifier.cpp | Andrey Khudenkikh | on review |
