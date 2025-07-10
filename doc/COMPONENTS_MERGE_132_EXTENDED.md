@@ -40,7 +40,7 @@
 |  calendar_modifier.cpp | | | 
 |  path_modifier.cpp | | | 
 |  media_cached_image_modifier.cpp | | | 
-|  menu_item_group_modifier.cpp | | | 
+|  menu_item_group_modifier.cpp | Sergey Morozov | | 
 |  grid_col_modifier.cpp | | | 
 |  date_picker_modifier.cpp | Vadim Voronov | | 
 |  list_item_group_modifier.cpp | | | 
@@ -49,7 +49,7 @@
 |  grid_row_modifier.cpp | | | 
 |  list_item_modifier.cpp | | | 
 |  column_split_modifier.cpp | | | 
-|  menu_modifier.cpp | | | 
+|  menu_modifier.cpp | Sergey Morozov | | 
 |  polyline_modifier.cpp | | | 
 |  grid_item_modifier.cpp | | | 
 |  image_modifier.cpp | | | 
@@ -61,7 +61,7 @@
 |  qr_code_modifier.cpp | | | 
 |  image_span_modifier.cpp | | | 
 |  node_container_modifier.cpp | | | 
-|  menu_item_modifier.cpp | | | 
+|  menu_item_modifier.cpp | Sergey Morozov | | 
 |  pattern_lock_modifier.cpp | | | 
 |  relative_container_modifier.cpp | | | 
 |  paste_button_modifier.cpp | | | 
