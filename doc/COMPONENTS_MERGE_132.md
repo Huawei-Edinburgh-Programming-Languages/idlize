@@ -37,7 +37,7 @@
 | 35 | circle_modifier.cpp | Evstigneev Roman | done |
 | 36 | circle_shape_accessor.cpp | Evstigneev Roman | done |
 | 37 | click_event_accessor.cpp | Evstigneev Roman | done |
-| 38 | client_authentication_handler_accessor.cpp | Evstigneev Roman | web |
+| 38 | client_authentication_handler_accessor.cpp | Evstigneev Roman | done |
 | 39 | color_content_accessor.cpp | Evstigneev Roman | new gen file |
 | 40 | color_filter_accessor.cpp | Evstigneev Roman | done |
 | 41 | color_metrics_accessor.cpp | Evstigneev Roman | done |
@@ -220,9 +220,9 @@
 | 218 | render_node_accessor.cpp | Samarin Sergey | in progress |
 | 219 | replace_symbol_effect_accessor.cpp | Samarin Sergey | in progress |
 | 220 | restricted_worker_accessor.cpp | | done (not implemented on FB) |
-| 221 | rich_editor_base_controller_accessor.cpp | | INTEGRATED |
-| 222 | rich_editor_controller_accessor.cpp | | INTEGRATED |
-| 223 | rich_editor_modifier.cpp | | INTEGRATED |
+| 221 | rich_editor_base_controller_accessor.cpp | Evstigneev Roman | INTEGRATED |
+| 222 | rich_editor_controller_accessor.cpp | Evstigneev Roman | INTEGRATED |
+| 223 | rich_editor_modifier.cpp | Evstigneev Roman | INTEGRATED |
 | 224 | rich_editor_styled_string_controller_accessor.cpp | Evstigneev Roman | done |
 | 225 | rich_text_modifier.cpp | Evstigneev Roman | done |
 | 226 | root_modifier.cpp | Lobah Mikhail | |
