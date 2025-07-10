@@ -162,10 +162,6 @@ export class InteropConvertor extends core.CppInteropArgConvertor {
         return this.undefined
     }
 
-   override convertOptional(type: core.IDLOptionalType): string {
-        return `KNativePointer`
-    }
-
     override convertPrimitiveType(type: core.IDLPrimitiveType): string {
         switch (type) {
             case core.IDLU64Type: return "KULong"
@@ -175,6 +171,9 @@ export class InteropConvertor extends core.CppInteropArgConvertor {
             case core.IDLF16Type: return "short float"
             case core.IDLVoidType: return "void"
             case core.IDLBooleanType: return 'KBoolean'
+            case core.IDLPointerType: return 'KNativePointer'
+            // todo: Seems useless, only in parameters
+            case core.IDLStringType: return 'KStringPtr&'
 
             // todo: suspicious
             case core.IDLI16Type: return "KShort"
