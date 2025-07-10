@@ -2077,7 +2077,7 @@ declare class ListAttribute extends ScrollableCommonMethod<ListAttribute> {
    * @atomicservice
    * @since 11
    */
-  onItemMove(event: (from: number, to: number) => boolean): ListAttribute;
+  onItemMove(event?: (from: number, to: number) => boolean): ListAttribute;
 
   /**
    * After a listener is bound, the component can be dragged. After the drag occurs, a callback is triggered.

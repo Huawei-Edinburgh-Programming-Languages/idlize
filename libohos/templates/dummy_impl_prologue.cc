@@ -884,6 +884,32 @@ namespace OHOS::Ace::NG::GeneratedModifier {
     }
     } // CommonMethodModifier
 
+    namespace ListAttributeModifier {
+    void SetOnItemMoveImpl(Ark_NativePointer node,
+                             const Opt_Callback_Number_Number_Boolean* cb)
+    {
+        Ark_Number a;
+        a.tag = INTEROP_TAG_INT32;
+        a.i32 = 5;
+        Ark_Number b;
+        b.tag = INTEROP_TAG_INT32;
+        b.i32 = 15;
+
+        Callback_Boolean_Void c;
+        c.resource.resourceId = 0xFF10;
+        c.resource.hold = [](auto) {};
+        c.resource.release = [](auto) {};
+        c.call = nullptr;
+        c.callSync = [](auto vm, auto id, auto r) {
+            string out("Result is ");
+            out.append(std::to_string(r));
+            appendGroupedLog(1, out);
+        };
+
+        cb->value.call(cb->value.resource.resourceId, a, b, c);
+    }
+    } // CommonMethodModifier
+
     namespace EventEmulatorAccessor {
     void EmitClickEventImpl(Ark_NativePointer node,
                             Ark_ClickEvent event)

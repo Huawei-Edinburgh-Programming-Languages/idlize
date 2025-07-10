@@ -378,6 +378,9 @@
                 "onClick1",
                 "drawModifier"
             ],
+            "List": [
+                "setOnItemMove"
+            ],
             "EventEmulator": [
                 "emitClickEvent"
             ],

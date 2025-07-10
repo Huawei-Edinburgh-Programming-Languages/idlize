@@ -27,7 +27,7 @@ declare interface ListInterface {
 
 declare class ListAttribute extends ScrollableCommonMethod<ListAttribute> {
     someOptional(param: Optional<boolean>): ListAttribute
-
+    onItemMove(cb?:(a:number, b:number) => boolean): ListAttribute
     onScrollVisibleContentChange(handler: OnScrollVisibleContentChangeCallback): ListAttribute;
 }
 
