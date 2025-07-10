@@ -152,10 +152,10 @@
 | 144 | line_height_style_accessor.cpp | Erokhin Ilya | ✅ done |
 | 145 | line_modifier.cpp | Erokhin Ilya | ✅ done |
 | 146 | line_typeset_accessor.cpp | Erokhin Ilya | ✅ done (new file) |
-| 147 | list_item_group_modifier.cpp | Sergey Morozov | |
-| 148 | list_item_modifier.cpp | Sergey Morozov | |
-| 149 | list_modifier.cpp | Sergey Morozov | |
-| 150 | list_scroller_accessor.cpp | Sergey Morozov | |
+| 147 | list_item_group_modifier.cpp | Sergey Morozov | ✅ done |
+| 148 | list_item_modifier.cpp | Sergey Morozov | ✅ done |
+| 149 | list_modifier.cpp | Sergey Morozov | ✅ done |
+| 150 | list_scroller_accessor.cpp | Sergey Morozov | ✅ done |
 | 151 | loading_progress_modifier.cpp | Samarin Sergey | ✅ done |
 | 152 | long_press_gesture_event_accessor.cpp | Samarin Sergey | ✅ done |
 | 153 | long_press_gesture_interface_accessor.cpp | Erokhin Ilya | ✅ done |
@@ -168,8 +168,8 @@
 | 160 | measurable_accessor.cpp | Lobah Mikhail | ✅ done nothing todo |
 | 161 | media_cached_image_modifier.cpp | Lobah Mikhail | ✅ done nothing todo |
 | 162 | menu_item_group_modifier.cpp | Lobah Mikhail | ✅ done |
-| 163 | menu_item_modifier.cpp | Sergey Morozov | |
-| 164 | menu_modifier.cpp | Sergey Morozov | |
+| 163 | menu_item_modifier.cpp | Sergey Morozov | ✅ done |
+| 164 | menu_modifier.cpp | Sergey Morozov | ✅ done |
 | 165 | mouse_event_accessor.cpp | Evstigneev Roman | ✅ done |
 | 166 | mutable_styled_string_accessor.cpp | Evstigneev Roman | ✅ done |
 | 167 | nav_destination_context_accessor.cpp | Evstigneev Roman | ✅ done |
