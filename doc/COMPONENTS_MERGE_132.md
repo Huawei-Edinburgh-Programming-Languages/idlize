@@ -315,7 +315,7 @@
 | 307 | text_shadow_style_accessor.cpp | Politov Mikhail | ✅ done |
 | 308 | text_style_accessor.cpp | Evstigneev Roman | ✅ done |
 | 309 | text_timer_controller_accessor.cpp | Dudkin Sergey | ✅ done |
-| 310 | text_timer_modifier.cpp | Dudkin Sergey | ✅ done, but it has a true WRONG_GEN methods and needs to be regenerated. Ark_Number->Ark_Int64 |
+| 310 | text_timer_modifier.cpp | Dudkin Sergey | ✅ done, but it has a true WRONG_GEN method and needs to be regenerated. Ark_Number->Ark_Int64 |
 | 311 | theme_control_accessor.cpp | Evstigneev Roman | ✅ done |
 | 312 | time_picker_dialog_accessor.cpp | Evstigneev Roman | ✅ done |
 | 313 | time_picker_modifier.cpp | Ekaterina Stepanova | 👀⏳ on review |
