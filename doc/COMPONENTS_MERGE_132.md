@@ -654,7 +654,7 @@
 
 | video_modifier.cpp |Sergey Kovalev |
 
-| view_model_bridge.cpp | |
+| view_model_bridge.cpp | Vadim Voronov |
 
 | visual_effect_accessor.cpp |Sergey Kovalev |
 
@@ -664,23 +664,23 @@
 
 | web_context_menu_param_accessor.cpp | Vadim Voronov |
 
-| web_context_menu_result_accessor.cpp |  Vadim Voronov |
+| web_context_menu_result_accessor.cpp | Vadim Voronov |
 
-| web_cookie_accessor.cpp |  Vadim Voronov |
+| web_cookie_accessor.cpp | Vadim Voronov |
 
-| web_keyboard_controller_accessor.cpp |  Vadim Voronov |
+| web_keyboard_controller_accessor.cpp | Vadim Voronov |
 
-| web_modifier.cpp |  Vadim Voronov |
+| web_modifier.cpp | Vadim Voronov |
 
-| web_resource_error_accessor.cpp |  Vadim Voronov |
+| web_resource_error_accessor.cpp | Vadim Voronov |
 
-| web_resource_request_accessor.cpp |  Vadim Voronov |
+| web_resource_request_accessor.cpp | Vadim Voronov |
 
-| web_resource_response_accessor.cpp |  Vadim Voronov |
+| web_resource_response_accessor.cpp | Vadim Voronov |
 
-| webview_controller_accessor.cpp |  Vadim Voronov |
+| webview_controller_accessor.cpp | Vadim Voronov |
 
-| window_scene_modifier.cpp |  Vadim Voronov |
+| window_scene_modifier.cpp | Vadim Voronov |
 
 | x_component_controller_accessor.cpp | Tuzhilkin Ivan, done |
 
