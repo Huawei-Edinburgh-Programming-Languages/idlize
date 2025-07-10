@@ -16,15 +16,26 @@ export class PeerVisitor extends Visitor {
         private outDir: string,
     ) {
         super()
+        Allowed.forEach(fqName => {
+            const parts = fqName.split('.')
+            const [ns, name] = parts.length === 1 ? ['', parts.at(0)] : parts
+            if (!this.allowed.has(ns)) {
+                this.allowed.set(ns, new Map<string, boolean>())
+            }
+
+            const [key, value] = name!.endsWith('-') ?
+                [name!.slice(0, -1), false] : [name!, true]
+            this.allowed.get(ns)!.set(key, value)
+        })
     }
 
     override onEnterNamespace(node: core.IDLNamespace): boolean {
-        console.log(`namespace: ${node.name}`);
-        return ['', 'ir', 'parser', 'es2panda'].includes(node.name)
+        //console.log(`namespace: ${node.name}`);
+        return this.allowed.has(node.name)
     }
 
     override onEnterInterface(node: core.IDLInterface): boolean{
-        if (Ignored.has(node.name)) return false
+        if (this.isIgnored(node)) return false
 
         // Native bridges & bindings generation
 
@@ -154,6 +165,11 @@ export class PeerVisitor extends Visitor {
         return path.join(__dirname, rel)
     }
 
+    private isIgnored(node: core.IDLInterface): boolean {
+        const classes = this.allowed.get(this.namespaceName)!
+        return classes.size !== 0 && !(classes.get(node.name) ?? (classes.get('*') ?? false))
+    }
+
     private resolver = {
         resolveTypeReference(
             type: core.IDLReferenceType,
@@ -220,48 +236,41 @@ export class PeerVisitor extends Visitor {
     )
 
     private indexContent: string[] = []
+    private allowed = new Map<string, Map<string, boolean>>()
 }
 
-const Ignored = new Set<string>([
-    'ETSParser', // from parser ns
-	'Annotated',
-	'AnnotationAllowed',
-	'es2panda_AstDumper',
-	'AstNodeForEachFunction',
-	'es2panda_AstNode',
-//	'AstNode',
-	'es2panda_BoundContext',
-	'es2panda_CheckerContext',
-	'ClassBuilder',
-	'ClassInitializerBuilder',
-	'es2panda_Config',
-	'es2panda_Context',
-	'es2panda_ExternalSource',
-	'es2panda_FunctionSignature',
-	'es2panda_GlobalContext',
-	'es2panda_GlobalTypesHolder',
-	'es2panda_Impl',
-	'es2panda_ImportPathManager',
-	'JsDocAllowed',
-	'MethodBuilder',
-	'NodePredicate',
-	'NodeTransformer',
-	'NodeTraverser',
-	'es2panda_Options',
-	'es2panda_OverloadInfo',
-	'es2panda_Path',
-	'PropertyProcessor',
-	'PropertyTraverser',
-	'es2panda_RecordTable',
-	'es2panda_ResolveResult',
-	'es2panda_Scope',
-	'es2panda_Signature',
-	'es2panda_SrcDumper',
-	'Typed',
-	'es2panda_TypeRelation',
-	'es2panda_Type',
-	'es2panda_ValidationInfo',
-	'es2panda_Variable',
-	'VectorIterationGuard',
-	'VoidPtr',
-])
+const Allowed = [
+    'es2panda_SourcePosition',
+    'es2panda_SourceRange',
+    'es2panda_LabelPair',
+    'es2panda_ScriptFunctionData',
+    'es2panda_ImportSource',
+    'es2panda_SignatureInfo',
+    'es2panda_IndexInfo',
+    'es2panda_ObjectDescriptor',
+    'es2panda_ScopeFindResult',
+    'es2panda_BindingProps',
+    'es2panda_Declaration',
+    'es2panda_AstVisitor',
+    'es2panda_AstVerifier',
+    'es2panda_VerifierMessage',
+    'es2panda_CodeGen',
+    'es2panda_VReg',
+    'es2panda_IRNode',
+    'es2panda_ErrorLogger',
+    'es2panda_VerificationContext',
+    'es2panda_DynamicImportData',
+    'es2panda_SuggestionInfo',
+    'es2panda_DiagnosticInfo',
+    'ir.*',
+	'ir.Annotated-',
+	'ir.AnnotationAllowed-',
+	'ir.AstNode-',
+	'ir.JsDocAllowed-',
+	'ir.Typed-',
+	'ir.VectorIterationGuard-',
+    'parser.Program',
+    'es2panda.*',
+    'varbinder.InterfaceDecl',
+    'varbinder.FunctionDecl'
+]
