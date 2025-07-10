@@ -13,17 +13,18 @@
  * limitations under the License.
  */
 
-import { forEachChild, IDLFile, IDLReferenceType, isReferenceType, Language, NativeModuleType, PeerLibrary } from "@idlizer/core";
+import { Language, NativeModuleType, PeerLibrary } from "@idlizer/core";
+import * as idl from "@idlizer/core/idl"
 
 export class IDLTypeResolver {
     private legacyLib = new PeerLibrary(Language.TS, new NativeModuleType('__NOT_USED__'), true)
-    constructor(library: IDLFile[]) {
+    constructor(library: idl.IDLFile[]) {
         library.forEach(file => {
             this.legacyLib.files.push(file)
         })
     }
 
-    toDeclaration(ref:IDLReferenceType) {
+    toDeclaration(ref:idl.IDLReferenceType) {
         return this.legacyLib.resolveTypeReference(ref)
     }
 }
@@ -31,5 +32,47 @@ export class IDLTypeResolver {
 export class EmptyGeneratorContext {
 }
 
-export class GeneratorContext {
+export class MakeResult {
+
 }
+
+interface Producer {
+    produce(): void
+}
+
+export class MakeSelector {
+    private readonly storage: {
+        predicate: (node:idl.IDLNode) => boolean,
+        producer: Producer,
+    }[] = []
+
+    register(predicate:(node:idl.IDLNode) => boolean, producer:Producer) {
+        this.storage.push({
+            predicate,
+            producer
+        })
+    }
+
+    select(node:idl.IDLNode): Producer {
+        const record = this.storage.find(it => it.predicate(node))
+        if (!record) {
+            throw new Error(`Can not process "${idl.getFQName(node)}"`)
+        }
+        return record.producer
+    }
+}
+
+export class GeneratorContext {
+    public resolver: IDLTypeResolver
+    constructor(
+        public library: idl.IDLFile[]
+    ) {
+        this.resolver = new IDLTypeResolver(library)
+    }
+
+    make(node:idl.IDLNode): MakeResult {
+        return new MakeResult()
+    }
+}
+
+

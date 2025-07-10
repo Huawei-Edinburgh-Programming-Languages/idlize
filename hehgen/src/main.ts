@@ -309,8 +309,11 @@ const printers: TargetInfo[] = [
 
 function main() {
 
-  Result.over(new GeneratorContext())
+  Result.over({})
     .with(() => ResultStatus.ok(scan(resolve(__dirname, '..', '..', 'idl', 'test'))))
+    .andThen(files => Result.over(new GeneratorContext(files.map(file => toIDLFile(file)[0])))
+      .with(() => ResultStatus.ok(true))
+    )
 
   const fileNames = scan(resolve(__dirname, '..', '..', 'idl', 'test'))
   const lib = new GenLibrary(Language.TS, new NativeModuleType('__HEH__'))

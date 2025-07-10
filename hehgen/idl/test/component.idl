@@ -1,0 +1,39 @@
+package demo.test.component;
+
+import demo.test.simple.structs as structs;
+
+interface OnClickEvent {
+    attribute String target;
+    attribute i32 touchCount;
+};
+
+callback ButtonOnClick = void (OnClickEvent event);
+
+[Component]
+interface CommonMethod {
+    [CommonMethod]
+    attribute i32 width;
+};
+
+[Component]
+interface Button {
+    [CommonMethod]
+    attribute OnClickEvent onClick;
+    [CommonMethod]
+    attribute String title;
+};
+
+
+[Component]
+interface Button {
+    [CommonMethod]
+    attribute OnClickEvent onClick;
+    [CommonMethod]
+    attribute String title;
+};
+
+[Component]
+interface Star {
+    [CommonMethod]
+    attribute structs.StarMapController skyMap;
+};

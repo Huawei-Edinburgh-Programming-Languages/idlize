@@ -63,11 +63,12 @@ export class Result<T, C = unknown> {
         return new Result<U, C>({ empty: true }, this.context)
     }
 
-    andThen<U>(op:(x:T, c:C) => ResultStatus<U>): Result<U, C> {
+    andThen<U, K>(op:(x:T, c:C) => ResultStatus<U> | Result<U, K>): Result<U, C> {
         if (this.value.empty) {
             return this.cloneError()
         }
-        return new Result(op(this.value.value, this.context).eject(), this.context)
+        const r = op(this.value.value, this.context)
+        return new Result(r instanceof Result ? r.value : r.eject(), this.context)
     }
 
     static over<C>(ctx:C) {
