@@ -333,19 +333,19 @@
 | 325 | user_data_span_accessor.cpp | Sergey Kovalev | ✅ done |
 | 326 | video_controller_accessor.cpp | Sergey Kovalev | ✅ done |
 | 327 | video_modifier.cpp | Sergey Kovalev | ✅ done |
-| 328 | view_model_bridge.cpp | Vadim Voronov | |
+| 328 | view_model_bridge.cpp | Vadim Voronov | ✅ done by default nothing todo|
 | 329 | visual_effect_accessor.cpp | Sergey Kovalev | ✅ done |
 | 330 | water_flow_modifier.cpp | Sergey Kovalev | ✅ done |
 | 331 | water_flow_sections_accessor.cpp | Sergey Kovalev | ✅ done |
-| 332 | web_context_menu_param_accessor.cpp | Vadim Voronov | |
-| 333 | web_context_menu_result_accessor.cpp | Vadim Voronov | |
-| 334 | web_cookie_accessor.cpp | Vadim Voronov | |
-| 335 | web_keyboard_controller_accessor.cpp | Vadim Voronov | |
+| 332 | web_context_menu_param_accessor.cpp | Vadim Voronov | ✅ done |
+| 333 | web_context_menu_result_accessor.cpp | Vadim Voronov | ✅ done |
+| 334 | web_cookie_accessor.cpp | Vadim Voronov | ✅ done |
+| 335 | web_keyboard_controller_accessor.cpp | Vadim Voronov | ✅ done |
 | 336 | web_modifier.cpp | Erokhin Ilya | |
 | 337 | web_resource_error_accessor.cpp | Erokhin Ilya | |
 | 338 | web_resource_request_accessor.cpp | Erokhin Ilya | |
 | 339 | web_resource_response_accessor.cpp | Politov Mikhail | web missing converter |
 | 340 | webview_controller_accessor.cpp | Politov Mikhail | missing file |
-| 341 | window_scene_modifier.cpp | Vadim Voronov | |
+| 341 | window_scene_modifier.cpp | Vadim Voronov | ✅ done |
 | 342 | x_component_controller_accessor.cpp | Tuzhilkin Ivan | ✅ done |
 | 343 | x_component_modifier.cpp | Tuzhilkin Ivan | ✅ done |
