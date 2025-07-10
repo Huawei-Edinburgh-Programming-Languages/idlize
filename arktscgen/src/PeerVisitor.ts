@@ -166,8 +166,9 @@ export class PeerVisitor extends Visitor {
     }
 
     private isIgnored(node: core.IDLInterface): boolean {
-        const classes = this.allowed.get(this.namespaceName)!
-        return classes.size !== 0 && !(classes.get(node.name) ?? (classes.get('*') ?? false))
+        const classes = this.allowed.get(this.namespaceName)
+        return classes === undefined ||
+            (classes.size !== 0 && !(classes.get(node.name) ?? (classes.get('*') ?? false)))
     }
 
     private resolver = {
@@ -240,6 +241,7 @@ export class PeerVisitor extends Visitor {
 }
 
 const Allowed = [
+    'es2panda_Impl-',
     'es2panda_SourcePosition',
     'es2panda_SourceRange',
     'es2panda_LabelPair',
@@ -265,7 +267,7 @@ const Allowed = [
     'ir.*',
 	'ir.Annotated-',
 	'ir.AnnotationAllowed-',
-	'ir.AstNode-',
+	'ir.AstNode+', // XXX: has bridges but no peer
 	'ir.JsDocAllowed-',
 	'ir.Typed-',
 	'ir.VectorIterationGuard-',
