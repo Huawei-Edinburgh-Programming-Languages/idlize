@@ -20,7 +20,7 @@ export class PeerVisitor extends Visitor {
 
     override onEnterNamespace(node: core.IDLNamespace): boolean {
         console.log(`namespace: ${node.name}`);
-        return ['', 'ir'].includes(node.name)
+        return ['', 'ir', 'parser', 'es2panda'].includes(node.name)
     }
 
     override onEnterInterface(node: core.IDLInterface): boolean{
@@ -222,12 +222,13 @@ export class PeerVisitor extends Visitor {
 }
 
 const Ignored = new Set<string>([
+    'ETSParser', // from parser ns
 	'Annotated',
 	'AnnotationAllowed',
 	'es2panda_AstDumper',
 	'AstNodeForEachFunction',
 	'es2panda_AstNode',
-	'AstNode',
+//	'AstNode',
 	'es2panda_BoundContext',
 	'es2panda_CheckerContext',
 	'ClassBuilder',

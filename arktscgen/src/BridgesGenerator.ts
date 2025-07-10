@@ -2,6 +2,7 @@ import * as core from "@idlizer/core"
 import { BridgesConstructions } from "./constuctions/BridgesConstructions"
 import { Body, Resolver } from "./general/types"
 import { PeerGenerator } from "./PeerGenerator"
+import { splitCreateOrUpdate } from "./general/common";
 
 const Literals = BridgesConstructions;
 
@@ -13,10 +14,20 @@ export class BridgesGenerator {
     }
 
     public write(iface: core.IDLInterface, body: Body, writer: core.CppLanguageWriter): void {
-        body.creates?.forEach(m => this.writeCreate(iface, m, writer))
-        body.updates?.forEach(m => this.writeCreate(iface, m, writer))
+        const creates = Array.prototype.concat(body.creates ?? [], body.updates ?? [])
+        creates.forEach(method => {
+            const parts = splitCreateOrUpdate(method.name)
+            method.name = `${this.methodPrefix}${parts.createOrUpdate}${iface.name}${parts.rest}`
+        })
+
         const methods = Array.prototype.concat(body.getters ?? [], body.regular ?? [])
-        //console.log(`${body.getters?.length}, ${body.regular?.length} => ${methods.length}`);
+        methods.forEach(method => {
+            method.name = `${this.methodPrefix}${iface.name}${method.name}`
+        })
+
+        PeerGenerator.sortInDeclarationOrder(methods, iface)
+            .forEach(m => this.writeCreate(iface, m, writer))
+
         PeerGenerator.sortInDeclarationOrder(methods, iface)
             .forEach(m => this.writeMethod(iface, m, writer))
     }
@@ -114,7 +125,8 @@ export class BridgesGenerator {
         iface: core.IDLInterface, method: core.Method,  writer: core.CppLanguageWriter): core.LanguageExpression {
         const cap = core.capitalize
         const argNames = method.signature.argNames!.map(a => this.convertArg(a))
-        return writer.makeString(`GetImpl()->${cap(method.name)}${iface.name}(${argNames.join(', ')})`)
+        const methodName = method.name.slice(this.methodPrefix.length)
+        return writer.makeString(`GetImpl()->${cap(methodName)}${iface.name}(${argNames.join(', ')})`)
     }
 
     private makeImplGetterCall(
@@ -127,10 +139,13 @@ export class BridgesGenerator {
     private makeMacro(
         iface: core.IDLInterface, method: core.Method,  writer: core.CppLanguageWriter): core.LanguageExpression {
         const isVoid = method.signature.returnType === core.IDLVoidType
-        const args = method.signature.args
+        const args = (isVoid ? [] : [method.signature.returnType])
+            .concat(method.signature.args)
             .map(a => this.converter.convert(a))
+        args.splice(0, 0, method.name.slice(this.methodPrefix.length))
+
         return writer.makeString(
-            `${Literals.interopMacro(isVoid, args.length)}(${args.join(', ')})`
+            `${Literals.interopMacro(isVoid, method.signature.args.length)}(${args.join(', ')})`
         )
     }
 
@@ -173,5 +188,6 @@ export class BridgesGenerator {
         return this.primitives.Undefined.getText()
     }
 
+    private readonly methodPrefix = 'impl_'
     public readonly primitives = new core.PrimitiveTypeList
 }
