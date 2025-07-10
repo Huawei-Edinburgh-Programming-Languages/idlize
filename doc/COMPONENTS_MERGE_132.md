@@ -43,7 +43,7 @@
 | 41 | color_metrics_accessor.cpp | Evstigneev Roman | ✅ done |
 | 42 | column_modifier.cpp | Lobah Mikhail | ✅ done nothing todo |
 | 43 | column_split_modifier.cpp | Lobah Mikhail | ✅ done nothing todo |
-| 44 | common_method_modifier.cpp | Lobah Mikhail | on reviev |
+| 44 | common_method_modifier.cpp | Lobah Mikhail | ⏳ on review |
 | 45 | common_shape_accessor.cpp | Evstigneev Roman | ✅ done |
 | 46 | common_shape_method_modifier.cpp | Evstigneev Roman | ✅ done |
 | 47 | component_content_accessor.cpp | Erokhin Ilya | ✅ done |
@@ -124,7 +124,7 @@
 | 122 | image_span_modifier.cpp | Vadim Voronov | ✅ done |
 | 123 | indicator_component_controller_accessor.cpp | Vadim Voronov | ✅ done |
 | 124 | indicator_component_modifier.cpp | Dmitry Smirnov | ⏳ on review |
-| 125 | iui_context_accessor.cpp | Dmitry Smirnov | allready ✅ done |
+| 125 | iui_context_accessor.cpp | Dmitry Smirnov | ✅ allready done |
 | 126 | js_geolocation_accessor.cpp | Dmitry Smirnov | ⏳ on review |
 | 127 | js_result_accessor.cpp | Dmitry Smirnov | ⏳ on review |
 | 128 | key_event_accessor.cpp | Dmitry Smirnov | ⏳ on review |
