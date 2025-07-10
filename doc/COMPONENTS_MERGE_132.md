@@ -308,8 +308,8 @@
 | 306 | text_picker_modifier.cpp | Ekaterina Stepanova | on review |
 | 307 | text_shadow_style_accessor.cpp | Politov Mikhail | |
 | 308 | text_style_accessor.cpp | Evstigneev Roman | done |
-| 309 | text_timer_controller_accessor.cpp | Dudkin Sergey | |
-| 310 | text_timer_modifier.cpp | Dudkin Sergey | |
+| 309 | text_timer_controller_accessor.cpp | Dudkin Sergey | done |
+| 310 | text_timer_modifier.cpp | Dudkin Sergey | done |
 | 311 | theme_control_accessor.cpp | Evstigneev Roman | done |
 | 312 | time_picker_dialog_accessor.cpp | Evstigneev Roman | done |
 | 313 | time_picker_modifier.cpp | Ekaterina Stepanova | on review |
@@ -317,7 +317,7 @@
 | 315 | touch_event_accessor.cpp | Samarin Sergey | done |
 | 316 | transition_effect_accessor.cpp | Evstigneev Roman | done |
 | 317 | typeface_accessor.cpp | Andrey Khudenkikh | |
-| 318 | ui_common_event_accessor.cpp | Dudkin Sergey | |
+| 318 | ui_common_event_accessor.cpp | Dudkin Sergey | done |
 | 319 | ui_context_accessor.cpp | Andrey Khudenkikh | |
 | 320 | ui_context_atomic_service_bar_accessor.cpp | Andrey Khudenkikh | |
 | 321 | ui_extension_component_modifier.cpp | Andrey Khudenkikh | |
