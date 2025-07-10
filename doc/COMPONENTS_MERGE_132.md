@@ -252,13 +252,13 @@
 | 250 | search_ops_accessor.cpp | Evstigneev Roman | done |
 | 251 | security_component_method_modifier.cpp | Samarin Sergey | |
 | 252 | select_modifier.cpp | Samarin Sergey | |
-| 253 | shader_effect_accessor.cpp | Tuzhilkin Ivan | |
-| 254 | shadow_layer_accessor.cpp | Tuzhilkin Ivan | |
-| 255 | shape_clip_accessor.cpp | Tuzhilkin Ivan | |
-| 256 | shape_mask_accessor.cpp | Tuzhilkin Ivan | |
-| 257 | shape_modifier.cpp | Tuzhilkin Ivan | |
-| 258 | side_bar_container_modifier.cpp | Tuzhilkin Ivan | |
-| 259 | slider_modifier.cpp | Tuzhilkin Ivan | |
+| 253 | shader_effect_accessor.cpp | Tuzhilkin Ivan | NEW_GENERATE |
+| 254 | shadow_layer_accessor.cpp | Tuzhilkin Ivan | NEW_GENERATE |
+| 255 | shape_clip_accessor.cpp | Tuzhilkin Ivan | done |
+| 256 | shape_mask_accessor.cpp | Tuzhilkin Ivan | done |
+| 257 | shape_modifier.cpp | Tuzhilkin Ivan | done |
+| 258 | side_bar_container_modifier.cpp | Tuzhilkin Ivan | done |
+| 259 | slider_modifier.cpp | Tuzhilkin Ivan | done |
 | 260 | span_modifier.cpp | Politov Mikhail | |
 | 261 | spring_motion_accessor.cpp | Vadim Voronov | done empty new file nothing todo |
 | 262 | spring_prop_accessor.cpp | Vadim Voronov | done empty new file nothing todo |
@@ -342,4 +342,4 @@
 | 340 | webview_controller_accessor.cpp | Vadim Voronov | |
 | 341 | window_scene_modifier.cpp | Vadim Voronov | |
 | 342 | x_component_controller_accessor.cpp | Tuzhilkin Ivan | done |
-| 343 | x_component_modifier.cpp | Tuzhilkin Ivan | |
+| 343 | x_component_modifier.cpp | Tuzhilkin Ivan | done |
