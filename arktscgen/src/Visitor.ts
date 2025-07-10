@@ -80,7 +80,6 @@ export class Visitor {
                 this.declarations.set('', new Map<string, core.IDLEntry>());
 
                 (node as core.IDLFile).entries.forEach(n => this.prepare(n))
-                this.printStatistics()
             } break;
 
             case core.IDLKind.Namespace: {
@@ -139,17 +138,16 @@ export class Visitor {
         //if (this.isHeir(ref, Config.defaultAncestor)) return true
         const type = core.isReferenceType(ref) ? this.resolveReference(ref) : ref
         if (type && core.isInterface(type) && type.inheritance.length === 0) {
-            console.log(`ArktsObject for ${type.name}`);
+            //console.log(`ArktsObject for ${type.name}`);
             return true
         }
-
         // TODO: Nodes that do not have parents have to be in this list
         if (["ValidationInfo", "ArkTsConfig", "Program"].includes(ref.name)) return true // TODO: fix
         return false
     }
 
     public resolveReference(ref: core.IDLReferenceType): core.IDLEntry | undefined {
-        const parts = ref.name.split('.', 2) // this.hack_removeDataClassPrefix(ref).split('.', 2)
+        const parts = ref.name.split('.', 2)
         const [ns, name] = parts.length == 1 ? ['', parts.at(0)] : parts
         const cns = this.namespaces[this.namespaces.length - 1][0]
 
@@ -159,13 +157,14 @@ export class Visitor {
             if (!ns.length) {
                 symbol = this.declarations.get('')?.get(name!)
             }
-            // todo: Add resolving with es2panda_ prefix for some types
+
             if (!symbol) {
                 this.unresolved.add(ref.name)
                 //throw `resolveReference: ${name} from '${ns}' => ${symbol}`
-                console.log(`resolveReference: ${name} from '${ns}' => ${symbol}`);
+                //console.log(`resolveReference: ${name} from '${ns}' => ${symbol}`);
             }
         }
+
         return symbol
     }
 
@@ -178,15 +177,23 @@ export class Visitor {
             console.warn(`Already has a ${name}(${node.name})`);
         } else {
             table.set(name, node)
-            this.hack_removeDuplicateFromGlobalNamespace(ns[0], name)
+            this.hack_removeDuplicateFromGlobalNamespace(ns[0], node)
         }
     }
 
-    private hack_removeDuplicateFromGlobalNamespace(ns: string, name: string): void {
-        if (ns == Config.irNamespace) {
-            const removed = this.declarations.get('')?.delete(name)
+    private hack_removeDuplicateFromGlobalNamespace(ns: string, node: core.IDLEntry): void {
+        const name = node.name
+        if (ns == Config.irNamespace || ns == 'parser') { // todo: parser for a Program and its c_type?
+            const globalTable = this.declarations.get('')!
+            const removed = globalTable.has(name)
             if (removed) {
-                console.warn(`Declaraion of '${name}' was removed from global namespace`)
+                console.warn(`Duplicated declaraion of '${ns}.${name}' was removed from global namespace`)
+            }
+
+            const alias = `${Config.dataClassPrefix}${name}`
+            if (globalTable.has(alias)) {
+                globalTable.set(alias, node)
+                console.warn(`Added alias in global namespace '${alias}' for ${ns}.${name} `)
             }
         }
     }
@@ -197,8 +204,12 @@ export class Visitor {
     }
 
     private hack_removeDataClassPrefix(node: core.IDLNamedNode): string {
+        return this.hack_removeDataClassPrefixStr(node.name)
+    }
+
+    private hack_removeDataClassPrefixStr(name: string): string {
         const prefix = Config.dataClassPrefix
-        return node.name.startsWith(prefix) ? node.name.slice(prefix.length) : node.name
+        return name.startsWith(prefix) ? name.slice(prefix.length) : name
     }
 
     private printStatistics(): void {
