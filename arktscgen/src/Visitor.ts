@@ -231,6 +231,10 @@ export class Visitor {
         }
     }
 
+    protected get namespaceName(): string {
+        return this.namespaces.at(-1)![0]
+    }
+
     private namespaces: Namespace[]= []
     private declarations: Declarations = new Map()
     private unresolved: Set<string> = new Set<string>()
