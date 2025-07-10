@@ -178,13 +178,13 @@
 | 176 | offscreen_canvas_accessor.cpp | Vadim Voronov | done |
 | 177 | offscreen_canvas_rendering_context2d_accessor.cpp | Vadim Voronov | done |
 | 178 | page_life_cycle_accessor.cpp | Politov Mikhail | |
-| 179 | pan_gesture_event_accessor.cpp | Politov Mikhail | |
-| 180 | pan_gesture_interface_accessor.cpp | Politov Mikhail | |
-| 181 | pan_gesture_options_accessor.cpp | Politov Mikhail | |
-| 182 | pan_recognizer_accessor.cpp | Politov Mikhail | |
+| 179 | pan_gesture_event_accessor.cpp | Politov Mikhail | done |
+| 180 | pan_gesture_interface_accessor.cpp | Politov Mikhail | done |
+| 181 | pan_gesture_options_accessor.cpp | Politov Mikhail | done |
+| 182 | pan_recognizer_accessor.cpp | Politov Mikhail | done |
 | 183 | paragraph_accessor.cpp | Politov Mikhail | |
 | 184 | paragraph_builder_accessor.cpp | Politov Mikhail | |
-| 185 | paragraph_style_accessor.cpp | Politov Mikhail | |
+| 185 | paragraph_style_accessor.cpp | Politov Mikhail | done |
 | 186 | paste_button_modifier.cpp | Samarin Sergey | done |
 | 187 | path2d_accessor.cpp | Vadim Voronov | done |
 | 188 | path_accessor.cpp | Evstigneev Roman | INTEGRATED |
@@ -201,8 +201,8 @@
 | 199 | pixel_map_accessor.cpp | Erokhin Ilya | done |
 | 200 | pixel_map_mock_accessor.cpp | Erokhin Ilya | done |
 | 201 | plugin_component_modifier.cpp | Erokhin Ilya | done |
-| 202 | polygon_modifier.cpp | Politov Mikhail | |
-| 203 | polyline_modifier.cpp | Politov Mikhail | |
+| 202 | polygon_modifier.cpp | Politov Mikhail | done |
+| 203 | polyline_modifier.cpp | Politov Mikhail | done |
 | 204 | progress_mask_accessor.cpp | Erokhin Ilya | done |
 | 205 | progress_modifier.cpp | Erokhin Ilya | done |
 | 206 | prompt_action_accessor.cpp | Erokhin Ilya | done |
@@ -259,7 +259,7 @@
 | 257 | shape_modifier.cpp | Tuzhilkin Ivan | done |
 | 258 | side_bar_container_modifier.cpp | Tuzhilkin Ivan | done |
 | 259 | slider_modifier.cpp | Tuzhilkin Ivan | done |
-| 260 | span_modifier.cpp | Politov Mikhail | |
+| 260 | span_modifier.cpp | Politov Mikhail | done |
 | 261 | spring_motion_accessor.cpp | Vadim Voronov | done empty new file nothing todo |
 | 262 | spring_prop_accessor.cpp | Vadim Voronov | done empty new file nothing todo |
 | 263 | ssl_error_handler_accessor.cpp | Vadim Voronov | done |
@@ -306,7 +306,7 @@
 | 304 | text_modifier.cpp | Tuzhilkin Ivan | done |
 | 305 | text_picker_dialog_accessor.cpp | Vadim Voronov | done |
 | 306 | text_picker_modifier.cpp | Ekaterina Stepanova | on review |
-| 307 | text_shadow_style_accessor.cpp | Politov Mikhail | |
+| 307 | text_shadow_style_accessor.cpp | Politov Mikhail | done |
 | 308 | text_style_accessor.cpp | Evstigneev Roman | done |
 | 309 | text_timer_controller_accessor.cpp | Dudkin Sergey | done |
 | 310 | text_timer_modifier.cpp | Dudkin Sergey | done |
@@ -323,7 +323,7 @@
 | 321 | ui_extension_component_modifier.cpp | Andrey Khudenkikh | |
 | 322 | ui_extension_proxy_accessor.cpp | Andrey Khudenkikh | |
 | 323 | unified_data_accessor.cpp | Evstigneev Roman | done |
-| 324 | url_style_accessor.cpp | Politov Mikhail | |
+| 324 | url_style_accessor.cpp | Politov Mikhail | done |
 | 325 | user_data_span_accessor.cpp | Sergey Kovalev | done |
 | 326 | video_controller_accessor.cpp | Sergey Kovalev | done |
 | 327 | video_modifier.cpp | Sergey Kovalev | done |
