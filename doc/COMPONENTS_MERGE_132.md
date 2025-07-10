@@ -273,12 +273,12 @@
 | 271 | swipe_gesture_accessor.cpp | Samarin Sergey | ✅ done (new file) |
 | 272 | swipe_gesture_event_accessor.cpp | Samarin Sergey | ✅ done |
 | 273 | swiper_content_transition_proxy_accessor.cpp | Vadim Voronov | ✅ done |
-| 274 | swiper_controller_accessor.cpp | Andrey Khudenkikh | 👀⏳ on review |
-| 275 | swipe_recognizer_accessor.cpp | Andrey Khudenkikh | 👀⏳ on review |
+| 274 | swiper_controller_accessor.cpp | Andrey Khudenkikh | ✅ done |
+| 275 | swipe_recognizer_accessor.cpp | Andrey Khudenkikh | ✅ done |
 | 276 | swiper_modifier.cpp | Samarin Sergey | ✅ INTEGRATED |
-| 277 | symbol_effect_accessor.cpp | Andrey Khudenkikh | 👀⏳ on review |
-| 278 | symbol_glyph_modifier.cpp | Andrey Khudenkikh | 👀⏳ on review |
-| 279 | symbol_span_modifier.cpp | Andrey Khudenkikh | 👀⏳ on review |
+| 277 | symbol_effect_accessor.cpp | Andrey Khudenkikh | ✅ done |
+| 278 | symbol_glyph_modifier.cpp | Andrey Khudenkikh | ✅ done |
+| 279 | symbol_span_modifier.cpp | Andrey Khudenkikh | ✅ done |
 | 280 | system_ops_accessor.cpp | Vadim Voronov | ✅ done by default nothing todo |
 | 281 | tab_bar_symbol_accessor.cpp | Vadim Voronov | ✅ done empty new file nothing todo |
 | 282 | tab_content_modifier.cpp | Tuzhilkin Ivan | ✅ done |
@@ -316,12 +316,12 @@
 | 314 | toggle_modifier.cpp | Ekaterina Stepanova | 👀⏳ on review |
 | 315 | touch_event_accessor.cpp | Samarin Sergey | ✅ done |
 | 316 | transition_effect_accessor.cpp | Evstigneev Roman | ✅ done |
-| 317 | typeface_accessor.cpp | Andrey Khudenkikh | |
+| 317 | typeface_accessor.cpp | Andrey Khudenkikh | ✅ done |
 | 318 | ui_common_event_accessor.cpp | Dudkin Sergey | ✅ done |
-| 319 | ui_context_accessor.cpp | Andrey Khudenkikh | |
-| 320 | ui_context_atomic_service_bar_accessor.cpp | Andrey Khudenkikh | |
-| 321 | ui_extension_component_modifier.cpp | Andrey Khudenkikh | |
-| 322 | ui_extension_proxy_accessor.cpp | Andrey Khudenkikh | |
+| 319 | ui_context_accessor.cpp | Andrey Khudenkikh | ✅ done |
+| 320 | ui_context_atomic_service_bar_accessor.cpp | Andrey Khudenkikh | ✅ done |
+| 321 | ui_extension_component_modifier.cpp | Andrey Khudenkikh |👀⏳ on review |
+| 322 | ui_extension_proxy_accessor.cpp | Andrey Khudenkikh | 👀⏳ on review |
 | 323 | unified_data_accessor.cpp | Evstigneev Roman | ✅ done |
 | 324 | url_style_accessor.cpp | Politov Mikhail | ✅ done |
 | 325 | user_data_span_accessor.cpp | Sergey Kovalev | ✅ done |
