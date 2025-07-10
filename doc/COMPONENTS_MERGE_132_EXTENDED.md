@@ -43,11 +43,11 @@
 |  menu_item_group_modifier.cpp | Sergey Morozov | | 
 |  grid_col_modifier.cpp | | | 
 |  date_picker_modifier.cpp | Vadim Voronov | | 
-|  list_item_group_modifier.cpp | | | 
+|  list_item_group_modifier.cpp | Sergey Morozov | | 
 |  polygon_modifier.cpp | | | 
 |  marquee_modifier.cpp | | | 
 |  grid_row_modifier.cpp | Lobah Mikhail | | 
-|  list_item_modifier.cpp | | | 
+|  list_item_modifier.cpp | Sergey Morozov | | 
 |  column_split_modifier.cpp | Lobah Mikhail | | 
 |  menu_modifier.cpp | Sergey Morozov | | 
 |  polyline_modifier.cpp | | | 
@@ -56,7 +56,7 @@
 |  navigation_modifier.cpp | | | 
 |  nav_destination_modifier.cpp | | | 
 |  rect_modifier.cpp | | | 
-|  list_modifier.cpp | | | 
+|  list_modifier.cpp | Sergey Morozov | | 
 |  indicator_component_modifier.cpp | | | 
 |  qr_code_modifier.cpp | | | 
 |  image_span_modifier.cpp | | | 
