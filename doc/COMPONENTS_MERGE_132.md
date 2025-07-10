@@ -1,6 +1,6 @@
-✅ done
-🔵 NEW_GENERATE
-👀⏳ on review
+✅ done  
+🔵 NEW_GENERATE  
+👀⏳ on review  
 
 | № | File | Owner | Status |
 |---|------|-------|--------|
