@@ -3,6 +3,7 @@ import { BridgesConstructions } from "./constuctions/BridgesConstructions"
 import { Body, Resolver } from "./general/types"
 import { PeerGenerator } from "./PeerGenerator"
 import { splitCreateOrUpdate } from "./general/common";
+import { Config } from "./general/Config";
 
 const Literals = BridgesConstructions;
 
@@ -14,27 +15,47 @@ export class BridgesGenerator {
     }
 
     public write(iface: core.IDLInterface, body: Body, writer: core.CppLanguageWriter): void {
-        const creates = Array.prototype.concat(body.creates ?? [], body.updates ?? [])
-        creates.forEach(method => {
-            const parts = splitCreateOrUpdate(method.name)
-            method.name = `${this.methodPrefix}${parts.createOrUpdate}${iface.name}${parts.rest}`
-        })
+        // For clear diff
+        const fixArgName = (name: string, prev?: string) =>
+            name.endsWith('Len') ? (prev ?? name.slice(0, -3)) + 'SequenceLength' : name === 'ctx' ? 'context' : name
 
-        const methods = Array.prototype.concat(body.getters ?? [], body.regular ?? [])
-        methods.forEach(method => {
-            method.name = `${this.methodPrefix}${iface.name}${method.name}`
-        })
+        PeerGenerator.sortInDeclarationOrder(Array.prototype.concat(body.creates ?? [], body.updates ?? []), iface)
+            .forEach(method => {
+                const parts = splitCreateOrUpdate(method.name)
+                method.name = `${this.methodPrefix}${parts.createOrUpdate}${iface.name}${parts.rest}`
+                method.signature.argNames = method.signature.argNames
+                    ?.map((v, i) => fixArgName(v, i === 0 ? undefined : method.signature.argNames![i - 1]))
 
-        PeerGenerator.sortInDeclarationOrder(methods, iface)
-            .forEach(m => this.writeCreate(iface, m, writer))
+                this.writeCreate(iface, method, writer)
+            })
 
-        PeerGenerator.sortInDeclarationOrder(methods, iface)
-            .forEach(m => this.writeMethod(iface, m, writer))
+        PeerGenerator.sortInDeclarationOrder(Array.prototype.concat(body.getters ?? [], body.regular ?? []), iface)
+            .forEach(method => {
+                method.name = `${this.methodPrefix}${iface.name}${method.name}`
+                method.signature.argNames = method.signature.argNames
+                    ?.map((v, i) => fixArgName(v, i === 0 ? undefined : method.signature.argNames![-i]))
+
+                this.writeMethod(iface, method, writer)
+            })
+    }
+
+    private hack_simplifyReturnType(method: core.Method): void {
+        const ret = method.signature.returnType
+        if (core.isContainerType(ret) && core.IDLContainerUtils.isSequence(ret)) {
+            method.signature.returnType = ret.elementType[0]
+        }
+
+        if (method.signature.returnType === core.IDLStringType) {
+            method.signature.returnType = core.IDLPointerType
+        }
     }
 
     private writeCreate(iface: core.IDLInterface, method: Readonly<core.Method>, writer: core.CppLanguageWriter): void {
         const statements = this.makeArgumentStatements(iface, method, writer)
         const implementationCall = this.makeImplMethodCall(iface, method, writer)
+
+        this.hack_simplifyReturnType(method)
+
         writer.writeMethodImplementation(
             method,
             () => {
@@ -56,14 +77,19 @@ export class BridgesGenerator {
         const implementationCall = this.makeImplGetterCall(iface, method, writer,
                                                  needExtraArg ? [Literals.sequenceLengthPass] : [])
 
+        this.hack_simplifyReturnType(method)
+
         writer.writeMethodImplementation(
             method,
             () => {
                 writer.writeStatements(...statements,
                     needExtraArg ?
-                        writer.makeAssign(Literals.sequenceLengthUsage, undefined, undefined, true) :
+                        //writer.makeAssign(Literals.sequenceLengthUsage, core.IDLU32Type, undefined, true, false) :
+                        writer.makeStatement(writer.makeString(Literals.sequenceLengthDeclaration)) : // todo: Half a hack
                         writer.makeStatement(writer.makeString('')),
-                    writer.makeAssign(Literals.result, undefined, implementationCall, true),
+                    returnValue.asString().length ?
+                        writer.makeAssign(Literals.result, undefined, implementationCall, true, false) :
+                        writer.makeStatement(implementationCall),
                     writer.makeReturn(returnValue),
                 )
             }
@@ -75,16 +101,23 @@ export class BridgesGenerator {
     private makeArgumentStatements(
         iface: core.IDLInterface, method: core.Method,  writer: core.CppLanguageWriter): core.LanguageStatement[] {
         const argFn = this.convertArg.bind(this)
+        const makeCast = (method: core.Method, type: core.IDLType, index: number) => {
+            const realType = core.isReferenceType(type) ? this.resolver.resolveTypeReference(type) ?? type : type
+            const opts = {
+                overrideTypeName: this.unwrap(iface, type),
+                unsafe: !core.isPrimitiveType(realType) && !core.isEnum(realType)
+            } as core.MakeCastOptions
+
+            return writer.makeCast(
+                writer.makeString(method.signature.argNames![index]), core.IDLUndefinedType, opts
+            )
+        }
+
         return method.signature.args
             .map((type, index) => {
-                const opts = {
-                    overrideTypeName: this.unwrap(iface, type),
-                    unsafe: !core.isPrimitiveType(type)
-                } as core.MakeCastOptions
-
-                return writer.makeCast(
-                    writer.makeString(method.signature.argNames![index]), core.IDLUndefinedType, opts
-                )
+                return type === core.IDLStringType ?  writer.makeFunctionCall(
+                        Literals.stringCast, [writer.makeString(method.signature.argNames![index])]
+                ) : makeCast(method, type, index)
             })
             .map((expr, index) => {
                 return writer.makeAssign(
@@ -97,10 +130,13 @@ export class BridgesGenerator {
     private makeAndCastReturnValue(
         iface: core.IDLInterface, method: core.Method,  writer: core.CppLanguageWriter): [boolean, core.LanguageExpression] {
         const tuple = this.makeReturnValue(iface, method, writer)
-        const cast = (expr: core.LanguageExpression) => writer.makeString(
-            writer.makeUnsafeCast_(expr, core.IDLVoidType, core.PrintHint.AsPointer))
-
-        return method.name.endsWith('Const') && tuple[1].asString().length ? [tuple[0], cast(tuple[1])] : tuple
+        //const cast = (expr: core.LanguageExpression) => writer.makeString(
+        //    writer.makeUnsafeCast_(expr, core.IDLVoidType, core.PrintHint.AsPointer))
+        const castCompat = (expr: core.LanguageExpression) =>
+            writer.makeString(`(void*)${expr.asString()}`)
+        const needCast = (tuple[0] || core.isReferenceType(method.signature.returnType))
+            && method.name.endsWith('Const')
+        return needCast ? [tuple[0], castCompat(tuple[1])] : tuple
     }
 
     private makeReturnValue(
@@ -126,14 +162,15 @@ export class BridgesGenerator {
         const cap = core.capitalize
         const argNames = method.signature.argNames!.map(a => this.convertArg(a))
         const methodName = method.name.slice(this.methodPrefix.length)
-        return writer.makeString(`GetImpl()->${cap(methodName)}${iface.name}(${argNames.join(', ')})`)
+        return writer.makeString(`GetImpl()->${cap(methodName)}(${argNames.join(', ')})`)
     }
 
     private makeImplGetterCall(
         iface: core.IDLInterface, method: core.Method, writer: core.CppLanguageWriter, extraArgs: string[]): core.LanguageExpression {
         const cap = core.capitalize
         const argNames = method.signature.argNames!.map(a => this.convertArg(a)).concat(extraArgs)
-        return writer.makeString(`GetImpl()->${iface.name}${cap(method.name)}(${argNames.join(', ')})`)
+        const methodName = method.name.slice(this.methodPrefix.length)
+        return writer.makeString(`GetImpl()->${cap(methodName)}(${argNames.join(', ')})`)
     }
 
     private makeMacro(
@@ -141,7 +178,10 @@ export class BridgesGenerator {
         const isVoid = method.signature.returnType === core.IDLVoidType
         const args = (isVoid ? [] : [method.signature.returnType])
             .concat(method.signature.args)
-            .map(a => this.converter.convert(a))
+            .map(a => {
+                const value = this.converter.convert(a)
+                return value.endsWith('&') ? value.slice(0, -1) : value // todo: only for kstringptr&
+            })
         args.splice(0, 0, method.name.slice(this.methodPrefix.length))
 
         return writer.makeString(
@@ -151,17 +191,14 @@ export class BridgesGenerator {
 
     private insertReceiverArgument(iface: core.IDLInterface, method: core.Method): void {
         method.signature.args.splice(1, 0, core.createReferenceType(iface.name))
-        method.signature.argNames!.splice(1, 0, 'reciever')
+        method.signature.argNames!.splice(1, 0, 'receiver')
     }
 
     private convertArg(name: string): string {
-        if (name.endsWith('Len')) {
-            name = name.slice(0, -3) + 'SequnceLength'
-        }
         return `_${name}`
     }
 
-    private unwrap(iface: core.IDLInterface, ref: core.IDLType): string {
+    private unwrap(_: core.IDLInterface, ref: core.IDLType): string {
         if (core.isContainerType(ref) && core.IDLContainerUtils.isSequence(ref)) {
                 return `${Literals.astNode}*`
 
@@ -176,12 +213,14 @@ export class BridgesGenerator {
 
             } else if (core.isInterface(type)) {
                 let name = type.name.slice(0)
-                if (name.includes('Context')) {
-                    name = 'es2panda_Context*'
+                const ctype = type.extendedAttributes?.find(v => v.name === 'c_type')
+                if (ctype && ctype.value ) {
+                    name = `${ctype.value}*`
                 } else {
-                    const ctype = iface.extendedAttributes?.find(v => v.name === 'c_type')
-                    name = ctype && ctype.value ? `${ctype.value}*` : Literals.astNode
+                    const short = name.startsWith(Config.dataClassPrefix) ? name.slice(Config.dataClassPrefix.length) : name
+                    name = this.hack_ctype.has(short) ? `${Config.dataClassPrefix}${short}*` : Literals.astNode
                 }
+                //console.log(`${name} for ${type.name}`);
                 return name
             }
         }
@@ -190,4 +229,15 @@ export class BridgesGenerator {
 
     private readonly methodPrefix = 'impl_'
     public readonly primitives = new core.PrimitiveTypeList
+    private readonly hack_ctype = new Set<string>([
+        'Context', // Do not remove!
+        'AstVisitor',
+        'CodeGen',
+        'Context',
+        'ErrorLogger',
+        'LabelPair',
+        'SourcePosition',
+        'SourceRange',
+        'VReg',
+    ])
 }
