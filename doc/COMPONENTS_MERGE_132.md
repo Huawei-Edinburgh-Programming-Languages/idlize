@@ -177,13 +177,13 @@
 | 175 | node_content_accessor.cpp | Lobah Mikhail | |
 | 176 | offscreen_canvas_accessor.cpp | Vadim Voronov | done |
 | 177 | offscreen_canvas_rendering_context2d_accessor.cpp | Vadim Voronov | done |
-| 178 | page_life_cycle_accessor.cpp | Politov Mikhail | |
+| 178 | page_life_cycle_accessor.cpp | Politov Mikhail | empty new file |
 | 179 | pan_gesture_event_accessor.cpp | Politov Mikhail | done |
 | 180 | pan_gesture_interface_accessor.cpp | Politov Mikhail | done |
 | 181 | pan_gesture_options_accessor.cpp | Politov Mikhail | done |
 | 182 | pan_recognizer_accessor.cpp | Politov Mikhail | done |
-| 183 | paragraph_accessor.cpp | Politov Mikhail | |
-| 184 | paragraph_builder_accessor.cpp | Politov Mikhail | |
+| 183 | paragraph_accessor.cpp | Politov Mikhail | empty new file |
+| 184 | paragraph_builder_accessor.cpp | Politov Mikhail | empty new file |
 | 185 | paragraph_style_accessor.cpp | Politov Mikhail | done |
 | 186 | paste_button_modifier.cpp | Samarin Sergey | done |
 | 187 | path2d_accessor.cpp | Vadim Voronov | done |
