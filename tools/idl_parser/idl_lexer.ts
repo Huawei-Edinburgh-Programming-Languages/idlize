@@ -117,14 +117,6 @@ export type TokenPattern = {
 };
 
 const g_keywords: Array<TokenPattern> = [
-  // regexp
-  { pattern: /-?([1-9][0-9]*|0[Xx][0-9A-Fa-f]+|0[0-7]*)/, type: Token.tInteger},
-  { pattern: /-?(([0-9]+\.[0-9]*|[0-9]*\.[0-9]+)([Ee][+-]?[0-9]+)?|[0-9]+[Ee][+-]?[0-9]+)/, type: Token.tDecimal},
-  { pattern: /[_-]?[A-Za-z][0-9A-Z_a-z-]*/, type: Token.tId},
-  { pattern: /"[^"]*"/, type: Token.tString},
-  { pattern: /\/\/.*|\/\*(.|\n)*?\*\//, type: Token.tComment},
-  { pattern: /[\t\n\r ]+/, type: Token.tWhiteSpace},
-
   // marks
   { pattern: /=/, type: Token.tEqual },
   { pattern: /\(/, type: Token.tLBracket },
@@ -220,6 +212,14 @@ const g_keywords: Array<TokenPattern> = [
 
   { pattern: /Promise/, type: Token.tPromise},
   { pattern: /number/, type: Token.tNumber},
+
+  // regexp
+  { pattern: /-?([1-9][0-9]*|0[Xx][0-9A-Fa-f]+|0[0-7]*)/, type: Token.tInteger},
+  { pattern: /-?(([0-9]+\.[0-9]*|[0-9]*\.[0-9]+)([Ee][+-]?[0-9]+)?|[0-9]+[Ee][+-]?[0-9]+)/, type: Token.tDecimal},
+  { pattern: /[_-]?[A-Za-z][0-9A-Z_a-z-]*/, type: Token.tId},
+  { pattern: /"[^"]*"/, type: Token.tString},
+  { pattern: /\/\/.*|\/\*(.|\n)*?\*\//, type: Token.tComment},
+  { pattern: /[\t\n\r ]+/, type: Token.tWhiteSpace},
 ];
 
 let g_ArgumentNameKeyword: Token[] = [
@@ -366,18 +366,24 @@ export function getTokenText(): string {
 export function getToken(): Token {
   console.log("getToken <<<");
 
-  while (g_pos < g_text.length) {
-    let found: boolean = false;
-
+  let nothing_found: boolean = false;
+  while (g_pos < g_text.length && !nothing_found) {
+    nothing_found = true;  // If none of the keywords match, then there is something wrong with the text.
     for (const kw of g_keywords) {
       const re = new RegExp(kw.pattern, "y");
       re.lastIndex = g_pos;
       const found = re.exec(g_text);
       if (found) {
         g_tokenText = found[0];
-        console.log(g_tokenText);
         g_pos += g_tokenText.length;
+        if (kw.type == Token.tWhiteSpace ||
+            kw.type == Token.tComment)
+          break;
+
+        console.log(g_tokenText);
         return kw.type;
+      } else {
+        nothing_found = false;
       }
     }
   }
