@@ -13,7 +13,7 @@
 |  gauge_modifier.cpp | | | 
 |  form_link_modifier.cpp | | | 
 |  dialog_common.cpp | | | 
-|  common_method_modifier.cpp | | | 
+|  common_method_modifier.cpp | Lobah Mikhail | | 
 |  circle_modifier.cpp | | | 
 |  button_modifier.cpp | | | 
 |  bind_sheet_utils.cpp | | | 
@@ -21,7 +21,7 @@
 |  effect_component_modifier.cpp | | | 
 |  checkbox_group_modifier.cpp | | | 
 |  checkbox_modifier.cpp | | | 
-|  column_modifier.cpp | | | 
+|  column_modifier.cpp | Lobah Mikhail | | 
 |  data_panel_modifier.cpp | | | 
 |  image_animator_modifier.cpp | | | 
 |  line_modifier.cpp | | | 
@@ -39,16 +39,16 @@
 |  form_component_modifier.cpp | Vadim Voronov | | 
 |  calendar_modifier.cpp | | | 
 |  path_modifier.cpp | | | 
-|  media_cached_image_modifier.cpp | | | 
+|  media_cached_image_modifier.cpp | Lobah Mikhail | | 
 |  menu_item_group_modifier.cpp | Sergey Morozov | | 
 |  grid_col_modifier.cpp | | | 
 |  date_picker_modifier.cpp | Vadim Voronov | | 
 |  list_item_group_modifier.cpp | | | 
 |  polygon_modifier.cpp | | | 
 |  marquee_modifier.cpp | | | 
-|  grid_row_modifier.cpp | | | 
+|  grid_row_modifier.cpp | Lobah Mikhail | | 
 |  list_item_modifier.cpp | | | 
-|  column_split_modifier.cpp | | | 
+|  column_split_modifier.cpp | Lobah Mikhail | | 
 |  menu_modifier.cpp | Sergey Morozov | | 
 |  polyline_modifier.cpp | | | 
 |  grid_item_modifier.cpp | | | 
@@ -60,7 +60,7 @@
 |  indicator_component_modifier.cpp | | | 
 |  qr_code_modifier.cpp | | | 
 |  image_span_modifier.cpp | | | 
-|  node_container_modifier.cpp | | | 
+|  node_container_modifier.cpp | Lobah Mikhail | | 
 |  menu_item_modifier.cpp | Sergey Morozov | | 
 |  pattern_lock_modifier.cpp | | | 
 |  relative_container_modifier.cpp | | | 

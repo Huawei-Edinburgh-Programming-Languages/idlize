@@ -236,7 +236,7 @@
 | 228 | rotation_gesture_accessor.cpp | Samarin Sergey | ✅ done (new file) |
 | 229 | rotation_gesture_event_accessor.cpp | Samarin Sergey | ✅ done |
 | 230 | rotation_recognizer_accessor.cpp | Samarin Sergey | ✅ done |
-| 231 | round_rect_accessor.cpp | Lobah Mikhail | ⏳ in progress |
+| 231 | round_rect_accessor.cpp | Lobah Mikhail | 🔵 NEW_GENERATE |
 | 232 | row_modifier.cpp | Lobah Mikhail | ⏳ in progress |
 | 233 | row_split_modifier.cpp | Lobah Mikhail | |
 | 234 | run_accessor.cpp | Samarin Sergey | ✅ done (new file) |
