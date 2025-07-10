@@ -132,13 +132,13 @@
 | layoutable_accessor.cpp |Dmitry Smirnov, NEW_GENERATE |
 | layout_callback_accessor.cpp | Evstigneev Roman - NEW_GENERATE |
 | layout_child_accessor.cpp | Evstigneev Roman - NEW_GENERATE |
-| layout_manager_accessor.cpp | Evstigneev Roman |
+| layout_manager_accessor.cpp | Evstigneev Roman - done |
 | layout_policy_accessor.cpp | Evstigneev Roman - NEW_GENERATE |
 | lazy_for_each_ops_accessor.cpp | Evstigneev Roman - INTEGRATED |
 | lazy_grid_layout_modifier.cpp | Evstigneev Roman - INTEGRATED |
 | lazyv_grid_layout_modifier.cpp | Evstigneev Roman - INTEGRATED |
-| length_metrics_accessor.cpp | Evstigneev Roman |
-| letter_spacing_style_accessor.cpp | Evstigneev Roman |
+| length_metrics_accessor.cpp | Evstigneev Roman - done |
+| letter_spacing_style_accessor.cpp | Evstigneev Roman - done |
 | life_cycle_accessor.cpp | Evstigneev Roman - NEW_GENERATE |
 | linear_gradient_accessor.cpp | Erokhin Ilya - done |
 | linear_indicator_controller_accessor.cpp | Erokhin Ilya - done |
@@ -191,10 +191,10 @@
 | path_effect_accessor.cpp | Evstigneev Roman - NEW_GENERATE |
 | path_modifier.cpp | Evstigneev Roman - INTEGRATED |
 | path_shape_accessor.cpp | Samarin Sergey |
-| pattern_lock_controller_accessor.cpp | Evstigneev Roman |
+| pattern_lock_controller_accessor.cpp | Evstigneev Roman - done |
 | pattern_lock_modifier.cpp | Evstigneev Roman - INTEGRATED |
 | pen_accessor.cpp | Evstigneev Roman - NEW_GENERATE | 
-| permission_request_accessor.cpp | Evstigneev Roman |
+| permission_request_accessor.cpp | Evstigneev Roman - done |
 | pinch_gesture_event_accessor.cpp | Samarin Sergey |
 | pinch_gesture_interface_accessor.cpp | Lobah Mikhail|
 | pinch_recognizer_accessor.cpp | Lobah Mikhail|
@@ -223,8 +223,8 @@
 | rich_editor_base_controller_accessor.cpp | INTEGRATED |
 | rich_editor_controller_accessor.cpp | INTEGRATED |
 | rich_editor_modifier.cpp | INTEGRATED |
-| rich_editor_styled_string_controller_accessor.cpp | Evstigneev Roman |
-| rich_text_modifier.cpp | Evstigneev Roman |
+| rich_editor_styled_string_controller_accessor.cpp | Evstigneev Roman - done |
+| rich_text_modifier.cpp | Evstigneev Roman - done |
 | root_modifier.cpp | Lobah Mikhail|
 | root_scene_modifier.cpp | Lobah Mikhail|
 | rotation_gesture_accessor.cpp | done (new file) |
@@ -307,15 +307,15 @@
 | text_picker_dialog_accessor.cpp | Vadim Voronov - done |
 | text_picker_modifier.cpp | Ekaterina Stepanova - on review|
 | text_shadow_style_accessor.cpp | Politov Mikhail |
-| text_style_accessor.cpp | Evstigneev Roman |
+| text_style_accessor.cpp | Evstigneev Roman - done |
 | text_timer_controller_accessor.cpp | Dudkin Sergey |
 | text_timer_modifier.cpp | Dudkin Sergey |
-| theme_control_accessor.cpp | Evstigneev Roman |
-| time_picker_dialog_accessor.cpp | Evstigneev Roman |
+| theme_control_accessor.cpp | Evstigneev Roman - done |
+| time_picker_dialog_accessor.cpp | Evstigneev Roman - done |
 | time_picker_modifier.cpp | Ekaterina Stepanova - on review|
 | toggle_modifier.cpp | Ekaterina Stepanova - on review |
 | touch_event_accessor.cpp | Samarin Sergey |
-| transition_effect_accessor.cpp | Evstigneev Roman |
+| transition_effect_accessor.cpp | Evstigneev Roman - done |
 | typeface_accessor.cpp | Andrey Khudenkikh |
 | ui_common_event_accessor.cpp | Dudkin Sergey |
 | ui_context_accessor.cpp | Andrey Khudenkikh |
