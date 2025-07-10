@@ -85,15 +85,15 @@
 | 83 | focus_axis_event_accessor.cpp | Dmitry Smirnov | ✅ done |
 | 84 | focus_controller_accessor.cpp | Dmitry Smirnov | ✅ done |
 | 85 | folder_stack_modifier.cpp | Dmitry Smirnov | ✅ done |
-| 86 | font_accessor.cpp | Dmitry Smirnov | NEW_GENERATE |
-| 87 | font_collection_accessor.cpp | Dmitry Smirnov | NEW_GENERATE |
+| 86 | font_accessor.cpp | Dmitry Smirnov | 🔵 NEW_GENERATE |
+| 87 | font_collection_accessor.cpp | Dmitry Smirnov | 🔵 NEW_GENERATE |
 | 88 | form_component_modifier.cpp | Dmitry Smirnov | ⏳ on review, WRONG_GEN, no ARK_FORM_DIMENSION_DIMENSION_2_1, no type LiteralDimension |
 | 89 | form_link_modifier.cpp | Dmitry Smirnov | ✅ done |
 | 90 | frame_node_accessor.cpp | Dmitry Smirnov | allready  ✅ done |
 | 91 | friction_motion_accessor.cpp | Dmitry Smirnov | empty the same as FB |
 | 92 | full_screen_exit_handler_accessor.cpp | Dmitry Smirnov | ✅ done |
 | 93 | gauge_modifier.cpp | Dmitry Smirnov | allready  ✅ done |
-| 94 | gesture_accessor.cpp | Dmitry Smirnov | NEW_GENERATE |
+| 94 | gesture_accessor.cpp | Dmitry Smirnov | 🔵 NEW_GENERATE |
 | 95 | gesture_event_accessor.cpp | Dmitry Smirnov | ✅ done |
 | 96 | gesture_group_interface_accessor.cpp | Sergey Kovalev | |
 | 97 | gesture_modifier_accessor.cpp | Sergey Kovalev | |
@@ -128,18 +128,18 @@
 | 126 | js_geolocation_accessor.cpp | Dmitry Smirnov | ⏳ on review |
 | 127 | js_result_accessor.cpp | Dmitry Smirnov | ⏳ on review |
 | 128 | key_event_accessor.cpp | Dmitry Smirnov | ⏳ on review |
-| 129 | lattice_accessor.cpp | Dmitry Smirnov | NEW_GENERATE |
-| 130 | layoutable_accessor.cpp | Dmitry Smirnov | NEW_GENERATE |
-| 131 | layout_callback_accessor.cpp | Evstigneev Roman | NEW_GENERATE |
-| 132 | layout_child_accessor.cpp | Evstigneev Roman | NEW_GENERATE |
+| 129 | lattice_accessor.cpp | Dmitry Smirnov | 🔵 NEW_GENERATE |
+| 130 | layoutable_accessor.cpp | Dmitry Smirnov | 🔵 NEW_GENERATE |
+| 131 | layout_callback_accessor.cpp | Evstigneev Roman | 🔵 NEW_GENERATE |
+| 132 | layout_child_accessor.cpp | Evstigneev Roman | 🔵 NEW_GENERATE |
 | 133 | layout_manager_accessor.cpp | Evstigneev Roman | ✅ done |
-| 134 | layout_policy_accessor.cpp | Evstigneev Roman | NEW_GENERATE |
-| 135 | lazy_for_each_ops_accessor.cpp | Evstigneev Roman | INTEGRATED |
-| 136 | lazy_grid_layout_modifier.cpp | Evstigneev Roman | INTEGRATED |
-| 137 | lazyv_grid_layout_modifier.cpp | Evstigneev Roman | INTEGRATED |
+| 134 | layout_policy_accessor.cpp | Evstigneev Roman | 🔵 NEW_GENERATE |
+| 135 | lazy_for_each_ops_accessor.cpp | Evstigneev Roman | ✅ INTEGRATED |
+| 136 | lazy_grid_layout_modifier.cpp | Evstigneev Roman | ✅ INTEGRATED |
+| 137 | lazyv_grid_layout_modifier.cpp | Evstigneev Roman | ✅ INTEGRATED |
 | 138 | length_metrics_accessor.cpp | Evstigneev Roman | ✅ done |
 | 139 | letter_spacing_style_accessor.cpp | Evstigneev Roman | ✅ done |
-| 140 | life_cycle_accessor.cpp | Evstigneev Roman | NEW_GENERATE |
+| 140 | life_cycle_accessor.cpp | Evstigneev Roman | 🔵 NEW_GENERATE |
 | 141 | linear_gradient_accessor.cpp | Erokhin Ilya | ✅ done |
 | 142 | linear_indicator_controller_accessor.cpp | Erokhin Ilya | ✅ done |
 | 143 | linear_indicator_modifier.cpp | Erokhin Ilya | ✅ done |
@@ -187,13 +187,13 @@
 | 185 | paragraph_style_accessor.cpp | Politov Mikhail | ✅ done |
 | 186 | paste_button_modifier.cpp | Samarin Sergey | ✅ done |
 | 187 | path2d_accessor.cpp | Vadim Voronov | ✅ done |
-| 188 | path_accessor.cpp | Evstigneev Roman | INTEGRATED |
-| 189 | path_effect_accessor.cpp | Evstigneev Roman | NEW_GENERATE |
-| 190 | path_modifier.cpp | Evstigneev Roman | INTEGRATED |
+| 188 | path_accessor.cpp | Evstigneev Roman | ✅ INTEGRATED |
+| 189 | path_effect_accessor.cpp | Evstigneev Roman | 🔵 NEW_GENERATE |
+| 190 | path_modifier.cpp | Evstigneev Roman | ✅ INTEGRATED |
 | 191 | path_shape_accessor.cpp | Samarin Sergey | ✅ done |
 | 192 | pattern_lock_controller_accessor.cpp | Evstigneev Roman | ✅ done |
-| 193 | pattern_lock_modifier.cpp | Evstigneev Roman | INTEGRATED |
-| 194 | pen_accessor.cpp | Evstigneev Roman | NEW_GENERATE |
+| 193 | pattern_lock_modifier.cpp | Evstigneev Roman | ✅ INTEGRATED |
+| 194 | pen_accessor.cpp | Evstigneev Roman | 🔵 NEW_GENERATE |
 | 195 | permission_request_accessor.cpp | Evstigneev Roman | ✅ done |
 | 196 | pinch_gesture_event_accessor.cpp | Samarin Sergey | ✅ done |
 | 197 | pinch_gesture_interface_accessor.cpp | Lobah Mikhail | |
@@ -215,14 +215,14 @@
 | 213 | refresh_modifier.cpp | Ekaterina Stepanova | ⏳ on review |
 | 214 | region_accessor.cpp | Erokhin Ilya | ✅ done (new file) |
 | 215 | relative_container_modifier.cpp | Erokhin Ilya | ✅ done |
-| 216 | remote_window_modifier.cpp | Samarin Sergey | INTEGRATED |
+| 216 | remote_window_modifier.cpp | Samarin Sergey | ✅ INTEGRATED |
 | 217 | rendering_context_settings_accessor.cpp | Vadim Voronov | ✅ done |
 | 218 | render_node_accessor.cpp | Samarin Sergey | in progress |
 | 219 | replace_symbol_effect_accessor.cpp | Samarin Sergey | in progress |
 | 220 | restricted_worker_accessor.cpp | Samarin Sergey | ✅ done (not implemented on FB) |
-| 221 | rich_editor_base_controller_accessor.cpp | Evstigneev Roman | INTEGRATED |
-| 222 | rich_editor_controller_accessor.cpp | Evstigneev Roman | INTEGRATED |
-| 223 | rich_editor_modifier.cpp | Evstigneev Roman | INTEGRATED |
+| 221 | rich_editor_base_controller_accessor.cpp | Evstigneev Roman | ✅ INTEGRATED |
+| 222 | rich_editor_controller_accessor.cpp | Evstigneev Roman | ✅ INTEGRATED |
+| 223 | rich_editor_modifier.cpp | Evstigneev Roman | ✅ INTEGRATED |
 | 224 | rich_editor_styled_string_controller_accessor.cpp | Evstigneev Roman | ✅ done |
 | 225 | rich_text_modifier.cpp | Evstigneev Roman | ✅ done |
 | 226 | root_modifier.cpp | Lobah Mikhail | |
@@ -252,8 +252,8 @@
 | 250 | search_ops_accessor.cpp | Evstigneev Roman | ✅ done |
 | 251 | security_component_method_modifier.cpp | Samarin Sergey | ✅ done |
 | 252 | select_modifier.cpp | Samarin Sergey | ✅ done |
-| 253 | shader_effect_accessor.cpp | Tuzhilkin Ivan | NEW_GENERATE |
-| 254 | shadow_layer_accessor.cpp | Tuzhilkin Ivan | NEW_GENERATE |
+| 253 | shader_effect_accessor.cpp | Tuzhilkin Ivan | 🔵 NEW_GENERATE |
+| 254 | shadow_layer_accessor.cpp | Tuzhilkin Ivan | 🔵 NEW_GENERATE |
 | 255 | shape_clip_accessor.cpp | Tuzhilkin Ivan | ✅ done |
 | 256 | shape_mask_accessor.cpp | Tuzhilkin Ivan | ✅ done |
 | 257 | shape_modifier.cpp | Tuzhilkin Ivan | ✅ done |
@@ -275,7 +275,7 @@
 | 273 | swiper_content_transition_proxy_accessor.cpp | Vadim Voronov | ✅ done |
 | 274 | swiper_controller_accessor.cpp | Andrey Khudenkikh | ⏳ on review |
 | 275 | swipe_recognizer_accessor.cpp | Andrey Khudenkikh | ⏳ on review |
-| 276 | swiper_modifier.cpp | Samarin Sergey | INTEGRATED |
+| 276 | swiper_modifier.cpp | Samarin Sergey | ✅ INTEGRATED |
 | 277 | symbol_effect_accessor.cpp | Andrey Khudenkikh | ⏳ on review |
 | 278 | symbol_glyph_modifier.cpp | Andrey Khudenkikh | ⏳ on review |
 | 279 | symbol_span_modifier.cpp | Andrey Khudenkikh | ⏳ on review |
