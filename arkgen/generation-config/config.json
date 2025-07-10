@@ -273,6 +273,38 @@
         ]
     },
     "hooks": {
+        "CommonMethod": {
+            "dragPreview" : {
+                "hookName" : "hookDragPreview"
+            },
+            "allowDrop" : {
+                "hookName" : "hookAllowDropAttribute"
+            },
+            "onDragStart" : {
+                "hookName" : "hookRegisterOnDragStartImpl"
+            },
+            "onDrop" : {
+                "hookName" : "hookOnDrop"
+            },
+            "backgroundImage" : {
+                "hookName" : "hookBackgroundImageImpl"
+            },
+            "stateStyles" : {
+                "hookName" : "hookStateStyleImpl"
+            },
+            "gesture": {
+                "hookName": "hookCommonMethodGestureImpl"
+            },
+            "priorityGesture": {
+                "hookName": "hookCommonMethodPriorityGestureImpl"
+            },
+            "parallelGesture": {
+                "hookName": "hookCommonMethodParallelGestureImpl"
+            },
+            "gestureModifier": {
+                "hookName": "hookCommonMethodGestureModifierImpl"
+            }
+        },
         "Button": {
             "contentModifier": {
                 "hookName": "hookButtonContentModifier"
