@@ -335,11 +335,11 @@
 | 333 | web_context_menu_result_accessor.cpp | Vadim Voronov | |
 | 334 | web_cookie_accessor.cpp | Vadim Voronov | |
 | 335 | web_keyboard_controller_accessor.cpp | Vadim Voronov | |
-| 336 | web_modifier.cpp | Vadim Voronov | |
-| 337 | web_resource_error_accessor.cpp | Vadim Voronov | |
-| 338 | web_resource_request_accessor.cpp | Vadim Voronov | |
-| 339 | web_resource_response_accessor.cpp | Vadim Voronov | |
-| 340 | webview_controller_accessor.cpp | Vadim Voronov | |
+| 336 | web_modifier.cpp |  | |
+| 337 | web_resource_error_accessor.cpp |  | |
+| 338 | web_resource_request_accessor.cpp |  | |
+| 339 | web_resource_response_accessor.cpp |  | |
+| 340 | webview_controller_accessor.cpp |  | |
 | 341 | window_scene_modifier.cpp | Vadim Voronov | |
 | 342 | x_component_controller_accessor.cpp | Tuzhilkin Ivan | done |
 | 343 | x_component_modifier.cpp | Tuzhilkin Ivan | done |
