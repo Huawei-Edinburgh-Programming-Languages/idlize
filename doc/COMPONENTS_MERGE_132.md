@@ -49,7 +49,7 @@
 | 41 | color_metrics_accessor.cpp | Evstigneev Roman | ✅ done |
 | 42 | column_modifier.cpp | Lobah Mikhail | ✅ done nothing todo |
 | 43 | column_split_modifier.cpp | Lobah Mikhail | ✅ done nothing todo |
-| 44 | common_method_modifier.cpp | Lobah Mikhail | 👀⏳ on review |
+| 44 | common_method_modifier.cpp | Lobah Mikhail | ✅ done |
 | 45 | common_shape_accessor.cpp | Evstigneev Roman | ✅ done |
 | 46 | common_shape_method_modifier.cpp | Evstigneev Roman | ✅ done |
 | 47 | component_content_accessor.cpp | Erokhin Ilya | ✅ done |
@@ -167,7 +167,7 @@
 | 159 | matrix_accessor.cpp | Samarin Sergey | ✅ done (new file) |
 | 160 | measurable_accessor.cpp | Lobah Mikhail | ✅ done nothing todo |
 | 161 | media_cached_image_modifier.cpp | Lobah Mikhail | ✅ done nothing todo |
-| 162 | menu_item_group_modifier.cpp | Lobah Mikhail | 👀⏳ on review |
+| 162 | menu_item_group_modifier.cpp | Lobah Mikhail | ✅ done |
 | 163 | menu_item_modifier.cpp | Sergey Morozov | |
 | 164 | menu_modifier.cpp | Sergey Morozov | |
 | 165 | mouse_event_accessor.cpp | Evstigneev Roman | ✅ done |
@@ -179,8 +179,8 @@
 | 171 | navigation_transition_proxy_accessor.cpp | Evstigneev Roman | ✅ done |
 | 172 | nav_path_info_accessor.cpp | Evstigneev Roman | ✅ done |
 | 173 | nav_path_stack_accessor.cpp | Evstigneev Roman | ✅ done |
-| 174 | node_container_modifier.cpp | Lobah Mikhail | |
-| 175 | node_content_accessor.cpp | Lobah Mikhail | |
+| 174 | node_container_modifier.cpp | Lobah Mikhail | ✅ done |
+| 175 | node_content_accessor.cpp | Lobah Mikhail | ✅ done |
 | 176 | offscreen_canvas_accessor.cpp | Vadim Voronov | ✅ done |
 | 177 | offscreen_canvas_rendering_context2d_accessor.cpp | Vadim Voronov | ✅ done |
 | 178 | page_life_cycle_accessor.cpp | Politov Mikhail | empty new file |
@@ -202,8 +202,8 @@
 | 194 | pen_accessor.cpp | Evstigneev Roman | 🔵 NEW_GENERATE |
 | 195 | permission_request_accessor.cpp | Evstigneev Roman | ✅ done |
 | 196 | pinch_gesture_event_accessor.cpp | Samarin Sergey | ✅ done |
-| 197 | pinch_gesture_interface_accessor.cpp | Lobah Mikhail | |
-| 198 | pinch_recognizer_accessor.cpp | Lobah Mikhail | |
+| 197 | pinch_gesture_interface_accessor.cpp | Lobah Mikhail | ⏳ in progress |
+| 198 | pinch_recognizer_accessor.cpp | Lobah Mikhail | ⏳ in progress |
 | 199 | pixel_map_accessor.cpp | Erokhin Ilya | ✅ done |
 | 200 | pixel_map_mock_accessor.cpp | Erokhin Ilya | ✅ done |
 | 201 | plugin_component_modifier.cpp | Erokhin Ilya | ✅ done |
