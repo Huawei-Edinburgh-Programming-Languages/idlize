@@ -1,6 +1,6 @@
 | № | File | Owner | Status |
 |---|------|-------|--------|
-| 1 | accessibility_hover_event_accessor.cpp | Erokhin Ilya | (done) |
+| 1 | accessibility_hover_event_accessor.cpp | Erokhin Ilya | done |
 | 2 | all_modifiers.cpp | Erokhin Ilya | should be generated |
 | 3 | alphabet_indexer_modifier.cpp | Erokhin Ilya | done |
 | 4 | animation_extender_accessor.cpp | Erokhin Ilya | done |
