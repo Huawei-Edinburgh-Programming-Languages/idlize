@@ -59,7 +59,7 @@
 | 57 | custom_span_accessor.cpp | Erokhin Ilya | ✅ done |
 | 58 | data_panel_modifier.cpp | Dudkin Sergey | it compiles and is ok |
 | 59 | data_resubmission_handler_accessor.cpp | Dudkin Sergey | a missing file in new generation |
-| 60 | date_picker_dialog_accessor.cpp | Dudkin Sergey | too big difference after re-generation. Simple merge can't be ✅ done. Missing 'ShowImpl' method. |
+| 60 | date_picker_dialog_accessor.cpp | Dudkin Sergey | too big difference after re-generation. Simple merge can't be done. Missing 'ShowImpl' method. |
 | 61 | date_picker_modifier.cpp | Dudkin Sergey | it is ok and compiles, however missing methods: DisappearTextStyle0Impl, SelectedTextStyle0Impl,  DigitalCrownSensitivityImpl, EnableHapticFeedbackImpl |
 | 62 | decoration_style_accessor.cpp | Erokhin Ilya | ✅ done |
 | 63 | disappear_symbol_effect_accessor.cpp | Erokhin Ilya | ✅ done |
@@ -87,7 +87,7 @@
 | 85 | folder_stack_modifier.cpp | Dmitry Smirnov | ✅ done |
 | 86 | font_accessor.cpp | Dmitry Smirnov | NEW_GENERATE |
 | 87 | font_collection_accessor.cpp | Dmitry Smirnov | NEW_GENERATE |
-| 88 | form_component_modifier.cpp | Dmitry Smirnov | on review, WRONG_GEN, no ARK_FORM_DIMENSION_DIMENSION_2_1, no type LiteralDimension |
+| 88 | form_component_modifier.cpp | Dmitry Smirnov | ⏳ on review, WRONG_GEN, no ARK_FORM_DIMENSION_DIMENSION_2_1, no type LiteralDimension |
 | 89 | form_link_modifier.cpp | Dmitry Smirnov | ✅ done |
 | 90 | frame_node_accessor.cpp | Dmitry Smirnov | allready  ✅ done |
 | 91 | friction_motion_accessor.cpp | Dmitry Smirnov | empty the same as FB |
@@ -123,11 +123,11 @@
 | 121 | image_modifier.cpp | Vadim Voronov | ✅ done |
 | 122 | image_span_modifier.cpp | Vadim Voronov | ✅ done |
 | 123 | indicator_component_controller_accessor.cpp | Vadim Voronov | ✅ done |
-| 124 | indicator_component_modifier.cpp | Dmitry Smirnov | on review |
+| 124 | indicator_component_modifier.cpp | Dmitry Smirnov | ⏳ on review |
 | 125 | iui_context_accessor.cpp | Dmitry Smirnov | allready ✅ done |
-| 126 | js_geolocation_accessor.cpp | Dmitry Smirnov | on review |
-| 127 | js_result_accessor.cpp | Dmitry Smirnov | on review |
-| 128 | key_event_accessor.cpp | Dmitry Smirnov | on review |
+| 126 | js_geolocation_accessor.cpp | Dmitry Smirnov | ⏳ on review |
+| 127 | js_result_accessor.cpp | Dmitry Smirnov | ⏳ on review |
+| 128 | key_event_accessor.cpp | Dmitry Smirnov | ⏳ on review |
 | 129 | lattice_accessor.cpp | Dmitry Smirnov | NEW_GENERATE |
 | 130 | layoutable_accessor.cpp | Dmitry Smirnov | NEW_GENERATE |
 | 131 | layout_callback_accessor.cpp | Evstigneev Roman | NEW_GENERATE |
@@ -209,10 +209,10 @@
 | 207 | pulse_symbol_effect_accessor.cpp | Erokhin Ilya | ✅ done |
 | 208 | qr_code_modifier.cpp | Evstigneev Roman | ✅ done |
 | 209 | radio_modifier.cpp | Evstigneev Roman | ✅ done |
-| 210 | rating_modifier.cpp | Ekaterina Stepanova | on review |
+| 210 | rating_modifier.cpp | Ekaterina Stepanova | ⏳ on review |
 | 211 | rect_modifier.cpp | Erokhin Ilya | ✅ done |
 | 212 | rect_shape_accessor.cpp | Samarin Sergey | ✅ done |
-| 213 | refresh_modifier.cpp | Ekaterina Stepanova | on review |
+| 213 | refresh_modifier.cpp | Ekaterina Stepanova | ⏳ on review |
 | 214 | region_accessor.cpp | Erokhin Ilya | ✅ done (new file) |
 | 215 | relative_container_modifier.cpp | Erokhin Ilya | ✅ done |
 | 216 | remote_window_modifier.cpp | Samarin Sergey | INTEGRATED |
@@ -273,12 +273,12 @@
 | 271 | swipe_gesture_accessor.cpp | Samarin Sergey | ✅ done (new file) |
 | 272 | swipe_gesture_event_accessor.cpp | Samarin Sergey | ✅ done |
 | 273 | swiper_content_transition_proxy_accessor.cpp | Vadim Voronov | ✅ done |
-| 274 | swiper_controller_accessor.cpp | Andrey Khudenkikh | on review |
-| 275 | swipe_recognizer_accessor.cpp | Andrey Khudenkikh | on review |
+| 274 | swiper_controller_accessor.cpp | Andrey Khudenkikh | ⏳ on review |
+| 275 | swipe_recognizer_accessor.cpp | Andrey Khudenkikh | ⏳ on review |
 | 276 | swiper_modifier.cpp | Samarin Sergey | INTEGRATED |
-| 277 | symbol_effect_accessor.cpp | Andrey Khudenkikh | on review |
-| 278 | symbol_glyph_modifier.cpp | Andrey Khudenkikh | on review |
-| 279 | symbol_span_modifier.cpp | Andrey Khudenkikh | on review |
+| 277 | symbol_effect_accessor.cpp | Andrey Khudenkikh | ⏳ on review |
+| 278 | symbol_glyph_modifier.cpp | Andrey Khudenkikh | ⏳ on review |
+| 279 | symbol_span_modifier.cpp | Andrey Khudenkikh | ⏳ on review |
 | 280 | system_ops_accessor.cpp | Vadim Voronov | ✅ done by default nothing todo |
 | 281 | tab_bar_symbol_accessor.cpp | Vadim Voronov | ✅ done empty new file nothing todo |
 | 282 | tab_content_modifier.cpp | Tuzhilkin Ivan | ✅ done |
@@ -305,15 +305,15 @@
 | 303 | text_menu_item_id_accessor.cpp | Vadim Voronov | ✅ done |
 | 304 | text_modifier.cpp | Tuzhilkin Ivan | ✅ done |
 | 305 | text_picker_dialog_accessor.cpp | Vadim Voronov | ✅ done |
-| 306 | text_picker_modifier.cpp | Ekaterina Stepanova | on review |
+| 306 | text_picker_modifier.cpp | Ekaterina Stepanova | ⏳ on review |
 | 307 | text_shadow_style_accessor.cpp | Politov Mikhail | ✅ done |
 | 308 | text_style_accessor.cpp | Evstigneev Roman | ✅ done |
 | 309 | text_timer_controller_accessor.cpp | Dudkin Sergey | ✅ done |
 | 310 | text_timer_modifier.cpp | Dudkin Sergey | ✅ done |
 | 311 | theme_control_accessor.cpp | Evstigneev Roman | ✅ done |
 | 312 | time_picker_dialog_accessor.cpp | Evstigneev Roman | ✅ done |
-| 313 | time_picker_modifier.cpp | Ekaterina Stepanova | on review |
-| 314 | toggle_modifier.cpp | Ekaterina Stepanova | on review |
+| 313 | time_picker_modifier.cpp | Ekaterina Stepanova | ⏳ on review |
+| 314 | toggle_modifier.cpp | Ekaterina Stepanova | ⏳ on review |
 | 315 | touch_event_accessor.cpp | Samarin Sergey | ✅ done |
 | 316 | transition_effect_accessor.cpp | Evstigneev Roman | ✅ done |
 | 317 | typeface_accessor.cpp | Andrey Khudenkikh | |
