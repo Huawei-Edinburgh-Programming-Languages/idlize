@@ -288,11 +288,44 @@
             },
             "compositingFilter": {
                 "hookName": "hookCommonMethodCompositingFilterImpl"
+            },
+            "dragPreview" : {
+                "hookName" : "hookDragPreview"
+            },
+            "allowDrop" : {
+                "hookName" : "hookAllowDropAttribute"
+            },
+            "onDragStart" : {
+                "hookName" : "hookRegisterOnDragStartImpl"
+            },
+            "onDrop" : {
+                "hookName" : "hookOnDrop"
+            },
+            "backgroundImage" : {
+                "hookName" : "hookBackgroundImageImpl"
+            },
+            "stateStyles" : {
+                "hookName" : "hookStateStyleImpl"
+            },
+            "gesture": {
+                "hookName": "hookCommonMethodGestureImpl"
+            },
+            "priorityGesture": {
+                "hookName": "hookCommonMethodPriorityGestureImpl"
+            },
+            "parallelGesture": {
+                "hookName": "hookCommonMethodParallelGestureImpl"
+            },
+            "gestureModifier": {
+                "hookName": "hookCommonMethodGestureModifierImpl"
             }
         },
         "Button": {
             "contentModifier": {
                 "hookName": "hookButtonContentModifier"
+            },
+             "attributeModifier": {
+                "hookName": "hookButtonAttributeModifier"
             }
         },
         "Checkbox": {
@@ -395,9 +428,19 @@
                 "hookName": "hookSetXComponentOptions"
             }
         },
-        "waterFlow": {
-            "setWaterFlowOptionsAttribute": {
+        "WaterFlow": {
+            "setWaterFlowOptions": {
                 "hookName": "hookWaterFlowOptionsImpl"
+            }
+        }, 
+        "List": {
+            "childrenMainSize": {
+                "hookName": "hookListChildrenMainSizeImpl"
+            }
+        },
+        "ListItemGroup": {
+            "childrenMainSize": {
+                "hookName": "hookListItemGroupChildrenMainSizeImpl"
             }
         },
         "GridItem": {
@@ -428,8 +471,8 @@
                 "hookName": "hookAlphabetIndexerAttributeSelectedImpl"
             }
         },
-        "Tabs": {
-            "setTabsOptions": {
+        "Text": {
+            "attributeModifier": {
                 "hookName": "hookTabsAttributeIndexImpl"
             }
         }
