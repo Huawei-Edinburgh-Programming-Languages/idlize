@@ -23,9 +23,9 @@ export class PeerVisitor extends Visitor {
                 this.allowed.set(ns, new Map<string, boolean>())
             }
 
-            const [key, value] = name!.endsWith('-') ?
-                [name!.slice(0, -1), false] : [name!, true]
-            this.allowed.get(ns)!.set(key, value)
+            const last = name!.at(-1)
+            const key = last === '-' || last === '+' ? name!.slice(0, -1) : name!
+            this.allowed.get(ns)!.set(key, last !== '-')
         })
     }
 
