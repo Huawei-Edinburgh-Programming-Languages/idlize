@@ -131,12 +131,22 @@ export class BridgesGenerator {
     private makeAndCastReturnValue(
         iface: core.IDLInterface, method: core.Method,  writer: core.CppLanguageWriter): [boolean, core.LanguageExpression] {
         const tuple = this.makeReturnValue(iface, method, writer)
+
         //const cast = (expr: core.LanguageExpression) => writer.makeString(
         //    writer.makeUnsafeCast_(expr, core.IDLVoidType, core.PrintHint.AsPointer))
         const castCompat = (expr: core.LanguageExpression) =>
             writer.makeString(`(void*)${expr.asString()}`)
-        const needCast = (tuple[0] || core.isReferenceType(method.signature.returnType))
-            && method.name.endsWith('Const')
+
+        const isRef = () => {
+            const returnType = method.signature.returnType
+            if (core.isReferenceType(returnType)) {
+                const type = this.resolver.resolveTypeReference(returnType)
+                return !type || !core.isEnum(type)
+            }
+            return false
+        }
+
+        const needCast = method.name.endsWith('Const') && (tuple[0] || isRef())
         return needCast ? [tuple[0], castCompat(tuple[1])] : tuple
     }
 
