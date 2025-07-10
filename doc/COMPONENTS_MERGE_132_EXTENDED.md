@@ -34,7 +34,7 @@
 |  hyperlink_modifier.cpp | | | 
 |  calendar_picker_modifier.cpp | | | 
 |  alphabet_indexer_modifier.cpp | | | 
-|  embedded_component_modifier.cpp | | | 
+|  embedded_component_modifier.cpp | Sergey Kovalyov | | 
 |  scrollable_common_method_modifier.cpp | | | 
 |  form_component_modifier.cpp | Vadim Voronov | | 
 |  calendar_modifier.cpp | | | 
