@@ -52,7 +52,7 @@
 | 50 | container_span_modifier.cpp | Erokhin Ilya | ✅ done |
 | 51 | content_modifier_helper_accessor.cpp | Erokhin Ilya | ✅ done |
 | 52 | context_accessor.cpp | Erokhin Ilya | ✅ done |
-| 53 | controller_handler_accessor.cpp | Erokhin Ilya | |
+| 53 | controller_handler_accessor.cpp | Erokhin Ilya | ✅ done |
 | 54 | counter_modifier.cpp | Erokhin Ilya | ✅ done |
 | 55 | custom_dialog_controller_accessor.cpp | Erokhin Ilya | ✅ done |
 | 56 | custom_layout_root_modifier.cpp | Erokhin Ilya | ✅ done |
@@ -338,8 +338,8 @@
 | 336 | web_modifier.cpp | Erokhin Ilya | |
 | 337 | web_resource_error_accessor.cpp | Erokhin Ilya | |
 | 338 | web_resource_request_accessor.cpp | Erokhin Ilya | |
-| 339 | web_resource_response_accessor.cpp | Erokhin Ilya | |
-| 340 | webview_controller_accessor.cpp | Erokhin Ilya | |
+| 339 | web_resource_response_accessor.cpp | | |
+| 340 | webview_controller_accessor.cpp | | |
 | 341 | window_scene_modifier.cpp | Vadim Voronov | |
 | 342 | x_component_controller_accessor.cpp | Tuzhilkin Ivan | ✅ done |
 | 343 | x_component_modifier.cpp | Tuzhilkin Ivan | ✅ done |
