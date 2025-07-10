@@ -1,3 +1,7 @@
+✅ done
+🔵 NEW_GENERATE
+👀⏳ on review
+
 | № | File | Owner | Status |
 |---|------|-------|--------|
 | 1 | accessibility_hover_event_accessor.cpp | Erokhin Ilya | ✅ done |
