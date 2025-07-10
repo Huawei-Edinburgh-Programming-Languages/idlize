@@ -10,7 +10,8 @@ export enum Token {
   tId = 3,
   tString = 4,
   tComment = 5,
-  tWhiteSpace = 6,
+  tLongComment = 6,
+  tWhiteSpace = 7,
 
   // marks
   tEqual = 10,        // =
@@ -117,6 +118,8 @@ export type TokenPattern = {
 };
 
 const g_keywords: Array<TokenPattern> = [
+  { pattern: /\/\/.*/, type: Token.tComment},
+  { pattern: /\/\*(.|\n)*\*\//, type: Token.tLongComment },
   // marks
   { pattern: /=/, type: Token.tEqual },
   { pattern: /\(/, type: Token.tLBracket },
@@ -218,7 +221,6 @@ const g_keywords: Array<TokenPattern> = [
   { pattern: /-?(([0-9]+\.[0-9]*|[0-9]*\.[0-9]+)([Ee][+-]?[0-9]+)?|[0-9]+[Ee][+-]?[0-9]+)/, type: Token.tDecimal},
   { pattern: /[_-]?[A-Za-z][0-9A-Z_a-z-]*/, type: Token.tId},
   { pattern: /"[^"]*"/, type: Token.tString},
-  { pattern: /\/\/.*|\/\*(.|\n)*?\*\//, type: Token.tComment},
   { pattern: /[\t\n\r ]+/, type: Token.tWhiteSpace},
 ];
 
@@ -372,16 +374,20 @@ export function getToken(): TokenData {
       re.lastIndex = g_pos;
       const found = re.exec(g_text);
       if (found) {
+        nothing_found = false;
+
         let tokenText: string = found[0];
         g_pos += tokenText.length;
-        if (kw.type == Token.tWhiteSpace ||
-            kw.type == Token.tComment)
+
+        if (kw.type == Token.tWhiteSpace)
           break;
+        if (kw.type == Token.tComment ||
+            kw.type == Token.tLongComment) {
+          break;
+        }
 
         console.log(tokenText);
         return new TokenData(kw.type, tokenText);
-      } else {
-        nothing_found = false;
       }
     }
   }
