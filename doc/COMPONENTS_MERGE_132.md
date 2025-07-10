@@ -231,13 +231,13 @@
 | 223 | rich_editor_modifier.cpp | Evstigneev Roman | ✅ INTEGRATED |
 | 224 | rich_editor_styled_string_controller_accessor.cpp | Evstigneev Roman | ✅ done |
 | 225 | rich_text_modifier.cpp | Evstigneev Roman | ✅ done |
-| 226 | root_modifier.cpp | Lobah Mikhail | |
-| 227 | root_scene_modifier.cpp | Lobah Mikhail | |
+| 226 | root_modifier.cpp | Lobah Mikhail | ✅ done nothing todo |
+| 227 | root_scene_modifier.cpp | Lobah Mikhail | ✅ done nothing todo |
 | 228 | rotation_gesture_accessor.cpp | Samarin Sergey | ✅ done (new file) |
 | 229 | rotation_gesture_event_accessor.cpp | Samarin Sergey | ✅ done |
 | 230 | rotation_recognizer_accessor.cpp | Samarin Sergey | ✅ done |
-| 231 | round_rect_accessor.cpp | Lobah Mikhail | |
-| 232 | row_modifier.cpp | Lobah Mikhail | |
+| 231 | round_rect_accessor.cpp | Lobah Mikhail | ⏳ in progress |
+| 232 | row_modifier.cpp | Lobah Mikhail | ⏳ in progress |
 | 233 | row_split_modifier.cpp | Lobah Mikhail | |
 | 234 | run_accessor.cpp | Samarin Sergey | ✅ done (new file) |
 | 235 | sampling_options_accessor.cpp | Vadim Voronov | ✅ done empty new file nothing todo |
