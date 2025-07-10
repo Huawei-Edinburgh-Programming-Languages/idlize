@@ -19,6 +19,8 @@ import { An, D, DD, dumpToString, E, IdentityTransformer, lw, Md, Op, processNPr
 import { copyFileSync, mkdirSync, readdirSync, statSync, writeFileSync } from "node:fs"
 import { EOL } from "node:os"
 import { dirname, join, normalize, relative, resolve } from "node:path"
+import { Result, ResultStatus } from "./library/data"
+import { GeneratorContext } from "./context"
 
 ////////////////////////////////////////////////////////////////
 // Constants
@@ -306,6 +308,10 @@ const printers: TargetInfo[] = [
 // entry point
 
 function main() {
+
+  Result.over(new GeneratorContext())
+    .with(() => ResultStatus.ok(scan(resolve(__dirname, '..', '..', 'idl', 'test'))))
+
   const fileNames = scan(resolve(__dirname, '..', '..', 'idl', 'test'))
   const lib = new GenLibrary(Language.TS, new NativeModuleType('__HEH__'))
   fileNames.forEach(fileName => {
