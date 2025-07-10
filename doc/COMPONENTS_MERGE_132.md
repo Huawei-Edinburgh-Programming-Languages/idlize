@@ -41,8 +41,8 @@
 | 39 | color_content_accessor.cpp | Evstigneev Roman | new gen file |
 | 40 | color_filter_accessor.cpp | Evstigneev Roman | done |
 | 41 | color_metrics_accessor.cpp | Evstigneev Roman | done |
-| 42 | column_modifier.cpp | Lobah Mikhail | done |
-| 43 | column_split_modifier.cpp | Lobah Mikhail | done |
+| 42 | column_modifier.cpp | Lobah Mikhail | done nothing todo |
+| 43 | column_split_modifier.cpp | Lobah Mikhail | done nothing todo |
 | 44 | common_method_modifier.cpp | Lobah Mikhail | on reviev |
 | 45 | common_shape_accessor.cpp | Evstigneev Roman | done |
 | 46 | common_shape_method_modifier.cpp | Evstigneev Roman | done |
@@ -159,8 +159,8 @@
 | 157 | matrix2d_accessor.cpp | Vadim Voronov | done |
 | 158 | matrix4_transit_accessor.cpp | Samarin Sergey | done |
 | 159 | matrix_accessor.cpp | Samarin Sergey | done (new file) |
-| 160 | measurable_accessor.cpp | Lobah Mikhail | done |
-| 161 | media_cached_image_modifier.cpp | Lobah Mikhail | done |
+| 160 | measurable_accessor.cpp | Lobah Mikhail | done nothing todo |
+| 161 | media_cached_image_modifier.cpp | Lobah Mikhail | done nothing todo |
 | 162 | menu_item_group_modifier.cpp | Sergey Morozov | |
 | 163 | menu_item_modifier.cpp | Sergey Morozov | |
 | 164 | menu_modifier.cpp | Sergey Morozov | |
