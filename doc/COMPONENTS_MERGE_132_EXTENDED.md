@@ -28,7 +28,7 @@
 |  flex_modifier.cpp | | | 
 |  linear_indicator_modifier.cpp | | | 
 |  folder_stack_modifier.cpp | | | 
-|  canvas_modifier.cpp | | | 
+|  canvas_modifier.cpp | Vadim Voronov | | 
 |  loading_progress_modifier.cpp | | | 
 |  grid_modifier.cpp | | | 
 |  hyperlink_modifier.cpp | | | 
@@ -36,13 +36,13 @@
 |  alphabet_indexer_modifier.cpp | | | 
 |  embedded_component_modifier.cpp | | | 
 |  scrollable_common_method_modifier.cpp | | | 
-|  form_component_modifier.cpp | | | 
+|  form_component_modifier.cpp | Vadim Voronov | | 
 |  calendar_modifier.cpp | | | 
 |  path_modifier.cpp | | | 
 |  media_cached_image_modifier.cpp | | | 
 |  menu_item_group_modifier.cpp | | | 
 |  grid_col_modifier.cpp | | | 
-|  date_picker_modifier.cpp | | | 
+|  date_picker_modifier.cpp | Vadim Voronov | | 
 |  list_item_group_modifier.cpp | | | 
 |  polygon_modifier.cpp | | | 
 |  marquee_modifier.cpp | | | 
