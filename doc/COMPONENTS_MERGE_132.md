@@ -48,7 +48,7 @@
 | 46 | common_shape_method_modifier.cpp | Evstigneev Roman | done |
 | 47 | component_content_accessor.cpp | Erokhin Ilya | done |
 | 48 | component_root_modifier.cpp | Erokhin Ilya | done |
-| 49 | console_message_accessor.cpp | Erokhin Ilya | |
+| 49 | console_message_accessor.cpp | Erokhin Ilya | done |
 | 50 | container_span_modifier.cpp | Erokhin Ilya | done |
 | 51 | content_modifier_helper_accessor.cpp | Erokhin Ilya | done |
 | 52 | context_accessor.cpp | Erokhin Ilya | done |
@@ -335,11 +335,11 @@
 | 333 | web_context_menu_result_accessor.cpp | Vadim Voronov | |
 | 334 | web_cookie_accessor.cpp | Vadim Voronov | |
 | 335 | web_keyboard_controller_accessor.cpp | Vadim Voronov | |
-| 336 | web_modifier.cpp |  | |
-| 337 | web_resource_error_accessor.cpp |  | |
-| 338 | web_resource_request_accessor.cpp |  | |
-| 339 | web_resource_response_accessor.cpp |  | |
-| 340 | webview_controller_accessor.cpp |  | |
+| 336 | web_modifier.cpp | Erokhin Ilya | |
+| 337 | web_resource_error_accessor.cpp | Erokhin Ilya | |
+| 338 | web_resource_request_accessor.cpp | Erokhin Ilya | |
+| 339 | web_resource_response_accessor.cpp | Erokhin Ilya | |
+| 340 | webview_controller_accessor.cpp | Erokhin Ilya | |
 | 341 | window_scene_modifier.cpp | Vadim Voronov | |
 | 342 | x_component_controller_accessor.cpp | Tuzhilkin Ivan | done |
 | 343 | x_component_modifier.cpp | Tuzhilkin Ivan | done |
