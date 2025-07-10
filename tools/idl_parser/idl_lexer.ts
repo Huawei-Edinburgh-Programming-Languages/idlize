@@ -4,55 +4,65 @@ const BooleanLiteral: readonly string[] = [ "true", "false" ]
 const FloatLiteral: readonly string[] = [ "decimal", "-Infinity", "Infinity", "NaN" ]
 
 export enum Token {
-  tAsync = 1,
-  tAttribute = 2,
-  tCallback = 3,
-  tClass = 4,
-  tConst = 5,
-  tConstructor = 6,
-  tDeleter = 7,
-  tDictionary = 8,
-  tEnum = 9,
-  tGetter = 10,
-  tIncludes = 11,
-  tInherit = 12,
-  tInterface = 13,
-  tIterable = 14,
-  tMaplike = 15,
-  tMixin = 16,
-  tNamespace = 17,
-  tPackage = 18,
-  tPartial = 19,
-  tReadonly = 20,
-  tRequired = 21,
-  tSetlike = 22,
-  tSetter = 23,
-  tStatic = 24,
-  tStringifier = 25,
-  tTypedef = 26,
-  tUnrestricted = 27,
-  tOr = 28,           // or
+  // regexp
+  tInteger = 1,
+  tDecimal = 2,
+  tId = 3,
+  tString = 4,
+  tComment = 5,
+  tWhiteSpace = 6,
 
-  tEqual = 32,        // =
-  tLBracket = 33,     // (
-  tRBracket = 34,     // )
-  tLBrace = 35,       // {
-  tRBrace = 36,       // }
-  tLAngle = 37,       // <
-  tRAngle = 38,       // >
-  tLSqrBracket = 39,  // [
-  tRSqrBracket = 40,  // ]
-  tColon = 41,        // :
-  tSemicolon = 42,    // ;
-  tDot = 43,          // .
-  tComma = 44,        // ,
-  tPlus = 45,         // +
-  tMinus = 46,        // -
-  tAsterisk = 47,     // *
-  tEllipsis = 48,     // ...
-  tQuestion = 49,     // ?
-  tDiv = 50,          // /
+  // marks
+  tEqual = 10,        // =
+  tLBracket = 11,     // (
+  tRBracket = 12,     // )
+  tLBrace = 13,       // {
+  tRBrace = 14,       // }
+  tLAngle = 15,       // <
+  tRAngle = 16,       // >
+  tLSqrBracket = 17,  // [
+  tRSqrBracket = 18,  // ]
+  tColon = 19,        // :
+  tSemicolon = 20,    // ;
+  tDot = 21,          // .
+  tComma = 22,        // ,
+  tPlus = 23,         // +
+  tMinus = 24,        // -
+  tAsterisk = 25,     // *
+  tEllipsis = 26,     // ...
+  tQuestion = 27,     // ?
+  tDiv = 28,          // /
 
+  // ArgumentNameKeywords
+  tAsync = 30,
+  tAttribute = 31,
+  tCallback = 32,
+  tClass = 33,
+  tConst = 34,
+  tConstructor = 35,
+  tDeleter = 36,
+  tDictionary = 37,
+  tEnum = 38,
+  tGetter = 39,
+  tIncludes = 40,
+  tInherit = 41,
+  tInterface = 42,
+  tIterable = 43,
+  tMaplike = 44,
+  tMixin = 45,
+  tNamespace = 46,
+  tPackage = 47,
+  tPartial = 48,
+  tReadonly = 49,
+  tRequired = 50,
+  tSetlike = 51,
+  tSetter = 52,
+  tStatic = 53,
+  tStringifier = 54,
+  tTypedef = 55,
+  tUnrestricted = 56,
+
+  // keywords
   tShort = 60,        // short
   tLong = 61,         // long
   tUnsigned = 62,     // unsigned
@@ -62,24 +72,21 @@ export enum Token {
   tBigint = 66,
   tFloat = 67,        // float
   tDouble = 68,       // double
-  tStringLiteral = 69,  // string literal, looks like: "str!"
-  tIntegerLiteral = 70, // integer literal matched by the regular expressions
-
-  tString = 75,       // string type with name String
-  tByteString = 76,   // strings
-  tDOMString = 77,
-  tUSVString = 78,
-
-  tVoid = 80,
-  tUndefined = 81,
-  tNumber = 82,
-  tSequence = 83,
-  tFrozenArray = 84,
-  tObservableArray = 85,
-  tRecord = 86,
-  tObject = 87,       // I found this two types in standard but not in source code
-  tSymbol = 88,
-  tOptional = 89,
+  tOr = 69,           // or
+  tStringType = 70,   // string type with name String
+  tByteString = 71,   // strings
+  tDOMString = 72,
+  tUSVString = 73,
+  tVoid = 74,
+  tAny = 75,          // The any type is the union of all other possible non-union types.
+  tUndefined = 76,
+  tSequence = 77,
+  tFrozenArray = 78,
+  tObservableArray = 79,
+  tRecord = 80,
+  tObject = 81,       // I found this two types in standard but not in source code
+  tSymbol = 82,
+  tOptional = 83,
 
   tArrayBuffer = 90,
   tSharedArrayBuffer = 91,
@@ -97,97 +104,123 @@ export enum Token {
   tFloat32Array = 103,
   tFloat64Array = 104,
 
-  tAny = 105,         // The any type is the union of all other possible non-union types.
+  tPromise = 105,
+  tNumber = 106,
 
-  tPromise = 106,
-
-  tId = 999,          // identifier
   tError = 1000,
   tEnd = 1001,
-  tNeedRepeat = 1002, // Lexer can skip comment, spaces, etc.
-                      // But it can't process comment ... spaces ... comment ... spaces ... some good token.
-                      // Sometimes we should call getToken many times to get something useful.
 };
 
-const g_keywords = new Map<string, Token>([
+type TokenPattern = {
+  pattern: RegExp;
+  type: Token;
+};
+
+const g_keywords: Array<TokenPattern> = [
+  // regexp
+  { pattern: /-?([1-9][0-9]*|0[Xx][0-9A-Fa-f]+|0[0-7]*)/, type: Token.tInteger},
+  { pattern: /-?(([0-9]+\.[0-9]*|[0-9]*\.[0-9]+)([Ee][+-]?[0-9]+)?|[0-9]+[Ee][+-]?[0-9]+)/, type: Token.tDecimal},
+  { pattern: /[_-]?[A-Za-z][0-9A-Z_a-z-]*/, type: Token.tId},
+  { pattern: /"[^"]*"/, type: Token.tString},
+  { pattern: /\/\/.*|\/\*(.|\n)*?\*\//, type: Token.tComment},
+  { pattern: /[\t\n\r ]+/, type: Token.tWhiteSpace},
+
+  // marks
+  { pattern: /=/, type: Token.tEqual },
+  { pattern: /\(/, type: Token.tLBracket },
+  { pattern: /\)/, type: Token.tRBracket },
+  { pattern: /\{/, type: Token.tLBrace },
+  { pattern: /\}/, type: Token.tRBrace },
+  { pattern: /\</, type: Token.tLAngle },
+  { pattern: /\>/, type: Token.tRAngle },
+  { pattern: /\[/, type: Token.tLSqrBracket },
+  { pattern: /\]/, type: Token.tRSqrBracket },
+  { pattern: /\:/, type: Token.tColon },
+  { pattern: /\;/, type: Token.tSemicolon },
+  { pattern: /\./, type: Token.tDot },
+  { pattern: /\,/, type: Token.tComma },
+  { pattern: /\+/, type: Token.tPlus },
+  { pattern: /\-/, type: Token.tMinus },
+  { pattern: /\*/, type: Token.tAsterisk },
+  { pattern: /\.\.\./, type: Token.tEllipsis },
+  { pattern: /\?/, type: Token.tQuestion },
+  { pattern: /\//, type: Token.tDiv },
+
   // ArgumentNameKeywords
-  ["async", Token.tAsync],
-  ["attribute", Token.tAttribute],
-  ["callback", Token.tCallback],
-  ["const", Token.tConst],
-  ["constructor", Token.tConstructor],
-  ["deleter", Token.tDeleter],
-  ["dictionary", Token.tDictionary],
-  ["enum", Token.tEnum],
-  ["getter", Token.tGetter],
-  ["includes",  Token.tIncludes],
-  ["inherit", Token.tInherit],
-  ["interface", Token.tInterface],
-  ["iterable", Token.tIterable],
-  ["maplike", Token.tMaplike],
-  ["mixin",  Token.tMixin],
-  ["namespace", Token.tNamespace],
-  ["partial", Token.tPartial],
-  ["readonly", Token.tReadonly],
-  ["required", Token.tRequired],
-  ["setlike", Token.tSetlike],
-  ["setter", Token.tSetter],
-  ["static", Token.tStatic],
-  ["stringifier", Token.tStringifier],
-  ["typedef", Token.tTypedef],
-  ["unrestricted", Token.tUnrestricted],
-  ["or", Token.tOr],
+  { pattern: /async/, type: Token.tAsync},
+  { pattern: /attribute/, type: Token.tAttribute},
+  { pattern: /callback/, type: Token.tCallback},
+  { pattern: /class/, type: Token.tClass},
+  { pattern: /const/, type: Token.tConst},
+  { pattern: /constructor/, type: Token.tConstructor},
+  { pattern: /deleter/, type: Token.tDeleter},
+  { pattern: /dictionary/, type: Token.tDictionary},
+  { pattern: /enum/, type: Token.tEnum},
+  { pattern: /getter/, type: Token.tGetter},
+  { pattern: /includes/,  type: Token.tIncludes},
+  { pattern: /inherit/, type: Token.tInherit},
+  { pattern: /interface/, type: Token.tInterface},
+  { pattern: /iterable/, type: Token.tIterable},
+  { pattern: /maplike/, type: Token.tMaplike},
+  { pattern: /mixin/,  type: Token.tMixin},
+  { pattern: /namespace/, type: Token.tNamespace},
+  { pattern: /package/, type: Token.tPackage},
+  { pattern: /partial/, type: Token.tPartial},
+  { pattern: /readonly/, type: Token.tReadonly},
+  { pattern: /required/, type: Token.tRequired},
+  { pattern: /setlike/, type: Token.tSetlike},
+  { pattern: /setter/, type: Token.tSetter},
+  { pattern: /static/, type: Token.tStatic},
+  { pattern: /stringifier/, type: Token.tStringifier},
+  { pattern: /typedef/, type: Token.tTypedef},
+  { pattern: /unrestricted/, type: Token.tUnrestricted},
+
   // Other tokens
-  ["class", Token.tClass],  // probably do not required
-  ["package", Token.tPackage],
-  ["short", Token.tShort],
-  ["long", Token.tLong],
-  ["unsigned", Token.tUnsigned],
-  ["boolean", Token.tBoolean],
-  ["byte", Token.tByte],
-  ["octet", Token.tOctet],
-  ["bigint", Token.tBigint],
-
-  ["float", Token.tFloat],
-  ["double", Token.tDouble],
-
-  ["String", Token.tString],
-  ["ByteString", Token.tByteString],
-  ["DOMString", Token.tDOMString],
-  ["USVString", Token.tUSVString],
-
-  ["void", Token.tVoid],  // void type is replaced by undefined type
+  { pattern: /short/, type: Token.tShort},
+  { pattern: /long/, type: Token.tLong},
+  { pattern: /unsigned/, type: Token.tUnsigned},
+  { pattern: /boolean/, type: Token.tBoolean},
+  { pattern: /byte/, type: Token.tByte},
+  { pattern: /octet/, type: Token.tOctet},
+  { pattern: /bigint/, type: Token.tBigint},
+  { pattern: /float/, type: Token.tFloat},
+  { pattern: /double/, type: Token.tDouble},
+  { pattern: /or/, type: Token.tOr},
+  { pattern: /String/, type: Token.tString},
+  { pattern: /ByteString/, type: Token.tByteString},
+  { pattern: /DOMString/, type: Token.tDOMString},
+  { pattern: /USVString/, type: Token.tUSVString},
+  { pattern: /void/, type: Token.tVoid},  // void type is replaced by undefined type
                           // (c) https://github.com/w3c/webidl2.js?tab=readme-ov-file#errors
-  ["undefined", Token.tUndefined],
-  ["number", Token.tNumber],
-  ["sequence", Token.tSequence],
-  ["FrozenArray", Token.tFrozenArray],
-  ["ObservableArray", Token.tObservableArray],
-  ["record", Token.tRecord],
-  ["object", Token.tObject],
-  ["symbol", Token.tSymbol],
-  ["optional", Token.tOptional],
+  { pattern: /any/, type: Token.tAny},
+  { pattern: /undefined/, type: Token.tUndefined},
+  { pattern: /sequence/, type: Token.tSequence},
+  { pattern: /FrozenArray/, type: Token.tFrozenArray},
+  { pattern: /ObservableArray/, type: Token.tObservableArray},
+  { pattern: /record/, type: Token.tRecord},
+  { pattern: /object/, type: Token.tObject},
+  { pattern: /symbol/, type: Token.tSymbol},
+  { pattern: /optional/, type: Token.tOptional},
 
-  ["tArrayBuffer", Token.tArrayBuffer],
-  ["tSharedArrayBuffer", Token.tSharedArrayBuffer],
-  ["DataView", Token.tDataView],
-  ["Int8Array", Token.tInt8Array],
-  ["Int16Array", Token.tInt16Array],
-  ["Int32Array", Token.tInt32Array],
-  ["Uint8Array", Token.tUint8Array],
-  ["Uint16Array", Token.tUint16Array],
-  ["Uint32Array", Token.tUint32Array],
-  ["Uint8ClampedArray", Token.tUint8ClampedArray],
-  ["BigInt64Array", Token.tBigInt64Array],
-  ["BigUint64Array", Token.tBigUint64Array],
-  ["Float16Array", Token.tFloat16Array],
-  ["Float32Array", Token.tFloat32Array],
-  ["Float64Array", Token.tFloat64Array],
+  { pattern: /ArrayBuffer/, type: Token.tArrayBuffer},
+  { pattern: /SharedArrayBuffer/, type: Token.tSharedArrayBuffer},
+  { pattern: /DataView/, type: Token.tDataView},
+  { pattern: /Int8Array/, type: Token.tInt8Array},
+  { pattern: /Int16Array/, type: Token.tInt16Array},
+  { pattern: /Int32Array/, type: Token.tInt32Array},
+  { pattern: /Uint8Array/, type: Token.tUint8Array},
+  { pattern: /Uint16Array/, type: Token.tUint16Array},
+  { pattern: /Uint32Array/, type: Token.tUint32Array},
+  { pattern: /Uint8ClampedArray/, type: Token.tUint8ClampedArray},
+  { pattern: /BigInt64Array/, type: Token.tBigInt64Array},
+  { pattern: /BigUint64Array/, type: Token.tBigUint64Array},
+  { pattern: /Float16Array/, type: Token.tFloat16Array},
+  { pattern: /Float32Array/, type: Token.tFloat32Array},
+  { pattern: /Float64Array/, type: Token.tFloat64Array},
 
-  ["any", Token.tAny],
-
-  ["Promise", Token.tPromise],
-]);
+  { pattern: /Promise/, type: Token.tPromise},
+  { pattern: /number/, type: Token.tNumber},
+];
 
 let g_ArgumentNameKeyword: Token[] = [
   Token.tAsync, Token.tAttribute, Token.tCallback, Token.tConst, Token.tConstructor,
