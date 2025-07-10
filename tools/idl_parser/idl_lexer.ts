@@ -347,7 +347,6 @@ let g_text: string;
 let g_pos: number = 0;
 let g_col: number = 0;
 let g_row: number = 0;
-//let g_tokenText: string = "";
 let g_lineStartPos = 0;
 let prev: string = ' ';  // TypeScript does not support static in functions :(
 
@@ -356,7 +355,6 @@ export function init(text: string) {
   g_pos = 0;
   g_col = 0;
   g_row = 0;
-  //g_tokenText = "";
   g_lineStartPos = 0;
 }
 
@@ -369,10 +367,6 @@ function isLetter(c: string): boolean {
 function isDigit(c: string): boolean {
   return (c >= '0' && c <= '9');
 }
-
-/*export function getTokenText(): string {
-  return g_tokenText;
-}*/
 
 export function getToken(): TokenData {
   console.log("getToken <<<");

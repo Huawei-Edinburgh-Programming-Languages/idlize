@@ -102,7 +102,7 @@ interface Callback {
   // Debug code
   /*for (let i: number = 0; i < 40 && g_lookahead != lex.Token.tEnd; i++) {
     g_lookahead = lex.getToken().type;
-    console.log("LookAhead[" + i + "]: " + g_lookahead + " == \'" + token2Name(g_lookahead) + "\' " + lex.getTokenText());
+    console.log("LookAhead[" + i + "]: " + g_lookahead + " == \'" + token2Name(g_lookahead) + "\' " + g_lookahead.text);
   }
   throw new Error("Done!");*/
   // Debug code
