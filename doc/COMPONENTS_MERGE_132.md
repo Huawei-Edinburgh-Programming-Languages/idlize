@@ -161,7 +161,7 @@
 | 159 | matrix_accessor.cpp | Samarin Sergey | ✅ done (new file) |
 | 160 | measurable_accessor.cpp | Lobah Mikhail | ✅ done nothing todo |
 | 161 | media_cached_image_modifier.cpp | Lobah Mikhail | ✅ done nothing todo |
-| 162 | menu_item_group_modifier.cpp | Sergey Morozov | |
+| 162 | menu_item_group_modifier.cpp | Lobah Mikhail | ⏳ on review |
 | 163 | menu_item_modifier.cpp | Sergey Morozov | |
 | 164 | menu_modifier.cpp | Sergey Morozov | |
 | 165 | mouse_event_accessor.cpp | Evstigneev Roman | ✅ done |
