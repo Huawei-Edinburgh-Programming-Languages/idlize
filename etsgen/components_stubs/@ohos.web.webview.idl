@@ -2,5 +2,13 @@ package ohos.web.webview;
 
 [DefaultExport]
 namespace webview {
-    interface WebviewController {};
+    interface WebHeader {
+        attribute String headerKey;
+        attribute String headerValue;
+    };
+
+    [Entity=Class]
+    interface WebviewController {
+        void loadUrl(optional sequence<WebHeader> headers);
+    };
 };
