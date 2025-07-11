@@ -19,9 +19,9 @@
 | rich_editor_base_controller_accessor.cpp | Evsitngeev Roman | |
 | hover_event_accessor.cpp | Evstigneev Roman | |
 | custom_dialog_controller_accessor.cpp | Evstigneev Roman | |
-| base_event_accessor.cpp | Sergey Kovalev | |
-| system_ops_accessor.cpp | Sergey Kovalev | |
-| mouse_event_accessor.cpp | Sergey Kovalev | |
+| base_event_accessor.cpp | Sergey Kovalev | done |
+| system_ops_accessor.cpp | Sergey Kovalev | done |
+| mouse_event_accessor.cpp | Sergey Kovalev | done |
 | animation_extender_accessor.cpp | Evstigneev Roman | |
 | navigation_transition_proxy_accessor.cpp | Evstigneev Roman | |
 | text_field_ops_accessor.cpp | Ilya Erokhin | done |
