@@ -8,12 +8,12 @@
 | checkbox_modifier.cpp | Ivan Tuzhilkin| |
 | alphabet_indexer_modifier.cpp | Ilya Erokhin | done |
 | checkbox_group_modifier.cpp | Dudkin Sergey | |
-| column_modifier.cpp | Ilya Erokhin | |
+| column_modifier.cpp | Ilya Erokhin | done |
 | swiper_modifier.cpp | Dudkin Sergey | |
 | date_picker_modifier.cpp | Vadim Voronov | |
 | frame_node_accessor.cpp | Ivan Tuzhilkin | |
 | form_component_modifier.cpp | Vadim Voronov | |
-| iui_context_accessor.cpp | | |
+| iui_context_accessor.cpp | Ilya Erokhin | |
 | text_menu_item_id_accessor.cpp | Samarin Sergey | |
 | key_event_accessor.cpp | | |
 | rich_editor_base_controller_accessor.cpp | Evsitngeev Roman | |
