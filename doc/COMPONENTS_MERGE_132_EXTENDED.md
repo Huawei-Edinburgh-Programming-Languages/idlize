@@ -2,7 +2,7 @@
 |------|-------|--------|
 | relative_container_modifier.cpp |Dmitry Smirnov | done |
 | path_accessor.cpp | Lobah Mikhail | |
-| webview_controller_accessor.cpp | Politov Mikhail | |
+| webview_controller_accessor.cpp | Politov Mikhail | done |
 | security_component_method_modifier.cpp | Samarin Sergey | done |
 | row_modifier.cpp | Ilya Erokhin | done |
 | checkbox_modifier.cpp | Ivan Tuzhilkin| done |
@@ -31,7 +31,7 @@
 | indicator_component_modifier.cpp | Skroba Gleb | done |
 | rich_editor_controller_accessor.cpp | Evstigneev Roman | done |
 | relative_container_modifier_test.cpp |Dmitry Smirnov | done|
-| base_event_accessor_test.cpp | Politov Mikhail | |
+| base_event_accessor_test.cpp | Politov Mikhail | done |
 | security_component_method_modifier_test.cpp | Samarin Sergey | done |
 | form_component_modifier_test.cpp | Vadim Voronov | done |
 | security_component_method_modifier_test_2.cpp | Samarin Sergey | done |
