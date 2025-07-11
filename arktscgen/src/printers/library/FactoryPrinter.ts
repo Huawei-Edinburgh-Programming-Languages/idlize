@@ -186,11 +186,6 @@ export class FactoryPrinter extends SingleFilePrinter {
             return undefined
         }
 
-        if (node.name === 'LabelledStatement') {
-            node.properties.forEach(prop => console.log(`PROP => ${prop.name}`))
-            console.log('===');
-        }
-
         if (node.properties.length !== creates[0].parameters.length) {
             return undefined
         }
