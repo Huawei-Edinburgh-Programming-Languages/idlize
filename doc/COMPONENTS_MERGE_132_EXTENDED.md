@@ -4,11 +4,11 @@
 | path_accessor.cpp | Vadim Voronov | |
 | webview_controller_accessor.cpp | | |
 | security_component_method_modifier.cpp | Samarin Sergey | |
-| row_modifier.cpp | Ilya Erokhin | |
+| row_modifier.cpp | Ilya Erokhin | done |
 | checkbox_modifier.cpp | Ivan Tuzhilkin| |
 | alphabet_indexer_modifier.cpp | Ilya Erokhin | done |
 | checkbox_group_modifier.cpp | Dudkin Sergey | |
-| column_modifier.cpp | | |
+| column_modifier.cpp | Ilya Erokhin | |
 | swiper_modifier.cpp | Dudkin Sergey | |
 | date_picker_modifier.cpp | Vadim Voronov | |
 | frame_node_accessor.cpp | | |
