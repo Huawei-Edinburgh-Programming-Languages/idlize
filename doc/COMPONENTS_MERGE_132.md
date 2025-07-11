@@ -202,8 +202,8 @@
 | 194 | pen_accessor.cpp | Evstigneev Roman | 🔵 NEW_GENERATE |
 | 195 | permission_request_accessor.cpp | Evstigneev Roman | ✅ done |
 | 196 | pinch_gesture_event_accessor.cpp | Samarin Sergey | ✅ done |
-| 197 | pinch_gesture_interface_accessor.cpp | Lobah Mikhail | ⏳ in progress |
-| 198 | pinch_recognizer_accessor.cpp | Lobah Mikhail | ⏳ in progress |
+| 197 | pinch_gesture_interface_accessor.cpp | Lobah Mikhail | ✅ done |
+| 198 | pinch_recognizer_accessor.cpp | Lobah Mikhail | ✅ done |
 | 199 | pixel_map_accessor.cpp | Erokhin Ilya | ✅ done |
 | 200 | pixel_map_mock_accessor.cpp | Erokhin Ilya | ✅ done |
 | 201 | plugin_component_modifier.cpp | Erokhin Ilya | ✅ done |
@@ -237,7 +237,7 @@
 | 229 | rotation_gesture_event_accessor.cpp | Samarin Sergey | ✅ done |
 | 230 | rotation_recognizer_accessor.cpp | Samarin Sergey | ✅ done |
 | 231 | round_rect_accessor.cpp | Lobah Mikhail | 🔵 NEW_GENERATE |
-| 232 | row_modifier.cpp | Lobah Mikhail | ⏳ in progress |
+| 232 | row_modifier.cpp | Lobah Mikhail | ✅ done |
 | 233 | row_split_modifier.cpp | Lobah Mikhail | |
 | 234 | run_accessor.cpp | Samarin Sergey | ✅ done (new file) |
 | 235 | sampling_options_accessor.cpp | Vadim Voronov | ✅ done empty new file nothing todo |
