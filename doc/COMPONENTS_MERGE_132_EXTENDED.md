@@ -40,7 +40,7 @@
 | common_method_modifier_test2.cpp | | |
 | common_method_modifier_test17.cpp | | |
 | common_method_modifier_test16.cpp | | |
-| common_method_modifier_test19.cpp | | |
+| common_method_modifier_test19.cpp | Dmitry Smirnov| |
 | hover_event_accessor_test.cpp | Andrey Khudenkikh | |
 | mouse_event_accessor_test.cpp | Andrey Khudenkikh | |
 | richeditor_string_styled_controller_accessor_test.cpp | Dudkin Sergey | |
