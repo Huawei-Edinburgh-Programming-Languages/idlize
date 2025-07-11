@@ -7,9 +7,9 @@
 | row_modifier.cpp | Ilya Erokhin | done |
 | checkbox_modifier.cpp | Ivan Tuzhilkin| |
 | alphabet_indexer_modifier.cpp | Ilya Erokhin | done |
-| checkbox_group_modifier.cpp | Dudkin Sergey | |
+| checkbox_group_modifier.cpp | Dudkin Sergey | done |
 | column_modifier.cpp | Ilya Erokhin | done |
-| swiper_modifier.cpp | Dudkin Sergey | |
+| swiper_modifier.cpp | Dudkin Sergey | done |
 | date_picker_modifier.cpp | Vadim Voronov | |
 | frame_node_accessor.cpp | Ivan Tuzhilkin | |
 | form_component_modifier.cpp | Vadim Voronov | |
@@ -43,10 +43,10 @@
 | common_method_modifier_test19.cpp | Dmitry Smirnov| |
 | hover_event_accessor_test.cpp | Andrey Khudenkikh | |
 | mouse_event_accessor_test.cpp | Andrey Khudenkikh | |
-| richeditor_string_styled_controller_accessor_test.cpp | Dudkin Sergey | |
+| richeditor_string_styled_controller_accessor_test.cpp | Dudkin Sergey | done |
 | navigation_transition_proxy_accessor_test.cpp | Evstigneev Roman | |
 | path2d_accessor_test.cpp | Vadim Voronov  | done, no errors nothing todo |
-| key_event_accessor_test.cpp | Dudkin Sergey | |
+| key_event_accessor_test.cpp | Dudkin Sergey | done |
 | mutable_styled_string_accessor_test.cpp | Ilya Erokhin | |
 | matrix2d_accessor_test.cpp | Vadim Voronov | done, no errors nothing todo |
 | capi_generated_modifiers_test/text_area_modifier_test_1.cpp | Evstigneev Roman | |
