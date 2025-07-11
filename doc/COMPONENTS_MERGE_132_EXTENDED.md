@@ -3,7 +3,7 @@
 | relative_container_modifier.cpp |Dmitry Smirnov | |
 | path_accessor.cpp | Vadim Voronov | |
 | webview_controller_accessor.cpp | | |
-| security_component_method_modifier.cpp | | |
+| security_component_method_modifier.cpp | Samarin Sergey | |
 | row_modifier.cpp | Ilya Erokhin | |
 | checkbox_modifier.cpp | Ivan Tuzhilkin| |
 | alphabet_indexer_modifier.cpp | Ilya Erokhin | done |
@@ -32,9 +32,9 @@
 | rich_editor_controller_accessor.cpp | | |
 | relative_container_modifier_test.cpp |Dmitry Smirnov | |
 | base_event_accessor_test.cpp | | |
-| security_component_method_modifier_test.cpp | | |
+| security_component_method_modifier_test.cpp | Samarin Sergey | |
 | form_component_modifier_test.cpp | Vadim Voronov | |
-| security_component_method_modifier_test_2.cpp | | |
+| security_component_method_modifier_test_2.cpp | Samarin Sergey | |
 | common_method_modifier_test13.cpp | | |
 | list_modifier_test.cpp | Sergey Morozov | |
 | common_method_modifier_test2.cpp | | |
