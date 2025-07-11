@@ -28,7 +28,7 @@
 | transition_effect_accessor.cpp | | |
 | data_panel_modifier.cpp | Sergey Morozov | |
 | progress_modifier.cpp | | |
-| indicator_component_modifier.cpp | | |
+| indicator_component_modifier.cpp | Skroba Gleb | |
 | rich_editor_controller_accessor.cpp | | |
 | relative_container_modifier_test.cpp |Dmitry Smirnov | |
 | base_event_accessor_test.cpp | | |
