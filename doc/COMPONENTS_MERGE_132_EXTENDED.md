@@ -5,7 +5,7 @@
 | webview_controller_accessor.cpp | | |
 | security_component_method_modifier.cpp | | |
 | row_modifier.cpp | | |
-| checkbox_modifier.cpp | | |
+| checkbox_modifier.cpp | Ivan Tuzhilkin| |
 | alphabet_indexer_modifier.cpp | | |
 | checkbox_group_modifier.cpp | | |
 | column_modifier.cpp | | |
