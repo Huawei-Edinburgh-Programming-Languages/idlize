@@ -57,7 +57,10 @@ function peerToOutString(library: PeerLibrary, context: idl.IDLInterface, method
 }
 
 function peerImplName(method: PeerMethod): string {
-    return `${capitalize(method.sig.name)}Impl`
+    const v132_name = `${capitalize(method.sig.name)}Impl`
+    if (method.v132_isComponentMethod)
+        return v132_name.substring(3)
+    return v132_name
 }
 
 function peerParentNamespaceName(library: PeerLibrary, context: idl.IDLInterface, method: PeerMethod): string {
@@ -289,7 +292,10 @@ export class ModifierVisitor {
                 }
             }
             if (this.commentedCode) {
-                this.real.print(`//${clazz?.componentName}ModelNG::Set${capitalize(method.sig.name)}(frameNode, convValue);`)
+                let v132_name = capitalize(method.sig.name)
+                if (method.v132_isComponentMethod)
+                    v132_name = v132_name.substring(3)
+                this.real.print(`//${clazz?.componentName}ModelNG::Set${v132_name}(frameNode, convValue);`)
             }
         }
     }

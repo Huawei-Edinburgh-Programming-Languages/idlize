@@ -74,6 +74,7 @@ export class PeerMethod {
         public returnType: IDLType,
         public isCallSignature: boolean,
         public method: Method,
+        public v132_isComponentMethod?: boolean
     ) { 
         // todo remove me
         if (method.modifiers?.includes(MethodModifier.FORCE_CONTEXT))
