@@ -25,7 +25,7 @@
 | animation_extender_accessor.cpp | Evstigneev Roman | |
 | navigation_transition_proxy_accessor.cpp | Evstigneev Roman | |
 | text_field_ops_accessor.cpp | Ilya Erokhin | |
-| transition_effect_accessor.cpp | | |
+| transition_effect_accessor.cpp | Sergey Kovalev | |
 | data_panel_modifier.cpp | Sergey Morozov | |
 | progress_modifier.cpp | | |
 | indicator_component_modifier.cpp | Skroba Gleb | |
