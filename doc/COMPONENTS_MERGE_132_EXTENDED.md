@@ -5,13 +5,13 @@
 | webview_controller_accessor.cpp | Politov Mikhail | |
 | security_component_method_modifier.cpp | Samarin Sergey | |
 | row_modifier.cpp | Ilya Erokhin | done |
-| checkbox_modifier.cpp | Ivan Tuzhilkin| |
+| checkbox_modifier.cpp | Ivan Tuzhilkin| done |
 | alphabet_indexer_modifier.cpp | Ilya Erokhin | done |
 | checkbox_group_modifier.cpp | Dudkin Sergey | done |
 | column_modifier.cpp | Ilya Erokhin | done |
 | swiper_modifier.cpp | Dudkin Sergey | done |
 | date_picker_modifier.cpp | Vadim Voronov | |
-| frame_node_accessor.cpp | Ivan Tuzhilkin | |
+| frame_node_accessor.cpp | Ivan Tuzhilkin | done |
 | form_component_modifier.cpp | Vadim Voronov | |
 | iui_context_accessor.cpp | Ilya Erokhin | done |
 | text_menu_item_id_accessor.cpp | Samarin Sergey | |
