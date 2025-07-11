@@ -378,16 +378,26 @@ export function getToken(): TokenData {
 
         let tokenText: string = found[0];
         g_pos += tokenText.length;
-
-        if (kw.type == Token.tWhiteSpace)
-          break;
-        if (kw.type == Token.tComment ||
+        // comments and white spaces can contain \n
+        if (kw.type == Token.tWhiteSpace ||
+            kw.type == Token.tComment ||
             kw.type == Token.tLongComment) {
+          let eol = 0;
+          for (let c of tokenText)
+            if (c === '\n') {
+              g_col = 1;
+              eol++;
+            } else {
+              g_col++;
+            }
+          g_row += eol;
           break;
+        } else {
+          g_col += tokenText.length;
         }
 
         console.log(tokenText);
-        return new TokenData(kw.type, tokenText);
+        return new TokenData(kw.type, tokenText, g_col, g_row);
       }
     }
   }
