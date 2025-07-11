@@ -46,7 +46,7 @@
 | richeditor_string_styled_controller_accessor_test.cpp | | |
 | navigation_transition_proxy_accessor_test.cpp | Evstigneev Roman | |
 | path2d_accessor_test.cpp | Vadim Voronov  | |
-| key_event_accessor_test.cpp | | |
+| key_event_accessor_test.cpp | Dudkin Sergey | |
 | mutable_styled_string_accessor_test.cpp | | |
 | matrix2d_accessor_test.cpp | Vadim Voronov | |
 | capi_generated_modifiers_test/text_area_modifier_test_1.cpp | | |
