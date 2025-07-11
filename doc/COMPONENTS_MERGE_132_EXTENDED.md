@@ -15,9 +15,9 @@
 | form_component_modifier.cpp | Vadim Voronov | |
 | iui_context_accessor.cpp | | |
 | text_menu_item_id_accessor.cpp | | |
-| key_event_accessor.cpp | Ivan Tuzhilkin | |
+| key_event_accessor.cpp | | |
 | rich_editor_base_controller_accessor.cpp | Evsitngeev Roman | |
-| hover_event_accessor.cpp | Ivan Tuzhilkin | |
+| hover_event_accessor.cpp | | |
 | custom_dialog_controller_accessor.cpp | | |
 | base_event_accessor.cpp | Sergey Kovalev | |
 | system_ops_accessor.cpp | Sergey Kovalev | |
