@@ -18,11 +18,11 @@
 | key_event_accessor.cpp | Ilya Erokhin | done |
 | rich_editor_base_controller_accessor.cpp | Evsitngeev Roman | |
 | hover_event_accessor.cpp | Evstigneev Roman | |
-| custom_dialog_controller_accessor.cpp | Evstigneev Roman | |
+| custom_dialog_controller_accessor.cpp | Evstigneev Roman | missed methods in the arkoala_api_generated.h |
 | base_event_accessor.cpp | Sergey Kovalev | done |
 | system_ops_accessor.cpp | Sergey Kovalev | done |
 | mouse_event_accessor.cpp | Sergey Kovalev | done |
-| animation_extender_accessor.cpp | Evstigneev Roman | |
+| animation_extender_accessor.cpp | Evstigneev Roman | missed methods in the arkoala_api_generated.h |
 | navigation_transition_proxy_accessor.cpp | Evstigneev Roman | |
 | text_field_ops_accessor.cpp | Ilya Erokhin | done |
 | transition_effect_accessor.cpp | Sergey Kovalev | done|
