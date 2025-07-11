@@ -412,11 +412,12 @@
         "ImageSpan": {
             "alt": {
                 "hookName": "hookSetAlt"
-            }
-        },
-        "ImageSpan": {
+            },
             "setImageSpanOptions": {
                 "hookName": "hookSetImageSpanOptions"
+            },
+            "colorFilter": {
+                "hookName": "hookSetColorFilter"
             }
         },
         "Shape": {
