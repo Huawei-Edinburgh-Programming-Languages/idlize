@@ -341,9 +341,9 @@
 | 333 | web_context_menu_result_accessor.cpp | Vadim Voronov | ✅ done |
 | 334 | web_cookie_accessor.cpp | Vadim Voronov | ✅ done |
 | 335 | web_keyboard_controller_accessor.cpp | Vadim Voronov | ✅ done |
-| 336 | web_modifier.cpp | Erokhin Ilya | |
-| 337 | web_resource_error_accessor.cpp | Erokhin Ilya | |
-| 338 | web_resource_request_accessor.cpp | Erokhin Ilya | |
+| 336 | web_modifier.cpp | Erokhin Ilya | ✅ done |
+| 337 | web_resource_error_accessor.cpp | Erokhin Ilya | ✅ done |
+| 338 | web_resource_request_accessor.cpp | Erokhin Ilya | ✅ done |
 | 339 | web_resource_response_accessor.cpp | Politov Mikhail | web missing converter |
 | 340 | webview_controller_accessor.cpp | Politov Mikhail | missing file |
 | 341 | window_scene_modifier.cpp | Vadim Voronov | ✅ done |

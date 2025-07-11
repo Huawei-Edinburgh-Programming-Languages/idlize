@@ -6,7 +6,7 @@
 | security_component_method_modifier.cpp | | |
 | row_modifier.cpp | | |
 | checkbox_modifier.cpp | Ivan Tuzhilkin| |
-| alphabet_indexer_modifier.cpp | | |
+| alphabet_indexer_modifier.cpp | Ilya Erokhin | |
 | checkbox_group_modifier.cpp | Dudkin Sergey | |
 | column_modifier.cpp | | |
 | swiper_modifier.cpp | Dudkin Sergey | |
