@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { D, T } from "lws";
+import { D, S, T } from "lws";
 import { createProducer } from "../context";
 import * as idl from "@idlizer/core/idl"
 
@@ -24,6 +24,23 @@ export const structureProducer = createProducer(
       artifact: {
         reference: T.cc(idl.getFQName(node)),
         implementationGenerator: () => {
+          if (node.methods.length > 0) {
+            return D.class(node.name,
+              node.properties.map(prop => {
+                return {
+                  name: prop.name,
+                  type: ctx.use(prop.type).reference()
+                }
+              }),
+              node.methods.map(method => {
+                return D.func(method.name,
+                  method.parameters.map(param => ({ name: param.name, type: ctx.use(param.type).reference() })),
+                  ctx.use(method.returnType).reference(),
+                  S.block([])
+                )
+              })
+            )
+          }
           return D.struct(node.name, node.properties.map(prop => {
             return {
               name: prop.name,

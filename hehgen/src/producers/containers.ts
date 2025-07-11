@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { D, lw, T, Ts } from "lws";
+import { lw, T } from "lws";
 import { createProducer } from "../context"
 import * as idl from "@idlizer/core/idl";
 
@@ -22,11 +22,13 @@ export const containerProducer = createProducer(
   idl.isContainerType,
   (node, ctx) => {
     return {
-      artifact: {
-        reference: T.c('#ARRAY'),
-        implementationGenerator: () => {
-            return D.type('#ARRAY', T.c('Array', ctx.use(node.elementType[0]).reference()))
-        },
+      recursive: () => {
+        const elemRef = ctx.use(node.elementType[0]).reference()
+        return {
+          artifact: {
+            reference: T.c('#ARRAY', elemRef)
+          }
+        }
       }
     }
   }

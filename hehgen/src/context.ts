@@ -43,7 +43,7 @@ export class MakeResult {
     reference() {
         return isTerminal(this.result)
             ? this.result.artifact.reference as lw.LWType
-            : throwError("WOW it is middle ware")
+            : throwError(`WOW it is "${getKind(this.result)}"`)
     }
 }
 
@@ -60,11 +60,15 @@ export interface TerminalProducerDescription {
 export interface RedirectProducerDescription {
     redirectTo: idl.IDLNode
 }
+export interface RecursiveProducerDescription {
+    recursive: () => ProducerDescription
+}
 
 type ProducerDescription =
-    MiddlewareProducerDescription
+      MiddlewareProducerDescription
     | TerminalProducerDescription
     | RedirectProducerDescription
+    | RecursiveProducerDescription
 
 function isMiddleware(desc: ProducerDescription): desc is MiddlewareProducerDescription {
     return "go" in desc
@@ -74,6 +78,25 @@ function isTerminal(desc: ProducerDescription): desc is TerminalProducerDescript
 }
 function isRedirect(desc: ProducerDescription): desc is RedirectProducerDescription {
     return "redirectTo" in desc
+}
+function isRecursive(desc: ProducerDescription): desc is RecursiveProducerDescription {
+    return "recursive" in desc
+}
+
+function getKind(desc:ProducerDescription) {
+    if (isMiddleware(desc)) {
+        return 'middleware'
+    }
+    if (isTerminal(desc)) {
+        return 'terminal'
+    }
+    if (isRedirect(desc)) {
+        return 'redirect'
+    }
+    if (isRecursive(desc)) {
+        return 'recursive'
+    }
+    return 'unknown'
 }
 
 export interface Producer<N extends idl.IDLNode = idl.IDLNode> {
@@ -124,6 +147,16 @@ export class GeneratorContext {
         private selector: MakeSelector,
     ) {
         this.resolver = new IDLTypeResolver(library)
+        library.forEach(file => {
+            idl.forEachChild(file, node => {
+                if (idl.isReferenceType(node)) {
+                    const found = this.resolver.toDeclaration(node)
+                    if (found) {
+                        node.name = idl.getFQName(found)
+                    }
+                }
+            })
+        })
     }
 
     private getUseKey(node: idl.IDLNode): string {
@@ -169,7 +202,14 @@ export class GeneratorContext {
             desc.go()
         }
         if (isRedirect(desc)) {
-            return this.runUse(desc.redirectTo)
+            const rec = this.runUse(desc.redirectTo)
+            this.storage.set(key, rec)
+            return rec
+        }
+        if (isRecursive(desc)) {
+            const rec = desc.recursive()
+            this.storage.set(key, rec)
+            return rec
         }
         return desc
     }
