@@ -1081,8 +1081,12 @@ class IDLVisitor extends arkts.AbstractVisitor {
             return idl.IDLUndefinedType
         if (arkts.isTSArrayType(type))
             return idl.createContainerType('sequence', [this.serializeType((type as arkts.TSArrayType).elementType)])
-        if (arkts.isETSUnionType(type))
-            return collapseTypes((type as arkts.ETSUnionType).types.map((it) => this.serializeType(it)))
+        if (arkts.isETSUnionType(type)) {
+            const types = (type as arkts.ETSUnionType).types.map((it) => this.serializeType(it))
+            const isOptional = types.some(it => it === idl.IDLUndefinedType)
+            const unionType = collapseTypes(types.filter(it => it !== idl.IDLUndefinedType))
+            return isOptional ? idl.createOptionalType(unionType) : unionType
+        }
         if (arkts.isETSPrimitiveType(type))
             return this.serializePrimitive((type as arkts.ETSPrimitiveType).primitiveType)
         if (arkts.isETSTypeReference(type)) {
@@ -1432,12 +1436,13 @@ class IDLVisitor extends arkts.AbstractVisitor {
                         if (!propType) {
                             // Property not found in `Component`, look in `ComponentOptions`
                             const options = this.entries.find(it => it.name === found.name + "Options")
-                            if (options && idl.isInterface(options))
+                                ?? this.entries.find(it => it.name === found.name.substring(0, found.name.length - "Attribute".length) + "Options")
+                            if (options && idl.isInterface(options)) {
                                 propType = options.properties.find(it => it.name === propName)?.type
+                            }
                         }
                         if (!propType) {
-                            // Give up search, and let the type be `number`
-                            propType = idl.IDLNumberType
+                            throw new Error(`Can not find type for bound property ${clsName}.${propName}`)
                         }
                         const callbackParams = [idl.createParameter(propName, propType)]
                         const callbackName = generateSyntheticFunctionName(callbackParams, idl.IDLVoidType)
