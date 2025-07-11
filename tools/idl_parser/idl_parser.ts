@@ -84,30 +84,11 @@ function Match(tArg: lex.Token | string) {
   }
 }
 
-export function Parse(): idl.Definitions | null {
-  const idl: string =
-`package arkui.component.idlize;
-callback Callback_Extender_OnProgress = void (f32 value);
-interface Content {/* test!! */};  // hahaha
-interface Callback {
-    attribute Colors colors;
-    void invoke(T data);
-};`
-
-/* test */
-//import arkui.component.common;
+export function Parse(idl_text: string): idl.Definitions | null {
   console.log("Try to parse:");
-  console.log(idl);
+  console.log(idl_text);
 
-  lex.init(idl);
-
-  // Debug code
-  /*for (let i: number = 0; i < 40 && g_lookahead != lex.Token.tEnd; i++) {
-    g_lookahead = lex.getToken().type;
-    console.log("LookAhead[" + i + "]: " + g_lookahead + " == \'" + token2Name(g_lookahead) + "\' " + g_lookahead.text);
-  }
-  throw new Error("Done!");*/
-  // Debug code
+  lex.init(idl_text);
 
   let defs: idl.Definitions | null = null;
 
