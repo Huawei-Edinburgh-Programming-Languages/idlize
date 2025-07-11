@@ -25,7 +25,7 @@
 | animation_extender_accessor.cpp | Evstigneev Roman | |
 | navigation_transition_proxy_accessor.cpp | Evstigneev Roman | |
 | text_field_ops_accessor.cpp | Ilya Erokhin | done |
-| transition_effect_accessor.cpp | Sergey Kovalev | |
+| transition_effect_accessor.cpp | Sergey Kovalev | done|
 | data_panel_modifier.cpp | Sergey Morozov | |
 | progress_modifier.cpp | Ilya Erokhin | done |
 | indicator_component_modifier.cpp | Skroba Gleb | |
@@ -37,7 +37,7 @@
 | security_component_method_modifier_test_2.cpp | Samarin Sergey | |
 | common_method_modifier_test13.cpp | Ilya Erokhin | done |
 | list_modifier_test.cpp | Sergey Morozov | |
-| common_method_modifier_test2.cpp | Sergey Kovalev | |
+| common_method_modifier_test2.cpp | Sergey Kovalev | done |
 | common_method_modifier_test17.cpp | Ilya Erokhin | done |
 | common_method_modifier_test16.cpp | Ilya Erokhin | done |
 | common_method_modifier_test19.cpp | Dmitry Smirnov| |
