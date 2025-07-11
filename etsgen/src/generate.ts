@@ -53,7 +53,7 @@ class StatusRecord {
         public type: string,
         public status: string,
         public src: string,
-    ) {}
+    ) { }
 
     ToString(): string {
         let statusStr = this.status ? `Deleted because of ${this.status}` : ''
@@ -83,7 +83,7 @@ class StatusTracker {
     }
 }
 
-function processFile(outDir: string, baseDir: string, file: string, configPath:string, config: ETSVisitorConfig, status: StatusTracker): IDLSuperFile {
+function processFile(outDir: string, baseDir: string, file: string, configPath: string, config: ETSVisitorConfig, status: StatusTracker): IDLSuperFile {
     let input = fs.readFileSync(file).toString()
     //let module = arkts.createETSModuleFromSource(input, arkts.Es2pandaContextState.ES2PANDA_STATE_PARSED)
     const configText = fs.readFileSync(configPath, 'utf-8')
@@ -697,7 +697,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
         members?.forEach(member => this.processNode((member) => {
             if (arkts.isClassProperty(member)) {
-                 if (this.shouldNotProcessMember(scopeName, member.id!.name)) {
+                if (this.shouldNotProcessMember(scopeName, member.id!.name)) {
                     this.traceDeleted('DeletedMembers')
                     return
                 }
@@ -723,7 +723,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     if (arkts.hasModifierFlag(propType, arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_STATIC)) {
                         prop.isStatic = true
                     }
-                    prop.extendedAttributes?.push({name: idl.IDLExtendedAttributes.Accessor, value: idl.IDLAccessorAttribute.Getter})
+                    prop.extendedAttributes?.push({ name: idl.IDLExtendedAttributes.Accessor, value: idl.IDLAccessorAttribute.Getter })
                     prop.extendedAttributes.push(...this.traceAttrs())
                     properties.push(prop)
                     return
@@ -737,7 +737,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     if (arkts.hasModifierFlag(propType, arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_STATIC)) {
                         prop.isStatic = true
                     }
-                    prop.extendedAttributes.push({name: idl.IDLExtendedAttributes.Accessor, value: idl.IDLAccessorAttribute.Setter})
+                    prop.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Accessor, value: idl.IDLAccessorAttribute.Setter })
                     prop.extendedAttributes.push(...this.traceAttrs())
                     properties.push(prop)
                     return
@@ -924,34 +924,34 @@ class IDLVisitor extends arkts.AbstractVisitor {
         let methodName = method.id!.name
         const extendedAttributes: idl.IDLExtendedAttribute[] = []
         const filteredParameters = method.function!.params.map(it => it as arkts.ETSParameterExpression)
-        .filter((param, paramIndex) => {
-            const paramName = param.name
-            let tag: string | undefined
-            if (arkts.isETSStringLiteralType(param.typeAnnotation)) {
-                tag = param.typeAnnotation.dumpSrc()
-            }
-            if (!tag) return true
-            const dtsTagIndexDefault = 0 // see idl.DtsTag specification
-            const dtsTagNameDefault = 'type' // see idl.DtsTag specification
-            let extendedAttributeValues: string[] = []
-            if (paramIndex != dtsTagIndexDefault || paramName != dtsTagNameDefault) {
-                extendedAttributeValues.push(paramIndex.toString())
-                extendedAttributeValues.push(paramName)
-            }
-            extendedAttributeValues.push(tag)
-            extendedAttributes.push({
-                name: idl.IDLExtendedAttributes.DtsTag,
-                value: extendedAttributeValues.map(value => value.replaceAll('|', '\\x7c')).join('|')
-            })
-            if (!extendedAttributes.some(it => it.name === idl.IDLExtendedAttributes.DtsName)) {
+            .filter((param, paramIndex) => {
+                const paramName = param.name
+                let tag: string | undefined
+                if (arkts.isETSStringLiteralType(param.typeAnnotation)) {
+                    tag = param.typeAnnotation.dumpSrc()
+                }
+                if (!tag) return true
+                const dtsTagIndexDefault = 0 // see idl.DtsTag specification
+                const dtsTagNameDefault = 'type' // see idl.DtsTag specification
+                let extendedAttributeValues: string[] = []
+                if (paramIndex != dtsTagIndexDefault || paramName != dtsTagNameDefault) {
+                    extendedAttributeValues.push(paramIndex.toString())
+                    extendedAttributeValues.push(paramName)
+                }
+                extendedAttributeValues.push(tag)
                 extendedAttributes.push({
-                    name: idl.IDLExtendedAttributes.DtsName,
-                    value: methodName,
+                    name: idl.IDLExtendedAttributes.DtsTag,
+                    value: extendedAttributeValues.map(value => value.replaceAll('|', '\\x7c')).join('|')
                 })
-            }
-            methodName = methodName + capitalize(tag.replaceAll('"', '').replaceAll("'", ''))
-            return false
-        })
+                if (!extendedAttributes.some(it => it.name === idl.IDLExtendedAttributes.DtsName)) {
+                    extendedAttributes.push({
+                        name: idl.IDLExtendedAttributes.DtsName,
+                        value: methodName,
+                    })
+                }
+                methodName = methodName + capitalize(tag.replaceAll('"', '').replaceAll("'", ''))
+                return false
+            })
         return {
             methodName: methodName,
             parameters: filteredParameters,
@@ -959,7 +959,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         }
     }
 
-    serializeMethod(method: arkts.MethodDefinition, parentName:string): idl.IDLMethod | idl.IDLConstructor {
+    serializeMethod(method: arkts.MethodDefinition, parentName: string): idl.IDLMethod | idl.IDLConstructor {
         const { set: paramsSet, parameters: typeParameters } = this.extractTypeParameters((method.value as arkts.FunctionExpression).function?.typeParams)
         return this.withTypeParamContext(paramsSet, () => {
             const { methodName, parameters: arktsParameters, extendedAttributes } = this.processMethodLiteralParameters(method)
@@ -1081,8 +1081,12 @@ class IDLVisitor extends arkts.AbstractVisitor {
             return idl.IDLUndefinedType
         if (arkts.isTSArrayType(type))
             return idl.createContainerType('sequence', [this.serializeType((type as arkts.TSArrayType).elementType)])
-        if (arkts.isETSUnionType(type))
-            return collapseTypes((type as arkts.ETSUnionType).types.map((it) => this.serializeType(it)))
+        if (arkts.isETSUnionType(type)) {
+            const types = (type as arkts.ETSUnionType).types.map((it) => this.serializeType(it))
+            const isOptional = types.some(it => it === idl.IDLUndefinedType)
+            const unionType = collapseTypes(types.filter(it => it !== idl.IDLUndefinedType))
+            return isOptional ? idl.createOptionalType(unionType) : unionType
+        }
         if (arkts.isETSPrimitiveType(type))
             return this.serializePrimitive((type as arkts.ETSPrimitiveType).primitiveType)
         if (arkts.isETSTypeReference(type)) {
@@ -1315,7 +1319,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         this.typeParamsStack.pop()
         return r
     }
-    withReplacementContext<T>(name: string, op: (found:boolean) => T): T {
+    withReplacementContext<T>(name: string, op: (found: boolean) => T): T {
         if (TypeParameterMap.has(name)) {
             const mapping = TypeParameterMap.get(name)!
             this.typeReplacements.push(mapping)
@@ -1353,7 +1357,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         }
     }
 
-    postprocessComponent(iface:idl.IDLInterface) {
+    postprocessComponent(iface: idl.IDLInterface) {
         iface.extendedAttributes ??= []
         iface.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Component })
     }
@@ -1377,7 +1381,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                         return
                     }
                     if (entry.name === componentAttributeName && idl.isInterface(entry)) {
-                         this.postprocessComponent(entry)
+                        this.postprocessComponent(entry)
                     }
                     if (idl.isCallback((entry))) {
                         let hasComponentInReferences = false
@@ -1423,6 +1427,39 @@ class IDLVisitor extends arkts.AbstractVisitor {
                     })
                 }
             }
+
+            this.config.BoundProperties.forEach((propNames, clsName) => {
+                const found = this.entries.find(it => it.name === clsName || it.name.endsWith('Attribute') && it.name.substring(0, it.name.length - 9) === clsName)
+                if (found && idl.isInterface(found)) {
+                    propNames.forEach(propName => {
+                        let propType = found.properties.find(it => it.name === propName)?.type
+                        if (!propType) {
+                            // Property not found in `Component`, look in `ComponentOptions`
+                            const options = this.entries.find(it => it.name === found.name + "Options")
+                                ?? this.entries.find(it => it.name === found.name.substring(0, found.name.length - "Attribute".length) + "Options")
+                            if (options && idl.isInterface(options)) {
+                                propType = options.properties.find(it => it.name === propName)?.type
+                            }
+                        }
+                        if (!propType) {
+                            throw new Error(`Can not find type for bound property ${clsName}.${propName}`)
+                        }
+                        const callbackParams = [idl.createParameter(propName, propType)]
+                        const callbackName = generateSyntheticFunctionName(callbackParams, idl.IDLVoidType)
+                        const foundIdx = this.entries.indexOf(found)
+                        this.entries.splice(foundIdx, 0, idl.createCallback(
+                            callbackName, callbackParams, idl.IDLVoidType, {
+                            extendedAttributes: [{ name: idl.IDLExtendedAttributes.Synthetic }],
+                            fileName: this.fileName
+                        }))
+                        found.methods.push(idl.createMethod(
+                            `_onChangeEvent_${propName}`,
+                            [idl.createParameter("callback", idl.createReferenceType(callbackName))],
+                            idl.IDLVoidType
+                        ))
+                    })
+                }
+            })
         }
 
         /* remove synthetic duplicates */
@@ -1460,7 +1497,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
             }
         ]
         for (const entry of this.entries) {
-            idl.forEachChild(entry, () => {}, (node) => mappers.forEach(it => it(node)))
+            idl.forEachChild(entry, () => { }, (node) => mappers.forEach(it => it(node)))
             mappers.forEach(it => it(entry))
         }
 
@@ -1470,18 +1507,18 @@ class IDLVisitor extends arkts.AbstractVisitor {
     /**
      * Just syntax equality
      */
-    private isTypesEq(a:idl.IDLType, b:idl.IDLType): boolean {
+    private isTypesEq(a: idl.IDLType, b: idl.IDLType): boolean {
         return idl.printType(a) === idl.printType(b)
     }
 
-    private isParametersEq(a:idl.IDLParameter, b:idl.IDLParameter): boolean {
+    private isParametersEq(a: idl.IDLParameter, b: idl.IDLParameter): boolean {
         return a.name === b.name
             && a.isOptional === b.isOptional
             && a.isVariadic === b.isVariadic
             && this.isTypesEq(a.type, b.type)
     }
 
-    private isMethodPerfectlyTheSame(a:idl.IDLMethod, b:idl.IDLMethod): boolean {
+    private isMethodPerfectlyTheSame(a: idl.IDLMethod, b: idl.IDLMethod): boolean {
         return a.name === b.name
             && a.parameters.length === b.parameters.length
             && zip(a.parameters, b.parameters).every(([x, y]) => this.isParametersEq(x, y))
