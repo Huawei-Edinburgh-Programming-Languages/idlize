@@ -1,5 +1,7 @@
 package ohos.web.webview;
 
+import global.resource.Resource as Resource;
+
 [DefaultExport]
 namespace webview {
     interface WebHeader {
@@ -9,6 +11,7 @@ namespace webview {
 
     [Entity=Class]
     interface WebviewController {
-        void loadUrl(optional sequence<WebHeader> headers);
+        static void initializeWebEngine();
+        void loadUrl((String or Resource) url, optional sequence<WebHeader> headers);
     };
 };
