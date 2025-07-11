@@ -208,7 +208,6 @@ interface NodeContainerOps {
 };
 callback Callback_Size_Void = void (Size size);
 
-
 callback Callback_onDragStart = void (pointer node, DragEvent dragEvent, optional String extraParam);
 
 [Entity=Class]
@@ -222,3 +221,22 @@ interface DragDropOps {
 interface OverlayOps {
     static void setOverlayAttribute(pointer node, (String or CustomBuilder or undefined) value, optional OverlayOptions options);
 };
+
+[Entity=Class]
+interface BuilderNodeOptions {
+    [Optional] attribute  Size selfIdealSize;
+    [Optional] attribute  number type;
+    [Optional] attribute  String surfaceId;
+};
+
+[Entity=Class]
+interface BuilderNodeOps {
+    constructor();
+    void create(Callback_Void buildFunc);
+    void disposeNode();
+    void setUpdateConfigurationCallback(Callback_Void configurationUpdateFunc);
+    void setOptions(BuilderNodeOptions options);
+    boolean postTouchEvent(TouchEvent event);
+    pointer setRootFrameNodeInBuilderNode(pointer node);
+};
+
