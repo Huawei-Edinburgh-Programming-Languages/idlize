@@ -38,8 +38,8 @@
 | common_method_modifier_test13.cpp | Ilya Erokhin | done |
 | list_modifier_test.cpp | Sergey Morozov | |
 | common_method_modifier_test2.cpp | Sergey Kovalev | |
-| common_method_modifier_test17.cpp | Ilya Erokhin | |
-| common_method_modifier_test16.cpp | | |
+| common_method_modifier_test17.cpp | Ilya Erokhin | done |
+| common_method_modifier_test16.cpp | Ilya Erokhin | |
 | common_method_modifier_test19.cpp | Dmitry Smirnov| |
 | hover_event_accessor_test.cpp | Andrey Khudenkikh | |
 | mouse_event_accessor_test.cpp | Andrey Khudenkikh | |
