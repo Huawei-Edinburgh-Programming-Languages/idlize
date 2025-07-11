@@ -24,10 +24,10 @@
 | mouse_event_accessor.cpp | Sergey Kovalev | |
 | animation_extender_accessor.cpp | Evstigneev Roman | |
 | navigation_transition_proxy_accessor.cpp | Evstigneev Roman | |
-| text_field_ops_accessor.cpp | Ilya Erokhin | |
+| text_field_ops_accessor.cpp | Ilya Erokhin | done |
 | transition_effect_accessor.cpp | Sergey Kovalev | |
 | data_panel_modifier.cpp | Sergey Morozov | |
-| progress_modifier.cpp | | |
+| progress_modifier.cpp | Ilya Erokhin | |
 | indicator_component_modifier.cpp | Skroba Gleb | |
 | rich_editor_controller_accessor.cpp | Evstigneev Roman | |
 | relative_container_modifier_test.cpp |Dmitry Smirnov | |
