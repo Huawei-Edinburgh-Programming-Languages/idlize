@@ -1,4 +1,6 @@
 
+import { Token } from "./idl_token";
+
 export class NodeVisitor {
   visitCallback() {}
   visitInterface() {}
@@ -40,6 +42,15 @@ export class DictionaryNode extends Node {
 
 export class IncludesNode extends Node {
   name: string = "";
+}
+
+export class ArgumentNode extends Node {
+  name: string = "";
+  type: Token = Token.tUndefined;
+
+  constructor() {
+    super();
+  }
 }
 
 export class InterfaceNode extends Node {
