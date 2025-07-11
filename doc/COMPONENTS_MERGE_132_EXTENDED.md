@@ -37,7 +37,7 @@
 | security_component_method_modifier_test_2.cpp | Samarin Sergey | |
 | common_method_modifier_test13.cpp | Ilya Erokhin | |
 | list_modifier_test.cpp | Sergey Morozov | |
-| common_method_modifier_test2.cpp | | |
+| common_method_modifier_test2.cpp | Sergey Kovalev | |
 | common_method_modifier_test17.cpp | | |
 | common_method_modifier_test16.cpp | | |
 | common_method_modifier_test19.cpp | Dmitry Smirnov| |
