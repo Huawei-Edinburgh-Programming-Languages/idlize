@@ -4,9 +4,9 @@
 | path_accessor.cpp | Vadim Voronov | |
 | webview_controller_accessor.cpp | | |
 | security_component_method_modifier.cpp | | |
-| row_modifier.cpp | | |
+| row_modifier.cpp | Ilya Erokhin | |
 | checkbox_modifier.cpp | Ivan Tuzhilkin| |
-| alphabet_indexer_modifier.cpp | Ilya Erokhin | |
+| alphabet_indexer_modifier.cpp | Ilya Erokhin | done |
 | checkbox_group_modifier.cpp | Dudkin Sergey | |
 | column_modifier.cpp | | |
 | swiper_modifier.cpp | Dudkin Sergey | |
