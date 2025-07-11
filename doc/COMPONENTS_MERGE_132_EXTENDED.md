@@ -27,7 +27,7 @@
 | text_field_ops_accessor.cpp | Ilya Erokhin | done |
 | transition_effect_accessor.cpp | Sergey Kovalev | |
 | data_panel_modifier.cpp | Sergey Morozov | |
-| progress_modifier.cpp | Ilya Erokhin | |
+| progress_modifier.cpp | Ilya Erokhin | done |
 | indicator_component_modifier.cpp | Skroba Gleb | |
 | rich_editor_controller_accessor.cpp | Evstigneev Roman | |
 | relative_container_modifier_test.cpp |Dmitry Smirnov | |
@@ -35,7 +35,7 @@
 | security_component_method_modifier_test.cpp | Samarin Sergey | |
 | form_component_modifier_test.cpp | Vadim Voronov | |
 | security_component_method_modifier_test_2.cpp | Samarin Sergey | |
-| common_method_modifier_test13.cpp | | |
+| common_method_modifier_test13.cpp | Ilya Erokhin | |
 | list_modifier_test.cpp | Sergey Morozov | |
 | common_method_modifier_test2.cpp | | |
 | common_method_modifier_test17.cpp | | |
