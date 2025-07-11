@@ -39,7 +39,7 @@ export class PeerGenerator {
 
     private writeBody(iface: core.IDLInterface, writer: core.LanguageWriter, written: (body: Body) => void) {
         const methods = PeerGenerator.filterOutOverloads(
-            PeerGenerator.splitMethods(iface), this.converter
+            PeerGenerator.splitMethods(iface, this.config), this.converter
         )
 
         // Make declarations. It is IMPORTANT to not modify its signatures here bc
@@ -89,7 +89,8 @@ export class PeerGenerator {
         // 3. Writing getters and regular
 
         const inFileOrder = PeerGenerator.ts_collapseDuplicates(
-            iface.methods.filter(m => !isCreateOrUpdate(m.name))
+            PeerGenerator.filterOutIngnored(iface, this.config)
+                .filter(m => !isCreateOrUpdate(m.name))
         ).map(m => m.name)
 
         let getIndex = 0, regIndex = 0
@@ -281,16 +282,18 @@ export class PeerGenerator {
             return p4
         }
 
-        const isIgnored = (method: core.IDLMethod) => false // todo: use config
-        const methods = iface.methods.reduce((acc, method) => {
-            if (isIgnored(method)) {
+        const methods = this.filterOutIngnored(iface, config)
+            .reduce((acc, method) => {
+                (acc[groupFn(method)] ??= []).push(method)
                 return acc
-            }
-            (acc[groupFn(method)] ??= []).push(method)
-            return acc
-        }, {} as Record<string, core.IDLMethod[]>);
+            }, {} as Record<string, core.IDLMethod[]>);
 
         return methods
+    }
+
+    public static filterOutIngnored(iface: core.IDLInterface, config?: Config): core.IDLMethod[] {
+        //return iface.methods.filter(m => config?.isIgnored(iface.name, m.name) !== true ?? true)
+        return iface.methods
     }
 
     public static filterOutOverloads(
@@ -490,13 +493,14 @@ export class PeerGenerator {
     }
 
     public static ts_removeArrayLengthParam(parameters: readonly core.IDLParameter[]): core.IDLParameter[] {
-        return parameters.reduce((prev, curr) => {
-            const prevName = prev.at(-1)?.name
-            if (!(prevName && curr.name === `${prevName}Len`)) { //core.IDLContainerUtils.isSequence(prevType))) {
-                prev.push(curr)
+        return parameters.filter((_, index) => {
+            if (index === 0) {
+                return true
             }
-            return prev
-        }, [] as core.IDLParameter[])
+            const prevType = parameters[index - 1].type
+            const isPrevSeq = core.isContainerType(prevType) && core.IDLContainerUtils.isSequence(prevType)
+            return !isPrevSeq
+        })
     }
 
     public static hack_makeNullableParameters(parameters: readonly core.IDLParameter[], resolver: Resolver): core.IDLParameter[] {
