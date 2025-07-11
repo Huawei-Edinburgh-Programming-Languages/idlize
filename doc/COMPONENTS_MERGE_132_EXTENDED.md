@@ -45,10 +45,10 @@
 | mouse_event_accessor_test.cpp | Andrey Khudenkikh | |
 | richeditor_string_styled_controller_accessor_test.cpp | Dudkin Sergey | |
 | navigation_transition_proxy_accessor_test.cpp | Evstigneev Roman | |
-| path2d_accessor_test.cpp | Vadim Voronov  | no errors nothing todo |
+| path2d_accessor_test.cpp | Vadim Voronov  | done, no errors nothing todo |
 | key_event_accessor_test.cpp | Dudkin Sergey | |
 | mutable_styled_string_accessor_test.cpp | | |
-| matrix2d_accessor_test.cpp | Vadim Voronov | done no errors nothing todo |
+| matrix2d_accessor_test.cpp | Vadim Voronov | done, no errors nothing todo |
 | capi_generated_modifiers_test/text_area_modifier_test_1.cpp | | |
 | capi_generated_modifiers_test/text_input_modifier_test_1.cpp | | |
 | capi_generated_modifiers_test/row_modifier_test.cpp | | |
