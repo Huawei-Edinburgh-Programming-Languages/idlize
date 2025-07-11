@@ -18,7 +18,7 @@
 | key_event_accessor.cpp | Ilya Erokhin | done |
 | rich_editor_base_controller_accessor.cpp | Evsitngeev Roman | |
 | hover_event_accessor.cpp | Evstigneev Roman | |
-| custom_dialog_controller_accessor.cpp | | |
+| custom_dialog_controller_accessor.cpp | Evstigneev Roman | |
 | base_event_accessor.cpp | Sergey Kovalev | |
 | system_ops_accessor.cpp | Sergey Kovalev | |
 | mouse_event_accessor.cpp | Sergey Kovalev | |
@@ -49,6 +49,6 @@
 | key_event_accessor_test.cpp | Dudkin Sergey | |
 | mutable_styled_string_accessor_test.cpp | | |
 | matrix2d_accessor_test.cpp | Vadim Voronov | done, no errors nothing todo |
-| capi_generated_modifiers_test/text_area_modifier_test_1.cpp | | |
-| capi_generated_modifiers_test/text_input_modifier_test_1.cpp | | |
+| capi_generated_modifiers_test/text_area_modifier_test_1.cpp | Evstigneev Roman | |
+| capi_generated_modifiers_test/text_input_modifier_test_1.cpp | Evstigneev Roman | |
 | capi_generated_modifiers_test/row_modifier_test.cpp | | |
