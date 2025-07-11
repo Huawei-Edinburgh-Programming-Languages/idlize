@@ -10,7 +10,7 @@
 | checkbox_group_modifier.cpp | Dudkin Sergey | |
 | column_modifier.cpp | | |
 | swiper_modifier.cpp | Dudkin Sergey | |
-| date_picker_modifier.cpp | | |
+| date_picker_modifier.cpp | Vadim Voronov | |
 | frame_node_accessor.cpp | | |
 | form_component_modifier.cpp | Vadim Voronov | |
 | iui_context_accessor.cpp | | |
