@@ -1,6 +1,6 @@
 | File | Owner | Status |
 |------|-------|--------|
-| relative_container_modifier.cpp | | |
+| relative_container_modifier.cpp |Dmitry Smirnov | |
 | path_accessor.cpp | | |
 | webview_controller_accessor.cpp | | |
 | security_component_method_modifier.cpp | | |
@@ -30,7 +30,7 @@
 | progress_modifier.cpp | | |
 | indicator_component_modifier.cpp | | |
 | rich_editor_controller_accessor.cpp | | |
-| relative_container_modifier_test.cpp | | |
+| relative_container_modifier_test.cpp |Dmitry Smirnov | |
 | base_event_accessor_test.cpp | | |
 | security_component_method_modifier_test.cpp | | |
 | form_component_modifier_test.cpp | | |
