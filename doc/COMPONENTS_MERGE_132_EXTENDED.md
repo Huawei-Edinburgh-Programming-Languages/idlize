@@ -1,7 +1,7 @@
 | File | Owner | Status |
 |------|-------|--------|
 | relative_container_modifier.cpp |Dmitry Smirnov | |
-| path_accessor.cpp | | |
+| path_accessor.cpp | Vadim Voronov | |
 | webview_controller_accessor.cpp | | |
 | security_component_method_modifier.cpp | | |
 | row_modifier.cpp | | |
