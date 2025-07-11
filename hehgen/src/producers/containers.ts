@@ -13,23 +13,19 @@
  * limitations under the License.
  */
 
-import { D, T } from "lws";
-import { createProducer } from "../context";
-import * as idl from "@idlizer/core/idl"
+import { D, lw, T, Ts } from "lws";
+import { createProducer } from "../context"
+import * as idl from "@idlizer/core/idl";
 
-export const structureProducer = createProducer(
-  idl.isInterface,
+
+export const containerProducer = createProducer(
+  idl.isContainerType,
   (node, ctx) => {
     return {
       artifact: {
-        reference: T.cc(idl.getFQName(node)),
+        reference: T.c('#ARRAY'),
         implementationGenerator: () => {
-          return D.struct(node.name, node.properties.map(prop => {
-            return {
-              name: prop.name,
-              type: ctx.use(prop.type).reference()
-            }
-          }))
+            return D.type('#ARRAY', T.c('Array', ctx.use(node.elementType[0]).reference()))
         },
       }
     }

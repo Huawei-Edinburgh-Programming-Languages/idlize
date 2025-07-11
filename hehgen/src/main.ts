@@ -20,7 +20,8 @@ import { copyFileSync, mkdirSync, readdirSync, statSync, writeFileSync } from "n
 import { EOL } from "node:os"
 import { dirname, join, normalize, relative, resolve } from "node:path"
 import { Result, ResultStatus } from "./library/data"
-import { GeneratorContext } from "./context"
+import { GeneratorContext, MakeSelector } from "./context"
+import { Producers } from "./producers"
 
 ////////////////////////////////////////////////////////////////
 // Constants
@@ -307,13 +308,7 @@ const printers: TargetInfo[] = [
 ////////////////////////////////////////////////////////////////
 // entry point
 
-function main() {
-
-  Result.over({})
-    .with(() => ResultStatus.ok(scan(resolve(__dirname, '..', '..', 'idl', 'test'))))
-    .andThen(files => Result.over(new GeneratorContext(files.map(file => toIDLFile(file)[0])))
-      .with(() => ResultStatus.ok(true))
-    )
+function main2() {
 
   const fileNames = scan(resolve(__dirname, '..', '..', 'idl', 'test'))
   const lib = new GenLibrary(Language.TS, new NativeModuleType('__HEH__'))
@@ -354,5 +349,20 @@ function main() {
     })
     writeFileSync(join(outDir, outFile), text, 'utf-8')
   })
+}
+
+function main() {
+  const fileNames = scan(resolve(__dirname, '..', '..', 'idl', 'test'))
+  const library = fileNames.map(fileName => toIDLFile(fileName)[0])
+
+  const selector = new MakeSelector()
+  selector.register(Producers.fileProducer)
+  selector.register(Producers.referenceProducer)
+  selector.register(Producers.structureProducer)
+  selector.register(Producers.primitiveProducer)
+  selector.register(Producers.containerProducer)
+
+  const ctx = new GeneratorContext(library, selector)
+  console.log(ctx.generate(library))
 }
 main()

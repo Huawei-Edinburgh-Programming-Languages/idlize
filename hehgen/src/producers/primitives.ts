@@ -13,24 +13,25 @@
  * limitations under the License.
  */
 
-import { D, T } from "lws";
-import { createProducer } from "../context";
-import * as idl from "@idlizer/core/idl"
+import { lw, Ts } from "lws";
+import { createProducer } from "../context"
+import * as idl from "@idlizer/core/idl";
 
-export const structureProducer = createProducer(
-  idl.isInterface,
-  (node, ctx) => {
+function selectType(type:idl.IDLPrimitiveType): lw.LWType {
+    switch (type) {
+        case idl.IDLI32Type: return Ts.prim.int
+        case idl.IDLStringType: return Ts.prim.str
+        case idl.IDLVoidType: return Ts.prim.void
+    }
+    throw new Error(`Can not map ${idl.DebugUtils.debugPrintType(type)}`)
+}
+
+export const primitiveProducer = createProducer(
+  idl.isPrimitiveType,
+  node => {
     return {
       artifact: {
-        reference: T.cc(idl.getFQName(node)),
-        implementationGenerator: () => {
-          return D.struct(node.name, node.properties.map(prop => {
-            return {
-              name: prop.name,
-              type: ctx.use(prop.type).reference()
-            }
-          }))
-        },
+        reference: selectType(node),
       }
     }
   }

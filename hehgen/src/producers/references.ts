@@ -13,25 +13,18 @@
  * limitations under the License.
  */
 
-import { D, T } from "lws";
 import { createProducer } from "../context";
 import * as idl from "@idlizer/core/idl"
 
-export const structureProducer = createProducer(
-  idl.isInterface,
-  (node, ctx) => {
-    return {
-      artifact: {
-        reference: T.cc(idl.getFQName(node)),
-        implementationGenerator: () => {
-          return D.struct(node.name, node.properties.map(prop => {
-            return {
-              name: prop.name,
-              type: ctx.use(prop.type).reference()
-            }
-          }))
-        },
-      }
+export const referenceProducer = createProducer(
+    idl.isReferenceType,
+    (ref, ctx) => {
+        const found = ctx.resolver.toDeclaration(ref)
+        if (!found) {
+            throw new Error("That is bad :(")
+        }
+        return {
+            redirectTo: found
+        }
     }
-  }
 )

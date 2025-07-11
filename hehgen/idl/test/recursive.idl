@@ -1,0 +1,8 @@
+package demo.test.recursive;
+
+interface A {
+    attribute B b;
+};
+interface B {
+    attribute A a;
+};

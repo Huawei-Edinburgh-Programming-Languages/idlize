@@ -15,6 +15,9 @@
 
 import { Language, NativeModuleType, PeerLibrary } from "@idlizer/core";
 import * as idl from "@idlizer/core/idl"
+import { lw, processNPrintTS } from "lws";
+import { EOL } from "node:os";
+import { throwError } from "./library/utils";
 
 export class IDLTypeResolver {
     private legacyLib = new PeerLibrary(Language.TS, new NativeModuleType('__NOT_USED__'), true)
@@ -24,7 +27,7 @@ export class IDLTypeResolver {
         })
     }
 
-    toDeclaration(ref:idl.IDLReferenceType) {
+    toDeclaration(ref: idl.IDLReferenceType) {
         return this.legacyLib.resolveTypeReference(ref)
     }
 }
@@ -33,45 +36,163 @@ export class EmptyGeneratorContext {
 }
 
 export class MakeResult {
+    constructor(
+        private result: ProducerDescription
+    ) { }
 
+    reference() {
+        return isTerminal(this.result)
+            ? this.result.artifact.reference as lw.LWType
+            : throwError("WOW it is middle ware")
+    }
 }
 
-interface Producer {
-    produce(): void
+
+export interface MiddlewareProducerDescription {
+    go: () => void
+}
+export interface TerminalProducerDescription {
+    artifact: {
+        reference: lw.LWStatement | lw.LWExpression | lw.LWType
+        implementationGenerator?: () => lw.LWDeclaration | undefined
+    }
+}
+export interface RedirectProducerDescription {
+    redirectTo: idl.IDLNode
+}
+
+type ProducerDescription =
+    MiddlewareProducerDescription
+    | TerminalProducerDescription
+    | RedirectProducerDescription
+
+function isMiddleware(desc: ProducerDescription): desc is MiddlewareProducerDescription {
+    return "go" in desc
+}
+function isTerminal(desc: ProducerDescription): desc is TerminalProducerDescription {
+    return "artifact" in desc
+}
+function isRedirect(desc: ProducerDescription): desc is RedirectProducerDescription {
+    return "redirectTo" in desc
+}
+
+export interface Producer<N extends idl.IDLNode = idl.IDLNode> {
+    (node: N, ctx: GeneratorContext): ProducerDescription
+}
+
+export interface ProducerBox<N extends idl.IDLNode> {
+    predicate: (node: idl.IDLNode) => node is N
+    producer: Producer<N>
+}
+
+export function createProducer<N extends idl.IDLNode>(predicate: (node: idl.IDLNode) => node is N, producer: Producer<N>): ProducerBox<N> {
+    return {
+        predicate,
+        producer,
+    }
 }
 
 export class MakeSelector {
-    private readonly storage: {
-        predicate: (node:idl.IDLNode) => boolean,
-        producer: Producer,
-    }[] = []
+    private readonly storage: ProducerBox<idl.IDLNode>[] = []
 
-    register(predicate:(node:idl.IDLNode) => boolean, producer:Producer) {
-        this.storage.push({
-            predicate,
-            producer
-        })
+    register<N extends idl.IDLNode>(box: ProducerBox<N>) {
+        this.storage.push(box as any)
     }
 
-    select(node:idl.IDLNode): Producer {
+    select(node: idl.IDLNode): Producer {
         const record = this.storage.find(it => it.predicate(node))
         if (!record) {
-            throw new Error(`Can not process "${idl.getFQName(node)}"`)
+            throw new Error(`Can not process "${idl.getFQName(node)}", ${idl.IDLKind[node.kind]}`)
         }
         return record.producer
+    }
+
+    static create() {
+        return new MakeSelector()
     }
 }
 
 export class GeneratorContext {
     public resolver: IDLTypeResolver
+
+    private storage = new Map<string, ProducerDescription>()
+    private generatingQueue: TerminalProducerDescription['artifact']['implementationGenerator'][] = []
+    private renderContext = false
+
     constructor(
-        public library: idl.IDLFile[]
+        public library: idl.IDLFile[],
+        private selector: MakeSelector,
     ) {
         this.resolver = new IDLTypeResolver(library)
     }
 
-    make(node:idl.IDLNode): MakeResult {
-        return new MakeResult()
+    private getUseKey(node: idl.IDLNode): string {
+        if (idl.isFile(node)) {
+            return node.fileName ?? 'no file???'
+        }
+        if (idl.isEntry(node)) {
+            return idl.getFQName(node)
+        }
+        if (idl.isType(node)) {
+            if (idl.isReferenceType(node)) {
+                return node.name
+            }
+            if (idl.isPrimitiveType(node)) {
+                return node.name
+            }
+            if (idl.isContainerType(node)) {
+                return '#' + node.containerKind + '#' + node.elementType.map(t => this.getUseKey(t)).join('::')
+            }
+            throw new Error(`Can not process "${idl.DebugUtils.debugPrintType(node)}"`)
+        }
+        throw new Error("???")
+    }
+    private runUse(node: idl.IDLNode): ProducerDescription {
+        if (!this.renderContext) {
+            throw new Error("Can not use here!")
+        }
+        const key = this.getUseKey(node)
+        if (this.storage.has(key)) {
+            return this.storage.get(key)!
+        }
+        const producer = this.selector.select(node)
+        this.renderContext = false
+        const desc = producer(node, this)
+        this.renderContext = true
+        this.storage.set(key, desc)
+        if (isTerminal(desc)) {
+            if (desc.artifact.implementationGenerator) {
+                this.generatingQueue.push(desc.artifact.implementationGenerator)
+            }
+        }
+        if (isMiddleware(desc)) {
+            desc.go()
+        }
+        if (isRedirect(desc)) {
+            return this.runUse(desc.redirectTo)
+        }
+        return desc
+    }
+
+    use(node: idl.IDLNode): MakeResult {
+        return new MakeResult(this.runUse(node))
+    }
+
+    generate(nodes: idl.IDLNode[]) {
+        const declaration: lw.LWDeclaration[] = []
+        this.renderContext = true
+        nodes.forEach(node => this.runUse(node))
+        this.renderContext = false
+        while (this.generatingQueue.length) {
+            const generator = this.generatingQueue.shift()!
+            this.renderContext = true
+            const decl = generator()
+            this.renderContext = false
+            if (decl) {
+                declaration.push(decl)
+            }
+        }
+        return declaration.map(processNPrintTS).join(EOL)
     }
 }
 

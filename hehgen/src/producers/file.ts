@@ -13,24 +13,20 @@
  * limitations under the License.
  */
 
-import { D, T } from "lws";
 import { createProducer } from "../context";
-import * as idl from "@idlizer/core/idl"
+import * as idl from "@idlizer/core/idl";
 
-export const structureProducer = createProducer(
-  idl.isInterface,
+export const fileProducer = createProducer(
+  idl.isFile,
   (node, ctx) => {
     return {
-      artifact: {
-        reference: T.cc(idl.getFQName(node)),
-        implementationGenerator: () => {
-          return D.struct(node.name, node.properties.map(prop => {
-            return {
-              name: prop.name,
-              type: ctx.use(prop.type).reference()
-            }
-          }))
-        },
+      go: () => {
+        idl.linearizeNamespaceMembers(node.entries)
+          .filter(node => !idl.isImport(node)
+            && !idl.isNamespace(node)
+            && !idl.isCallback(node)
+          )
+          .forEach(node => ctx.use(node))
       }
     }
   }
