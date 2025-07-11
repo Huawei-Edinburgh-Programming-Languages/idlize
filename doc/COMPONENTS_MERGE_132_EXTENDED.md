@@ -21,7 +21,7 @@
 | custom_dialog_controller_accessor.cpp | | |
 | base_event_accessor.cpp | Sergey Kovalev | |
 | system_ops_accessor.cpp | Sergey Kovalev | |
-| mouse_event_accessor.cpp | | |
+| mouse_event_accessor.cpp | Sergey Kovalev | |
 | animation_extender_accessor.cpp | | |
 | navigation_transition_proxy_accessor.cpp | | |
 | text_field_ops_accessor.cpp | | |
