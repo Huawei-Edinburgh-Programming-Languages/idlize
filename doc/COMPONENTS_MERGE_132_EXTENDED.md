@@ -7,7 +7,7 @@
 | row_modifier.cpp | Ilya Erokhin | done |
 | checkbox_modifier.cpp | Ivan Tuzhilkin| |
 | alphabet_indexer_modifier.cpp | Ilya Erokhin | done |
-| checkbox_group_modifier.cpp | Dudkin Sergey | a true WRONG_GEN error and needs to be regenerated |
+| checkbox_group_modifier.cpp | Dudkin Sergey | a true WRONG_GEN error and needs to be regenerated, Callback_Opt_Boolean_Void->Callback_Union_Boolean_Undefined_Void |
 | column_modifier.cpp | Ilya Erokhin | done |
 | swiper_modifier.cpp | Dudkin Sergey | |
 | date_picker_modifier.cpp | Vadim Voronov | |
