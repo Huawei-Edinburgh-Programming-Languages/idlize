@@ -58,7 +58,7 @@ export interface TerminalProducerDescription {
     }
 }
 export interface RedirectProducerDescription {
-    redirectTo: idl.IDLNode
+    redirectTo: MakeSelectorQuery
 }
 export interface RecursiveProducerDescription {
     recursive: () => ProducerDescription
@@ -104,15 +104,22 @@ export interface Producer<N extends idl.IDLNode = idl.IDLNode> {
 }
 
 export interface ProducerBox<N extends idl.IDLNode> {
-    predicate: (node: idl.IDLNode) => node is N
+    pattern: MakeSelectorPattern<N>
     producer: Producer<N>
 }
 
-export function createProducer<N extends idl.IDLNode>(predicate: (node: idl.IDLNode) => node is N, producer: Producer<N>): ProducerBox<N> {
+export function createProducer<N extends idl.IDLNode>(pattern:MakeSelectorPattern<N>, producer: Producer<N>): ProducerBox<N> {
     return {
-        predicate,
+        pattern,
         producer,
     }
+}
+
+interface MakeSelectorQuery {
+    node: idl.IDLNode
+}
+interface MakeSelectorPattern<N extends idl.IDLNode> {
+    is: (node:idl.IDLNode) => node is N
 }
 
 export class MakeSelector {
@@ -122,10 +129,10 @@ export class MakeSelector {
         this.storage.push(box as any)
     }
 
-    select(node: idl.IDLNode): Producer {
-        const record = this.storage.find(it => it.predicate(node))
+    select(query: MakeSelectorQuery): Producer {
+        const record = this.storage.find(it => it.pattern.is(query.node))
         if (!record) {
-            throw new Error(`Can not process "${idl.getFQName(node)}", ${idl.IDLKind[node.kind]}`)
+            throw new Error(`Can not process "${idl.getFQName(query.node)}", ${idl.IDLKind[query.node.kind]}`)
         }
         return record.producer
     }
@@ -159,38 +166,38 @@ export class GeneratorContext {
         })
     }
 
-    private getUseKey(node: idl.IDLNode): string {
-        if (idl.isFile(node)) {
-            return node.fileName ?? 'no file???'
+    private getUseKey(query: MakeSelectorQuery): string {
+        if (idl.isFile(query.node)) {
+            return query.node.fileName ?? 'no file???'
         }
-        if (idl.isEntry(node)) {
-            return idl.getFQName(node)
+        if (idl.isEntry(query.node)) {
+            return idl.getFQName(query.node)
         }
-        if (idl.isType(node)) {
-            if (idl.isReferenceType(node)) {
-                return node.name
+        if (idl.isType(query.node)) {
+            if (idl.isReferenceType(query.node)) {
+                return query.node.name
             }
-            if (idl.isPrimitiveType(node)) {
-                return node.name
+            if (idl.isPrimitiveType(query.node)) {
+                return query.node.name
             }
-            if (idl.isContainerType(node)) {
-                return '#' + node.containerKind + '#' + node.elementType.map(t => this.getUseKey(t)).join('::')
+            if (idl.isContainerType(query.node)) {
+                return '#' + query.node.containerKind + '#' + query.node.elementType.map(t => this.getUseKey({ node: t })).join('::')
             }
-            throw new Error(`Can not process "${idl.DebugUtils.debugPrintType(node)}"`)
+            throw new Error(`Can not process "${idl.DebugUtils.debugPrintType(query.node)}"`)
         }
         throw new Error("???")
     }
-    private runUse(node: idl.IDLNode): ProducerDescription {
+    private runUse(query: MakeSelectorQuery): ProducerDescription {
         if (!this.renderContext) {
             throw new Error("Can not use here!")
         }
-        const key = this.getUseKey(node)
+        const key = this.getUseKey(query)
         if (this.storage.has(key)) {
             return this.storage.get(key)!
         }
-        const producer = this.selector.select(node)
+        const producer = this.selector.select(query)
         this.renderContext = false
-        const desc = producer(node, this)
+        const desc = producer(query.node, this)
         this.renderContext = true
         this.storage.set(key, desc)
         if (isTerminal(desc)) {
@@ -214,14 +221,14 @@ export class GeneratorContext {
         return desc
     }
 
-    use(node: idl.IDLNode): MakeResult {
-        return new MakeResult(this.runUse(node))
+    use(query: MakeSelectorQuery): MakeResult {
+        return new MakeResult(this.runUse(query))
     }
 
     generate(nodes: idl.IDLNode[]) {
         const declaration: lw.LWDeclaration[] = []
         this.renderContext = true
-        nodes.forEach(node => this.runUse(node))
+        nodes.forEach(node => this.runUse({ node }))
         this.renderContext = false
         while (this.generatingQueue.length) {
             const generator = this.generatingQueue.shift()!

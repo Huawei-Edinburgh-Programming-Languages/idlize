@@ -13,20 +13,21 @@
  * limitations under the License.
  */
 
-import { createProducer } from "../context";
-import * as idl from "@idlizer/core/idl"
+import { GeneratorContext } from "../../context";
 
-export const referenceProducer = createProducer(
-    { is: idl.isReferenceType },
-    (ref, ctx) => {
-        const found = ctx.resolver.toDeclaration(ref)
-        if (!found) {
-            throw new Error("That is bad :(")
-        }
-        return {
-            redirectTo: {
-                node: found
-            }
-        }
-    }
-)
+class ArgConvertor {
+    constructor(
+        private ctx: GeneratorContext,
+        private sName: string,
+    ) {}
+
+    //////////////////////
+
+    
+
+    //////////////////////
+
+
+}
+
+export function makeArgConvert() {}

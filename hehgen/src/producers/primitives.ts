@@ -27,7 +27,7 @@ function selectType(type:idl.IDLPrimitiveType): lw.LWType {
 }
 
 export const primitiveProducer = createProducer(
-  idl.isPrimitiveType,
+  { is: idl.isPrimitiveType },
   node => {
     return {
       artifact: {

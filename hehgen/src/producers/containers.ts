@@ -13,22 +13,33 @@
  * limitations under the License.
  */
 
-import { lw, T } from "lws";
+import { T } from "lws";
 import { createProducer } from "../context"
 import * as idl from "@idlizer/core/idl";
 
-
 export const containerProducer = createProducer(
-  idl.isContainerType,
+  { is: idl.isContainerType },
   (node, ctx) => {
     return {
       recursive: () => {
-        const elemRef = ctx.use(node.elementType[0]).reference()
-        return {
-          artifact: {
-            reference: T.c('#ARRAY', elemRef)
+        if (idl.IDLContainerUtils.isSequence(node)) {
+          const elemRef = ctx.use({ node: node.elementType[0] }).reference()
+          return {
+            artifact: {
+              reference: T.c('idlize.Array', elemRef)
+            }
           }
         }
+        if (idl.IDLContainerUtils.isRecord(node)) {
+          const keyRef = ctx.use({ node: node.elementType[0] }).reference()
+          const valRef = ctx.use({ node: node.elementType[1] }).reference()
+          return {
+            artifact: {
+              reference: T.c('idlize.Map', keyRef, valRef)
+            }
+          }
+        }
+        throw new Error(`Unknown type "${idl.DebugUtils.debugPrintType(node)}"`)
       }
     }
   }

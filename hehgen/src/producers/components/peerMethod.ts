@@ -13,20 +13,17 @@
  * limitations under the License.
  */
 
-import { createProducer } from "../context";
+import { D, E, lw, S, T } from "lws";
 import * as idl from "@idlizer/core/idl"
+import { GeneratorContext } from "../../context";
 
-export const referenceProducer = createProducer(
-    { is: idl.isReferenceType },
-    (ref, ctx) => {
-        const found = ctx.resolver.toDeclaration(ref)
-        if (!found) {
-            throw new Error("That is bad :(")
-        }
-        return {
-            redirectTo: {
-                node: found
-            }
-        }
-    }
-)
+export function makePeerMethod(method: idl.IDLMethod, ctx: GeneratorContext): lw.FunctionDeclaration {
+  return D.func(method.name,
+    method.parameters.map(param => ({ name: param.name, type: ctx.use({ node: param.type }).reference() })),
+    ctx.use({ node: method.returnType }).reference(),
+    S.block([
+      S.declaration('thisSerializer', T.c('Serializer'), false, E.instance('Serializer', [])),
+      S.return(E.c(42)),
+    ])
+  )
+}

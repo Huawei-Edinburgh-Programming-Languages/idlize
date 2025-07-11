@@ -17,16 +17,17 @@ import { createProducer } from "../context";
 import * as idl from "@idlizer/core/idl";
 
 export const fileProducer = createProducer(
-  idl.isFile,
+  { is: idl.isFile },
   (node, ctx) => {
     return {
       go: () => {
         idl.linearizeNamespaceMembers(node.entries)
-          .filter(node => !idl.isImport(node)
+          .filter(node =>
+               !idl.isImport(node)
             && !idl.isNamespace(node)
             && !idl.isCallback(node)
           )
-          .forEach(node => ctx.use(node))
+          .forEach(node => ctx.use({ node }))
       }
     }
   }

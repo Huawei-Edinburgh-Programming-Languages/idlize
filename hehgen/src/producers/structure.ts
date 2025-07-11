@@ -16,9 +16,10 @@
 import { D, S, T } from "lws";
 import { createProducer } from "../context";
 import * as idl from "@idlizer/core/idl"
+import { makePeerMethod } from "./components/peerMethod";
 
 export const structureProducer = createProducer(
-  idl.isInterface,
+  { is: idl.isInterface },
   (node, ctx) => {
     return {
       artifact: {
@@ -29,22 +30,18 @@ export const structureProducer = createProducer(
               node.properties.map(prop => {
                 return {
                   name: prop.name,
-                  type: ctx.use(prop.type).reference()
+                  type: ctx.use({ node: prop.type}).reference()
                 }
               }),
               node.methods.map(method => {
-                return D.func(method.name,
-                  method.parameters.map(param => ({ name: param.name, type: ctx.use(param.type).reference() })),
-                  ctx.use(method.returnType).reference(),
-                  S.block([])
-                )
+                return makePeerMethod(method, ctx)
               })
             )
           }
           return D.struct(node.name, node.properties.map(prop => {
             return {
               name: prop.name,
-              type: ctx.use(prop.type).reference()
+              type: ctx.use({ node: prop.type}).reference()
             }
           }))
         },
