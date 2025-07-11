@@ -26,7 +26,7 @@
 | navigation_transition_proxy_accessor.cpp | | |
 | text_field_ops_accessor.cpp | | |
 | transition_effect_accessor.cpp | | |
-| data_panel_modifier.cpp | | |
+| data_panel_modifier.cpp | Sergey Morozov | |
 | progress_modifier.cpp | | |
 | indicator_component_modifier.cpp | | |
 | rich_editor_controller_accessor.cpp | | |
@@ -36,7 +36,7 @@
 | form_component_modifier_test.cpp | | |
 | security_component_method_modifier_test_2.cpp | | |
 | common_method_modifier_test13.cpp | | |
-| list_modifier_test.cpp | | |
+| list_modifier_test.cpp | Sergey Morozov | |
 | common_method_modifier_test2.cpp | | |
 | common_method_modifier_test17.cpp | | |
 | common_method_modifier_test16.cpp | | |
