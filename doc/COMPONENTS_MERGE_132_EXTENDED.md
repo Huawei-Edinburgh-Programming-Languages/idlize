@@ -12,7 +12,7 @@
 | swiper_modifier.cpp | Dudkin Sergey | |
 | date_picker_modifier.cpp | | |
 | frame_node_accessor.cpp | | |
-| form_component_modifier.cpp | | |
+| form_component_modifier.cpp | Vadim Voronov | |
 | iui_context_accessor.cpp | | |
 | text_menu_item_id_accessor.cpp | | |
 | key_event_accessor.cpp | | |
@@ -33,7 +33,7 @@
 | relative_container_modifier_test.cpp |Dmitry Smirnov | |
 | base_event_accessor_test.cpp | | |
 | security_component_method_modifier_test.cpp | | |
-| form_component_modifier_test.cpp | | |
+| form_component_modifier_test.cpp | Vadim Voronov | |
 | security_component_method_modifier_test_2.cpp | | |
 | common_method_modifier_test13.cpp | | |
 | list_modifier_test.cpp | Sergey Morozov | |
@@ -45,10 +45,10 @@
 | mouse_event_accessor_test.cpp | Andrey Khudenkikh | |
 | richeditor_string_styled_controller_accessor_test.cpp | | |
 | navigation_transition_proxy_accessor_test.cpp | | |
-| path2d_accessor_test.cpp | | |
+| path2d_accessor_test.cpp | Vadim Voronov  | |
 | key_event_accessor_test.cpp | | |
 | mutable_styled_string_accessor_test.cpp | | |
-| matrix2d_accessor_test.cpp | | |
+| matrix2d_accessor_test.cpp | Vadim Voronov | |
 | capi_generated_modifiers_test/text_area_modifier_test_1.cpp | | |
 | capi_generated_modifiers_test/text_input_modifier_test_1.cpp | | |
 | capi_generated_modifiers_test/row_modifier_test.cpp | | |
