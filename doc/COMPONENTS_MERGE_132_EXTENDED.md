@@ -2,7 +2,7 @@
 |------|-------|--------|
 | relative_container_modifier.cpp |Dmitry Smirnov | |
 | path_accessor.cpp | Vadim Voronov | |
-| webview_controller_accessor.cpp | | |
+| webview_controller_accessor.cpp | Politov Mikhail | |
 | security_component_method_modifier.cpp | Samarin Sergey | |
 | row_modifier.cpp | Ilya Erokhin | done |
 | checkbox_modifier.cpp | Ivan Tuzhilkin| |
