@@ -1,7 +1,7 @@
 | File | Owner | Status |
 |------|-------|--------|
 | relative_container_modifier.cpp |Dmitry Smirnov | done |
-| path_accessor.cpp | Vadim Voronov | |
+| path_accessor.cpp | Lobah Mikhail | |
 | webview_controller_accessor.cpp | Politov Mikhail | |
 | security_component_method_modifier.cpp | Samarin Sergey | |
 | row_modifier.cpp | Ilya Erokhin | done |
