@@ -106,23 +106,30 @@ export class Visitor {
     }
 
     public isHeir(ref: core.IDLReferenceType | core.IDLInterface, name: string): boolean {
+        const needDebug = ref.name.endsWith('ETSFunctionType')
         if (core.isReferenceType(ref)) {
-            const type = this.resolveReference(ref)
+            const type = this.resolveReference(ref, needDebug)
             if (!type || !core.isInterface(type)) {
                 return false
             }
             ref = type
         }
 
+        const ns = ref.parent && core.isNamespace(ref.parent) ? ref.parent.name : ''
+        const makeFQRef = (ref: core.IDLReferenceType) => {
+            return ns.length && ref.name.indexOf('.') < 0 ?
+                core.createReferenceType(`${ns}.${ref.name}`) : ref
+        }
+
         const queue: core.IDLInterface[] = [ref]
         while (queue.length) {
             const node = queue.shift()!
-            if (node.name == name) {
+            if (node.name === name) {
                 return true;
             }
 
-             node.inheritance
-                .map(i => this.resolveReference(i))
+            node.inheritance
+                .map(i => this.resolveReference(makeFQRef(i), needDebug))
                 .filter(p => p !== undefined && core.isInterface(p))
                 .forEach(p => queue.push(p as core.IDLInterface))
         }
@@ -137,26 +144,37 @@ export class Visitor {
 
         //if (this.isHeir(ref, Config.defaultAncestor)) return true
         const type = core.isReferenceType(ref) ? this.resolveReference(ref) : ref
-        if (type && core.isInterface(type) && type.inheritance.length === 0) {
+        if (type === undefined) {
+            return false
+        }
+
+        if (["ETSFunctionType", "ValidationInfo", "ArkTsConfig", "Program"] // TODO: fix hack
+            .includes(type.name)) {
+                return true
+        }
+
+        if (core.isInterface(type) && type.inheritance.length === 0) {
             //console.log(`ArktsObject for ${type.name}`);
             return true
         }
-        // TODO: Nodes that do not have parents have to be in this list
-        if (["ValidationInfo", "ArkTsConfig", "Program"].includes(ref.name)) return true // TODO: fix
+
         return false
     }
 
-    public resolveReference(ref: core.IDLReferenceType): core.IDLEntry | undefined {
+    public resolveReference(ref: core.IDLReferenceType, debug: boolean = false): Readonly<core.IDLEntry> | undefined {
         const parts = ref.name.split('.', 2)
         const [ns, name] = parts.length == 1 ? ['', parts.at(0)] : parts
         const cns = this.namespaces[this.namespaces.length - 1][0]
 
         let symbol = this.declarations.get(ns || cns)?.get(name!)
+        if (debug) console.log(`resolveReference: ${name} from '${ns || cns}' => ${symbol?.name}`)
+
         if (!symbol) {
             // Lookup in global namespace if no namespace was specified
             if (!ns.length) {
                 symbol = this.declarations.get('')?.get(name!)
             }
+            if (debug) console.log(`resolveReference: ${name} from '' => ${symbol?.name}`)
 
             if (!symbol) {
                 this.unresolved.add(ref.name)
