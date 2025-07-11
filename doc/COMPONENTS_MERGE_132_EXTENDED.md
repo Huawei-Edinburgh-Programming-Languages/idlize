@@ -13,9 +13,9 @@
 | date_picker_modifier.cpp | Vadim Voronov | |
 | frame_node_accessor.cpp | Ivan Tuzhilkin | |
 | form_component_modifier.cpp | Vadim Voronov | |
-| iui_context_accessor.cpp | Ilya Erokhin | |
+| iui_context_accessor.cpp | Ilya Erokhin | missing from arkoala_api_generated.h |
 | text_menu_item_id_accessor.cpp | Samarin Sergey | |
-| key_event_accessor.cpp | | |
+| key_event_accessor.cpp | Ilya Erokhin | |
 | rich_editor_base_controller_accessor.cpp | Evsitngeev Roman | |
 | hover_event_accessor.cpp | | |
 | custom_dialog_controller_accessor.cpp | | |
