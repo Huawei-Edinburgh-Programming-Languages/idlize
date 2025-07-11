@@ -20,7 +20,7 @@
 | hover_event_accessor.cpp | | |
 | custom_dialog_controller_accessor.cpp | | |
 | base_event_accessor.cpp | Sergey Kovalev | |
-| system_ops_accessor.cpp | | |
+| system_ops_accessor.cpp | Sergey Kovalev | |
 | mouse_event_accessor.cpp | | |
 | animation_extender_accessor.cpp | | |
 | navigation_transition_proxy_accessor.cpp | | |
