@@ -13,7 +13,7 @@
 | date_picker_modifier.cpp | Vadim Voronov | |
 | frame_node_accessor.cpp | Ivan Tuzhilkin | |
 | form_component_modifier.cpp | Vadim Voronov | |
-| iui_context_accessor.cpp | Ilya Erokhin | missing from arkoala_api_generated.h |
+| iui_context_accessor.cpp | Ilya Erokhin | done |
 | text_menu_item_id_accessor.cpp | Samarin Sergey | |
 | key_event_accessor.cpp | Ilya Erokhin | done |
 | rich_editor_base_controller_accessor.cpp | Evsitngeev Roman | |
@@ -35,10 +35,10 @@
 | security_component_method_modifier_test.cpp | Samarin Sergey | |
 | form_component_modifier_test.cpp | Vadim Voronov | |
 | security_component_method_modifier_test_2.cpp | Samarin Sergey | |
-| common_method_modifier_test13.cpp | Ilya Erokhin | |
+| common_method_modifier_test13.cpp | Ilya Erokhin | done |
 | list_modifier_test.cpp | Sergey Morozov | |
 | common_method_modifier_test2.cpp | Sergey Kovalev | |
-| common_method_modifier_test17.cpp | | |
+| common_method_modifier_test17.cpp | Ilya Erokhin | |
 | common_method_modifier_test16.cpp | | |
 | common_method_modifier_test19.cpp | Dmitry Smirnov| |
 | hover_event_accessor_test.cpp | Andrey Khudenkikh | |
