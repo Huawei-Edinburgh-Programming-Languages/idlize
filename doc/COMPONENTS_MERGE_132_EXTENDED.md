@@ -7,9 +7,9 @@
 | row_modifier.cpp | | |
 | checkbox_modifier.cpp | Ivan Tuzhilkin| |
 | alphabet_indexer_modifier.cpp | | |
-| checkbox_group_modifier.cpp | | |
+| checkbox_group_modifier.cpp | Dudkin Sergey | |
 | column_modifier.cpp | | |
-| swiper_modifier.cpp | | |
+| swiper_modifier.cpp | Dudkin Sergey | |
 | date_picker_modifier.cpp | | |
 | frame_node_accessor.cpp | | |
 | form_component_modifier.cpp | | |
