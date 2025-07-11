@@ -33,6 +33,8 @@ const g_char2token = new Map<string, lex.Token>([
   ["void", lex.Token.tVoid],
   ["constructor", lex.Token.tConstructor],
   ["includes", lex.Token.tIncludes],
+  ["//comment", lex.Token.tComment],
+  ["/*comment*/", lex.Token.tLongComment],
 ]);
 
 function token2Name(t: lex.Token): string {
@@ -86,7 +88,7 @@ export function Parse(): idl.Definitions | null {
   const idl: string =
 `package arkui.component.idlize;
 callback Callback_Extender_OnProgress = void (f32 value);
-interface Content {};
+interface Content {/* test!! */};  // hahaha
 interface Callback {
     attribute Colors colors;
     void invoke(T data);
@@ -179,7 +181,7 @@ function InterfaceOrMixin(): idl.Node | null {
 }
 
 function InterfaceRest(): idl.Node | null {
-  let res: idl.InterfaceNode = new idl.InterfaceNode();
+  let res: idl.InterfaceNode = new idl.InterfaceNode(g_lookahead.text);
   if (g_lookahead.type == lex.Token.tId) {
     //    identifier Inheritance { InterfaceMembers } ;
     Match(lex.Token.tId); Inheritance(); Match(lex.Token.tLBrace); InterfaceMembers(); Match(lex.Token.tRBrace); Match(lex.Token.tSemicolon);
@@ -297,15 +299,18 @@ function IncludesStatement(): idl.Node | null {
 }
 
 function Package(): idl.Node | null {
-  let res: idl.PackageNode = new idl.PackageNode();
+  let text: string = "";
   Match(lex.Token.tPackage);
   while (g_lookahead.type != lex.Token.tEnd) {
+    text += g_lookahead.text;
     Match(lex.Token.tId);
     if (g_lookahead.type == lex.Token.tSemicolon)
       break;
+    text += ".";
     Match(lex.Token.tDot);
   }
   Match(lex.Token.tSemicolon);
+  let res: idl.PackageNode = new idl.PackageNode(text);
   return res;
 }
 

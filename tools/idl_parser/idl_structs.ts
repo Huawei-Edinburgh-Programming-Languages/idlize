@@ -44,6 +44,15 @@ export class IncludesNode extends Node {
 
 export class InterfaceNode extends Node {
   name: string = "";
+
+  constructor(val: string) {
+    super();
+    this.name = val;
+  }
+
+  descr(): string {
+    return "InterfaceNode: " + this.name;
+  }
 }
 
 export class NamespaceNode extends Node {
@@ -52,6 +61,15 @@ export class NamespaceNode extends Node {
 
 export class PackageNode extends Node {
   name: string = "";
+
+  constructor(val: string) {
+    super();
+    this.name = val;
+  }
+
+  descr(): string {
+    return "PackageNode: " + this.name;
+  }
 }
 
 export class TypedefNode extends Node {
