@@ -39,7 +39,7 @@
 | list_modifier_test.cpp | Sergey Morozov | |
 | common_method_modifier_test2.cpp | Sergey Kovalev | |
 | common_method_modifier_test17.cpp | Ilya Erokhin | done |
-| common_method_modifier_test16.cpp | Ilya Erokhin | |
+| common_method_modifier_test16.cpp | Ilya Erokhin | done |
 | common_method_modifier_test19.cpp | Dmitry Smirnov| |
 | hover_event_accessor_test.cpp | Andrey Khudenkikh | |
 | mouse_event_accessor_test.cpp | Andrey Khudenkikh | |
@@ -47,7 +47,7 @@
 | navigation_transition_proxy_accessor_test.cpp | Evstigneev Roman | |
 | path2d_accessor_test.cpp | Vadim Voronov  | done, no errors nothing todo |
 | key_event_accessor_test.cpp | Dudkin Sergey | |
-| mutable_styled_string_accessor_test.cpp | | |
+| mutable_styled_string_accessor_test.cpp | Ilya Erokhin | |
 | matrix2d_accessor_test.cpp | Vadim Voronov | done, no errors nothing todo |
 | capi_generated_modifiers_test/text_area_modifier_test_1.cpp | Evstigneev Roman | |
 | capi_generated_modifiers_test/text_input_modifier_test_1.cpp | Evstigneev Roman | |
