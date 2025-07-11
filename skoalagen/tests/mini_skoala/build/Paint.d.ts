@@ -13,7 +13,8 @@
  * limitations under the License.
  */
 
-import { Finalizable } from "index"
+// import { Finalizable } from "index"
+import { Finalizable } from "./Finalizable"
 
 export class Paint extends Finalizable {
     constructor(ptr: pointer)

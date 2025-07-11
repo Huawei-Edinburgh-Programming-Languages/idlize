@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { RefCounted } from "index"
+import { RefCounted } from "./RefCounted"
 
 export declare class Drawable extends RefCounted {
     constructor(ptr: pointer);

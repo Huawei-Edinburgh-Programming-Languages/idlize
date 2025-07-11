@@ -116,6 +116,27 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                 this.assignFinalizable(className, peerPtr, writer)
             }
         }, this.getSuperDelegationCall(this.printer, clazz, peerPtrExpr, collapseCtors, superClassName))
+
+        const classTypeParameters = clazz.generics?.map(sanitizeGenerics)
+        if (!collapseCtors) {
+            for (const ctor of clazz.ctors) {
+                this.printCtor(clazz, ctor)
+            }
+        }
+        this.printer.makeStaticBlock(() => {
+            if (!collapseCtors) {
+                for (const ctor of clazz.ctors) {
+                    const pointerType = IDLPointerType
+                    this.library.setCurrentContext(`${clazz.className}.constructor`)
+                    writePeerMethod(this.library, this.printer, ctor, true, this.dumpSerialized, "", "", pointerType)
+                    this.library.setCurrentContext(undefined)
+                }
+            }
+            if (clazz.finalizer) printPeerFinalizer(clazz, this.printer)
+            if (clazz.isInterface) {
+                writeFromPtrMethod(clazz, this.printer, collapseCtors, this.maxCtorParams, classTypeParameters)
+            }
+        })
     }
 
     printCollapsedCtors(clazz: MaterializedClass, superClassName?: string) {
@@ -403,29 +424,10 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             this.printFields(clazz)
 
             this.printBaseCtor(clazz, collapseConstructors, superClassName)
-            if (!collapseConstructors) {
-                for (const ctor of clazz.ctors) {
-                    this.printCtor(clazz, ctor)
-                }
-            }
-            writer.makeStaticBlock(() => {
-                if (!collapseConstructors) {
-                    for (const ctor of clazz.ctors) {
-                        const pointerType = IDLPointerType
-                        this.library.setCurrentContext(`${clazz.className}.constructor`)
-                        writePeerMethod(this.library, this.printer, ctor, true, this.dumpSerialized, "", "", pointerType)
-                        this.library.setCurrentContext(undefined)
-                    }
-                }
-                if (clazz.finalizer) printPeerFinalizer(clazz, writer)
-                if (clazz.isInterface) {
-                    writeFromPtrMethod(clazz, writer, collapseConstructors, this.maxCtorParams, classTypeParameters)
-                }
-            })
             this.printOverloads(clazz)
             this.printTaggedMethods(clazz)
             this.printMethods(clazz)
-            }, superClassName, interfaces.length === 0 ? undefined : interfaces, classTypeParameters)
+        }, superClassName, interfaces.length === 0 ? undefined : interfaces, classTypeParameters)
     }
 }
 

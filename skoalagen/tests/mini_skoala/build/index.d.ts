@@ -22,8 +22,8 @@ export * from "./Rect"
 export * from "./SurfaceProps"
 export * from "./utils"
 
-export class Finalizable {}
-export class RefCounted {}
+// export class Finalizable {}
+// export class RefCounted {}
 
 export function testFun(): void
 export function rgbColor(r: uint8, g: uint8, b: uint8, a: uint8): void

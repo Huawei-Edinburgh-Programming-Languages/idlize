@@ -20,7 +20,7 @@ import { isExternalType } from './isExternalType'
 import { getSuper } from './getSuperType'
 import { ReferenceResolver } from './ReferenceResolver'
 
-export function isMaterialized(declaration: idl.IDLInterface, resolver: ReferenceResolver): boolean {
+export function isMaterialized(declaration: idl.IDLInterface, resolver: ReferenceResolver, isPeerDecl = false): boolean {
     if (!idl.isInterfaceSubkind(declaration) && !idl.isClassSubkind(declaration)) return false
     if (idl.isHandwritten(declaration) || isBuilderClass(declaration)) return false
     if (generatorConfiguration().forceResource.includes(declaration.name)) {
@@ -29,6 +29,8 @@ export function isMaterialized(declaration: idl.IDLInterface, resolver: Referenc
 
     if (generatorConfiguration().forceMaterialized.includes(declaration.name)) {
         return true
+    } else if (isPeerDecl) {
+        return false
     }
 
     // TODO: rework this
@@ -83,8 +85,8 @@ function isSelfReturnMethod(method:idl.IDLMethod, entry:idl.IDLEntry, resolver: 
     return idl.getFQName(found) === idl.getFQName(entry)
 }
 
-export function isStaticMaterialized(declaration: idl.IDLInterface, resolver: ReferenceResolver): boolean {
-    if (isMaterialized(declaration, resolver)) {
+export function isStaticMaterialized(declaration: idl.IDLInterface, resolver: ReferenceResolver, isPeerDecl = false): boolean {
+    if (isMaterialized(declaration, resolver, isPeerDecl)) {
         if (declaration.properties.length || declaration.constructors.length) return false
         if (!declaration.methods.every(it => it.isStatic && !isSelfReturnMethod(it, declaration, resolver))) return false
         const superClass = getSuper(declaration, resolver)

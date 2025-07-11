@@ -269,6 +269,12 @@
                             "items": {
                                 "type": "string"
                             }
+                        },
+                        "ignoreSuperTypes": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     },
                     "required": [

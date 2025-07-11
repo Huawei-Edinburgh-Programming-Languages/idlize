@@ -54,6 +54,8 @@
     "run:dummy:arkts": "npm run generate:dummy:idl && node . --idl2peer --language=arkts --default-idl-package dummy --input-dir ./tests/dummy/generated/idl,./tests/dummy/idl --output-dir ./tests/dummy",
     "configure:native-node-host-ts-ohos-context": "cd ./native && meson setup -Dsource_set=ohos-context build-node-host-ts-ohos-context",
     "compile:native-node-host-ts-ohos-context": "npm run configure:native-node-host-ts-ohos-context && cd native && meson compile --verbose -C build-node-host-ts-ohos-context && meson install -C build-node-host-ts-ohos-context",
-    "generate-schema": "npm run compile && node . --show-config-schema > generation-config/schema.json"
+    "generate-schema": "npm run compile && node . --show-config-schema > generation-config/schema.json",
+    "generate:skoala:idl": "npm run compile && node ../dtsgen --dts2idl --output-dir ./out/skoala/idl --input-dir ../skoalagen/tests/mini_skoala/build/ --base-dir ../skoalagen,../skoalagen/tests/mini_skoala/build/ --options-file ./generation-config/skoala-config.json",
+    "run:skoala:ts": "npm run generate:skoala:idl && node . --use-new-ohos --idl2peer --input-dir ./out/skoala/idl --output-dir ./out/skoala/skoala_ohos --language=ts --options-file ./generation-config/skoala-config.json"
   }
 }

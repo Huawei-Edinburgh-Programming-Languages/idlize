@@ -14,8 +14,8 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { FieldModifier, getSuperType, IDLInterface, IDLMethod, IDLProperty, isBuilderClass, isClassSubkind, isInterface, isMaterialized, Language, LanguageWriter, LayoutNodeRole, lib, LibraryInterface, linearizeNamespaceMembers, maybeOptional, Method, MethodModifier, NamedMethodSignature, NativeModuleType, PeerLibrary } from "@idlizer/core";
-import { allowsOverloads, collapseSameMethodsIDL, collapseSameNamedMethods, collectDeclDependencies, groupOverloadsIDL, groupSameSignatureMethodsIDL, ImportsCollector, peerGeneratorConfiguration, PrinterResult } from "@idlizer/libohos";
+import { FieldModifier, getSuperType, IDLInterface, IDLMethod, IDLProperty, isClassSubkind, isInterface, LanguageWriter, LayoutNodeRole, LibraryInterface, linearizeNamespaceMembers, Method, MethodModifier, NativeModuleType } from "@idlizer/core";
+import { allowsOverloads, collapseSameMethodsIDL, collectDeclDependencies, groupOverloadsIDL, groupSameSignatureMethodsIDL, ImportsCollector, peerGeneratorConfiguration, PrinterResult } from "@idlizer/libohos";
 
 export function printComponentClasses(library: LibraryInterface): PrinterResult[] {
     return new OHOSComponentVisitor(library).print()
@@ -39,7 +39,7 @@ class OHOSComponentVisitor {
 
             collectDeclDependencies(this.library, entry, collector)
             collector.addFeatures(['NativeBuffer'], '@koalaui/interop')
-            collector.addFeatures([`${this.library.name.toUpperCase()}NativeModule`], `./${this.library.name.toLowerCase()}.INTERNAL`)
+            // collector.addFeatures([`${this.library.name.toUpperCase()}NativeModule`], `./${this.library.name.toLowerCase()}.INTERNAL`)
 
             const superClass = getSuperType(entry, this.library)
             const interfaces = entry.inheritance.filter(it => !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.Extends)).map(it => it.name)

@@ -113,7 +113,7 @@ export class DependencyProcessor {
         const isDeclInterface = idl.isInterfaceSubkind(decl) && !isStaticMaterialized
         const implemenationParentName = isDeclInterface ? getInternalClassName(decl.name) : decl.name
         const resolvedDecl = getSuper(decl, this.library)
-        const interfaces: idl.IDLReferenceType[] = []
+        let interfaces: idl.IDLReferenceType[] = []
         const propertiesFromInterface: idl.IDLProperty[] = []
         let superType: idl.IDLReferenceType | undefined = undefined
         if (resolvedDecl) {
@@ -124,6 +124,8 @@ export class DependencyProcessor {
                 superType = undefined
             }
         }
+
+        interfaces = interfaces.filter(it => !peerGeneratorConfiguration().materialized.ignoreSuperTypes.includes(it.name))
 
         let constructors: idl.IDLConstructor[] = decl.constructors
         if (constructors.length == 0 && !isStaticMaterialized) {
@@ -260,11 +262,11 @@ export class DependencyProcessor {
     }
 
     protected processDep(dep: idl.IDLEntry, isPeerDecl: boolean): boolean {
-        if (!isPeerDecl && idl.isInterface(dep) && [idl.IDLInterfaceSubkind.Class, idl.IDLInterfaceSubkind.Interface].includes(dep.subkind)) {
-            if (isStaticMaterialized(dep, this.library)) {
+        if (idl.isInterface(dep) && [idl.IDLInterfaceSubkind.Class, idl.IDLInterfaceSubkind.Interface].includes(dep.subkind)) {
+            if (isStaticMaterialized(dep, this.library, isPeerDecl)) {
                 this.processMaterialized(dep, true)
                 return true
-            } else if (isMaterialized(dep, this.library)) {
+            } else if (isMaterialized(dep, this.library, isPeerDecl)) {
                 this.processMaterialized(dep)
                 return true
             }

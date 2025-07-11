@@ -13,7 +13,8 @@
  * limitations under the License.
  */
 
-import { Finalizable } from "index"
+// import { Finalizable } from "index"
+import { Finalizable } from "./Finalizable"
 
 export declare class Canvas extends Finalizable {
     constructor(ptr: pointer, managed?: boolean)
