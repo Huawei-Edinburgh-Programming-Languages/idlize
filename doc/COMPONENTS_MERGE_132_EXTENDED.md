@@ -28,7 +28,7 @@
 | transition_effect_accessor.cpp | Sergey Kovalev | done|
 | data_panel_modifier.cpp | Sergey Morozov | |
 | progress_modifier.cpp | Ilya Erokhin | done |
-| indicator_component_modifier.cpp | Skroba Gleb | |
+| indicator_component_modifier.cpp | Skroba Gleb | done |
 | rich_editor_controller_accessor.cpp | Evstigneev Roman | done |
 | relative_container_modifier_test.cpp |Dmitry Smirnov | done|
 | base_event_accessor_test.cpp | Politov Mikhail | |
