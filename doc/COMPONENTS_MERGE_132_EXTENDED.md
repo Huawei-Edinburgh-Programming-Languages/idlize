@@ -51,4 +51,4 @@
 | matrix2d_accessor_test.cpp | Vadim Voronov | done, no errors nothing todo |
 | capi_generated_modifiers_test/text_area_modifier_test_1.cpp | Evstigneev Roman | done |
 | capi_generated_modifiers_test/text_input_modifier_test_1.cpp | Evstigneev Roman | done |
-| capi_generated_modifiers_test/row_modifier_test.cpp | Dudkin Sergey | |
+| capi_generated_modifiers_test/row_modifier_test.cpp | Dudkin Sergey | done |
