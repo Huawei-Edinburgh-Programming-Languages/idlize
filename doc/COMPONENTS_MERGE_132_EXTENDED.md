@@ -15,7 +15,7 @@
 | form_component_modifier.cpp | Vadim Voronov | |
 | iui_context_accessor.cpp | Ilya Erokhin | missing from arkoala_api_generated.h |
 | text_menu_item_id_accessor.cpp | Samarin Sergey | |
-| key_event_accessor.cpp | Ilya Erokhin | |
+| key_event_accessor.cpp | Ilya Erokhin | done |
 | rich_editor_base_controller_accessor.cpp | Evsitngeev Roman | |
 | hover_event_accessor.cpp | Evstigneev Roman | |
 | custom_dialog_controller_accessor.cpp | | |
@@ -24,7 +24,7 @@
 | mouse_event_accessor.cpp | Sergey Kovalev | |
 | animation_extender_accessor.cpp | Evstigneev Roman | |
 | navigation_transition_proxy_accessor.cpp | Evstigneev Roman | |
-| text_field_ops_accessor.cpp | | |
+| text_field_ops_accessor.cpp | Ilya Erokhin | |
 | transition_effect_accessor.cpp | | |
 | data_panel_modifier.cpp | Sergey Morozov | |
 | progress_modifier.cpp | | |
