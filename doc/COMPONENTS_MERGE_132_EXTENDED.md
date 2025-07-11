@@ -14,7 +14,7 @@
 | frame_node_accessor.cpp | Ivan Tuzhilkin | |
 | form_component_modifier.cpp | Vadim Voronov | |
 | iui_context_accessor.cpp | | |
-| text_menu_item_id_accessor.cpp | | |
+| text_menu_item_id_accessor.cpp | Samarin Sergey | |
 | key_event_accessor.cpp | | |
 | rich_editor_base_controller_accessor.cpp | Evsitngeev Roman | |
 | hover_event_accessor.cpp | | |
