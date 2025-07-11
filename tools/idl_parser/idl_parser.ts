@@ -460,24 +460,28 @@ function Arguments() {
   // ε
 }
 
-function Argument() {
+function Argument(): idl.ArgumentNode {
   if (g_lookahead.type == Token.tLSqrBracket)
     ExtendedAttributeList();
-  ArgumentRest();
+  return ArgumentRest();
 }
 
-function ArgumentRest() {
+function ArgumentRest(): idl.ArgumentNode {
+  let res: idl.ArgumentNode;
   if (g_lookahead.type == Token.tOptional) {
-    Match(Token.tOptional); TypeWithExtendedAttributes(); ArgumentName(); Default();
+    Match(Token.tOptional); TypeWithExtendedAttributes(); res = ArgumentName(); Default();
   } else {
-    Match(Token.tId); Ellipsis(); ArgumentName();  // I replace Type to Id
+    let type: string = g_lookahead.text;
+    Match(Token.tId); Ellipsis(); res = ArgumentName();  // I replace Type to Id
+    res.type = type;
+    console.log("arg: ", res.name, res.type);
   }
+  return res;
 }
 
-function ArgumentName() {
+function ArgumentName(): idl.ArgumentNode {
   let res: idl.ArgumentNode = new idl.ArgumentNode;
   if (lex.IsItArgumentNameKeyword(g_lookahead.type)) {
-    res.type = g_lookahead.type;
     Match(g_lookahead.type);
   }
   res.name = g_lookahead.text;

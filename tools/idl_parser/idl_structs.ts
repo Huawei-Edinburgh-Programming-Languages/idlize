@@ -46,7 +46,7 @@ export class IncludesNode extends Node {
 
 export class ArgumentNode extends Node {
   name: string = "";
-  type: Token = Token.tUndefined;
+  type: string = "";
 
   constructor() {
     super();
