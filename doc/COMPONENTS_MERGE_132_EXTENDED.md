@@ -7,7 +7,7 @@
 | row_modifier.cpp | Ilya Erokhin | done |
 | checkbox_modifier.cpp | Ivan Tuzhilkin| |
 | alphabet_indexer_modifier.cpp | Ilya Erokhin | done |
-| checkbox_group_modifier.cpp | Dudkin Sergey | |
+| checkbox_group_modifier.cpp | Dudkin Sergey | a true WRONG_GEN error and needs to be regenerated |
 | column_modifier.cpp | Ilya Erokhin | done |
 | swiper_modifier.cpp | Dudkin Sergey | |
 | date_picker_modifier.cpp | Vadim Voronov | |
