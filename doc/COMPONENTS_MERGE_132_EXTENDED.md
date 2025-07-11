@@ -19,7 +19,7 @@
 | rich_editor_base_controller_accessor.cpp | | |
 | hover_event_accessor.cpp | | |
 | custom_dialog_controller_accessor.cpp | | |
-| base_event_accessor.cpp | | |
+| base_event_accessor.cpp | Sergey Kovalev | |
 | system_ops_accessor.cpp | | |
 | mouse_event_accessor.cpp | | |
 | animation_extender_accessor.cpp | | |
