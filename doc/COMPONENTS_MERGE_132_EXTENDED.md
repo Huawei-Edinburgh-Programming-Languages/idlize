@@ -31,7 +31,7 @@
 | indicator_component_modifier.cpp | Skroba Gleb | |
 | rich_editor_controller_accessor.cpp | Evstigneev Roman | |
 | relative_container_modifier_test.cpp |Dmitry Smirnov | |
-| base_event_accessor_test.cpp | | |
+| base_event_accessor_test.cpp | Politov Mikhail | |
 | security_component_method_modifier_test.cpp | Samarin Sergey | |
 | form_component_modifier_test.cpp | Vadim Voronov | |
 | security_component_method_modifier_test_2.cpp | Samarin Sergey | |
