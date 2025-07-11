@@ -41,8 +41,8 @@
 | common_method_modifier_test17.cpp | | |
 | common_method_modifier_test16.cpp | | |
 | common_method_modifier_test19.cpp | | |
-| hover_event_accessor_test.cpp | | |
-| mouse_event_accessor_test.cpp | | |
+| hover_event_accessor_test.cpp | Andrey Khudenkikh | |
+| mouse_event_accessor_test.cpp | Andrey Khudenkikh | |
 | richeditor_string_styled_controller_accessor_test.cpp | | |
 | navigation_transition_proxy_accessor_test.cpp | | |
 | path2d_accessor_test.cpp | | |
