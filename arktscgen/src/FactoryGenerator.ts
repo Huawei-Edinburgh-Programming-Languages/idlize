@@ -4,6 +4,7 @@ import { PeerGenerator } from "./PeerGenerator"
 import { PeersConstructions } from "./constuctions/PeersConstructions"
 import { FactoryConstructions } from "./constuctions/FactoryConstructions"
 import assert from "assert"
+import { mangleIfKeyword } from "./general/common"
 
 export class FactoryGenerator {
     // todo: split body into methods
@@ -21,13 +22,11 @@ export class FactoryGenerator {
         const gettersTypes = body.getters.map(getReturnType)
         const methods = body.creates.filter(method => {
             const args = method.signature.args
-            // todo: add arg name == getter name check
             return args.length && args.every(
                 (a, index) => gettersTypes.includes(getType(a)) &&
                     gettersNames.includes(method.signature.argNames![index]) )
         })
 
-        //console.log(`methods: ${methods.map(m => m.name).join('+')}`);
         if (methods.length !== 1) {
             return
         }
@@ -37,20 +36,18 @@ export class FactoryGenerator {
             PeersConstructions.universalCreate(iface.name),
             core.createReferenceType(iface.name)
         )
+        //method.signature.argNames = method.signature.argNames!.map(mangleIfKeyword)
 
         // Write create method
 
-        writer.writeMethodImplementation(
-            method,
-            () => writer.writeStatement(
-                writer.makeReturn(
-                    writer.makeFunctionCall(
-                       PeersConstructions.callPeerMethod(iface.name, method.name),
-                       method.signature.argNames?.map(writer.makeString.bind(writer)) ?? []
-                    )
-                )
-            )
-        )
+        const _str = writer.makeString.bind(writer)
+        writer.writeMethodImplementation(method, () => writer.writeStatement(
+            writer.makeReturn(writer.makeFunctionCall(
+                PeersConstructions.callPeerMethod(iface.name, method.name),
+                method.signature.argNames?.map(_str) ?? []
+            ))
+        ))
+        writer.print(',')
 
         // Write update method
 
@@ -59,21 +56,18 @@ export class FactoryGenerator {
             .filter(m => argsKind.includes(getReturnType(m)) && method.signature.argNames?.includes(m.name))
             .sort((a, b) => argsKind.indexOf(getReturnType(a)) - argsKind.indexOf(getReturnType(b)))
 
-        //console.log(`${body.getters.map(a => a.name)}`);
-        //console.log(`${getters.length} === ${method.signature.argNames?.length}`);
         assert(getters.length === method.signature.argNames?.length, `Failed method: ${iface.name}.${method.name}`)
 
         const conditionStmt = writer.makeCondition(
-            writer.makeString(
-                FactoryConstructions.all(
-                    method.signature.argNames
-                        ?.map((m, ind) => FactoryConstructions.isSame(m, getters.at(ind)!.name)) ?? []
-                )
-            ),
+            _str(FactoryConstructions.all(
+                method.signature.argNames
+                    ?.map((m, ind) => FactoryConstructions.isSame(m, getters.at(ind)!.name)) ?? []
+            )),
+            // then
             writer.makeReturn(
-                writer.makeString(FactoryConstructions.original)
+                _str(FactoryConstructions.original)
             )
-        )
+        ) // condition
 
         method.name = PeersConstructions.universalUpdate(iface.name)
         method.signature.args.unshift(core.createReferenceType(iface))
@@ -83,7 +77,19 @@ export class FactoryGenerator {
             method,
             () => {
                 writer.writeStatement(conditionStmt)
+                writer.writeStatement(
+                    writer.makeReturn(writer.makeFunctionCall(
+                        FactoryConstructions.updateNodeByNode, [
+                            writer.makeFunctionCall(
+                                PeersConstructions.callPeerMethod(iface.name, method.name),
+                                method.signature.argNames!.slice(1).map(_str) // removes original arg
+                            ),
+                            _str(FactoryConstructions.original)
+                        ]
+                    )) // return
+                ) // stmt
             }
         )
+        writer.print(',')
     }
 }
