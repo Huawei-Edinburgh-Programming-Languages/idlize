@@ -43,7 +43,7 @@
 | common_method_modifier_test19.cpp | | |
 | hover_event_accessor_test.cpp | Andrey Khudenkikh | |
 | mouse_event_accessor_test.cpp | Andrey Khudenkikh | |
-| richeditor_string_styled_controller_accessor_test.cpp | | |
+| richeditor_string_styled_controller_accessor_test.cpp | Dudkin Sergey | |
 | navigation_transition_proxy_accessor_test.cpp | Evstigneev Roman | |
 | path2d_accessor_test.cpp | Vadim Voronov  | |
 | key_event_accessor_test.cpp | Dudkin Sergey | |
