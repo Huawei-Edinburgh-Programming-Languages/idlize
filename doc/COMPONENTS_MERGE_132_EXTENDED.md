@@ -23,7 +23,7 @@
 | system_ops_accessor.cpp | Sergey Kovalev | |
 | mouse_event_accessor.cpp | Sergey Kovalev | |
 | animation_extender_accessor.cpp | | |
-| navigation_transition_proxy_accessor.cpp | | |
+| navigation_transition_proxy_accessor.cpp | Evstigneev Roman | |
 | text_field_ops_accessor.cpp | | |
 | transition_effect_accessor.cpp | | |
 | data_panel_modifier.cpp | Sergey Morozov | |
@@ -44,7 +44,7 @@
 | hover_event_accessor_test.cpp | Andrey Khudenkikh | |
 | mouse_event_accessor_test.cpp | Andrey Khudenkikh | |
 | richeditor_string_styled_controller_accessor_test.cpp | | |
-| navigation_transition_proxy_accessor_test.cpp | | |
+| navigation_transition_proxy_accessor_test.cpp | Evstigneev Roman | |
 | path2d_accessor_test.cpp | Vadim Voronov  | |
 | key_event_accessor_test.cpp | | |
 | mutable_styled_string_accessor_test.cpp | | |
