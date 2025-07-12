@@ -480,7 +480,7 @@
         },
         "Text": {
             "attributeModifier": {
-                "hookName": "hookTabsAttributeIndexImpl"
+                "hookName": "hookTextAttributeModifier"
             }
         }
     },
