@@ -1,7 +1,7 @@
 |File Name|Owner|Status|
 |---------|-----|------|
 |common_shape_method_modifier_test.cpp|||
-|common_method_modifier_test14.cpp|||
+|common_method_modifier_test14.cpp| Lobah Mikhail||
 |common_method_modifier_test2.cpp|||
 |text_timer_modifier_test.cpp|||
 |relative_container_modifier_test.cpp|||
@@ -9,7 +9,7 @@
 |common_method_modifier_test.cpp|||
 |date_picker_modifier_test.cpp|||
 |security_component_method_modifier_test_2.cpp|||
-|common_method_modifier_test6.cpp|||
+|common_method_modifier_test6.cpp| Lobah Mikhail||
 |shape_clip_accessor_test.cpp|||
 |frame_node_accessor_test.cpp|||
 |base_event_accessor_test.cpp|||
