@@ -33,7 +33,7 @@
 |tabs_modifier.cpp|||
 |embedded_component_modifier.cpp|||
 |custom_dialog_controller_peer_impl.cpp|||
-|common_method_modifier.cpp|||
+|common_method_modifier.cpp| Lobah Mikhail||
 |list_modifier.cpp|||
 |custom_dialog_controller_accessor.cpp|||
 |select_modifier.cpp|||
