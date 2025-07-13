@@ -2,7 +2,7 @@
 |---------|-----|------|
 |common_shape_method_modifier_test.cpp|||
 |common_method_modifier_test14.cpp| Lobah Mikhail||
-|common_method_modifier_test2.cpp|||
+|common_method_modifier_test2.cpp| Lobah Mikhail||
 |text_timer_modifier_test.cpp|||
 |relative_container_modifier_test.cpp|||
 |scrollable_common_method_modifier_test.cpp|||
