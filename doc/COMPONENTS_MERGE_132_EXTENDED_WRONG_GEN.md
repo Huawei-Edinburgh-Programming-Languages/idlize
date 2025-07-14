@@ -40,7 +40,7 @@
 |common_shape_method_modifier.cpp| Evstigneev Roman ||
 |slider_modifier.cpp| Ivan Tuzhilkin ||
 |nav_path_info_accessor.cpp| Evstigneev Roman ||
-|relative_container_modifier.cpp| Evstigneev Roman ||
+|relative_container_modifier.cpp| Evstigneev Roman, Vadim Voronov | in progress|
 |animation_extender_accessor.cpp|||
 |ui_extension_component_modifier.cpp| Pavelev Ivan ||
 |nav_path_stack_accessor.cpp| Evstigneev Roman ||
