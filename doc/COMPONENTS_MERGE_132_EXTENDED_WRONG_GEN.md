@@ -45,7 +45,7 @@
 |ui_extension_component_modifier.cpp|||
 |nav_path_stack_accessor.cpp| Evstigneev Roman ||
 |text_picker_modifier.cpp| Dudkin Sergey ||
-|navigation_context.cpp|||
+|navigation_context.cpp| Dudkin Sergey ||
 |rich_editor_controller_accessor.cpp| Evstigneev Roman ||
 |converter_enums.cpp| Samarin Sergey ||
 |converter.cpp|||
