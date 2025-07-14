@@ -19,7 +19,7 @@
 |key_event_accessor_test.cpp| Sergey Kovalev ||
 |drag_event_accessor_test.cpp| Mikhail Politov ||
 |global_scope_common_accessor_test.cpp|||
-|text_timer_modifier.cpp| Sergey Kovalev ||
+|text_timer_modifier.cpp| Vadim Voronov ||
 |global_scope_ohos_font_accessor.cpp|||
 |all_modifiers.cpp|||
 |text_area_modifier.cpp| Ivan Tuzhilkin ||
