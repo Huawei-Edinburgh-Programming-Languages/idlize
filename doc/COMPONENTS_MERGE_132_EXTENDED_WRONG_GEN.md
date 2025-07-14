@@ -15,7 +15,7 @@
 |base_event_accessor_test.cpp|||
 |shape_mask_accessor_test.cpp|||
 |mutable_styled_string_accessor_test.cpp|||
-|richeditor_controller_accessor_callback_test.cpp|||
+|richeditor_controller_accessor_callback_test.cpp| Evstigneev Roman ||
 |key_event_accessor_test.cpp|||
 |drag_event_accessor_test.cpp|||
 |global_scope_common_accessor_test.cpp|||
@@ -37,7 +37,7 @@
 |list_modifier.cpp|||
 |custom_dialog_controller_accessor.cpp|||
 |select_modifier.cpp|||
-|common_shape_method_modifier.cpp|||
+|common_shape_method_modifier.cpp| Evstigneev Roman ||
 |slider_modifier.cpp|||
 |nav_path_info_accessor.cpp|||
 |relative_container_modifier.cpp|||
@@ -46,7 +46,7 @@
 |nav_path_stack_accessor.cpp|||
 |text_picker_modifier.cpp|||
 |navigation_context.cpp|||
-|rich_editor_controller_accessor.cpp|||
+|rich_editor_controller_accessor.cpp| Evstigneev Roman ||
 |converter_enums.cpp|||
 |converter.cpp|||
 |reverse_converter.cpp|||
