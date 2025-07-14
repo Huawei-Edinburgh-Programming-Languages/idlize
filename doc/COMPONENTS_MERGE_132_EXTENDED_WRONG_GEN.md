@@ -41,7 +41,7 @@
 |common_shape_method_modifier.cpp| Evstigneev Roman | done |
 |slider_modifier.cpp| Ivan Tuzhilkin | WRONG_GEN can not be fixed |
 |nav_path_info_accessor.cpp| Evstigneev Roman | done |
-|relative_container_modifier.cpp| Evstigneev Roman, Vadim Voronov | in progress|
+|relative_container_modifier.cpp| Evstigneev Roman, Vadim Voronov | done |
 |animation_extender_accessor.cpp|||
 |ui_extension_component_modifier.cpp| Pavelev Ivan ||
 |nav_path_stack_accessor.cpp| Evstigneev Roman | done |
