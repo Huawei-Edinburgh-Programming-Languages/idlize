@@ -42,7 +42,7 @@
 |nav_path_info_accessor.cpp| Evstigneev Roman ||
 |relative_container_modifier.cpp| Evstigneev Roman ||
 |animation_extender_accessor.cpp|||
-|ui_extension_component_modifier.cpp|||
+|ui_extension_component_modifier.cpp| Pavelev Ivan ||
 |nav_path_stack_accessor.cpp| Evstigneev Roman ||
 |text_picker_modifier.cpp| Dudkin Sergey ||
 |navigation_context.cpp| Dudkin Sergey ||
