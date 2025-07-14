@@ -41,8 +41,8 @@
 | common_method_modifier_test17.cpp | Ilya Erokhin | done |
 | common_method_modifier_test16.cpp | Ilya Erokhin | done |
 | common_method_modifier_test19.cpp | Dmitry Smirnov| done, no errors nothing todo|
-| hover_event_accessor_test.cpp | Andrey Khudenkikh | |
-| mouse_event_accessor_test.cpp | | |
+| hover_event_accessor_test.cpp | Andrey Khudenkikh | done |
+| mouse_event_accessor_test.cpp | Andrey Khudenkikh | done |
 | richeditor_string_styled_controller_accessor_test.cpp | Dudkin Sergey | done |
 | navigation_transition_proxy_accessor_test.cpp | Evstigneev Roman | done |
 | path2d_accessor_test.cpp | Vadim Voronov  | done, no errors nothing todo |
