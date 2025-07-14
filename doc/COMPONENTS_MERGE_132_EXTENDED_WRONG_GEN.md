@@ -7,7 +7,7 @@
 |text_timer_modifier_test.cpp| Vadim Voronov | done, WRONG_GEN can't be fixed, Opt_Callback_Int64_Int64_Void required |
 |relative_container_modifier_test.cpp| Vadim Voronov | done |
 |scrollable_common_method_modifier_test.cpp| Vadim Voronov | done |
-|common_method_modifier_test.cpp| Vadim Voronov | done |
+|common_method_modifier_test.cpp| Vadim Voronov | |
 |date_picker_modifier_test.cpp| Vadim Voronov | done |
 |security_component_method_modifier_test_2.cpp| Samarin Sergey ||
 |common_method_modifier_test6.cpp| Lobah Mikhail||
