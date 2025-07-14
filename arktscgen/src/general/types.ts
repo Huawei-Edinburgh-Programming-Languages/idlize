@@ -107,6 +107,7 @@ export class ImporterResolverProxy implements Resolver, Importer {
     }
 
     importPeer(name: string): string {
+        name = name.startsWith('es2panda_') ? name.slice(9) : name
         return this.import(name, name)
     }
 
@@ -135,6 +136,66 @@ export class ImporterResolverProxy implements Resolver, Importer {
     ])
 
     private imports: string[] = []
+}
+
+
+export class TsInteropConvertor extends core.TSInteropArgConvertor {
+    constructor(
+        private resolver: Resolver,
+        public undefined = 'UNDEFINED*'
+    ) { super() }
+
+    override convertTypeReference(ref: core.IDLReferenceType): string {
+        const type = this.resolver.resolveTypeReference(ref)
+        if (!type) {
+           //throw `Unresolved reference: ${ref.name}!`
+        } else if (core.isInterface(type)) {
+            return `KNativePointer`
+        } else if (core.isEnum(type)) {
+            return `KInt`
+        }
+
+        if (ref.name.includes('Flag')) { // probably an enum
+            return 'KLong'
+        }
+
+        throw `${ref.name} -> ${type?.kind}`
+        return this.undefined
+    }
+
+    override convertContainer(type: core.IDLContainerType): string {
+        if (core.IDLContainerUtils.isSequence(type)) {
+            return `KNativePointerArray`
+        }
+        throw `container -> ${type?.kind}`
+        return this.undefined
+    }
+
+    override convertPrimitiveType(type: core.IDLPrimitiveType): string {
+        switch (type) {
+            case core.IDLI64Type: return "KLong"
+            case core.IDLI32Type: return "KInt"
+            case core.IDLU64Type: return "KULong"
+            case core.IDLU32Type: return "KUInt"
+            case core.IDLF64Type: return "KDouble"
+            case core.IDLF32Type: return "KFloat"
+            case core.IDLF16Type: return "short float"
+            case core.IDLVoidType: return "void"
+            case core.IDLBooleanType: return 'KBoolean'
+            case core.IDLPointerType: return 'KNativePointer'
+            // todo: Seems useless, only in parameters
+            case core.IDLStringType: return 'KStringPtr'
+
+            // todo: suspicious
+            case core.IDLU16Type: return "KUShort"
+            case core.IDLU8Type: return "std::byte"
+            // todo: for clear diff (compat)
+            case core.IDLI16Type: return "KInt" // "KShort"
+            case core.IDLI8Type: return "KBoolean" // "char"
+            default:
+        }
+        return super.convertPrimitiveType(type)
+    }
 }
 
 export class InteropConvertor extends core.CppInteropArgConvertor {

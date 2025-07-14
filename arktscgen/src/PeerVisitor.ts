@@ -6,7 +6,7 @@ import { Visitor } from "./Visitor"
 import { PeerGenerator } from "./PeerGenerator";
 import { FactoryGenerator } from "./FactoryGenerator";
 import { BridgesGenerator } from "./BridgesGenerator";
-import { Body, ImporterResolverProxy, InteropConvertor, Resolver, SimpleConverter } from "./general/types"
+import { Body, ImporterResolverProxy, InteropConvertor, Resolver, SimpleConverter, TsInteropConvertor } from "./general/types"
 import { BindingsConstructions } from "./constuctions/BindingsConstructions";
 import { fixEnumPrefix, isCreateOrUpdate, splitCreateOrUpdate } from "./general/common";
 
@@ -16,6 +16,8 @@ export class PeerVisitor extends Visitor {
         private outDir: string,
     ) {
         super()
+        this.bindingsWriter.pushIndent()
+
         Allowed.forEach(fqName => {
             const parts = fqName.split('.')
             const [ns, name] = parts.length === 1 ? ['', parts.at(0)] : parts
@@ -62,7 +64,9 @@ export class PeerVisitor extends Visitor {
         peerGenerator.writeClass(node, writer, (body: Body) => {
             this.writeFactoryCreateImpl(node, body, this.factoryWriter)
         })
-        this.writeFile(`src/generated/peers/${node.name}.ts`, writer, 'peer.ts', importer)
+
+        const _remove = (name: string) => name.startsWith('es2panda_') ? name.slice(9) : name
+        this.writeFile(`src/generated/peers/${_remove(node.name)}.ts`, writer, 'peer.ts', importer)
 
         return false
     }
@@ -73,8 +77,9 @@ export class PeerVisitor extends Visitor {
    }
 
     override onDone(_: core.IDLFile): void {
-        this.writeFile('src/generated/factory.ts', this.factoryWriter, undefined, this.factoryImporter)
-        this.writeFile('src/generated/bridges.cc', this.bridgesWriter)
+        // Not working
+        //this.writeFile('src/generated/factory.ts', this.factoryWriter, undefined, this.factoryImporter)
+        this.writeFile('native/src/generated/bridges.cc', this.bridgesWriter)
         this.writeFile('src/generated/Es2pandaNativeModule.ts', this.bindingsWriter)
         //this.writeFile('src/generated/index.ts', this.indexContent)
         this.writeFile('src/generated/Es2pandaEnums.ts', this.enumsWriter)
@@ -124,13 +129,18 @@ export class PeerVisitor extends Visitor {
         const writer = this.bindingsWriter
         iface.methods.forEach((m, index) => {
             const method = PeerGenerator.makeMethod(m)
+            const ret = method.signature.returnType
+            if (core.isContainerType(ret) && core.IDLContainerUtils.isSequence(ret)) {
+                method.signature.returnType = ret.elementType[0]
+            }
+
             if (isCreateOrUpdate(m.name)) {
                 const parts = splitCreateOrUpdate(m.name)
                 method.name = `_${parts.createOrUpdate}${iface.name}${parts.rest}`
             } else {
                 method.name = `_${iface.name}${m.name}`
                 method.signature.args.splice(1, 0, core.createReferenceType(iface.name))
-                method.signature.argNames!.splice(1, 0, 'reciever')
+                method.signature.argNames!.splice(1, 0, 'receiver')
             }
             writer.writeMethodImplementation(method, () => {
                 writer.writeExpressionStatement(
@@ -227,7 +237,8 @@ export class PeerVisitor extends Visitor {
     private bindingsWriter = new core.TSLanguageWriter(
         new core.IndentedPrinter(),
         this.resolver,
-        this.interopConverter
+        //this.interopConverter
+        new TsInteropConvertor(this.resolver)
     )
 
     private enumsWriter = new core.TSLanguageWriter(
@@ -263,7 +274,9 @@ const Allowed = [
     'es2panda_VerificationContext',
     'es2panda_DynamicImportData',
     'es2panda_SuggestionInfo',
+    'es2panda_Signature',
     'es2panda_DiagnosticInfo',
+    'NodeTransformer',
     'ir.*',
 	'ir.Annotated-',
 	'ir.AnnotationAllowed-',
@@ -273,6 +286,25 @@ const Allowed = [
 	'ir.VectorIterationGuard-',
     'parser.Program',
     'es2panda.*',
-    'varbinder.InterfaceDecl',
-    'varbinder.FunctionDecl'
+'varbinder.AnnotationParamScope',
+'varbinder.CatchScope',
+'varbinder.ClassScope',
+'varbinder.Decl',
+'varbinder.FunctionDecl',
+'varbinder.FunctionScope',
+'varbinder.GlobalScope',
+'varbinder.InterfaceDecl',
+'varbinder.LocalScope',
+'varbinder.LocalVariable',
+'varbinder.LoopScope',
+'varbinder.ParamScope',
+'varbinder.Scope',
+'varbinder.Variable',
+'varbinder.VariableScope',
+'checker.ETSAsyncFuncReturnType',
+'checker.ETSBigIntType',
+'checker.ETSFunctionType-',
+'checker.ETSObjectType',
+'checker.ETSStringType',
+'checker.Type',
 ]

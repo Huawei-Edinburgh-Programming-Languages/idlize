@@ -33,6 +33,9 @@ export class Visitor {
                 this.namespaces = [['', undefined]];
                 (node as core.IDLFile).entries.forEach(n => this.visit(n))
                 this.onDone(node as core.IDLFile)
+                console.log(
+                    `${[...this.tryResolve.keys()].sort().join('\n')}`
+                );
                 this.printStatistics()
             } break;
 
@@ -80,6 +83,10 @@ export class Visitor {
                 this.declarations.set('', new Map<string, core.IDLEntry>());
 
                 (node as core.IDLFile).entries.forEach(n => this.prepare(n))
+                this.registerEntry(
+                    core.createInterface(
+                        'es2panda_JsDocInfo', core.IDLInterfaceSubkind.Interface
+                ))
             } break;
 
             case core.IDLKind.Namespace: {
@@ -106,7 +113,7 @@ export class Visitor {
     }
 
     public isHeir(ref: core.IDLReferenceType | core.IDLInterface, name: string): boolean {
-        const needDebug = ref.name.endsWith('ETSFunctionType')
+        const needDebug = ref.name.endsWith('JsDocInfo')
         if (core.isReferenceType(ref)) {
             const type = this.resolveReference(ref, needDebug)
             if (!type || !core.isInterface(type)) {
@@ -120,11 +127,12 @@ export class Visitor {
             return ns.length && ref.name.indexOf('.') < 0 ?
                 core.createReferenceType(`${ns}.${ref.name}`) : ref
         }
+        const hacks = ['Type']
 
         const queue: core.IDLInterface[] = [ref]
         while (queue.length) {
             const node = queue.shift()!
-            if (node.name === name) {
+            if (node.name === name || hacks.includes(node.name)) {
                 return true;
             }
 
@@ -173,6 +181,7 @@ export class Visitor {
             // Lookup in global namespace if no namespace was specified
             if (!ns.length) {
                 symbol = this.declarations.get('')?.get(name!)
+                this.tryResolve.add(`${name}`)
             }
             if (debug) console.log(`resolveReference: ${name} from '' => ${symbol?.name}`)
 
@@ -181,10 +190,14 @@ export class Visitor {
                 //throw `resolveReference: ${name} from '${ns}' => ${symbol}`
                 //console.log(`resolveReference: ${name} from '${ns}' => ${symbol}`);
             }
+        } else {
+            this.tryResolve.add(`${(ns || cns)}.${name}`)
         }
 
         return symbol
     }
+
+    private tryResolve = new Set<string>()
 
     private registerEntry(node: core.IDLEntry) : void {
         const name = node.name //this.hack_removeDataClassPrefix(node)

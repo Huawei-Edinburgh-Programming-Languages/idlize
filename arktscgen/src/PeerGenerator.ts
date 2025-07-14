@@ -6,6 +6,10 @@ import { flattenType, nodeNamespace, nodeType, parent } from "./utils/idl";
 import { InteropConstructions } from "./constuctions/InteropConstructions"
 import { PeersConstructions } from "./constuctions/PeersConstructions"
 
+function hack_removePrefix(name: string) {
+    return name.startsWith(Config.dataClassPrefix) ? name.slice(Config.dataClassPrefix.length) : name
+}
+
 export class PeerGenerator {
     constructor(
         public resolver: Resolver,
@@ -17,11 +21,13 @@ export class PeerGenerator {
 
     public writeClass(iface: core.IDLInterface, writer: core.LanguageWriter, written: (body: Body) => void) {
         const parentName = (node: core.IDLInterface) => {
-            return this.importer.importPeer(parent(node) ?? Config.defaultAncestor)
+            const ns = node.parent && core.isNamespace(node.parent) ? node.parent.name : ''
+            return this.importer.importPeer(
+                parent(node) ?? (ns === 'checker' ? Config.astNodeCommonAncestor : Config.defaultAncestor))
         }
 
         writer.writeClass(
-            iface.name,
+            hack_removePrefix(iface.name),
             () => {
                 this.writeBody(iface, writer, written)
             },
@@ -58,8 +64,18 @@ export class PeerGenerator {
             )
         }
         const hack_returnValue = (method: core.Method) => {
+            const returnType = method.signature.returnType
             method.signature.returnType =
-                PeerGenerator.hack_makeNullable(method.signature.returnType, this.resolver)
+                PeerGenerator.hack_makeNullable(returnType, this.resolver)
+            // todo: has to be in core?
+            if (core.isContainerType(returnType) &&
+                core.IDLContainerUtils.isSequence(returnType) &&
+                core.isReferenceType(returnType.elementType[0])) {
+                const type = this.resolver.resolveTypeReference(returnType.elementType[0])
+                if (type && core.isInterface(type)) {
+                    this.importer.importPeer(type.name)
+                }
+            }
         }
 
         const body = {
@@ -102,11 +118,11 @@ export class PeerGenerator {
                 this.writeRegularImpl(iface, body.regular[regIndex]!, writer)
                 regIndex += 1
             } else {
-                console.warn(`Unknown method ${name}`);
+                console.warn(`Unknown method ${iface.name}.${name}`);
             }
         }
 
-        writer.writeProperty(PeersConstructions.brand(iface.name),
+        writer.writeProperty(PeersConstructions.brand(hack_removePrefix(iface.name)),
              core.IDLUndefinedType, [core.FieldModifier.PROTECTED, core.FieldModifier.READONLY]
         )
 
@@ -232,17 +248,18 @@ export class PeerGenerator {
     }
 
     private writeTypeGuard(iface: core.IDLInterface, writer: core.LanguageWriter): void {
+        const ifaceName = hack_removePrefix(iface.name)
         writer.writeFunctionImplementation(
-            PeersConstructions.typeGuard.name(iface.name),
+            PeersConstructions.typeGuard.name(ifaceName),
             new core.MethodSignature(
-                core.createReferenceType(PeersConstructions.typeGuard.returnType(iface.name)),
+                core.createReferenceType(PeersConstructions.typeGuard.returnType(ifaceName)),
                 [core.createReferenceType(PeersConstructions.typeGuard.parameter.type)],
                 undefined, undefined, undefined,
                 [PeersConstructions.typeGuard.parameter.name]
             ),
             () => {
                 writer.writeStatement(
-                    writer.makeReturn(writer.makeString(PeersConstructions.typeGuard.body(iface.name)))
+                    writer.makeReturn(writer.makeString(PeersConstructions.typeGuard.body(ifaceName)))
                 )
             }
         )
@@ -351,13 +368,18 @@ export class PeerGenerator {
         const methodName = method.name
         const nativeCall = writer.makeFunctionCall(
             PeersConstructions.callBinding(iface.name, methodName, nodeNamespace(iface)),
-            PeerGenerator.convertBindingArguments([core.IDLPointerType, ...method.signature.args],
+            PeerGenerator.convertBindingArguments(
+                [core.IDLPointerType, ...method.signature.args],
                 [PeersConstructions.pointerUsage, ...method.signature.argNames ?? []],
                 (a, b) => PeerGenerator.makeWrapperToNativeType(a, b, this.resolver)
             ).map(writer.makeString)
         )
-        const wrapper = PeerGenerator.makeWrapperFromNativeType('', method.signature.returnType, resolver)
-        return wrapper.length == 0 ? nativeCall : writer.makeFunctionCall(wrapper, [nativeCall])
+        const [wrapper, ...args] = [PeerGenerator.makeWrapperFromNativeType('', method.signature.returnType, resolver)].flat()
+        if (args.length) {
+            this.importer.importReexport(wrapper)
+        }
+        return wrapper.length == 0 ?
+            nativeCall : writer.makeFunctionCall(wrapper, [nativeCall, ...args.map(a => writer.makeString(a))])
     }
 
     public makeBindingArguments(method: core.Method) : string[] {
@@ -387,17 +409,22 @@ export class PeerGenerator {
         return name
     }
 
-    public static makeWrapperFromNativeType(name: string, type: core.IDLType, resolver: Resolver) : string {
-        // todo: make it possible to fix that via LanguageWriter & converter
-        const hack_removePrefix = (name: string) =>
-            name.startsWith(Config.dataClassPrefix) ? name.slice(Config.dataClassPrefix.length) : name
-
+    public static makeWrapperFromNativeType(name: string, type: core.IDLType, resolver: Resolver) : string | string[] {
         if (core.isReferenceType(type)) {
             const refType = resolver.resolveTypeReference(type)
             return refType && core.isInterface(refType) && resolver.isHeir(refType, Config.astNodeCommonAncestor) ?
                 PeersConstructions.unpackNonNullable : name
 
         } else if (core.isContainerType(type)) {
+            if (core.isReferenceType(type.elementType[0])) {
+                const tmp = resolver.resolveTypeReference(type.elementType[0])
+                if (tmp && core.isInterface(tmp) && !tmp.inheritance.length) {
+                    return [
+                        'acceptNativeObjectArrayResult',
+                        `(peer: KNativePointer) => new ${hack_removePrefix(tmp.name)}(peer)`
+                    ]
+                }
+            }
             return PeersConstructions.arrayOfPointersToArrayOfPeers
 
         } else if (core.isOptionalType(type)) {
@@ -480,9 +507,9 @@ export class PeerGenerator {
     }
 
     public static isGetter(method: core.IDLMethod): boolean {
-        if (method.extendedAttributes?.some((attr) => {
-            return attr.name == 'get'
-        })) return true
+        //if (method.extendedAttributes?.some((attr) => {
+        //    return attr.name == 'get'
+        //})) return true
 
         // probably a hack
         if (method.returnType == core.IDLVoidType) return false

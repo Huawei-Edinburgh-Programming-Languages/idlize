@@ -3,6 +3,8 @@ import { BridgesConstructions } from "./constuctions/BridgesConstructions"
 import { Body, Resolver } from "./general/types"
 import { PeerGenerator } from "./PeerGenerator"
 import { splitCreateOrUpdate } from "./general/common";
+import { readFileSync } from "node:fs";
+import { flattenType } from "./utils/idl";
 import { Config } from "./general/Config";
 
 const Literals = BridgesConstructions;
@@ -13,6 +15,15 @@ export class BridgesGenerator {
         private converter: core.IdlNameConvertor,
         private config: Config
     ) {
+        /*const values = Array.from(this.newMethods.keys()).sort()
+        const result = makeMap(values)
+
+        for (const [k,values] of result) {
+            console.log(`--- key: ${k}`);
+            for (const v of values) {
+                console.log(`\t\t${v}`);
+            }
+        }*/
     }
 
     public write(iface: core.IDLInterface, body: Body, writer: core.CppLanguageWriter): void {
@@ -40,7 +51,7 @@ export class BridgesGenerator {
             })
     }
 
-    private hack_simplifyReturnType(method: core.Method): void {
+    public static hack_simplifyReturnType(method: core.Method): void {
         const ret = method.signature.returnType
         if (core.isContainerType(ret) && core.IDLContainerUtils.isSequence(ret)) {
             method.signature.returnType = ret.elementType[0]
@@ -52,10 +63,12 @@ export class BridgesGenerator {
     }
 
     private writeCreate(iface: core.IDLInterface, method: Readonly<core.Method>, writer: core.CppLanguageWriter): void {
+        //if (this.newMethods.has(method.name.slice(5))) return
+
         const statements = this.makeArgumentStatements(iface, method, writer)
         const implementationCall = this.makeImplCall(iface, method, writer)
 
-        this.hack_simplifyReturnType(method)
+        BridgesGenerator.hack_simplifyReturnType(method)
 
         writer.writeMethodImplementation(
             method,
@@ -71,6 +84,8 @@ export class BridgesGenerator {
     }
 
     private writeMethod(iface: core.IDLInterface, method: Readonly<core.Method>, writer: core.CppLanguageWriter): void {
+        //if (this.newMethods.has(method.name.slice(5))) return
+
         this.insertReceiverArgument(iface, method)
 
         const [needExtraArg, returnValue] = this.makeAndCastReturnValue(iface, method, writer)
@@ -78,7 +93,7 @@ export class BridgesGenerator {
         const implementationCall = this.makeImplCall(iface, method, writer,
                                                  needExtraArg ? [Literals.sequenceLengthPass] : [])
 
-        this.hack_simplifyReturnType(method)
+        BridgesGenerator.hack_simplifyReturnType(method)
 
         writer.writeMethodImplementation(
             method,
@@ -246,4 +261,46 @@ export class BridgesGenerator {
         'SourceRange',
         'VReg',
     ])
+    private newMethods = new Set<string>(readFileSync('new_methods.txt', 'utf-8').split('\n'))
+}
+
+function commonPrefix(lhs: string, rhs: string) {
+    const anchors = ['Is', 'Get', 'Set', 'Js']
+    const length = Math.min(lhs.length, rhs.length)
+    let index = 0
+    for (; index < length; index++) {
+        if (lhs.charAt(index) !== rhs.charAt(index)) {
+            break;
+        }
+
+        if (anchors.some(anchor => lhs.slice(index).startsWith(anchor)) ||
+            anchors.some(anchor => rhs.slice(index).startsWith(anchor))) {
+            break;
+        }
+    }
+    return lhs.slice(0, index)
+}
+
+function makeMap(values: string[]) {
+    let left = 0, right = 1
+    let prevPrefix = ''
+    const result = new Map<string, string[]>()
+
+    while (right < values.length) {
+        const prefix = commonPrefix(values[left], values[right])
+        if (prefix.length < 5 || prefix.length < prevPrefix.length) {
+            result.set(prevPrefix,
+                values.slice(left, right)
+                   .map(n => `${prevPrefix}.${n.slice(prevPrefix.length)}`)
+            )
+            left = right
+            right = left + 1
+            prevPrefix = ''
+        } else {
+            right += 1
+            prevPrefix = prefix
+        }
+    }
+
+    return result
 }

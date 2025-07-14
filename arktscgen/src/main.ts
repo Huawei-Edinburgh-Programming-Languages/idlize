@@ -51,9 +51,10 @@ function main() {
         { inheritanceMode: 'single' }
     )
 
+    console.log(`OUTDIR: ${options.outputDir}`);
     const visitor = new PeerVisitor(
         config,
-        `${options.outputDir}2/libarkts`
+        `${options.outputDir}/libarkts`
     )
     visitor.visit(idlFile)
 }
