@@ -910,6 +910,7 @@ export function createEnum(
     }
 }
 
+/** Maybe `parent` parameter should be removed */
 export function createEnumMember(
     name: string,
     parent: IDLEnum,

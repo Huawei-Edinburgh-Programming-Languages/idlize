@@ -147,7 +147,6 @@ function createComponentPeers(library: PeerLibrary, synthesizedEntries: Map<stri
     })
 }
 
-/** @deprecated please do not extend this file. Storing synthetic declarations globally seems a bad pattern */
 export function fillSyntheticDeclarations(library: PeerLibrary) {
     const targets = collectDeclarationTargetsUncached(library, { synthesizeCallbacks: false, unionFlatteningMode: false })
     const synthesizedEntries = new Map<string, idl.IDLEntry>()

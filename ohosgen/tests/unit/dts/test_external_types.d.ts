@@ -1,5 +1,5 @@
 import { ExternalType } from "#external_lib"
-import { hookns, hooksns.subhookns } from "#external_lib"
+import { hookns } from "#external_lib"
 import { SDKExternalType } from "@external.lib.sdk"
 
 export interface InternalType {

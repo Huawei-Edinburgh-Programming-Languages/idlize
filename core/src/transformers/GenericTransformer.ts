@@ -138,7 +138,10 @@ function inplaceReferenceGenerics(
     if (!idl.isTypedef(resolved) && !idl.isInterface(resolved) && !idl.isCallback(resolved)) {
         throw new Error(`Unsupported generics target ${resolved.kind}`)
     }
-    const inplacedRef = idl.createReferenceType(monomorphisedEntryName(resolved, ref.typeArguments))
+    const monomorphizedFQ = idl.getFQName(resolved).split('.')
+    monomorphizedFQ.pop()
+    monomorphizedFQ.push(monomorphisedEntryName(resolved, ref.typeArguments))
+    const inplacedRef = idl.createReferenceType(monomorphizedFQ.join('.'))
     if (!resolver.resolveTypeReference(inplacedRef)) {
         const monomorphizedEntry = monomorphizeEntry(resolved, ref.typeArguments)
         insertEntryNearTo(monomorphizedEntry, resolved)

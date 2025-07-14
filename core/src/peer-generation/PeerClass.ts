@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { getFQName, IDLFile, IDLI32Type, IDLPointerType, IDLProperty } from "../idl"
+import { getFQName, IDLEntry, IDLFile, IDLI32Type, IDLPointerType, IDLProperty } from "../idl"
 import { NumericConvertor, PointerConvertor } from "../LanguageWriters/ArgConvertors"
 import { PeerMethod, PeerMethodArg, PeerMethodSignature } from "./PeerMethod"
 import { Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters/LanguageWriter"
@@ -25,6 +25,7 @@ export interface PeerClassBase {
 export class PeerClass implements PeerClassBase {
     constructor(
         public readonly file: IDLFile,
+        public readonly declaration: IDLEntry,
         public readonly componentName: string,
         public readonly originalFilename: string,
     ) { }

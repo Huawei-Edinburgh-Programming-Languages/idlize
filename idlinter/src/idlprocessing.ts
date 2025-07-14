@@ -154,7 +154,6 @@ export class IdlProcessingManager {
     constructor() {
         // Only resolution is used for now, so choosing idl.Language.TS does not have language-specific effects
         this.peerlibrary = new idl.PeerLibrary(idl.Language.TS, new idl.NativeModuleType("_UNUSED__"))
-        this.peerlibrary.disableFallback()
     }
 
     addFile(fileName: string, parseOnly?: boolean): void {

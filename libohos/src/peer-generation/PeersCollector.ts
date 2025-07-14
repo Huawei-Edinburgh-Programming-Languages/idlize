@@ -29,7 +29,7 @@ function processMethodOrCallable(library: PeerLibrary, method: idl.IDLMethod | i
     const isCallSignature = idl.isCallable(method)
     const methodName = isCallSignature ? `set${capitalize(peer.componentName)}Options` : method.name
     const retType = method.returnType!
-    const isThisRet = isCallSignature || idl.isNamedNode(retType) && (retType.name === peer.originalClassName || retType.name === "T" || retType === idl.IDLThisType)
+    const isThisRet = isCallSignature || idl.isNamedNode(retType) && (idl.getFQName(peer.declaration) === retType.name || retType.name === "T" || retType === idl.IDLThisType)
     const originalParentName = parentName ?? peer.originalClassName!
     const signature = new NamedMethodSignature(
         (isThisRet ? idl.IDLThisType : retType) ?? method.returnType!,
@@ -144,7 +144,7 @@ function generatePeer(library: PeerLibrary, component: IdlComponentDeclaration):
         throw new Error(`Not found a file corresponding to attributes class: ${baseName} (${resolvedPath})`)
     }
 
-    const peer = new PeerClass(file, component.name, baseName)
+    const peer = new PeerClass(file, component.attributeDeclaration, component.name, baseName)
 
     if (component.interfaceDeclaration) {
         fillInterface(library, peer, component.interfaceDeclaration)

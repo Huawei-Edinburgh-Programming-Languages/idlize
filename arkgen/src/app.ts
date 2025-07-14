@@ -241,6 +241,7 @@ export function arkgen(argv:string[]) {
                 verifyIDLLinter(file, idlLibrary, peerGeneratorConfiguration().linter)
             })
         }
+        idlLibrary.makeRefsFQ()
         inplaceArkoalaGenerics(idlLibrary)
         fillSyntheticDeclarations(idlLibrary)
         idlLibrary.enableCache()
@@ -324,6 +325,8 @@ export function arkgen(argv:string[]) {
                             verifyIDLLinter(file, idlLibrary, peerGeneratorConfiguration().linter)
                         })
                     }
+
+                    idlLibrary.makeRefsFQ()
                     fillSyntheticDeclarations(idlLibrary)
                     idlLibrary.enableCache()
                     const peerProcessor = new IdlPeerProcessor(idlLibrary)

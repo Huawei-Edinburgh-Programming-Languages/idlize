@@ -1,4 +1,18 @@
 package arkui.component.idlize;
+import arkui.component.common.ContentModifier as ContentModifier;
+import arkui.component.toggle.ToggleConfiguration as ToggleConfiguration;
+import arkui.component.textTimer.TextTimerConfiguration as TextTimerConfiguration;
+import arkui.component.textClock.TextClockConfiguration as TextClockConfiguration;
+import arkui.component.slider.SliderConfiguration as SliderConfiguration;
+import arkui.component.select.MenuItemConfiguration as MenuItemConfiguration;
+import arkui.component.rating.RatingConfiguration as RatingConfiguration;
+import arkui.component.radio.RadioConfiguration as RadioConfiguration;
+import arkui.component.progress.ProgressConfiguration as ProgressConfiguration;
+import arkui.component.loadingProgress.LoadingProgressConfiguration as LoadingProgressConfiguration;
+import arkui.component.gauge.GaugeConfiguration as GaugeConfiguration;
+import arkui.component.dataPanel.DataPanelConfiguration as DataPanelConfiguration;
+import arkui.component.checkbox.CheckBoxConfiguration as CheckBoxConfiguration;
+import arkui.component.button.ButtonConfiguration as ButtonConfiguration;
 
 [Synthetic]
 callback ButtonModifierBuilder = pointer (pointer parentNode, ButtonConfiguration config);

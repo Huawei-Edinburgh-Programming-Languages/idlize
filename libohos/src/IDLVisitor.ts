@@ -464,7 +464,7 @@ export class IDLVisitor implements GenerateVisitor<idl.IDLFile> {
         }
         if (!moduleFileName) {
             console.warn(`Import at '${this.sourceFile.fileName}', module '${module}': unable to resolve source file path`)
-            return [[], undefined]
+            return [module.split('.').map(it => it.replaceAll(/[\\/@#]/g, '').trim()).filter(it => it.length), undefined]
         }
         const sibling = siblings[moduleFileName] ?? siblings[path.resolve(moduleFileName)]
         if (!sibling) {

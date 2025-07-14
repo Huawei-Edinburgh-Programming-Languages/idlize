@@ -18,8 +18,7 @@ function inplaceReferenceFQN(
     resolver: ReferenceResolver,
 ): void {
     const resolved = resolver.resolveTypeReference(ref)
-    if (resolved === undefined) {
-        throw new Error("Can not expand FQN for " + ref.name)
+    if (resolved) {
+        ref.name = idl.getFQName(resolved)
     }
-    ref.name = idl.getFQName(resolved)
 }

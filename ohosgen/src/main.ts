@@ -116,6 +116,8 @@ if (options.idl2peer) {
     }
 
     initLibraryName(idlLibrary)
+    AdjustGlobalPackages()
+    idlLibrary.makeRefsFQ()
     idlLibrary.files.forEach(file => inplaceGenerics(file, idlLibrary))
     fillSyntheticDeclarations(idlLibrary)
     new IdlPeerProcessor(idlLibrary).process()
@@ -126,6 +128,20 @@ if (options.idl2peer) {
 
 if (!didJob) {
     command.help()
+}
+
+function AdjustGlobalPackages() {
+    const packages = [
+        'idlize.stdlib',
+        'idlize.internal',
+    ]
+
+    const config = peerGeneratorConfiguration()
+    packages.forEach(pkg => {
+        if (!config.globalPackages.includes(pkg)) {
+            config.globalPackages.push(pkg)
+        }
+    })
 }
 
 function processInputFiles(files: string[] | string | undefined): string[] {

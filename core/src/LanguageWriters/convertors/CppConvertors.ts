@@ -121,6 +121,9 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
         if (generatorConfiguration().parameterized.includes(refName)) {
             return this.make('CustomObject', idl.IDLCustomObjectType)
         }
+        if (generatorConfiguration().forceResource.includes(refName)) {
+            return this.make('Object', type)
+        }
         let decl = this.resolver.toDeclaration(type)
         if (idl.isCallback(decl)) {
             decl = maybeTransformManagedCallback(decl, this.resolver) ?? decl

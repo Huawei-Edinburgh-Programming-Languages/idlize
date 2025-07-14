@@ -287,7 +287,6 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             writer.writeStatement(writer.makeReturn(writer.makeNewObject(writer.getNodeName(clazzRefType), args.map(arg => writer.makeString(arg)))))
         })
     }
-    
 
     printMethods(clazz: MaterializedClass) {
         clazz.methods.filter(m => !m.method.modifiers?.includes(MethodModifier.STATIC)).forEach(method => {

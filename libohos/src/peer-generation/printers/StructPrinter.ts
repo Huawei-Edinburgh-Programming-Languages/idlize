@@ -266,6 +266,8 @@ export class StructPrinter {
         }
     }
 
+    private printedRuntimeTypes = new Set()
+
     private prologueDefinedRuntimeTypes = [
         idl.IDLDate.name,
     ]
@@ -274,11 +276,20 @@ export class StructPrinter {
             return
         const resultType = idl.createReferenceType("RuntimeType")
         const op = this.writeRuntimeTypeOp(target, targetType, resultType, isOptional, writer)
+
+        const processedType = idl.maybeOptional(targetType, isOptional)
+        const key = writer.getNodeName(processedType)
+
+        if (this.printedRuntimeTypes.has(key)) {
+            return
+        }
+        this.printedRuntimeTypes.add(key)
+
         if (op) {
             writer.print("template <>")
             writer.writeMethodImplementation(
                 new Method("runtimeType",
-                    new NamedMethodSignature(resultType, [idl.maybeOptional(targetType, isOptional)], ["value"], undefined, undefined, [undefined, PrintHint.AsConstReference]),
+                    new NamedMethodSignature(resultType, [processedType], ["value"], undefined, undefined, [undefined, PrintHint.AsConstReference]),
                     [MethodModifier.INLINE]),
                 op)
         }

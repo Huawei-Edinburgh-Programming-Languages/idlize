@@ -24,7 +24,7 @@
         "GenericInterfaceDataHandler": []
     },
     "forceResource": [
-       "ContentModifier"
+       "test_wrapped_builder.ContentModifier"
     ],
     "boundProperties": {},
     "rootComponents": [],

@@ -22,7 +22,7 @@ import { collapseSameNamedMethods } from "./OverloadsPrinter";
 import { TargetFile } from "./TargetFile"
 import { ImportsCollector } from "../ImportsCollector"
 import { ARKOALA_PACKAGE, ARKOALA_PACKAGE_PATH } from "./lang/Java";
-import { createOptionalType, createReferenceType, forceAsNamedNode, IDLType, IDLVoidType, isOptionalType } from '@idlizer/core/idl'
+import { createOptionalType, createReferenceType, forceAsNamedNode, getFQName, IDLType, IDLVoidType, isOptionalType } from '@idlizer/core/idl'
 import { collectDeclDependencies } from "../ImportsCollectorUtils";
 import { PrinterResult } from '../LayoutManager';
 
@@ -47,7 +47,10 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
             const maybeParents = [
                 ...this.peerLibrary.buildersToGenerate.values()
             ]
-            const parentDecl = maybeParents.find(it => it.name === clazz.declaration.inheritance[0].name)
+            const parentDecl = maybeParents.find(it => getFQName(it.declaration) === clazz.declaration.inheritance[0].name)
+            if (!parentDecl) {
+                throw new Error(`Not found declaration for "${clazz.declaration.inheritance[0].name}"`)
+            }
             collectDeclDependencies(this.peerLibrary, parentDecl!.declaration, imports)
         }
         const currentModule = removeExt(renameClassToBuilderClass(clazz.name, this.peerLibrary.language))
@@ -78,7 +81,7 @@ class TSBuilderClassFileVisitor implements BuilderClassFileVisitor {
                     writer.writeMethodImplementation(staticMethod, writer => {
                         const sig = staticMethod.signature
                         const args = sig.args.map((_, i) => sig.argName(i)).join(", ")
-                        const obj = forceAsNamedNode(sig.returnType).name
+                        const obj = writer.getNodeName(sig.returnType)
                         // TBD: Use writer.makeObjectAlloc()
                         writer.writeStatement(writer.makeReturn(writer.makeString(`new ${obj}(${args})`)))
                     })
