@@ -21,14 +21,14 @@
 |global_scope_common_accessor_test.cpp|||
 |text_timer_modifier.cpp| Vadim Voronov ||
 |global_scope_ohos_font_accessor.cpp|||
-|all_modifiers.cpp|||
+|all_modifiers.cpp| idlize | this is generated file |
 |text_area_modifier.cpp| Ivan Tuzhilkin ||
-|system_ops_accessor.cpp|||
-|prompt_action_accessor.cpp|||
+|system_ops_accessor.cpp| Evstigneev Roman ||
+|prompt_action_accessor.cpp| Evstigneev Roman ||
 |stepper_modifier.cpp| Sergey Kovalev ||
 |node_content_accessor.cpp| Sergey Kovalev ||
 |text_input_modifier.cpp| Ivan Tuzhilkin ||
-|plugin_component_modifier.cpp| Evstigneev Roman ||
+|plugin_component_modifier.cpp| Evstigneev Roman | done, need change Ark_Object to something that can be converted to std::string |
 |frame_node_accessor.cpp| Ivan Tuzhilkin ||
 |tabs_modifier.cpp| Ivan Tuzhilkin ||
 |embedded_component_modifier.cpp| Sergey Kovalev ||
