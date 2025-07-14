@@ -414,7 +414,8 @@ function Operation(node: idl.InterfaceNode) {
 
 function RegularOperation(node: idl.InterfaceNode) {
   let res: idl.FuncNode;
-  let args: idl.PrimitiveTypeNode | null = Type(); res = OperationRest();
+  let rettype: idl.TypeNode | null = Type(); res = OperationRest();
+  res.rettype = rettype;
   console.log("*** args: ", res);
   node.funcs.push(res);
 }
@@ -687,8 +688,8 @@ function Typedef(): idl.Node | null {
   return res;
 }
 
-function Type(): idl.PrimitiveTypeNode | null {
-  let res: idl.PrimitiveTypeNode | null = SingleType();
+function Type(): idl.TypeNode | null {
+  let res: idl.TypeNode | null = SingleType();
   if (!res) {
     UnionType(); Null();
   }
@@ -701,7 +702,7 @@ function TypeWithExtendedAttributes() {
   Type();
 }
 
-function SingleType(): idl.PrimitiveTypeNode | null {
+function SingleType(): idl.TypeNode | null {
   if (lex.IsItDistinguishableType(g_lookahead.type)) {
     return DistinguishableType();
   } else if  (g_lookahead.type == Token.tAny) {
@@ -733,14 +734,18 @@ function UnionMemberTypes() {
   // ε
 }
 
-function DistinguishableType(): idl.PrimitiveTypeNode | null {
-  let res: idl.PrimitiveTypeNode | null = null;
+function DistinguishableType(): idl.TypeNode | null {
+  let res: idl.TypeNode | null = null;
   if (lex.IsItPrimitiveType(g_lookahead.type)) {
-    res = PrimitiveType(); if (res) res.can_be_null = Null();
+    let prim_res: idl.PrimitiveTypeNode | null = PrimitiveType(); if (prim_res) prim_res.can_be_null = Null();
+    res = prim_res;
   } else if (lex.IsItStringType(g_lookahead.type)) {
     StringType(); Null();
   } else if (g_lookahead.type == Token.tId) {  // ! кажется, именно это условие должно пропускать произвольный пользовательский тип!
+    let user_res: idl.UserTypeNode = new idl.UserTypeNode();
+    user_res.type_name = g_lookahead.text;
     Match(Token.tId); Null();
+    res = user_res;
   } else if (g_lookahead.type == Token.tSequence) {
     Match(Token.tSequence); Match(Token.tLAngle); TypeWithExtendedAttributes(); Match(Token.tRAngle); Null();
   } else if (g_lookahead.type == Token.tAsync) {
@@ -759,8 +764,6 @@ function DistinguishableType(): idl.PrimitiveTypeNode | null {
     RecordType(); Null();
   } else if (g_lookahead.type == Token.tUndefined) {
     Match(Token.tUndefined); Null();
-  } else {  // FIXME!!! костыль... нужен для того, чтобы снаружи можно было понять, удалось ли обработать текущий токен
-    res = null;
   }
   return res;
 }
