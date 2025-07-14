@@ -39,11 +39,11 @@
 |select_modifier.cpp| Samarin Sergey ||
 |common_shape_method_modifier.cpp| Evstigneev Roman ||
 |slider_modifier.cpp|||
-|nav_path_info_accessor.cpp|||
+|nav_path_info_accessor.cpp| Evstigneev Roman ||
 |relative_container_modifier.cpp|||
 |animation_extender_accessor.cpp|||
 |ui_extension_component_modifier.cpp|||
-|nav_path_stack_accessor.cpp|||
+|nav_path_stack_accessor.cpp| Evstigneev Roman ||
 |text_picker_modifier.cpp| Dudkin Sergey ||
 |navigation_context.cpp|||
 |rich_editor_controller_accessor.cpp| Evstigneev Roman ||
