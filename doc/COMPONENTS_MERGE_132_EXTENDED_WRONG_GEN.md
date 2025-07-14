@@ -10,8 +10,8 @@
 |date_picker_modifier_test.cpp| Vadim Voronov | done, unfixable nothing todo|
 |security_component_method_modifier_test_2.cpp| Samarin Sergey ||
 |common_method_modifier_test6.cpp| Lobah Mikhail||
-|shape_clip_accessor_test.cpp|||
-|frame_node_accessor_test.cpp|||
+|shape_clip_accessor_test.cpp| Andrey Khudenkikh ||
+|frame_node_accessor_test.cpp| Andrey Khudenkikh ||
 |base_event_accessor_test.cpp| Sergey Kovalev||
 |shape_mask_accessor_test.cpp|||
 |mutable_styled_string_accessor_test.cpp| Sergey Kovalev||
