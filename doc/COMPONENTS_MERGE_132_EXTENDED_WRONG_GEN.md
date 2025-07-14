@@ -34,7 +34,7 @@
 |embedded_component_modifier.cpp| Sergey Kovalev ||
 |custom_dialog_controller_peer_impl.cpp|||
 |common_method_modifier.cpp| Lobah Mikhail||
-|list_modifier.cpp|||
+|list_modifier.cpp| Dudkin Sergey ||
 |custom_dialog_controller_accessor.cpp| Evstigneev Roman ||
 |select_modifier.cpp| Samarin Sergey ||
 |common_shape_method_modifier.cpp| Evstigneev Roman ||
