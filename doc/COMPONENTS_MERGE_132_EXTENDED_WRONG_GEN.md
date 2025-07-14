@@ -16,7 +16,7 @@
 |base_event_accessor_test.cpp| Sergey Kovalev||
 |shape_mask_accessor_test.cpp| Ivan Tuzhilkin | WRONG_GEN can not be fixed |
 |mutable_styled_string_accessor_test.cpp| Sergey Kovalev||
-|richeditor_controller_accessor_callback_test.cpp| Evstigneev Roman ||
+|richeditor_controller_accessor_callback_test.cpp| Evstigneev Roman | done |
 |key_event_accessor_test.cpp| Sergey Kovalev ||
 |drag_event_accessor_test.cpp| Mikhail Politov ||
 |global_scope_common_accessor_test.cpp| Vadim Voronov ||
@@ -24,30 +24,30 @@
 |global_scope_ohos_font_accessor.cpp| Vadim Voronov ||
 |all_modifiers.cpp| idlize | this is generated file |
 |text_area_modifier.cpp| Ivan Tuzhilkin | done |
-|system_ops_accessor.cpp| Evstigneev Roman | ResourceToLengthMetrics doesn't contained in the struct |
-|prompt_action_accessor.cpp| Evstigneev Roman ||
+|system_ops_accessor.cpp| Evstigneev Roman | done, ResourceToLengthMetrics doesn't contained in the struct |
+|prompt_action_accessor.cpp| Evstigneev Roman | done|
 |stepper_modifier.cpp| Sergey Kovalev ||
 |node_content_accessor.cpp| Sergey Kovalev ||
 |text_input_modifier.cpp| Ivan Tuzhilkin | done |
-|plugin_component_modifier.cpp| Evstigneev Roman | need change Ark_Object to something that can be converted to std::string |
+|plugin_component_modifier.cpp| Evstigneev Roman | done, need change Ark_Object to something that can be converted to std::string |
 |frame_node_accessor.cpp| Ivan Tuzhilkin | WRONG_GEN can not be fixed. One WRONG_GEN changed to WRONG_SDK |
 |tabs_modifier.cpp| Ivan Tuzhilkin | done |
 |embedded_component_modifier.cpp| Sergey Kovalev ||
 |custom_dialog_controller_peer_impl.cpp| Ivan Tuzhilkin ||
 |common_method_modifier.cpp| Lobah Mikhail||
 |list_modifier.cpp| Dudkin Sergey ||
-|custom_dialog_controller_accessor.cpp| Evstigneev Roman ||
+|custom_dialog_controller_accessor.cpp| Evstigneev Roman | done |
 |select_modifier.cpp| Samarin Sergey ||
-|common_shape_method_modifier.cpp| Evstigneev Roman ||
+|common_shape_method_modifier.cpp| Evstigneev Roman | done |
 |slider_modifier.cpp| Ivan Tuzhilkin | WRONG_GEN can not be fixed |
-|nav_path_info_accessor.cpp| Evstigneev Roman ||
+|nav_path_info_accessor.cpp| Evstigneev Roman | done |
 |relative_container_modifier.cpp| Evstigneev Roman, Vadim Voronov | in progress|
 |animation_extender_accessor.cpp|||
 |ui_extension_component_modifier.cpp| Pavelev Ivan ||
-|nav_path_stack_accessor.cpp| Evstigneev Roman ||
+|nav_path_stack_accessor.cpp| Evstigneev Roman | done |
 |text_picker_modifier.cpp| Dudkin Sergey ||
 |navigation_context.cpp| Dudkin Sergey ||
-|rich_editor_controller_accessor.cpp| Evstigneev Roman ||
+|rich_editor_controller_accessor.cpp| Evstigneev Roman | done |
 |converter_enums.cpp| Samarin Sergey ||
 |converter.cpp|||
 |reverse_converter.cpp|||
