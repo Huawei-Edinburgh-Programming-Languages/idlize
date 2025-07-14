@@ -23,16 +23,16 @@
 |global_scope_ohos_font_accessor.cpp|||
 |all_modifiers.cpp| idlize | this is generated file |
 |text_area_modifier.cpp| Ivan Tuzhilkin ||
-|system_ops_accessor.cpp| Evstigneev Roman ||
+|system_ops_accessor.cpp| Evstigneev Roman | ResourceToLengthMetrics doesn't contained in the struct |
 |prompt_action_accessor.cpp| Evstigneev Roman ||
 |stepper_modifier.cpp| Sergey Kovalev ||
 |node_content_accessor.cpp| Sergey Kovalev ||
 |text_input_modifier.cpp| Ivan Tuzhilkin ||
-|plugin_component_modifier.cpp| Evstigneev Roman | done, need change Ark_Object to something that can be converted to std::string |
+|plugin_component_modifier.cpp| Evstigneev Roman | need change Ark_Object to something that can be converted to std::string |
 |frame_node_accessor.cpp| Ivan Tuzhilkin ||
 |tabs_modifier.cpp| Ivan Tuzhilkin ||
 |embedded_component_modifier.cpp| Sergey Kovalev ||
-|custom_dialog_controller_peer_impl.cpp|||
+|custom_dialog_controller_peer_impl.cpp| Evstigneev Roman ||
 |common_method_modifier.cpp| Lobah Mikhail||
 |list_modifier.cpp| Dudkin Sergey ||
 |custom_dialog_controller_accessor.cpp| Evstigneev Roman ||
