@@ -17,7 +17,7 @@
 |mutable_styled_string_accessor_test.cpp| Sergey Kovalev||
 |richeditor_controller_accessor_callback_test.cpp| Evstigneev Roman ||
 |key_event_accessor_test.cpp| Sergey Kovalev ||
-|drag_event_accessor_test.cpp|||
+|drag_event_accessor_test.cpp| Mikhail Politov ||
 |global_scope_common_accessor_test.cpp|||
 |text_timer_modifier.cpp| Sergey Kovalev ||
 |global_scope_ohos_font_accessor.cpp|||
@@ -51,3 +51,6 @@
 |converter.cpp|||
 |reverse_converter.cpp|||
 |reverse_converter.h|||
+| key_event_accessor.cpp | Mikhail Politov |  |
+| base_event_accessor.cpp | Mikhail Politov |  |
+| drag_event_accessor.cpp | Mikhail Politov |  |
