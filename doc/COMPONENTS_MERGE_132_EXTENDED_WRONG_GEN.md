@@ -16,7 +16,7 @@
 |shape_mask_accessor_test.cpp|||
 |mutable_styled_string_accessor_test.cpp| Sergey Kovalev||
 |richeditor_controller_accessor_callback_test.cpp| Evstigneev Roman ||
-|key_event_accessor_test.cpp|||
+|key_event_accessor_test.cpp| Sergey Kovalev ||
 |drag_event_accessor_test.cpp|||
 |global_scope_common_accessor_test.cpp|||
 |text_timer_modifier.cpp|||
