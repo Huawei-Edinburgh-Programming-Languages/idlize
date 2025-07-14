@@ -25,7 +25,7 @@
 |text_area_modifier.cpp| Ivan Tuzhilkin ||
 |system_ops_accessor.cpp|||
 |prompt_action_accessor.cpp|||
-|stepper_modifier.cpp|||
+|stepper_modifier.cpp| Sergey Kovalev ||
 |node_content_accessor.cpp|||
 |text_input_modifier.cpp| Ivan Tuzhilkin ||
 |plugin_component_modifier.cpp|||
