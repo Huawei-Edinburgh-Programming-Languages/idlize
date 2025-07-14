@@ -26,7 +26,7 @@
 |system_ops_accessor.cpp|||
 |prompt_action_accessor.cpp|||
 |stepper_modifier.cpp| Sergey Kovalev ||
-|node_content_accessor.cpp|||
+|node_content_accessor.cpp| Sergey Kovalev ||
 |text_input_modifier.cpp| Ivan Tuzhilkin ||
 |plugin_component_modifier.cpp|||
 |frame_node_accessor.cpp| Ivan Tuzhilkin ||
