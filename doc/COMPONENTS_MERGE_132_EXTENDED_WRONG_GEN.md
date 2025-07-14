@@ -35,7 +35,7 @@
 |embedded_component_modifier.cpp| Sergey Kovalev ||
 |custom_dialog_controller_peer_impl.cpp| Ivan Tuzhilkin ||
 |common_method_modifier.cpp| Lobah Mikhail||
-|list_modifier.cpp| Dudkin Sergey ||
+|list_modifier.cpp| Dudkin Sergey | done |
 |custom_dialog_controller_accessor.cpp| Evstigneev Roman | done |
 |select_modifier.cpp| Samarin Sergey | done |
 |common_shape_method_modifier.cpp| Evstigneev Roman | done |
@@ -45,8 +45,8 @@
 |animation_extender_accessor.cpp|||
 |ui_extension_component_modifier.cpp| Pavelev Ivan ||
 |nav_path_stack_accessor.cpp| Evstigneev Roman | done |
-|text_picker_modifier.cpp| Dudkin Sergey ||
-|navigation_context.cpp| Dudkin Sergey ||
+|text_picker_modifier.cpp| Dudkin Sergey | done |
+|navigation_context.cpp| Dudkin Sergey | done |
 |rich_editor_controller_accessor.cpp| Evstigneev Roman | done |
 |converter_enums.cpp| Samarin Sergey | done |
 |converter.cpp|||
