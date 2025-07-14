@@ -13,7 +13,7 @@
 |shape_clip_accessor_test.cpp| Andrey Khudenkikh ||
 |frame_node_accessor_test.cpp| Andrey Khudenkikh ||
 |base_event_accessor_test.cpp| Sergey Kovalev||
-|shape_mask_accessor_test.cpp|||
+|shape_mask_accessor_test.cpp| Ivan Tuzhilkin ||
 |mutable_styled_string_accessor_test.cpp| Sergey Kovalev||
 |richeditor_controller_accessor_callback_test.cpp| Evstigneev Roman ||
 |key_event_accessor_test.cpp| Sergey Kovalev ||
@@ -38,7 +38,7 @@
 |custom_dialog_controller_accessor.cpp| Evstigneev Roman ||
 |select_modifier.cpp| Samarin Sergey ||
 |common_shape_method_modifier.cpp| Evstigneev Roman ||
-|slider_modifier.cpp|||
+|slider_modifier.cpp| Ivan Tuzhilkin ||
 |nav_path_info_accessor.cpp| Evstigneev Roman ||
 |relative_container_modifier.cpp| Evstigneev Roman ||
 |animation_extender_accessor.cpp|||
