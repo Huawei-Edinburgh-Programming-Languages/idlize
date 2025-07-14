@@ -9,7 +9,7 @@
 |scrollable_common_method_modifier_test.cpp| Vadim Voronov | done |
 |common_method_modifier_test.cpp| Vadim Voronov | |
 |date_picker_modifier_test.cpp| Vadim Voronov | done |
-|security_component_method_modifier_test_2.cpp| Samarin Sergey ||
+|security_component_method_modifier_test_2.cpp| Samarin Sergey | in progress |
 |common_method_modifier_test6.cpp| Lobah Mikhail||
 |shape_clip_accessor_test.cpp| Andrey Khudenkikh ||
 |frame_node_accessor_test.cpp| Andrey Khudenkikh ||
@@ -37,7 +37,7 @@
 |common_method_modifier.cpp| Lobah Mikhail||
 |list_modifier.cpp| Dudkin Sergey ||
 |custom_dialog_controller_accessor.cpp| Evstigneev Roman | done |
-|select_modifier.cpp| Samarin Sergey ||
+|select_modifier.cpp| Samarin Sergey | done |
 |common_shape_method_modifier.cpp| Evstigneev Roman | done |
 |slider_modifier.cpp| Ivan Tuzhilkin | WRONG_GEN can not be fixed |
 |nav_path_info_accessor.cpp| Evstigneev Roman | done |
@@ -48,7 +48,7 @@
 |text_picker_modifier.cpp| Dudkin Sergey ||
 |navigation_context.cpp| Dudkin Sergey ||
 |rich_editor_controller_accessor.cpp| Evstigneev Roman | done |
-|converter_enums.cpp| Samarin Sergey ||
+|converter_enums.cpp| Samarin Sergey | done |
 |converter.cpp|||
 |reverse_converter.cpp|||
 |reverse_converter.h|||
