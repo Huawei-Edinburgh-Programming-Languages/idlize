@@ -65,6 +65,8 @@ export enum DataType {
   tUnsignedShort = 3,
   tUnsignedLong = 4,
   tUnsignedLongLong = 5,
+
+  tUser = 99,
 };
 
 export class TypeNode extends Node {
@@ -78,15 +80,32 @@ export class TypeNode extends Node {
 
 export class PrimitiveTypeNode extends TypeNode {
   can_be_null: boolean = false;
+
+  toString(): string {
+    return "PrimitiveTypeNode: ";
+  }
+}
+
+export class UserTypeNode extends TypeNode {
+  type_name: string = "";
+
+  constructor() {
+    super();
+    this.type = DataType.tUser;
+  }
+
+  toString(): string {
+    return "UserTypeNode: " + this.type_name;
+  }
 }
 
 export class FuncNode extends Node {
   args: ArgumentNode[] = [];
-  rettype: string = "";
+  rettype: TypeNode | null = null;
   name: string = "";
 
   toString(): string {
-    let res: string = this.rettype;
+    let res: string = this.rettype ? this.rettype.toString() : "";
     for (const a of this.args) {
       res += a;
     }
