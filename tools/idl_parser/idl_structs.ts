@@ -14,7 +14,7 @@ export class NodeVisitor {
 }
 
 export class Node {
-  descr(): string {
+  toString(): string {
     return "Node";
   }
 
@@ -29,7 +29,7 @@ export class CallbackNode extends Node {
     this.name = val;
   }
 
-  descr(): string {
+  toString(): string {
     return "CallbackNode: " + this.name;
   }
 
@@ -51,18 +51,71 @@ export class ArgumentNode extends Node {
   constructor() {
     super();
   }
+
+  toString(): string {
+    return this.name + ": " + this.type;
+  }
+}
+
+export enum DataType {
+  tUndefined = 0,
+  tShort = 1,
+  tLong = 2,
+  tLongLong = 2,
+  tUnsignedShort = 3,
+  tUnsignedLong = 4,
+  tUnsignedLongLong = 5,
+};
+
+export class TypeNode extends Node {
+  type: DataType = DataType.tUndefined;
+
+  /*constructor(t: DataType) {
+    super();
+    this.type = t;
+  }*/
+}
+
+export class PrimitiveTypeNode extends TypeNode {
+  can_be_null: boolean = false;
+}
+
+export class FuncNode extends Node {
+  args: ArgumentNode[] = [];
+  rettype: string = "";
+  name: string = "";
+
+  toString(): string {
+    let res: string = this.rettype;
+    for (const a of this.args) {
+      res += a;
+    }
+
+    return res;
+  }
 }
 
 export class InterfaceNode extends Node {
   name: string = "";
 
+  funcs: FuncNode[] = [];
+
   constructor(val: string) {
     super();
     this.name = val;
+    //this.funcs = null;
   }
 
-  descr(): string {
-    return "InterfaceNode: " + this.name;
+  toString(): string {
+    let res: string = "InterfaceNode: " + this.name;
+    if (this.funcs) {
+      res += "\n";
+      for (const f of this.funcs) {
+        res += f;
+        res += "\n";
+      }
+    }
+    return res;
   }
 }
 
@@ -78,7 +131,7 @@ export class PackageNode extends Node {
     this.name = val;
   }
 
-  descr(): string {
+  toString(): string {
     return "PackageNode: " + this.name;
   }
 }

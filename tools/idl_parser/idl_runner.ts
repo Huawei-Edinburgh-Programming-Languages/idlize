@@ -14,13 +14,21 @@ throw new Error("Done!");*/
 
 
 const idl_text: string =
-`package arkui.component.idlize;
-callback Callback_Extender_OnProgress = void (f32 value);
-interface Content {/* test!! */};  // hahaha
-interface Callback {
+`interface Call_Back {
     attribute Colors colors;
+    void init();
     void invoke(T data);
 };`
+
+//const idl_text: string =
+//`callback Callback_Extender_OnProgress = void (f32 value);`
+
+
+//package arkui.component.idlize;
+//callback Callback_Extender_OnProgress = void (f32 value);
+//interface Content {/* test!! */};  // hahaha
+
+
 /* test */
 //import arkui.component.common;
 
@@ -30,7 +38,7 @@ if (defs) {
   console.log("IDL has " + defs.nodes.length + " definitions");
 
   for (let i = 0; i < defs.nodes.length; i++) {
-    console.log(i, defs.nodes[i].descr());
+    console.log(i, defs.nodes[i]);
   }
 
   // call visitor

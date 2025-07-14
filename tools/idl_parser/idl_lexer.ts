@@ -227,6 +227,10 @@ function addWord(word: string): number {
   return g_lastId;
 }
 
+function q(s: string) {
+  return "\'" + s + "\'";
+}
+
 export class TokenData {
   type: Token;
   text: string;
@@ -239,8 +243,17 @@ export class TokenData {
     this.col = col;
     this.row = row;
   }
-};
 
+  toString(): string {
+    let res: string;
+    res = typeof this + ", ";
+    res += this.type + ", ";
+    res += q(this.text) + " (";
+    res += this.col + ", ";
+    res += this.row + ")";
+    return res;
+  }
+};
 
 let g_text: string;
 let g_pos: number = 0;

@@ -166,7 +166,7 @@ function InterfaceRest(): idl.Node | null {
   let res: idl.InterfaceNode = new idl.InterfaceNode(g_lookahead.text);
   if (g_lookahead.type == Token.tId) {
     //    identifier Inheritance { InterfaceMembers } ;
-    Match(Token.tId); Inheritance(); Match(Token.tLBrace); InterfaceMembers(); Match(Token.tRBrace); Match(Token.tSemicolon);
+    Match(Token.tId); Inheritance(); Match(Token.tLBrace); InterfaceMembers(res); Match(Token.tRBrace); Match(Token.tSemicolon);
   }
   return res;
 }
@@ -188,19 +188,20 @@ function PartialInterfaceOrPartialMixin() {
 }
 
 function PartialInterfaceRest() {
-  Match(Token.tId); Match(Token.tLBrace); PartialInterfaceMembers(); Match(Token.tRBrace); Match(Token.tSemicolon);
+  let node: idl.InterfaceNode = new idl.InterfaceNode("FIX ME!!!");
+  Match(Token.tId); Match(Token.tLBrace); PartialInterfaceMembers(node); Match(Token.tRBrace); Match(Token.tSemicolon);
 }
 
 //InterfaceMembers ::
 //    ExtendedAttributeList InterfaceMember InterfaceMembers
 
-function InterfaceMembers() {
+function InterfaceMembers(node: idl.InterfaceNode) {
   if (g_lookahead.type == Token.tLSqrBracket)
     ExtendedAttributeList();
 
   let rpt: boolean;
   do {
-    rpt = InterfaceMember();
+    rpt = InterfaceMember(node);
   } while (rpt);
   // ε
 }
@@ -211,10 +212,10 @@ const g_PartialFirstTokens: Token[] = [
   Token.tMaplike, Token.tSetlike, Token.tInherit
 ];
 
-function InterfaceMember(): boolean {
+function InterfaceMember(node: idl.InterfaceNode): boolean {
   if (g_PartialFirstTokens.includes(g_lookahead.type) ||
       lex.IsItSingleType(g_lookahead.type)) {  // see Operation()
-    PartialInterfaceMember();
+    PartialInterfaceMember(node);
     return true;
   } else if (g_lookahead.type == Token.tConstructor) {
     Constructor();
@@ -223,20 +224,20 @@ function InterfaceMember(): boolean {
   return false;
 }
 
-function PartialInterfaceMembers() {
+function PartialInterfaceMembers(node: idl.InterfaceNode) {
   if (g_lookahead.type == Token.tLSqrBracket)
     ExtendedAttributeList();
 
-  if (g_PartialFirstTokens.includes(g_lookahead.type) ||
+  while (g_PartialFirstTokens.includes(g_lookahead.type) ||
       lex.IsItSingleType(g_lookahead.type)) {  // see Operation()
-    PartialInterfaceMember(); PartialInterfaceMembers();
+    PartialInterfaceMember(node);
   }
   // ε
 }
 
-function PartialInterfaceMember() {
+function PartialInterfaceMember(node: idl.InterfaceNode) {
   Const();
-  Operation();
+  Operation(node);
   Stringifier();
   StaticMember();
   Iterable();
@@ -257,21 +258,21 @@ function Inheritance() {
 }
 
 function MixinRest() {
-  Match(Token.tMixin); Match(Token.tId); Match(Token.tLBrace); MixinMembers(); Match(Token.tRBrace); Match(Token.tSemicolon);
+  //Match(Token.tMixin); Match(Token.tId); Match(Token.tLBrace); MixinMembers(); Match(Token.tRBrace); Match(Token.tSemicolon);
 }
 
 function MixinMembers() {
-  if (g_lookahead.type == Token.tLSqrBracket)
+  /*if (g_lookahead.type == Token.tLSqrBracket)
     ExtendedAttributeList();
-  MixinMember(); MixinMembers();
+  MixinMember(); MixinMembers();*/
   // ε
 }
 
 function MixinMember() {
-  Const();
+  /*Const();
   RegularOperation();
   Stringifier();
-  OptionalReadOnly(); AttributeRest();
+  OptionalReadOnly(); AttributeRest();*/
 }
 
 function IncludesStatement(): idl.Node | null {
@@ -313,14 +314,14 @@ function CallbackRestOrInterface(): idl.Node | null {
 function CallbackInterfaceMembers(): idl.Node | null {
   if (g_lookahead.type == Token.tLSqrBracket)
     ExtendedAttributeList();
-  CallbackInterfaceMember();
-  return CallbackInterfaceMembers();
+  CallbackInterfaceMember(); /*return*/ CallbackInterfaceMembers(); return null;
   // ε
 }
 
 function CallbackInterfaceMember() {
   Const();
-  RegularOperation();
+  let dummy: idl.InterfaceNode = new idl.InterfaceNode("FIX ME!");
+  RegularOperation(dummy);
 }
 
 function Const() {
@@ -404,19 +405,22 @@ function DefaultValue() {
   undefined*/
 }
 
-function Operation() {
+function Operation(node: idl.InterfaceNode) {
   if (lex.IsItSingleType(g_lookahead.type) || g_lookahead.type == Token.tLBracket) {
-    RegularOperation();
+    RegularOperation(node);
   }
   //SpecialOperation(); // Not in use yet.
 }
 
-function RegularOperation() {
-  Type(); OperationRest();
+function RegularOperation(node: idl.InterfaceNode) {
+  let res: idl.FuncNode;
+  let args: idl.PrimitiveTypeNode | null = Type(); res = OperationRest();
+  console.log("*** args: ", res);
+  node.funcs.push(res);
 }
 
 function SpecialOperation() {
-  Special(); RegularOperation();
+  //Special(); RegularOperation();
 }
 
 function Special() {
@@ -425,21 +429,29 @@ function Special() {
   deleter*/
 }
 
-function OperationRest() {
-  OptionalOperationName(); Match(Token.tLBracket); ArgumentList(); Match(Token.tRBracket); Match(Token.tSemicolon);
+function OperationRest(): idl.FuncNode {
+  let res: idl.FuncNode;
+  let name: string = "";
+  name = OptionalOperationName(); Match(Token.tLBracket); res = ArgumentList(); Match(Token.tRBracket); Match(Token.tSemicolon);
+  if (res)
+    res.name = name;
+  return res;
 }
 
-function OptionalOperationName() {
+function OptionalOperationName(): string {
   if (g_lookahead.type == Token.tId) {
-    OperationName();
+    return OperationName();
   } else {
     // ε
+    return "";
   }
 }
 
-function OperationName() {
+function OperationName(): string {
   OperationNameKeyword();
+  let res: string = g_lookahead.text;
   Match(Token.tId);
+  return res;
 }
 
 function OperationNameKeyword() {
@@ -448,33 +460,44 @@ function OperationNameKeyword() {
   }
 }
 
-function ArgumentList() {
-  Argument(); Arguments();
+function ArgumentList(): idl.FuncNode {
+  let res: idl.FuncNode = new idl.FuncNode();
+  let arg = Argument();
+  if (arg) {
+    res.args.push(arg);
+    Arguments(res);
+  }
   // ε
+  return res;
 }
 
-function Arguments() {
+function Arguments(res: idl.FuncNode) {
   while (g_lookahead.type == Token.tComma) {
-    Match(Token.tComma); Argument();
+    Match(Token.tComma);
+    let arg = Argument();
+    if (arg) {
+      res.args.push(arg);
+    }
   }
   // ε
 }
 
-function Argument(): idl.ArgumentNode {
+function Argument(): idl.ArgumentNode | null {
   if (g_lookahead.type == Token.tLSqrBracket)
     ExtendedAttributeList();
   return ArgumentRest();
 }
 
-function ArgumentRest(): idl.ArgumentNode {
-  let res: idl.ArgumentNode;
+function ArgumentRest(): idl.ArgumentNode | null {
+  let res: idl.ArgumentNode | null = null ;
   if (g_lookahead.type == Token.tOptional) {
     Match(Token.tOptional); TypeWithExtendedAttributes(); res = ArgumentName(); Default();
-  } else {
+  } else if (g_lookahead.type == Token.tId) {
     let type: string = g_lookahead.text;
     Match(Token.tId); Ellipsis(); res = ArgumentName();  // I replace Type to Id
     res.type = type;
     console.log("arg: ", res.name, res.type);
+  } else {  // no args
   }
   return res;
 }
@@ -523,7 +546,8 @@ function StaticMember() {
 
 function StaticMemberRest() {
   OptionalReadOnly(); AttributeRest();
-  RegularOperation();
+  let dummy: idl.InterfaceNode = new idl.InterfaceNode("FIX ME!");
+  RegularOperation(dummy);
 }
 
 function Iterable() {
@@ -582,7 +606,8 @@ function NamespaceMembers() {
 }
 
 function NamespaceMember() {
-  RegularOperation();
+  let dummy: idl.InterfaceNode = new idl.InterfaceNode("FIX ME!");
+  RegularOperation(dummy);
   Match(Token.tReadonly); AttributeRest();
   Const();
 }
@@ -662,10 +687,12 @@ function Typedef(): idl.Node | null {
   return res;
 }
 
-function Type() {
-  if (! SingleType()) {
+function Type(): idl.PrimitiveTypeNode | null {
+  let res: idl.PrimitiveTypeNode | null = SingleType();
+  if (!res) {
     UnionType(); Null();
   }
+  return res;
 }
 
 function TypeWithExtendedAttributes() {
@@ -674,17 +701,17 @@ function TypeWithExtendedAttributes() {
   Type();
 }
 
-function SingleType(): boolean {
+function SingleType(): idl.PrimitiveTypeNode | null {
   if (lex.IsItDistinguishableType(g_lookahead.type)) {
     return DistinguishableType();
   } else if  (g_lookahead.type == Token.tAny) {
     Match(Token.tAny);
-    return true;
+    return null;
   } else if (g_lookahead.type == Token.tPromise) {
     PromiseType();
-    return true;
+    return null;
   } else {
-    return false;
+    return null;
   }
 }
 
@@ -706,10 +733,10 @@ function UnionMemberTypes() {
   // ε
 }
 
-function DistinguishableType(): boolean {
-  let processed: boolean = true;
+function DistinguishableType(): idl.PrimitiveTypeNode | null {
+  let res: idl.PrimitiveTypeNode | null = null;
   if (lex.IsItPrimitiveType(g_lookahead.type)) {
-    PrimitiveType(); Null();
+    res = PrimitiveType(); if (res) res.can_be_null = Null();
   } else if (lex.IsItStringType(g_lookahead.type)) {
     StringType(); Null();
   } else if (g_lookahead.type == Token.tId) {  // ! кажется, именно это условие должно пропускать произвольный пользовательский тип!
@@ -733,13 +760,16 @@ function DistinguishableType(): boolean {
   } else if (g_lookahead.type == Token.tUndefined) {
     Match(Token.tUndefined); Null();
   } else {  // FIXME!!! костыль... нужен для того, чтобы снаружи можно было понять, удалось ли обработать текущий токен
-    processed = false;
+    res = null;
   }
-  return processed;
+  return res;
 }
 
-function PrimitiveType() {
-  UnsignedIntegerType();
+function PrimitiveType(): idl.PrimitiveTypeNode | null {
+  let res: idl.PrimitiveTypeNode | null = null;
+  res = UnsignedIntegerType();
+  if (res)
+    return res;
   UnrestrictedFloatType();
   if (g_lookahead.type == Token.tBoolean) {
     Match(Token.tBoolean);
@@ -752,6 +782,7 @@ function PrimitiveType() {
   } else if (g_lookahead.type == Token.tVoid) {  // we have void type but webidl havn't
     Match(Token.tVoid);
   }
+  return null;
 }
 
 function UnrestrictedFloatType() {
@@ -770,26 +801,41 @@ function FloatType() {
   }
 }
 
-function UnsignedIntegerType() {
+function UnsignedIntegerType(): idl.PrimitiveTypeNode | null {
   if (g_lookahead.type == Token.tUnsigned) {
-    Match(Token.tUnsigned); IntegerType();
+    Match(Token.tUnsigned); return IntegerType(true);
+  } else {
+    return IntegerType(false);
   }
-  IntegerType();
 }
 
-function IntegerType() {
+function IntegerType(is_unsigned: boolean): idl.PrimitiveTypeNode | null {
   if (g_lookahead.type == Token.tShort) {
     Match(Token.tShort);
+    let res: idl.PrimitiveTypeNode = new idl.PrimitiveTypeNode();
+    res.type = is_unsigned ? idl.DataType.tUnsignedShort : idl.DataType.tShort;
+    return res;
   } else if (g_lookahead.type == Token.tLong) {
     Match(Token.tLong);
-    OptionalLong();
+    let is_opt_long: boolean = OptionalLong();
+    let res: idl.PrimitiveTypeNode = new idl.PrimitiveTypeNode();
+    if (is_opt_long) {
+      res.type = is_unsigned ? idl.DataType.tUnsignedLongLong : idl.DataType.tLongLong;
+    } else {
+      res.type = is_unsigned ? idl.DataType.tUnsignedLong : idl.DataType.tLong;
+    }
+    return res;
+  } else {
+    return null;
   }
 }
 
-function OptionalLong() {
+function OptionalLong(): boolean {
   if (g_lookahead.type == Token.tLong) {
     Match(Token.tLong);
+    return true;
   }
+  return false;
   // | ε
 }
 
@@ -813,11 +859,13 @@ function RecordType() {
   Match(Token.tRecord); Match(Token.tLAngle); StringType(); Match(Token.tComma); TypeWithExtendedAttributes(); Match(Token.tRAngle);
 }
 
-function Null() {
+function Null(): boolean {
   if (g_lookahead.type == Token.tQuestion) {
     Match(Token.tQuestion);
+    return true;
   } else {
     // ε
+    return false;
   }
 }
 
