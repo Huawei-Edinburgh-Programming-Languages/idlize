@@ -1,4 +1,4 @@
-git |File Name|Owner|Status|
+|File Name|Owner|Status|
 |---------|-----|------|
 |common_shape_method_modifier_test.cpp| Vadim Voronov ||
 |common_method_modifier_test14.cpp| Lobah Mikhail||
@@ -44,7 +44,7 @@ git |File Name|Owner|Status|
 |animation_extender_accessor.cpp|||
 |ui_extension_component_modifier.cpp|||
 |nav_path_stack_accessor.cpp|||
-|text_picker_modifier.cpp| ||
+|text_picker_modifier.cpp|||
 |navigation_context.cpp|||
 |rich_editor_controller_accessor.cpp|||
 |converter_enums.cpp|||
