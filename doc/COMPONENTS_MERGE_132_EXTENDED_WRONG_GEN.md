@@ -1,6 +1,7 @@
 |File Name|Owner|Status|
 |---------|-----|------|
 |common_shape_method_modifier_test.cpp| Vadim Voronov ||
+|common_shape_method_modifier_test2.cpp| Vadim Voronov ||
 |common_method_modifier_test14.cpp| Lobah Mikhail||
 |common_method_modifier_test2.cpp| Lobah Mikhail||
 |text_timer_modifier_test.cpp| Vadim Voronov ||
