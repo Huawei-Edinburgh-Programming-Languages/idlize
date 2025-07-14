@@ -28,19 +28,19 @@
 |stepper_modifier.cpp| Sergey Kovalev ||
 |node_content_accessor.cpp| Sergey Kovalev ||
 |text_input_modifier.cpp| Ivan Tuzhilkin ||
-|plugin_component_modifier.cpp|||
+|plugin_component_modifier.cpp| Evstigneev Roman ||
 |frame_node_accessor.cpp| Ivan Tuzhilkin ||
 |tabs_modifier.cpp| Ivan Tuzhilkin ||
 |embedded_component_modifier.cpp| Sergey Kovalev ||
 |custom_dialog_controller_peer_impl.cpp|||
 |common_method_modifier.cpp| Lobah Mikhail||
 |list_modifier.cpp|||
-|custom_dialog_controller_accessor.cpp|||
+|custom_dialog_controller_accessor.cpp| Evstigneev Roman ||
 |select_modifier.cpp| Samarin Sergey ||
 |common_shape_method_modifier.cpp| Evstigneev Roman ||
 |slider_modifier.cpp|||
 |nav_path_info_accessor.cpp| Evstigneev Roman ||
-|relative_container_modifier.cpp|||
+|relative_container_modifier.cpp| Evstigneev Roman ||
 |animation_extender_accessor.cpp|||
 |ui_extension_component_modifier.cpp|||
 |nav_path_stack_accessor.cpp| Evstigneev Roman ||
