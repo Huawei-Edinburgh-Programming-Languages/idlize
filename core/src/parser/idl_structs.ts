@@ -68,6 +68,9 @@ export enum DataType {
   tUnsignedLong = 4,
   tUnsignedLongLong = 5,
   tVoid = 6,
+  tAny = 7,
+  tFloat = 8,
+  tDouble = 9,
 
   tUser = 99,
 };

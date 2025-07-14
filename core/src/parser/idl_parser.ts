@@ -497,7 +497,10 @@ function ArgumentRest(): idl.ArgumentNode | null {
     let type: string = g_lookahead.text;
     Match(Token.tId); Ellipsis(); res = ArgumentName();  // I replace Type to Id
     res.type = type;
-    console.log("arg: ", res.name, res.type);
+  } else if (lex.IsItSingleType(g_lookahead.type)) {  // functions can get args of standard type or user type
+    let type: string = g_lookahead.text;              // SingleType is less power than "IsType"
+    Match(g_lookahead.type); Ellipsis(); res = ArgumentName();
+    res.type = type;
   } else {  // no args
   }
   return res;
@@ -707,8 +710,10 @@ function SingleType(): idl.TypeNode | null {
   if (lex.IsItDistinguishableType(g_lookahead.type)) {
     return DistinguishableType();
   } else if  (g_lookahead.type == Token.tAny) {
+    let res: idl.TypeNode = new idl.TypeNode();
+    res.type = idl.DataType.tAny;
     Match(Token.tAny);
-    return null;
+    return res;
   } else if (g_lookahead.type == Token.tPromise) {
     PromiseType();
     return null;
@@ -774,7 +779,10 @@ function PrimitiveType(): idl.PrimitiveTypeNode | null {
   res = UnsignedIntegerType();
   if (res)
     return res;
-  UnrestrictedFloatType();
+  res = UnrestrictedFloatType();
+  if (res)
+    return res;
+
   if (g_lookahead.type == Token.tBoolean) {
     Match(Token.tBoolean);
   } else if (g_lookahead.type == Token.tByte) {
@@ -792,20 +800,27 @@ function PrimitiveType(): idl.PrimitiveTypeNode | null {
   return res;
 }
 
-function UnrestrictedFloatType() {
+function UnrestrictedFloatType(): idl.PrimitiveTypeNode | null {
   if (g_lookahead.type == Token.tUnrestricted) {
-    Match(Token.tUnrestricted); FloatType();
+    Match(Token.tUnrestricted); return FloatType(true);
   } else {
-    FloatType();
+    return FloatType(false);
   }
 }
 
-function FloatType() {
+function FloatType(is_unrestricted: boolean): idl.PrimitiveTypeNode | null {
   if (g_lookahead.type == Token.tFloat) {
+    let res: idl.PrimitiveTypeNode = new idl.PrimitiveTypeNode();
+    res.type = idl.DataType.tFloat;  // is_unrestricted ? tUnrestrictedFloat : tFloat  ????
     Match(Token.tFloat);
+    return res;
   } else if (g_lookahead.type == Token.tDouble) {
+    let res: idl.PrimitiveTypeNode = new idl.PrimitiveTypeNode();
+    res.type = idl.DataType.tDouble;
     Match(Token.tDouble);
+    return res;
   }
+  return null;
 }
 
 function UnsignedIntegerType(): idl.PrimitiveTypeNode | null {
