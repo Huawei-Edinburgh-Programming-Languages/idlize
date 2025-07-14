@@ -22,6 +22,8 @@ export class Node {
 }
 
 export class CallbackNode extends Node {
+  args: ArgumentNode[] = [];
+  rettype: TypeNode | null = null;
   name: string;
 
   constructor(val: string) {
@@ -65,6 +67,7 @@ export enum DataType {
   tUnsignedShort = 3,
   tUnsignedLong = 4,
   tUnsignedLongLong = 5,
+  tVoid = 6,
 
   tUser = 99,
 };

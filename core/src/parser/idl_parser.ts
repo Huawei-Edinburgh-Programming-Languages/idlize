@@ -674,9 +674,10 @@ function CallbackRest(): idl.Node | null {
   let res: idl.CallbackNode = new idl.CallbackNode(g_lookahead.text);
   Match(Token.tId);
   Match(Token.tEqual);
-  Type();
+  res.rettype = Type();
   Match(Token.tLBracket);
-  ArgumentList();
+  let fnode: idl.FuncNode = ArgumentList();
+  res.args = fnode.args;
   Match(Token.tRBracket);
   Match(Token.tSemicolon);
   return res;
@@ -783,9 +784,12 @@ function PrimitiveType(): idl.PrimitiveTypeNode | null {
   } else if (g_lookahead.type == Token.tBigint) {
     Match(Token.tBigint);
   } else if (g_lookahead.type == Token.tVoid) {  // we have void type but webidl havn't
+    res = new idl.PrimitiveTypeNode();
     Match(Token.tVoid);
+    res.type = idl.DataType.tVoid;
   }
-  return null;
+
+  return res;
 }
 
 function UnrestrictedFloatType() {
