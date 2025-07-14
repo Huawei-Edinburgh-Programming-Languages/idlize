@@ -22,15 +22,15 @@
 |text_timer_modifier.cpp| Sergey Kovalev ||
 |global_scope_ohos_font_accessor.cpp|||
 |all_modifiers.cpp|||
-|text_area_modifier.cpp|||
+|text_area_modifier.cpp| Ivan Tuzhilkin ||
 |system_ops_accessor.cpp|||
 |prompt_action_accessor.cpp|||
 |stepper_modifier.cpp|||
 |node_content_accessor.cpp|||
-|text_input_modifier.cpp|||
+|text_input_modifier.cpp| Ivan Tuzhilkin ||
 |plugin_component_modifier.cpp|||
-|frame_node_accessor.cpp|||
-|tabs_modifier.cpp|||
+|frame_node_accessor.cpp| Ivan Tuzhilkin ||
+|tabs_modifier.cpp| Ivan Tuzhilkin ||
 |embedded_component_modifier.cpp|||
 |custom_dialog_controller_peer_impl.cpp|||
 |common_method_modifier.cpp| Lobah Mikhail||
