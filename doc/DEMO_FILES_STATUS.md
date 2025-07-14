@@ -1,6 +1,6 @@
 |/FILE | responsible |
 |---|---|
-| AlphabetIndexerTest.ets | |
+| AlphabetIndexerTest.ets | Alexander Porodin |
 | Animation.test.ets | |
 | AspectRatioTest.ets | |
 | AttachDetach.test.ets | |
