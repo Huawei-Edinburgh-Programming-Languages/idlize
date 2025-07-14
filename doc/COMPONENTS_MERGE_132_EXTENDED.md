@@ -26,7 +26,7 @@
 | navigation_transition_proxy_accessor.cpp | Evstigneev Roman | done |
 | text_field_ops_accessor.cpp | Ilya Erokhin | done |
 | transition_effect_accessor.cpp | Sergey Kovalev | done|
-| data_panel_modifier.cpp | Sergey Morozov | |
+| data_panel_modifier.cpp | Sergey Morozov | done |
 | progress_modifier.cpp | Ilya Erokhin | done |
 | indicator_component_modifier.cpp | Skroba Gleb | done |
 | rich_editor_controller_accessor.cpp | Evstigneev Roman | done |
