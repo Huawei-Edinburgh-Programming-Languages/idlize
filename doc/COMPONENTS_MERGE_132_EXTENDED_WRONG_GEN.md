@@ -7,7 +7,7 @@
 |relative_container_modifier_test.cpp| Vadim Voronov ||
 |scrollable_common_method_modifier_test.cpp| Vadim Voronov ||
 |common_method_modifier_test.cpp| Vadim Voronov ||
-|date_picker_modifier_test.cpp| Vadim Voronov ||
+|date_picker_modifier_test.cpp| Vadim Voronov | done, unfixable nothing todo|
 |security_component_method_modifier_test_2.cpp|||
 |common_method_modifier_test6.cpp| Lobah Mikhail||
 |shape_clip_accessor_test.cpp|||
