@@ -31,7 +31,7 @@
 |plugin_component_modifier.cpp|||
 |frame_node_accessor.cpp| Ivan Tuzhilkin ||
 |tabs_modifier.cpp| Ivan Tuzhilkin ||
-|embedded_component_modifier.cpp|||
+|embedded_component_modifier.cpp| Sergey Kovalev ||
 |custom_dialog_controller_peer_impl.cpp|||
 |common_method_modifier.cpp| Lobah Mikhail||
 |list_modifier.cpp|||
