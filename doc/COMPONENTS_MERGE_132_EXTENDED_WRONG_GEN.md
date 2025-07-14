@@ -4,11 +4,11 @@
 |common_shape_method_modifier_test2.cpp| Vadim Voronov ||
 |common_method_modifier_test14.cpp| Lobah Mikhail||
 |common_method_modifier_test2.cpp| Lobah Mikhail||
-|text_timer_modifier_test.cpp| Vadim Voronov ||
-|relative_container_modifier_test.cpp| Vadim Voronov ||
-|scrollable_common_method_modifier_test.cpp| Vadim Voronov ||
-|common_method_modifier_test.cpp| Vadim Voronov ||
-|date_picker_modifier_test.cpp| Vadim Voronov | done, unfixable nothing todo|
+|text_timer_modifier_test.cpp| Vadim Voronov | done, WRONG_GEN can't be fixed, Opt_Callback_Int64_Int64_Void required |
+|relative_container_modifier_test.cpp| Vadim Voronov | done |
+|scrollable_common_method_modifier_test.cpp| Vadim Voronov | done |
+|common_method_modifier_test.cpp| Vadim Voronov | done |
+|date_picker_modifier_test.cpp| Vadim Voronov | done |
 |security_component_method_modifier_test_2.cpp| Samarin Sergey ||
 |common_method_modifier_test6.cpp| Lobah Mikhail||
 |shape_clip_accessor_test.cpp| Andrey Khudenkikh ||
@@ -19,9 +19,9 @@
 |richeditor_controller_accessor_callback_test.cpp| Evstigneev Roman ||
 |key_event_accessor_test.cpp| Sergey Kovalev ||
 |drag_event_accessor_test.cpp| Mikhail Politov ||
-|global_scope_common_accessor_test.cpp|||
-|text_timer_modifier.cpp| Vadim Voronov ||
-|global_scope_ohos_font_accessor.cpp|||
+|global_scope_common_accessor_test.cpp| Vadim Voronov ||
+|text_timer_modifier.cpp| Vadim Voronov | done, WRONG_GEN can't be fixed, Opt_Callback_Int64_Int64_Void required |
+|global_scope_ohos_font_accessor.cpp| Vadim Voronov ||
 |all_modifiers.cpp| idlize | this is generated file |
 |text_area_modifier.cpp| Ivan Tuzhilkin | done |
 |system_ops_accessor.cpp| Evstigneev Roman | ResourceToLengthMetrics doesn't contained in the struct |
