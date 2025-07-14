@@ -12,7 +12,7 @@
 |common_method_modifier_test6.cpp| Lobah Mikhail||
 |shape_clip_accessor_test.cpp|||
 |frame_node_accessor_test.cpp|||
-|base_event_accessor_test.cpp|||
+|base_event_accessor_test.cpp| Sergey Kovalev||
 |shape_mask_accessor_test.cpp|||
 |mutable_styled_string_accessor_test.cpp|||
 |richeditor_controller_accessor_callback_test.cpp| Evstigneev Roman ||
