@@ -2,15 +2,15 @@
 |---------|-----|------|
 |common_shape_method_modifier_test.cpp| Vadim Voronov | on review |
 |scrollable_common_method_modifier_test2.cpp| Vadim Voronov | on review |
-|common_method_modifier_test14.cpp| Lobah Mikhail||
-|common_method_modifier_test2.cpp| Lobah Mikhail||
+|common_method_modifier_test14.cpp| Lobah Mikhail| done, WRONG_GEN partially remained.|
+|common_method_modifier_test2.cpp| Lobah Mikhail| done, WRONG_GEN partially remained.|
 |text_timer_modifier_test.cpp| Vadim Voronov | done, WRONG_GEN can't be fixed, Opt_Callback_Int64_Int64_Void required |
 |relative_container_modifier_test.cpp| Vadim Voronov | done |
 |scrollable_common_method_modifier_test.cpp| Vadim Voronov | done |
 |common_method_modifier_test.cpp| Samarin Sergey | in progress |
 |date_picker_modifier_test.cpp| Vadim Voronov | done |
 |security_component_method_modifier_test_2.cpp| Samarin Sergey | in progress |
-|common_method_modifier_test6.cpp| Lobah Mikhail||
+|common_method_modifier_test6.cpp| Lobah Mikhail| done, WRONG_GEN partially remained.|
 |shape_clip_accessor_test.cpp| Andrey Khudenkikh | WRONG_GEN can not be fixed |
 |frame_node_accessor_test.cpp| Andrey Khudenkikh | done |
 |base_event_accessor_test.cpp| Sergey Kovalev| done |
@@ -34,7 +34,7 @@
 |tabs_modifier.cpp| Ivan Tuzhilkin | done |
 |embedded_component_modifier.cpp| Sergey Kovalev | done |
 |custom_dialog_controller_peer_impl.cpp| Ivan Tuzhilkin | done |
-|common_method_modifier.cpp| Lobah Mikhail||
+|common_method_modifier.cpp| Lobah Mikhail| done, WRONG_GEN partially remained.|
 |list_modifier.cpp| Dudkin Sergey | done |
 |custom_dialog_controller_accessor.cpp| Evstigneev Roman | done |
 |select_modifier.cpp| Samarin Sergey | done |
