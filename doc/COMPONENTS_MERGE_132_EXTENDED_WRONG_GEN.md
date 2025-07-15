@@ -33,7 +33,7 @@
 |frame_node_accessor.cpp| Ivan Tuzhilkin | WRONG_GEN can not be fixed. One WRONG_GEN changed to WRONG_SDK |
 |tabs_modifier.cpp| Ivan Tuzhilkin | done |
 |embedded_component_modifier.cpp| Sergey Kovalev | done |
-|custom_dialog_controller_peer_impl.cpp| Ivan Tuzhilkin ||
+|custom_dialog_controller_peer_impl.cpp| Ivan Tuzhilkin | done |
 |common_method_modifier.cpp| Lobah Mikhail||
 |list_modifier.cpp| Dudkin Sergey | done |
 |custom_dialog_controller_accessor.cpp| Evstigneev Roman | done |
