@@ -51,9 +51,9 @@
 | ImageAnimator | setReverseTestReverseInvalidValues | Bug |||
 | ImageAnimator | setMonitorInvisibleAreaTestMonitorInvisibleAreaInvalidValues | Bug |||
 | ImageAnimator | setIterationsTestIterationsValidValues | Looks like bug|||
-| Progress | setColorTestColorInvalidValues | broken LinearGradient|||
-| Progress | setValueTestValueInvalidValues | Bug |||
-| Progress | setPrivacySensitiveTestPrivacySensitiveValidValues | Bug Code commented in model|||
+| Progress | setColorTestColorInvalidValues | broken LinearGradient| Vadim Voronov ||
+| Progress | setValueTestValueInvalidValues | Bug |Vadim Voronov ||
+| Progress | setPrivacySensitiveTestPrivacySensitiveValidValues | Bug Code commented in model| Vadim Voronov ||
 | Slider | setShowTipsTestShowTipsInvalidValues | Bug |||
 | Slider | setSelectedColorTestSelectedColorInvalidValues | Bug |||
 | Slider | setEnableHapticFeedbackTestEnableHapticFeedbackValidValues | Bug in NG model, need to switch to static model|||
