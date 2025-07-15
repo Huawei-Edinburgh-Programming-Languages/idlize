@@ -114,7 +114,7 @@ class ReturnValueConvertor implements TypeConvertor<string | undefined> {
     convertTypeReference(type: IDLReferenceType): string | undefined {
         const decl = this.resolver.resolveTypeReference(type)
         if (decl && isInterface(decl) && isMaterialized(decl, this.resolver)) {
-            return `(${this.retTypeConverter.convert(type)}) 300`
+            return `reinterpret_cast<${this.retTypeConverter.convert(type)}>(300)`
         }
         return this.mkObject()
     }
@@ -295,7 +295,7 @@ export class ModifierVisitor {
                 let v132_name = capitalize(method.sig.name)
                 if (method.v132_isComponentMethod)
                     v132_name = v132_name.substring(3)
-                this.real.print(`//${clazz?.componentName}ModelNG::Set${v132_name}(frameNode, convValue);`)
+                this.real.print(`// ${clazz?.componentName}ModelNG::Set${v132_name}(frameNode, convValue);`)
             }
         }
     }
