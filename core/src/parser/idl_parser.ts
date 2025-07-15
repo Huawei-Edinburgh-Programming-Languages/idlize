@@ -891,24 +891,27 @@ function Null(): boolean {
   }
 }
 
-function BufferRelatedType() {
-/*
-  ArrayBuffer();
-  SharedArrayBuffer();
-  DataView();
-  Int8Array();
-  Int16Array();
-  Int32Array();
-  Uint8Array();
-  Uint16Array();
-  Uint32Array();
-  Uint8ClampedArray();
-  BigInt64Array();
-  BigUint64Array();
-  Float16Array();
-  Float32Array();
-  Float64Array();
-*/
+function BufferRelatedType(): idl.TypeNode | null {
+  let res: idl.TypeNode = new idl.TypeNode;
+  switch (g_lookahead.type) {
+    case Token.tArrayBuffer: res.type = idl.DataType.tArrayBuffer; break;
+    case Token.tSharedArrayBuffer: res.type = idl.DataType.tSharedArrayBuffer; break;
+    case Token.tDataView: res.type = idl.DataType.tDataView; break;
+    case Token.tInt8Array: res.type = idl.DataType.tInt8Array; break;
+    case Token.tInt16Array: res.type = idl.DataType.tInt16Array; break;
+    case Token.tInt32Array: res.type = idl.DataType.tInt32Array; break;
+    case Token.tUint8Array: res.type = idl.DataType.tUint8Array; break;
+    case Token.tUint16Array: res.type = idl.DataType.tUint16Array; break;
+    case Token.tUint32Array: res.type = idl.DataType.tUint32Array; break;
+    case Token.tUint8ClampedArray: res.type = idl.DataType.tUint8ClampedArray; break;
+    case Token.tBigInt64Array: res.type = idl.DataType.tBigInt64Array; break;
+    case Token.tBigUint64Array: res.type = idl.DataType.tBigUint64Array; break;
+    case Token.tFloat16Array: res.type = idl.DataType.tFloat16Array; break;
+    case Token.tFloat32Array: res.type = idl.DataType.tFloat32Array; break;
+    case Token.tFloat64Array: res.type = idl.DataType.tFloat64Array; break;
+    default: return null;
+  }
+  return res;
 }
 
 function ExtendedAttributeList() {
@@ -948,52 +951,52 @@ function ExtendedAttributeInner() {
 }
 
 function Other() {
-  "integer"
-  "decimal"
-  Token.tId
-  "string"
-  "other"
-  "-"
-  "-Infinity"
-  "."
-  "..."
-  ":"
-  ";"
-  "<"
-  "="
-  ">"
-  "?"
-  "*"
-  "ByteString"
-  "DOMString"
-  "FrozenArray"
-  "Infinity"
-  "NaN"
-  "ObservableArray"
-  "Promise"
-  "USVString"
-  "any"
-  "bigint"
-  "boolean"
-  "byte"
-  "double"
-  "false"
-  "float"
-  "long"
-  "null"
-  "object"
-  "octet"
-  "or"
-  "optional"
-  "record"
-  "sequence"
-  "short"
-  "symbol"
-  "true"
-  "unsigned"
-  "undefined"
-  "ArgumentNameKeyword"
-  "BufferRelatedType"
+  Token.tInteger,
+  Token.tDecimal,
+  Token.tId,
+  Token.tString,
+  /* "other" ??? */
+  Token.tMinus,
+  Token.tMinusInfinity,
+  Token.tDot,
+  Token.tEllipsis,
+  Token.tColon,
+  Token.tSemicolon,
+  Token.tLAngle,
+  Token.tEqual,
+  Token.tRAngle,
+  Token.tQuestion,
+  Token.tAsterisk,
+  Token.tByteString,
+  Token.tDOMString,
+  Token.tFrozenArray,
+  Token.tPlusInfinity,
+  Token.tNaN,
+  Token.tObservableArray,
+  Token.tPromise,
+  Token.tUSVString,
+  Token.tAny,
+  Token.tBigint,
+  Token.tBoolean,
+  Token.tByte,
+  Token.tDouble,
+  Token.tFalse,
+  Token.tFloat,
+  Token.tLong,
+  Token.tNull,
+  Token.tObject,
+  Token.tOctet,
+  Token.tOr,
+  Token.tOptional,
+  Token.tRecord,
+  Token.tSequence,
+  Token.tShort,
+  Token.tSymbol,
+  Token.tTrue,
+  Token.tUnsigned,
+  Token.tUndefined,
+  "ArgumentNameKeyword"  // non-terminal
+  //lex.IsItBufferRelatedType()  // non-terminal
 }
 
 function OtherOrComma() {

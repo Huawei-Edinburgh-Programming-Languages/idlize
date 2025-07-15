@@ -72,6 +72,22 @@ export enum DataType {
   tFloat = 8,
   tDouble = 9,
 
+  tArrayBuffer = 80,
+  tSharedArrayBuffer = 81,
+  tDataView = 82,
+  tInt8Array = 83,
+  tInt16Array = 84,
+  tInt32Array = 85,
+  tUint8Array = 86,
+  tUint16Array = 87,
+  tUint32Array = 88,
+  tUint8ClampedArray = 89,
+  tBigInt64Array = 90,
+  tBigUint64Array = 91,
+  tFloat16Array = 92,
+  tFloat32Array = 93,
+  tFloat64Array = 94,
+
   tUser = 99,
 };
 

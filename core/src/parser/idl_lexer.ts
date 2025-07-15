@@ -89,6 +89,7 @@ const g_keywords: Array<TokenPattern> = [
   { pattern: /object/, type: Token.tObject},
   { pattern: /symbol/, type: Token.tSymbol},
   { pattern: /optional/, type: Token.tOptional},
+  { pattern: /null/, type: Token.tNull},
 
   { pattern: /ArrayBuffer/, type: Token.tArrayBuffer},
   { pattern: /SharedArrayBuffer/, type: Token.tSharedArrayBuffer},

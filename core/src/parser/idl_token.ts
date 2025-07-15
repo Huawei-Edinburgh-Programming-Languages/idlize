@@ -84,6 +84,7 @@ export enum Token {
   tObject = 81,       // I found this two types in standard but not in source code
   tSymbol = 82,
   tOptional = 83,
+  tNull = 84,
 
   tArrayBuffer = 90,
   tSharedArrayBuffer = 91,
@@ -103,6 +104,12 @@ export enum Token {
 
   tPromise = 105,
   tNumber = 106,
+  tMinusInfinity = 107,
+  tPlusInfinity = 108,
+  tNaN = 109,
+
+  tTrue = 110,
+  tFalse = 111,
 
   tError = 1000,
   tEnd = 1001,
