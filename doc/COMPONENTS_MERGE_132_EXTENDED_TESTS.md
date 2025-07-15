@@ -1,5 +1,6 @@
-|File Name|Owner|Status|
-|---------|-----|------|
+
+|Component|Method|Comment|Owner|Status|
+|---------|------|-------|-----|------|
 |common_shape_method_modifier_test.cpp| Vadim Voronov | on review |
 |scrollable_common_method_modifier_test2.cpp| Vadim Voronov | on review |
 
@@ -70,5 +71,6 @@
 | TextClock | setFontFeatureTestFontFeatureInvalidValues | Bug |||
 | WaterFlow | setColumnsTemplateTestColumnsTemplateInvalidValues | Bugs |||
 | WaterFlow | setRowsTemplateTestRowsTemplateInvalidValues | Bugs|||
+
 
 
