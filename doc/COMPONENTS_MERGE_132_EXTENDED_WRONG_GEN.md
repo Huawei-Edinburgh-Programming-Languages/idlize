@@ -50,8 +50,8 @@
 |rich_editor_controller_accessor.cpp| Evstigneev Roman | done |
 |converter_enums.cpp| Samarin Sergey | done |
 |converter.cpp| Kovalev Sergey ||
-|reverse_converter.cpp|||
-|reverse_converter.h|||
+|reverse_converter.cpp| Vadim Voronov ||
+|reverse_converter.h| Vadim Voronov ||
 | key_event_accessor.cpp | Mikhail Politov |  |
 | base_event_accessor.cpp | Mikhail Politov |  |
 | drag_event_accessor.cpp | Mikhail Politov |  |
