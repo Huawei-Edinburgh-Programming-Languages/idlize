@@ -407,7 +407,7 @@ class DeserializeCallbacksVisitor {
                             ? [`vmContext`, `thisArray`, `thisLength`]
                             : [`thisDeserializer`]
                         const callbackKindValue = generateCallbackKindAccess(callback, this.writer.language)
-                        writer.print(`case ${generateCallbackKindValue(callback)}/*${callbackKindValue}*/: return deserializeAndCallSync${callback.name}(${args.join(', ')});`)
+                        writer.print(`case ${callbackKindValue}: return deserializeAndCallSync${callback.name}(${args.join(', ')});`)
                     }
                     writer.popIndent()
                     writer.print(`}`)
