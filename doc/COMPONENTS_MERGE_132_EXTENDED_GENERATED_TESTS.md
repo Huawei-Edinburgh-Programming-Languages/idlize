@@ -5,7 +5,7 @@
 |TextArea | setCaretStyleTestCaretStyleWidthInvalidValues | Bug |||
 |TextArea | setShowCounterTestShowCounterValueInvalidValues | Bug |||
 |TextArea | setFontFeatureTestFontFeatureInvalidValues | Bug |||
-| TextInput | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug |||
+| TextInput | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug | Ivan Tuzhilkin ||
 | TextInput | setCaretStyleTestCaretStyleWidthInvalidValues | Bug |||
 | TextInput | setFontFeatureTestFontFeatureInvalidValues | Bug |||
 | TextInput | setShowCounterTestShowCounterValueInvalidValues | Bug |||
