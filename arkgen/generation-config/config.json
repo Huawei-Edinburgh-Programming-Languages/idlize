@@ -284,6 +284,11 @@
                 "hookName": "hookCheckBoxContentModifier"
             }
         },
+        "CommonMethod": {
+            "stateStyles": {
+                "hookName": "hookStateStyleImpl"
+            }
+        },
         "DataPanel": {
             "contentModifier": {
                 "hookName": "hookDataPanelContentModifier"
