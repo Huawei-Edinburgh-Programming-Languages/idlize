@@ -12,7 +12,7 @@
 |security_component_method_modifier_test_2.cpp| Samarin Sergey | in progress |
 |common_method_modifier_test6.cpp| Lobah Mikhail||
 |shape_clip_accessor_test.cpp| Andrey Khudenkikh ||
-|frame_node_accessor_test.cpp| Andrey Khudenkikh ||
+|frame_node_accessor_test.cpp| Andrey Khudenkikh | done |
 |base_event_accessor_test.cpp| Sergey Kovalev| done |
 |shape_mask_accessor_test.cpp| Ivan Tuzhilkin | WRONG_GEN can not be fixed |
 |mutable_styled_string_accessor_test.cpp| Sergey Kovalev| done |
