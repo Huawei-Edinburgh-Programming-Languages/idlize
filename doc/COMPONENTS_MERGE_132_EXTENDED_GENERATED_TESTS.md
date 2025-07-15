@@ -1,6 +1,6 @@
 |Component | Method | Comment| Owner |Status|
 |----------|----------|--------|-------|------|
-|TextArea  | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug |||
+|TextArea  | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug | Ivan Tuzhilkin ||
 |TextArea | setFontFamilyTestFontFamilyInvalidValues | Bug |||
 |TextArea | setCaretStyleTestCaretStyleWidthInvalidValues | Bug |||
 |TextArea | setShowCounterTestShowCounterValueInvalidValues | Bug |||
