@@ -205,7 +205,9 @@
             "PageTransitionExitInterface",
             "CommonTransition",
             "wrapBuilder",
-            "ContentModifier"
+            "ContentModifier",
+            "CustomStyles",
+            "applyStyles"
         ],
         "ignoreEntry": [
             "Optional",
@@ -282,6 +284,11 @@
         "Checkbox": {
             "contentModifier": {
                 "hookName": "hookCheckBoxContentModifier"
+            }
+        },
+        "CommonMethod": {
+            "stateStyles": {
+                "hookName": "hookStateStyleImpl"
             }
         },
         "DataPanel": {
@@ -362,7 +369,8 @@
             "String",
             "Function",
             "Optional",
-            "RelativeIndexable"
+            "RelativeIndexable",
+            "StateStyles"
         ]
     },
     "dummy": {
