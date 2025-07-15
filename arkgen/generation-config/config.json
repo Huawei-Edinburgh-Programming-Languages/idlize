@@ -212,7 +212,8 @@
             "PageTransitionExitInterface",
             "CommonTransition",
             "wrapBuilder",
-            "ContentModifier"
+            "ContentModifier",
+            "CustomStyles"
         ],
         "ignoreEntry": [
             "Optional",
@@ -394,7 +395,8 @@
             "String",
             "Function",
             "Optional",
-            "RelativeIndexable"
+            "RelativeIndexable",
+            "StateStyles"
         ]
     },
     "dummy": {
