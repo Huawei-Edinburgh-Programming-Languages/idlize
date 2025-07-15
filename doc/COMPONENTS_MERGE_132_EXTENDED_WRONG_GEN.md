@@ -49,7 +49,7 @@
 |navigation_context.cpp| Dudkin Sergey | done |
 |rich_editor_controller_accessor.cpp| Evstigneev Roman | done |
 |converter_enums.cpp| Samarin Sergey | done |
-|converter.cpp|||
+|converter.cpp| Kovalev Sergey ||
 |reverse_converter.cpp|||
 |reverse_converter.h|||
 | key_event_accessor.cpp | Mikhail Politov |  |
