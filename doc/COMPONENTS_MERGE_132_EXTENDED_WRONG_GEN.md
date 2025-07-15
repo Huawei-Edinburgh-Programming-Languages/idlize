@@ -13,11 +13,11 @@
 |common_method_modifier_test6.cpp| Lobah Mikhail||
 |shape_clip_accessor_test.cpp| Andrey Khudenkikh ||
 |frame_node_accessor_test.cpp| Andrey Khudenkikh ||
-|base_event_accessor_test.cpp| Sergey Kovalev||
+|base_event_accessor_test.cpp| Sergey Kovalev| done |
 |shape_mask_accessor_test.cpp| Ivan Tuzhilkin | WRONG_GEN can not be fixed |
-|mutable_styled_string_accessor_test.cpp| Sergey Kovalev||
+|mutable_styled_string_accessor_test.cpp| Sergey Kovalev| done |
 |richeditor_controller_accessor_callback_test.cpp| Evstigneev Roman | done |
-|key_event_accessor_test.cpp| Sergey Kovalev ||
+|key_event_accessor_test.cpp| Sergey Kovalev | done |
 |drag_event_accessor_test.cpp| Mikhail Politov ||
 |global_scope_common_accessor_test.cpp| Vadim Voronov ||
 |text_timer_modifier.cpp| Vadim Voronov | done, WRONG_GEN can't be fixed, Opt_Callback_Int64_Int64_Void required |
@@ -26,13 +26,13 @@
 |text_area_modifier.cpp| Ivan Tuzhilkin | done |
 |system_ops_accessor.cpp| Evstigneev Roman | done, ResourceToLengthMetrics doesn't contained in the struct |
 |prompt_action_accessor.cpp| Evstigneev Roman | done|
-|stepper_modifier.cpp| Sergey Kovalev ||
-|node_content_accessor.cpp| Sergey Kovalev ||
+|stepper_modifier.cpp| Sergey Kovalev | done |
+|node_content_accessor.cpp| Sergey Kovalev | done |
 |text_input_modifier.cpp| Ivan Tuzhilkin | done |
 |plugin_component_modifier.cpp| Evstigneev Roman | done, need change Ark_Object to something that can be converted to std::string |
 |frame_node_accessor.cpp| Ivan Tuzhilkin | WRONG_GEN can not be fixed. One WRONG_GEN changed to WRONG_SDK |
 |tabs_modifier.cpp| Ivan Tuzhilkin | done |
-|embedded_component_modifier.cpp| Sergey Kovalev ||
+|embedded_component_modifier.cpp| Sergey Kovalev | done |
 |custom_dialog_controller_peer_impl.cpp| Ivan Tuzhilkin ||
 |common_method_modifier.cpp| Lobah Mikhail||
 |list_modifier.cpp| Dudkin Sergey | done |
