@@ -7,7 +7,7 @@
 |text_timer_modifier_test.cpp| Vadim Voronov | done, WRONG_GEN can't be fixed, Opt_Callback_Int64_Int64_Void required |
 |relative_container_modifier_test.cpp| Vadim Voronov | done |
 |scrollable_common_method_modifier_test.cpp| Vadim Voronov | done |
-|common_method_modifier_test.cpp| Vadim Voronov | |
+|common_method_modifier_test.cpp| Evstigneev Roman | |
 |date_picker_modifier_test.cpp| Vadim Voronov | done |
 |security_component_method_modifier_test_2.cpp| Samarin Sergey | in progress |
 |common_method_modifier_test6.cpp| Lobah Mikhail||
@@ -19,9 +19,9 @@
 |richeditor_controller_accessor_callback_test.cpp| Evstigneev Roman | done |
 |key_event_accessor_test.cpp| Sergey Kovalev | done |
 |drag_event_accessor_test.cpp| Mikhail Politov ||
-|global_scope_common_accessor_test.cpp| Vadim Voronov ||
+|global_scope_common_accessor_test.cpp| Evstigneev Roman ||
 |text_timer_modifier.cpp| Vadim Voronov | done, WRONG_GEN can't be fixed, Opt_Callback_Int64_Int64_Void required |
-|global_scope_ohos_font_accessor.cpp| Vadim Voronov ||
+|global_scope_ohos_font_accessor.cpp| Evstigneev Roman | done |
 |all_modifiers.cpp| idlize | this is generated file |
 |text_area_modifier.cpp| Ivan Tuzhilkin | done |
 |system_ops_accessor.cpp| Evstigneev Roman | done, ResourceToLengthMetrics doesn't contained in the struct |
