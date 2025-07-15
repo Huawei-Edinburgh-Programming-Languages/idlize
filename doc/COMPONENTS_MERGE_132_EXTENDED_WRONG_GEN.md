@@ -42,7 +42,7 @@
 |slider_modifier.cpp| Ivan Tuzhilkin | WRONG_GEN can not be fixed |
 |nav_path_info_accessor.cpp| Evstigneev Roman | done |
 |relative_container_modifier.cpp| Evstigneev Roman, Vadim Voronov | done |
-|animation_extender_accessor.cpp| Evstigneev Roman | AnimateToImmediately, KeyFrameAnimation doesn't contain in the struct |
+|animation_extender_accessor.cpp| Evstigneev Roman | struct doesn't contain AnimateToImmediately, KeyFrameAnimation |
 |ui_extension_component_modifier.cpp| Pavelev Ivan ||
 |nav_path_stack_accessor.cpp| Evstigneev Roman | done |
 |text_picker_modifier.cpp| Dudkin Sergey | done |
