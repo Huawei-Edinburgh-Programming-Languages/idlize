@@ -49,7 +49,7 @@
 |navigation_context.cpp| Dudkin Sergey | done |
 |rich_editor_controller_accessor.cpp| Evstigneev Roman | done |
 |converter_enums.cpp| Samarin Sergey | done |
-|converter.cpp| Kovalev Sergey ||
+|converter.cpp| Kovalev Sergey | done, one WRONG_GEN can not be fixed|
 |reverse_converter.cpp| Vadim Voronov | |
 |reverse_converter.h| Vadim Voronov | |
 | key_event_accessor.cpp | Mikhail Politov |  |
