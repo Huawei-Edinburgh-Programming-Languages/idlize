@@ -1,7 +1,7 @@
 |File Name|Owner|Status|
 |---------|-----|------|
-|common_shape_method_modifier_test.cpp| Vadim Voronov | on review |
-|scrollable_common_method_modifier_test2.cpp| Vadim Voronov | on review |
+|common_shape_method_modifier_test.cpp| Vadim Voronov | done |
+|scrollable_common_method_modifier_test2.cpp| Vadim Voronov | done |
 |common_method_modifier_test14.cpp| Lobah Mikhail| done, WRONG_GEN partially remained.|
 |common_method_modifier_test2.cpp| Lobah Mikhail| done, WRONG_GEN partially remained.|
 |text_timer_modifier_test.cpp| Vadim Voronov | done, WRONG_GEN can't be fixed, Opt_Callback_Int64_Int64_Void required |
@@ -50,8 +50,8 @@
 |rich_editor_controller_accessor.cpp| Evstigneev Roman | done |
 |converter_enums.cpp| Samarin Sergey | done |
 |converter.cpp| Kovalev Sergey | done, one WRONG_GEN can not be fixed|
-|reverse_converter.cpp| Vadim Voronov | |
-|reverse_converter.h| Vadim Voronov | |
+|reverse_converter.cpp| Vadim Voronov | done |
+|reverse_converter.h| Vadim Voronov | done |
 | key_event_accessor.cpp | Mikhail Politov |  |
 | base_event_accessor.cpp | Mikhail Politov |  |
 | drag_event_accessor.cpp | Mikhail Politov |  |
