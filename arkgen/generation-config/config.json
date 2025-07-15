@@ -299,6 +299,11 @@
                 "replaceImplementation": true
             }
         },
+        "CommonMethod": {
+            "stateStyles": {
+                "hookName": "hookStateStyleImpl"
+            }
+        },
         "DataPanel": {
             "contentModifier": {
                 "hookName": "hookDataPanelContentModifier",
