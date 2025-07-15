@@ -27,14 +27,14 @@
 | ColumnSplit | setDividerTestDefaultValues | Wrong default values when not initialized. Need to investigate!|||
 | ColumnSplit | setResizeableTestResizeableInvalidValues | Bug |||
 | RichEditor | setEnableDataDetectorTestEnableDataDetectorInvalidValues | Bug |||
-| CommonMethod | setFocusScopePriorityTestFocusScopeIdInvalidValues |Bugs|||
-| CommonMethod | setRotateTestRotateCenterZValidValues |Bugs Looks like wrong fixture AND bug in implementation|||
-| CommonMethod | setRotateTestRotateCenterZInvalidValues |Bugs||||
-| CommonMethod | setMarkAnchorTestMarkAnchorPositionXInvalidValues |Bugs|||
-| CommonMethod | setMarkAnchorTestMarkAnchorPositionYInvalidValues |Bugs|||
+| CommonMethod | setFocusScopePriorityTestFocusScopeIdInvalidValues |Bugs| Lobah Mikhail||
+| CommonMethod | setRotateTestRotateCenterZValidValues |Bugs Looks like wrong fixture AND bug in implementation| Lobah Mikhail||
+| CommonMethod | setRotateTestRotateCenterZInvalidValues |Bugs| Lobah Mikhail|||
+| CommonMethod | setMarkAnchorTestMarkAnchorPositionXInvalidValues |Bugs| Lobah Mikhail||
+| CommonMethod | setMarkAnchorTestMarkAnchorPositionYInvalidValues |Bugs| Lobah Mikhail||
 | CommonMethod | setTabIndexTestTabIndexInvalidValues |Bugs|||
-| CommonMethod | setDefaultFocusTestDefaultFocusInvalidValues |Bugs|||
-| CommonMethod | setGroupDefaultFocusTestGroupDefaultFocusInvalidValues |Bugs|||
+| CommonMethod | setDefaultFocusTestDefaultFocusInvalidValues |Bugs| Lobah Mikhail||
+| CommonMethod | setGroupDefaultFocusTestGroupDefaultFocusInvalidValues |Bugs| Lobah Mikhail||
 | CommonMethod | setFocusOnTouchTestFocusOnTouchInvalidValues |Bugs|||
 | CommonMethod | setFlexGrowTestFlexGrowInvalidValues |Bugs|||
 | CommonMethod | setFlexShrinkTestFlexShrinkInvalidValues |Bugs|||
