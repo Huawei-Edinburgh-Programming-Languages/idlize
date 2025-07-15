@@ -50,7 +50,7 @@
 |rich_editor_controller_accessor.cpp| Evstigneev Roman | done |
 |converter_enums.cpp| Samarin Sergey | done |
 |converter.cpp| Kovalev Sergey | done, one WRONG_GEN can not be fixed|
-|reverse_converter.cpp| Vadim Voronov | done |
+|reverse_converter.cpp| Vadim Voronov | done, WRONG_GEN can't be fixed Ark_HistoricalPoint should have Ark_Int64 for timestamp |
 |reverse_converter.h| Vadim Voronov | done |
 | key_event_accessor.cpp | Mikhail Politov |  |
 | base_event_accessor.cpp | Mikhail Politov |  |
