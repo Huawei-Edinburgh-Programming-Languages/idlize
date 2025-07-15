@@ -1,7 +1,7 @@
 |File Name|Owner|Status|
 |---------|-----|------|
-|common_shape_method_modifier_test.cpp| Vadim Voronov ||
-|common_shape_method_modifier_test2.cpp| Vadim Voronov ||
+|common_shape_method_modifier_test.cpp| Vadim Voronov | on review |
+|scrollable_common_method_modifier_test2.cpp| Vadim Voronov | on review |
 |common_method_modifier_test14.cpp| Lobah Mikhail||
 |common_method_modifier_test2.cpp| Lobah Mikhail||
 |text_timer_modifier_test.cpp| Vadim Voronov | done, WRONG_GEN can't be fixed, Opt_Callback_Int64_Int64_Void required |
