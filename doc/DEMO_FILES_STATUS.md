@@ -10,7 +10,7 @@
 | BackgroundBlurStyle.test.ets | |
 | BadgeTest.ets | Alexander Porodin |
 | BaseSpanTest.ets | |
-| BlankTest.ets | |
+| BlankTest.ets | Olga Daryina |
 | ButtonTest.ets | Ivan Tuzhilkin |
 | CalendarPickerTest.ets | Ivan Tuzhilkin |
 | CanvasRendererBeginPath.test.ets | Vadim Voronov |
@@ -132,9 +132,9 @@
 | IndicatorComponent.test.ets | |
 | KeyboardShortcutTest.ets | |
 | Line.ets | |
-| ListItemGroupTest.ets | |
-| ListItemTest.ets | |
-| ListTest.ets | |
+| ListItemGroupTest.ets | Olga Daryina |
+| ListItemTest.ets | Olga Daryina |
+| ListTest.ets | Olga Daryina |
 | LoadingProgressTest.ets | Samarin Sergey |
 | LocationButtonTest.ets | |
 | MarqueeTest.ets | Alexander Porodin |
