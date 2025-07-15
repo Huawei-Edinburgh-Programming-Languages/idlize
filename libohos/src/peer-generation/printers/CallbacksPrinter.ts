@@ -54,7 +54,7 @@ function collectEntryCallbacks(library: LibraryInterface, entry: idl.IDLEntry): 
 export function collectUniqueCallbacks(library: LibraryInterface, options?: { transformCallbacks?: boolean }) {
     const uniqueCallbacks: idl.IDLCallback[] = []
     const uniqueCallbacksNames = new Set<string>()
-    collectDeclarationTargets(library).filter(idl.isCallback).forEach(it => {
+    collectDeclarationTargets(library).filter(idl.isCallback).filter(it => !peerGeneratorConfiguration().isHandWritten(it.name)).forEach(it => {
         if (!uniqueCallbacksNames.has(it.name)) {
             uniqueCallbacksNames.add(it.name)
             uniqueCallbacks.push(it)
