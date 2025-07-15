@@ -11,7 +11,7 @@
 |date_picker_modifier_test.cpp| Vadim Voronov | done |
 |security_component_method_modifier_test_2.cpp| Samarin Sergey | in progress |
 |common_method_modifier_test6.cpp| Lobah Mikhail||
-|shape_clip_accessor_test.cpp| Andrey Khudenkikh ||
+|shape_clip_accessor_test.cpp| Andrey Khudenkikh | WRONG_GEN can not be fixed |
 |frame_node_accessor_test.cpp| Andrey Khudenkikh | done |
 |base_event_accessor_test.cpp| Sergey Kovalev| done |
 |shape_mask_accessor_test.cpp| Ivan Tuzhilkin | WRONG_GEN can not be fixed |
