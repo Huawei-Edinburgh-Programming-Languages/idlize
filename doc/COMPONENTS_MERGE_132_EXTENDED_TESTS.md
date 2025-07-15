@@ -6,9 +6,9 @@
 
 
 
-|Component | Method | Comment| Owner|Status|
-| Button |----------|--------|-------|------|
-|TextArea | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug |||
+|Component | Method | Comment| Owner |Status|
+|----------|----------|--------|-------|------|
+|TextArea  | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug |||
 |TextArea | setFontFamilyTestFontFamilyInvalidValues | Bug |||
 |TextArea | setCaretStyleTestCaretStyleWidthInvalidValues | Bug |||
 |TextArea | setShowCounterTestShowCounterValueInvalidValues | Bug |||
@@ -71,6 +71,5 @@
 | TextClock | setFontFeatureTestFontFeatureInvalidValues | Bug |||
 | WaterFlow | setColumnsTemplateTestColumnsTemplateInvalidValues | Bugs |||
 | WaterFlow | setRowsTemplateTestRowsTemplateInvalidValues | Bugs|||
-
 
 
