@@ -1,14 +1,14 @@
 |Component | Method | Comment| Owner |Status|
 |----------|----------|--------|-------|------|
-|TextArea  | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug | Ivan Tuzhilkin ||
-|TextArea | setFontFamilyTestFontFamilyInvalidValues | Bug |||
-|TextArea | setCaretStyleTestCaretStyleWidthInvalidValues | Bug |||
-|TextArea | setShowCounterTestShowCounterValueInvalidValues | Bug |||
-|TextArea | setFontFeatureTestFontFeatureInvalidValues | Bug |||
-| TextInput | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug | Ivan Tuzhilkin ||
-| TextInput | setCaretStyleTestCaretStyleWidthInvalidValues | Bug |||
-| TextInput | setFontFeatureTestFontFeatureInvalidValues | Bug |||
-| TextInput | setShowCounterTestShowCounterValueInvalidValues | Bug |||
+|TextArea  | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug | Ivan Tuzhilkin | in progress |
+|TextArea | setFontFamilyTestFontFamilyInvalidValues | Bug | Ivan Tuzhilkin ||
+|TextArea | setCaretStyleTestCaretStyleWidthInvalidValues | Bug | Ivan Tuzhilkin ||
+|TextArea | setShowCounterTestShowCounterValueInvalidValues | Bug | Ivan Tuzhilkin ||
+|TextArea | setFontFeatureTestFontFeatureInvalidValues | Bug | Ivan Tuzhilkin ||
+| TextInput | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug | Ivan Tuzhilkin | in progress |
+| TextInput | setCaretStyleTestCaretStyleWidthInvalidValues | Bug |Ivan Tuzhilkin||
+| TextInput | setFontFeatureTestFontFeatureInvalidValues | Bug | Ivan Tuzhilkin||
+| TextInput | setShowCounterTestShowCounterValueInvalidValues | Bug | Ivan Tuzhilkin||
 | TextInput | setMaxLinesTestMaxLinesValidValues | ??? |||
 | TextInput | setCancelButtonTestCancelButtonCancelButtonOptionsStyleValidValues | Bug? |||
 | TextInput | setCancelButtonTestCancelButtonCancelButtonOptionsIconSizeValidValues | Bug? |||
