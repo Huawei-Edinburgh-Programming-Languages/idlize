@@ -15,7 +15,8 @@
 | TextInput | setCancelButtonTestCancelButtonCancelButtonOptionsIconColorValidValues | Bug? |||
 | TextInput | setCancelButtonTestCancelButtonCancelButtonOptionsIconSrcValidValues | Bug? |||
 | TextInput | setCancelButtonTestCancelButtonCancelButtonSymbolOptionsStyleValidValues | Bug? |||
-| Button | setFontWeightTestDefaultValues | Value is different from documentation|Andrey Khudenkikh||
+| Button | setFontWeightTestDefaultValues | Value is different from documentation|Andrey Khudenkikh| ace problem|
+| Button | setFontWeightTestFontWeightInvalidValues | Value is different from documentation|Andrey Khudenkikh| ace problem|
 | Button | setFontSizeTestFontSizeValidValues | Invalid units for 0 |Andrey Khudenkikh||
 | Button | setLabelStyleTestLabelStyleFontSizeValidValues | Invalid units for 0|Andrey Khudenkikh||
 | Button | setFontFamilyTestFontFamilyValidValues | Incorrect resource processing|Andrey Khudenkikh||
