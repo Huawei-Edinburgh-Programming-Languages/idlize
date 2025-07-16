@@ -620,7 +620,7 @@ export abstract class LanguageWriter {
     }
     makeRuntimeTypeCondition(typeVarName: string, equals: boolean, type: RuntimeType, varName?: string): LanguageExpression {
         const op = equals ? "==" : "!="
-        return this.makeNaryOp(op, [this.makeRuntimeType(type), this.makeString(typeVarName)])
+        return this.makeNaryOp(op, [this.makeString(typeVarName), this.makeRuntimeType(type)])
     }
     makeValueFromOption(value: string, destinationConvertor: ArgConvertor): LanguageExpression {
         return this.makeString(`${value}!`)
