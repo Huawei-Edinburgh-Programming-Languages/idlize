@@ -13,17 +13,45 @@
  * limitations under the License.
  */
 
+import * as idl from "@idlizer/core/idl";
 import { GeneratorContext } from "../../context";
+import { E, lw, S } from "lws";
 
-class ArgConvertor {
+function selectWriteName(type:idl.IDLPrimitiveType): string {
+    switch (type) {
+        case idl.IDLI32Type: return 'writeInt32'
+        case idl.IDLStringType: return 'writeString'
+        default: throw new Error(`Can not convert "${idl.DebugUtils.debugPrintType(type)}"`)
+    }
+}
+function selectReadName(type:idl.IDLPrimitiveType): string {
+    switch (type) {
+        case idl.IDLI32Type: return 'readInt32'
+        case idl.IDLStringType: return 'readString'
+        default: throw new Error(`Can not convert "${idl.DebugUtils.debugPrintType(type)}"`)
+    }
+}
+
+export class ArgConvertor {
     constructor(
         private ctx: GeneratorContext,
-        private sName: string,
+        private sName: lw.LWExpression,
     ) {}
 
     //////////////////////
 
-    
+    write(accessor:lw.LWExpression, type:idl.IDLType): lw.LWStatement {
+        if (idl.isPrimitiveType(type)) {
+            return S.e(E.call(E.get(this.sName, selectWriteName(type)), [accessor]))
+        }
+        if (idl.isReferenceType(type)) {
+            return S.e(E.call(
+                E.get(this.ctx.use({ node: type, role: 'serializer' }).name(), 'write'),
+                [this.sName, accessor]
+            ))
+        }
+        throw new Error(`Can not process "${idl.DebugUtils.debugPrintType(type)}"`)
+    }
 
     //////////////////////
 

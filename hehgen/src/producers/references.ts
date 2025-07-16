@@ -17,15 +17,16 @@ import { createProducer } from "../context";
 import * as idl from "@idlizer/core/idl"
 
 export const referenceProducer = createProducer(
-    { is: idl.isReferenceType },
-    (ref, ctx) => {
+    { is: idl.isReferenceType, role: "" },
+    (ref, ctx, query) => {
         const found = ctx.resolver.toDeclaration(ref)
         if (!found) {
             throw new Error("That is bad :(")
         }
         return {
             redirectTo: {
-                node: found
+                node: found,
+                role: query.role
             }
         }
     }

@@ -15,8 +15,10 @@
 
 import { containerProducer } from "./containers";
 import { fileProducer } from "./file";
+import { nativeModuleProducer } from "./nativeModule";
 import { primitiveProducer } from "./primitives";
 import { referenceProducer } from "./references";
+import { serializerProducer } from "./serializer";
 import { structureProducer } from "./structure";
 
 export const Producers = {
@@ -25,4 +27,6 @@ export const Producers = {
     primitiveProducer,
     referenceProducer,
     containerProducer,
+    nativeModuleProducer,
+    serializerProducer,
 }

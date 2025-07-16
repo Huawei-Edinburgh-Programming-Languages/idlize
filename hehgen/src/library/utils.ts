@@ -13,6 +13,19 @@
  * limitations under the License.
  */
 
+import { readdirSync, statSync } from "node:fs"
+import { join } from "node:path"
+
 export function throwError(msg:string): never {
     throw new Error(msg)
+}
+
+export function scan(root: string): string[] {
+  return statSync(root).isDirectory()
+    ? readdirSync(root).flatMap(p => scan(join(root, p)))
+    : [root]
+}
+
+export function mkName(...chunks:string[]): string {
+  return chunks.join('.')
 }

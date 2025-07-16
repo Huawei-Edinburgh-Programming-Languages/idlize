@@ -15,9 +15,7 @@
 
 import { Language, NativeModuleType, PeerLibrary } from "@idlizer/core";
 import * as idl from "@idlizer/core/idl"
-import { lw, processNPrintTS } from "lws";
-import { EOL } from "node:os";
-import { throwError } from "./library/utils";
+import { E, lw } from "lws";
 
 export class IDLTypeResolver {
     private legacyLib = new PeerLibrary(Language.TS, new NativeModuleType('__NOT_USED__'), true)
@@ -32,18 +30,23 @@ export class IDLTypeResolver {
     }
 }
 
-export class EmptyGeneratorContext {
-}
-
 export class MakeResult {
     constructor(
         private result: ProducerDescription
     ) { }
 
+    private asTerminal(r: ProducerDescription): TerminalProducerDescription {
+        if (!isTerminal(r)) {
+            throw new Error(`WOW it is "${getKind(this.result)}"`)
+        }
+        return r
+    }
+
     reference() {
-        return isTerminal(this.result)
-            ? this.result.artifact.reference as lw.LWType
-            : throwError(`WOW it is "${getKind(this.result)}"`)
+        return this.asTerminal(this.result).artifact.reference as lw.LWType
+    }
+    name() {
+        return this.asTerminal(this.result).artifact.reference as lw.LWExpression
     }
 }
 
@@ -54,7 +57,7 @@ export interface MiddlewareProducerDescription {
 export interface TerminalProducerDescription {
     artifact: {
         reference: lw.LWStatement | lw.LWExpression | lw.LWType
-        implementationGenerator?: () => lw.LWDeclaration | undefined
+        implementationGenerator?: () => lw.LWDeclaration
     }
 }
 export interface RedirectProducerDescription {
@@ -65,7 +68,7 @@ export interface RecursiveProducerDescription {
 }
 
 type ProducerDescription =
-      MiddlewareProducerDescription
+    MiddlewareProducerDescription
     | TerminalProducerDescription
     | RedirectProducerDescription
     | RecursiveProducerDescription
@@ -83,7 +86,7 @@ function isRecursive(desc: ProducerDescription): desc is RecursiveProducerDescri
     return "recursive" in desc
 }
 
-function getKind(desc:ProducerDescription) {
+function getKind(desc: ProducerDescription) {
     if (isMiddleware(desc)) {
         return 'middleware'
     }
@@ -100,7 +103,7 @@ function getKind(desc:ProducerDescription) {
 }
 
 export interface Producer<N extends idl.IDLNode = idl.IDLNode> {
-    (node: N, ctx: GeneratorContext): ProducerDescription
+    (node: N, ctx: GeneratorContext, query: MakeSelectorQuery): ProducerDescription
 }
 
 export interface ProducerBox<N extends idl.IDLNode> {
@@ -108,7 +111,7 @@ export interface ProducerBox<N extends idl.IDLNode> {
     producer: Producer<N>
 }
 
-export function createProducer<N extends idl.IDLNode>(pattern:MakeSelectorPattern<N>, producer: Producer<N>): ProducerBox<N> {
+export function createProducer<N extends idl.IDLNode>(pattern: MakeSelectorPattern<N>, producer: Producer<N>): ProducerBox<N> {
     return {
         pattern,
         producer,
@@ -116,10 +119,12 @@ export function createProducer<N extends idl.IDLNode>(pattern:MakeSelectorPatter
 }
 
 interface MakeSelectorQuery {
-    node: idl.IDLNode
+    node: idl.IDLNode,
+    role?: string
 }
 interface MakeSelectorPattern<N extends idl.IDLNode> {
-    is: (node:idl.IDLNode) => node is N
+    is: (node: idl.IDLNode) => node is N,
+    role?: string
 }
 
 export class MakeSelector {
@@ -130,7 +135,20 @@ export class MakeSelector {
     }
 
     select(query: MakeSelectorQuery): Producer {
-        const record = this.storage.find(it => it.pattern.is(query.node))
+        const record = this.storage.find(it => {
+            if (!it.pattern.is(query.node)) {
+                return false
+            }
+            if (query.role) {
+                if (it.pattern.role === undefined) {
+                    return false
+                }
+                if (!query.role.startsWith(it.pattern.role)) {
+                    return false
+                }
+            }
+            return true
+        })
         if (!record) {
             throw new Error(`Can not process "${idl.getFQName(query.node)}", ${idl.IDLKind[query.node.kind]}`)
         }
@@ -145,7 +163,7 @@ export class MakeSelector {
 export class GeneratorContext {
     public resolver: IDLTypeResolver
 
-    private storage = new Map<string, ProducerDescription>()
+    private storage = new Map<string, TerminalProducerDescription>()
     private generatingQueue: TerminalProducerDescription['artifact']['implementationGenerator'][] = []
     private renderContext = false
 
@@ -166,26 +184,30 @@ export class GeneratorContext {
         })
     }
 
-    private getUseKey(query: MakeSelectorQuery): string {
-        if (idl.isFile(query.node)) {
-            return query.node.fileName ?? 'no file???'
+    private getUseKeyFromNode(node: idl.IDLNode): string {
+        if (idl.isFile(node)) {
+            return node.fileName ?? 'no file???'
         }
-        if (idl.isEntry(query.node)) {
-            return idl.getFQName(query.node)
+        if (idl.isEntry(node)) {
+            return idl.getFQName(node)
         }
-        if (idl.isType(query.node)) {
-            if (idl.isReferenceType(query.node)) {
-                return query.node.name
+        if (idl.isType(node)) {
+            if (idl.isReferenceType(node)) {
+                return node.name
             }
-            if (idl.isPrimitiveType(query.node)) {
-                return query.node.name
+            if (idl.isPrimitiveType(node)) {
+                return node.name
             }
-            if (idl.isContainerType(query.node)) {
-                return '#' + query.node.containerKind + '#' + query.node.elementType.map(t => this.getUseKey({ node: t })).join('::')
+            if (idl.isContainerType(node)) {
+                return '#' + node.containerKind + '#' + node.elementType.map(t => this.getUseKey({ node: t })).join('::')
             }
-            throw new Error(`Can not process "${idl.DebugUtils.debugPrintType(query.node)}"`)
+            throw new Error(`Can not process "${idl.DebugUtils.debugPrintType(node)}"`)
         }
         throw new Error("???")
+    }
+    private getUseKey(query: MakeSelectorQuery): string {
+        const nodeKey = this.getUseKeyFromNode(query.node)
+        return nodeKey + '$$$' + (query.role ?? '<no role>')
     }
     private runUse(query: MakeSelectorQuery): ProducerDescription {
         if (!this.renderContext) {
@@ -197,36 +219,41 @@ export class GeneratorContext {
         }
         const producer = this.selector.select(query)
         this.renderContext = false
-        const desc = producer(query.node, this)
+        const desc = producer(query.node, this, query)
         this.renderContext = true
-        this.storage.set(key, desc)
+        return this.resolveDescription(key, desc)
+    }
+    private resolveDescription(key: string, desc:ProducerDescription): ProducerDescription {
         if (isTerminal(desc)) {
             if (desc.artifact.implementationGenerator) {
                 this.generatingQueue.push(desc.artifact.implementationGenerator)
             }
+            this.storage.set(key, desc)
+            return desc
         }
         if (isMiddleware(desc)) {
             desc.go()
+            return desc
         }
         if (isRedirect(desc)) {
             const rec = this.runUse(desc.redirectTo)
-            this.storage.set(key, rec)
+            if (isTerminal(rec)) {
+                this.storage.set(key, rec)
+            }
             return rec
         }
         if (isRecursive(desc)) {
-            const rec = desc.recursive()
-            this.storage.set(key, rec)
-            return rec
+            return this.resolveDescription(key, desc.recursive())
         }
-        return desc
+        throw new Error("Unknown kind!")
     }
 
     use(query: MakeSelectorQuery): MakeResult {
         return new MakeResult(this.runUse(query))
     }
 
-    generate(nodes: idl.IDLNode[]) {
-        const declaration: lw.LWDeclaration[] = []
+    generate(nodes: idl.IDLNode[]): lw.LWDeclaration[] {
+        const declarations: lw.LWDeclaration[] = []
         this.renderContext = true
         nodes.forEach(node => this.runUse({ node }))
         this.renderContext = false
@@ -236,10 +263,10 @@ export class GeneratorContext {
             const decl = generator()
             this.renderContext = false
             if (decl) {
-                declaration.push(decl)
+                declarations.push(decl)
             }
         }
-        return declaration.map(processNPrintTS).join(EOL)
+        return declarations
     }
 }
 
