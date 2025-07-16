@@ -265,7 +265,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                 // TBD: Add tagged methods implementation
                 this.printer.writeMethodImplementation(new Method(getTaggedName(method)!, signature), writer => {
                     writer.writeStatement(
-                        writer.makeThrowError("TBD")
+                        writer.makeThrowError("Improve")
                     )
                 })
             })
