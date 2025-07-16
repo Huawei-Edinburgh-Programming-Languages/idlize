@@ -1,14 +1,14 @@
 |Component | Method | Comment| Owner |Status|
 |----------|----------|--------|-------|------|
-|TextArea  | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug | Ivan Tuzhilkin | in progress |
-|TextArea | setFontFamilyTestFontFamilyInvalidValues | Bug | Ivan Tuzhilkin ||
-|TextArea | setCaretStyleTestCaretStyleWidthInvalidValues | Bug | Ivan Tuzhilkin ||
-|TextArea | setShowCounterTestShowCounterValueInvalidValues | Bug | Ivan Tuzhilkin ||
-|TextArea | setFontFeatureTestFontFeatureInvalidValues | Bug | Ivan Tuzhilkin ||
+| TextArea  | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug | Ivan Tuzhilkin | in progress |
+| TextArea | setFontFamilyTestFontFamilyInvalidValues | Bug | Ivan Tuzhilkin | in progress |
+| TextArea | setCaretStyleTestCaretStyleWidthInvalidValues | Bug | Ivan Tuzhilkin | in progress |
+| TextArea | setShowCounterTestShowCounterValueInvalidValues | Bug | Ivan Tuzhilkin | in progress|
+| TextArea | setFontFeatureTestFontFeatureInvalidValues | Bug | Ivan Tuzhilkin ||
 | TextInput | setEnterKeyTypeTestEnterKeyTypeValidValues | Bug | Ivan Tuzhilkin | in progress |
-| TextInput | setCaretStyleTestCaretStyleWidthInvalidValues | Bug |Ivan Tuzhilkin||
+| TextInput | setCaretStyleTestCaretStyleWidthInvalidValues | Bug |Ivan Tuzhilkin| in progress |
 | TextInput | setFontFeatureTestFontFeatureInvalidValues | Bug | Ivan Tuzhilkin||
-| TextInput | setShowCounterTestShowCounterValueInvalidValues | Bug | Ivan Tuzhilkin||
+| TextInput | setShowCounterTestShowCounterValueInvalidValues | Bug | Ivan Tuzhilkin| in progress |
 | TextInput | setMaxLinesTestMaxLinesValidValues | ??? |||
 | TextInput | setCancelButtonTestCancelButtonCancelButtonOptionsStyleValidValues | Bug? |||
 | TextInput | setCancelButtonTestCancelButtonCancelButtonOptionsIconSizeValidValues | Bug? |||
@@ -60,6 +60,6 @@
 | Slider | setShowStepsTestShowStepsInvalidValues | Bug |||
 | TextClock | setFontSizeTestDefaultValues | broken at FB|||
 | TextClock | setTextClockOptionsTestOptionsTimeZoneOffsetValidValues | Looks like invalid fixture|||
-| TextClock | setFontFeatureTestFontFeatureInvalidValues | Bug |||
+| TextClock | setFontFeatureTestFontFeatureInvalidValues | Bug | Ivan Tuzhilkin ||
 | WaterFlow | setColumnsTemplateTestColumnsTemplateInvalidValues | Bugs |||
 | WaterFlow | setRowsTemplateTestRowsTemplateInvalidValues | Bugs|||
