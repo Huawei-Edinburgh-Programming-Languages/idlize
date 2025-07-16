@@ -28,14 +28,14 @@
 | ColumnSplit | setDividerTestDefaultValues | Wrong default values when not initialized. Need to investigate!|||
 | ColumnSplit | setResizeableTestResizeableInvalidValues | Bug |||
 | RichEditor | setEnableDataDetectorTestEnableDataDetectorInvalidValues | Bug |||
-| CommonMethod | setFocusScopePriorityTestFocusScopeIdInvalidValues |Bugs| Lobah Mikhail| on review|
-| CommonMethod | setRotateTestRotateCenterZValidValues |Bugs Looks like wrong fixture AND bug in implementation| Lobah Mikhail| on review|
-| CommonMethod | setRotateTestRotateCenterZInvalidValues |Bugs| Lobah Mikhail| in progress|
-| CommonMethod | setMarkAnchorTestMarkAnchorPositionXInvalidValues |Bugs| Lobah Mikhail||
-| CommonMethod | setMarkAnchorTestMarkAnchorPositionYInvalidValues |Bugs| Lobah Mikhail||
+| CommonMethod | setFocusScopePriorityTestFocusScopeIdInvalidValues |Bugs| Lobah Mikhail| Undisabled, on review|
+| CommonMethod | setRotateTestRotateCenterZValidValues |Bugs Looks like wrong fixture AND bug in implementation| Lobah Mikhail| Undisabled, on review|
+| CommonMethod | setRotateTestRotateCenterZInvalidValues |Bugs| Lobah Mikhail| Undisabled, on review|
+| CommonMethod | setMarkAnchorTestMarkAnchorPositionXInvalidValues |Bugs| Lobah Mikhail| Undisabled, on review|
+| CommonMethod | setMarkAnchorTestMarkAnchorPositionYInvalidValues |Bugs| Lobah Mikhail| Undisabled, on review|
 | CommonMethod | setTabIndexTestTabIndexInvalidValues |Bugs|||
-| CommonMethod | setDefaultFocusTestDefaultFocusInvalidValues |Bugs| Lobah Mikhail||
-| CommonMethod | setGroupDefaultFocusTestGroupDefaultFocusInvalidValues |Bugs| Lobah Mikhail||
+| CommonMethod | setDefaultFocusTestDefaultFocusInvalidValues |Bugs| Lobah Mikhail| Undisabled, on review|
+| CommonMethod | setGroupDefaultFocusTestGroupDefaultFocusInvalidValues |Bugs| Lobah Mikhail| Undisabled, on review|
 | CommonMethod | setFocusOnTouchTestFocusOnTouchInvalidValues |Bugs|||
 | CommonMethod | setFlexGrowTestFlexGrowInvalidValues |Bugs|||
 | CommonMethod | setFlexShrinkTestFlexShrinkInvalidValues |Bugs|||
