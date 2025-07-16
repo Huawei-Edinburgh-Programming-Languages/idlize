@@ -19,11 +19,11 @@
 | Button | setFontSizeTestFontSizeValidValues | Invalid units for 0 |Andrey Khudenkikh||
 | Button | setLabelStyleTestLabelStyleFontSizeValidValues | Invalid units for 0|Andrey Khudenkikh||
 | Button | setFontFamilyTestFontFamilyValidValues | Incorrect resource processing|Andrey Khudenkikh||
-| Button | setLabelStyleTestLabelStyleFontFamilyValidValues | Incorrect resource processing|||
-| Button | setLabelStyleTestLabelStyleOverflowInvalidValues | Bug in arkui? |||
-| Button | setLabelStyleTestDefaultValues | Invalid default value for labelStyle.overflow|||
-| Button | setLabelStyleTestLabelStyleOverflowValidValues | Invalid case for MARQUEE enum|||
-| Button | setStateEffectTestStateEffectInvalidValues | Bug |||
+| Button | setLabelStyleTestLabelStyleFontFamilyValidValues | Incorrect resource processing|Andrey Khudenkikh||
+| Button | setLabelStyleTestLabelStyleOverflowInvalidValues | Bug in arkui? |Andrey Khudenkikh||
+| Button | setLabelStyleTestDefaultValues | Invalid default value for labelStyle.overflow|Andrey Khudenkikh||
+| Button | setLabelStyleTestLabelStyleOverflowValidValues | Invalid case for MARQUEE enum|Andrey Khudenkikh||
+| Button | setStateEffectTestStateEffectInvalidValues | Bug |Andrey Khudenkikh||
 | ColumnSplit | setDividerTestDefaultValues | Wrong default values when not initialized. Need to investigate!|||
 | ColumnSplit | setResizeableTestResizeableInvalidValues | Bug |||
 | RichEditor | setEnableDataDetectorTestEnableDataDetectorInvalidValues | Bug |||
