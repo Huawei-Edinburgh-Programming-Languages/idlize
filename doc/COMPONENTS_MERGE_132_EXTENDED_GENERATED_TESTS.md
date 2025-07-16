@@ -15,10 +15,10 @@
 | TextInput | setCancelButtonTestCancelButtonCancelButtonOptionsIconColorValidValues | Bug? |||
 | TextInput | setCancelButtonTestCancelButtonCancelButtonOptionsIconSrcValidValues | Bug? |||
 | TextInput | setCancelButtonTestCancelButtonCancelButtonSymbolOptionsStyleValidValues | Bug? |||
-| Button | setFontWeightTestDefaultValues | Value is different from documentation|||
-| Button | setFontSizeTestFontSizeValidValues | Invalid units for 0 |||
-| Button | setLabelStyleTestLabelStyleFontSizeValidValues | Invalid units for 0|||
-| Button | setFontFamilyTestFontFamilyValidValues | Incorrect resource processing|||
+| Button | setFontWeightTestDefaultValues | Value is different from documentation|Andrey Khudenkikh||
+| Button | setFontSizeTestFontSizeValidValues | Invalid units for 0 |Andrey Khudenkikh||
+| Button | setLabelStyleTestLabelStyleFontSizeValidValues | Invalid units for 0|Andrey Khudenkikh||
+| Button | setFontFamilyTestFontFamilyValidValues | Incorrect resource processing|Andrey Khudenkikh||
 | Button | setLabelStyleTestLabelStyleFontFamilyValidValues | Incorrect resource processing|||
 | Button | setLabelStyleTestLabelStyleOverflowInvalidValues | Bug in arkui? |||
 | Button | setLabelStyleTestDefaultValues | Invalid default value for labelStyle.overflow|||
