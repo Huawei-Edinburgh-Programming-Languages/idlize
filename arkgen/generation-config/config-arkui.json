@@ -1,12 +1,12 @@
 {
     "moduleName": "arkui",
     "modules": {
-        "global": {
-            "name": "global",
+        "global.resource": {
+            "name": "global.resourcel",
             "packages": ["global.resource"]
         },
-        "image": {
-            "name": "image",
+        "ohos.multimedia.image": {
+            "name": "ohos.multimedia.image",
             "external": true,
             "packages": ["ohos.multimedia.image"]
         },
@@ -33,6 +33,11 @@
                 "ohos.promptAction",
                 "ohos.window"
             ]
+        }
+    },
+    "moduleNameMap": {
+        "ohos.multimedia.image": {
+            "TS": "global.resource"
         }
     }
 }

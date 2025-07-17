@@ -54,6 +54,7 @@ export const CoreConfigurationSchema = D.object({
     externalPackages: T.stringArray(),
     moduleName: D.string(),
     modules: D.map(D.string(), ModuleConfigurationSchema).onMerge('replace'),
+    moduleNameMap: D.map(D.string(), D.map(D.string(), D.string())).onMerge('replace'),
 
     globalPackages: T.stringArray()
 })
@@ -80,6 +81,7 @@ export const defaultCoreConfiguration: CoreConfiguration = {
     externalPackages: [],
     moduleName: "",
     modules: new Map<string, ModuleConfiguration>(),
+    moduleNameMap: new Map<string, Map<string, string>>(),
 
     globalPackages: []
 }
