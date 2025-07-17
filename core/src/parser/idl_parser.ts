@@ -626,8 +626,8 @@ function DistinguishableType(): idl.TypeNode | null {
   if (lex.IsItPrimitiveType(g_lookahead.type)) {
     let prim_res: idl.PrimitiveTypeNode | null = PrimitiveType(); if (prim_res) prim_res.can_be_null = Null();
     res = prim_res;
-  } else if (lex.IsItStringType(g_lookahead.type)) {
-    StringType(); Null();
+  } else if (g_lookahead.type == Token.tString) {
+    Match(Token.tString); Null();
   } else if (g_lookahead.type == Token.tId) {  // ! кажется, именно это условие должно пропускать произвольный пользовательский тип!
     let user_res: idl.UserTypeNode = new idl.UserTypeNode();
     user_res.type_name = g_lookahead.text;
@@ -747,7 +747,7 @@ function PromiseType() {
 }
 
 function RecordType() {
-  Match(Token.tRecord); Match(Token.tLAngle); StringType(); Match(Token.tComma); TypeWithExtendedAttributes(); Match(Token.tRAngle);
+  Match(Token.tRecord); Match(Token.tLAngle); Match(Token.tString); Match(Token.tComma); TypeWithExtendedAttributes(); Match(Token.tRAngle);
 }
 
 function Null(): boolean {

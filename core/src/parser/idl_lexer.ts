@@ -122,7 +122,7 @@ export function IsItSingleType(value: Token): boolean {
 
 export function IsItDistinguishableType(value: Token): boolean {
   return IsItPrimitiveType(value) ||
-         IsItStringType(value) ||
+         value == Token.tString ||
          value == Token.tId ||
          value == Token.tSequence ||
          value == Token.tAsync ||
@@ -161,10 +161,6 @@ export function IsItUnrestrictedFloatType(value: Token): boolean {
 
 export function IsItFloatType(value: Token): boolean {
   return value == Token.tFloat || value == Token.tDouble;
-}
-
-export function IsItStringType(value: Token): boolean {
-  return value == Token.tString;
 }
 
 let g_Types: Token[] = [
