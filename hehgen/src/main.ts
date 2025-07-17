@@ -18,7 +18,7 @@ import { resolve } from "node:path"
 import { GeneratorContext, MakeSelector } from "./context"
 import { Producers } from "./producers"
 import { scan } from "./library/utils"
-import { postprocess } from "./postprocess"
+import { formFiles, postprocess } from "./postprocess"
 import { processNPrintTS } from "lws"
 import { EOL } from "node:os"
 
@@ -37,6 +37,13 @@ function main() {
 
   const ctx = new GeneratorContext(library, selector)
   const decls = postprocess(ctx.generate(library))
-  console.log(decls.map(processNPrintTS).join(EOL))
+  const files = formFiles(new Set(library.map(file => file.packageClause.join('.'))), decls)
+  files.forEach((content, name) => {
+    console.log('-------------------------------------------------')
+    console.log('FILE: ', name)
+    console.log('')
+    console.log(content.map(processNPrintTS).join(EOL))
+    console.log('-------------------------------------------------')
+  })
 }
 main()

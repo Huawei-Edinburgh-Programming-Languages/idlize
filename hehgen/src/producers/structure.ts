@@ -26,7 +26,7 @@ export const structureProducer = createProducer(
         reference: T.cc(idl.getFQName(node)),
         implementationGenerator: () => {
           if (node.methods.length > 0) {
-            return D.class(node.name,
+            return D.class(idl.getFQName(node),
               node.properties.map(prop => {
                 return {
                   name: prop.name,
@@ -38,7 +38,7 @@ export const structureProducer = createProducer(
               })
             )
           }
-          return D.struct(node.name, node.properties.map(prop => {
+          return D.struct(idl.getFQName(node), node.properties.map(prop => {
             return {
               name: prop.name,
               type: ctx.use({ node: prop.type}).reference()

@@ -19,7 +19,7 @@ import { D, E, S, T, Ts } from "lws";
 import { ArgConvertor } from "./components/argConvertor";
 
 function makeSerializerName(node:idl.IDLInterface) {
-    return node.name + 'Serializer'
+    return idl.getFQName(node) + 'Serializer'
 }
 
 export const serializerProducer = createProducer(
