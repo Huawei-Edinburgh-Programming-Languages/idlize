@@ -155,11 +155,7 @@ function CallbackOrInterfaceOrMixin(): idl.Node | null {
 }
 
 function InterfaceOrMixin(): idl.Node | null {
-  return InterfaceRest();
-}
-
-function InterfaceRest(): idl.Node | null {
-  console.log("InterfaceRest >>>>");
+  console.log("InterfaceOrMixin >>>>");
   let res: idl.InterfaceNode = new idl.InterfaceNode(g_lookahead.text);
   if (g_lookahead.type == Token.tId) {
     //    identifier Inheritance { InterfaceMembers } ;
@@ -772,15 +768,11 @@ function BufferRelatedType(): idl.TypeNode | null {
 
 function ExtendedAttributeList() {
   if (g_lookahead.type == Token.tLSqrBracket) {
-    Match(Token.tLSqrBracket); ExtendedAttribute(); ExtendedAttributes(); Match(Token.tRSqrBracket);
-  } else {
-    // ε
-  }
-}
-
-function ExtendedAttributes() {
-  if (g_lookahead.type == Token.tComma) {
-    Match(Token.tComma); ExtendedAttribute(); ExtendedAttributes();
+    Match(Token.tLSqrBracket); ExtendedAttribute();
+    while (g_lookahead.type == Token.tComma) {
+      Match(Token.tComma); ExtendedAttribute();
+    }
+    Match(Token.tRSqrBracket);
   } else {
     // ε
   }
@@ -858,14 +850,9 @@ function OtherOrComma() {
 }
 
 function IdentifierList() {
-  Match(Token.tId); Identifiers();
-}
-
-function Identifiers() {
-  if (g_lookahead.type == Token.tComma) {
-    Match(Token.tComma); Match(Token.tId); Identifiers();
-  } else {
-    // ε
+  Match(Token.tId);
+  while (g_lookahead.type == Token.tComma) {
+    Match(Token.tComma); Match(Token.tId);
   }
 }
 
