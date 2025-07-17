@@ -1,0 +1,20 @@
+package test_name_collision;
+
+interface Size {
+    attribute i32 height;
+    attribute i32 width;
+};
+interface Sizeable {
+    attribute Size size;
+};
+void resize(Size size);
+
+namespace test {
+    interface Size {
+        attribute string spec;
+    };
+    interface Test {
+        attribute Size size;
+    };
+    void testSize(Size size);
+};
