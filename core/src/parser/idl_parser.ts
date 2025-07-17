@@ -52,28 +52,14 @@ function q(s: string) {
   return "\'" + s + "\'";
 }
 
-function Match(tArg: Token | string) {
-  let tok: Token;
-  let tok_name: string = "";
-  if (typeof tArg === 'string') {
-    if (g_char2token.has(tArg)) {
-      tok_name = " (" + tArg + ")";
-      tok = g_char2token.get(tArg) ! ;
-    } else {
-      console.log("Error. Unknown symbol: " + tArg);
-      tok = Token.tError;
-    }
-  } else {
-    tok = tArg;
-  }
-
-  if (g_lookahead.type == tok) {
-     console.log("Match ok: " + tok + tok_name + " " + q(token2Name(tok)));
+function Match(tArg: Token) {
+  if (g_lookahead.type === tArg) {
+     console.log("Match ok: " + tArg + " " + q(token2Name(tArg)));
      g_lookahead = lex.getToken();
      console.log("new:  " + g_lookahead);
   } else {
     let msg: string = "Match Error. Waiting for: " +
-                      tok + " " + q(token2Name(tok)) + ", but got " +
+                      tArg + " " + q(token2Name(tArg)) + ", but got " +
                       g_lookahead.type + " " + q(token2Name(g_lookahead.type));
 
     msg += " at pos: (" + lex.getCol() + ", " + lex.getRow() + ")\n";
@@ -767,9 +753,9 @@ function BufferRelatedType(): idl.TypeNode | null {
 }
 
 function ExtendedAttributeList() {
-  if (g_lookahead.type == Token.tLSqrBracket) {
+  if (g_lookahead.type === Token.tLSqrBracket) {
     Match(Token.tLSqrBracket); ExtendedAttribute();
-    while (g_lookahead.type == Token.tComma) {
+    while (g_lookahead.type === Token.tComma) {
       Match(Token.tComma); ExtendedAttribute();
     }
     Match(Token.tRSqrBracket);
@@ -779,15 +765,16 @@ function ExtendedAttributeList() {
 }
 
 function ExtendedAttribute() {
-  Match(Token.tLBracket); ExtendedAttributeInner(); Match(Token.tRBracket); ExtendedAttributeRest();
-  Match(Token.tLSqrBracket); ExtendedAttributeInner(); Match(Token.tRSqrBracket); ExtendedAttributeRest();
-  Match(Token.tLBrace); ExtendedAttributeInner(); Match(Token.tRBrace); ExtendedAttributeRest();
-  Other(); ExtendedAttributeRest();
-}
-
-function ExtendedAttributeRest() {
-  ExtendedAttribute();
-  // ε
+  if (g_lookahead.type == Token.tLBracket) {
+    Match(Token.tLBracket); ExtendedAttributeInner(); Match(Token.tRBracket); ExtendedAttribute();
+  } else if (g_lookahead.type == Token.tLSqrBracket) {
+    Match(Token.tLSqrBracket); ExtendedAttributeInner(); Match(Token.tRSqrBracket); ExtendedAttribute();
+  } else if (g_lookahead.type == Token.tLBrace) {
+    Match(Token.tLBrace); ExtendedAttributeInner(); Match(Token.tRBrace); ExtendedAttribute();
+  } else if (IsOther(g_lookahead.type)) {
+    Other(); ExtendedAttribute();
+  } else {
+  }
 }
 
 function ExtendedAttributeInner() {
@@ -798,7 +785,7 @@ function ExtendedAttributeInner() {
   // ε
 }
 
-function Other() {
+let g_OtherKeywords: Token[] = [
   Token.tInteger,
   Token.tDecimal,
   Token.tId,
@@ -840,8 +827,20 @@ function Other() {
   Token.tTrue,
   Token.tUnsigned,
   Token.tUndefined,
-  "ArgumentNameKeyword"  // non-terminal
   Token.tArrayBuffer
+];
+
+function IsOther(value: Token) {
+  if (g_OtherKeywords.includes(value))
+    return true;
+  if (lex.IsItArgumentNameKeyword(g_lookahead.type))
+    return true;
+  return false;
+}
+
+function Other() {
+  if (IsOther(g_lookahead.type))
+    Match(g_lookahead.type);
 }
 
 function OtherOrComma() {
