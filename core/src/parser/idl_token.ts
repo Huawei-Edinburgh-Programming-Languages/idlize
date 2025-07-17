@@ -37,25 +37,13 @@ export enum Token {
   tClass = 33,
   tConst = 34,
   tConstructor = 35,
-  tDeleter = 36,
   tDictionary = 37,
-  tEnum = 38,
-  tGetter = 39,
-  tIncludes = 40,
-  tInherit = 41,
   tInterface = 42,
-  tIterable = 43,
-  tMaplike = 44,
-  tMixin = 45,
   tNamespace = 46,
   tPackage = 47,
   tPartial = 48,
   tReadonly = 49,
-  tRequired = 50,
-  tSetlike = 51,
-  tSetter = 52,
   tStatic = 53,
-  tStringifier = 54,
   tTypedef = 55,
   tUnrestricted = 56,
 
@@ -71,9 +59,6 @@ export enum Token {
   tDouble = 68,       // double
   tOr = 69,           // or
   tStringType = 70,   // string type with name String
-  tByteString = 71,   // strings
-  tDOMString = 72,
-  tUSVString = 73,
   tVoid = 74,
   tAny = 75,          // The any type is the union of all other possible non-union types.
   tUndefined = 76,

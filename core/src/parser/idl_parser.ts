@@ -33,7 +33,6 @@ const g_char2token = new Map<string, Token>([
   ["interface", Token.tInterface],
   ["void", Token.tVoid],
   ["constructor", Token.tConstructor],
-  ["includes", Token.tIncludes],
   ["//comment", Token.tComment],
   ["/*comment*/", Token.tLongComment],
 ]);
@@ -117,6 +116,7 @@ function Definitions(): idl.Definitions {
 }
 
 function Definition(node: idl.Definitions) {
+  console.log("Definition >>>>");
   let chld: idl.Node | null = null;
   if (g_lookahead.type == Token.tCallback ||
       g_lookahead.type == Token.tInterface) {
@@ -127,12 +127,8 @@ function Definition(node: idl.Definitions) {
     chld = Partial();
   } else if (g_lookahead.type == Token.tDictionary) {
     chld = Dictionary();
-  } else if (g_lookahead.type == Token.tEnum) {
-    chld = Enum();
   } else if (g_lookahead.type == Token.tTypedef) {
     chld = Typedef();
-  } else if (g_lookahead.type == Token.tIncludes) {
-    chld = IncludesStatement();
   } else if (g_lookahead.type == Token.tPackage) {
     chld = Package();
   } else {
@@ -146,6 +142,7 @@ function Definition(node: idl.Definitions) {
 }
 
 function CallbackOrInterfaceOrMixin(): idl.Node | null {
+  console.log("CallbackOrInterfaceOrMixin >>>>");
   if (g_lookahead.type == Token.tCallback) {
     Match(Token.tCallback);
     return CallbackRestOrInterface();
@@ -159,10 +156,10 @@ function CallbackOrInterfaceOrMixin(): idl.Node | null {
 
 function InterfaceOrMixin(): idl.Node | null {
   return InterfaceRest();
-  //MixinRest();  // Not in use yet.
 }
 
 function InterfaceRest(): idl.Node | null {
+  console.log("InterfaceRest >>>>");
   let res: idl.InterfaceNode = new idl.InterfaceNode(g_lookahead.text);
   if (g_lookahead.type == Token.tId) {
     //    identifier Inheritance { InterfaceMembers } ;
@@ -184,7 +181,6 @@ function PartialDefinition() {
 
 function PartialInterfaceOrPartialMixin() {
   PartialInterfaceRest();
-  //MixinRest();  // Not in use yet.
 }
 
 function PartialInterfaceRest() {
@@ -207,9 +203,8 @@ function InterfaceMembers(node: idl.InterfaceNode) {
 }
 
 const g_PartialFirstTokens: Token[] = [
-  Token.tConst, Token.tLBracket, Token.tStringifier, Token.tStatic,
-  Token.tIterable, Token.tAsync, Token.tReadonly, Token.tAttribute,
-  Token.tMaplike, Token.tSetlike, Token.tInherit
+  Token.tConst, Token.tLBracket, Token.tStatic,
+  Token.tAsync, Token.tReadonly, Token.tAttribute
 ];
 
 function InterfaceMember(node: idl.InterfaceNode): boolean {
@@ -238,15 +233,9 @@ function PartialInterfaceMembers(node: idl.InterfaceNode) {
 function PartialInterfaceMember(node: idl.InterfaceNode) {
   Const();
   Operation(node);
-  Stringifier();
   StaticMember();
-  Iterable();
-  AsyncIterable();
   ReadOnlyMember();
   ReadWriteAttribute();
-  ReadWriteMaplike();
-  ReadWriteSetlike();
-  InheritAttribute();
 }
 
 function Inheritance() {
@@ -255,30 +244,6 @@ function Inheritance() {
   } else {
     // ε
   }
-}
-
-function MixinRest() {
-  //Match(Token.tMixin); Match(Token.tId); Match(Token.tLBrace); MixinMembers(); Match(Token.tRBrace); Match(Token.tSemicolon);
-}
-
-function MixinMembers() {
-  /*if (g_lookahead.type == Token.tLSqrBracket)
-    ExtendedAttributeList();
-  MixinMember(); MixinMembers();*/
-  // ε
-}
-
-function MixinMember() {
-  /*Const();
-  RegularOperation();
-  Stringifier();
-  OptionalReadOnly(); AttributeRest();*/
-}
-
-function IncludesStatement(): idl.Node | null {
-  let res: idl.IncludesNode = new idl.IncludesNode();
-  Match(Token.tId); Match(Token.tIncludes); Match(Token.tId); Match(Token.tSemicolon);
-  return res;
 }
 
 function Package(): idl.Node | null {
@@ -298,6 +263,7 @@ function Package(): idl.Node | null {
 }
 
 function CallbackRestOrInterface(): idl.Node | null {
+  console.log("CallbackRestOrInterface >>>>");
   if (g_lookahead.type == Token.tInterface) {
     Match(Token.tInterface);
     Match(Token.tId);
@@ -361,18 +327,10 @@ function ReadOnlyMember() {
 
 function ReadOnlyMemberRest() {
   AttributeRest();
-  MaplikeRest();
-  SetlikeRest();
 }
 
 function ReadWriteAttribute() {
   AttributeRest();
-}
-
-function InheritAttribute() {
-  if (g_lookahead.type == Token.tInherit) {
-    Match(Token.tInherit); AttributeRest();
-  }
 }
 
 function AttributeRest() {
@@ -388,7 +346,6 @@ function AttributeName() {
 
 function AttributeNameKeyword() {
   //async
-  //required
 }
 
 function OptionalReadOnly() {
@@ -420,16 +377,6 @@ function RegularOperation(node: idl.InterfaceNode) {
   node.funcs.push(res);
 }
 
-function SpecialOperation() {
-  //Special(); RegularOperation();
-}
-
-function Special() {
-  /*getter
-  setter
-  deleter*/
-}
-
 function OperationRest(): idl.FuncNode {
   let res: idl.FuncNode;
   let name: string = "";
@@ -449,19 +396,14 @@ function OptionalOperationName(): string {
 }
 
 function OperationName(): string {
-  OperationNameKeyword();
+  //OperationNameKeyword();
   let res: string = g_lookahead.text;
   Match(Token.tId);
   return res;
 }
 
-function OperationNameKeyword() {
-  if (g_lookahead.type == Token.tIncludes) {
-    Match(Token.tIncludes);
-  }
-}
-
 function ArgumentList(): idl.FuncNode {
+  console.log("ArgumentList >>>>");
   let res: idl.FuncNode = new idl.FuncNode();
   let arg = Argument();
   if (arg) {
@@ -497,10 +439,12 @@ function ArgumentRest(): idl.ArgumentNode | null {
     let type: string = g_lookahead.text;
     Match(Token.tId); Ellipsis(); res = ArgumentName();  // I replace Type to Id
     res.type = type;
+    console.log("arg(1): ", res.name, res.type);
   } else if (lex.IsItSingleType(g_lookahead.type)) {  // functions can get args of standard type or user type
     let type: string = g_lookahead.text;              // SingleType is less power than "IsType"
     Match(g_lookahead.type); Ellipsis(); res = ArgumentName();
     res.type = type;
+    console.log("arg(2): ", res.name, res.type);
   } else {  // no args
   }
   return res;
@@ -531,17 +475,6 @@ function Constructor() {
   }
 }
 
-function Stringifier() {
-  if (g_lookahead.type == Token.tStringifier) {
-    Match(Token.tStringifier); StringifierRest();
-  }
-}
-
-function StringifierRest() {
-  OptionalReadOnly(); AttributeRest();
-  Match(Token.tSemicolon);
-}
-
 function StaticMember() {
   if (g_lookahead.type == Token.tStatic) {
     Match(Token.tStatic); StaticMemberRest();
@@ -554,46 +487,14 @@ function StaticMemberRest() {
   RegularOperation(dummy);
 }
 
-function Iterable() {
-  if (g_lookahead.type == Token.tIterable) {
-    Match(Token.tIterable); Match(Token.tLAngle); TypeWithExtendedAttributes(); OptionalType(); Match(Token.tRAngle); Match(Token.tSemicolon);
-  }
-}
-
 function OptionalType() {
   Match(Token.tComma); TypeWithExtendedAttributes();
   // ε
 }
 
-function AsyncIterable() {
-  if (g_lookahead.type == Token.tAsync) {
-    Match(Token.tAsync); Match(Token.tIterable); Match(Token.tLAngle); TypeWithExtendedAttributes(); OptionalType(); Match(Token.tRAngle); OptionalArgumentList(); Match(Token.tSemicolon);
-  }
-}
-
 function OptionalArgumentList() {
   Match(Token.tLBracket); ArgumentList(); Match(Token.tRBracket);
   // ε
-}
-
-function ReadWriteMaplike() {
-  MaplikeRest();
-}
-
-function MaplikeRest() {
-  if (g_lookahead.type == Token.tMaplike) {
-    Match(Token.tMaplike); Match(Token.tLAngle); TypeWithExtendedAttributes(); Match(Token.tComma); TypeWithExtendedAttributes(); Match(Token.tRAngle); Match(Token.tSemicolon);
-  }
-}
-
-function ReadWriteSetlike() {
-  SetlikeRest();
-}
-
-function SetlikeRest() {
-  if (g_lookahead.type == Token.tSetlike) {
-    Match(Token.tSetlike); Match(Token.tLAngle); TypeWithExtendedAttributes(); Match(Token.tRAngle); Match(Token.tSemicolon);
-  }
 }
 
 function Namespace(): idl.Node | null {
@@ -634,7 +535,6 @@ function DictionaryMember() {
 }
 
 function DictionaryMemberRest() {
-  Match(Token.tRequired); TypeWithExtendedAttributes(); Match(Token.tId); Match(Token.tSemicolon);
   Type(); Match(Token.tId); Default(); Match(Token.tSemicolon);
 }
 
@@ -650,27 +550,8 @@ function Default() {
   }
 }
 
-function Enum(): idl.Node | null {
-  throw new Error("Enum node has not processed yet");
-  //Match(Token.tEnum); Match(Token.tId); Match(Token.tLBrace); EnumValueList(); Match(Token.tRBrace); Match(Token.tSemicolon);
-}
-
-function EnumValueList() {
-  Match(Token.tString);
-  EnumValueListComma();
-}
-
-function EnumValueListComma() {
-  Match(Token.tComma); EnumValueListString();
-  // ε
-}
-
-function EnumValueListString() {
-  Match("string"); EnumValueListComma();
-  // ε
-}
-
 function CallbackRest(): idl.Node | null {
+  console.log("CallbackRestOrInterface >>>>");
   if (g_lookahead.type != Token.tId)
     return null;
 
@@ -754,8 +635,6 @@ function DistinguishableType(): idl.TypeNode | null {
     res = user_res;
   } else if (g_lookahead.type == Token.tSequence) {
     Match(Token.tSequence); Match(Token.tLAngle); TypeWithExtendedAttributes(); Match(Token.tRAngle); Null();
-  } else if (g_lookahead.type == Token.tAsync) {
-    Match(Token.tAsync); Match(Token.tIterable); Match(Token.tLAngle); TypeWithExtendedAttributes(); Match(Token.tRAngle); Null();
   } else if (g_lookahead.type == Token.tObject) {
     Match(Token.tObject); Null();
   } else if (g_lookahead.type == Token.tSymbol) {
@@ -861,16 +740,6 @@ function OptionalLong(): boolean {
   // | ε
 }
 
-function StringType() {
-  if (g_lookahead.type == Token.tByteString) {
-    Match(Token.tByteString);
-  } else if (g_lookahead.type == Token.tDOMString) {
-    Match(Token.tDOMString);
-  } else if (g_lookahead.type == Token.tUSVString) {
-    Match(Token.tUSVString);
-  }
-}
-
 function PromiseType() {
   if (g_lookahead.type == Token.tPromise) {
     Match(Token.tPromise); Match(Token.tLAngle); Type(); Match(Token.tRAngle);
@@ -967,14 +836,11 @@ function Other() {
   Token.tRAngle,
   Token.tQuestion,
   Token.tAsterisk,
-  Token.tByteString,
-  Token.tDOMString,
   Token.tFrozenArray,
   Token.tPlusInfinity,
   Token.tNaN,
   Token.tObservableArray,
   Token.tPromise,
-  Token.tUSVString,
   Token.tAny,
   Token.tBigint,
   Token.tBoolean,
@@ -996,7 +862,7 @@ function Other() {
   Token.tUnsigned,
   Token.tUndefined,
   "ArgumentNameKeyword"  // non-terminal
-  //lex.IsItBufferRelatedType()  // non-terminal
+  Token.tArrayBuffer
 }
 
 function OtherOrComma() {

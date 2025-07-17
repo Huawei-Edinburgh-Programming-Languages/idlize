@@ -5,11 +5,8 @@ export class NodeVisitor {
   visitCallback() {}
   visitInterface() {}
   visitNamespace() {}
-  visitPartial() {}
   visitDictionary() {}
-  visitEnum() {}
   visitTypedef() {}
-  visitIncludesStatement() {}
   visitPackage() {}
 }
 
@@ -39,10 +36,6 @@ export class CallbackNode extends Node {
 }
 
 export class DictionaryNode extends Node {
-  name: string = "";
-}
-
-export class IncludesNode extends Node {
   name: string = "";
 }
 
@@ -158,6 +151,11 @@ export class InterfaceNode extends Node {
     }
     return res;
   }
+}
+
+export class AttributeNode extends Node {
+  name: string = "";
+  rettype: TypeNode | null = null;
 }
 
 export class NamespaceNode extends Node {

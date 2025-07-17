@@ -41,25 +41,13 @@ const g_keywords: Array<TokenPattern> = [
   { pattern: /class/, type: Token.tClass},
   { pattern: /const/, type: Token.tConst},
   { pattern: /constructor/, type: Token.tConstructor},
-  { pattern: /deleter/, type: Token.tDeleter},
   { pattern: /dictionary/, type: Token.tDictionary},
-  { pattern: /enum/, type: Token.tEnum},
-  { pattern: /getter/, type: Token.tGetter},
-  { pattern: /includes/,  type: Token.tIncludes},
-  { pattern: /inherit/, type: Token.tInherit},
   { pattern: /interface/, type: Token.tInterface},
-  { pattern: /iterable/, type: Token.tIterable},
-  { pattern: /maplike/, type: Token.tMaplike},
-  { pattern: /mixin/,  type: Token.tMixin},
   { pattern: /namespace/, type: Token.tNamespace},
   { pattern: /package/, type: Token.tPackage},
   { pattern: /partial/, type: Token.tPartial},
   { pattern: /readonly/, type: Token.tReadonly},
-  { pattern: /required/, type: Token.tRequired},
-  { pattern: /setlike/, type: Token.tSetlike},
-  { pattern: /setter/, type: Token.tSetter},
   { pattern: /static/, type: Token.tStatic},
-  { pattern: /stringifier/, type: Token.tStringifier},
   { pattern: /typedef/, type: Token.tTypedef},
   { pattern: /unrestricted/, type: Token.tUnrestricted},
 
@@ -75,9 +63,6 @@ const g_keywords: Array<TokenPattern> = [
   { pattern: /double/, type: Token.tDouble},
   { pattern: /or/, type: Token.tOr},
   { pattern: /String/, type: Token.tString},
-  { pattern: /ByteString/, type: Token.tByteString},
-  { pattern: /DOMString/, type: Token.tDOMString},
-  { pattern: /USVString/, type: Token.tUSVString},
   { pattern: /void/, type: Token.tVoid},  // void type is replaced by undefined type
                           // (c) https://github.com/w3c/webidl2.js?tab=readme-ov-file#errors
   { pattern: /any/, type: Token.tAny},
@@ -120,10 +105,9 @@ const g_keywords: Array<TokenPattern> = [
 
 let g_ArgumentNameKeyword: Token[] = [
   Token.tAsync, Token.tAttribute, Token.tCallback, Token.tConst, Token.tConstructor,
-  Token.tDeleter, Token.tDictionary, Token.tEnum, Token.tGetter, Token.tIncludes,
-  Token.tInherit, Token.tInterface, Token.tIterable, Token.tMaplike, Token.tMixin,
-  Token.tNamespace, Token.tPartial, Token.tReadonly, Token.tRequired, Token.tSetlike,
-  Token.tSetter, Token.tStatic, Token.tStringifier, Token.tTypedef, Token.tUnrestricted
+  Token.tDictionary, Token.tInterface, Token.tPartial,
+  Token.tNamespace, Token.tReadonly,
+  Token.tStatic, Token.tTypedef, Token.tUnrestricted
 ];
 
 export function IsItArgumentNameKeyword(value: Token): boolean {
@@ -179,12 +163,8 @@ export function IsItFloatType(value: Token): boolean {
   return value == Token.tFloat || value == Token.tDouble;
 }
 
-let g_StringType: Token[] = [
-  Token.tByteString, Token.tDOMString, Token.tUSVString
-];
-
 export function IsItStringType(value: Token): boolean {
-  return g_StringType.includes(value);
+  return value == Token.tString;
 }
 
 let g_BufferRelatedType: Token[] = [

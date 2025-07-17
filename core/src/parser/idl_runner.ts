@@ -14,9 +14,11 @@ throw new Error("Done!");*/
 
 
 const idl_text: string =
-`interface Call_Back {
+`callback Callback_Extender_OnProgress = void (float value);
+callback Callback_OnButtonClick = bool (Point pos);
+interface Call_Back_Iface {
     attribute Colors colors;
-    void init();
+    Huks init();
     void invoke(T data);
 };`
 
