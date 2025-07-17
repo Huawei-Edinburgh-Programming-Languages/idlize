@@ -18,7 +18,7 @@
 |mutable_styled_string_accessor_test.cpp| Sergey Kovalev| done |
 |richeditor_controller_accessor_callback_test.cpp| Evstigneev Roman | done |
 |key_event_accessor_test.cpp| Sergey Kovalev | done |
-|drag_event_accessor_test.cpp| Mikhail Politov ||
+|drag_event_accessor_test.cpp| Mikhail Politov | done |
 |global_scope_common_accessor_test.cpp| Evstigneev Roman ||
 |text_timer_modifier.cpp| Vadim Voronov | done, WRONG_GEN can't be fixed, Opt_Callback_Int64_Int64_Void required |
 |global_scope_ohos_font_accessor.cpp| Evstigneev Roman | done |
