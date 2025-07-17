@@ -206,7 +206,8 @@
             "CommonTransition",
             "wrapBuilder",
             "ContentModifier",
-            "CustomStyles"
+            "CustomStyles",
+            "applyStyles"
         ],
         "ignoreEntry": [
             "Optional",
