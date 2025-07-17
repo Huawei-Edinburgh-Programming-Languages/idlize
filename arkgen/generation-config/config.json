@@ -293,17 +293,16 @@
             "id": {
                 "hookName": "hookId",
                 "replaceImplementation": false
+            },
+            "stateStyles": {
+                "hookName": "hookStateStyleImpl",
+                "replaceImplementation": true
             }
         },
         "Checkbox": {
             "contentModifier": {
                 "hookName": "hookCheckBoxContentModifier",
                 "replaceImplementation": true
-            }
-        },
-        "CommonMethod": {
-            "stateStyles": {
-                "hookName": "hookStateStyleImpl"
             }
         },
         "DataPanel": {
