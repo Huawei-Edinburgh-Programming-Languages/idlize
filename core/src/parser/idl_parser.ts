@@ -639,7 +639,7 @@ function DistinguishableType(): idl.TypeNode | null {
     Match(Token.tObject); Null();
   } else if (g_lookahead.type == Token.tSymbol) {
     Match(Token.tSymbol); Null();
-  } else if (lex.IsItBufferRelatedType(g_lookahead.type)) {
+  } else if (g_lookahead.type == Token.tArrayBuffer) {
     BufferRelatedType(); Null();
   } else if (g_lookahead.type == Token.tFrozenArray) {
     Match(Token.tFrozenArray); Match(Token.tLAngle); TypeWithExtendedAttributes(); Match(Token.tRAngle); Null();
@@ -761,26 +761,13 @@ function Null(): boolean {
 }
 
 function BufferRelatedType(): idl.TypeNode | null {
-  let res: idl.TypeNode = new idl.TypeNode;
-  switch (g_lookahead.type) {
-    case Token.tArrayBuffer: res.type = idl.DataType.tArrayBuffer; break;
-    case Token.tSharedArrayBuffer: res.type = idl.DataType.tSharedArrayBuffer; break;
-    case Token.tDataView: res.type = idl.DataType.tDataView; break;
-    case Token.tInt8Array: res.type = idl.DataType.tInt8Array; break;
-    case Token.tInt16Array: res.type = idl.DataType.tInt16Array; break;
-    case Token.tInt32Array: res.type = idl.DataType.tInt32Array; break;
-    case Token.tUint8Array: res.type = idl.DataType.tUint8Array; break;
-    case Token.tUint16Array: res.type = idl.DataType.tUint16Array; break;
-    case Token.tUint32Array: res.type = idl.DataType.tUint32Array; break;
-    case Token.tUint8ClampedArray: res.type = idl.DataType.tUint8ClampedArray; break;
-    case Token.tBigInt64Array: res.type = idl.DataType.tBigInt64Array; break;
-    case Token.tBigUint64Array: res.type = idl.DataType.tBigUint64Array; break;
-    case Token.tFloat16Array: res.type = idl.DataType.tFloat16Array; break;
-    case Token.tFloat32Array: res.type = idl.DataType.tFloat32Array; break;
-    case Token.tFloat64Array: res.type = idl.DataType.tFloat64Array; break;
-    default: return null;
+  if (g_lookahead.type == Token.tArrayBuffer) {
+    let res: idl.TypeNode = new idl.TypeNode;
+    res.type = idl.DataType.tArrayBuffer;
+    return res;
+  } else {
+    return null;
   }
-  return res;
 }
 
 function ExtendedAttributeList() {

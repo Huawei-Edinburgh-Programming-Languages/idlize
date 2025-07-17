@@ -128,7 +128,7 @@ export function IsItDistinguishableType(value: Token): boolean {
          value == Token.tAsync ||
          value == Token.tObject ||
          value == Token.tSymbol ||
-         IsItBufferRelatedType(value) ||
+         value == Token.tArrayBuffer ||
          value == Token.tFrozenArray ||
          value == Token.tObservableArray ||
          value == Token.tRecord ||
@@ -165,18 +165,6 @@ export function IsItFloatType(value: Token): boolean {
 
 export function IsItStringType(value: Token): boolean {
   return value == Token.tString;
-}
-
-let g_BufferRelatedType: Token[] = [
-  Token.tArrayBuffer, Token.tSharedArrayBuffer, Token.tDataView,
-  Token.tInt8Array, Token.tInt16Array, Token.tInt32Array,
-  Token.tUint8Array, Token.tUint16Array, Token.tUint32Array,
-  Token.tUint8ClampedArray, Token.tBigInt64Array, Token.tBigUint64Array,
-  Token.tFloat16Array, Token.tFloat32Array, Token.tFloat64Array
-];
-
-export function IsItBufferRelatedType(value: Token): boolean {
-  return g_BufferRelatedType.includes(value);
 }
 
 let g_Types: Token[] = [
