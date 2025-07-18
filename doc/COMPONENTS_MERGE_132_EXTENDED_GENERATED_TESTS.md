@@ -42,19 +42,19 @@
 | CommonMethod | setFlexBasisTestFlexBasisInvalidValues | Bug Reset commented in model|||
 | CommonMethod | setRotateTestRotateCenterXInvalidValues | Bug in modifier|||
 | CommonMethod | setRotateTestRotateCenterYInvalidValues | Bug in modifier|||
-| Image | setMatchTextDirectionTestMatchTextDirectionInvalidValues | Bug | Vadim Voronov||
-| Image | setAutoResizeTestAutoResizeInvalidValues | Bug | Vadim Voronov ||
-| Image | setSyncLoadTestSyncLoadInvalidValues | Bug | Vadim Voronov||
-| Image | setEnableAnalyzerTestEnableAnalyzerInvalidValues | Bug | Vadim Voronov||
-| Image | setFitOriginalSizeTestFitOriginalSizeInvalidValues | Bug | Vadim Voronov||
-| Image | setDraggableTestDraggableValidValues | Bug| Vadim Voronov||
-| Image | setImageOptions1TestValidValues |Need opt support for valid values | Vadim Voronov||
+| Image | setMatchTextDirectionTestMatchTextDirectionInvalidValues | Bug | Vadim Voronov| in progress|
+| Image | setAutoResizeTestAutoResizeInvalidValues | Bug | Vadim Voronov | in progress|
+| Image | setSyncLoadTestSyncLoadInvalidValues | Bug | Vadim Voronov| in progress|
+| Image | setEnableAnalyzerTestEnableAnalyzerInvalidValues | Bug | Vadim Voronov| in progress|
+| Image | setFitOriginalSizeTestFitOriginalSizeInvalidValues | Bug | Vadim Voronov| in progress|
+| Image | setDraggableTestDraggableValidValues | Bug| Vadim Voronov| in progress|
+| Image | setImageOptions1TestValidValues |Need opt support for valid values | Vadim Voronov| in progress|
 | ImageAnimator | setReverseTestReverseInvalidValues | Bug |||
 | ImageAnimator | setMonitorInvisibleAreaTestMonitorInvisibleAreaInvalidValues | Bug |||
 | ImageAnimator | setIterationsTestIterationsValidValues | Looks like bug|||
-| Progress | setColorTestColorInvalidValues | broken LinearGradient| Vadim Voronov ||
-| Progress | setValueTestValueInvalidValues | Bug |Vadim Voronov ||
-| Progress | setPrivacySensitiveTestPrivacySensitiveValidValues | Bug Code commented in model| Vadim Voronov ||
+| Progress | setColorTestColorInvalidValues | broken LinearGradient| Vadim Voronov | in progress|
+| Progress | setValueTestValueInvalidValues | Bug |Vadim Voronov | in progress|
+| Progress | setPrivacySensitiveTestPrivacySensitiveValidValues | Bug Code commented in model| Vadim Voronov | in progress|
 | Slider | setShowTipsTestShowTipsInvalidValues | Bug |||
 | Slider | setSelectedColorTestSelectedColorInvalidValues | Bug |||
 | Slider | setEnableHapticFeedbackTestEnableHapticFeedbackValidValues | Bug in NG model, need to switch to static model|||
