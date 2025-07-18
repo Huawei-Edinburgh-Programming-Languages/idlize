@@ -62,6 +62,7 @@
             "packages": [""]
         }
     },
+    "libraryNameMapping": { },
     "packageTransformation": {
         "internal.component.ets": "arkui.component"
     },
