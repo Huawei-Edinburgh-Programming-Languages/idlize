@@ -42,13 +42,13 @@
 | CommonMethod | setFlexBasisTestFlexBasisInvalidValues | Bug Reset commented in model|||
 | CommonMethod | setRotateTestRotateCenterXInvalidValues | Bug in modifier|||
 | CommonMethod | setRotateTestRotateCenterYInvalidValues | Bug in modifier|||
-| Image | setMatchTextDirectionTestMatchTextDirectionInvalidValues | Bug |||
-| Image | setAutoResizeTestAutoResizeInvalidValues | Bug |||
-| Image | setSyncLoadTestSyncLoadInvalidValues | Bug |||
-| Image | setEnableAnalyzerTestEnableAnalyzerInvalidValues | Bug |||
-| Image | setFitOriginalSizeTestFitOriginalSizeInvalidValues | Bug |||
-| Image | setDraggableTestDraggableValidValues | Bug|||
-| Image | setImageOptions1TestValidValues |Need opt support for valid values |||
+| Image | setMatchTextDirectionTestMatchTextDirectionInvalidValues | Bug | Vadim Voronov||
+| Image | setAutoResizeTestAutoResizeInvalidValues | Bug | Vadim Voronov ||
+| Image | setSyncLoadTestSyncLoadInvalidValues | Bug | Vadim Voronov||
+| Image | setEnableAnalyzerTestEnableAnalyzerInvalidValues | Bug | Vadim Voronov||
+| Image | setFitOriginalSizeTestFitOriginalSizeInvalidValues | Bug | Vadim Voronov||
+| Image | setDraggableTestDraggableValidValues | Bug| Vadim Voronov||
+| Image | setImageOptions1TestValidValues |Need opt support for valid values | Vadim Voronov||
 | ImageAnimator | setReverseTestReverseInvalidValues | Bug |||
 | ImageAnimator | setMonitorInvisibleAreaTestMonitorInvisibleAreaInvalidValues | Bug |||
 | ImageAnimator | setIterationsTestIterationsValidValues | Looks like bug|||
