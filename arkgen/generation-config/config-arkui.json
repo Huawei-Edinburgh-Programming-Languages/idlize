@@ -2,7 +2,7 @@
     "moduleName": "arkui",
     "modules": {
         "global.resource": {
-            "name": "global.resourcel",
+            "name": "global.resource",
             "packages": ["global.resource"]
         },
         "ohos.multimedia.image": {

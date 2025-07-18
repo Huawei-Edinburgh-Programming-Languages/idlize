@@ -25,7 +25,6 @@
     },
     "include": [
         "generated/modules/global/generated/ts/**/*",
-        "generated/modules/image/generated/ts/**/*",
         "generated/sig/arkoala/**/*",
         "generated/sig/arkoala-arkts/framework/**/*"
     ]
