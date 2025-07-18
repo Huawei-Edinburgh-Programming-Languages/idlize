@@ -1,9 +1,5 @@
 import { registerNativeModuleLibraryName } from '@koalaui/interop';
-import { checkArkoalaCallbacks } from '../../generated/arkts';
-
-export function pullEvents() {
-    checkArkoalaCallbacks();
-}
+export { resize, test } from '../../generated/arkts';
 
 export function init() {
     registerNativeModuleLibraryName('InteropNativeModule', 'TEST_NAME_COLLISIONNativeModule');

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "package": "@test-buffer",
+        "package": "@test-name-collision",
         "baseUrl": ".",
         "outDir": "build/panda/out",
         "paths": {
