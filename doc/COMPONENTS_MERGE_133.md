@@ -27,14 +27,14 @@
 | calendar_picker_dialog_accessor.cpp | | |
 | calendar_picker_modifier.cpp | | |
 | canvas_accessor.cpp | | |
-| canvas_gradient_accessor.cpp | Vadim Voronov | |
-| canvas_modifier.cpp | Vadim Voronov | |
-| canvas_path_accessor.cpp | Vadim Voronov | |
-| canvas_pattern_accessor.cpp | Vadim Voronov | |
-| canvas_renderer_accessor.cpp | Vadim Voronov | |
-| canvas_renderer_peer_impl.cpp | Vadim Voronov | |
-| canvas_rendering_context2d_accessor.cpp | Vadim Voronov | |
-| canvas_rendering_context2d_peer_impl.cpp | Vadim Voronov | |
+| canvas_gradient_accessor.cpp | Vadim Voronov | done nothing todo |
+| canvas_modifier.cpp | Vadim Voronov | done nothing todo |
+| canvas_path_accessor.cpp | Vadim Voronov | done nothing todo |
+| canvas_pattern_accessor.cpp | Vadim Voronov | done nothing todo |
+| canvas_renderer_accessor.cpp | Vadim Voronov | done nothing todo |
+| canvas_renderer_peer_impl.cpp | Vadim Voronov | done nothing todo |
+| canvas_rendering_context2d_accessor.cpp | Vadim Voronov | done nothing todo |
+| canvas_rendering_context2d_peer_impl.cpp | Vadim Voronov | done nothing todo |
 | checkbox_group_modifier.cpp | | |
 | checkbox_modifier.cpp | | |
 | children_main_size_accessor.cpp | | |
@@ -72,7 +72,7 @@
 | data_panel_modifier.cpp | | |
 | data_resubmission_handler_accessor.cpp | | |
 | date_picker_dialog_accessor.cpp | | |
-| date_picker_modifier.cpp | Vadim Voronov | |
+| date_picker_modifier.cpp | Vadim Voronov | done nothing todo |
 | decoration_style_accessor.cpp | | |
 | dialog_common.cpp | | |
 | disappear_symbol_effect_accessor.cpp | | |
@@ -84,8 +84,8 @@
 | drag_event_accessor.cpp | | |
 | drawable_descriptor_accessor.cpp | | |
 | draw_context_accessor.cpp | | |
-| drawing_rendering_context_accessor.cpp | Vadim Voronov | |
-| drawing_rendering_context_peer_impl.cpp | Vadim Voronov | |
+| drawing_rendering_context_accessor.cpp | Vadim Voronov | done nothing todo |
+| drawing_rendering_context_peer_impl.cpp | Vadim Voronov | done nothing todo |
 | draw_modifier_accessor.cpp | | |
 | effect_component_modifier.cpp | | |
 | ellipse_modifier.cpp | | |
@@ -104,7 +104,7 @@
 | folder_stack_modifier.cpp | | |
 | font_accessor.cpp | | |
 | font_collection_accessor.cpp | | |
-| form_component_modifier.cpp | Vadim Voronov | |
+| form_component_modifier.cpp | Vadim Voronov | done nothing todo |
 | form_link_modifier.cpp | | |
 | frame_node_accessor.cpp | | |
 | friction_motion_accessor.cpp | | |
@@ -119,7 +119,7 @@
 | global_scope_accessor.cpp | | |
 | global_scope_animation_helper.cpp | | |
 | global_scope_ohos_arkui_component_snapshot_accessor.cpp | | |
-| global_scope_ohos_arkui_performance_monitor_accessor.cpp | Vadim Voronov | |
+| global_scope_ohos_arkui_performance_monitor_accessor.cpp | Vadim Voronov | done nothing todo |
 | global_scope_ohos_font_accessor.cpp | | |
 | global_scope_ohos_measure_utils_accessor.cpp | | |
 | grid_col_modifier.cpp | | |
@@ -133,7 +133,7 @@
 | image_analyzer_controller_accessor.cpp | | |
 | image_animator_modifier.cpp | | |
 | image_attachment_accessor.cpp | | |
-| image_bitmap_accessor.cpp | Vadim Voronov | |
+| image_bitmap_accessor.cpp | Vadim Voronov | done nothing todo |
 | image_common_methods.cpp | | |
 | image_data_accessor.cpp | | |
 | image_filter_accessor.cpp | | |
@@ -169,10 +169,10 @@
 | loading_progress_modifier.cpp | | |
 | long_press_gesture_event_accessor.cpp | | |
 | long_press_gesture_interface_accessor.cpp | | |
-| long_press_recognizer_accessor.cpp | Vadim Voronov | |
+| long_press_recognizer_accessor.cpp | Vadim Voronov | done nothing todo |
 | marquee_modifier.cpp | | |
 | mask_filter_accessor.cpp | | |
-| matrix2d_accessor.cpp | Vadim Voronov | |
+| matrix2d_accessor.cpp | Vadim Voronov | done nothing todo |
 | matrix4_transit_accessor.cpp | | |
 | matrix_accessor.cpp | | |
 | measurable_accessor.cpp | | |
@@ -193,10 +193,10 @@
 | nav_path_stack_accessor.cpp | | |
 | node_container_modifier.cpp | | |
 | node_content_accessor.cpp | | |
-| offscreen_canvas_accessor.cpp | Vadim Voronov | |
-| offscreen_canvas_peer.cpp | Vadim Voronov | |
-| offscreen_canvas_rendering_context2d_accessor.cpp | Vadim Voronov | |
-| offscreen_canvas_rendering_context2d_peer_impl.cpp | Vadim Voronov | |
+| offscreen_canvas_accessor.cpp | Vadim Voronov | done nothing todo |
+| offscreen_canvas_peer.cpp | Vadim Voronov | done nothing todo |
+| offscreen_canvas_rendering_context2d_accessor.cpp | Vadim Voronov | done nothing todo |
+| offscreen_canvas_rendering_context2d_peer_impl.cpp | Vadim Voronov | done nothing todo |
 | page_life_cycle_accessor.cpp | | |
 | pan_gesture_event_accessor.cpp | | |
 | pan_gesture_interface_accessor.cpp | | |
@@ -205,7 +205,7 @@
 | paragraph_accessor.cpp | | |
 | paragraph_builder_accessor.cpp | | |
 | paragraph_style_accessor.cpp | | |
-| path2d_accessor.cpp | Vadim Voronov | |
+| path2d_accessor.cpp | Vadim Voronov | done nothing todo |
 | path_accessor.cpp | | |
 | path_effect_accessor.cpp | | |
 | path_modifier.cpp | | |
@@ -216,7 +216,7 @@
 | permission_request_accessor.cpp | | |
 | pinch_gesture_event_accessor.cpp | | |
 | pinch_gesture_interface_accessor.cpp | | |
-| pinch_recognizer_accessor.cpp | Vadim Voronov | |
+| pinch_recognizer_accessor.cpp | Vadim Voronov | done nothing todo |
 | pixel_map_accessor.cpp | | |
 | pixel_map_mock_accessor.cpp | | |
 | plugin_component_modifier.cpp | | |
@@ -234,7 +234,7 @@
 | region_accessor.cpp | Lobah Mikhail| |
 | relative_container_modifier.cpp | Lobah Mikhail| |
 | remote_window_modifier.cpp | | |
-| rendering_context_settings_accessor.cpp | Vadim Voronov | |
+| rendering_context_settings_accessor.cpp | Vadim done nothing todo  | done nothing todo |
 | render_node_accessor.cpp | | |
 | render_service_node_accessor.cpp | | |
 | replace_symbol_effect_accessor.cpp | | |
