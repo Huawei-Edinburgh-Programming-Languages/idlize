@@ -13,4 +13,5 @@ List of open PR's into OLD FB: OpenHarmony_feature_20250328
 | 6 | https://gitee.com/openharmony/arkui_ace_engine/pulls/68055 | Ivan Pavelyev |
 | 7 | https://gitee.com/openharmony/arkui_ace_engine/pulls/67960 | Ivan Pavelyev |
 | 8 | https://gitee.com/openharmony/arkui_ace_engine/pulls/64031 | Ivan Pavelyev |
+| 9 | https://gitee.com/openharmony/arkui_ace_engine/pulls/68026 | Nikolay Pisanov |
 
