@@ -1,5 +1,6 @@
 {
     "DeletedPackages": [
+        "arkui.component.repeat"
     ],
     "DeletedDeclarations": [
         "Callback",
