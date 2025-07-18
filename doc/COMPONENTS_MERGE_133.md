@@ -45,15 +45,15 @@
 | color_content_accessor.cpp | | |
 | color_filter_accessor.cpp | | |
 | color_metrics_accessor.cpp | | |
-| column_modifier.cpp | | |
-| column_split_modifier.cpp | | |
-| common_ani_modifier.cpp | | |
-| common_method_modifier.cpp | | |
-| common_shape_accessor.cpp | | |
-| common_shape_method_modifier.cpp | | |
-| component_content_accessor.cpp | | |
-| component_content_ani_modifier.cpp | | |
-| component_root_modifier.cpp | | |
+| column_modifier.cpp | Lobah Mikhail| |
+| column_split_modifier.cpp | Lobah Mikhail| |
+| common_ani_modifier.cpp | Lobah Mikhail| |
+| common_method_modifier.cpp | Lobah Mikhail| |
+| common_shape_accessor.cpp | Lobah Mikhail| |
+| common_shape_method_modifier.cpp | Lobah Mikhail| |
+| component_content_accessor.cpp | Lobah Mikhail| |
+| component_content_ani_modifier.cpp | Lobah Mikhail| |
+| component_root_modifier.cpp | Lobah Mikhail| |
 | component_snapshot_ani_modifier.cpp | | |
 | console_message_accessor.cpp | | |
 | container_span_modifier.cpp | | |
@@ -227,12 +227,12 @@
 | prompt_action_accessor.cpp | | |
 | qr_code_modifier.cpp | | |
 | radio_modifier.cpp | | |
-| rating_modifier.cpp | | |
-| rect_modifier.cpp | | |
-| rect_shape_accessor.cpp | | |
-| refresh_modifier.cpp | | |
-| region_accessor.cpp | | |
-| relative_container_modifier.cpp | | |
+| rating_modifier.cpp | Lobah Mikhail| |
+| rect_modifier.cpp | Lobah Mikhail| |
+| rect_shape_accessor.cpp | Lobah Mikhail| |
+| refresh_modifier.cpp | Lobah Mikhail| |
+| region_accessor.cpp | Lobah Mikhail| |
+| relative_container_modifier.cpp | Lobah Mikhail| |
 | remote_window_modifier.cpp | | |
 | rendering_context_settings_accessor.cpp | Vadim Voronov | |
 | render_node_accessor.cpp | | |
@@ -248,12 +248,12 @@
 | rich_text_modifier.cpp | | |
 | root_modifier.cpp | | |
 | root_scene_modifier.cpp | | |
-| rotation_gesture_accessor.cpp | | |
-| rotation_gesture_event_accessor.cpp | | |
-| rotation_recognizer_accessor.cpp | | |
+| rotation_gesture_accessor.cpp | Lobah Mikhail| |
+| rotation_gesture_event_accessor.cpp | Lobah Mikhail| |
+| rotation_recognizer_accessor.cpp | Lobah Mikhail| |
 | round_rect_accessor.cpp | | |
-| row_modifier.cpp | | |
-| row_split_modifier.cpp | | |
+| row_modifier.cpp | Lobah Mikhail| |
+| row_split_modifier.cpp | Lobah Mikhail| |
 | run_accessor.cpp | | |
 | sampling_options_accessor.cpp | | |
 | scale_symbol_effect_accessor.cpp | | |
