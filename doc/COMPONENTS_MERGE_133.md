@@ -169,7 +169,7 @@
 | loading_progress_modifier.cpp | | |
 | long_press_gesture_event_accessor.cpp | | |
 | long_press_gesture_interface_accessor.cpp | | |
-| long_press_recognizer_accessor.cpp | | |
+| long_press_recognizer_accessor.cpp | Vadim Voronov | |
 | marquee_modifier.cpp | | |
 | mask_filter_accessor.cpp | | |
 | matrix2d_accessor.cpp | Vadim Voronov | |
@@ -216,7 +216,7 @@
 | permission_request_accessor.cpp | | |
 | pinch_gesture_event_accessor.cpp | | |
 | pinch_gesture_interface_accessor.cpp | | |
-| pinch_recognizer_accessor.cpp | | |
+| pinch_recognizer_accessor.cpp | Vadim Voronov | |
 | pixel_map_accessor.cpp | | |
 | pixel_map_mock_accessor.cpp | | |
 | plugin_component_modifier.cpp | | |
