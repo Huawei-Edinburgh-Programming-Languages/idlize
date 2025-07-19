@@ -37,12 +37,21 @@ function main() {
 
   const ctx = new GeneratorContext(library, selector)
   const decls = postprocess(ctx.generate(library))
-  const files = formFiles(new Set(library.map(file => file.packageClause.join('.'))), decls)
+  const SPECIAL_PACKAGES = ['engine']
+  const files = formFiles(new Set(library.map(file => file.packageClause.join('.')).concat(SPECIAL_PACKAGES)), decls)
   files.forEach((content, name) => {
     console.log('-------------------------------------------------')
     console.log('FILE: ', name)
     console.log('')
-    console.log(content.map(processNPrintTS).join(EOL))
+    let text = ''
+    content.moduleLikeImports.forEach((vals, source) => {
+      text += `import {${Array.from(vals).join(', ')}} from "./${source}"\n`
+    })
+    if (content.moduleLikeImports.size > 0) {
+      text += '\n'
+    }
+    text += content.body.map(processNPrintTS).join(EOL)
+    console.log(text)
     console.log('-------------------------------------------------')
   })
 }

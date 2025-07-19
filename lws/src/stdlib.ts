@@ -19,9 +19,10 @@ import { Annotation, DecoratorKind, LWType, Modifier } from "./lws"
 const knownAnnotations = {
     ptrVal: 'ptrVal',
     asStruct: 'asStruct',
+    isType: 'isType',
     named: 'named',
     staticMethod: 'staticMethod',
-    stackInstance: 'stackInstance'
+    stackInstance: 'stackInstance',
 }
 
 const knownModifiers = {
@@ -69,6 +70,7 @@ export const std = {
 export const An = {
     ptrVal: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.ptrVal }),
     asStruct: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.asStruct }),
+    isType: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.isType }),
     named: (name:string): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.named, value: name }),
     staticMethod: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.staticMethod }),
     stackInstance: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.stackInstance })

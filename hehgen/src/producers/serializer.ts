@@ -15,7 +15,7 @@
 
 import * as idl from "@idlizer/core/idl";
 import { createProducer } from "../context"
-import { D, E, S, T, Ts } from "lws";
+import { An, D, E, S, T, Ts } from "lws";
 import { ArgConvertor } from "./components/argConvertor";
 
 function makeSerializerName(node:idl.IDLInterface) {
@@ -27,7 +27,7 @@ export const serializerProducer = createProducer(
   (node, ctx) => {
     return {
       artifact: {
-        reference: E.v(makeSerializerName(node)),
+        reference: E.v(makeSerializerName(node), [An.isType()]),
         implementationGenerator: () => {
             const serializerName = 'serializer'
             const convertor = new ArgConvertor(ctx, E.v(serializerName))

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { D, IdentityTransformer, lw } from "lws";
+import { An, D, E, IdentityTransformer, lw, std, T, utils } from "lws";
 
 export function postprocess(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     decls = mergeTheSameNamespaces(decls)
@@ -87,20 +87,63 @@ function mergeTheSameClasses(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
 
 /////////////////////////////////////////////////////
 
+interface ResultFile {
+    moduleLikeImports: Map<string, Set<string>>
+    body: lw.LWDeclaration[]
+}
+
 class RefSearcher extends IdentityTransformer {
     constructor(
         private registry: Map<string, string>,
-        private imports: Set<string>
+        private imports: Map<string, Set<string>>
     ) { super() }
+
+    private nsStack: string[] = []
+    private trimNs(name:string): string {
+        const prefix = this.nsStack.join('.') + '.'
+        if (name.startsWith(prefix)) {
+            return name.substring(prefix.length)
+        }
+        return name
+    }
+    goNamespaceDeclaration(decl: lw.NamespaceDeclaration): lw.NamespaceDeclaration {
+        this.nsStack.push(decl.name)
+        const r = super.goNamespaceDeclaration(decl)
+        this.nsStack.pop()
+        return r
+    }
+
+    private getBase(name:string) {
+        return name.split('.').at(0)!
+    }
 
     goConstType(type: lw.ConstType): lw.LWType {
         if (!type.name.startsWith('@')) {
             const record = this.registry.get(type.name)
             if (record) {
-                this.imports.add(record)
+                if (!this.imports.has(record)) {
+                    this.imports.set(record, new Set())
+                }
+                let val = type.name
+                if (val.startsWith(record)) {
+                    val = val.substring(record.length)
+                    while (val.startsWith('.')) {
+                        val = val.substring(1)
+                    }
+                }
+                this.imports.get(record)?.add(this.getBase(val))
+                return T.c(this.trimNs(val))
             }
+            return T.c(this.trimNs(type.name))
         }
         return super.goConstType(type)
+    }
+    goVariableExpression(expr: lw.VariableExpression): lw.VariableExpression {
+        if (utils.hasAnnotation(expr, std.names.annotations.isType)) {
+            const r = this.goConstType(T.cc(expr.name)) as lw.ConstType
+            return E.v(r.name, expr.annotations)
+        }
+        return super.goVariableExpression(expr)
     }
 }
 
@@ -128,7 +171,7 @@ function putToNs(declarations:lw.LWDeclaration[]): lw.LWDeclaration[] {
     return result
 }
 
-export function formFiles(knownPackages: Set<string>, declarations: lw.LWDeclaration[]): Map<string, lw.LWDeclaration[]> {
+export function formFiles(knownPackages: Set<string>, declarations: lw.LWDeclaration[]): Map<string, ResultFile> {
 
     // form files
     const files = new Map<string, lw.LWDeclaration[]>()
@@ -158,13 +201,21 @@ export function formFiles(knownPackages: Set<string>, declarations: lw.LWDeclara
     })
 
     // do namespace stuff
-    const nsFiles = new Map<string, lw.LWDeclaration[]>()
+    const nsFiles = new Map<string, ResultFile>()
     files.forEach((decls, name) => {
-        const rowImports = new Set<string>()
+        const rowImports = new Map<string, Set<string>>()
         const refSearcher = new RefSearcher(refIndex, rowImports)
-        nsFiles.set(name, putToNs(decls).map(it => refSearcher.goDeclaration(it)))
-        const imports = Array.from(rowImports).filter(it => it !== name)
-        console.error(name, imports)
+        const nsDecls = putToNs(decls).map(it => refSearcher.goDeclaration(it))
+        const imports = new Map<string, Set<string>>()
+        rowImports.forEach((vals, imp) => {
+            if (imp !== name) {
+                imports.set(imp, vals)
+            }
+        })
+        nsFiles.set(name, {
+            moduleLikeImports: imports,
+            body: nsDecls
+        })
     })
 
     return nsFiles

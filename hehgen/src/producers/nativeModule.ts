@@ -13,12 +13,11 @@
  * limitations under the License.
  */
 
-import { D, E, lw, S, T, Ts } from "lws";
+import { An, D, E, S, T, Ts } from "lws";
 import { createProducer } from "../context"
 import * as idl from "@idlizer/core/idl";
-import { mkName } from "../library/utils";
 
-const NATIVE_MODULE_NAME = 'NativeModule'
+const NATIVE_MODULE_NAME = 'engine.NativeModule'
 
 export const nativeModuleProducer = createProducer(
   { is: idl.isMethod, role: 'native' },
@@ -26,7 +25,7 @@ export const nativeModuleProducer = createProducer(
     const methodName = idl.getFQName(node).split('.').join('_')
     return {
       artifact: {
-        reference: E.v(mkName(NATIVE_MODULE_NAME, methodName)),
+        reference: E.get(E.v(NATIVE_MODULE_NAME, [An.isType()]), methodName),
         implementationGenerator: () => {
           return D.class(NATIVE_MODULE_NAME, [], [
             D.func(methodName, [{ name: 'buffer', type: T.c('SerializerBase') }], Ts.prim.void, S.block([]))
