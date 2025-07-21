@@ -15,7 +15,7 @@
 
 import * as idl from "@idlizer/core/idl";
 import { createProducer } from "../context"
-import { An, D, E, S, T, Ts } from "lws";
+import { An, D, DD, E, Md, S, T, Ts } from "lws";
 import { ArgConvertor } from "./components/argConvertor";
 
 function makeSerializerName(node:idl.IDLInterface) {
@@ -32,13 +32,13 @@ export const serializerProducer = createProducer(
             const serializerName = 'serializer'
             const convertor = new ArgConvertor(ctx, E.v(serializerName))
             return D.class(makeSerializerName(node), [], [
-                D.func('write', [
+                DD({ modifiers: [Md.static()] }).func('write', [
                     { name: serializerName, type: T.c('SerializerBase') },
                     { name: 'value', type: ctx.use({ node }).reference() },
                 ], Ts.prim.void, S.block(
                     node.properties.map(prop => convertor.write(E.get(E.v('value'), prop.name), prop.type))
                 )),
-                D.func('read', [], Ts.prim.void, S.block([]))
+                DD({ modifiers: [Md.static()] }).func('read', [], Ts.prim.void, S.block([]))
             ])
         }
       }
