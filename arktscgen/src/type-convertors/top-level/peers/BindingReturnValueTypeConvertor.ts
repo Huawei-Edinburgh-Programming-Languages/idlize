@@ -16,15 +16,19 @@
 import { TopLevelTypeConvertor } from "../TopLevelTypeConvertor"
 import { Typechecker } from "../../../general/Typechecker"
 import {
+    IDLContainerType,
+    IDLContainerUtils,
     IDLOptionalType,
     IDLReferenceType,
     IDLType,
+    isInterface,
     isReferenceType,
     LanguageExpression,
-    LanguageWriter, throwException
+    LanguageWriter, printType, throwException
 } from "@idlizer/core"
 import { PeersConstructions } from "../../../constuctions/PeersConstructions"
 import { Config } from "../../../general/Config"
+import { isDataClass, isReal } from "../../../general/common"
 
 export class BindingReturnValueTypeConvertor extends TopLevelTypeConvertor<
     (writer: LanguageWriter, call: LanguageExpression) => LanguageExpression
@@ -35,12 +39,23 @@ export class BindingReturnValueTypeConvertor extends TopLevelTypeConvertor<
         const plain = (type: IDLType) =>
             (writer: LanguageWriter, call: LanguageExpression) =>
                 call
-        const wrap = (wrapWith: string) =>
+        const wrap = (wrapWith: string, ...args: string[]) =>
                 (writer: LanguageWriter, call: LanguageExpression) =>
-                    writer.makeFunctionCall(wrapWith, [call])
+                    writer.makeFunctionCall(wrapWith, [call, ...args.map(arg => writer.makeString(arg))])
+
         super(typechecker, {
-            sequence: (type: IDLType) =>
-                wrap(PeersConstructions.arrayOfPointersToArrayOfPeers),
+            sequence: (type: IDLContainerType) => {
+                if (IDLContainerUtils.isSequence(type) && isReferenceType(type.elementType[0])) {
+                    const elementType = this.typechecker.findRealDeclaration(type.elementType[0].name)
+                    if (elementType && isInterface(elementType) && isDataClass(elementType)) {
+                        return wrap(
+                            'acceptNativeObjectArrayResult',
+                            `(peer: KNativePointer) => new ${elementType.name}(peer)`
+                        )
+                    }
+                }
+                return wrap(PeersConstructions.arrayOfPointersToArrayOfPeers)
+            },
             string: (type: IDLType) =>
                 wrap(PeersConstructions.receiveString),
             reference: (type: IDLReferenceType) =>

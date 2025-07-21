@@ -29,7 +29,8 @@ import {
     KNativePointer,
     nodeByType,
     ArktsObject,
-    unpackString
+    unpackString,
+    acceptNativeObjectArrayResult
 } from "../../reexport-for-generated"
 
 %GENERATED_PART%
