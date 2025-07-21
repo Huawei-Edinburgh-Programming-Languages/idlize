@@ -8,12 +8,12 @@
 | api_impl.cpp | | |
 | appear_symbol_effect_accessor.cpp | | |
 | axis_event_accessor.cpp | | |
-| background_color_style_accessor.cpp | | |
-| badge_modifier.cpp | | |
-| base_context_accessor.cpp | | |
-| base_event_accessor.cpp | | |
-| base_gesture_event_accessor.cpp | | |
-| baseline_offset_style_accessor.cpp | | |
+| background_color_style_accessor.cpp | Sergey Kovalev | |
+| badge_modifier.cpp | Sergey Kovalev | |
+| base_context_accessor.cpp | Sergey Kovalev | |
+| base_event_accessor.cpp | Sergey Kovalev | |
+| base_gesture_event_accessor.cpp | Sergey Kovalev | |
+| baseline_offset_style_accessor.cpp | Sergey Kovalev | |
 | base_shape_accessor.cpp | | |
 | base_span_modifier.cpp | | |
 | bind_sheet_utils.cpp | | |
