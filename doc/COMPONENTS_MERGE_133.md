@@ -260,14 +260,14 @@
 | scene_accessor.cpp | | |
 | screen_capture_handler_accessor.cpp | | |
 | screen_modifier.cpp | | |
-| scrollable_common_method_modifier.cpp | | |
-| scrollable_target_info_accessor.cpp | | |
-| scroll_bar_modifier.cpp | | |
-| scroller_accessor.cpp | | |
-| scroller_peer_impl.cpp | | |
-| scroll_modifier.cpp | | |
-| scroll_motion_accessor.cpp | | |
-| scroll_result_accessor.cpp | | |
+| scrollable_common_method_modifier.cpp | Andrey Khudenkikh | |
+| scrollable_target_info_accessor.cpp | Andrey Khudenkikh | |
+| scroll_bar_modifier.cpp | Andrey Khudenkikh | |
+| scroller_accessor.cpp | Andrey Khudenkikh | |
+| scroller_peer_impl.cpp | Andrey Khudenkikh | |
+| scroll_modifier.cpp | Andrey Khudenkikh | |
+| scroll_motion_accessor.cpp | Andrey Khudenkikh | |
+| scroll_result_accessor.cpp | Andrey Khudenkikh | |
 | search_controller_accessor.cpp | | |
 | search_modifier.cpp | | |
 | search_ops_accessor.cpp | | |
