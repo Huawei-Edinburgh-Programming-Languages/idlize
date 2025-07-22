@@ -49,6 +49,7 @@
                 "test_hilog",
                 "test_internal_lib",
                 "test_length",
+                "test_promise",
                 "test_number",
                 "test_return_types",
                 "test_class_props_initial_values",

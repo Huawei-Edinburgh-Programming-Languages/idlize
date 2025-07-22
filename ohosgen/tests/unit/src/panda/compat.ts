@@ -78,6 +78,8 @@ export { ExternalType, hookns } from "./handwritten/external_lib"
 
 export { DTSCheckExternalLib, InternalType } from "../../generated/arkts"
 
+export { DTSCheckPromiseOptions, DTSCheckPromise } from "../../generated/arkts"
+
 export type OHBuffer = NativeBuffer
 export type OHAny = object
 

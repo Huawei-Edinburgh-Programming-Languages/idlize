@@ -85,6 +85,8 @@ import { ExternalType, hookns } from "@external.lib"
 import { SDKExternalType } from "@external.lib.sdk"
 import { DTSCheckExternalLib, InternalType } from "#compat"
 
+import { DTSCheckPromise, DTSCheckPromiseOptions } from "#compat"
+
 export function assertEQ<T1, T2>(value1: T1, value2: T2, comment?: string): void {
   checkEQ(value1, value2, comment)
 }
@@ -491,6 +493,12 @@ function checkThrowException() {
   assertEQ(true, catchException, "Exception has not been thrown!")
 }
 
+function checkPromise() {
+  const options: DTSCheckPromiseOptions = {flag: true, count: 567}
+  const checkPromise = new DTSCheckPromise()
+  checkPromise.checkPromiseVoid(options)
+}
+
 function buildCustomComponent(config: CommonConfiguration): void {
   const customConf = config as CustomComponentConfiguration
   console.log(`Build custom component`)
@@ -547,6 +555,7 @@ export function run() {
   suite.addTest("checkReturnTypes", checkReturnTypes)
   suite.addTest("checkNativeBuffer", checkNativeBuffer)
   suite.addTest("checkThrowException", checkThrowException)
+  suite.addTest("checkPromise", checkPromise)
   // suite.addTest("checkHandwritten", checkHandwritten)
   suite.addTest("checkHooks", checkHooks)
   suite.addTest("checkInternalLib", checkInternalLib)

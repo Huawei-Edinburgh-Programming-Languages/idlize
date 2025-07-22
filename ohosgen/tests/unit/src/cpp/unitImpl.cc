@@ -1025,3 +1025,21 @@ void DTSCheckExternalLib_checkSubNSExternalTypeImpl(OH_NativePointer thisPtr, OH
 //     printf("[native] checkSDKExternalTypeImpl: %p\n", externalType);
 // }
 
+// Promise
+
+class DTSCheckPromisePeer
+{
+};
+
+OH_UNIT_DTSCheckPromiseHandle DTSCheckPromise_constructImpl() {
+    return (OH_UNIT_DTSCheckPromiseHandle) new DTSCheckPromisePeer();
+}
+void DTSCheckPromise_destructImpl(OH_UNIT_DTSCheckPromiseHandle thisPtr) {
+}
+
+void DTSCheckPromise_checkImpl(OH_NativePointer thisPtr, const OH_UNIT_DTSCheckPromiseOptions* options) {
+}
+
+void DTSCheckPromise_checkPromiseVoidImpl(OH_UNIT_VMContext vmContext, OH_UNIT_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const OH_UNIT_DTSCheckPromiseOptions* options, const UNIT_Callback_Opt_Array_String_Void* outputArgumentForReturningPromise) {
+    printf("[native] DTSCheckPromise_checkPromiseVoidImpl options flag: %d, count: %d\n", options->flag, options->count.i32);
+}
