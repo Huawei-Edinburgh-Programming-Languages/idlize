@@ -163,7 +163,8 @@
         "TextPickerDialog",
         "TimePickerDialog",
         "AlertDialog",
-        "CanvasPattern"
+        "CanvasPattern",
+        "WithThemeAttribute"
     ],
     "parameterized": [
         "Indicator",
