@@ -112,7 +112,7 @@
 | ForegroundEffect.test.ets | |
 | FormComponentTest.ets | Vadim Voronov |
 | FormLink.ets | |
-| GaugeTest.ets | |
+| GaugeTest.ets | Olga Daryina |
 | gestureTests
 | GridCol.test.ets | |
 | GridItem.test.ets | |
@@ -138,16 +138,16 @@
 | LoadingProgressTest.ets | Samarin Sergey |
 | LocationButtonTest.ets | |
 | MarqueeTest.ets | Alexander Porodin |
-| MenuItemGroupTest.ets | |
-| MenuItemTest.ets | |
-| MenuTest.ets | |
+| MenuItemGroupTest.ets | Olga Daryina |
+| MenuItemTest.ets | Olga Daryina |
+| MenuTest.ets | Olga Daryina |
 | MotionBlur.test.ets | |
 | NavDestination.test.ets | |
 | Navigation.test.ets | |
 | NestedScroll.test.ets | |
 | OnAreaChangeTest.ets | |
 | OnSizeChangeTest.ets | |
-| PanelTest.ets | |
+| PanelTest.ets | Olga Daryina |
 | PasteButtonTest.ets | |
 | Path.ets | |
 | PatternLock.test.ets | Smirnov Dmitry |
