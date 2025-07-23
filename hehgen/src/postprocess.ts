@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { An, D, E, IdentityTransformer, lw, std, T, utils } from "lws";
+import { D, E, IdentityTransformer, lw, std, T, utils } from "lws";
 
 export function postprocess(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     decls = mergeTheSameNamespaces(decls)

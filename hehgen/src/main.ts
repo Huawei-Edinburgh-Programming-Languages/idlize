@@ -22,6 +22,14 @@ import { formFiles, postprocess } from "./postprocess"
 import { processNPrintTS } from "lws"
 import { EOL } from "node:os"
 
+function native() {
+
+}
+
+function managed() {
+
+}
+
 function main() {
   const fileNames = scan(resolve(__dirname, '..', '..', 'idl', 'test'))
   const library = fileNames.map(fileName => toIDLFile(fileName)[0])
