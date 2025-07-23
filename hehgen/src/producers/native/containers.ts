@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { T } from "lws";
-import { createProducer } from "../context"
+import { D, lw, std, T, Ts } from "lws";
+import { createProducer } from "../../context"
 import * as idl from "@idlizer/core/idl";
 
 export const containerProducer = createProducer(
@@ -26,7 +26,7 @@ export const containerProducer = createProducer(
           const elemRef = ctx.use({ node: node.elementType[0] }).reference()
           return {
             artifact: {
-              reference: T.c('idlize.Array', elemRef)
+              reference: T.c('synthetic.mono.Array', elemRef),
             }
           }
         }
@@ -35,7 +35,7 @@ export const containerProducer = createProducer(
           const valRef = ctx.use({ node: node.elementType[1] }).reference()
           return {
             artifact: {
-              reference: T.c('idlize.Map', keyRef, valRef)
+              reference: T.c('synthetic.mono.Map', keyRef, valRef)
             }
           }
         }

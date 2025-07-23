@@ -14,7 +14,7 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { createProducer } from "../context"
+import { createProducer } from "../../context"
 import { An, D, DD, E, Md, S, T, Ts } from "lws";
 import { ArgConvertor } from "./components/argConvertor";
 

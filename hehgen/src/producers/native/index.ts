@@ -13,22 +13,16 @@
  * limitations under the License.
  */
 
-import { createProducer } from "../context";
-import * as idl from "@idlizer/core/idl";
+import { containerProducer } from "./containers";
+import { fileProducer } from "./file";
+import { primitiveProducer } from "./primitives";
+import { referenceProducer } from "./references";
+import { structureProducer } from "./structure";
 
-export const fileProducer = createProducer(
-  { is: idl.isFile },
-  (node, ctx) => {
-    return {
-      go: () => {
-        idl.linearizeNamespaceMembers(node.entries)
-          .filter(node =>
-               !idl.isImport(node)
-            && !idl.isNamespace(node)
-            && !idl.isCallback(node)
-          )
-          .forEach(node => ctx.use({ node }))
-      }
-    }
-  }
-)
+export const producers = {
+    structureProducer,
+    fileProducer,
+    referenceProducer,
+    primitiveProducer,
+    containerProducer,
+}

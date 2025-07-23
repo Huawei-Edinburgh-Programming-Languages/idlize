@@ -13,54 +13,48 @@
  * limitations under the License.
  */
 
-import { toIDLFile } from "@idlizer/core"
+import { IDLFile, toIDLFile } from "@idlizer/core"
 import { resolve } from "node:path"
 import { GeneratorContext, MakeSelector } from "./context"
-import { Producers } from "./producers"
+import { producers } from "./producers"
 import { scan } from "./library/utils"
-import { formFiles, postprocess } from "./postprocess"
-import { processNPrintTS } from "lws"
-import { EOL } from "node:os"
+import { dumpTsLike, dumpCLike } from "./dump"
 
-function native() {
+function native(library: IDLFile[]) {
+  const selector = new MakeSelector()
+  selector.register(producers.native.fileProducer)
+  selector.register(producers.native.structureProducer)
+  selector.register(producers.native.primitiveProducer)
+  selector.register(producers.native.referenceProducer)
+  selector.register(producers.native.containerProducer)
 
+  const ctx = new GeneratorContext(library, selector)
+  const produced = ctx.generate(library)
+
+  dumpCLike(produced, library)
 }
 
-function managed() {
+function managed(library: IDLFile[]) {
+  const selector = new MakeSelector()
+  selector.register(producers.managed.fileProducer)
+  selector.register(producers.managed.referenceProducer)
+  selector.register(producers.managed.structureProducer)
+  selector.register(producers.managed.primitiveProducer)
+  selector.register(producers.managed.containerProducer)
+  selector.register(producers.managed.nativeModuleProducer)
+  selector.register(producers.managed.serializerProducer)
 
+  const ctx = new GeneratorContext(library, selector)
+  const produced = ctx.generate(library)
+
+  dumpTsLike(produced, library)
 }
 
 function main() {
   const fileNames = scan(resolve(__dirname, '..', '..', 'idl', 'test'))
   const library = fileNames.map(fileName => toIDLFile(fileName)[0])
 
-  const selector = new MakeSelector()
-  selector.register(Producers.fileProducer)
-  selector.register(Producers.referenceProducer)
-  selector.register(Producers.structureProducer)
-  selector.register(Producers.primitiveProducer)
-  selector.register(Producers.containerProducer)
-  selector.register(Producers.nativeModuleProducer)
-  selector.register(Producers.serializerProducer)
-
-  const ctx = new GeneratorContext(library, selector)
-  const decls = postprocess(ctx.generate(library))
-  const SPECIAL_PACKAGES = ['engine']
-  const files = formFiles(new Set(library.map(file => file.packageClause.join('.')).concat(SPECIAL_PACKAGES)), decls)
-  files.forEach((content, name) => {
-    console.log('-------------------------------------------------')
-    console.log('FILE: ', name)
-    console.log('')
-    let text = ''
-    content.moduleLikeImports.forEach((vals, source) => {
-      text += `import {${Array.from(vals).join(', ')}} from "./${source}"\n`
-    })
-    if (content.moduleLikeImports.size > 0) {
-      text += '\n'
-    }
-    text += content.body.map(processNPrintTS).join(EOL)
-    console.log(text)
-    console.log('-------------------------------------------------')
-  })
+  managed(library)
+  native(library)
 }
 main()

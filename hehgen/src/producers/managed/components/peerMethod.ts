@@ -15,7 +15,7 @@
 
 import { D, E, lw, S, T } from "lws";
 import * as idl from "@idlizer/core/idl"
-import { GeneratorContext } from "../../context";
+import { GeneratorContext } from "../../../context";
 import { ArgConvertor } from "./argConvertor";
 
 export function makePeerMethod(method: idl.IDLMethod, ctx: GeneratorContext): lw.FunctionDeclaration {

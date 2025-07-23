@@ -13,25 +13,24 @@
  * limitations under the License.
  */
 
-import { lw, Ts } from "lws";
-import { createProducer } from "../context"
+import { An, D, E, S, T, Ts } from "lws";
+import { createProducer } from "../../context"
 import * as idl from "@idlizer/core/idl";
 
-function selectType(type:idl.IDLPrimitiveType): lw.LWType {
-    switch (type) {
-        case idl.IDLI32Type: return Ts.prim.int
-        case idl.IDLStringType: return Ts.prim.str
-        case idl.IDLVoidType: return Ts.prim.void
-    }
-    throw new Error(`Can not map ${idl.DebugUtils.debugPrintType(type)}`)
-}
+const NATIVE_MODULE_NAME = 'engine.NativeModule'
 
-export const primitiveProducer = createProducer(
-  { is: idl.isPrimitiveType },
+export const nativeModuleProducer = createProducer(
+  { is: idl.isMethod, role: 'native' },
   node => {
+    const methodName = idl.getFQName(node).split('.').join('_')
     return {
       artifact: {
-        reference: selectType(node),
+        reference: E.get(E.v(NATIVE_MODULE_NAME, [An.isType()]), methodName),
+        implementationGenerator: () => {
+          return D.class(NATIVE_MODULE_NAME, [], [
+            D.func(methodName, [{ name: 'buffer', type: T.c('SerializerBase') }], Ts.prim.void, S.block([]))
+          ])
+        }
       }
     }
   }

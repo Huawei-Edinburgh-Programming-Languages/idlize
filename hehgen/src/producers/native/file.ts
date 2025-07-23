@@ -13,21 +13,21 @@
  * limitations under the License.
  */
 
-import { createProducer } from "../context";
-import * as idl from "@idlizer/core/idl"
+import { createProducer } from "../../context";
+import * as idl from "@idlizer/core/idl";
 
-export const referenceProducer = createProducer(
-    { is: idl.isReferenceType, role: "" },
-    (ref, ctx, query) => {
-        const found = ctx.resolver.toDeclaration(ref)
-        if (!found) {
-            throw new Error("That is bad :(")
-        }
-        return {
-            redirectTo: {
-                node: found,
-                role: query.role
-            }
-        }
+export const fileProducer = createProducer(
+  { is: idl.isFile },
+  (node, ctx) => {
+    return {
+      go: () => {
+        idl.linearizeNamespaceMembers(node.entries)
+          .filter(node =>
+               idl.isInterface(node)
+            && node.methods.length === 0
+          )
+          .forEach(node => ctx.use({ node }))
+      }
     }
+  }
 )

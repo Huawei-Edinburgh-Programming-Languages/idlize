@@ -14,7 +14,7 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { GeneratorContext } from "../../context";
+import { GeneratorContext } from "../../../context";
 import { E, lw, S } from "lws";
 
 function selectWriteName(type:idl.IDLPrimitiveType): string {

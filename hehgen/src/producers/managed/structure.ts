@@ -14,7 +14,7 @@
  */
 
 import { D, S, T } from "lws";
-import { createProducer } from "../context";
+import { createProducer } from "../../context";
 import * as idl from "@idlizer/core/idl"
 import { makePeerMethod } from "./components/peerMethod";
 

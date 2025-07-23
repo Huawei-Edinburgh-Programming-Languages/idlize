@@ -13,10 +13,22 @@
  * limitations under the License.
  */
 
-import { producers as managed } from "./managed";
-import { producers as native } from "./native";
+import { createProducer } from "../../context";
+import * as idl from "@idlizer/core/idl";
 
-export const producers = {
-    managed,
-    native
-}
+export const fileProducer = createProducer(
+  { is: idl.isFile },
+  (node, ctx) => {
+    return {
+      go: () => {
+        idl.linearizeNamespaceMembers(node.entries)
+          .filter(node =>
+               !idl.isImport(node)
+            && !idl.isNamespace(node)
+            && !idl.isCallback(node)
+          )
+          .forEach(node => ctx.use({ node }))
+      }
+    }
+  }
+)

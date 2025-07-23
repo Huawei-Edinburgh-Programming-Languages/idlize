@@ -13,10 +13,20 @@
  * limitations under the License.
  */
 
-import { producers as managed } from "./managed";
-import { producers as native } from "./native";
+import { containerProducer } from "./containers";
+import { fileProducer } from "./file";
+import { nativeModuleProducer } from "./nativeModule";
+import { primitiveProducer } from "./primitives";
+import { referenceProducer } from "./references";
+import { serializerProducer } from "./serializer";
+import { structureProducer } from "./structure";
 
 export const producers = {
-    managed,
-    native
+    fileProducer,
+    structureProducer,
+    primitiveProducer,
+    referenceProducer,
+    containerProducer,
+    nativeModuleProducer,
+    serializerProducer,
 }
