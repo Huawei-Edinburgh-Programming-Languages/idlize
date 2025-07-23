@@ -152,8 +152,8 @@
 | Path.ets | |
 | PatternLock.test.ets | Smirnov Dmitry |
 | PluginComponentUser.ets | |
-| Polygon.test.ets | |
-| Polyline.test.ets | |
+| Polygon.test.ets | Alexander Porodin |
+| Polyline.test.ets | Alexander Porodin |
 | ProgressTest.ets | |
 | QRCode.test.ets | |
 | RadioTest.ets | |
@@ -183,8 +183,8 @@
 | Stack.ets | |
 | StepperTest.ets | Ivan Tuzhilkin |
 | Swiper.test.ets | |
-| SymbolGlyph.ets | Olga Daryina |
-| SymbolSpan.ets | Olga Daryina |
+| SymbolGlyph.ets | Olga Daryina, Alexander Porodin |
+| SymbolSpan.ets | Olga Daryina, Alexander Porodin |
 | Tabs.test.ets | Andrey Khudenkikh |
 | TabsTransition.ets | |
 | TextArea.test.ets | |
