@@ -106,6 +106,8 @@ function collectTypeCheckDeclarations(library: PeerLibrary): (idl.IDLInterface |
             continue
         if (peerGeneratorConfiguration().ignoreEntry(decl.name, library.language))
             continue
+        if (peerGeneratorConfiguration().components.custom.includes(decl.name))
+            continue
         if (idl.isInterface(decl) && isExternalType(decl, library))
             continue
         syntheticCollector.convert(decl)

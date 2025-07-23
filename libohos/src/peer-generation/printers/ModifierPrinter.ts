@@ -62,6 +62,16 @@ function peerImplName(method: PeerMethod): string {
         return v132_name.substring(3)
     return v132_name
 }
+function lowerize(name:string) {
+    return name[0].toLowerCase() + name.substring(1)
+}
+function normalName(method: PeerMethod): string {
+    const name = method.sig.name
+    if (method.v132_isComponentMethod) {
+        return lowerize(name.substring(3))
+    }
+    return name
+}
 
 function peerParentNamespaceName(library: PeerLibrary, context: idl.IDLInterface, method: PeerMethod): string {
     if (isComponentDeclaration(library, context)) {
@@ -321,7 +331,7 @@ export class ModifierVisitor {
         this.printMethodProlog(this.real, method)
         this.printModifierImplFunctionBody(method, clazz)
         this.printMethodEpilog(this.real)
-        if (!peerGeneratorConfiguration().noDummyGeneration(clazz.componentName, method.sig.name)) {
+        if (!peerGeneratorConfiguration().noDummyGeneration(clazz.componentName, normalName(method))) {
             this.printMethodProlog(this.dummy, method)
             this.printDummyImplFunctionBody(context, method)
             this.printMethodEpilog(this.dummy)
@@ -429,7 +439,7 @@ class AccessorVisitor extends ModifierVisitor {
             if (!method) return
             this.accessors.print(`${namespaceName}::${peerImplName(method)},`)
             this.printMaterializedMethod(this.real, method, m => this.printModifierImplFunctionBody(m))
-            if (!peerGeneratorConfiguration().noDummyGeneration(clazz.className, method.sig.name)) {
+            if (!peerGeneratorConfiguration().noDummyGeneration(clazz.className, normalName(method))) {
                 this.printMaterializedMethod(this.dummy, method, m => this.printDummyImplFunctionBody(clazz.decl, m))
             }
         })

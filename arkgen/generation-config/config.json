@@ -185,7 +185,8 @@
         "custom": [
             "BaseCustomComponent",
             "CustomComponent",
-            "CustomComponentV2"
+            "CustomComponentV2",
+            "BaseCustomDialog"
         ],
         "customNodeTypes": [
             "CustomNode"
@@ -206,7 +207,10 @@
             "PageTransitionExitInterface",
             "CommonTransition",
             "wrapBuilder",
-            "ContentModifier"
+            "ContentModifier",
+            "BaseCustomDialog",
+            "CustomStyles",
+            "applyStyles"
         ],
         "ignoreEntry": [
             "Optional",
@@ -283,6 +287,11 @@
         "Checkbox": {
             "contentModifier": {
                 "hookName": "hookCheckBoxContentModifier"
+            }
+        },
+        "CommonMethod": {
+            "stateStyles": {
+                "hookName": "hookStateStyleImpl"
             }
         },
         "DataPanel": {
@@ -363,7 +372,8 @@
             "String",
             "Function",
             "Optional",
-            "RelativeIndexable"
+            "RelativeIndexable",
+            "StateStyles"
         ]
     },
     "dummy": {
