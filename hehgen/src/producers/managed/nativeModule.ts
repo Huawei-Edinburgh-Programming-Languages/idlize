@@ -20,7 +20,7 @@ import * as idl from "@idlizer/core/idl";
 const NATIVE_MODULE_NAME = 'engine.NativeModule'
 
 export const nativeModuleProducer = createProducer(
-  { is: idl.isMethod, role: 'native' },
+  { is: idl.isMethod, role: 'nativeModule' },
   node => {
     const methodName = idl.getFQName(node).split('.').join('_')
     return {

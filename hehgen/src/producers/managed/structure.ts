@@ -17,16 +17,18 @@ import { D, S, T } from "lws";
 import { createProducer } from "../../context";
 import * as idl from "@idlizer/core/idl"
 import { makePeerMethod } from "./components/peerMethod";
+import { managedName } from "../common";
 
 export const structureProducer = createProducer(
-  { is: idl.isInterface },
+  { is: idl.isInterface, role: 'managed' },
   (node, ctx) => {
+    const generatedDeclName = managedName(idl.getFQName(node))
     return {
       artifact: {
-        reference: T.cc(idl.getFQName(node)),
+        reference: T.cc(generatedDeclName),
         implementationGenerator: () => {
           if (node.methods.length > 0) {
-            return D.class(idl.getFQName(node),
+            return D.class(generatedDeclName,
               node.properties.map(prop => {
                 return {
                   name: prop.name,
@@ -38,7 +40,7 @@ export const structureProducer = createProducer(
               })
             )
           }
-          return D.struct(idl.getFQName(node), node.properties.map(prop => {
+          return D.struct(generatedDeclName, node.properties.map(prop => {
             return {
               name: prop.name,
               type: ctx.use({ node: prop.type}).reference()

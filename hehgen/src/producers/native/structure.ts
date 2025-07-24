@@ -16,15 +16,17 @@
 import { D, T } from "lws";
 import { createProducer } from "../../context";
 import * as idl from "@idlizer/core/idl"
+import { cApiName } from "../common";
 
 export const structureProducer = createProducer(
-  { is: idl.isInterface },
+  { is: idl.isInterface, role: 'native' },
   (node, ctx) => {
+    const generatedDeclName = cApiName(idl.getFQName(node))
     return {
       artifact: {
-        reference: T.cc(idl.getFQName(node)),
+        reference: T.cc(generatedDeclName),
         implementationGenerator: () => {
-          return D.struct(idl.getFQName(node), node.properties.map(prop => {
+          return D.struct(generatedDeclName, node.properties.map(prop => {
             return {
               name: prop.name,
               type: ctx.use({ node: prop.type}).reference()

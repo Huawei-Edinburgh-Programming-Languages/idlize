@@ -13,16 +13,8 @@
  * limitations under the License.
  */
 
-import { containerProducer } from "./containers";
-import { fileProducer } from "./file";
-import { primitiveProducer } from "./primitives";
-import { referenceProducer } from "./references";
 import { structureProducer } from "./structure";
 
 export const producers = {
     structureProducer,
-    fileProducer,
-    referenceProducer,
-    primitiveProducer,
-    containerProducer,
 }

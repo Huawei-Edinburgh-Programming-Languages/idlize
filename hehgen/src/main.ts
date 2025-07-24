@@ -19,23 +19,14 @@ import { GeneratorContext, MakeSelector } from "./context"
 import { producers } from "./producers"
 import { scan } from "./library/utils"
 import { dumpTsLike, dumpCLike } from "./dump"
+import { dumpToString, lw } from "lws"
+import { dropBucketName, isCApi, isManaged, isNative } from "./producers/common"
 
-function native(library: IDLFile[]) {
+function generate(library: IDLFile[]) {
   const selector = new MakeSelector()
-  selector.register(producers.native.fileProducer)
+
   selector.register(producers.native.structureProducer)
-  selector.register(producers.native.primitiveProducer)
-  selector.register(producers.native.referenceProducer)
-  selector.register(producers.native.containerProducer)
 
-  const ctx = new GeneratorContext(library, selector)
-  const produced = ctx.generate(library)
-
-  dumpCLike(produced, library)
-}
-
-function managed(library: IDLFile[]) {
-  const selector = new MakeSelector()
   selector.register(producers.managed.fileProducer)
   selector.register(producers.managed.referenceProducer)
   selector.register(producers.managed.structureProducer)
@@ -50,11 +41,29 @@ function managed(library: IDLFile[]) {
   dumpTsLike(produced, library)
 }
 
+function processAndDump(decls:lw.LWDeclaration[]) {
+
+  const buckets: [(decl)] = 
+
+  decls.forEach(decl => {
+    if (isManaged(decl.name)) {
+      buckets.managed.push(dropBucketName(decl))
+    }
+    if (isCApi(decl.name)) {
+      buckets.cApi.push(dropBucketName(decl))
+    }
+    if (isNative(decl.name)) {
+      buckets.native.push(dropBucketName(decl))
+    }
+    console.error(dumpToString(decl))
+    throw new Error("Can not process generated code!")
+  })
+}
+
 function main() {
   const fileNames = scan(resolve(__dirname, '..', '..', 'idl', 'test'))
   const library = fileNames.map(fileName => toIDLFile(fileName)[0])
 
-  managed(library)
-  native(library)
+  generate(library)
 }
 main()

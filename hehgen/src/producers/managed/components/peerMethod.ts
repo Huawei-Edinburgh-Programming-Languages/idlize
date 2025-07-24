@@ -28,7 +28,7 @@ export function makePeerMethod(method: idl.IDLMethod, ctx: GeneratorContext): lw
     S.block([
       S.declaration(serializerName, T.c('SerializerBase'), false, E.instance('SerializerBase', [])),
       ...stmts,
-      S.e(E.call(ctx.use({ node: method, role: 'native' }).name(), [E.v(serializerName)])),
+      S.e(E.call(ctx.use({ node: method, role: 'nativeModule' }).name(), [E.v(serializerName)])),
     ])
   )
 }

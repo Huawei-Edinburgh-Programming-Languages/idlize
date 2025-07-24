@@ -17,9 +17,10 @@ import * as idl from "@idlizer/core/idl";
 import { createProducer } from "../../context"
 import { An, D, DD, E, Md, S, T, Ts } from "lws";
 import { ArgConvertor } from "./components/argConvertor";
+import { managedName } from "../common";
 
 function makeSerializerName(node:idl.IDLInterface) {
-    return idl.getFQName(node) + 'Serializer'
+    return managedName(idl.getFQName(node) + 'Serializer')
 }
 
 export const serializerProducer = createProducer(
