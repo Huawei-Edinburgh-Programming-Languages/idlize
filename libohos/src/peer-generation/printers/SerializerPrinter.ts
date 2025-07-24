@@ -343,19 +343,12 @@ export function createCSerializerPrinter(library: PeerLibrary, language: Languag
 }
 
 export function getSerializerDeclarations(library: PeerLibrary, dependencyFilter: DependencyFilter): SerializableTarget[] {
-    const seenNames = new Set<string>()
     return collectDeclarationTargets(library)
         .map(it => it)
         .filter((it): it is SerializableTarget => dependencyFilter.shouldAdd(it))
         .filter(it => !idl.isHandwritten(it) && !isInIdlizeInternal(it) && !peerGeneratorConfiguration().components.custom.includes(it.name) && !peerGeneratorConfiguration().isHandWritten(it.name))
         .filter(it => !(idl.isNamedNode(it) && peerGeneratorConfiguration().isResource(it.name)))
         .filter(it => !it.typeParameters?.length || it.typeParameters.every(it => it.includes('=')))
-        .filter(it => {
-            const fullName = qualifiedName(it, "_", "namespace.name")
-            const seen = seenNames.has(fullName)
-            seenNames.add(fullName)
-            return !seen
-        })
 }
 
 export function printSerializerImports(library: PeerLibrary, language: Language, collector: ImportsCollector) {

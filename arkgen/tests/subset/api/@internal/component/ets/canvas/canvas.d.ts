@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+// This file was moved to a subdirectory to match ETS/peers generation where each file makes its own package
+
 declare type CanvasFillRule = "evenodd" | "nonzero";
 
 declare class ImageData {
