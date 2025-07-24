@@ -215,10 +215,10 @@
 | 207 | pulse_symbol_effect_accessor.cpp | Erokhin Ilya | ✅ done |
 | 208 | qr_code_modifier.cpp | Evstigneev Roman | ✅ done |
 | 209 | radio_modifier.cpp | Evstigneev Roman | ✅ done |
-| 210 | rating_modifier.cpp | Ekaterina Stepanova | 👀⏳ on review |
+| 210 | rating_modifier.cpp | Ekaterina Stepanova | ✅ done |
 | 211 | rect_modifier.cpp | Erokhin Ilya | ✅ done |
 | 212 | rect_shape_accessor.cpp | Samarin Sergey | ✅ done |
-| 213 | refresh_modifier.cpp | Ekaterina Stepanova | 👀⏳ on review |
+| 213 | refresh_modifier.cpp | Ekaterina Stepanova | ✅ done |
 | 214 | region_accessor.cpp | Erokhin Ilya | ✅ done (new file) |
 | 215 | relative_container_modifier.cpp | Erokhin Ilya | ✅ done |
 | 216 | remote_window_modifier.cpp | Samarin Sergey | ✅ INTEGRATED |
@@ -311,15 +311,15 @@
 | 303 | text_menu_item_id_accessor.cpp | Vadim Voronov | ✅ done |
 | 304 | text_modifier.cpp | Tuzhilkin Ivan | ✅ done |
 | 305 | text_picker_dialog_accessor.cpp | Vadim Voronov | ✅ done |
-| 306 | text_picker_modifier.cpp | Ekaterina Stepanova | 👀⏳ on review |
+| 306 | text_picker_modifier.cpp | Ekaterina Stepanova | ✅ done |
 | 307 | text_shadow_style_accessor.cpp | Politov Mikhail | ✅ done |
 | 308 | text_style_accessor.cpp | Evstigneev Roman | ✅ done |
 | 309 | text_timer_controller_accessor.cpp | Dudkin Sergey | ✅ done |
 | 310 | text_timer_modifier.cpp | Dudkin Sergey | ✅ done, but it has a true WRONG_GEN method and needs to be regenerated. Ark_Number->Ark_Int64 |
 | 311 | theme_control_accessor.cpp | Evstigneev Roman | ✅ done |
 | 312 | time_picker_dialog_accessor.cpp | Evstigneev Roman | ✅ done |
-| 313 | time_picker_modifier.cpp | Ekaterina Stepanova | 👀⏳ on review |
-| 314 | toggle_modifier.cpp | Ekaterina Stepanova | 👀⏳ on review |
+| 313 | time_picker_modifier.cpp | Ekaterina Stepanova | ✅ done |
+| 314 | toggle_modifier.cpp | Ekaterina Stepanova | ✅ done |
 | 315 | touch_event_accessor.cpp | Samarin Sergey | ✅ done |
 | 316 | transition_effect_accessor.cpp | Evstigneev Roman | ✅ done |
 | 317 | typeface_accessor.cpp | Andrey Khudenkikh | ✅ done |
