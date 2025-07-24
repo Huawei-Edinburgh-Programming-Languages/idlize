@@ -753,6 +753,8 @@ export function getNamespaceName(a: IDLEntry): string {
 }
 
 export type QNPattern =
+    "package_namespace_name" |
+    "package_namespace.name" |
     "package.namespace.name" |
     "namespace.name" |
     "name";
@@ -761,17 +763,26 @@ export function deriveQualifiedNameFrom(name: string, from: IDLNode): string {
     return [...getPackageClause(from), ...getNamespacesPathFor(from).map(it => it.name), name].join(".")
 }
 
-export function getQualifiedName(a:IDLNode, pattern: QNPattern): string {
-    const result: string[] = []
-    if ("package.namespace.name" === pattern)
-        result.push(...getPackageClause(a), ...getNamespacesPathFor(a).map(it => it.name))
+export function getQualifiedName(node: IDLNode, pattern: QNPattern): string {
+    const underscores: string[] = []
+    const dots: string[] = []
+    if ("package_namespace.name" === pattern) {
+        underscores.push(...getPackageClause(node).map(it => it + "_").join(""))
+        dots.push(...getNamespacesPathFor(node).map(it => it.name))
+    } else if ("package_namespace_name" === pattern)
+        underscores.push(...getPackageClause(node), ...getNamespacesPathFor(node).map(it => it.name))
+    else if ("package.namespace.name" === pattern)
+        dots.push(...getPackageClause(node), ...getNamespacesPathFor(node).map(it => it.name))
     else if ("namespace.name" === pattern)
-        result.push(...getNamespacesPathFor(a).map(it => it.name))
+        dots.push(...getNamespacesPathFor(node).map(it => it.name))
 
-    if (isNamedNode(a) && a.name)
-        result.push(a.name)
+    if (isNamedNode(node) && node.name)
+        if ("package_namespace_name" === pattern)
+            underscores.push(node.name)
+        else
+            dots.push(node.name)
 
-    return result.join(".")
+    return underscores.join("_") + dots.join(".")
 }
 
 export function getFQName(a:IDLNode): string {

@@ -45,7 +45,7 @@ import { PeerMethodSignature } from "../peer-generation/PeerMethod";
 import { isInExternalModule } from "../peer-generation/modules";
 
 export function getSerializerName(declaration:idl.IDLEntry) {
-    return `${idl.getQualifiedName(declaration, "namespace.name").split('.').join('_')}_serializer`;
+    return `${idl.getQualifiedName(declaration, "package_namespace_name")}_serializer`;
 }
 
 export interface ArgConvertor {
