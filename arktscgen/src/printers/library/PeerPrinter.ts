@@ -31,6 +31,7 @@ import {
     IDLVoidType,
     IndentedPrinter,
     isProperty,
+    isReferenceType,
     LanguageExpression,
     LanguageStatement,
     Method,
@@ -227,6 +228,11 @@ export class PeerPrinter extends SingleFilePrinter {
                 [MethodModifier.GETTER]
             ),
             () => {
+                if (this.bindingReturnValueTypeConvertor.isDataClass(node.returnType)) {
+                    this.writer.writeStatement(
+                        this.writer.makeThrowError('Data classes is not supported yet!')
+                    )
+                }
                 this.writer.writeStatement(
                     this.writer.makeReturn(
                         this.makeReturnBindingCall(node)
@@ -240,6 +246,8 @@ export class PeerPrinter extends SingleFilePrinter {
         this.writer.writeExpressionStatement(
             this.writer.makeString(`/** @deprecated */`)
         )
+        const dataClass = node.parameters
+            .find(p => this.bindingReturnValueTypeConvertor.isDataClass(p.type))
         this.writer.writeMethodImplementation(
             makeMethod(
                 peerMethod(node.name),
@@ -247,6 +255,11 @@ export class PeerPrinter extends SingleFilePrinter {
                 flattenType(PeersConstructions.this.type)
             ),
             () => {
+                if (dataClass) {
+                    this.writer.writeStatement(
+                        this.writer.makeThrowError(`Data classes ${dataClass.name} is not supported yet!`)
+                    )
+                }
                 this.writer.writeExpressionStatement(
                     this.makeReturnBindingCall(node)
                 )

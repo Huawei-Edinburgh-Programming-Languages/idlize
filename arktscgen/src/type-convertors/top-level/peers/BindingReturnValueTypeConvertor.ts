@@ -18,9 +18,11 @@ import { Typechecker } from "../../../general/Typechecker"
 import {
     IDLContainerType,
     IDLContainerUtils,
+    IDLNode,
     IDLOptionalType,
     IDLReferenceType,
     IDLType,
+    isContainerType,
     isInterface,
     isReferenceType,
     LanguageExpression,
@@ -45,14 +47,12 @@ export class BindingReturnValueTypeConvertor extends TopLevelTypeConvertor<
 
         super(typechecker, {
             sequence: (type: IDLContainerType) => {
-                if (IDLContainerUtils.isSequence(type) && isReferenceType(type.elementType[0])) {
-                    const elementType = this.typechecker.findRealDeclaration(type.elementType[0].name)
-                    if (elementType && isInterface(elementType) && isDataClass(elementType)) {
-                        return wrap(
-                            'acceptNativeObjectArrayResult',
-                            `(peer: KNativePointer) => new ${elementType.name}(peer)`
-                        )
-                    }
+                if (this.isDataClassSequence(type)) {
+                    const ref = type.elementType[0] as IDLReferenceType
+                    return wrap(
+                        'acceptNativeObjectArrayResult',
+                        `(peer: KNativePointer) => new ${ref.name}(peer)`
+                    )
                 }
                 return wrap(PeersConstructions.arrayOfPointersToArrayOfPeers)
             },
@@ -78,5 +78,20 @@ export class BindingReturnValueTypeConvertor extends TopLevelTypeConvertor<
             boolean: plain,
             undefined: plain
         })
+    }
+
+    private isDataClassSequence(type: IDLContainerType): boolean {
+        return IDLContainerUtils.isSequence(type) && isReferenceType(type.elementType[0]) &&
+            this.isDataClassReference(type.elementType[0])
+    }
+
+    private isDataClassReference(type: IDLReferenceType): boolean {
+        const isDataClassNode = (node: IDLNode) => isInterface(node) && isDataClass(node)
+        return this.typechecker.isReferenceTo(type, isDataClassNode)
+    }
+
+    public isDataClass(type: IDLType): boolean {
+        return isContainerType(type) && this.isDataClassSequence(type) ||
+            isReferenceType(type) && this.isDataClassReference(type)
     }
 }
