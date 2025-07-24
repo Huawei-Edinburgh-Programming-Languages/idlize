@@ -5,9 +5,9 @@ interface Size {
     attribute i32 width;
 };
 
-namespace units {
-    interface Offset {
-        attribute i32 x;
-        attribute i32 y;
+namespace fp {
+    interface Size {
+        attribute f64 height;
+        attribute f64 width;
     };
 };

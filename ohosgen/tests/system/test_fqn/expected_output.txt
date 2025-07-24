@@ -2,4 +2,4 @@
 Starting demo: test_fqn
 [loadLibraries] Loading InteropNativeModule [TEST_FQNNativeModule]
 [loadLibraries] Loading TEST_FQNNativeModule [TEST_FQNNativeModule]
-resize(size=8x4, offset=19,23)
+resize(numSize=4x8, intSize=14x18, floatSize=24.0x28.0)
