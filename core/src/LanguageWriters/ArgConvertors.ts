@@ -1041,7 +1041,7 @@ export class OptionConvertor extends BaseArgConvertor {
         throw new Error("Must never be used")
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
-        const runtimeBufferName = `${bufferName}_runtimeType`
+        const runtimeBufferName = `${bufferName}TmpRuntimeType`
         const statements: LanguageStatement[] = []
         statements.push(writer.makeAssign(runtimeBufferName, undefined,
             writer.makeCast(writer.makeString(`${deserializerName}.readInt8()`), writer.getRuntimeType()), true))
@@ -1049,7 +1049,7 @@ export class OptionConvertor extends BaseArgConvertor {
         statements.push(writer.makeAssign(bufferName, bufferType, (writer.language == Language.CJ || writer.language == Language.KOTLIN) ? writer.makeNull() : undefined, true, false))
 
         const thenStatement = new BlockStatement([
-            this.typeConvertor.convertorDeserialize(`${bufferName}_`, deserializerName, (expr) => {
+            this.typeConvertor.convertorDeserialize(`${bufferName}Tmp2`, deserializerName, (expr) => {
                 const receiver = writer.language === Language.CPP
                     ? `${bufferName}.value` : bufferName
                 return writer.makeAssign(receiver, undefined, expr, false)
