@@ -1,0 +1,8 @@
+package test_fqn;
+
+interface Rectangle {
+    attribute deps.Size size;
+    attribute deps.units.Offset offset;
+};
+
+void resize(Rectangle rect);
