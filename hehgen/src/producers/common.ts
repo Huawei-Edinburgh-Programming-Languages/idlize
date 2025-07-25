@@ -14,19 +14,29 @@
  */
 
 import { IdentityTransformer, lw } from "lws"
+import * as idl from "@idlizer/core/idl"
+import { createProducer, GeneratorContext, MakeSelectorPattern, MakeSelectorQuery, Producer, ProducerBox, ProducerDescription } from "../context"
 
-const MANAGED_PREFIX = 'managed.'
-const C_API_PREFIX = 'capi.'
-const NATIVE_PREFIX = 'native.'
+export const MANAGED_PREFIX = 'managed'
+export const C_API_PREFIX = 'capi'
+export const NATIVE_PREFIX = 'native'
+
+export const roles = {
+    managed: MANAGED_PREFIX,
+    cApi: C_API_PREFIX,
+    native: NATIVE_PREFIX,
+    nativeModule: "managed.nativeModule",
+    serializer: "serializer"
+}
 
 export function managedName(name:string) {
-    return MANAGED_PREFIX + name
+    return MANAGED_PREFIX + '.' + name
 }
 export function cApiName(name:string) {
-    return C_API_PREFIX + name
+    return C_API_PREFIX + '.' + name
 }
 export function nativeName(name:string) {
-    return NATIVE_PREFIX + name
+    return NATIVE_PREFIX + '.' + name
 }
 
 function is(prefix:string, name:string) {
@@ -42,8 +52,36 @@ export function isNative(name:string) {
     return is(NATIVE_PREFIX, name)
 }
 
-export function dropBucketName(decl:lw.LWDeclaration): lw.LWDeclaration {
-    const clone = new IdentityTransformer().goDeclaration(decl)
-    clone.name = decl.name.split('.').slice(1).join('.')
-    return clone
+///////////////////////////////////////////////////////////
+
+export class AdvancedGeneratorContext {
+
+    constructor(
+        public base: GeneratorContext
+    ) { }
+
+    useManaged(node:idl.IDLNode) {
+        return this.base.use({ node, role: roles.managed })
+    }
+    useCApi(node:idl.IDLNode) {
+        return this.base.use({ node, role: roles.cApi })
+    }
+    useManagedNativeModule(method:idl.IDLMethod) {
+        return this.base.use({ node: method, role: roles.nativeModule })
+    }
+    useBridge(node:idl.IDLMethod) {
+        return this.base.use({ node, role: roles.native })
+    }
+    useSerializer(node:idl.IDLNode) {
+        return this.base.use({ node, role: roles.serializer })
+    }
 }
+export interface AdvancedProducer<N extends idl.IDLNode = idl.IDLNode> {
+    (node: N, ctx: AdvancedGeneratorContext, query: MakeSelectorQuery): ProducerDescription
+}
+export function createSpecialProducer<N extends idl.IDLNode>(pattern: MakeSelectorPattern<N>, producer: AdvancedProducer<N>): ProducerBox<N> {
+    return createProducer(pattern, (n, ctx, query) => {
+        return producer(n, new AdvancedGeneratorContext(ctx), query)
+    })
+}
+

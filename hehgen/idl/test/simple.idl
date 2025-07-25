@@ -18,5 +18,6 @@ namespace structs {
     interface StarMapController {
         void add(Star star);
         i32 sum();
+        void addMap(StarMap map);
     };
 };

@@ -18,14 +18,15 @@ import { resolve } from "node:path"
 import { GeneratorContext, MakeSelector } from "./context"
 import { producers } from "./producers"
 import { scan } from "./library/utils"
-import { dumpTsLike, dumpCLike } from "./dump"
+import { dumpTsLike, dumpCLike, dumpAsIs } from "./dump"
 import { dumpToString, lw } from "lws"
-import { dropBucketName, isCApi, isManaged, isNative } from "./producers/common"
+import { isCApi, isManaged, isNative, MANAGED_PREFIX } from "./producers/common"
 
 function generate(library: IDLFile[]) {
   const selector = new MakeSelector()
 
   selector.register(producers.native.structureProducer)
+  selector.register(producers.native.bridgeProducer)
 
   selector.register(producers.managed.fileProducer)
   selector.register(producers.managed.referenceProducer)
@@ -38,26 +39,45 @@ function generate(library: IDLFile[]) {
   const ctx = new GeneratorContext(library, selector)
   const produced = ctx.generate(library)
 
-  dumpTsLike(produced, library)
+  processAndDump(produced, library)
 }
 
-function processAndDump(decls:lw.LWDeclaration[]) {
+function processAndDump(decls: lw.LWDeclaration[], library: IDLFile[]) {
 
-  const buckets: [(decl)] = 
+  console.error(decls)
+  const selectors = [
+    isManaged,
+    isCApi,
+    isNative
+  ]
+  const buckets = selectors.map(predicate => [predicate, [] as lw.LWDeclaration[]] as const)
 
   decls.forEach(decl => {
-    if (isManaged(decl.name)) {
-      buckets.managed.push(dropBucketName(decl))
-    }
-    if (isCApi(decl.name)) {
-      buckets.cApi.push(dropBucketName(decl))
-    }
-    if (isNative(decl.name)) {
-      buckets.native.push(dropBucketName(decl))
+    for (const [predicate, bucket] of buckets) {
+      if (predicate(decl.name)) {
+        bucket.push(decl)
+        return
+      }
     }
     console.error(dumpToString(decl))
     throw new Error("Can not process generated code!")
   })
+
+  const [
+    managed,
+    cApi,
+    native
+  ] = buckets.map(e => e[1])
+
+
+  const SPECIAL_PACKAGES = [
+    [MANAGED_PREFIX, 'engine'].join('.')
+  ]
+  const knownPackages = library.map(file => [MANAGED_PREFIX].concat(file.packageClause).join('.'))
+
+  dumpTsLike(managed, new Set(knownPackages.concat(SPECIAL_PACKAGES)))
+  dumpCLike(cApi)
+  dumpAsIs(native)
 }
 
 function main() {

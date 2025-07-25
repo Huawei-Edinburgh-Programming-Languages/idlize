@@ -13,8 +13,10 @@
  * limitations under the License.
  */
 
+import { bridgeProducer } from "./bridge";
 import { structureProducer } from "./structure";
 
 export const producers = {
     structureProducer,
+    bridgeProducer,
 }

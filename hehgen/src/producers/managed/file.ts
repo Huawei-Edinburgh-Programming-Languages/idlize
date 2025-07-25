@@ -15,6 +15,7 @@
 
 import { createProducer } from "../../context";
 import * as idl from "@idlizer/core/idl";
+import { roles } from "../common";
 
 export const fileProducer = createProducer(
   { is: idl.isFile },
@@ -27,7 +28,7 @@ export const fileProducer = createProducer(
             && !idl.isNamespace(node)
             && !idl.isCallback(node)
           )
-          .forEach(node => ctx.use({ node }))
+          .forEach(node => ctx.use({ node, role: roles.managed }))
       }
     }
   }

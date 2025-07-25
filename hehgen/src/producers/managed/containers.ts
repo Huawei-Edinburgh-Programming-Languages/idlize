@@ -16,14 +16,15 @@
 import { T } from "lws";
 import { createProducer } from "../../context"
 import * as idl from "@idlizer/core/idl";
+import { createSpecialProducer } from "../common";
 
-export const containerProducer = createProducer(
+export const containerProducer = createSpecialProducer(
   { is: idl.isContainerType },
   (node, ctx) => {
     return {
       recursive: () => {
         if (idl.IDLContainerUtils.isSequence(node)) {
-          const elemRef = ctx.use({ node: node.elementType[0] }).reference()
+          const elemRef = ctx.useManaged(node.elementType[0]).reference()
           return {
             artifact: {
               reference: T.c('idlize.Array', elemRef)
@@ -31,8 +32,8 @@ export const containerProducer = createProducer(
           }
         }
         if (idl.IDLContainerUtils.isRecord(node)) {
-          const keyRef = ctx.use({ node: node.elementType[0] }).reference()
-          const valRef = ctx.use({ node: node.elementType[1] }).reference()
+          const keyRef = ctx.useManaged(node.elementType[0]).reference()
+          const valRef = ctx.useManaged(node.elementType[1]).reference()
           return {
             artifact: {
               reference: T.c('idlize.Map', keyRef, valRef)

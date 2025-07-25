@@ -17,18 +17,19 @@ import { D, E, lw, S, T } from "lws";
 import * as idl from "@idlizer/core/idl"
 import { GeneratorContext } from "../../../context";
 import { ArgConvertor } from "./argConvertor";
+import { AdvancedGeneratorContext } from "../../common";
 
-export function makePeerMethod(method: idl.IDLMethod, ctx: GeneratorContext): lw.FunctionDeclaration {
+export function makePeerMethod(method: idl.IDLMethod, ctx: AdvancedGeneratorContext): lw.FunctionDeclaration {
   const serializerName = 'thisSerializer'
   const convertor = new ArgConvertor(ctx, E.v(serializerName))
   const stmts = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
   return D.func(method.name,
-    method.parameters.map(param => ({ name: param.name, type: ctx.use({ node: param.type }).reference() })),
-    ctx.use({ node: method.returnType }).reference(),
+    method.parameters.map(param => ({ name: param.name, type: ctx.useManaged(param.type).reference() })),
+    ctx.useManaged(method.returnType).reference(),
     S.block([
       S.declaration(serializerName, T.c('SerializerBase'), false, E.instance('SerializerBase', [])),
       ...stmts,
-      S.e(E.call(ctx.use({ node: method, role: 'nativeModule' }).name(), [E.v(serializerName)])),
+      S.e(E.call(ctx.useManagedNativeModule(method).name(), [E.v(serializerName)])),
     ])
   )
 }

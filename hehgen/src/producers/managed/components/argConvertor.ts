@@ -15,7 +15,8 @@
 
 import * as idl from "@idlizer/core/idl";
 import { GeneratorContext } from "../../../context";
-import { E, lw, S } from "lws";
+import { E, lw, Op, S, Ts } from "lws";
+import { AdvancedGeneratorContext } from "../../common";
 
 function selectWriteName(type:idl.IDLPrimitiveType): string {
     switch (type) {
@@ -34,7 +35,7 @@ function selectReadName(type:idl.IDLPrimitiveType): string {
 
 export class ArgConvertor {
     constructor(
-        private ctx: GeneratorContext,
+        private ctx: AdvancedGeneratorContext,
         private sName: lw.LWExpression,
     ) {}
 
@@ -44,9 +45,20 @@ export class ArgConvertor {
         if (idl.isPrimitiveType(type)) {
             return S.e(E.call(E.get(this.sName, selectWriteName(type)), [accessor]))
         }
+        if (idl.isContainerType(type)) {
+            if (idl.IDLContainerUtils.isSequence(type)) {
+                return S.block([
+                    S.declaration('ii', Ts.prim.int, true, E.c(0)),
+                    S.loop(E.bin(Op.lt, E.v('ii'), E.get(accessor, 'length')), S.block([
+                        this.write(E.call(E.get(accessor, 'get'), [E.v('ii')]), type.elementType[0]),
+                        S.e(E.bin('=', E.v('ii'), E.bin(Op.add, E.v('ii'), E.c(1))))
+                    ]))
+                ])
+            }
+        }
         if (idl.isReferenceType(type)) {
             return S.e(E.call(
-                E.get(this.ctx.use({ node: type, role: 'serializer' }).name(), 'write'),
+                E.get(this.ctx.useSerializer(type).name(), 'write'),
                 [this.sName, accessor]
             ))
         }

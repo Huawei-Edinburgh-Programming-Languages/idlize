@@ -56,14 +56,14 @@ class MakeMono extends IdentityTransformer {
 
         // known special types
         this.index.set(
-            'synthetic.mono.Array',
+            'idlize.Array',
             DD({ generics: [{ name: 'T' }] }).struct('synthetic.mono.Array', [
                 { name: 'length', type: Ts.prim.int },
                 { name: 'value', type: Ts.ptr(T.c('T')) }
             ])
         )
         this.index.set(
-            'synthetic.mono.Map',
+            'idlize.Map',
             DD({ generics: [{ name: 'K' }, { name: 'V' }] }).struct('synthetic.mono.Map', [
                 { name: 'length', type: Ts.prim.int },
                 { name: 'keys', type: Ts.ptr(T.c('K')) },

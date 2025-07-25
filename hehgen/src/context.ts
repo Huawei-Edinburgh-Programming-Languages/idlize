@@ -67,8 +67,8 @@ export interface RecursiveProducerDescription {
     recursive: () => ProducerDescription
 }
 
-type ProducerDescription =
-    MiddlewareProducerDescription
+export type ProducerDescription =
+      MiddlewareProducerDescription
     | TerminalProducerDescription
     | RedirectProducerDescription
     | RecursiveProducerDescription
@@ -118,11 +118,11 @@ export function createProducer<N extends idl.IDLNode>(pattern: MakeSelectorPatte
     }
 }
 
-interface MakeSelectorQuery {
+export interface MakeSelectorQuery {
     node: idl.IDLNode,
     role?: string
 }
-interface MakeSelectorPattern<N extends idl.IDLNode> {
+export interface MakeSelectorPattern<N extends idl.IDLNode> {
     is: (node: idl.IDLNode) => node is N,
     role?: string
 }
@@ -139,15 +139,11 @@ export class MakeSelector {
             if (!it.pattern.is(query.node)) {
                 return false
             }
-            if (query.role) {
-                if (it.pattern.role === undefined) {
-                    return false
-                }
-                if (!query.role.startsWith(it.pattern.role)) {
-                    return false
-                }
+            if (it.pattern.role === undefined) {
+                return true
             }
-            return true
+            const queryRole = query.role ?? ''
+            return queryRole.startsWith(it.pattern.role)
         })
         if (!record) {
             throw new Error(`Can not process "${idl.getFQName(query.node)}", ${idl.IDLKind[query.node.kind]}`)

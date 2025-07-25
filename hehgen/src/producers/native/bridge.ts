@@ -13,25 +13,22 @@
  * limitations under the License.
  */
 
-import { An, D, E, S, T, Ts } from "lws";
-import { createProducer } from "../../context"
-import * as idl from "@idlizer/core/idl";
-import { createSpecialProducer, managedName, roles } from "../common";
+import { D, E, S, T, Ts } from "lws";
+import * as idl from "@idlizer/core/idl"
+import { cApiName, createSpecialProducer, nativeName, roles } from "../common";
 
-const NATIVE_MODULE_NAME = managedName('engine.NativeModule')
-
-export const nativeModuleProducer = createSpecialProducer(
-  { is: idl.isMethod, role: roles.nativeModule },
+export const bridgeProducer = createSpecialProducer(
+  { is: idl.isMethod, role: roles.native },
   (method, ctx) => {
-    const methodName = idl.getFQName(method).split('.').join('_')
+    const generatedDeclName = nativeName(idl.getFQName(method))
     return {
       artifact: {
-        reference: E.get(E.v(NATIVE_MODULE_NAME, [An.isType()]), methodName),
+        reference: E.v(generatedDeclName),
         implementationGenerator: () => {
-          ctx.useBridge(method)
-          return D.class(NATIVE_MODULE_NAME, [], [
-            D.func(methodName, [{ name: 'buffer', type: T.c('SerializerBase') }], Ts.prim.void, S.block([]))
-          ])
+          method.parameters.forEach(param => {
+            ctx.useCApi(param.type)
+          })
+          return D.func(generatedDeclName, [{ name: 'buffer', type: T.c('SerializerBase') }], Ts.prim.void, S.block([]))
         }
       }
     }

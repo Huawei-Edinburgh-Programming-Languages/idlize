@@ -20,10 +20,9 @@ import { IDLFile } from "@idlizer/core/idl";
 import { processNPrintCXX, processNPrintTS } from "lws";
 import { EOL } from "os";
 
-export function dumpTsLike(decls: LWDeclaration[], library:IDLFile[]) {
+export function dumpTsLike(decls: LWDeclaration[], packages:Set<string>) {
     decls = moduleLike.postprocess(decls)
-    const SPECIAL_PACKAGES = ['engine']
-    const files = moduleLike.formFiles(new Set(library.map(file => file.packageClause.join('.')).concat(SPECIAL_PACKAGES)), decls)
+    const files = moduleLike.formFiles(packages, decls)
     files.forEach((content, name) => {
         console.log('-------------------------------------------------')
         console.log('FILE: ', name)
@@ -41,9 +40,16 @@ export function dumpTsLike(decls: LWDeclaration[], library:IDLFile[]) {
     })
 }
 
-export function dumpCLike(decls: LWDeclaration[], library:IDLFile[]) {
+export function dumpCLike(decls: LWDeclaration[]) {
     decls = lowLevelLike.postprocess(decls)
-    console.log("=================== NATIVE ===================")
+    console.log("===================== C-API =====================")
+    decls.forEach(decl => {
+        console.log(processNPrintCXX(decl))
+    })
+}
+
+export function dumpAsIs(decls: LWDeclaration[]) {
+    console.log("==================== NATIVE ====================")
     decls.forEach(decl => {
         console.log(processNPrintCXX(decl))
     })

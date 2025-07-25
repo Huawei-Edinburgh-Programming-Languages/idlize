@@ -16,10 +16,10 @@
 import { D, T } from "lws";
 import { createProducer } from "../../context";
 import * as idl from "@idlizer/core/idl"
-import { cApiName } from "../common";
+import { cApiName, createSpecialProducer, roles } from "../common";
 
-export const structureProducer = createProducer(
-  { is: idl.isInterface, role: 'native' },
+export const structureProducer = createSpecialProducer(
+  { is: idl.isInterface, role: roles.cApi },
   (node, ctx) => {
     const generatedDeclName = cApiName(idl.getFQName(node))
     return {
@@ -29,7 +29,7 @@ export const structureProducer = createProducer(
           return D.struct(generatedDeclName, node.properties.map(prop => {
             return {
               name: prop.name,
-              type: ctx.use({ node: prop.type}).reference()
+              type: ctx.useCApi(prop.type).reference()
             }
           }))
         },
