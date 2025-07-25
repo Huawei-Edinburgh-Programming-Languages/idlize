@@ -766,27 +766,24 @@ export function deriveQualifiedNameFrom(name: string, from: IDLNode): string {
 export function getQualifiedName(node: IDLNode, pattern: QNPattern): string {
     const underscored: string[] = []
     const dotted: string[] = []
+    const namespaces = getNamespacesPathFor(node).map(it => it.name)
     if ("package_namespace.name" === pattern) {
         underscored.push(...getPackageClause(node))
-        dotted.push(...getNamespacesPathFor(node).map(it => it.name))
+        dotted.push(...namespaces)
     } else if ("package_namespace_name" === pattern)
-        underscored.push(...getPackageClause(node), ...getNamespacesPathFor(node).map(it => it.name))
+        underscored.push(...getPackageClause(node), ...namespaces)
     else if ("package.namespace.name" === pattern)
-        dotted.push(...getPackageClause(node), ...getNamespacesPathFor(node).map(it => it.name))
+        dotted.push(...getPackageClause(node), ...namespaces)
     else if ("namespace.name" === pattern)
-        dotted.push(...getNamespacesPathFor(node).map(it => it.name))
+        dotted.push(...namespaces)
 
+    const result = [
+        underscored.map(it => it + "_").join(""),
+        dotted.map(it => it + ".").join("")
+    ]
     if (isNamedNode(node) && node.name)
-        if ("package_namespace_name" === pattern)
-            underscored.push(node.name)
-        else
-            dotted.push(node.name)
-
-    const underscores = underscored.join("_")
-    const dots = dotted.join(".")
-    return !underscores ? dots
-        : !dots ? underscores
-        : underscores + "_" + dots
+        result.push(node.name)
+    return result.join("")
 }
 
 export function getFQName(a:IDLNode): string {
