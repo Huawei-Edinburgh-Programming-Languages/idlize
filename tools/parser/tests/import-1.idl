@@ -1,0 +1,5 @@
+package component.imp;
+
+import iface-1;
+import typedef-1;
+import const-1 as Frame;
