@@ -76,4 +76,6 @@ interface FrameNode {
     void reuse();
     void recycle();
     static pointer getFrameNodePtr(FrameNode node);
+    pointer createByRawPtr(FrameNode pointer);
+    FrameNode unWrapRawPtr(pointer pointer);
 };
