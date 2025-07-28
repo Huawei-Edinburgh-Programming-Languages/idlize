@@ -126,6 +126,10 @@ export class TsLayout extends CommonLayoutBase {
     }
 }
 
+function modifierNameGenerator(name: string): string {
+    return name.replaceAll("Attribute", "" ).concat("Modifier")
+}
+
 class ArkTsLayout extends CommonLayoutBase {
     protected arkTSInternalPaths = new Map<string, string>([
         ["TypeChecker", "#components"],
@@ -139,6 +143,9 @@ class ArkTsLayout extends CommonLayoutBase {
     // replace point symbol inside names, but not when it is a part of path
     readonly replacePattern = /(\.)[^\.\/]/g
     resolve(target: idl.LayoutTargetDescription): string {
+        if (target.hint === 'component.modifier') {
+            return modifierNameGenerator(target.node.name)
+        }
         if (target.node.name === NativeModule.Generated.name)
             return `#components`
         if (this.arkTSInternalPaths.has(target.node.name))
