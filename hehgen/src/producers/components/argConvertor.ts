@@ -14,9 +14,8 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { GeneratorContext } from "../../../context";
 import { E, lw, Op, S, Ts } from "lws";
-import { AdvancedGeneratorContext } from "../../common";
+import { AdvancedGeneratorContext } from "../common";
 
 function selectWriteName(type:idl.IDLPrimitiveType): string {
     switch (type) {
@@ -37,7 +36,14 @@ export class ArgConvertor {
     constructor(
         private ctx: AdvancedGeneratorContext,
         private sName: lw.LWExpression,
+        private isNative: boolean
     ) {}
+
+    private getSerializer(node:idl.IDLNode) {
+        return this.isNative
+            ? this.ctx.useNativeSerializer(node)
+            : this.ctx.useManagedSerializer(node)
+    }
 
     //////////////////////
 
@@ -58,7 +64,7 @@ export class ArgConvertor {
         }
         if (idl.isReferenceType(type)) {
             return S.e(E.call(
-                E.get(this.ctx.useSerializer(type).name(), 'write'),
+                E.get(this.getSerializer(type).name(), 'write'),
                 [this.sName, accessor]
             ))
         }
@@ -67,6 +73,24 @@ export class ArgConvertor {
 
     //////////////////////
 
+    read(accessor:lw.LWExpression, type:idl.IDLType): [lw.LWStatement[], lw.LWExpression] {
+        if (idl.isPrimitiveType(type)) {
+            return [
+                [],
+                E.call(E.get(this.sName, selectReadName(type)), [accessor])
+            ]
+        }
+        if (idl.isReferenceType(type)) {
+            return [
+                [],
+                E.call(
+                    E.get(this.getSerializer(type).name(), 'write'),
+                    [this.sName, accessor]
+                )
+            ]
+        }
+        throw new Error(`Can not process "${idl.DebugUtils.debugPrintType(type)}"`)
+    }
 
 }
 

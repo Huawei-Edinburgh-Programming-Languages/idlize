@@ -14,35 +14,10 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { createProducer } from "../../context"
-import { An, D, DD, E, Md, S, T, Ts } from "lws";
-import { ArgConvertor } from "./components/argConvertor";
-import { createSpecialProducer, managedName, roles } from "../common";
-
-function makeSerializerName(node:idl.IDLInterface) {
-    return managedName(idl.getFQName(node) + 'Serializer')
-}
+import { createSpecialProducer, roles } from "../common";
+import { makeSerializer } from "../components/serializer";
 
 export const serializerProducer = createSpecialProducer(
-  { is: idl.isInterface, role: roles.serializer },
-  (node, ctx) => {
-    return {
-      artifact: {
-        reference: E.v(makeSerializerName(node), [An.isType()]),
-        implementationGenerator: () => {
-            const serializerName = 'serializer'
-            const convertor = new ArgConvertor(ctx, E.v(serializerName))
-            return D.class(makeSerializerName(node), [], [
-                DD({ modifiers: [Md.static()] }).func('write', [
-                    { name: serializerName, type: T.c('SerializerBase') },
-                    { name: 'value', type: ctx.useManaged(node).reference() },
-                ], Ts.prim.void, S.block(
-                    node.properties.map(prop => convertor.write(E.get(E.v('value'), prop.name), prop.type))
-                )),
-                DD({ modifiers: [Md.static()] }).func('read', [], Ts.prim.void, S.block([]))
-            ])
-        }
-      }
-    }
-  }
+  { is: idl.isInterface, role: roles.serializerManaged },
+  (node, ctx) => makeSerializer(true, node, ctx)
 )

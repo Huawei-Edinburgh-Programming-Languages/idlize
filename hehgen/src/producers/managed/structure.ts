@@ -13,10 +13,9 @@
  * limitations under the License.
  */
 
-import { D, S, T } from "lws";
-import { createProducer } from "../../context";
+import { D, T } from "lws";
 import * as idl from "@idlizer/core/idl"
-import { makePeerMethod } from "./components/peerMethod";
+import { makePeerMethod } from "../components/peerMethod";
 import { createSpecialProducer, managedName, roles } from "../common";
 
 export const structureProducer = createSpecialProducer(

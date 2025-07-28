@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import { IdentityTransformer, lw } from "lws"
 import * as idl from "@idlizer/core/idl"
 import { createProducer, GeneratorContext, MakeSelectorPattern, MakeSelectorQuery, Producer, ProducerBox, ProducerDescription } from "../context"
 
@@ -26,7 +25,8 @@ export const roles = {
     cApi: C_API_PREFIX,
     native: NATIVE_PREFIX,
     nativeModule: "managed.nativeModule",
-    serializer: "serializer"
+    serializerManaged: "managed.serializer",
+    serializerNative: "native.serializer",
 }
 
 export function managedName(name:string) {
@@ -72,8 +72,12 @@ export class AdvancedGeneratorContext {
     useBridge(node:idl.IDLMethod) {
         return this.base.use({ node, role: roles.native })
     }
-    useSerializer(node:idl.IDLNode) {
-        return this.base.use({ node, role: roles.serializer })
+
+    useNativeSerializer(node:idl.IDLNode) {
+        return this.base.use({ node, role: roles.serializerNative })
+    }
+    useManagedSerializer(node:idl.IDLNode) {
+        return this.base.use({ node, role: roles.serializerManaged })
     }
 }
 export interface AdvancedProducer<N extends idl.IDLNode = idl.IDLNode> {

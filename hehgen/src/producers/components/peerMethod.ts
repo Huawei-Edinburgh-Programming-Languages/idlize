@@ -15,13 +15,12 @@
 
 import { D, E, lw, S, T } from "lws";
 import * as idl from "@idlizer/core/idl"
-import { GeneratorContext } from "../../../context";
 import { ArgConvertor } from "./argConvertor";
-import { AdvancedGeneratorContext } from "../../common";
+import { AdvancedGeneratorContext } from "../common";
 
 export function makePeerMethod(method: idl.IDLMethod, ctx: AdvancedGeneratorContext): lw.FunctionDeclaration {
   const serializerName = 'thisSerializer'
-  const convertor = new ArgConvertor(ctx, E.v(serializerName))
+  const convertor = new ArgConvertor(ctx, E.v(serializerName), true)
   const stmts = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
   return D.func(method.name,
     method.parameters.map(param => ({ name: param.name, type: ctx.useManaged(param.type).reference() })),

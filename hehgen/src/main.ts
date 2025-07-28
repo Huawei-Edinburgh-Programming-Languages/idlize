@@ -25,6 +25,9 @@ import { isCApi, isManaged, isNative, MANAGED_PREFIX } from "./producers/common"
 function generate(library: IDLFile[]) {
   const selector = new MakeSelector()
 
+  selector.register(producers.native.serializerProducer)
+  selector.register(producers.managed.serializerProducer)
+
   selector.register(producers.native.structureProducer)
   selector.register(producers.native.bridgeProducer)
 
@@ -34,7 +37,6 @@ function generate(library: IDLFile[]) {
   selector.register(producers.managed.primitiveProducer)
   selector.register(producers.managed.containerProducer)
   selector.register(producers.managed.nativeModuleProducer)
-  selector.register(producers.managed.serializerProducer)
 
   const ctx = new GeneratorContext(library, selector)
   const produced = ctx.generate(library)

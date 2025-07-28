@@ -43,10 +43,37 @@ export class MakeResult {
     }
 
     reference() {
-        return this.asTerminal(this.result).artifact.reference as lw.LWType
+        const target = this.asTerminal(this.result).artifact.reference
+        if (!target) {
+            throw new Error("ERROR 1")
+        }
+        if (![
+            lw.LWKind.ConstType,
+            lw.LWKind.AppType,
+            lw.LWKind.FuncType,
+        ].includes(target.kind)) {
+            throw new Error("ERROR 2")
+        }
+        return target as lw.LWType
     }
     name() {
-        return this.asTerminal(this.result).artifact.reference as lw.LWExpression
+        const target = this.asTerminal(this.result).artifact.reference
+        if (!target) {
+            throw new Error("ERROR")
+        }
+        if (![
+            lw.LWKind.VariableExpression,
+            lw.LWKind.ConstantExpression,
+            lw.LWKind.StringExpression,
+            lw.LWKind.UnaryExpression,
+            lw.LWKind.BinaryExpression,
+            lw.LWKind.CallExpression,
+            lw.LWKind.AccessorExpression,
+            lw.LWKind.ConstructorExpression,
+        ].includes(target.kind)) {
+            throw new Error("ERROR 2")
+        }
+        return target as lw.LWExpression
     }
 }
 
@@ -68,7 +95,7 @@ export interface RecursiveProducerDescription {
 }
 
 export type ProducerDescription =
-      MiddlewareProducerDescription
+    MiddlewareProducerDescription
     | TerminalProducerDescription
     | RedirectProducerDescription
     | RecursiveProducerDescription
@@ -143,10 +170,10 @@ export class MakeSelector {
                 return true
             }
             const queryRole = query.role ?? ''
-            return queryRole.startsWith(it.pattern.role)
+            return it.pattern.role === queryRole
         })
         if (!record) {
-            throw new Error(`Can not process "${idl.getFQName(query.node)}", ${idl.IDLKind[query.node.kind]}`)
+            throw new Error(`Can not process "${idl.getFQName(query.node)}", ${idl.IDLKind[query.node.kind]}, ${query.role}`)
         }
         return record.producer
     }
@@ -219,7 +246,7 @@ export class GeneratorContext {
         this.renderContext = true
         return this.resolveDescription(key, desc)
     }
-    private resolveDescription(key: string, desc:ProducerDescription): ProducerDescription {
+    private resolveDescription(key: string, desc: ProducerDescription): ProducerDescription {
         if (isTerminal(desc)) {
             if (desc.artifact.implementationGenerator) {
                 this.generatingQueue.push(desc.artifact.implementationGenerator)

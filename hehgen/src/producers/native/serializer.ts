@@ -13,12 +13,11 @@
  * limitations under the License.
  */
 
-import { bridgeProducer } from "./bridge";
-import { serializerProducer } from "./serializer";
-import { structureProducer } from "./structure";
+import * as idl from "@idlizer/core/idl";
+import { createSpecialProducer, roles } from "../common";
+import { makeSerializer } from "../components/serializer";
 
-export const producers = {
-    structureProducer,
-    bridgeProducer,
-    serializerProducer,
-}
+export const serializerProducer = createSpecialProducer(
+  { is: idl.isInterface, role: roles.serializerNative },
+  (node, ctx) => makeSerializer(false, node, ctx)
+)

@@ -16,6 +16,7 @@
 import { D, E, S, T, Ts } from "lws";
 import * as idl from "@idlizer/core/idl"
 import { cApiName, createSpecialProducer, nativeName, roles } from "../common";
+import { ArgConvertor } from "../components/argConvertor";
 
 export const bridgeProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.native },
@@ -25,10 +26,14 @@ export const bridgeProducer = createSpecialProducer(
       artifact: {
         reference: E.v(generatedDeclName),
         implementationGenerator: () => {
-          method.parameters.forEach(param => {
-            ctx.useCApi(param.type)
+          const serializerName = 'thisDeserializer'
+          const convertor = new ArgConvertor(ctx, E.v(serializerName), true)
+          const readers = method.parameters.map(param => {
+            return convertor.read(E.v(param.name), param.type)
           })
-          return D.func(generatedDeclName, [{ name: 'buffer', type: T.c('SerializerBase') }], Ts.prim.void, S.block([]))
+          return D.func(generatedDeclName, [{ name: 'buffer', type: T.c('SerializerBase') }], Ts.prim.void, S.block([
+            ...readers.flatMap(x => x[0])
+          ]))
         }
       }
     }
