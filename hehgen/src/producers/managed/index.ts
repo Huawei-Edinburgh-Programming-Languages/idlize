@@ -14,6 +14,7 @@
  */
 
 import { containerProducer } from "./containers";
+import { fallbackProducer } from "./fallback";
 import { fileProducer } from "./file";
 import { nativeModuleProducer } from "./nativeModule";
 import { primitiveProducer } from "./primitives";
@@ -29,4 +30,5 @@ export const producers = {
     containerProducer,
     nativeModuleProducer,
     serializerProducer,
+    fallbackProducer,
 }

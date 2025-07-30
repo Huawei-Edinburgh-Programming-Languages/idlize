@@ -52,7 +52,10 @@ const specialTypeNames = {
 
     auto: '@LW.AUTO',
 
+    boolean: '@LW.Boolean',
+    buffer: '@LW.Buffer',
     int: '@LW.Int32',
+    number: '@LW.Number',
     string: '@LW.String',
     void: '@LW.Void',
 }
@@ -113,7 +116,10 @@ const knownOperations = {
 export const Op = knownOperations
 
 const primitiveTypes = {
+    boolean: T.c(specialTypeNames.boolean),
+    buffer: T.c(specialTypeNames.buffer),
     int: T.c(specialTypeNames.int),
+    number: T.c(specialTypeNames.number),
     str: T.c(specialTypeNames.string),
     void: T.c(specialTypeNames.void),
 }

@@ -38,6 +38,8 @@ function generate(library: IDLFile[]) {
   selector.register(producers.managed.containerProducer)
   selector.register(producers.managed.nativeModuleProducer)
 
+  selector.register(producers.managed.fallbackProducer)
+
   const ctx = new GeneratorContext(library, selector)
   const produced = ctx.generate(library)
 

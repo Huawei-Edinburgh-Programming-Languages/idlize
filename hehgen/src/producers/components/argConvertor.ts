@@ -19,14 +19,20 @@ import { AdvancedGeneratorContext } from "../common";
 
 function selectWriteName(type:idl.IDLPrimitiveType): string {
     switch (type) {
+        case idl.IDLBooleanType: return 'writeBoolean'
+        case idl.IDLBufferType: return 'writeBuffer'
         case idl.IDLI32Type: return 'writeInt32'
+        case idl.IDLNumberType: return 'writeNumber'
         case idl.IDLStringType: return 'writeString'
         default: throw new Error(`Can not convert "${idl.DebugUtils.debugPrintType(type)}"`)
     }
 }
 function selectReadName(type:idl.IDLPrimitiveType): string {
     switch (type) {
+        case idl.IDLBooleanType: return 'readBoolean'
+        case idl.IDLBufferType: return 'readBuffer'
         case idl.IDLI32Type: return 'readInt32'
+        case idl.IDLNumberType: return 'readNumber'
         case idl.IDLStringType: return 'readString'
         default: throw new Error(`Can not convert "${idl.DebugUtils.debugPrintType(type)}"`)
     }

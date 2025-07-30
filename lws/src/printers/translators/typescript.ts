@@ -30,7 +30,10 @@ const varMapping = new Map([
 export class ConvertTSTypes extends IdentityTransformer {
   goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
-      case std.names.types.int: return T.cc('number')
+      case std.names.types.boolean: return T.cc('boolean')
+      case std.names.types.buffer: return T.cc('ArrayBuffer')
+      case std.names.types.int:
+      case std.names.types.number: return T.cc('number')
       case std.names.types.string: return T.cc('string')
       case std.names.types.void: return T.cc('void')
     }

@@ -13,6 +13,9 @@
  * limitations under the License.
  */
 
+import { GeneratorContext, MakeSelector, producers } from "hehgen"
+import { ArkTSPrinter, ConvertArkTSTypes, LWDeclaration } from "lws"
+
 import * as path from 'node:path'
 import {
     IDLBufferType,
@@ -29,6 +32,9 @@ import {
     IDLEntry,
     LayoutNodeRole,
     IDLPointerType,
+    createLanguageWriter,
+    createInterface,
+    IDLInterfaceSubkind,
 } from "@idlizer/core";
 import {
     writeIntegratedFile,
@@ -99,11 +105,12 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
             createInterfacePrinter(false, false),
             printGlobal,
             printDataClasses,
-            createSerializerPrinter(peerLibrary.language, ""),
+            // createSerializerPrinter(peerLibrary.language, ""),
             printCallbackChecker,
             createDeserializeAndCallPrinter(peerLibrary.name, peerLibrary.language),
             createGeneratedNativeModulePrinter(NativeModule.Generated),
             ...spreadIfLang([Language.ARKTS], printArkTSTypeChecker),
+            lwsGenerate,
         ]
     )
 
@@ -136,4 +143,64 @@ function makeOhosModule(root:string, componentsFiles: string[]): string {
         const fileNameNoExt = relativePath.replaceAll(path.extname(file), "")
         return `export * from "./${fileNameNoExt}"`
     }).sort().join("\n")
+}
+
+function lwsGenerate(peerLibrary: PeerLibrary): PrinterResult[] {
+    const selector = new MakeSelector()
+
+    selector.register(producers.native.serializerProducer)
+    selector.register(producers.managed.serializerProducer)
+
+    selector.register(producers.native.structureProducer)
+    selector.register(producers.native.bridgeProducer)
+
+    selector.register(producers.managed.fileProducer)
+    selector.register(producers.managed.referenceProducer)
+    selector.register(producers.managed.structureProducer)
+    selector.register(producers.managed.primitiveProducer)
+    selector.register(producers.managed.containerProducer)
+    selector.register(producers.managed.nativeModuleProducer)
+
+    selector.register(producers.managed.fallbackProducer)
+
+    const ctx = new GeneratorContext(peerLibrary.files, selector)
+    const produced = ctx.generate(peerLibrary.files)
+    const printer = new ArkTSPrinter()///langs
+
+    return [
+        printSerializers,
+        printGlobalScope,
+        printNativeModule,
+        printTypeChecker,
+    ].flatMap(f => f(peerLibrary, produced, printer))
+}
+
+function printSerializers(peerLibrary: PeerLibrary, decls: LWDeclaration[], printer: ArkTSPrinter): PrinterResult[] {
+    return decls
+        .filter(it => it.name.includes("Serializer"))
+        .map(decl => {
+            decl = new ConvertArkTSTypes().goDeclaration(decl)
+            printer.printDeclaration(decl)
+            const writer = createLanguageWriter(peerLibrary.language)
+            writer.concat(printer.p.map(it => it.join("")))
+            const imports = new ImportsCollector()
+            const node = createInterface(decl.name, IDLInterfaceSubkind.Interface)
+            return {
+                over: { node, role: LayoutNodeRole.SERIALIZER },
+                collector: imports,
+                content: writer
+            }
+        })
+}
+
+function printNativeModule(peerLibrary: PeerLibrary, decls: LWDeclaration[], printer: ArkTSPrinter): PrinterResult[] {
+    return []
+}
+
+function printTypeChecker(peerLibrary: PeerLibrary, decls: LWDeclaration[], printer: ArkTSPrinter): PrinterResult[] {
+    return []
+}
+
+function printGlobalScope(peerLibrary: PeerLibrary, decls: LWDeclaration[], printer: ArkTSPrinter): PrinterResult[] {
+    return []
 }

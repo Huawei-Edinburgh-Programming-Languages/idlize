@@ -13,28 +13,16 @@
  * limitations under the License.
  */
 
-import { lw, Ts } from "lws";
+import { lw, T } from "lws";
 import { createProducer } from "../../context"
 import * as idl from "@idlizer/core/idl";
 
-function selectType(type:idl.IDLPrimitiveType): lw.LWType {
-    switch (type) {
-        case idl.IDLBooleanType: return Ts.prim.boolean
-        case idl.IDLBufferType: return Ts.prim.buffer
-        case idl.IDLI32Type: return Ts.prim.int
-        case idl.IDLNumberType: return Ts.prim.number
-        case idl.IDLStringType: return Ts.prim.str
-        case idl.IDLVoidType: return Ts.prim.void
-    }
-    throw new Error(`Can not map ${idl.DebugUtils.debugPrintType(type)}`)
-}
-
-export const primitiveProducer = createProducer(
-  { is: idl.isPrimitiveType },
+export const fallbackProducer = createProducer(
+  { is: idl.isEnum },
   node => {
     return {
       artifact: {
-        reference: selectType(node),
+        reference: T.cc("///enum " + node.name),
       }
     }
   }
