@@ -462,10 +462,17 @@ export function snakeCaseToCamelCase(input: string, tailToLowerCase: boolean = f
         .join("")
 }
 
-export function toCamelCase(input: string): string {
-    return input
-        .replace(/([-_][a-z])/g, group => group.toUpperCase().replace('-', '').replace('_', ''))
-        .replace(/^[A-Z]/, match => match.toLowerCase());
+export function toCamelCase(input: string, delimiters: string[] = ["-", "_"]): string {
+    const delimitersRegExp = new RegExp(`([${delimiters.join("")}])`, 'g');
+    const pattern = new RegExp(`([${delimiters.join("")}][A-z])`, 'g');
+    const output = input
+        .replace(pattern, group => group.toUpperCase().replace(delimitersRegExp, ''))
+        .replace(/^[A-Z]/, match => match.toLowerCase())
+    if (input.length && isUpperCase(input[0])) {
+        return capitalize(output)
+    } else {
+        return output
+    }
 }
 
 export function isUpperCase(s: string): boolean {
