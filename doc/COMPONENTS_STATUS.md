@@ -3314,16 +3314,16 @@
 |`begin`| Function | Vadim Voronov | done | | |
 |`end`| Function | Vadim Voronov | done | | |
 |`recordInputEventTime`| Function | Vadim Voronov | done | |  |
-|*CommonShape*| *Class* | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`construct`| Function |Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`offset`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`fill`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`position`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|*BaseShape*| *Class* | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`construct`| Function |Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`width`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`height`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`size`| Function | Tuzhilkin Ivan | done | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|*CommonShape*| *Class* | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`construct`| Function |Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`offset`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`fill`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`position`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|*BaseShape*| *Class* | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`construct`| Function |Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`width`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`height`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`size`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |*GlobalScope_ohos_font*| *Class* | Pavelyev Ivan | done | | |
 |`registerFont`| Function | Pavelyev Ivan | done | | |
 |`getSystemFontList`| Function | Pavelyev Ivan | done | | |
