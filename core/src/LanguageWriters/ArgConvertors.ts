@@ -45,7 +45,7 @@ import { PeerMethodSignature } from "../peer-generation/PeerMethod";
 import { isInExternalModule } from "../peer-generation/modules";
 
 export function getSerializerName(declaration:idl.IDLEntry) {
-    return `${idl.getQualifiedName(declaration, "namespace.name").split('.').join('_')}_serializer`;
+    return `${idl.getQualifiedName(declaration, "namespace.name").split('.').join('_')}Serializer`;
 }
 
 export interface ArgConvertor {
@@ -612,8 +612,8 @@ export class AggregateConvertor extends BaseArgConvertor {
             statements.push(assigneer(resultExpression))
         } else if (writer.language == Language.KOTLIN) {
             const resultExpression = this.decl.subkind === idl.IDLInterfaceSubkind.Tuple ?
-            writer.makeString(`${writer.getNodeName(this.idlType)}(${this.decl.properties.map(prop => `${bufferName}_${prop.name}`).join(', ')})`) :
-            writer.makeString(`object: ${writer.getNodeName(this.idlType)} { ${this.decl.properties.map(prop => `override var ${prop.name} = ${bufferName}_${prop.name}`).join("; ")} }`)
+            writer.makeString(`${writer.getNodeName(this.idlType)}(${this.decl.properties.map(prop => `${bufferName}${capitalize(prop.name)}`).join(', ')})`) :
+            writer.makeString(`object: ${writer.getNodeName(this.idlType)} { ${this.decl.properties.map(prop => `override var ${prop.name} = ${bufferName}${capitalize(prop.name)}`).join("; ")} }`)
             statements.push(assigneer(resultExpression))
         } else {
             const resultExpression = this.makeAssigneeExpression(this.decl.properties.map(prop => {
@@ -1041,7 +1041,7 @@ export class OptionConvertor extends BaseArgConvertor {
         throw new Error("Must never be used")
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
-        const runtimeBufferName = `${bufferName}_runtimeType`
+        const runtimeBufferName = `${bufferName}RuntimeType`
         const statements: LanguageStatement[] = []
         statements.push(writer.makeAssign(runtimeBufferName, undefined,
             writer.makeCast(writer.makeString(`${deserializerName}.readInt8()`), writer.getRuntimeType()), true))
@@ -1049,7 +1049,7 @@ export class OptionConvertor extends BaseArgConvertor {
         statements.push(writer.makeAssign(bufferName, bufferType, writer.language === Language.CPP ? undefined : writer.makeNull(this.type), true, false)) // maybe change to generic None
 
         const thenStatement = new BlockStatement([
-            this.typeConvertor.convertorDeserialize(`${bufferName}_`, deserializerName, (expr) => {
+            this.typeConvertor.convertorDeserialize(`${bufferName}`, deserializerName, (expr) => {
                 const receiver = writer.language === Language.CPP
                     ? `${bufferName}.value` : bufferName
                 return writer.makeAssign(receiver, undefined, expr, false)
