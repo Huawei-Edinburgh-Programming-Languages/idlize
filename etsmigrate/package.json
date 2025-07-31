@@ -1,0 +1,47 @@
+{
+  "name": "@idlizer/etsmigrate",
+  "version": "2.1.9+devel",
+  "description": "",
+  "main": "lib/main.js",
+  "bin": "lib/main.js",
+  "files": [
+    "build/lib/src/app.d.ts",
+    "lib/*.js",
+    "generation-config/**/*",
+    "config.json",
+    "components_stubs/**/*"
+  ],
+  "exports": {
+    "./app": [
+      "./lib/library.js"
+    ]
+  },
+  "typesVersions": {
+    "*": {
+      "app": [
+        "./build/lib/src/app.d.ts"
+      ]
+    }
+  },
+  "license": "Apache-2.0",
+  "keywords": [],
+  "dependencies": {
+    "@idlizer/core": "2.1.9+devel",
+    "@idlizer/libohos": "2.1.9+devel",
+    "@koalaui/libarkts": "file:../external/ui2abc/libarkts",
+    "@types/node": "^18.0.0",
+    "commander": "^10.0.0",
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6"
+  },
+  "scripts": {
+    "clean": "rimraf -g build",
+    "libarkts:reinstall:regenerate": "cd ../external/ui2abc/libarkts && npm run reinstall:regenerate && npm run compile && npm run compile:plugins",
+    "compile": "npm run -C ../core compile && npm run -C ../libohos compile && tsc -b . && rollup -c",
+    "run": "node . --input-dir ./tests --output-dir ./out",
+    "run:full": "rimraf ./out && npm run compile && npm run run",
+    "test": "npm run compile && rimraf out && mkdir ./out && node . --input-dir ./tests --output-dir ./out"
+  }
+}
