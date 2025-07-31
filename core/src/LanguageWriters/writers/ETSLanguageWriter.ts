@@ -49,6 +49,7 @@ import { Language } from "../../Language";
 import { RuntimeType } from "../common";
 import { throwException } from "../../util";
 import { ReferenceResolver } from "../../peer-generation/ReferenceResolver";
+import { qualifiedName } from "../../peer-generation/idl/common"
 
 ////////////////////////////////////////////////////////////////
 //                        EXPRESSIONS                         //
@@ -197,12 +198,12 @@ export function generateTypeCheckerName(typeName: string): string {
 }
 
 export function generateEnumToNumericName(entry: idl.IDLEntry): string {
-    const typeName = idl.getQualifiedName(entry, "namespace.name").split('.').join('_')
+    const typeName = qualifiedName(entry, "_", "namespace.name")
     return `${typeName}_ToNumeric`
 }
 
 export function generateEnumFromNumericName(entry: idl.IDLEntry): string {
-    const typeName = idl.getQualifiedName(entry, "namespace.name").split('.').join('_')
+    const typeName = qualifiedName(entry, "_", "namespace.name")
     return `${typeName}_FromNumeric`
 }
 

@@ -14,7 +14,7 @@
  */
 
 import * as webidl2 from "webidl2"
-import { indentedBy, isDefined, stringOrNone, throwException } from "./util";
+import { capitalize, indentedBy, isDefined, stringOrNone, throwException } from "./util";
 import { generateSyntheticIdlNodeName } from "./peer-generation/idl/common";
 import { IDLKeywords } from "./languageSpecificKeywords";
 import { Location } from "./diagnostictypes";

@@ -44,8 +44,8 @@ import { LayoutNodeRole } from "../peer-generation/LayoutManager";
 import { PeerMethodSignature } from "../peer-generation/PeerMethod";
 import { isInExternalModule } from "../peer-generation/modules";
 
-export function getSerializerName(declaration:idl.IDLEntry) {
-    return `${idl.getQualifiedName(declaration, "namespace.name").split('.').join('_')}Serializer`;
+export function getSerializerName(declaration:idl.IDLEntry) {    
+    return `${qualifiedName(declaration, "_", "namespace.name")}Serializer`;
 }
 
 export interface ArgConvertor {
@@ -1049,7 +1049,7 @@ export class OptionConvertor extends BaseArgConvertor {
         statements.push(writer.makeAssign(bufferName, bufferType, writer.language === Language.CPP ? undefined : writer.makeNull(this.type), true, false)) // maybe change to generic None
 
         const thenStatement = new BlockStatement([
-            this.typeConvertor.convertorDeserialize(`${bufferName}`, deserializerName, (expr) => {
+            this.typeConvertor.convertorDeserialize(`${bufferName}Optional`, deserializerName, (expr) => {
                 const receiver = writer.language === Language.CPP
                     ? `${bufferName}.value` : bufferName
                 return writer.makeAssign(receiver, undefined, expr, false)
