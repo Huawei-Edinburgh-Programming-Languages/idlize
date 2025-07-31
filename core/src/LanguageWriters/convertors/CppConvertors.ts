@@ -173,7 +173,7 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
     }
 
     private qualifiedName(target: idl.IDLNode): string {
-        return qualifiedName(target, "_", "namespace.name")
+        return qualifiedName(target, "_", "namespace.name", true)
     }
 
     private computeTargetTypeLiteralName(decl: idl.IDLInterface): string {
@@ -294,7 +294,7 @@ export class CppReturnTypeConvertor implements TypeConvertor<string> {
     convertTypeReference(type: idl.IDLReferenceType): string {
         const decl = this.resolver.resolveTypeReference(type)
         if (decl && idl.isInterface(decl) && isMaterialized(decl, this.resolver)) {
-            return generatorTypePrefix() + qualifiedName(decl, "_", "namespace.name")
+            return generatorTypePrefix() + qualifiedName(decl, "_", "namespace.name", true)
         }
         return this.convertor.convert(type)
     }

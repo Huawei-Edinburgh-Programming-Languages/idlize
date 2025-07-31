@@ -68,7 +68,7 @@ function peerParentNamespaceName(library: PeerLibrary, context: idl.IDLInterface
         return `${capitalize(context.name)}Modifier`
     }
     if (isMaterialized(context, library))
-        return `${qualifiedName(context, "_", "namespace.name")}Accessor`
+        return `${qualifiedName(context, "_", "namespace.name", true)}Accessor`
     throw new Error("Can not calculate name for " + context.name)
 }
 

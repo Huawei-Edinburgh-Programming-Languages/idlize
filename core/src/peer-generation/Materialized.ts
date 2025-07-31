@@ -136,7 +136,7 @@ export function createDestroyPeerMethod(clazz: MaterializedClass): MaterializedM
                 idl.IDLVoidType,
                 clazz.decl,
             ),
-            idl.getQualifiedName(clazz.decl, "namespace.name").split('.').join('_'),
+            qualifiedName(clazz.decl, "_", "namespace.name", true),
             clazz.getImplementationName(),
             idl.IDLVoidType,
             false,

@@ -13,13 +13,13 @@
  * limitations under the License.
  */
 
-import { capitalize } from "@idlizer/core";
-import { getQualifiedName, IDLEntry } from "@idlizer/core/idl";
+import { qualifiedName } from "@idlizer/core";
+import { IDLEntry } from "@idlizer/core/idl";
 import { peerGeneratorConfiguration } from "../../DefaultConfiguration";
 
 
-export function getDeclarationUniqueName(declaration:IDLEntry) {
-    return getQualifiedName(declaration, "namespace.name").split('.').map(capitalize).join('_')
+export function getDeclarationUniqueName(declaration: IDLEntry) {
+    return qualifiedName(declaration, "_", "namespace.name", true)
 }
 
 export function getAccessorName(declaration:IDLEntry) {

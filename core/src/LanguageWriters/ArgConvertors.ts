@@ -44,8 +44,8 @@ import { LayoutNodeRole } from "../peer-generation/LayoutManager";
 import { PeerMethodSignature } from "../peer-generation/PeerMethod";
 import { isInExternalModule } from "../peer-generation/modules";
 
-export function getSerializerName(declaration:idl.IDLEntry) {
-    return `${idl.getQualifiedName(declaration, "namespace.name").split('.').join('_')}Serializer`;
+export function getSerializerName(declaration:idl.IDLEntry) {    
+    return `${qualifiedName(declaration, "_", "namespace.name", true)}Serializer`;
 }
 
 export interface ArgConvertor {
@@ -1049,7 +1049,7 @@ export class OptionConvertor extends BaseArgConvertor {
         statements.push(writer.makeAssign(bufferName, bufferType, (writer.language == Language.CJ || writer.language == Language.KOTLIN) ? writer.makeNull() : undefined, true, false))
 
         const thenStatement = new BlockStatement([
-            this.typeConvertor.convertorDeserialize(`${bufferName}`, deserializerName, (expr) => {
+            this.typeConvertor.convertorDeserialize(`${bufferName}Optional`, deserializerName, (expr) => {
                 const receiver = writer.language === Language.CPP
                     ? `${bufferName}.value` : bufferName
                 return writer.makeAssign(receiver, undefined, expr, false)
@@ -1195,7 +1195,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
     convertorArg(param: string, writer: LanguageWriter): string {
         switch (writer.language) {
             case Language.CPP:
-                return `static_cast<${generatorTypePrefix()}${qualifiedName(this.declaration, "_", "namespace.name")}>(${param})`
+                return `static_cast<${generatorTypePrefix()}${qualifiedName(this.declaration, "_", "namespace.name", true)}>(${param})`
             case Language.JAVA:
             case Language.KOTLIN:
             case Language.CJ:
