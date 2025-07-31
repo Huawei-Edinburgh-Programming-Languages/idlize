@@ -54,7 +54,7 @@
                 ["LinearGradient", "LinearGradient_common"]
             ],
             "alert_dialog.d.ts": [
-                ["TextStyle", "TextStyle_alert_dialog"]
+                ["TextStyle", "TextStyleAlertDialog"]
             ],
             "styled_string.d.ts" : [
                 ["TextStyle", "TextStyle_styled_string"]

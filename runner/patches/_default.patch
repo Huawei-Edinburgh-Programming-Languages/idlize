@@ -7,7 +7,7 @@ index d608e158c..134233582 100644
   * @arkts 1.1&1.2
   */
 -declare interface TextStyle {
-+declare interface TextStyle_alert_dialog {
++declare interface TextStyleAlertDialog {
    /**
     * Set the word break type.
     *
@@ -16,7 +16,7 @@ index d608e158c..134233582 100644
     * @arkts 1.1&1.2
     */
 -  textStyle?: TextStyle;
-+  textStyle?: TextStyle_alert_dialog;
++  textStyle?: TextStyleAlertDialog;
  
    /**
     * Defines whether to respond to the hover mode.

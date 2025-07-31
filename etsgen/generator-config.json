@@ -124,7 +124,7 @@
         "alert_dialog.d.ts": [
             [
                 "TextStyle",
-                "TextStyle_alert_dialog"
+                "TextStyleAlertDialog"
             ]
         ],
         "styled_string.d.ts": [

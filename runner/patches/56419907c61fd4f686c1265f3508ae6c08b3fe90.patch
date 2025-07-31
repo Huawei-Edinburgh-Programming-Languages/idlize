@@ -7,7 +7,7 @@ index caaf8160a..186587850 100644
   * @since 12
   */
 -declare interface TextStyle {
-+declare interface TextStyle_alert_dialog {
++declare interface TextStyleAlertDialog {
    /**
     * Set the word break type.
     *
@@ -16,7 +16,7 @@ index caaf8160a..186587850 100644
     * @since 12
     */
 -  textStyle?: TextStyle;
-+  textStyle?: TextStyle_alert_dialog;
++  textStyle?: TextStyleAlertDialog;
  
    /**
     * Set the alertDialog's textStyle.

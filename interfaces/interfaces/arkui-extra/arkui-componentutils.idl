@@ -6,9 +6,9 @@ import arkui.Graphics;
 interface ComponentInfo {
 
     attribute Size size;
-    attribute Offset_componentutils localOffset;
-    attribute Offset_componentutils windowOffset;
-    attribute Offset_componentutils screenOffset;
+    attribute OffsetComponentUtils localOffset;
+    attribute OffsetComponentUtils windowOffset;
+    attribute OffsetComponentUtils screenOffset;
     attribute TranslateResult translate;
     attribute ScaleResult scale;
     attribute RotateResult rotate;
@@ -16,7 +16,7 @@ interface ComponentInfo {
 
 };
 [Entity=Interface]
-interface Offset_componentutils {
+interface OffsetComponentUtils {
 
     attribute number x;
     attribute number y;

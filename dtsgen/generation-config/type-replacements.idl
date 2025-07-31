@@ -26,7 +26,7 @@ interface SliderBlockStyle {
 [Entity=Interface]
 interface AlertDialogParam {
     [Optional]
-    attribute TextStyle_alert_dialog textStyle;
+    attribute TextStyleAlertDialog textStyle;
 };
 
 [Entity=Interface]
