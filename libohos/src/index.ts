@@ -72,6 +72,16 @@ export * from './skoala-generation/printers/InterfacePrinter'
 export { IdlSkoalaLibrary, IldSkoalaOutFile, IdlWrapperProcessor } from './skoala-generation/idl/idlSkoalaLibrary'
 export * from './skoala-generation/SkoalaInstall'
 export * from './skoala-generation/SkoalaGeneration'
+export * from './ost/builder'
+export * from './ost/lws'
+export * from './ost/main'
+export * from './ost/stdlib'
+export * from './ostgen/context'
+export * from './ostgen/dump'
+export * from './ostgen/producers'
+export * from './ostgen/producers/common'
+export * as moduleLike from "./ostgen/postprocess/moduleLike";
+export * as lowLevelLike from "./ostgen/postprocess/lowLevelLike";
 
 export class Install {
     mkdir(path: string): string {
