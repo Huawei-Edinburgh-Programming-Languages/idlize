@@ -17,35 +17,39 @@ import { D, T } from "../../../ost/main";
 import * as idl from "@idlizer/core/idl"
 import { makePeerMethod } from "../components/peerMethod";
 import { createSpecialProducer, managedName, roles } from "../common";
+import { isMaterialized } from "@idlizer/core";
 
 export const structureProducer = createSpecialProducer(
   { is: idl.isInterface, role: roles.managed },
   (node, ctx) => {
     const generatedDeclName = managedName(idl.getFQName(node))
+    const implementationGenerator = isMaterialized(node, ctx.base.resolver.R)
+      ? undefined
+      : () => {
+        if (node.methods.length > 0) {
+          return D.class(generatedDeclName,
+            node.properties.map(prop => {
+              return {
+                name: prop.name,
+                type: ctx.useManaged(prop.type).reference()
+              }
+            }),
+            node.methods.map(method => {
+              return makePeerMethod(method, ctx)
+            })
+          )
+        }
+        return D.struct(generatedDeclName, node.properties.map(prop => {
+          return {
+            name: prop.name,
+            type: ctx.useManaged(prop.type).reference()
+          }
+        }))
+      }
     return {
       artifact: {
         reference: T.cc(generatedDeclName),
-        implementationGenerator: () => {
-          if (node.methods.length > 0) {
-            return D.class(generatedDeclName,
-              node.properties.map(prop => {
-                return {
-                  name: prop.name,
-                  type: ctx.useManaged(prop.type).reference()
-                }
-              }),
-              node.methods.map(method => {
-                return makePeerMethod(method, ctx)
-              })
-            )
-          }
-          return D.struct(generatedDeclName, node.properties.map(prop => {
-            return {
-              name: prop.name,
-              type: ctx.useManaged(prop.type).reference()
-            }
-          }))
-        },
+        implementationGenerator
       }
     }
   }
