@@ -15,18 +15,18 @@
 
 import { Language, NativeModuleType, PeerLibrary } from "@idlizer/core";
 import * as idl from "@idlizer/core/idl"
-import { E, lw } from "../ost/main";
+import { lw } from "../ost/main";
 
 export class IDLTypeResolver {
-    private legacyLib = new PeerLibrary(Language.TS, new NativeModuleType('__NOT_USED__'), true)
+    readonly R = new PeerLibrary(Language.TS, new NativeModuleType('__NOT_USED__'), true)
     constructor(library: idl.IDLFile[]) {
         library.forEach(file => {
-            this.legacyLib.files.push(file)
+            this.R.files.push(file)
         })
     }
 
     toDeclaration(ref: idl.IDLReferenceType) {
-        return this.legacyLib.resolveTypeReference(ref)
+        return this.R.resolveTypeReference(ref)
     }
 }
 
