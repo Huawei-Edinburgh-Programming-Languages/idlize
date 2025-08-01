@@ -1,0 +1,18 @@
+package test_fqn;
+
+import deps.Size as IntSize;
+
+interface Size {
+    attribute number height;
+    attribute number width;
+};
+
+interface Sizes {
+    attribute Size numSize;
+    attribute IntSize intSize;
+    attribute deps.fp.Size floatSize;
+
+    void resize(Sizes sizes);
+};
+
+void resize(Sizes sizes);
