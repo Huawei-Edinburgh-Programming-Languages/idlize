@@ -31,6 +31,8 @@ export interface PrinterResult {
     ignoreNamespace?: boolean
 }
 
+export type OutputFile = { imports: ImportsCollector, content: string[], extension: string, exported: boolean }
+
 export interface PrinterClass {
     print(library: PeerLibrary): PrinterResult[]
 }
@@ -57,7 +59,20 @@ export function install(
         fileExtension?: string,
         customLayout?: LayoutManager,
         isDeclared?: boolean,
-    }): string[] {
+    }): string[]
+{
+    return installFiles(outDir, formFiles(library, printers, options))
+}
+
+export function formFiles(
+    library: PeerLibrary,
+    printers: Printer[],
+    options?: {
+        fileExtension?: string,
+        customLayout?: LayoutManager,
+        isDeclared?: boolean,
+    }): Map<string, OutputFile>
+{
     const storage = new Map<string, PrinterResult[]>()
 
     // groupBy
@@ -75,12 +90,8 @@ export function install(
     })
 
     // print
-    const installedToExport: string[] = []
+    const result: Map<string, OutputFile> = new Map()
     Array.from(storage.entries()).forEach(([filePath, results]) => {
-        const installPath = join(outDir, filePath) + (options?.fileExtension ?? library.language.extension)
-        if (!results.every(it => !!it.private || !isEntryExported(it.over.node))) {
-            installedToExport.push(installPath)
-        }
         results.sort((a, b) => (a.weight ?? 0) - (b.weight ?? 0))
         results.sort(sortByNamespaces)
 
@@ -105,17 +116,26 @@ export function install(
         if (library.language === Language.JAVA) {
             content = [`package ${ARKOALA_PACKAGE};`].concat(content)
         }
+        const extension = options?.fileExtension ?? library.language.extension
+        const exported = !results.every(it => !!it.private || !isEntryExported(it.over.node))
+        result.set(filePath, { imports, content, extension, exported })
+    })
+    return result
+}
 
+export function installFiles(outDir: string, files: Map<string, OutputFile>): string[] {
+    const exportedFiles: string[] = []
+    for (const [filePath, { imports, content, extension, exported }] of files.entries()) {
+        const installPath = join(outDir, filePath) + extension
         const text = tsCopyrightAndWarning(
             imports.printToLines(filePath, outDir)
                 .concat(content)
-                .join('\n')
-        )
-
+                .join('\n'))
         writeIntegratedFile(installPath, text, 'producing')
-    })
-
-    return installedToExport
+        if (exported)
+            exportedFiles.push(installPath)
+    }
+    return exportedFiles
 }
 
 function printWithNamespaces(library: PeerLibrary, results: PrinterResult[], options: { isDeclared: boolean }): string[] {
