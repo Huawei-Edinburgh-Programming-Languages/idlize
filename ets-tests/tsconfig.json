@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        "moduleResolution": "node",
+        "composite": true,
+        "incremental": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "declaration": true,
+        "noEmitOnError": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "removeComments": false,
+        "outDir": "build",
+        "rootDir": ".",
+    },
+    "exclude": [
+        "ets/pages/*.ets"
+    ],
+    "include": [
+        "src/entry.ts",
+        "src/AppControl.ts",
+        "src/suites/*.ts",
+        "src/index.ts"
+    ],
+}
