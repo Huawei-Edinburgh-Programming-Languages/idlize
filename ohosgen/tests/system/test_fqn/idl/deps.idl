@@ -1,0 +1,13 @@
+package deps;
+
+interface Size {
+    attribute i32 height;
+    attribute i32 width;
+};
+
+namespace fp {
+    interface Size {
+        attribute f64 height;
+        attribute f64 width;
+    };
+};
