@@ -21,9 +21,19 @@ function selectType(type:idl.IDLPrimitiveType): lw.LWType {
     switch (type) {
         case idl.IDLBooleanType: return Ts.prim.boolean
         case idl.IDLBufferType: return Ts.prim.buffer
-        case idl.IDLI32Type: return Ts.prim.int
+        case idl.IDLF32Type: return Ts.prim.f32
+        case idl.IDLF64Type: return Ts.prim.f64
+        case idl.IDLI8Type: return Ts.prim.i8
+        case idl.IDLI32Type: return Ts.prim.i32
+        case idl.IDLI64Type: return Ts.prim.i64
         case idl.IDLNumberType: return Ts.prim.number
+        case idl.IDLObjectType: return Ts.prim.object
+        case idl.IDLPointerType: return Ts.prim.pointer
+        case idl.IDLSerializerBuffer: return Ts.prim.serializerBuffer
         case idl.IDLStringType: return Ts.prim.str
+        case idl.IDLU8Type: return Ts.prim.u8
+        case idl.IDLU32Type: return Ts.prim.u32
+        case idl.IDLU64Type: return Ts.prim.u64
         case idl.IDLVoidType: return Ts.prim.void
     }
     throw new Error(`Can not map ${idl.DebugUtils.debugPrintType(type)}`)

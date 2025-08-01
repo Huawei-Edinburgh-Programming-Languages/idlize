@@ -54,9 +54,18 @@ const specialTypeNames = {
 
     boolean: '@LW.Boolean',
     buffer: '@LW.Buffer',
-    int: '@LW.Int32',
+    f32: '@LW.Float32',
+    f64: '@LW.Float64',
+    i8: '@LW.Int8',
+    i32: '@LW.Int32',
+    i64: '@LW.Int64',
+    object: '@LW.Object',
     number: '@LW.Number',
+    serializerBuffer: '@LW.SerializerBuffer',
     string: '@LW.String',
+    u8: '@LW.U8',
+    u32: '@LW.U32',
+    u64: '@LW.U64',
     void: '@LW.Void',
 }
 
@@ -118,9 +127,19 @@ export const Op = knownOperations
 const primitiveTypes = {
     boolean: T.c(specialTypeNames.boolean),
     buffer: T.c(specialTypeNames.buffer),
-    int: T.c(specialTypeNames.int),
+    f32: T.c(specialTypeNames.f32),
+    f64: T.c(specialTypeNames.f64),
+    i8: T.c(specialTypeNames.i8),
+    i32: T.c(specialTypeNames.i32),
+    i64: T.c(specialTypeNames.i64),
+    pointer: T.c(specialTypeNames.pointer),
+    object: T.c(specialTypeNames.object),
     number: T.c(specialTypeNames.number),
+    serializerBuffer: T.c(specialTypeNames.serializerBuffer),
     str: T.c(specialTypeNames.string),
+    u8: T.c(specialTypeNames.u8),
+    u32: T.c(specialTypeNames.u32),
+    u64: T.c(specialTypeNames.u64),
     void: T.c(specialTypeNames.void),
 }
 

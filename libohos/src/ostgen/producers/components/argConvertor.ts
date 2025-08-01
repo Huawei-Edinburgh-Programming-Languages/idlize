@@ -17,25 +17,30 @@ import * as idl from "@idlizer/core/idl";
 import { E, lw, Op, S, Ts } from "../../../ost/main";
 import { AdvancedGeneratorContext } from "../common";
 
-function selectWriteName(type:idl.IDLPrimitiveType): string {
+function selectPrimitiveTypeName(type: idl.IDLPrimitiveType): string {
     switch (type) {
-        case idl.IDLBooleanType: return 'writeBoolean'
-        case idl.IDLBufferType: return 'writeBuffer'
-        case idl.IDLI32Type: return 'writeInt32'
-        case idl.IDLNumberType: return 'writeNumber'
-        case idl.IDLStringType: return 'writeString'
+        case idl.IDLBooleanType: return 'boolean'
+        case idl.IDLBufferType: return 'buffer'
+        case idl.IDLI8Type: return 'i8'
+        case idl.IDLI32Type: return 'i32'
+        case idl.IDLI64Type: return 'i64'
+        case idl.IDLF32Type: return 'f32'
+        case idl.IDLF64Type: return 'f64'
+        case idl.IDLNumberType: return 'number'
+        case idl.IDLPointerType: return 'pointer'
+        case idl.IDLSerializerBuffer: return 'buffer'
+        case idl.IDLStringType: return 'string'
+        case idl.IDLU8Type: return 'u8'
+        case idl.IDLU32Type: return 'u32'
+        case idl.IDLU64Type: return 'u64'
         default: throw new Error(`Can not convert "${idl.DebugUtils.debugPrintType(type)}"`)
     }
 }
+function selectWriteName(type:idl.IDLPrimitiveType): string {
+    return "write" + selectPrimitiveTypeName(type)
+}
 function selectReadName(type:idl.IDLPrimitiveType): string {
-    switch (type) {
-        case idl.IDLBooleanType: return 'readBoolean'
-        case idl.IDLBufferType: return 'readBuffer'
-        case idl.IDLI32Type: return 'readInt32'
-        case idl.IDLNumberType: return 'readNumber'
-        case idl.IDLStringType: return 'readString'
-        default: throw new Error(`Can not convert "${idl.DebugUtils.debugPrintType(type)}"`)
-    }
+    return "read" + selectPrimitiveTypeName(type)
 }
 
 export class ArgConvertor {
@@ -60,7 +65,7 @@ export class ArgConvertor {
         if (idl.isContainerType(type)) {
             if (idl.IDLContainerUtils.isSequence(type)) {
                 return S.block([
-                    S.declaration('ii', Ts.prim.int, true, E.c(0)),
+                    S.declaration('ii', Ts.prim.i32, true, E.c(0)),
                     S.loop(E.bin(Op.lt, E.v('ii'), E.get(accessor, 'length')), S.block([
                         this.write(E.call(E.get(accessor, 'get'), [E.v('ii')]), type.elementType[0]),
                         S.e(E.bin('=', E.v('ii'), E.bin(Op.add, E.v('ii'), E.c(1))))

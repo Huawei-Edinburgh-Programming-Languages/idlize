@@ -29,6 +29,7 @@ import {
     IDLEntry,
     LayoutNodeRole,
     IDLPointerType,
+    isMethod,
 } from "@idlizer/core";
 import {
     writeIntegratedFile,
@@ -49,11 +50,34 @@ import {
     createGeneratedNativeModulePrinter,
     printArkTSTypeChecker,
     createInterfacePrinter,
-} from '@idlizer/libohos';
+    createSpecialProducer,
+    T,
+} from '@idlizer/libohos'
+import {
+    printFiles as printFiles,
+    installFiles,
+    MakeSelector,
+    producers,
+    GeneratorContext,
+    LWDeclaration,
+    lw,
+    moduleLike,
+    OutputFile,
+    processNPrintArkTS,
+    lowLevelLike,
+    processNPrintCXX,
+    isManaged,
+    isCApi,
+    isNative,
+    dumpToString,
+    MANAGED_PREFIX,
+    roles,
+} from '@idlizer/libohos'
 import { OhosInstall } from "./OhosInstall"
 import { generateNativeOhos, suggestLibraryName } from './OhosNativeVisitor';
 import { ohosLayout } from './OhosLayout';
 import { printDataClasses } from './OhosDataClassVisitor';
+import { EOL } from 'node:os';
 
 export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: PeerGeneratorConfiguration) {
     const origGenConfig = generatorConfiguration()
@@ -73,13 +97,12 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
             return data
         return []
     }
-    const installed = install(
-        ohos.managedDir(),
+    const printedFiles = printFiles(
         peerLibrary,
         [
             createCallbackKindPrinter(peerLibrary.language),
             createMaterializedPrinter(false),
-            createInterfacePrinter(false, false),
+            // createInterfacePrinter(false, false),
             printGlobal,
             printDataClasses,
             createSerializerPrinter(peerLibrary.language, ""),
@@ -88,6 +111,8 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
             ...spreadIfLang([Language.ARKTS], printArkTSTypeChecker),
         ]
     )
+    const ostFiles = printOstFiles(peerLibrary)
+    const installed = installFiles(ohos.managedDir(), mergeOutputFiles(printedFiles, ostFiles))
 
     // managed-index
 
@@ -118,4 +143,124 @@ function makeOhosModule(root:string, componentsFiles: string[]): string {
         const fileNameNoExt = relativePath.replaceAll(path.extname(file), "")
         return `export * from "./${fileNameNoExt}"`
     }).sort().join("\n")
+}
+
+function mergeOutputFiles(printedFiles: Map<string, OutputFile>, ostFiles: Map<string, OutputFile>): Map<string, OutputFile> {
+    for (const [key, value] of printedFiles) {
+        const ostValue = ostFiles.get(key) // ignore unknown files
+        if (ostValue) {
+            console.log("merging", key)
+            value.imports.merge(ostValue.imports)
+            value.content = value.content.concat(ostValue.content)
+        }
+    }
+    return printedFiles
+}
+
+function printOstFiles(peerLibrary: PeerLibrary): Map<string, OutputFile> {
+    const declarations = generateOstDeclarations(peerLibrary)
+    const SPECIAL_PACKAGES = [
+        [MANAGED_PREFIX, 'engine'].join('.')
+      ]
+    const knownPackages = peerLibrary.files.map(file => [MANAGED_PREFIX].concat(file.packageClause).join('.'))
+    return printOstDeclarations(declarations, new Set(knownPackages.concat(SPECIAL_PACKAGES)))
+}
+
+function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
+    const selector = new MakeSelector()
+
+    selector.register(producers.native.serializerProducer)
+    selector.register(producers.managed.serializerProducer)
+
+    // selector.register(producers.native.structureProducer)
+    // selector.register(producers.native.bridgeProducer)
+
+    selector.register(producers.managed.fileProducer)
+    selector.register(producers.managed.referenceProducer)
+    selector.register(producers.managed.structureProducer)
+    selector.register(producers.managed.primitiveProducer)
+    selector.register(producers.managed.containerProducer)
+    selector.register(producers.managed.nativeModuleProducer)
+
+    /// fallback producers
+    selector.register(createSpecialProducer(
+        { is: isMethod, role: roles.managed },
+        (method, ctx) => {
+          return { artifact: { reference: T.cc("MANAGED_METHOD_FALLBACK") } }
+        }))
+    selector.register(createSpecialProducer(
+        { is: isMethod, role: roles.native },
+        (method, ctx) => {
+          return { artifact: { reference: T.cc("NATIVE_METHOD_FALLBACK") } }
+        }))
+
+    const ctx = new GeneratorContext(peerLibrary.files, selector)
+    return ctx.generate(peerLibrary.files)
+}
+
+
+function printOstDeclarations(decls: lw.LWDeclaration[], packages: Set<string>): Map<string, OutputFile> {
+    const selectors = [ isManaged, isCApi, isNative ]
+    const buckets = selectors.map(predicate => [predicate, [] as lw.LWDeclaration[]] as const)
+
+    decls.forEach(decl => {
+        for (const [predicate, bucket] of buckets) {
+            if (predicate(decl.name)) {
+                bucket.push(decl)
+                return
+            }
+        }
+        console.error(dumpToString(decl))
+        throw new Error("Can not process generated code!")
+    })
+    const [ managed, cApi, native ] = buckets.map(e => e[1])
+
+    const tsFiles = dumpTsLike(managed, packages)
+    const cFiles = dumpCLike(cApi)
+    const nativeFiles = dumpAsIs(native)
+    return tsFiles /// ...cFiles, ...nativeFiles])
+}
+
+function mapOstFileName(name: string): string | undefined {
+    return name
+        .replace(/^managed\./, '')
+        .replace(/^native\./, '')
+        // .replace(/^engine/, generatorConfiguration().moduleName + ".INTERNAL")
+}
+
+function dumpTsLike(decls: lw.LWDeclaration[], packages: Set<string>): Map<string, OutputFile> {
+    decls = moduleLike.postprocess(decls)
+    const files = moduleLike.formFiles(packages, decls)
+    const result: Map<string, OutputFile> = new Map()
+    files.forEach((content, name) => {
+        const mappedName = mapOstFileName(name)
+        if (!mappedName)
+            return
+        const imports = new ImportsCollector()
+        content.moduleLikeImports.forEach((vals, source) =>
+            imports.addFeatures(Array.from(vals), `./${source}`))
+        const printed = content.body.map(processNPrintArkTS)///langs
+        result.set(mappedName, {
+            imports,
+            content: printed,
+            extension: ".ets",
+            exported: false,
+        })
+    })
+    return result
+}
+
+function dumpCLike(decls: lw.LWDeclaration[]) {
+    decls = lowLevelLike.postprocess(decls)
+    console.log("===================== C-API =====================")
+    decls.forEach(decl => {
+        console.log(processNPrintCXX(decl))
+    })
+}
+
+function dumpAsIs(decls: lw.LWDeclaration[]) {
+    console.log("==================== NATIVE ====================")
+    decls.forEach(decl => {
+        console.log(processNPrintCXX(decl))
+    })
 }

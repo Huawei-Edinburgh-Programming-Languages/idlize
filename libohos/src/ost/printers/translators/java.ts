@@ -30,7 +30,7 @@ const varMapping = new Map([
 export class ConvertJavaTypes extends IdentityTransformer {
   goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
-      case std.names.types.int: return T.cc('int')
+      case std.names.types.i32: return T.cc('int')
       case std.names.types.string: return T.cc('String')
       case std.names.types.void: return T.cc('void')
     }
