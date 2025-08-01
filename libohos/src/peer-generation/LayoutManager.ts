@@ -61,10 +61,10 @@ export function install(
         isDeclared?: boolean,
     }): string[]
 {
-    return installFiles(outDir, formFiles(library, printers, options))
+    return installFiles(outDir, printFiles(library, printers, options))
 }
 
-export function formFiles(
+export function printFiles(
     library: PeerLibrary,
     printers: Printer[],
     options?: {

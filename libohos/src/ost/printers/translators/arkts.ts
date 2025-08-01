@@ -30,8 +30,19 @@ const varMapping = new Map([
 export class ConvertArkTSTypes extends IdentityTransformer {
   goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
-      case std.names.types.int: return T.cc('double')
+      case std.names.types.boolean: return T.cc('boolean')
+      case std.names.types.buffer: return T.cc('NativeBuffer')
+      case std.names.types.f32: return T.cc('float')
+      case std.names.types.f64: return T.cc('double')
+      case std.names.types.i8: return T.cc('byte')
+      case std.names.types.i32: return T.cc('int')
+      case std.names.types.i64: return T.cc('long')
+      case std.names.types.object: return T.cc('object')
+      case std.names.types.number: return T.cc('number')
       case std.names.types.string: return T.cc('string')
+      case std.names.types.u8: return T.cc('byte')
+      case std.names.types.u32: return T.cc('int')
+      case std.names.types.u64: return T.cc('long')
       case std.names.types.void: return T.cc('void')
     }
     return type
@@ -251,7 +262,7 @@ export class ArkTSPrinter {
 
   private printField(name: string, type: lw.LWType) {
     this.p.put(name)
-    this.p.put(':')
+    this.p.put(':', ' ')
     this.printType(type)
   }
   private printGeneric(generic: lw.GenericDescriptor) {
@@ -367,12 +378,12 @@ export class ArkTSPrinter {
             this.p.put(',', ' ')
           }
           this.p.put(param.name)
-          this.p.put(':')
+          this.p.put(':', ' ')
           this.printType(param.type)
         })
         this.p.put(')')
         if (!isCtor) {
-          this.p.put(':')
+          this.p.put(':', ' ')
           this.printType(declaration.returnType)
         }
         this.p.put(' ')
