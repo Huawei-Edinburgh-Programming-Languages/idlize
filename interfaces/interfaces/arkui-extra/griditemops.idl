@@ -1,0 +1,8 @@
+package api.internal.component.ets;
+
+callback GridItemSelectedCallback = void (boolean selected);
+
+[Entity=Class]
+interface GridItemOps {
+    static pointer registerSelectedCallback(pointer node, boolean value, GridItemSelectedCallback callback);
+};

@@ -1,0 +1,23 @@
+package api.internal.component.ets;
+
+import arkui.component.common;
+
+callback ShowCallback = void (boolean value);
+[Entity=Class]
+interface BindSheetOps {
+    static void registerSheetShowCallback(pointer node, boolean value, ShowCallback callback, CustomBuilder builder, SheetOptions options);
+    static void registerContentCoverShowCallback(pointer node, boolean value, ShowCallback callback, ContentCoverOptions options);
+};
+
+interface commonMethodOps {
+    static void VisualEffectHandWrittenImpl(pointer node, i64 value);
+    static void BackgroundFilterHandWrittenImpl(pointer node, i64 value);
+    static void ForegroundFilterHandWrittenImpl(pointer node, i64 value);
+    static void CompositingFilterHandWrittenImpl(pointer node, i64 value);
+    static void AdvancedBlendModeObjectImpl(pointer node, i64 effect, optional BlendApplyType type);
+    static void AdvancedBlendModeEnumImpl(pointer node, optional BlendMode effect, optional BlendApplyType type);
+
+    static void ClipShapeHandWrittenImpl(pointer node, i64 value);
+    static void MaskShapeHandWrittenImpl(pointer node, i64 value);
+    static void TransformHandWrittenImpl(pointer node, i64 value);
+};

@@ -26,6 +26,32 @@ interface SystemOps {
     static sequence<number> colorMetricsResourceColor(Resource color);
 };
 
+callback GestureEventHandler = void (GestureEvent event);
+callback CancelEventHandler = void ();
+[Entity=Class]
+interface GestureOps {
+    static pointer createTapGesture(number fingers, number count, number distanceThreshold, boolean isFingerCountLimited);
+    static pointer createLongPressGesture(number fingers, boolean repeat, number duration, boolean isFingerCountLimited);
+    static pointer createPanGesture(number fingers, PanDirection direction, number distance, boolean isFingerCountLimited);
+    static pointer createPanGestureWithPanGestureOptions(pointer panGestureOptions);
+    static pointer createPinchGesture(number fingers, number distance, boolean isFingerCountLimited);
+    static pointer createRotationGesture(number fingers, number angle, boolean isFingerCountLimited);
+    static pointer createSwipeGesture(number fingers, SwipeDirection direction, number speed, boolean isFingerCountLimited);
+    static pointer createGestureGroup(GestureMode mode);
+    static void setOnAction(pointer gesture, GestureEventHandler onAction);
+    static void setOnActionStart(pointer gesture, GestureEventHandler onActionStart);
+    static void setOnActionUpdate(pointer gesture, GestureEventHandler onActionUpdate);
+    static void setOnActionEnd(pointer gesture, GestureEventHandler onActionEnd);
+    static void setOnActionCancel(pointer gesture, GestureEventHandler onActionCancel);
+    static void setOnCancel(pointer gesture, CancelEventHandler onCancel);
+    static void setGestureTag(pointer gesture, String tag);
+    static void setAllowedTypes(pointer gesture, sequence<SourceTool> types);
+    static void addGestureToNode(pointer node, number priority, GestureMask mask, pointer gesture, boolean isModifier);
+    static void addGestureToGroup(pointer group, pointer gesture);
+    static void removeGestureByTag(pointer node, String tag);
+    static void clearGestures(pointer node);
+};
+
 [Entity=Class]
 interface FocusController {
     static void requestFocus(String key);
@@ -170,6 +196,32 @@ interface StateStylesOps {
 [Entity=Class]
 interface UIContextAtomicServiceBar {
     static Frame getBarRect();
+};
+
+[Entity=Class]
+interface NodeContainerOps {
+    static void addNodeContainerRootNode(pointer self, pointer child);
+    static void setAboutToAppear(pointer self, Callback_Void value);
+    static void setAboutToDisappear(pointer self, Callback_Void value);
+    static void setAboutToResize(pointer self, Callback_Size_Void value);
+    static void setOnAttach(pointer self, Callback_Void value);
+    static void setOnDetach(pointer self, Callback_Void value);
+    static void setOnTouchEvent(pointer self, optional Callback_TouchEvent_Void value);
+};
+callback Callback_Size_Void = void (Size size);
+
+callback Callback_onDragStart = void (pointer node, DragEvent dragEvent, optional String extraParam);
+
+[Entity=Class]
+interface DragDropOps {
+    static void registerOnDragStart(pointer node, Callback_onDragStart onDragStart);
+    static void registerDragPreview(pointer node, (CustomBuilder or DragItemInfo or String or undefined) preview, optional PreviewConfiguration config);
+    static void registerOnDrop(pointer node, (OnDragEventCallback or undefined) eventCallback, optional DropOptions dropOptions);
+};
+
+[Entity=Class]
+interface OverlayOps {
+    static void setOverlayAttribute(pointer node, (String or CustomBuilder or undefined) value, optional OverlayOptions options);
 };
 
 [Entity=Class]

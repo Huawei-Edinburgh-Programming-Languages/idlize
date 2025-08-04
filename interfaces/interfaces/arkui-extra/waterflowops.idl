@@ -1,0 +1,6 @@
+package api.internal.component.ets;
+
+[Entity=Class]
+interface WaterFlowOps  {
+    static pointer registerWaterFlowOps(pointer node, (WaterFlowOptions or undefined) options);
+};

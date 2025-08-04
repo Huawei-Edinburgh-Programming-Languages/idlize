@@ -1,0 +1,8 @@
+package api.internal.component.ets;
+
+callback RefreshingCallback = void (boolean refreshing);
+
+[Entity=Class]
+interface RefreshOps  {
+    static pointer registerRefreshingCallback(pointer node, boolean value, RefreshingCallback callback);
+};
