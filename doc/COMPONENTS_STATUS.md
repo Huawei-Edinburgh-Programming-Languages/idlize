@@ -2209,11 +2209,11 @@
 |`rect`| Function | Vadim Voronov | testskipped |  |  |
 |*Path2D*| *Class* | Vadim Voronov | testskipped |  | |
 |`construct0`| Function | Vadim Voronov | testskipped |  | |
-|`construct1`| Function | Vadim Voronov | in progress |
-|`construct2`| Function | Vadim Voronov| in progress |
-|`construct3`| Function | Vadim Voronov| in progress |
-|`construct4`| Function | Vadim Voronov | in progress |
-|`construct5`| Function | Vadim Voronov | in progress |
+|`construct1`| Function | Vadim Voronov | done |
+|`construct2`| Function | Vadim Voronov| done |
+|`construct3`| Function | Vadim Voronov| done |
+|`construct4`| Function | Vadim Voronov | done |
+|`construct5`| Function | Vadim Voronov | done |
 |`addPath`| Function | Vadim Voronov | testskipped |  | |
 |*CanvasPattern*| *Class* | Vadim Voronov | done |  |  |
 |`construct`| Function |Vadim Voronov | done |  |  |
