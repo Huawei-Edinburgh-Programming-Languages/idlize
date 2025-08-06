@@ -200,6 +200,7 @@ export class ArkTSComponentsLayout extends ArkTsLayout {
 
 export class CJLayout extends CommonLayoutBase {
     protected CJInternalPaths = new Map<string, string>([
+        ["TypeChecker", "#components"],
         ["Serializer", "Serializer"],
         ["Deserializer", "Deserializer"],
         ["CallbackKind", "CallbackKind"],
@@ -207,32 +208,55 @@ export class CJLayout extends CommonLayoutBase {
         ["checkArkoalaCallbacks", "./CallbacksChecker"],
         ["CallbackTransformer", "./CallbackTransformer"],
     ])
-    resolve(target: idl.LayoutTargetDescription): string {
-        if (this.CJInternalPaths.has(target.node.name))
-            return this.CJInternalPaths.get(target.node.name)!
-        if (idl.isHandwritten(target.node) || peerGeneratorConfiguration().isHandWritten(target.node.name)) {
-            return HandwrittenModule(this.library.language)
+    private getPath(file:string, subdir?: string):string {
+        if (subdir) {
+            return path.join(subdir, file)
         }
-        if (idl.isSyntheticEntry(target.node)) {
-            return SyntheticModule
-        }
-        if (idl.isTypedef(target.node)) {
-            return SyntheticModule
-        }
-        if (idl.isInterface(target.node) && !isComponentDeclaration(this.library, target.node)) {
-            if (idl.isBuilderClass(target.node)) {
-                return `${this.prefix}${toFileName(target.node.name)}Builder`
+        return path.join('.', file)
+    }
+    
+    resolve({ node, role }: idl.LayoutTargetDescription): string {
+        switch (role) {
+            case LayoutNodeRole.SERIALIZER:
+            case LayoutNodeRole.INTERFACE: {
+                if (idl.isEntry(node)) {
+                    const ns = idl.getNamespaceName(node)
+                    if (ns !== '') {
+                        return this.getPath(`${this.prefix}${ns.split('.').map(it => idl.capitalize(it)).join('')}Namespace`, 'interface')
+                    }
+                }
+                if (idl.isInterface(node)) {
+                    if (isComponentDeclaration(this.library, node)) {
+                        return this.getPath(`${this.prefix}${toFileName(node.name)}`, 'component')
+                    }
+                    if (idl.isBuilderClass(node)) {
+                        return this.getPath(`${this.prefix}${toFileName(node.name)}Builder`, 'component')
+                    }
+                    if (idl.isMaterialized(node, this.library)) {
+                        if (idl.isInterfaceSubkind(node)) {
+                            return this.getPath(toFileName(node.name) + 'Internal', 'interface')
+                        }
+                        return this.getPath(toFileName(node.name), 'interface')
+                    }
+                    return this.getPath(`${this.prefix}${toFileName(node.name)}Interfaces`, 'interface')
+                }
+                return this.getPath(`Common`, 'core')
+            }
+            case LayoutNodeRole.PEER: {
+                if (idl.isInterface(node)) {
+                    if (isComponentDeclaration(this.library, node)) {
+                        return this.getPath(`${this.prefix}${toFileName(node.name)}Peer`, 'peer')
+                    }
+                }
+                return this.getPath(`CommonPeer`, 'peer')
+            }
+            case LayoutNodeRole.GLOBAL: {
+                return this.getPath('GlobalScope', 'core')
+            }
+            case LayoutNodeRole.COMPONENT: {
+                return this.getPath('Ark' + node.name, 'component')
             }
         }
-        let pureFileName = idl.getFileFor(target.node)?.fileName
-            ?.replaceAll('.d.ts', '')
-            ?.replaceAll('.idl', '')
-            ?.replaceAll('@', '')
-        if (pureFileName) {
-            pureFileName = path.basename(pureFileName)
-        }
-        const entryName = pureFileName ?? target.node.name
-        return entryName
     }
 }
 
