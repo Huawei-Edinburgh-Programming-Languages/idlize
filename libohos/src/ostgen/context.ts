@@ -224,6 +224,9 @@ export class GeneratorContext {
             if (idl.isContainerType(node)) {
                 return '#' + node.containerKind + '#' + node.elementType.map(t => this.getUseKey({ node: t })).join('::')
             }
+            if (idl.isUnionType(node)) {
+                return node.types.map(it => '|' + this.getUseKey({ node: it })).join('')
+            }
             throw new Error(`Can not process "${idl.DebugUtils.debugPrintType(node)}"`)
         }
         throw new Error("???")
