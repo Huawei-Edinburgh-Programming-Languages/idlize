@@ -199,15 +199,12 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
     selector.register(producers.managed.referenceProducer)
     selector.register(producers.managed.structureProducer)
     selector.register(producers.managed.primitiveProducer)
+    selector.register(producers.managed.enumProducer)
+    selector.register(producers.managed.unionProducer)
     selector.register(producers.managed.containerProducer)
     selector.register(producers.managed.nativeModuleProducer)
 
     /// fallback producers
-    selector.register(createSpecialProducer(
-        { is: isEnum, role: roles.managed },
-        (node, ctx) => {
-          return { artifact: { reference: T.cc("MANAGED_ENUM_FALLBACK") } }
-        }))
     selector.register(createSpecialProducer(
         { is: isMethod, role: roles.managed },
         (method, ctx) => {
@@ -217,11 +214,6 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
         { is: isMethod, role: roles.native },
         (method, ctx) => {
           return { artifact: { reference: T.cc("NATIVE_METHOD_FALLBACK") } }
-        }))
-    selector.register(createSpecialProducer(
-        { is: isUnionType, role: roles.managed },
-        (type, ctx) => {
-            return { artifact: { reference: T.cc("MANAGED_UNION_FALLBACK") } }
         }))
 
     const ctx = new GeneratorContext(peerLibrary.files, selector)

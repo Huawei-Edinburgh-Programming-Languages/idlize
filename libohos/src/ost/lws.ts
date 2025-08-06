@@ -15,6 +15,7 @@
 
 export enum LWKind {
   UnionDeclaration,
+  EnumDeclaration,
   StructureDeclaration,
   ClassDeclaration,
   NamespaceDeclaration,
@@ -76,9 +77,16 @@ export interface UnionDeclaration {
   generics: GenericDescriptor[]
   modifiers: Modifier[]
   name: string
-  variants: {
+  variants: LWType[]
+}
+export interface EnumDeclaration {
+  kind: LWKind.EnumDeclaration
+  generics: GenericDescriptor[]
+  modifiers: Modifier[]
+  name: string
+  members: {
     name: string
-    type: LWType
+    value?: number | string
   }[]
 }
 export interface StructureDeclaration {
@@ -89,6 +97,7 @@ export interface StructureDeclaration {
   members: {
     name: string
     type: LWType
+    modifiers?: Modifier[]
   }[]
 }
 export interface ClassDeclaration {
@@ -99,6 +108,7 @@ export interface ClassDeclaration {
   fields: {
     name: string
     type: LWType
+    modifiers?: Modifier[]
   }[]
   methods: FunctionDeclaration[]
 
@@ -134,6 +144,7 @@ export interface FunctionDeclaration {
 }
 export type LWDeclaration =
     UnionDeclaration
+  | EnumDeclaration
   | StructureDeclaration
   | ClassDeclaration
   | NamespaceDeclaration
