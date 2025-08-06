@@ -14,19 +14,23 @@
  */
 
 import { containerProducer } from "./containers";
+import { enumProducer } from "./enum";
 import { fileProducer } from "./file";
 import { nativeModuleProducer } from "./nativeModule";
 import { primitiveProducer } from "./primitives";
 import { referenceProducer } from "./references";
 import { serializerProducer } from "./serializer";
 import { structureProducer } from "./structure";
+import { unionProducer } from "./union";
 
 export const producers = {
     fileProducer,
+    enumProducer,
     structureProducer,
     primitiveProducer,
     referenceProducer,
     containerProducer,
+    unionProducer,
     nativeModuleProducer,
     serializerProducer,
 }

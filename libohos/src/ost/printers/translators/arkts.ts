@@ -15,7 +15,7 @@
 
 import { IndentPrinter } from "../indent";
 import * as lw from "../../lws"
-import { std } from "../../stdlib";
+import { Md, std } from "../../stdlib";
 import { IdentityTransformer } from "../../visitors/identity";
 import { T, utils } from "../../builder";
 
@@ -44,6 +44,14 @@ export class ConvertArkTSTypes extends IdentityTransformer {
       case std.names.types.u32: return T.cc('int')
       case std.names.types.u64: return T.cc('long')
       case std.names.types.void: return T.cc('void')
+    }
+    return type
+  }
+  goAppType(type: lw.AppType): lw.LWType {
+    type = super.goAppType(type) as lw.AppType
+    switch (type.head) {
+      case 'idlize.Array': return T.c('Array', ...type.args)
+      case 'idlize.Map': return T.c('Map', ...type.args)
     }
     return type
   }
@@ -260,8 +268,12 @@ export class ArkTSPrinter {
     }
   }
 
-  private printField(name: string, type: lw.LWType) {
+  private printField(name: string, type: lw.LWType, modifiers?: lw.Modifier[]) {
+    if (modifiers?.includes(Md.static))
+      this.p.put('static', ' ')
     this.p.put(name)
+    if (modifiers?.includes(Md.optional))
+      this.p.put('?')
     this.p.put(':', ' ')
     this.printType(type)
   }
@@ -283,6 +295,30 @@ export class ArkTSPrinter {
   printDeclaration(declaration: lw.LWDeclaration) {
     switch (declaration.kind) {
       case lw.LWKind.UnionDeclaration: {
+        this.p.put('export', ' ', 'type', ' ', declaration.name, ' ', '=', ' ')
+        declaration.variants.forEach((variant, i) => {
+          if (i > 0)
+            this.p.put(' | ')
+          this.printType(variant)
+        })
+        break
+      }
+      case lw.LWKind.EnumDeclaration: {
+        this.p.put('export', ' ', 'enum', ' ', declaration.name, ' ', '{')
+        this.p.inc().newline()
+        declaration.members.forEach((member, i) => {
+          if (i > 0) {
+            this.p.put(',')
+            this.p.newline()
+          }
+          this.p.put(member.name)
+          if (member.value !== undefined) {
+            const val = typeof member.value === 'number' ? member.value.toString() : `"${member.value}"`
+            this.p.put(' ', '=', ' ', val)
+          }
+        })
+        this.p.dec().newline()
+        this.p.put('}')
         break
       }
       case lw.LWKind.StructureDeclaration: {
@@ -292,7 +328,7 @@ export class ArkTSPrinter {
           if (i > 0) {
             this.p.newline()
           }
-          this.printField(member.name, member.type)
+          this.printField(member.name, member.type, member.modifiers)
         })
         this.p.dec().newline()
         this.p.put('}')
@@ -325,7 +361,7 @@ export class ArkTSPrinter {
         this.p.inc()
         declaration.fields.forEach((field, i) => {
           this.p.newline()
-          this.printField(field.name, field.type)
+          this.printField(field.name, field.type, field.modifiers)
         })
         declaration.methods.forEach((method, i) => {
           this.p.newline()

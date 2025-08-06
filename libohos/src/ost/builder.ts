@@ -137,6 +137,13 @@ export const DD = ({ generics = [], modifiers = [] }: DDOptions) => ({
     name,
     variants,
   }),
+  enum: (name: string, members: lw.EnumDeclaration['members']): lw.EnumDeclaration => ({
+    kind: lw.LWKind.EnumDeclaration,
+    generics,
+    modifiers,
+    name,
+    members,
+  }),
   struct: (name: string, members: lw.StructureDeclaration['members']): lw.StructureDeclaration => ({
     kind: lw.LWKind.StructureDeclaration,
     generics,

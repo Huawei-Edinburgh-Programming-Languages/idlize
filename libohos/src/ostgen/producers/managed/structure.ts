@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { D, T } from "../../../ost/main";
+import { D, Md, T } from "../../../ost/main";
 import * as idl from "@idlizer/core/idl"
 import { makePeerMethod } from "../components/peerMethod";
 import { createSpecialProducer, managedName, roles } from "../common";
@@ -23,29 +23,27 @@ export const structureProducer = createSpecialProducer(
   { is: idl.isInterface, role: roles.managed },
   (node, ctx) => {
     const generatedDeclName = managedName(idl.getFQName(node))
+    const fields = () => node.properties.map(prop => {
+      const modifiers = [
+        ...prop.isOptional ? [Md.optional] : [],
+        ...prop.isStatic ? [Md.static] : [],
+      ]
+      return {
+        name: prop.name,
+        type: ctx.useManaged(prop.type).reference(),
+        modifiers,
+      }
+    })
     const implementationGenerator = isMaterialized(node, ctx.base.resolver.R)
       ? undefined
-      : () => {
-        if (node.methods.length > 0) {
-          return D.class(generatedDeclName,
-            node.properties.map(prop => {
-              return {
-                name: prop.name,
-                type: ctx.useManaged(prop.type).reference()
-              }
-            }),
+      : () =>
+        node.methods.length > 0
+          ? D.class(generatedDeclName,
+            fields(),
             node.methods.map(method => {
               return makePeerMethod(method, ctx)
-            })
-          )
-        }
-        return D.struct(generatedDeclName, node.properties.map(prop => {
-          return {
-            name: prop.name,
-            type: ctx.useManaged(prop.type).reference()
-          }
-        }))
-      }
+            }))
+          : D.struct(generatedDeclName, fields())
     return {
       artifact: {
         reference: T.cc(generatedDeclName),

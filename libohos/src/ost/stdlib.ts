@@ -26,6 +26,7 @@ const knownAnnotations = {
 }
 
 const knownModifiers = {
+    optional: 'optional',
     static: 'static',
 }
 
@@ -89,7 +90,8 @@ export const An = {
 }
 
 export const Md = {
-    static: (): Modifier => ({ kind: DecoratorKind.Modifier, name: knownModifiers.static })
+    optional: { kind: DecoratorKind.Modifier, name: knownModifiers.optional } as Modifier,
+    static: { kind: DecoratorKind.Modifier, name: knownModifiers.static } as Modifier,
 }
 
 export const Vs = {

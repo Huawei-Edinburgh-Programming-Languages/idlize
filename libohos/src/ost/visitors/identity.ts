@@ -28,10 +28,19 @@ export class IdentityTransformer {
       generics: decl.generics,
       modifiers: decl.modifiers,
       name: decl.name,
-      variants: decl.variants.map(v => ({
-        name: v.name,
-        type: this.goType(v.type)
-      }))
+      variants: decl.variants.map(v => this.goType(v))
+    }
+  }
+  goEnumDeclaration(decl: lw.EnumDeclaration): lw.EnumDeclaration {
+    return {
+      kind: decl.kind,
+      generics: decl.generics,
+      modifiers: decl.modifiers,
+      name: decl.name,
+      members: decl.members.map(m => ({
+        name: m.name,
+        value: m.value
+      })),
     }
   }
   goStructureDeclaration(decl:lw.StructureDeclaration): lw.StructureDeclaration {
@@ -42,7 +51,8 @@ export class IdentityTransformer {
       name: decl.name,
       members: decl.members.map(m => ({
         name: m.name,
-        type: this.goType(m.type)
+        type: this.goType(m.type),
+        modifiers: m.modifiers
       })),
     }
   }
@@ -54,7 +64,8 @@ export class IdentityTransformer {
       name: decl.name,
       fields: decl.fields.map(f => ({
         name: f.name,
-        type: this.goType(f.type)
+        type: this.goType(f.type),
+        modifiers: f.modifiers
       })),
       methods: decl.methods.map(m => this.goFunctionDeclaration(m)),
       oop: over(decl.oop, oop => ({
@@ -97,6 +108,7 @@ export class IdentityTransformer {
   goDeclaration(decl:lw.LWDeclaration): lw.LWDeclaration {
     switch (decl.kind) {
       case lw.LWKind.UnionDeclaration: return this.goUnionDeclaration(decl)
+      case lw.LWKind.EnumDeclaration: return this.goEnumDeclaration(decl)
       case lw.LWKind.StructureDeclaration: return this.goStructureDeclaration(decl)
       case lw.LWKind.ClassDeclaration: return this.goClassDeclaration(decl)
       case lw.LWKind.NamespaceDeclaration: return this.goNamespaceDeclaration(decl)
