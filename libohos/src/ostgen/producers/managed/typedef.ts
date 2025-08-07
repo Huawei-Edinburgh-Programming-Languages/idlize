@@ -13,21 +13,20 @@
  * limitations under the License.
  */
 
-import { createProducer } from "../../context";
+import { D, T } from "../../../ost/main";
 import * as idl from "@idlizer/core/idl"
+import { createSpecialProducer, managedName, roles } from "../common";
 
-export const referenceProducer = createProducer(
-    { is: idl.isReferenceType },
-    (ref, ctx, query) => {
-        const found = ctx.resolver.toDeclaration(ref)
-        if (!found) {
-            throw new Error("Unresolved reference " + ref.name)
-        }
-        return {
-            redirectTo: {
-                node: found,
-                role: query.role
-            }
-        }
+export const typedefProducer = createSpecialProducer(
+  { is: idl.isTypedef, role: roles.managed },
+  (typedef, ctx) => {
+    const generatedDeclName = managedName(idl.getFQName(typedef))
+    return {
+      artifact: {
+        reference: T.cc(generatedDeclName),
+        implementationGenerator: () =>
+          D.type(generatedDeclName, ctx.useManaged(typedef.type).reference())
+      }
     }
+  }
 )

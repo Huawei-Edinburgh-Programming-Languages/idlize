@@ -19,6 +19,8 @@ import * as idl from "@idlizer/core/idl";
 
 function selectType(type:idl.IDLPrimitiveType): lw.LWType {
     switch (type) {
+        case idl.IDLAnyType: return Ts.prim.object///
+        case idl.IDLBigintType: return Ts.prim.bigint
         case idl.IDLBooleanType: return Ts.prim.boolean
         case idl.IDLBufferType: return Ts.prim.buffer
         case idl.IDLF32Type: return Ts.prim.f32

@@ -53,6 +53,7 @@ const specialTypeNames = {
 
     auto: '@LW.AUTO',
 
+    bigint: '@LW.Bigint',
     boolean: '@LW.Boolean',
     buffer: '@LW.Buffer',
     f32: '@LW.Float32',
@@ -127,6 +128,7 @@ const knownOperations = {
 export const Op = knownOperations
 
 const primitiveTypes = {
+    bigint: T.c(specialTypeNames.bigint),
     boolean: T.c(specialTypeNames.boolean),
     buffer: T.c(specialTypeNames.buffer),
     f32: T.c(specialTypeNames.f32),

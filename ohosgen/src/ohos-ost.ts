@@ -63,6 +63,7 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
     selector.register(producers.managed.unionProducer)
     selector.register(producers.managed.callbackProducer)
     selector.register(producers.managed.containerProducer)
+    selector.register(producers.managed.typedefProducer)
     selector.register(producers.managed.nativeModuleProducer)
 
     /// fallback producers
@@ -75,6 +76,11 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
         { is: idl.isMethod, role: roles.native },
         (method, ctx) => {
           return { artifact: { reference: T.cc("NATIVE_METHOD_FALLBACK") } }
+        }))
+    selector.register(createSpecialProducer(
+        { is: idl.isConstant, role: roles.managed },
+        (constant, ctx) => {
+            return { artifact: { reference: T.cc("MANAGED_CONSTANT_FALLBACK")}}
         }))
 
     const ctx = new GeneratorContext(peerLibrary.files, selector)
