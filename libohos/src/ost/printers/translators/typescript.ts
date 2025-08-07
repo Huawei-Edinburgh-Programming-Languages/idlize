@@ -15,7 +15,7 @@
 
 import { IndentPrinter } from "../indent";
 import * as lw from "../../lws"
-import { std } from "../../stdlib";
+import { Md, std } from "../../stdlib";
 import { IdentityTransformer } from "../../visitors/identity";
 import { T, utils } from "../../builder";
 
@@ -28,22 +28,58 @@ const varMapping = new Map([
 ])
 
 export class ConvertTSTypes extends IdentityTransformer {
-  goConstType(type: lw.ConstType): lw.ConstType {
+  private nameStack: string[]
+
+  constructor(
+    private readonly localPackage: string,
+    private readonly packages: Set<string>
+  ) {
+      super()
+      this.nameStack = [localPackage]
+  }
+
+  override goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
       case std.names.types.boolean: return T.cc('boolean')
       case std.names.types.buffer: return T.cc('ArrayBuffer')
-      case std.names.types.i32:
+      case std.names.types.f32: return T.cc('float')
+      case std.names.types.f64: return T.cc('double')
+      case std.names.types.i8: return T.cc('byte')
+      case std.names.types.i32: return T.cc('int')
+      case std.names.types.i64: return T.cc('long')
+      case std.names.types.object: return T.cc('object')
       case std.names.types.number: return T.cc('number')
       case std.names.types.string: return T.cc('string')
+      case std.names.types.u8: return T.cc('byte')
+      case std.names.types.u32: return T.cc('int')
+      case std.names.types.u64: return T.cc('long')
       case std.names.types.void: return T.cc('void')
+    }
+    // strip local package from type name
+    const localPrefix = this.nameStack.map(it => it + '.').join('')
+    if (type.name.startsWith(localPrefix))
+      return T.cc(type.name.substring(localPrefix.length))
+    return type
+  }
+  override goAppType(type: lw.AppType): lw.LWType {
+    type = super.goAppType(type) as lw.AppType
+    switch (type.head) {
+      case 'idlize.Array': return T.c('Array', ...type.args)
+      case 'idlize.Map': return T.c('Map', ...type.args)
     }
     return type
   }
+  override goNamespaceDeclaration(decl: lw.NamespaceDeclaration): lw.NamespaceDeclaration {
+    this.nameStack.push(decl.name)
+    const ret = super.goNamespaceDeclaration(decl)
+    this.nameStack.pop()
+    return ret
+  }
 }
 
-export class TypeScriptPrinter {
-  private readonly p = new IndentPrinter()
-  private readonly scope: ('global' | 'member')[] = ['global']
+export class TSPrinter {
+  protected readonly p = new IndentPrinter()
+  protected readonly scope: ('global' | 'member')[] = ['global']
 
   printType(type: lw.LWType) {
     switch (type.kind) {
@@ -58,7 +94,7 @@ export class TypeScriptPrinter {
             this.p.put(',', ' ')
           }
           this.p.put(param.name)
-          this.p.put(':')
+          this.p.put(':', ' ')
           this.printType(param.type)
         })
         this.p.put(')', ' ', '=>', ' ')
@@ -130,7 +166,7 @@ export class TypeScriptPrinter {
       }
       case lw.LWKind.CallExpression: {
         this.printExpression(expression.callee)
-        if (expression.typeArgs) {
+        if (expression.typeArgs && expression.typeArgs.length > 0) {
           this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
             if (i > 0) {
@@ -168,7 +204,7 @@ export class TypeScriptPrinter {
           return
         }
         this.p.put('new', ' ', expression.name)
-        if (expression.typeArgs) {
+        if (expression.typeArgs && expression.typeArgs.length > 0) {
           this.p.put('<')
           expression.typeArgs.forEach((type, i) => {
             if (i > 0) {
@@ -252,15 +288,19 @@ export class TypeScriptPrinter {
     }
   }
 
-  private printField(name: string, type: lw.LWType) {
+  private printField(name: string, type: lw.LWType, modifiers?: lw.Modifier[]) {
+    if (modifiers?.includes(Md.static))
+      this.p.put('static', ' ')
     this.p.put(name)
-    this.p.put(':')
+    if (modifiers?.includes(Md.optional))
+      this.p.put('?')
+    this.p.put(':', ' ')
     this.printType(type)
   }
   private printGeneric(generic: lw.GenericDescriptor) {
     this.p.put(generic.name)
   }
-  private maybePrintGenerics(generics: lw.GenericDescriptor[]) {
+  private printGenerics(generics: lw.GenericDescriptor[]) {
     if (generics.length > 0) {
       this.p.put('<')
       generics.forEach((gen, i) => {
@@ -275,6 +315,30 @@ export class TypeScriptPrinter {
   printDeclaration(declaration: lw.LWDeclaration) {
     switch (declaration.kind) {
       case lw.LWKind.UnionDeclaration: {
+        this.p.put('export', ' ', 'type', ' ', declaration.name, ' ', '=', ' ')
+        declaration.variants.forEach((variant, i) => {
+          if (i > 0)
+            this.p.put(' | ')
+          this.printType(variant)
+        })
+        break
+      }
+      case lw.LWKind.EnumDeclaration: {
+        this.p.put('export', ' ', 'enum', ' ', declaration.name, ' ', '{')
+        this.p.inc().newline()
+        declaration.members.forEach((member, i) => {
+          if (i > 0) {
+            this.p.put(',')
+            this.p.newline()
+          }
+          this.p.put(member.name)
+          if (member.value !== undefined) {
+            const val = typeof member.value === 'number' ? member.value.toString() : `"${member.value}"`
+            this.p.put(' ', '=', ' ', val)
+          }
+        })
+        this.p.dec().newline()
+        this.p.put('}')
         break
       }
       case lw.LWKind.StructureDeclaration: {
@@ -284,7 +348,7 @@ export class TypeScriptPrinter {
           if (i > 0) {
             this.p.newline()
           }
-          this.printField(member.name, member.type)
+          this.printField(member.name, member.type, member.modifiers)
         })
         this.p.dec().newline()
         this.p.put('}')
@@ -295,7 +359,7 @@ export class TypeScriptPrinter {
           ? 'interface'
           : 'class'
         this.p.put('export', ' ', specifier, ' ', declaration.name)
-        this.maybePrintGenerics(declaration.generics)
+        this.printGenerics(declaration.generics)
         this.p.put(' ')
         if (declaration.oop !== undefined) {
           if (declaration.oop.base) {
@@ -317,7 +381,7 @@ export class TypeScriptPrinter {
         this.p.inc()
         declaration.fields.forEach((field, i) => {
           this.p.newline()
-          this.printField(field.name, field.type)
+          this.printField(field.name, field.type, field.modifiers)
         })
         declaration.methods.forEach((method, i) => {
           this.p.newline()
@@ -363,19 +427,19 @@ export class TypeScriptPrinter {
         } else {
           this.p.put(declaration.name)
         }
-        this.maybePrintGenerics(declaration.generics)
+        this.printGenerics(declaration.generics)
         this.p.put('(')
         declaration.parameters.forEach((param, i) => {
           if (i > 0) {
             this.p.put(',', ' ')
           }
           this.p.put(param.name)
-          this.p.put(':')
+          this.p.put(':', ' ')
           this.printType(param.type)
         })
         this.p.put(')')
         if (!isCtor) {
-          this.p.put(':')
+          this.p.put(':', ' ')
           this.printType(declaration.returnType)
         }
         this.p.put(' ')
@@ -394,12 +458,10 @@ export class TypeScriptPrinter {
   }
 }
 
-export function processNPrintTS(chunk:lw.LWDeclaration, localPackage: string, packages: Set<string>) {
-  let tree = chunk
+export function processNPrintTS(tree: lw.LWDeclaration, localPackage: string, packages: Set<string>) {
+  tree = new ConvertTSTypes(localPackage, packages).goDeclaration(tree)
 
-  tree = new ConvertTSTypes().goDeclaration(tree)
-
-  const printer = new TypeScriptPrinter()
+  const printer = new TSPrinter()
   printer.printDeclaration(tree)
   return printer.render()
 }
