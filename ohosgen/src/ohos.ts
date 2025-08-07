@@ -116,14 +116,14 @@ function makeOhosModule(root:string, componentsFiles: string[]): string {
     }).sort().join("\n")
 }
 
-function mergeOutputFiles(printedFiles: Map<string, OutputFile>, ostFiles: Map<string, OutputFile>): Map<string, OutputFile> {
-    for (const [key, value] of printedFiles) {
-        const ostValue = ostFiles.get(key) // ignore unknown files
-        if (ostValue) {
+function mergeOutputFiles(files0: Map<string, OutputFile>, files1: Map<string, OutputFile>): Map<string, OutputFile> {
+    for (const [key, value] of files0) {
+        const value1 = files1.get(key) // ignore unknown files
+        if (value1) {
             console.log("merging", key)
-            value.imports.merge(ostValue.imports)
-            value.content = value.content.concat(ostValue.content)
+            value.imports.merge(value1.imports)
+            value.content = value.content.concat(value1.content)
         }
     }
-    return printedFiles
+    return files0
 }

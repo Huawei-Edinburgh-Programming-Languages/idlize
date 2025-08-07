@@ -63,7 +63,7 @@ export class OhosTsLayout implements LayoutManagerStrategy {
             }
             return currentModule().useFoldersLayout
                 ? idl.getPackageClause(node).join("/") || 'synthetic'
-                : "@" + idl.getPackageName(node)
+                : idl.getPackageName(node)
         }
 
         const conf = peerGeneratorConfiguration()

@@ -28,7 +28,17 @@ const varMapping = new Map([
 ])
 
 export class ConvertArkTSTypes extends IdentityTransformer {
-  goConstType(type: lw.ConstType): lw.ConstType {
+  private nameStack: string[]
+
+  constructor(
+    private readonly localPackage: string,
+    private readonly packages: Set<string>
+  ) {
+      super()
+      this.nameStack = [localPackage]
+  }
+
+  override goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
       case std.names.types.boolean: return T.cc('boolean')
       case std.names.types.buffer: return T.cc('NativeBuffer')
@@ -45,15 +55,25 @@ export class ConvertArkTSTypes extends IdentityTransformer {
       case std.names.types.u64: return T.cc('long')
       case std.names.types.void: return T.cc('void')
     }
+    // strip local package from type name
+    const localPrefix = this.nameStack.map(it => it + '.').join('')
+    if (type.name.startsWith(localPrefix))
+      return T.cc(type.name.substring(localPrefix.length))
     return type
   }
-  goAppType(type: lw.AppType): lw.LWType {
+  override goAppType(type: lw.AppType): lw.LWType {
     type = super.goAppType(type) as lw.AppType
     switch (type.head) {
       case 'idlize.Array': return T.c('Array', ...type.args)
       case 'idlize.Map': return T.c('Map', ...type.args)
     }
     return type
+  }
+  override goNamespaceDeclaration(decl: lw.NamespaceDeclaration): lw.NamespaceDeclaration {
+    this.nameStack.push(decl.name)
+    const ret = super.goNamespaceDeclaration(decl)
+    this.nameStack.pop()
+    return ret
   }
 }
 
@@ -74,7 +94,7 @@ export class ArkTSPrinter {
             this.p.put(',', ' ')
           }
           this.p.put(param.name)
-          this.p.put(':')
+          this.p.put(':', ' ')
           this.printType(param.type)
         })
         this.p.put(')', ' ', '=>', ' ')
@@ -438,10 +458,8 @@ export class ArkTSPrinter {
   }
 }
 
-export function processNPrintArkTS(chunk: lw.LWDeclaration) {
-  let tree = chunk
-
-  tree = new ConvertArkTSTypes().goDeclaration(tree)
+export function processNPrintArkTS(tree: lw.LWDeclaration, localPackage: string, packages: Set<string>) {
+  tree = new ConvertArkTSTypes(localPackage, packages).goDeclaration(tree)
 
   const printer = new ArkTSPrinter()
   printer.printDeclaration(tree)
