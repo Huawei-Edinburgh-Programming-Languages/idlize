@@ -13,11 +13,12 @@ class %COMPONENT_ATTRIBUTE_NAME%ContentHolder {
 }
 
 
-@Memo(
-    public func Ark%COMPONENT_NAME%(
-        style: ?((attributes: %COMPONENT_ATTRIBUTE_NAME%Interfaces) -> Unit),
-        content_: ?(() -> Unit)%FUNCTION_PARAMETERS%
+@Memo
+public func Ark%COMPONENT_NAME%(
+    style: ?((attributes: %COMPONENT_ATTRIBUTE_NAME%Interfaces) -> Unit),
+    content_: ?(() -> Unit)%FUNCTION_PARAMETERS%
     ): Unit {
+<<<<<<< HEAD
         let styleHolder = %COMPONENT_ATTRIBUTE_NAME%StyleHolder(style)
         let contentHolder = %COMPONENT_ATTRIBUTE_NAME%ContentHolder(content_)
         let receiver = remember({ =>
@@ -31,6 +32,20 @@ class %COMPONENT_ATTRIBUTE_NAME%ContentHolder {
             if (let Some(content_) <- contentHolder.value) {
                 content_()
             }
+=======
+    let styleHolder = %COMPONENT_ATTRIBUTE_NAME%StyleHolder(style)
+    let contentHolder = %COMPONENT_ATTRIBUTE_NAME%ContentHolder(content_)
+    let receiver = remember({ =>
+        %COMPONENT_CLASS_NAME%()
+    })
+    NodeAttach<%PEER_CLASS_NAME%>({ => %PEER_CLASS_NAME%.create(receiver, 0) }) {
+        %PEER_CALLABLE_INVOKE%
+        if (let Some(style) <- styleHolder.value) {
+            style(receiver)
+        }
+        if (let Some(content) <- contentHolder.value) {
+            content()
+>>>>>>> e77d0b313 (1. Add annotations for useCase interfaces_js_sdk.)
         }
     }
-)
+}
