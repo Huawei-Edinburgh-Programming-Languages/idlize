@@ -14,7 +14,6 @@
  */
 
 import {
-    ArgumentModifier,
     CppLanguageWriter,
     createEmptyReferenceResolver,
     IDLMethod,
@@ -25,7 +24,7 @@ import {
     PrimitiveType,
     PrimitiveTypeList
 } from "@idlizer/core"
-import { createReferenceType, IDLFile, IDLInterface, IDLType, IDLVoidType } from "@idlizer/core/idl"
+import { createReferenceType, IDLContainerUtils, IDLFile, IDLInterface, IDLType, isContainerType } from "@idlizer/core/idl"
 import { BridgesConstructions } from "../../constuctions/BridgesConstructions"
 import { InteropPrinter } from "./InteropPrinter"
 import { isSequence, isString, makeSignature, makeStatement } from "../../utils/idl"
@@ -111,9 +110,9 @@ export class BridgesPrinter extends InteropPrinter {
             signature.argNames!.splice(1, 0, 'receiver')
         }
 
+        // Not necessary, just to keep old names
         const fixArgName = (name: string, prev?: string) =>
             name.endsWith('Len') ? (prev ?? name.slice(0, -3)) + 'SequenceLength' : name === 'ctx' ? 'context' : name
-        // Not necessary, just to keep old names
         signature.argNames = signature.argNames
             ?.map((v, i) => fixArgName(v, i === 0 ? undefined : signature.argNames![i - 1]))
 
@@ -124,13 +123,7 @@ export class BridgesPrinter extends InteropPrinter {
     private printBody(node: IDLMethod, signature: MethodSignature, pandaMethodName: string): void {
         const writer = this.writer
         const argNames = signature.argNames!.map(BridgesConstructions.castedParameter)
-        const statements = signature.args.map((type, index) => this.writer.makeAssign(
-            BridgesConstructions.castedParameter(signature.argName(index)),
-            undefined,
-            writer.makeFunctionCall(
-                this.castTypeConvertor.convertType(type), [writer.makeString(signature.argName(index))]
-            )
-        ))
+        const statements = this.makeCastStatements(signature)
 
         if (isSequence(node.returnType)) {
             argNames.push(BridgesConstructions.sequenceLengthPass)
@@ -157,6 +150,53 @@ export class BridgesPrinter extends InteropPrinter {
                ))
            )
         }
+    }
+
+    private makeStringArrayCast(type: IDLType, srcName: string, lenName: string = 'argc'): LanguageStatement[] {
+        const writer = this.writer
+        const makeExpr = (name: string) => writer.makeString(name)
+        const makeCast = (name: string) => `reinterpret_cast<const char*>(${name} + headerLen)` // XXX: manual cast as const char* needed
+        const unpackCall = (...args: string[]) => writer.makeFunctionCall(`unpackUInt`, args.map(makeExpr))
+        const strdupCall = (...args: string[]) => writer.makeFunctionCall('StageArena::strdup', args.map(makeExpr))
+        const allocCall = (...args: string[]) => writer.makeFunctionCall('StageArena::allocArray<const char*>', args.map(makeExpr))
+
+        const counterName = 'k'
+        const dstName = BridgesConstructions.castedParameter(srcName)
+
+        const block = writer.makeBlock([
+                writer.makeAssign('strLen', undefined, unpackCall(srcName), true, true),
+                writer.makeAssign(`${dstName}[${counterName}]`, undefined, strdupCall(makeCast(srcName), 'strLen'), false),
+                writer.makeStatement(makeExpr(`${srcName} += strLen + headerLen`))
+            ],
+            false
+        )
+
+        return [
+            writer.makeAssign(dstName, undefined, allocCall(lenName), true, false),
+            writer.makeAssign('headerLen', undefined, makeExpr(`sizeof(KUInt)`), true, true),
+            writer.makeLoop(counterName, `static_cast<int>(${lenName})`, block)
+        ]
+    }
+
+    private makeCommonCast(type: IDLType, name: string): LanguageStatement {
+        const writer = this.writer
+        return writer.makeAssign(
+            BridgesConstructions.castedParameter(name),
+            undefined,
+            writer.makeFunctionCall(
+                this.castTypeConvertor.convertType(type), [writer.makeString(name)]
+            )
+        )
+    }
+
+    private makeCastStatements(signature: MethodSignature): LanguageStatement[] {
+        const statements = signature.args.map((type, index) => {
+            if (isContainerType(type) && IDLContainerUtils.isSequence(type) && isString(type.elementType[0])) {
+                return this.makeStringArrayCast(type, signature.argName(index), signature.argNames?.at(index + 1))
+            }
+            return this.makeCommonCast(type, signature.argName(index))
+        })
+        return statements.flat()
     }
 
     private makeReturnExpression(returnType: IDLType): string {
