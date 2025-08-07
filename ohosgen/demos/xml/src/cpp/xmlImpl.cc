@@ -20,10 +20,10 @@
 
 #include "interop-logging.h"
 
-OH_OHOS_XML_xml_XmlSerializerHandle xml_XmlSerializer_constructImpl(const OH_Buffer* buffer, const Opt_String* encoding) {
+OH_OHOS_XML_Xml_XmlSerializerHandle xml_XmlSerializer_constructImpl(const OH_Buffer* buffer, const Opt_String* encoding) {
     return {};
 }
-void xml_XmlSerializer_destructImpl(OH_OHOS_XML_xml_XmlSerializerHandle thiz) {
+void xml_XmlSerializer_destructImpl(OH_OHOS_XML_Xml_XmlSerializerHandle thiz) {
 }
 void xml_XmlSerializer_setAttributesImpl(OH_OHOS_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_String* name, const OH_String* value) {
 }
@@ -47,10 +47,10 @@ void xml_XmlSerializer_setDocTypeImpl(OH_OHOS_XML_VMContext vmContext, OH_Native
 }
 void xml_XmlDynamicSerializer_addEmptyElementImpl(OH_OHOS_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_String* name) {
 }
-OH_OHOS_XML_xml_XmlDynamicSerializerHandle xml_XmlDynamicSerializer_constructImpl(const Opt_String* encoding) {
+OH_OHOS_XML_Xml_XmlDynamicSerializerHandle xml_XmlDynamicSerializer_constructImpl(const Opt_String* encoding) {
     return {};
 }
-void xml_XmlDynamicSerializer_destructImpl(OH_OHOS_XML_xml_XmlDynamicSerializerHandle thisPtr) {
+void xml_XmlDynamicSerializer_destructImpl(OH_OHOS_XML_Xml_XmlDynamicSerializerHandle thisPtr) {
 }
 void xml_XmlDynamicSerializer_endElementImpl(OH_OHOS_XML_VMContext vmContext, OH_NativePointer thisPtr) {
 }
@@ -73,10 +73,10 @@ void xml_XmlDynamicSerializer_setTextImpl(OH_OHOS_XML_VMContext vmContext, OH_Na
 }
 void xml_XmlDynamicSerializer_startElementImpl(OH_OHOS_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_String* name) {
 }
-OH_OHOS_XML_xml_ParseInfoHandle xml_ParseInfo_constructImpl() {
+OH_OHOS_XML_Xml_ParseInfoHandle xml_ParseInfo_constructImpl() {
     return {};
 }
-void xml_ParseInfo_destructImpl(OH_OHOS_XML_xml_ParseInfoHandle thiz) {
+void xml_ParseInfo_destructImpl(OH_OHOS_XML_Xml_ParseInfoHandle thiz) {
 }
 OH_Number xml_ParseInfo_getColumnNumberImpl(OH_NativePointer thisPtr) {
     return {};
@@ -109,11 +109,11 @@ OH_Number xml_ParseInfo_getAttributeCountImpl(OH_NativePointer thisPtr) {
     return {};
 }
 
-OH_OHOS_XML_xml_XmlPullParserHandle xml_XmlPullParser_constructImpl(const OH_Buffer* buffer, const Opt_String* encoding) {
+OH_OHOS_XML_Xml_XmlPullParserHandle xml_XmlPullParser_constructImpl(const OH_Buffer* buffer, const Opt_String* encoding) {
     const ExpatParser* parser = new ExpatParser(*buffer);
-    return (OH_OHOS_XML_xml_XmlPullParserHandle) parser;
+    return (OH_OHOS_XML_Xml_XmlPullParserHandle) parser;
 }
-void xml_XmlPullParser_destructImpl(OH_OHOS_XML_xml_XmlPullParserHandle thiz) {
+void xml_XmlPullParser_destructImpl(OH_OHOS_XML_Xml_XmlPullParserHandle thiz) {
     const ExpatParser* parser = (ExpatParser*) thiz;
     delete parser;
 }
@@ -123,7 +123,7 @@ void temp_release(int resId) {}
 void temp_call(const OH_Int32 resourceId, const OH_Boolean value) {}
 void temp_call_sync(const OH_OHOS_XML_VMContext vmContext, const OH_Int32 resourceId, const OH_Boolean value) {}
 
-void xml_XmlPullParser_parseImpl(OH_OHOS_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_OHOS_XML_xml_ParseOptions* option) {
+void xml_XmlPullParser_parseImpl(OH_OHOS_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_OHOS_XML_Xml_ParseOptions* option) {
     ExpatParser* parser = (ExpatParser*) thisPtr;
     if (option->tagValueCallbackFunction.tag != INTEROP_TAG_UNDEFINED) {
         parser->setTagValueCallback([&](const char* name, const char* value) {
@@ -161,7 +161,7 @@ void xml_XmlPullParser_parseImpl(OH_OHOS_XML_VMContext vmContext, OH_NativePoint
     parser->parse();
     parser->reset();
 }
-void xml_XmlPullParser_parseXmlImpl(OH_OHOS_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_OHOS_XML_xml_ParseOptions* option) {
+void xml_XmlPullParser_parseXmlImpl(OH_OHOS_XML_VMContext vmContext, OH_NativePointer thisPtr, const OH_OHOS_XML_Xml_ParseOptions* option) {
 }
 class TestPromiseHandler {
 private:
@@ -205,10 +205,10 @@ OH_OHOS_XML_Point GlobalScope_xml_getPointImpl() {
 
 class ClassStub {};
 
-OH_OHOS_XML_xml_MapTestHandle xml_MapTest_constructImpl() {
-    return (OH_OHOS_XML_xml_MapTestHandle)(new ClassStub());
+OH_OHOS_XML_Xml_MapTestHandle xml_MapTest_constructImpl() {
+    return (OH_OHOS_XML_Xml_MapTestHandle)(new ClassStub());
 }
-void xml_MapTest_destructImpl(OH_OHOS_XML_xml_MapTestHandle thiz) {
+void xml_MapTest_destructImpl(OH_OHOS_XML_Xml_MapTestHandle thiz) {
     delete (ClassStub*)thiz;
 }
 OH_Number xml_MapTest_testSerializeImpl(OH_NativePointer thisPtr, const Map_String_Number* options) {

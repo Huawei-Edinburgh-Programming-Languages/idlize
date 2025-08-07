@@ -20,7 +20,7 @@ export interface RenamedModuleDataInterface {
     count: number;
 }
 
-export class RenamedModuleDataInterface_serializer {
+export class RenamedModuleDataInterfaceSerializer {
     public static write(buffer: SerializerBase, value: RenamedModuleDataInterface): void {
         let valueSerializer: SerializerBase = buffer
         const value_count = value.count

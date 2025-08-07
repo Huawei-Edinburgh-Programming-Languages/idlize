@@ -150,7 +150,7 @@ class OHOSNativeVisitor {
     }
 
     private apiName(clazz: IDLInterface): string {
-        return capitalize(qualifiedName(clazz, "_", "namespace.name"))
+        return qualifiedName(clazz, "_", "namespace.name", true)
     }
 
     makeSignature(returnType: IDLType, parameters: IDLParameter[]): MethodSignature {
@@ -185,7 +185,7 @@ class OHOSNativeVisitor {
         if (peerGeneratorConfiguration().isResource(clazz.name)) return
         let name = this.modifierName(clazz)
         let handleType = this.handleType(clazz)
-        let className = qualifiedName(clazz, "_", "namespace.name")
+        let className = qualifiedName(clazz, "_", "namespace.name", true)
         let _h = this.hWriter
         let _c = writer
         _h.print(`struct ${handleType}Opaque;`)
@@ -300,10 +300,10 @@ class OHOSNativeVisitor {
     }
 
     private modifierName(clazz: IDLInterface): string {
-        return this.mangleTypeName(`${qualifiedName(clazz, "_", "namespace.name")}Modifier`)
+        return this.mangleTypeName(`${qualifiedName(clazz, "_", "namespace.name", true)}Modifier`)
     }
     private handleType(clazz: IDLInterface): string {
-        return this.mangleTypeName(`${qualifiedName(clazz, "_", "namespace.name")}Handle`)
+        return this.mangleTypeName(`${qualifiedName(clazz, "_", "namespace.name", true)}Handle`)
     }
 
     private writeImpls() {

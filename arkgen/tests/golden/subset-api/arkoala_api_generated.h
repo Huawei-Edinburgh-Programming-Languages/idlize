@@ -1423,8 +1423,8 @@ typedef struct Opt_TextRange Opt_TextRange;
 typedef struct TextShadowStylePeer TextShadowStylePeer;
 typedef struct TextShadowStylePeer* Ark_TextShadowStyle;
 typedef struct Opt_TextShadowStyle Opt_TextShadowStyle;
-typedef struct Ark_TextStyle_alert_dialog Ark_TextStyle_alert_dialog;
-typedef struct Opt_TextStyle_alert_dialog Opt_TextStyle_alert_dialog;
+typedef struct Ark_TextStyleAlertDialog Ark_TextStyleAlertDialog;
+typedef struct Opt_TextStyleAlertDialog Opt_TextStyleAlertDialog;
 typedef struct Ark_ToggleOptions Ark_ToggleOptions;
 typedef struct Opt_ToggleOptions Opt_ToggleOptions;
 typedef struct Ark_TouchObject Ark_TouchObject;
@@ -1676,8 +1676,8 @@ typedef struct Ark_SearchOptions Ark_SearchOptions;
 typedef struct Opt_SearchOptions Opt_SearchOptions;
 typedef struct Ark_SelectOption Ark_SelectOption;
 typedef struct Opt_SelectOption Opt_SelectOption;
-typedef struct Ark_sharedTransitionOptions Ark_sharedTransitionOptions;
-typedef struct Opt_sharedTransitionOptions Opt_sharedTransitionOptions;
+typedef struct Ark_SharedTransitionOptions Ark_SharedTransitionOptions;
+typedef struct Opt_SharedTransitionOptions Opt_SharedTransitionOptions;
 typedef struct Ark_SheetTitleOptions Ark_SheetTitleOptions;
 typedef struct Opt_SheetTitleOptions Opt_SheetTitleOptions;
 typedef struct Ark_SizeOptions Ark_SizeOptions;
@@ -8540,14 +8540,14 @@ typedef struct Opt_TextShadowStyle {
     Ark_Tag tag;
     Ark_TextShadowStyle value;
 } Opt_TextShadowStyle;
-typedef struct Ark_TextStyle_alert_dialog {
+typedef struct Ark_TextStyleAlertDialog {
     /* kind: Interface */
     Opt_WordBreak wordBreak;
-} Ark_TextStyle_alert_dialog;
-typedef struct Opt_TextStyle_alert_dialog {
+} Ark_TextStyleAlertDialog;
+typedef struct Opt_TextStyleAlertDialog {
     Ark_Tag tag;
-    Ark_TextStyle_alert_dialog value;
-} Opt_TextStyle_alert_dialog;
+    Ark_TextStyleAlertDialog value;
+} Opt_TextStyleAlertDialog;
 typedef struct Ark_ToggleOptions {
     /* kind: Interface */
     Ark_ToggleType type;
@@ -9955,7 +9955,7 @@ typedef struct Opt_SelectOption {
     Ark_Tag tag;
     Ark_SelectOption value;
 } Opt_SelectOption;
-typedef struct Ark_sharedTransitionOptions {
+typedef struct Ark_SharedTransitionOptions {
     /* kind: Interface */
     Opt_Number duration;
     Opt_Union_Curve_String_ICurve curve;
@@ -9963,11 +9963,11 @@ typedef struct Ark_sharedTransitionOptions {
     Opt_MotionPathOptions motionPath;
     Opt_Number zIndex;
     Opt_SharedTransitionEffectType type;
-} Ark_sharedTransitionOptions;
-typedef struct Opt_sharedTransitionOptions {
+} Ark_SharedTransitionOptions;
+typedef struct Opt_SharedTransitionOptions {
     Ark_Tag tag;
-    Ark_sharedTransitionOptions value;
-} Opt_sharedTransitionOptions;
+    Ark_SharedTransitionOptions value;
+} Opt_SharedTransitionOptions;
 typedef struct Ark_SheetTitleOptions {
     /* kind: Interface */
     Ark_ResourceStr title;
@@ -10715,7 +10715,7 @@ typedef struct Ark_AlertDialogParamWithButtons {
     Opt_Union_ResourceColor_EdgeColors_LocalizedEdgeColors borderColor;
     Opt_Union_BorderStyle_EdgeStyles borderStyle;
     Opt_Union_ShadowOptions_ShadowStyle shadow;
-    Opt_TextStyle_alert_dialog textStyle;
+    Opt_TextStyleAlertDialog textStyle;
     Opt_Boolean enableHoverMode;
     Opt_HoverModeAreaType hoverModeArea;
     Ark_AlertDialogButtonBaseOptions primaryButton;
@@ -10749,7 +10749,7 @@ typedef struct Ark_AlertDialogParamWithConfirm {
     Opt_Union_ResourceColor_EdgeColors_LocalizedEdgeColors borderColor;
     Opt_Union_BorderStyle_EdgeStyles borderStyle;
     Opt_Union_ShadowOptions_ShadowStyle shadow;
-    Opt_TextStyle_alert_dialog textStyle;
+    Opt_TextStyleAlertDialog textStyle;
     Opt_Boolean enableHoverMode;
     Opt_HoverModeAreaType hoverModeArea;
     Opt_AlertDialogButtonBaseOptions confirm;
@@ -10782,7 +10782,7 @@ typedef struct Ark_AlertDialogParamWithOptions {
     Opt_Union_ResourceColor_EdgeColors_LocalizedEdgeColors borderColor;
     Opt_Union_BorderStyle_EdgeStyles borderStyle;
     Opt_Union_ShadowOptions_ShadowStyle shadow;
-    Opt_TextStyle_alert_dialog textStyle;
+    Opt_TextStyleAlertDialog textStyle;
     Opt_Boolean enableHoverMode;
     Opt_HoverModeAreaType hoverModeArea;
     Array_AlertDialogButtonOptions buttons;
@@ -11965,7 +11965,7 @@ typedef struct GENERATED_ArkUICommonMethodModifier {
                       const Opt_Number* value);
     void (*setSharedTransition)(Ark_NativePointer node,
                                 const Opt_String* id,
-                                const Opt_sharedTransitionOptions* options);
+                                const Opt_SharedTransitionOptions* options);
     void (*setDirection)(Ark_NativePointer node,
                          const Opt_Direction* value);
     void (*setAlign)(Ark_NativePointer node,
