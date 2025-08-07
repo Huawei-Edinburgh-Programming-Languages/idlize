@@ -27,6 +27,7 @@ const knownAnnotations = {
 
 const knownModifiers = {
     optional: 'optional',
+    readonly: 'readonly',
     static: 'static',
 }
 
@@ -92,6 +93,7 @@ export const An = {
 
 export const Md = {
     optional: { kind: DecoratorKind.Modifier, name: knownModifiers.optional } as Modifier,
+    readonly: { kind: DecoratorKind.Modifier, name: knownModifiers.readonly } as Modifier,
     static: { kind: DecoratorKind.Modifier, name: knownModifiers.static } as Modifier,
 }
 

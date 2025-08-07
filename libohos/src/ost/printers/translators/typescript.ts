@@ -289,8 +289,9 @@ export class TSPrinter {
   }
 
   private printField(name: string, type: lw.LWType, modifiers?: lw.Modifier[]) {
-    if (modifiers?.includes(Md.static))
-      this.p.put('static', ' ')
+    modifiers
+      ?.filter(it => it !== Md.optional)
+      .forEach(it => this.p.put(it.name, ' '))
     this.p.put(name)
     if (modifiers?.includes(Md.optional))
       this.p.put('?')

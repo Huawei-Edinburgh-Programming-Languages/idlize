@@ -26,6 +26,7 @@ export const structureProducer = createSpecialProducer(
     const fields = () => node.properties.map(prop => {
       const modifiers = [
         ...prop.isOptional ? [Md.optional] : [],
+        ...prop.isReadonly ? [Md.readonly] : [],
         ...prop.isStatic ? [Md.static] : [],
       ]
       return {
