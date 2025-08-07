@@ -77,7 +77,6 @@ export * from './ost/lws'
 export * from './ost/main'
 export * from './ost/stdlib'
 export * from './ostgen/context'
-export * from './ostgen/dump'
 export * from './ostgen/producers'
 export * from './ostgen/producers/common'
 export * as moduleLike from "./ostgen/postprocess/moduleLike";

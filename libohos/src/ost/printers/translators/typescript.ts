@@ -394,7 +394,7 @@ export class TypeScriptPrinter {
   }
 }
 
-export function processNPrintTS(chunk:lw.LWDeclaration) {
+export function processNPrintTS(chunk:lw.LWDeclaration, localPackage: string, packages: Set<string>) {
   let tree = chunk
 
   tree = new ConvertTSTypes().goDeclaration(tree)

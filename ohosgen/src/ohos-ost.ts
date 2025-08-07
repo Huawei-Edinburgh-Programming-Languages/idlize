@@ -61,6 +61,7 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
     selector.register(producers.managed.primitiveProducer)
     selector.register(producers.managed.enumProducer)
     selector.register(producers.managed.unionProducer)
+    selector.register(producers.managed.callbackProducer)
     selector.register(producers.managed.containerProducer)
     selector.register(producers.managed.nativeModuleProducer)
 
@@ -103,7 +104,7 @@ function printOstDeclarations(decls: LWDeclaration[], language: Language, packag
     return tsFiles /// ...cFiles, ...nativeFiles])
 }
 
-function mapOstFileName(name: string): string | undefined {
+function mapOstFileName(name: string): string {
     return name
         .replace(/^managed\./, '')
         .replace(/^native\./, '')
@@ -115,14 +116,14 @@ function dumpTsLike(decls: LWDeclaration[], language: Language, packages: Set<st
     const files = moduleLike.formFiles(packages, decls)
     const result: Map<string, OutputFile> = new Map()
     const printer = language === Language.ARKTS ? processNPrintArkTS : processNPrintTS
-    files.forEach((content, name) => {
-        const mappedName = mapOstFileName(name)
+    files.forEach((content, fileName) => {
+        const mappedName = mapOstFileName(fileName)
         if (!mappedName)
             return
         const imports = new ImportsCollector()
         content.moduleLikeImports.forEach((vals, source) =>
             imports.addFeatures(Array.from(vals), `./${source}`))
-        const printed = content.body.map(printer)
+        const printed = content.body.map(it => printer(it, fileName, packages))
         result.set(mappedName, {
             imports,
             content: printed,
