@@ -23,6 +23,7 @@ import { serializerProducer } from "./serializer";
 import { structureProducer } from "./structure";
 import { unionProducer } from "./union";
 import { callbackProducer } from "./callback";
+import { typedefProducer } from "./typedef";
 
 export const producers = {
     fileProducer,
@@ -33,6 +34,7 @@ export const producers = {
     containerProducer,
     unionProducer,
     callbackProducer,
+    typedefProducer,
     nativeModuleProducer,
     serializerProducer,
 }
