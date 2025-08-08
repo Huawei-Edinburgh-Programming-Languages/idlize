@@ -42,7 +42,9 @@ export function printOstFiles(peerLibrary: PeerLibrary): Map<string, OutputFile>
     const SPECIAL_PACKAGES = [
         [MANAGED_PREFIX, 'engine'].join('.')
       ]
-    const knownPackages = peerLibrary.files.map(file => [MANAGED_PREFIX].concat(file.packageClause).join('.'))
+    const knownPackages = peerLibrary.files
+        .map(file => file.packageClause.length ? file.packageClause : [peerLibrary.name.toLowerCase()])
+        .map(clause => [MANAGED_PREFIX, ...clause].join('.'))
     return printOstDeclarations(declarations, peerLibrary.language, new Set(knownPackages.concat(SPECIAL_PACKAGES)))
 }
 
