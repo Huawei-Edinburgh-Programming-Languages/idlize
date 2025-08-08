@@ -38,9 +38,10 @@ import {
     createDeserializeAndCallPrinter,
     createGeneratedNativeModulePrinter,
     printArkTSTypeChecker,
+    createInterfacePrinter,
 } from '@idlizer/libohos'
 import {
-    printFiles as printFiles,
+    printFiles,
     installFiles,
     OutputFile,
 } from '@idlizer/libohos'
@@ -68,12 +69,12 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
             return data
         return []
     }
-    const printedFiles = printFiles(
+    let printedFiles = printFiles(
         peerLibrary,
         [
             createCallbackKindPrinter(peerLibrary.language),
             createMaterializedPrinter(false),
-            // createInterfacePrinter(false, false),
+            ...spreadIfLang([Language.CJ, Language.JAVA, Language.KOTLIN], createInterfacePrinter(false, false)),
             printGlobal,
             printDataClasses,
             createSerializerPrinter(peerLibrary.language, ""),
@@ -82,8 +83,9 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
             ...spreadIfLang([Language.ARKTS], printArkTSTypeChecker),
         ]
     )
-    const ostFiles = printOstFiles(peerLibrary)
-    const installed = installFiles(ohos.managedDir(), mergeOutputFiles(printedFiles, ostFiles))
+    if ([Language.TS, Language.ARKTS].includes(peerLibrary.language))
+        printedFiles = mergeOutputFiles(printedFiles, printOstFiles(peerLibrary))
+    const installed = installFiles(ohos.managedDir(), printedFiles)
 
     // managed-index
 
