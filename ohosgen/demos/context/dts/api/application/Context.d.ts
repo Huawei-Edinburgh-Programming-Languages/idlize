@@ -27,7 +27,8 @@ import BaseContext from './BaseContext';
 // import contextConstant from '../@ohos.app.ability.contextConstant';
 import ApplicationContext = require('./ApplicationContext')
 
-type ApplicationContextAlias = typeof ApplicationContext
+/// TODO uncomment when OST supports materialized types
+// type ApplicationContextAlias = typeof ApplicationContext
 
 export default class Context extends BaseContext {
 
