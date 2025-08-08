@@ -177,6 +177,10 @@ export function capitalize(string: string): string {
     return string.charAt(0).toUpperCase() + string.slice(1)
 }
 
+function deCapitalize(string: string): string {
+    return string.charAt(0).toLowerCase() + string.slice(1)
+}
+
 export function capitalizeConstantName(string: string): string {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
 }
@@ -456,23 +460,46 @@ export function getNameWithoutQualifiersLeft(node: ts.EntityName | undefined): s
 }
 
 export function snakeCaseToCamelCase(input: string, tailToLowerCase: boolean = false): string {
-    return input
-        .split("_")
-        .map(it => capitalize(tailToLowerCase ? it.toLowerCase() : it))
-        .join("")
+    if (tailToLowerCase) throw new Error('unused tailToLowerCase argument')
+    return changeCase(input, Casing.CamelCase, Casing.SnakeCase)
 }
 
-export function toCamelCase(input: string, delimiters: string[] = ["-", "_"]): string {
-    const delimitersRegExp = new RegExp(`([${delimiters.join("")}])`, 'g');
-    const pattern = new RegExp(`([${delimiters.join("")}][A-z])`, 'g');
-    const output = input
-        .replace(pattern, group => group.toUpperCase().replace(delimitersRegExp, ''))
-        .replace(/^[A-Z]/, match => match.toLowerCase())
-    if (input.length && isUpperCase(input[0])) {
-        return capitalize(output)
-    } else {
-        return output
+function tokenizeText(text: string, originalCasing?: Casing): string[] {
+    const camelCasePattern = new RegExp(`[A-Z][a-z]*`, "g")
+    const lowCamelCasePattern = new RegExp(`[a-z][A-Z]*`, "g")
+    const delimetersPattern = new RegExp(`[_-]`)
+
+    switch (originalCasing) {
+        case Casing.CamelCase:
+        case Casing.PascalCase:
+            return text.replaceAll(camelCasePattern, it => ` ${it}`)
+                .split(" ")
+                .filter(s => s !== "")
+        case Casing.LowCamelCase:
+            return text.replaceAll(lowCamelCasePattern, it => ` ${it}`)
+                .split(" ")
+                .filter(s => s !== "")
+        case Casing.SnakeCase:
+        case Casing.UpperSnakeCase:
+            return text
+                .split("_")
+                .filter(s => s !== "")
+        case Casing.KebabCase:
+            return text
+                .split("-")
+                .filter(s => s !== "")
+        default: {
+            return text
+                .replaceAll(camelCasePattern, it => `_${it}`)
+                .split(delimetersPattern)
+                .filter(s => s !== "")
+        }
     }
+}
+
+export function toCamelCase(input: string, originalCasing?: Casing): string {
+    const tokens = tokenizeText(input, originalCasing)
+    return tokens.map((it, idx) => idx > 0 ? capitalize(it.toLowerCase()) : it.toLowerCase()).join("")
 }
 
 export function isUpperCase(s: string): boolean {
@@ -487,39 +514,76 @@ function isDigit(s: string): boolean {
     return s >= '0' && s <= '9'
 }
 
-export function camelCaseToUpperSnakeCase(input: string) {
-
-    function boundaryFromLowerToUpperCase(s1: string, s2: string): string {
-        return s2 !== undefined && (isLowerCase(s1) && !isDigit(s1)) && (isUpperCase(s2)) ? '_' : ''
-    }
-
-    function toUpperSnakeCase(s: string): string {
-        return Array.from(s)
-            .map((c, i) => `${c.toUpperCase()}${boundaryFromLowerToUpperCase(c, s[i + 1])}`)
-            .join('')
-    }
-
-    return input.split('_')
-        .filter(s => s !== "")
-        .map(s => toUpperSnakeCase(s))
-        .join('_')
+export enum Casing {
+    SnakeCase,
+    UpperSnakeCase,
+    LowSnakeCase,
+    KebabCase,
+    CamelCase,
+    LowCamelCase,
+    PascalCase
 }
 
-export function snakeToLowCamelNode(node: idl.IDLEntry): string {
-    if (!node.fileName) {
-        throw new Error("Invalid Convert")
+function toLowCamelCase(input: string, originalCasing?: Casing) {
+    const tokens = tokenizeText(input, originalCasing)
+    return tokens.map((it, idx) => idx > 0 ? deCapitalize(it.toUpperCase()) : it.toUpperCase()).join("")
+}
+
+function toSnakeCase(input: string, originalCasing?: Casing) {
+    const tokens = tokenizeText(input, originalCasing)
+    return tokens.join("_")
+}
+
+function toLowSnakeCase(input: string, originalCasing?: Casing) {
+    const tokens = tokenizeText(input, originalCasing)
+    return tokens.map(it => it.toLowerCase()).join("_")
+}
+
+function toUpperSnakeCase(input: string, originalCasing?: Casing) {
+    const tokens = tokenizeText(input, originalCasing)
+    return tokens.map(it => it.toUpperCase()).join("_")
+}
+
+function toKebabCase(input: string, originalCasing?: Casing) {
+    const tokens = tokenizeText(input, originalCasing)
+    return tokens.join("-")
+}
+
+function toPascalCase(input: string, originalCasing?: Casing) {
+    return capitalize(toCamelCase(input, originalCasing))
+}
+
+export function changeCase(text: string, outputCasing: Casing, originalCasing?: Casing): string {
+    switch (outputCasing) {
+        case Casing.CamelCase: {
+            return toCamelCase(text, originalCasing)
+        }
+        case Casing.LowCamelCase: {
+            return toLowCamelCase(text, originalCasing)
+        }
+        case Casing.SnakeCase: {
+            return toSnakeCase(text, originalCasing)
+        }
+        case Casing.LowSnakeCase: {
+            return toLowSnakeCase(text, originalCasing)
+        }
+        case Casing.UpperSnakeCase: {
+            return toUpperSnakeCase(text, originalCasing)
+        }
+        case Casing.KebabCase: {
+            return toKebabCase(text, originalCasing)
+        }
+        case Casing.PascalCase: {
+            return toPascalCase(text, originalCasing)
+        }
+    
+        default:
+            throw new Error(`Implement conversion to ${Casing[outputCasing]} casing`)
     }
-    const classname = path.basename(node.fileName).replace(".idl", "").replace(".d.ts", "")
-    return classname
-        .split('_')
-        .filter(word => word !== '')
-        .map((word, index) => {
-            if (index === 0) {
-                return word.toLowerCase();
-            }
-            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-        })
-        .join('');
+}
+
+export function camelCaseToUpperSnakeCase(input: string) {
+    return changeCase(input, Casing.UpperSnakeCase, Casing.CamelCase)
 }
 
 export function renameDtsToPeer(fileName: string, language: Language, withFileExtension: boolean = true) {
