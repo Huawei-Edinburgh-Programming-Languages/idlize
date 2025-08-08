@@ -22,6 +22,7 @@ import { ConvertTSTypes, TSPrinter } from "./typescript";
 export class ConvertArkTSTypes extends ConvertTSTypes {
   override goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
+      case std.names.types.bigint: return T.cc('long')
       case std.names.types.buffer: return T.cc('NativeBuffer')
     }
     return super.goConstType(type)

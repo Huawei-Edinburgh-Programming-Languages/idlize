@@ -195,16 +195,6 @@ export class GeneratorContext {
         private selector: MakeSelector,
     ) {
         this.resolver = new IDLTypeResolver(library)
-        library.forEach(file => {
-            idl.forEachChild(file, node => {
-                if (idl.isReferenceType(node)) {
-                    const found = this.resolver.toDeclaration(node)
-                    if (found) {
-                        node.name = idl.getFQName(found)
-                    }
-                }
-            })
-        })
     }
 
     private getUseKeyFromNode(node: idl.IDLNode): string {
