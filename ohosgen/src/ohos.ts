@@ -138,7 +138,10 @@ function makeOhosModule(root:string, componentsFiles: string[]): string {
 
 function mergeOutputFiles(files0: Map<string, OutputFile>, files1: Map<string, OutputFile>): Map<string, OutputFile> {
     for (const [file, output] of files1) {
-        const output0 = files0.get(file) ?? files0.get(file.replaceAll(/\./g, '/'))
+        /// wild guessing. Probably need to take useFoldersLayout and moduleName into account somewhere else
+        const output0 = files0.get(file)
+            ?? files0.get(file.replaceAll(/\./g, '/'))
+            ?? files0.get(file.replace(generatorConfiguration().moduleName + ".", ""))
         if (output0) { // ignore unknown files
             console.log("merging", file)
             output0.imports.merge(output.imports)
