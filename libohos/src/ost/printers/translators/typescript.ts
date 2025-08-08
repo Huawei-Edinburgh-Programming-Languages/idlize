@@ -40,6 +40,7 @@ export class ConvertTSTypes extends IdentityTransformer {
 
   override goConstType(type: lw.ConstType): lw.ConstType {
     switch (type.name) {
+      case std.names.types.bigint: return T.cc('bigint')
       case std.names.types.boolean: return T.cc('boolean')
       case std.names.types.buffer: return T.cc('ArrayBuffer')
       case std.names.types.f32: return T.cc('float')
