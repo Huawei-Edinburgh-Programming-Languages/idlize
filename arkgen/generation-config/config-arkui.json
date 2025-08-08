@@ -3,7 +3,13 @@
     "modules": {
         "global.resource": {
             "name": "global.resource",
+            "external": true,
             "packages": ["global.resource"]
+        },
+        "ohos.font": {
+            "name": "ohos.font",
+            "external": true,
+            "packages": ["ohos.font"]
         },
         "ohos.multimedia.image": {
             "name": "ohos.multimedia.image",
@@ -23,7 +29,6 @@
                 "ohos.base",
                 "ohos.curves",
                 "ohos.data",
-                "ohos.font",
                 "ohos.graphics",
                 "ohos.intl",
                 "ohos.matrix4",
@@ -32,7 +37,6 @@
                 "ohos.promptAction",
                 "ohos.web.webview",
                 "ohos.window",
-
                 "idlize.stdlib",
                 "idlize.internal"
             ]
