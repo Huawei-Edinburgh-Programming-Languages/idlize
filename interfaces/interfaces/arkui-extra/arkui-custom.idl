@@ -15,6 +15,12 @@ interface LazyForEachOps {
 };
 
 [Entity=Class]
+interface LengthMetricsCustom {
+    attribute number unit;
+    attribute number value;
+};
+
+[Entity=Class]
 interface SystemOps {
     static pointer StartFrame();
     static void EndFrame(pointer root);
@@ -24,6 +30,7 @@ interface SystemOps {
     static void resourceManagerReset();
     static void setFrameCallback(Callback_Number_Void onFrameCallback, Callback_Number_Void onIdleCallback, number delayTime);
     static sequence<number> colorMetricsResourceColor(Resource color);
+    static LengthMetricsCustom resoureToLengthMetrics(Resource res);
 };
 
 [Entity=Class]
