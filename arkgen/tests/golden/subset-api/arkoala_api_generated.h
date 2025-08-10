@@ -11738,9 +11738,6 @@ typedef struct GENERATED_ArkUICommonMethodModifier {
                       const Opt_Union_Length_LayoutPolicy* value);
     void (*setDrawModifier)(Ark_NativePointer node,
                             const Opt_DrawModifier* modifier);
-    void (*setCustomProperty)(Ark_NativePointer node,
-                              const Opt_String* name,
-                              const Opt_Object* value);
     void (*setExpandSafeArea)(Ark_NativePointer node,
                               const Opt_Array_SafeAreaType* types,
                               const Opt_Array_SafeAreaEdge* edges);
