@@ -128,13 +128,15 @@ export class PeerPrinter extends SingleFilePrinter {
             new MethodSignature(
                 IDLVoidType,
                 [
-                    IDLPointerType
+                    IDLPointerType,
+                    ...(isReal(this.node) ? [createReferenceType(Config.nodeTypeAttribute)] : []),
                 ],
                 undefined,
                 undefined,
                 undefined,
                 [
-                    PeersConstructions.pointerParameter
+                    PeersConstructions.pointerParameter,
+                    Config.nodeTypeArgName,
                 ]
             ),
             () => {
@@ -156,7 +158,8 @@ export class PeerPrinter extends SingleFilePrinter {
                     this.writer.makeFunctionCall(
                         PeersConstructions.super,
                         [
-                            this.writer.makeString(PeersConstructions.pointerParameter)
+                            this.writer.makeString(PeersConstructions.pointerParameter),
+                            ...(isReal(this.node) ? [this.writer.makeString(Config.nodeTypeArgName)] : []),
                         ]
                     )
                 )
@@ -393,6 +396,7 @@ export class PeerPrinter extends SingleFilePrinter {
                             ),
                             this.makeBindingArguments(node.parameters)
                         ),
+                        this.writer.makeString(Config.nodeTypeArgName),
                     ]
                 )
 

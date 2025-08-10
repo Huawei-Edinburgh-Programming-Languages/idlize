@@ -43,6 +43,10 @@ export class Config {
         return `Es2pandaAstNodeType`
     }
 
+    static get nodeTypeArgName(): string {
+        return `astNodeType`
+    }
+
     static get nodeNamespaceAttribute(): string {
         return `cpp_namespace`
     }
