@@ -325,9 +325,6 @@ typedef struct Ark_ColumnAttribute Ark_ColumnAttribute;
 typedef struct Opt_ColumnAttribute Opt_ColumnAttribute;
 typedef struct Ark_CounterAttribute Ark_CounterAttribute;
 typedef struct Opt_CounterAttribute Opt_CounterAttribute;
-typedef struct CustomDialogControllerPeer CustomDialogControllerPeer;
-typedef struct CustomDialogControllerPeer* Ark_CustomDialogController;
-typedef struct Opt_CustomDialogController Opt_CustomDialogController;
 typedef struct Opt_CustomObject Opt_CustomObject;
 typedef struct Ark_DividerAttribute Ark_DividerAttribute;
 typedef struct Opt_DividerAttribute Opt_DividerAttribute;
@@ -1118,8 +1115,6 @@ typedef struct ContextPeer* Ark_Context;
 typedef struct Opt_Context Opt_Context;
 typedef struct Ark_CopyEvent Ark_CopyEvent;
 typedef struct Opt_CopyEvent Opt_CopyEvent;
-typedef struct Ark_CustomDialogControllerOptions Ark_CustomDialogControllerOptions;
-typedef struct Opt_CustomDialogControllerOptions Opt_CustomDialogControllerOptions;
 typedef struct CustomSpanPeer CustomSpanPeer;
 typedef struct CustomSpanPeer* Ark_CustomSpan;
 typedef struct Opt_CustomSpan Opt_CustomSpan;
@@ -4018,10 +4013,6 @@ typedef struct Opt_CounterAttribute {
     Ark_Tag tag;
     Ark_CounterAttribute value;
 } Opt_CounterAttribute;
-typedef struct Opt_CustomDialogController {
-    Ark_Tag tag;
-    Ark_CustomDialogController value;
-} Opt_CustomDialogController;
 typedef struct Opt_CustomObject {
     Ark_Tag tag;
     Ark_CustomObject value;
@@ -7251,14 +7242,6 @@ typedef struct Opt_CopyEvent {
     Ark_Tag tag;
     Ark_CopyEvent value;
 } Opt_CopyEvent;
-typedef struct Ark_CustomDialogControllerOptions {
-    /* kind: Interface */
-    Ark_CustomObject builder;
-} Ark_CustomDialogControllerOptions;
-typedef struct Opt_CustomDialogControllerOptions {
-    Ark_Tag tag;
-    Ark_CustomDialogControllerOptions value;
-} Opt_CustomDialogControllerOptions;
 typedef struct Opt_CustomSpan {
     Ark_Tag tag;
     Ark_CustomSpan value;
@@ -13855,14 +13838,6 @@ typedef struct GENERATED_ArkUIContextAccessor {
                            const Ark_String* processName);
 } GENERATED_ArkUIContextAccessor;
 
-typedef struct GENERATED_ArkUICustomDialogControllerAccessor {
-    void (*destroyPeer)(Ark_CustomDialogController peer);
-    Ark_CustomDialogController (*construct)(const Ark_CustomDialogControllerOptions* value);
-    Ark_NativePointer (*getFinalizer)();
-    void (*open)(Ark_CustomDialogController peer);
-    void (*close)(Ark_CustomDialogController peer);
-} GENERATED_ArkUICustomDialogControllerAccessor;
-
 typedef struct GENERATED_ArkUICustomSpanAccessor {
     void (*destroyPeer)(Ark_CustomSpan peer);
     Ark_CustomSpan (*construct)();
@@ -15303,7 +15278,6 @@ typedef struct GENERATED_ArkUIAccessors {
     const GENERATED_ArkUIClickEventAccessor* (*getClickEventAccessor)();
     const GENERATED_ArkUIColorFilterAccessor* (*getColorFilterAccessor)();
     const GENERATED_ArkUIContextAccessor* (*getContextAccessor)();
-    const GENERATED_ArkUICustomDialogControllerAccessor* (*getCustomDialogControllerAccessor)();
     const GENERATED_ArkUICustomSpanAccessor* (*getCustomSpanAccessor)();
     const GENERATED_ArkUIDecorationStyleAccessor* (*getDecorationStyleAccessor)();
     const GENERATED_ArkUIDisappearSymbolEffectAccessor* (*getDisappearSymbolEffectAccessor)();
