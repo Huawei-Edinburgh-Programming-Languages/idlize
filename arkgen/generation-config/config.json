@@ -212,7 +212,11 @@
             "CustomStyles",
             "applyStyles",
             "UIGestureEvent",
-            "GestureModifier"
+            "GestureModifier",
+            "ExtendableComponent",
+            "LifeCycle",
+            "CustomDialogController",
+            "CustomDialogControllerOptions"
         ],
         "ignoreEntry": [
             "Optional",
