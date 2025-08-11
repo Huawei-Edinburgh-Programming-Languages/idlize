@@ -33,23 +33,26 @@ include:
 #         paths:
 #           - VERSION
 
-idlize sanity:
+arkgen TS subset:
   stage: test
   tags:
     - idlize-ci
     - koala-ci
-  dependencies:
-  - download sdk
-  - build external
-  script:
+  before_script:
     - !reference [.npm, script]
-    - !reference [.panda, script]
-    - npm run sanity
-  # after_script:
-  #   - !reference [.notify-telegram, script]
+  script:
+    - npm run -C arkgen setup:subset:ts
+    - npm run -C arkgen gen-idl:subset:ts
+    - npm run -C arkgen gen:subset:ts
+    - npm run -C arkgen build:subset:ts
+    - npm run -C arkgen build-native:subset:ts
+    - npm run -C arkgen exec:subset:ts
+  needs:
+    - prepare caches
+    - build arkgen
+    - build interfaces
 
-pg java:run:
-  allow_failure: true
+arkgen ArkTS subset:
   stage: test
   tags:
     - idlize-ci
@@ -57,23 +60,37 @@ pg java:run:
   before_script:
     - !reference [.npm, script]
     - !reference [.panda, script]
-    - cd $CI_PROJECT_DIR/arkgen
   script:
-    - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64 npm run run:java
-
-run arkts subset:
-  stage: test
-  tags:
-    - idlize-ci
-    - koala-ci
-  dependencies:
+    - npm run -C arkgen gen:subset:arkts
+    - npm run -C arkgen build:subset:arkts
+    - npm run -C arkgen build-native:subset:arkts
+    - npm run -C arkgen exec:subset:arkts
+  needs:
+    - prepare caches
+    - build arkgen
+    - build interfaces
     - build external
+
+arkgen TS sdk:
+  stage: test
+  tags:
+    - idlize-ci
+    - koala-ci
   before_script:
     - !reference [.npm, script]
-    - !reference [.panda, script]
-    - cd $CI_PROJECT_DIR/arkgen
   script:
-    - npm run run:panda:subset
+    - npm run -C arkgen setup:sdk:ts
+    - npm run -C arkgen gen-idl:sdk:ts
+    - npm run -C arkgen gen:sdk:ts
+    - npm run -C arkgen build:sdk:ts
+    - npm run -C arkgen build-native:sdk:ts
+    - npm run -C arkgen exec:sdk:ts
+  needs:
+    - prepare caches
+    - build arkgen
+    - build interfaces
+    - build ohosgen
+    - download sdk
 
 compile arkts peers:
   stage: test
@@ -143,7 +160,7 @@ build arkoala-ts:
 #          - arkoala.har
 
 # Build targets
-build idlize-arkgen:
+build arkgen:
   stage: build
   tags:
   - idlize-ci
@@ -200,7 +217,7 @@ pack idlize-arkgen:
   variables:
     PACKAGE_DIR: arkgen
   dependencies:
-    - build idlize-arkgen
+    - build arkgen
 
 pack idlize-core:
   extends:
@@ -226,7 +243,7 @@ publish idlize-arkgen:
   variables:
     PACKAGE_DIR: arkgen
   dependencies:
-    - build idlize-arkgen
+    - build arkgen
 
 publish idlize-core:
   extends:
@@ -253,13 +270,14 @@ check index-full:
     dependencies:
     - download sdk
     - build external
+    - build interfaces
     before_script:
     - !reference [.npm, script]
     - !reference [.panda, script]
     - cd $CI_PROJECT_DIR/arkgen
     script:
-        - npm run check:peers:ets
-        - npm run check:index-full:ts
+      - npm run check:peers:ets
+      - npm run check:index-full:ts
 
 subset CAPI golden:
   stage: test
@@ -271,3 +289,6 @@ subset CAPI golden:
     - cd $CI_PROJECT_DIR/arkgen
   script:
     - npm run test:subset-api
+  needs:
+    - build interfaces
+    - build arkgen

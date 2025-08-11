@@ -1,3 +1,18 @@
+build interfaces:
+  stage: build
+  tags:
+    - idlize-ci
+    - koala-ci
+  before_script:
+    - !reference [.npm, script]
+  script:
+    - npm run -C interfaces compile
+  needs:
+    - download sdk
+  artifacts:
+    paths:
+      - interfaces/dist
+
 check arkui interfaces:
   allow_failure: true
   stage: test

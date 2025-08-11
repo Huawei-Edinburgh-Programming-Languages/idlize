@@ -45,5 +45,5 @@ publish idlize-arktscgen:
   variables:
     PACKAGE_DIR: arktscgen
   dependencies:
-    - build idlize-arkgen
+    - build arkgen
 

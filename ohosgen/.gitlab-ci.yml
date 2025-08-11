@@ -16,6 +16,21 @@ include:
     - gitlab/setup.yml
     - gitlab/npm.yml
 
+build ohosgen:
+  stage: build
+  tags:
+    - idlize-ci
+    - koala-ci
+  needs:
+    - prepare caches
+  before_script:
+    - !reference [.npm, script]
+  script:
+    - npm run -C ohosgen compile
+  artifacts:
+    paths:
+      - ohosgen/lib
+
 check generated XML demo:
     stage: test
     tags:
