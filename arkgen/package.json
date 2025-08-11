@@ -69,6 +69,17 @@
     "release": "npm run compile && npm run compile --prefix ../core && npm run compile --prefix linter && node tools/release.mjs",
     "compile": "npm run compile -C ../interfaces && npm run compile -C ../libohos && tsc && rollup -c",
     "clean": "rimraf build dist lib generated native/build* native/lib* native/cross* native/NativeBridge* native/ace* out external-subset",
+
+    "compile:arkts:libs": "npm run build -C ../external/incremental/runtime && npm run build -C ../external/interop",
+
+    "ACTION:SOURCE-KIND:LANGUAGE": "",
+    "gen:sdk:idl": "npm run -C ../etsgen && node ../etsgen --ets2idl --use-component-stubs --output-dir ./out/sdk-idl --base-dir ../sdk-patched-arkts/api --input-dir  ../sdk-patched-arkts/api/arkui/component --input-files ../sdk-patched-arkts/api/global/resource.d.ets",
+    "gen:sdk:arkts": "node . --use-memo-m3 --arkts-extension .ets --idl2peer --reference-names generation-config/references/ets-sdk.refs.json --no-type-checker --input-files $(find ./sdk-idl -type f | tr '\\n' ' ') --output-dir out/ets-arkts-peers/generated --language arkts --options-file ./generation-config/config-arkui.json && npm run generate:modules-all:arkts",
+    "build:sdk:arkts": "fast-arktsc --config ./arktsconfig-peers-ets.json --link-name ./out/ets-arkts-peers/abc/all.abc --compiler ../external/incremental/tools/panda/arkts/arktsc && ninja -C ./out/ets-arkts-peers/abc -f build.ninja",
+    "build-native:sdk:arkts": "cd ./native && meson setup -Dsource_set=ets-arkts-peers build-sdk-arkts && meson compile --verbose -C build-sdk-arkts && meson install -C build-sdk-arkts",
+    "exec:sdk:arkts": "ACE_LIBRARY_PATH=./native/build-node-host-arkts-full LD_LIBRARY_PATH=./native bash ../external/incremental/tools/panda/arkts/ark --ark-entry-point arkui.framework.main.ETSGLOBAL::main --ark-boot-files ../external/interop/build/interop.abc:../external/incremental/runtime/build/incremental.abc:./out/ets-arkts-peers/abc out/ets-arkts-peers/abc/all.abc --driver-log info",
+    "all:sdk:arkts": "npm run compile && npm run compile -C ../etsgen && npm run gen:sdk:idl && npm run gen:sdk:arkts && npm run build:sdk:arkts && npm run build-native:sdk:arkts && npm run exec:sdk:arkts",
+
     "tracker:ets": "npm run compile && node . --idl2peer --reference-names generation-config/references/ets-sdk.refs.json --no-type-checker --input-files $(find ../etsgen/out/idl -type f | tr '\\n' ' ') --output-dir ../doc --generator-target tracker --tracker-status ../doc/COMPONENTS_STATUS.md",
     "tracker:ver": "sed \"1iSDK version:    `git -C ../interface_sdk-js rev-parse HEAD` `git -C ../interface_sdk-js name-rev --name-only HEAD`\" -i ../doc/COMPONENTS.md && sed \"1iIDLize Version: `git rev-parse HEAD` `git name-rev --name-only HEAD`\" -i ../doc/COMPONENTS.md",
     "tracker:ets:all": "npm run tracker:ets && npm run tracker:ver",
@@ -105,7 +116,6 @@
     "make:arkts:peers:ets": "npm run compile && node . --use-memo-m3 --arkts-extension .ets --idl2peer --reference-names generation-config/references/ets-sdk.refs.json --no-type-checker --input-files $(find ../etsgen/out/idl -type f | tr '\\n' ' ') --output-dir out/ets-arkts-peers/generated --language arkts --options-file ./generation-config/config-arkui.json && npm run generate:modules-all:arkts",
     "compile:arkts:subset": "fast-arktsc --config ./arktsconfig-subset.json --link-name ./out/arkts-subset/abc/all.abc --compiler ../external/incremental/tools/panda/arkts/arktsc && ninja -C ./out/arkts-subset/abc -f build.ninja",
     "compile:arkts:peers:ets": "fast-arktsc --config ./arktsconfig-peers-ets.json --link-name ./out/ets-arkts-peers/abc/all.abc --compiler ../external/incremental/tools/panda/arkts/arktsc && ninja -C ./out/ets-arkts-peers/abc -f build.ninja",
-    "compile:arkts:libs": "npm run build -C ../external/incremental/runtime && npm run build -C ../external/interop",
     "make:compile:arkts:peers:ets": "npm run make:arkts:peers:ets && npm run compile:arkts:peers:ets && npm run compile:native-node-host-arkts-full-ets && npm run compile:arkts:libs",
     "run:arkts-link-interfaces": "bash ../external/incremental/tools/panda/arkts/arklink --output ./out/abc-subset/sig/arkoala-arkts/arkui/src/generated/dts_interfaces.abc -- `find ./out/abc-subset/sig/arkoala-arkts/arkui/src/generated/ -name *Interfaces.abc`",
     "compile:all:arkts": "npm run make:arkts && npm run compile:arkts:subset && npm run compile:native-node-host-arkts-subset && npm run compile:arkts:libs",
