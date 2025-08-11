@@ -465,20 +465,13 @@ export function snakeCaseToCamelCase(input: string, tailToLowerCase: boolean = f
 }
 
 function tokenizeText(text: string, originalCasing?: Casing): string[] {
-    const camelCasePattern = new RegExp(`[A-Z][a-z]*`, "g")
-    const lowCamelCasePattern = new RegExp(`[a-z][A-Z]*`, "g")
-    const delimetersPattern = new RegExp(`[_-]`)
-
+    const camelCasePattern = new RegExp(`[0-9]+|[A-Z]?[a-z]+|[A-Z]+(?=$|[A-Z]|[^[A-Za-z])`, "g")
+    const delimetersPattern = new RegExp(`[_.-]`)
     switch (originalCasing) {
         case Casing.CamelCase:
-        case Casing.PascalCase:
-            return text.replaceAll(camelCasePattern, it => ` ${it}`)
-                .split(" ")
-                .filter(s => s !== "")
-        case Casing.LowCamelCase:
-            return text.replaceAll(lowCamelCasePattern, it => ` ${it}`)
-                .split(" ")
-                .filter(s => s !== "")
+        case Casing.PascalCase: {
+            return Array.from(text.matchAll(camelCasePattern), it => it[0])
+        }
         case Casing.SnakeCase:
         case Casing.UpperSnakeCase:
             return text
@@ -490,9 +483,8 @@ function tokenizeText(text: string, originalCasing?: Casing): string[] {
                 .filter(s => s !== "")
         default: {
             return text
-                .replaceAll(camelCasePattern, it => `_${it}`)
                 .split(delimetersPattern)
-                .filter(s => s !== "")
+                .flatMap(part => Array.from(part.matchAll(camelCasePattern), it => it[0]))
         }
     }
 }
@@ -520,13 +512,7 @@ export enum Casing {
     LowSnakeCase,
     KebabCase,
     CamelCase,
-    LowCamelCase,
     PascalCase
-}
-
-function toLowCamelCase(input: string, originalCasing?: Casing) {
-    const tokens = tokenizeText(input, originalCasing)
-    return tokens.map((it, idx) => idx > 0 ? deCapitalize(it.toUpperCase()) : it.toUpperCase()).join("")
 }
 
 function toSnakeCase(input: string, originalCasing?: Casing) {
@@ -546,7 +532,7 @@ function toUpperSnakeCase(input: string, originalCasing?: Casing) {
 
 function toKebabCase(input: string, originalCasing?: Casing) {
     const tokens = tokenizeText(input, originalCasing)
-    return tokens.join("-")
+    return tokens.map(it => it.toLowerCase()).join("-")
 }
 
 function toPascalCase(input: string, originalCasing?: Casing) {
@@ -557,9 +543,6 @@ export function changeCase(text: string, outputCasing: Casing, originalCasing?: 
     switch (outputCasing) {
         case Casing.CamelCase: {
             return toCamelCase(text, originalCasing)
-        }
-        case Casing.LowCamelCase: {
-            return toLowCamelCase(text, originalCasing)
         }
         case Casing.SnakeCase: {
             return toSnakeCase(text, originalCasing)
@@ -588,7 +571,7 @@ export function camelCaseToUpperSnakeCase(input: string) {
 
 export function renameDtsToPeer(fileName: string, language: Language, withFileExtension: boolean = true) {
     const renamed = "Ark"
-        .concat(snakeCaseToCamelCase(fileName))
+        .concat(capitalize(snakeCaseToCamelCase(fileName)))
         .replace(".d.ts", "")
         .replace(".idl", "")
         .concat("Peer")
@@ -600,7 +583,7 @@ export function renameDtsToPeer(fileName: string, language: Language, withFileEx
 
 export function renameDtsToComponent(fileName: string, language: Language, withFileExtension: boolean = true) {
     const renamed = "Ark"
-        .concat(snakeCaseToCamelCase(fileName))
+        .concat(capitalize(snakeCaseToCamelCase(fileName)))
         .replace(".d.ts", "")
         .replace(".idl", "")
 
@@ -612,7 +595,7 @@ export function renameDtsToComponent(fileName: string, language: Language, withF
 
 export function renameDtsToInterfaces(fileName: string, language: Language, withFileExtension: boolean = true) {
     const renamed = "Ark"
-        .concat(snakeCaseToCamelCase(fileName), "Interfaces")
+        .concat(capitalize(snakeCaseToCamelCase(fileName)), "Interfaces")
         .replace(".d.ts", "")
         .replace(".idl", "")
 
@@ -624,7 +607,7 @@ export function renameDtsToInterfaces(fileName: string, language: Language, with
 
 export function renameClassToBuilderClass(className: string, language: Language, withFileExtension: boolean = true) {
     const renamed = "Ark"
-        .concat(snakeCaseToCamelCase(className))
+        .concat(capitalize(snakeCaseToCamelCase(className)))
         .concat("Builder")
 
     if (withFileExtension) {
@@ -637,7 +620,7 @@ export function renameClassToMaterialized(className: string, language: Language,
 
     const name = className.endsWith("Internal") ? className.substring(0, className.length - "Internal".length) : className
     const renamed = "Ark"
-        .concat(snakeCaseToCamelCase(name))
+        .concat(capitalize(snakeCaseToCamelCase(name)))
         .concat("Materialized")
 
     if (withFileExtension) {
@@ -674,7 +657,7 @@ export function nameEnumValues(enumTarget: string[]): string[] {
                     nameToIndex.set(`${prefix}_${upperCaseName}`, i)
                 }
             } else {
-                upperCaseName = camelCaseToUpperSnakeCase(name)
+                upperCaseName = changeCase(name, Casing.UpperSnakeCase)
                 if (nameToIndex.has(upperCaseName)) {
                     upperCaseName = `${prefix}_${upperCaseName}`
                 }

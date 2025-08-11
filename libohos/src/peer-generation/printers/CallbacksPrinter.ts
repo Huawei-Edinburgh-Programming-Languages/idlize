@@ -15,7 +15,7 @@
 
 import * as idl from '@idlizer/core/idl'
 import { CppLanguageWriter, NamedMethodSignature } from "../LanguageWriters";
-import { generatorTypePrefix, LanguageWriter, LayoutNodeRole, MethodSignature, PeerLibrary, PrimitiveTypesInstance, snakeCaseToCamelCase } from "@idlizer/core"
+import { capitalize, Casing, changeCase, generatorTypePrefix, LanguageWriter, LayoutNodeRole, MethodSignature, PeerLibrary, PrimitiveTypesInstance } from "@idlizer/core"
 import { peerGeneratorConfiguration } from "../../DefaultConfiguration";
 import { ImportsCollector } from "../ImportsCollector"
 import { Language, LibraryInterface, CallbackConvertor, maybeTransformManagedCallback } from  '@idlizer/core'
@@ -394,7 +394,7 @@ class DeserializeCallbacksVisitor {
                 writer.writeStatement(writer.makeThrowError(`Unknown callback kind`))
             }
         })
-        const camelcaseModuleName = snakeCaseToCamelCase(peerGeneratorConfiguration().moduleName.split(".").join("_"))
+        const camelcaseModuleName = capitalize(changeCase(peerGeneratorConfiguration().moduleName, Casing.CamelCase))
         if (this.writer.language != Language.CPP) {
             this.writer.writeFunctionImplementation(`register${camelcaseModuleName}ApiHandler`, new MethodSignature(idl.IDLVoidType, []), writer => {
                 writer.addFeature('registerApiEventHandler', '@koalaui/interop')

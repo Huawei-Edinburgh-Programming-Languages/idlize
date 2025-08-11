@@ -16,6 +16,8 @@
 import {
     camelCaseToUpperSnakeCase,
     capitalize,
+    Casing,
+    changeCase,
     collapseTypes,
     filterRedundantAttributesOverloads,
     filterRedundantMethodsOverloads,
@@ -413,7 +415,6 @@ class IDLVisitor extends arkts.AbstractVisitor {
             .replaceAll('.idl', '')
             .split(path.sep)
             .map(it => it.replaceAll('@', ''))
-            .map(it => it.split('-').map((it, i) => i === 0 ? it : capitalize(it)).join('')) // kebab-case to camelCase
             .filter(it => it.length && it !== '.' && it !== '..')
     }
 

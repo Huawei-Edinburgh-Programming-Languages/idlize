@@ -28,7 +28,9 @@ import {
     PeerLibrary,
     PrimitiveTypesInstance,
     PrimitiveTypeList,
-    getSuper
+    getSuper,
+    changeCase,
+    Casing
 } from "@idlizer/core"
 import { RuntimeType } from "@idlizer/core"
 import { LanguageExpression, Method, MethodModifier, NamedMethodSignature } from "../LanguageWriters"
@@ -143,7 +145,7 @@ export class StructPrinter {
                 for (let member of enumTarget.elements) {
                     const memberName = member.name
                     const initializer = (!stringEnum && (member.initializer !== undefined)) ? " = " + member.initializer : ""
-                    enumsDeclarations.print(`${camelCaseToUpperSnakeCase(nameAssigned)}_${memberName}${initializer},`)
+                    enumsDeclarations.print(`${changeCase(nameAssigned, Casing.UpperSnakeCase)}_${memberName}${initializer},`)
                 }
                 enumsDeclarations.popIndent()
                 enumsDeclarations.print(`} ${nameAssigned};`)

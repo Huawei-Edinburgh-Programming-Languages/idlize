@@ -3873,10 +3873,10 @@ typedef struct Opt_WordBreak {
     Ark_WordBreak value;
 } Opt_WordBreak;
 typedef enum Ark_XComponentType {
-    ARK_XCOMPONENT_TYPE_SURFACE = 0,
-    ARK_XCOMPONENT_TYPE_COMPONENT = 1,
-    ARK_XCOMPONENT_TYPE_TEXTURE = 2,
-    ARK_XCOMPONENT_TYPE_NODE = 3,
+    ARK_X_COMPONENT_TYPE_SURFACE = 0,
+    ARK_X_COMPONENT_TYPE_COMPONENT = 1,
+    ARK_X_COMPONENT_TYPE_TEXTURE = 2,
+    ARK_X_COMPONENT_TYPE_NODE = 3,
 } Ark_XComponentType;
 typedef struct Opt_XComponentType {
     Ark_Tag tag;
