@@ -108,6 +108,20 @@ export class TSPrinter {
           case std.names.types.pointer: { this.printType(type.args[0]); return }
           case std.names.types.reference: { this.printType(type.args[0]); return }
           case std.names.types.constant: { this.printType(type.args[0]); return }
+          case std.names.types.intersection:
+            this.p.put('[')
+            type.args.forEach((arg, i) => {
+              if (i > 0) this.p.put(',', ' ')
+              this.printType(arg)
+            })
+            this.p.put(']')
+            return
+          case std.names.types.union:
+            type.args.forEach((arg, i) => {
+              if (i > 0) this.p.put(' ', '|', ' ')
+              this.printType(arg)
+            })
+            return
         }
 
         this.p.put(type.head)

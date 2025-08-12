@@ -13,21 +13,20 @@
  * limitations under the License.
  */
 
-import { D, T } from "../../../ost/main";
+import { Ts } from "../../../ost/main";
 import * as idl from "@idlizer/core/idl"
-import { createSpecialProducer, managedName, roles } from "../common";
+import { createSpecialProducer, roles } from "../common";
 
 export const unionProducer = createSpecialProducer(
   { is: idl.isUnionType, role: roles.managed },
   (union, ctx) => {
-    const generatedDeclName = managedName(idl.getFQName(union))
     return {
-      artifact: {
-        reference: T.cc(generatedDeclName),
-        implementationGenerator: () => {
-          return D.union(
-            generatedDeclName,
-            union.types.map(type => ctx.useManaged(type).reference()))
+      recursive: () => {
+        return {
+          artifact: {
+            reference: Ts.union(
+              union.types.map(type => ctx.useManaged(type).reference()))
+          }
         }
       }
     }
