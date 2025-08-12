@@ -86,4 +86,5 @@ interface FrameNode {
     static FrameNode createTypedFrameNode(String type);
     pointer createByRawPtr(FrameNode pointer);
     FrameNode unWrapRawPtr(pointer pointer);
+    void applyAttributesFinish(FrameNode node);
 };
