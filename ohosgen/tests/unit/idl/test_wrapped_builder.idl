@@ -13,7 +13,7 @@ WrappedBuilder wrapBuilder(Callback_WrappedBuilder_Args_Void builder);
 
 [Entity=Interface]
 interface ContentModifier {
-    WrappedBuilder applyContent();
+///    WrappedBuilder applyContent();
 };
 
 [Entity=Interface]

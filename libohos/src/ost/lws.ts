@@ -115,7 +115,7 @@ export interface ClassDeclaration {
   oop?: {
     base?: LWType
     implementations?: LWType[]
-    sort: 'interface' | 'class'
+    kind: 'interface' | 'class'
   }
 }
 export interface NamespaceDeclaration {

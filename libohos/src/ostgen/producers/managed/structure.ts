@@ -17,7 +17,7 @@ import { D, Md, T, Ts } from "../../../ost/main";
 import * as idl from "@idlizer/core/idl"
 import { makePeerMethod } from "../components/peerMethod";
 import { createSpecialProducer, managedName, roles } from "../common";
-import { isMaterialized } from "@idlizer/core";
+import { getSuperType, isMaterialized } from "@idlizer/core";
 
 export const structureProducer = createSpecialProducer(
   { is: idl.isInterface, role: roles.managed },
@@ -36,30 +36,29 @@ export const structureProducer = createSpecialProducer(
     }
 
     const generatedDeclName = managedName(idl.getFQName(node))
-    const fields = () => node.properties.map(prop => {
-      const modifiers = [
-        ...prop.isOptional ? [Md.optional] : [],
-        ...prop.isReadonly ? [Md.readonly] : [],
-        ...prop.isStatic ? [Md.static] : [],
-      ]
-      return {
-        name: prop.name,
-        type: ctx.useManaged(prop.type).reference(),
-        modifiers,
-      }
-    })
 
     const implementationGenerator = isMaterialized(node, ctx.base.resolver.R)
       ? undefined
-      : () =>
-        node.methods.length > 0
-          ? D.class(generatedDeclName,
-            fields(),
-            node.methods.map(method => {
-              return makePeerMethod(method, ctx)
-            }))
-          : D.struct(generatedDeclName, fields())
-
+      : () => {
+        const superType = getSuperType(node, ctx.base.resolver.R)
+        return D.class(generatedDeclName,
+          node.properties.map(prop => {
+            const modifiers = [
+              ...prop.isOptional ? [Md.optional] : [],
+              ...prop.isReadonly ? [Md.readonly] : [],
+              ...prop.isStatic ? [Md.static] : [],
+            ]
+            return {
+              name: prop.name,
+              type: ctx.useManaged(prop.type).reference(),
+              modifiers,
+            }
+          }),
+          node.methods.map(method => makePeerMethod(method, ctx)), {
+          kind: idl.isClassSubkind(node) ? 'class' : 'interface',
+          base: superType ? ctx.useManaged(superType).reference() : undefined
+          })
+      }
     return {
       artifact: {
         reference: T.cc(generatedDeclName),
