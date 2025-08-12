@@ -26,7 +26,6 @@ import {
     IDLParameter,
     IDLPointerType,
     IDLProperty,
-    IDLReferenceType,
     IDLType,
     IDLUndefinedType,
     IDLVoidType,
@@ -56,14 +55,14 @@ import { Importer } from "./Importer"
 import { InteropConstructions } from "../../constuctions/InteropConstructions"
 import { Typechecker } from "../../general/Typechecker"
 import { LibraryTypeConvertor } from "../../type-convertors/top-level/LibraryTypeConvertor"
-import { convertAndImport } from "../../type-convertors/top-level/ImporterTypeConvertor"
+import { ImporterTypeConvertor } from "../../type-convertors/top-level/ImporterTypeConvertor"
 import { SingleFilePrinter } from "../SingleFilePrinter"
 import { BindingParameterTypeConvertor } from "../../type-convertors/top-level/peers/BindingParameterTypeConvertor"
 import { BindingReturnValueTypeConvertor } from "../../type-convertors/top-level/peers/BindingReturnValueTypeConvertor"
+import { composedConvertType } from "../../type-convertors/BaseTypeConvertor"
 import { Config } from "../../general/Config"
 import { ExtraParameter } from "../../options/ExtraParameters"
 import assert from "node:assert"
-import { dropPrefix } from "../../utils/string"
 
 export class PeerPrinter extends SingleFilePrinter {
     protected printInterface(node: IDLInterface): void {
@@ -87,7 +86,7 @@ export class PeerPrinter extends SingleFilePrinter {
         super(idl)
     }
 
-    protected typechecker = new Typechecker(this.idl)
+    protected typechecker = new Typechecker(this.idl.entries)
 
     protected importer = new Importer(this.typechecker, `.`, this.node.name)
 
@@ -100,20 +99,17 @@ export class PeerPrinter extends SingleFilePrinter {
     protected writer = new TSLanguageWriter(
         new IndentedPrinter(),
         createEmptyReferenceResolver(),
-        { convert: (node: IDLType) => convertAndImport(
-            this.importer,
-            new class extends LibraryTypeConvertor {
-                convertTypeReference(type: IDLReferenceType): string {
-                    return dropPrefix(super.convertTypeReference(type), Config.dataClassPrefix)
-                }
-            } (this.typechecker),
-            node
-        )}
+        { convert: (node: IDLType) => composedConvertType(
+                new LibraryTypeConvertor(this.typechecker),
+                new ImporterTypeConvertor(this.importer, this.typechecker),
+                node
+            )
+        }
     )
 
     private printPeer(): void {
         this.writer.writeClass(
-            PeersConstructions.peerName(this.node.name), // XXX: Change peer name
+            this.node.name,
             () => this.printBody(),
             this.parent ? this.importer.withPeerImport(baseNameString(this.parent)) : undefined
         )

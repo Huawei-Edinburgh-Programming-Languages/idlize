@@ -41,8 +41,9 @@ export class Importer {
         if (this.seen.has(it)) {
             return it
         }
-        // the 'it' parameter can be a modified peer name
-        // and therefor cannot be resolved here
+        if (!this.typechecker.isPeer(it)) {
+            return it
+        }
         this.seen.add(it)
         this.import(it, it)
         return it

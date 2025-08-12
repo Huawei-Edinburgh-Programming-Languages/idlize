@@ -52,7 +52,7 @@ export abstract class SingleFilePrinter extends AbstractVisitor {
     prologue() {}
     epilogue() {}
 
-    protected typechecker = new Typechecker(this.idl)
+    protected typechecker = new Typechecker(this.idl.entries)
     protected importer?: Importer
     protected abstract writer: LanguageWriter
 
