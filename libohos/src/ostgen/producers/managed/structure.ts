@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { D, Md, T } from "../../../ost/main";
+import { D, Md, T, Ts } from "../../../ost/main";
 import * as idl from "@idlizer/core/idl"
 import { makePeerMethod } from "../components/peerMethod";
 import { createSpecialProducer, managedName, roles } from "../common";
@@ -22,6 +22,19 @@ import { isMaterialized } from "@idlizer/core";
 export const structureProducer = createSpecialProducer(
   { is: idl.isInterface, role: roles.managed },
   (node, ctx) => {
+    if (node.subkind === idl.IDLInterfaceSubkind.Tuple) {
+      return {
+        recursive: () => {
+          return {
+            artifact: {
+              reference: Ts.intersection(
+                node.properties.map(prop => ctx.useManaged(prop.type).reference()))
+            }
+          }
+        }
+      }
+    }
+
     const generatedDeclName = managedName(idl.getFQName(node))
     const fields = () => node.properties.map(prop => {
       const modifiers = [
@@ -35,6 +48,7 @@ export const structureProducer = createSpecialProducer(
         modifiers,
       }
     })
+
     const implementationGenerator = isMaterialized(node, ctx.base.resolver.R)
       ? undefined
       : () =>
@@ -45,6 +59,7 @@ export const structureProducer = createSpecialProducer(
               return makePeerMethod(method, ctx)
             }))
           : D.struct(generatedDeclName, fields())
+
     return {
       artifact: {
         reference: T.cc(generatedDeclName),
