@@ -1,0 +1,6 @@
+package managed.lib;
+
+interface ManagedClass {
+    number inc(number value);
+};
+

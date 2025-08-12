@@ -18,6 +18,7 @@ import {
     IndentedPrinter,
     Language,
     camelCaseToUpperSnakeCase,
+    isManaged,
     isMaterialized,
     isBuilderClass,
     isImportAttr,
@@ -122,7 +123,8 @@ export class StructPrinter {
                 this.printOptionalIfNeeded(forwardDeclarations, concreteDeclarations, writeToString, idl.IDLObjectType, seenNames)
                 continue
             }
-            if (idl.isInterface(target) && generatorConfiguration().forceResource.includes(target.name)) {
+            if (idl.isInterface(target) && isManaged(target)) {
+            // if (idl.isInterface(target) && generatorConfiguration().forceResource.includes(target.name)) {
                 typedefDeclarations.print(`typedef ${DECL_RESOURCE} ${nameAssigned};`)
                 // idl.createOptionalType(...)
                 const optNameAssigned = `${generatorConfiguration().OptionalPrefix}${target.name}`

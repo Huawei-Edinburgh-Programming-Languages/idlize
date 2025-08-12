@@ -1,5 +1,5 @@
 import * as idl from "@idlizer/core/idl"
-import { generatorConfiguration, Language, LibraryInterface, isMaterialized, cleanPrefix, isInIdlize, isStaticMaterialized, isInCurrentModule, PeerLibrary, maybeTransformManagedCallback } from "@idlizer/core";
+import { generatorConfiguration, Language, LibraryInterface, isManaged, isMaterialized, cleanPrefix, isInIdlize, isStaticMaterialized, isInCurrentModule, PeerLibrary, maybeTransformManagedCallback } from "@idlizer/core";
 import { isComponentDeclaration } from "./ComponentsCollector";
 import { UnionFlatteningMode, DependencySorter } from "./idl/DependencySorter";
 import { IdlNameConvertor } from "@idlizer/core";
@@ -186,7 +186,7 @@ export namespace DeclarationTargets {
             .filter(it => it !== idl.IDLVoidType)
             .filter(it => {
                 if (idl.isOptionalType(it)) it = it.type
-                if (idl.isNamedNode(it) && peerGeneratorConfiguration().isResource(it.name)) return false
+                if (idl.isNamedNode(it) && isManaged(it)) return false
                 if ((idl.isInterface(it) || idl.isReferenceType(it)) && peerGeneratorConfiguration().serializer.ignore.includes(it.name)) return false
                 return true
             })

@@ -1,0 +1,8 @@
+package test_managed_lib;
+
+import managed.lib.ManagedClass as ManagedClass;
+
+[Entity=Class]
+interface IDLCheckManagedLib {
+    ManagedClass checkManagedClass(ManagedClass managedClass);
+};

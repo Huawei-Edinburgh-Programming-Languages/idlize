@@ -55,6 +55,7 @@ import {
     Language,
     LanguageWriter,
     qualifiedName,
+    isManaged,
     isMaterialized,
     PeerLibrary,
     CppLanguageWriter,
@@ -182,7 +183,7 @@ class OHOSNativeVisitor {
     }
 
     private writeModifier(clazz: IDLInterface, writer: CppLanguageWriter) {
-        if (peerGeneratorConfiguration().isResource(clazz.name)) return
+        if (isManaged(clazz)) return
         let name = this.modifierName(clazz)
         let handleType = this.handleType(clazz)
         let className = qualifiedName(clazz, "_", "namespace.name")
@@ -345,7 +346,7 @@ class OHOSNativeVisitor {
         _c.pushIndent()
         _c.print(`1, // version`)
         this.interfaces.forEach(it => {
-            if (!peerGeneratorConfiguration().isResource(it.name))
+            if (!isManaged(it))
                 _c.print(`&${this.modifierName(it)}Impl,`)
         })
         _c.popIndent()
@@ -360,7 +361,7 @@ class OHOSNativeVisitor {
         _h.pushIndent()
         _h.print(`${generatorConfiguration().TypePrefix}Int32 version;`)
         this.interfaces.forEach(it => {
-            if (!peerGeneratorConfiguration().isResource(it.name))
+            if (!isManaged(it))
                 _h.print(`const ${this.modifierName(it)}* (*${this.apiName(it)})();`)
         })
         _h.popIndent()
@@ -503,7 +504,7 @@ class OhosBridgeCcVisitor extends BridgeCcVisitor {
     }
 
     protected printMaterializedClass(clazz: MaterializedClass) {
-        if (peerGeneratorConfiguration().isResource(clazz.className)) return
+        if (isManaged(clazz.decl)) return
         const modifierName = "";
         for (const method of [...clazz.ctors, clazz.finalizer].concat(clazz.methods)) {
             if (!method) continue

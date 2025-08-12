@@ -17,12 +17,13 @@ import { generatorConfiguration } from '../config'
 import * as idl from '../idl'
 import { isBuilderClass } from './BuilderClass'
 import { getSuper } from './getSuperType'
+import { isManaged } from './isManaged'
 import { ReferenceResolver } from './ReferenceResolver'
 
 export function isMaterialized(declaration: idl.IDLInterface, resolver: ReferenceResolver): boolean {
     if (!idl.isInterfaceSubkind(declaration) && !idl.isClassSubkind(declaration)) return false
     if (idl.isHandwritten(declaration) || isBuilderClass(declaration)) return false
-    if (generatorConfiguration().forceResource.includes(declaration.name)) {
+    if (isManaged(declaration)) {
         return false
     }
 

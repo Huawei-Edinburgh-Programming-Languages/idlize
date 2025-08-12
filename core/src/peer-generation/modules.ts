@@ -19,13 +19,27 @@ export function isInExternalModule(node: idl.IDLNode): boolean {
 export function getModuleFor(node: idl.IDLNode): ModuleConfiguration
 export function getModuleFor(packageName: string): ModuleConfiguration
 export function getModuleFor(nodeOrPackage: idl.IDLNode | string): ModuleConfiguration {
-    if (typeof nodeOrPackage === "object")
+    // if (typeof nodeOrPackage === "object")
+    //     return getModuleFor(idl.getPackageName(nodeOrPackage))
+    if (typeof nodeOrPackage === "object") {
+        if (idl.isNamedNode(nodeOrPackage) && nodeOrPackage.name.includes("ManagedClass")) {
+            console.log(`GetModuleFor: ${nodeOrPackage.name}`)
+            const p = idl.getPackageName(nodeOrPackage)
+            console.log(`PackageName: ${idl.getPackageName(nodeOrPackage)}`)
+        }
         return getModuleFor(idl.getPackageName(nodeOrPackage))
+    }
     const packageName = nodeOrPackage
+    if (packageName.includes("ManagedClass")) {
+        console.log(`ManagedClass packageName: ${packageName}`)
+    }
     let module = modulesCache.get(packageName)
     if (module) return module
     module = getApplicableModuleFor(packageName)
     modulesCache.set(packageName, module)
+    if (packageName.includes("ManagedClass")) {
+        console.log(`ManagedClass module: ${module}`)
+    }
     return module
 }
 

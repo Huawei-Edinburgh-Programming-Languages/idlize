@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { generatorConfiguration, Language, isMaterialized, isBuilderClass, throwException, LanguageExpression, isInIdlize, isInIdlizeInternal, createLanguageWriter, lib, getExtractor, getSerializerName, InterfaceConvertor, ProxyConvertor, PrintHint, CppLanguageWriter, isInCurrentModule, isInExternalModule, capitalize } from '@idlizer/core'
+import { generatorConfiguration, Language, isManaged, isMaterialized, isBuilderClass, throwException, LanguageExpression, isInIdlize, isInIdlizeInternal, createLanguageWriter, lib, getExtractor, getSerializerName, InterfaceConvertor, ProxyConvertor, PrintHint, CppLanguageWriter, isInCurrentModule, isInExternalModule, capitalize } from '@idlizer/core'
 import { ExpressionStatement, LanguageStatement, Method, MethodSignature, NamedMethodSignature } from "../LanguageWriters"
 import { LanguageWriter, PeerLibrary } from "@idlizer/core"
 import { peerGeneratorConfiguration } from '../../DefaultConfiguration'
@@ -341,7 +341,7 @@ export function getSerializerDeclarations(library: PeerLibrary, dependencyFilter
         .map(it => it)
         .filter((it): it is SerializableTarget => dependencyFilter.shouldAdd(it))
         .filter(it => !idl.isHandwritten(it) && !isInIdlizeInternal(it) && !peerGeneratorConfiguration().components.custom.includes(it.name) && !peerGeneratorConfiguration().isHandWritten(it.name))
-        .filter(it => !(idl.isNamedNode(it) && peerGeneratorConfiguration().isResource(it.name)))
+        .filter(it => !(idl.isNamedNode(it) && isManaged(it)))
         .filter(it => !it.typeParameters?.length || it.typeParameters.every(it => it.includes('=')))
         .filter(it => {
             const fullName = qualifiedName(it, "_", "namespace.name")

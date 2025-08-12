@@ -74,6 +74,7 @@ import {
 import { IDLCheckConstructor } from '#compat'
 
 import { InternalModuleDataInterface, RenamedModuleDataInterface, DTSCheckInternalLib } from "#compat"
+import { ManagedClass, IDLCheckManagedLib } from "#compat"
 
 import { ImportedHookValue } from "#compat"
 import { DTSHookClass, DTSHookValue } from "#compat"
@@ -398,6 +399,14 @@ function checkInternalLib() {
   assertEQ(32, check.checkRenamedModuleDataInterface(renamedModuleDataInterface))
 }
 
+function checkManagedLib() {
+  const managedClass = new ManagedClass()
+  const check = new IDLCheckManagedLib()
+  const resultClass:ManagedClass = check.checkManagedClass(managedClass)
+
+  assertEQ(31, resultClass.inc(30))
+}
+
 function checkExternalTypes() {
 
   const check = new DTSCheckExternalLib()
@@ -557,6 +566,7 @@ export function run() {
   // suite.addTest("checkHandwritten", checkHandwritten)
   suite.addTest("checkHooks", checkHooks)
   suite.addTest("checkInternalLib", checkInternalLib)
+  suite.addTest("checkManagedLib", checkManagedLib)
   suite.addTest("checkExternalTypes", checkExternalTypes)
   suite.addTest("checkContentModifier", checkContentModifier)
   suite.addTest("checkPromiseRejected", checkPromiseRejected)

@@ -73,6 +73,10 @@ export { InternalModuleDataInterface } from "./modules/internal_lib"
 export { RenamedModuleDataInterface } from "./modules/newname_lib"
 export { DTSCheckInternalLib } from "../../generated/ts"
 
+export { ManagedClass } from "./modules/managed_lib"
+export { IDLCheckManagedLib } from "../../generated/ts"
+
+
 export { DTSHookClass, DTSHookValue } from "../../generated/ts"
 export { ImportedHookValue } from "./handwritten/external_lib"
 export { ExternalType, hookns } from "./handwritten/external_lib"

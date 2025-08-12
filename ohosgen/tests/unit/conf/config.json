@@ -12,6 +12,16 @@
                 "external.lib"
             ]
         },
+        "managed.lib": {
+            "name": "managed.lib",
+            "external": true,
+            "packages": [
+                "managed.lib"
+            ],
+            "forceObject": [
+                "ManagedClass"
+            ]
+        },
         "renamed.lib": {
             "name": "renamed.lib",
             "packages": [
@@ -52,6 +62,7 @@
                 "test_generic_interface",
                 "test_hilog",
                 "test_internal_lib",
+                "test_managed_lib",
                 "test_length",
                 "test_number",
                 "test_return_types",

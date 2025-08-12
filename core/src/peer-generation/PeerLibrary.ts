@@ -45,6 +45,7 @@ import { isInCurrentModule } from './modules'
 import { generatorConfiguration } from '../config'
 import { KotlinTypeNameConvertor } from '../LanguageWriters/convertors/KotlinConvertors'
 import { NativeModuleType } from '../LanguageWriters/common'
+import { isManaged } from './isManaged'
 
 export interface GlobalScopeDeclarations {
     methods: idl.IDLMethod[]
@@ -385,7 +386,7 @@ export class PeerLibrary implements LibraryInterface {
                 case 'number': return new NumberConvertor(param)
                 case 'KPointer': return new PointerConvertor(param)
             }
-            if (generatorConfiguration().forceResource.includes(type.name)) {
+            if (isManaged(type)) {
                 return new ObjectConvertor(param, type)
             }
             const decl = this.resolveTypeReference(type)
@@ -410,7 +411,7 @@ export class PeerLibrary implements LibraryInterface {
     }
 
     declarationConvertor(param: string, type: idl.IDLReferenceType, declaration: idl.IDLEntry | undefined): ArgConvertor {
-        if (generatorConfiguration().forceResource.includes(type.name)) {
+        if (isManaged(type)) {
             return new ObjectConvertor(param, type)
         }
         let customConv = this.customConvertor(param, type.name, type)
