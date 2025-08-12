@@ -74,9 +74,10 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
         [
             createCallbackKindPrinter(peerLibrary.language),
             createMaterializedPrinter(false),
-            ...spreadIfLang([Language.CJ, Language.JAVA, Language.KOTLIN], createInterfacePrinter(false, false)),
+            ...spreadIfLang([Language.CJ, Language.JAVA, Language.KOTLIN],
+                createInterfacePrinter(false, false),
+                printDataClasses),
             printGlobal,
-            printDataClasses,
             createSerializerPrinter(peerLibrary.language, ""),
             createDeserializeAndCallPrinter(peerLibrary.name, peerLibrary.language),
             createGeneratedNativeModulePrinter(NativeModule.Generated),

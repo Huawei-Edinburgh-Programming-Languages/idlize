@@ -69,7 +69,7 @@ export class IdentityTransformer {
       })),
       methods: decl.methods.map(m => this.goFunctionDeclaration(m)),
       oop: over(decl.oop, oop => ({
-        sort: oop.sort,
+        kind: oop.kind,
         base: over(oop.base, b => this.goType(b)),
         implementations: oop.implementations?.map(imp => this.goType(imp))
       }))

@@ -287,7 +287,7 @@ export class JavaPrinter {
         break
       }
       case lw.LWKind.ClassDeclaration: {
-        const specifier = declaration.oop?.sort === 'interface'
+        const specifier = declaration.oop?.kind === 'interface'
           ? 'interface'
           : 'class'
         this.p.put(specifier, ' ', declaration.name)

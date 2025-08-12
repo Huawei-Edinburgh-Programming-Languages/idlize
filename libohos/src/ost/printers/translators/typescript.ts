@@ -18,6 +18,7 @@ import * as lw from "../../lws"
 import { Md, std } from "../../stdlib";
 import { IdentityTransformer } from "../../visitors/identity";
 import { T, utils } from "../../builder";
+import { peerGeneratorConfiguration } from "../../../DefaultConfiguration";
 
 const varMapping = new Map([
   [std.names.vars.base, 'super'],
@@ -303,7 +304,7 @@ export class TSPrinter {
     }
   }
 
-  private printField(name: string, type: lw.LWType, modifiers?: lw.Modifier[]) {
+  private printField(name: string, type: lw.LWType, modifiers?: lw.Modifier[], initializer?: string) {
     modifiers
       ?.filter(it => it !== Md.optional)
       .forEach(it => this.p.put(it.name, ' '))
@@ -312,6 +313,8 @@ export class TSPrinter {
       this.p.put('?')
     this.p.put(':', ' ')
     this.printType(type)
+    if (initializer)
+      this.p.put(' ', '=', ' ', initializer)
   }
   private printGeneric(generic: lw.GenericDescriptor) {
     this.p.put(generic.name)
@@ -371,7 +374,7 @@ export class TSPrinter {
         break
       }
       case lw.LWKind.ClassDeclaration: {
-        const specifier = declaration.oop?.sort === 'interface'
+        const specifier = declaration.oop?.kind === 'interface'
           ? 'interface'
           : 'class'
         this.p.put('export', ' ', specifier, ' ', declaration.name)
@@ -397,7 +400,8 @@ export class TSPrinter {
         this.p.inc()
         declaration.fields.forEach((field, i) => {
           this.p.newline()
-          this.printField(field.name, field.type, field.modifiers)
+          const value = peerGeneratorConfiguration().constants.get(`${declaration.name}.${field.name}`)
+          this.printField(field.name, field.type, field.modifiers, value)
         })
         declaration.methods.forEach((method, i) => {
           this.p.newline()
