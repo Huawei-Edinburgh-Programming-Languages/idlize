@@ -2983,9 +2983,9 @@
 |`subStyledString`| Function | Pavelyev Ivan | done |  | |
 |`fromHtml`| Function | Pavelyev Ivan | done |  | |
 |`toHtml`| Function | Pavelyev Ivan | done |  |  |
-|`marshalling0`| Function | Politov Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`marshalling0`| Function | Pavelyev Ivan | in progress | | |
 |`marshalling1`| Function | Politov Mikhail | done | | |
-|`unmarshalling0`| Function | Pavelyev Ivan | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|`unmarshalling0`| Function | Pavelyev Ivan | in progress | | |
 |`unmarshalling1`| Function | Pavelyev Ivan | done | | |
 |`getLength`| Function | Pavelyev Ivan | done |  | |
 |*TextStyle*| *Class* | | |
@@ -3057,8 +3057,8 @@
 |`setOnMeasure`| Function | | |
 |`getOnDraw`| Function | | |
 |`setOnDraw`| Function | | |
-|*UserDataSpan*| *Class* | | |
-|`construct`| Function | | |
+|*UserDataSpan*| *Class* | Pavelyev Ivan | |
+|`construct`| Function | Pavelyev Ivan | in progress |
 |*SwiperController*| *Class* | Skroba Gleb | done |  |  |
 |`construct`| Function | Skroba Gleb | done |  |  |
 |`showNext`| Function | Skroba Gleb | done | failed |  |
