@@ -30,7 +30,8 @@
     "@koalaui/interop": "1.7.9"
   },
   "scripts": {
-    "compile": "npm run --prefix ../dtsgen compile && npm run --prefix ../libohos compile && rollup -c",
+    "compile:self": "rollup -c",
+    "compile": "npm run --prefix ../dtsgen compile && npm run --prefix ../libohos compile && npm run compile:self",
     "panda:sdk:install": "npm run panda:sdk:install --prefix ../external/incremental/tools/panda",
     "panda:sdk:check-install": "npm run panda:sdk:check-install --prefix ../external/incremental/tools/panda",
     "generate:xml:idl": "npm run compile && node ../dtsgen --dts2idl --output-dir ./demos/xml/generated/idl --base-dir ../sdk-patched/api,./demos/xml --input-files ../sdk-patched/api/@ohos.xml.d.ts ./demos/xml/@ohos.xml.test.d.ts --options-file ./demos/xml/config.json",

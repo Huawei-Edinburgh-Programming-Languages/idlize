@@ -6,19 +6,38 @@ include:
     - npm run panda:sdk:install --prefix ./external/ui2abc/libarkts
     - npm ls @panda/sdk --prefix ./external/incremental/tools/panda
 
-prepare caches:
-    stage: pre-build
+build idlize:
+    stage: build
     tags:
     - idlize-ci
     - koala-ci
     script:
     - !reference [.npm, script]
     - !reference [.panda, script]
+    - node tools/compile-parallel.mjs
     cache:
     -   key: $CI_PIPELINE_ID
         policy: pull-push
         paths:
         - .npm/
+    artifacts:
+        paths:
+        - arkgen/build
+        - arkgen/lib
+        - arktscgen/lib
+        - core/build
+        - dtsgen/build
+        - dtsgen/lib
+        - etsgen/build
+        - etsgen/lib
+        - idlinter/build
+        - idlinter/dist
+        - interfaces/dist
+        - libohos/build
+        - linter/lib
+        - ohosgen/lib
+        - runner/lib
+
 
 build external:
     stage: build
@@ -78,7 +97,7 @@ download sdk:
     - !reference [.panda, script]
     - npm run download:sdk
     needs:
-    - prepare caches
+    - build idlize
     - build external
     artifacts:
         paths:

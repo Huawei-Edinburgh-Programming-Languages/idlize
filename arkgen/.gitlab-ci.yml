@@ -1,38 +1,3 @@
-stages:
-  - notify
-  - build
-  - test
-  - pre-deploy
-  - deploy
-
-workflow:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "pipeline"
-    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
-
-variables:
-  GIT_SUBMODULE_STRATEGY: recursive
-
-include:
-    - gitlab/setup.yml
-    - gitlab/npm.yml
-    - gitlab/notify.yml
-
-# notify-release:
-#   stage: notify
-#   tags:
-#     - idlize-ci
-#     - koala-ci
-#   script:
-#     - version=$(cat ./VERSION)
-#     - node ./tools/telegram/notify-release.mjs $version
-#   rules:
-#     - if: $CI_COMMIT_BRANCH != 'master'
-#       changes:
-#         compare_to: 'refs/heads/master'
-#         paths:
-#           - VERSION
-
 arkgen TS subset:
   stage: test
   tags:
@@ -48,9 +13,7 @@ arkgen TS subset:
     - npm run -C arkgen build-native:subset:ts
     - npm run -C arkgen exec:subset:ts
   needs:
-    - prepare caches
-    - build arkgen
-    - build interfaces
+    - build idlize
 
 arkgen ArkTS subset:
   stage: test
@@ -66,9 +29,7 @@ arkgen ArkTS subset:
     - npm run -C arkgen build-native:subset:arkts
     - npm run -C arkgen exec:subset:arkts
   needs:
-    - prepare caches
-    - build arkgen
-    - build interfaces
+    - build idlize
     - build external
 
 arkgen TS sdk:
@@ -78,18 +39,18 @@ arkgen TS sdk:
     - koala-ci
   before_script:
     - !reference [.npm, script]
+    - !reference [.panda, script]
   script:
     - npm run -C arkgen setup:sdk:ts
     - npm run -C arkgen gen-idl:sdk:ts
     - npm run -C arkgen gen:sdk:ts
+    - npm run -C arkgen gen-modules:sdk:ts
     - npm run -C arkgen build:sdk:ts
     - npm run -C arkgen build-native:sdk:ts
     - npm run -C arkgen exec:sdk:ts
   needs:
-    - prepare caches
-    - build arkgen
-    - build interfaces
-    - build ohosgen
+    - build idlize
+    - build external
     - download sdk
 
 compile arkts peers:
@@ -98,9 +59,10 @@ compile arkts peers:
   tags:
     - idlize-ci
     - koala-ci
-  dependencies:
-  - download sdk
+  needs:
+  - build idlize
   - build external
+  - download sdk
   before_script:
     - !reference [.npm, script]
     - !reference [.panda, script]
@@ -121,119 +83,30 @@ build arkoala-ts:
     - npm run compile
     - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:ts
 
-#build arkoala-ts-native-arm64:
-#  stage: test
-#  allow_failure: true
-#  tags:
-#    - idlize-ci
-#    - koala-ci
-#  before_script:
-#    - !reference [.setup, script]
-#  script:
-#    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:ts:native:arm64
-#
-#build arkoala-ts-native-arm32:
-#  stage: test
-#  allow_failure: true
-#  tags:
-#    - idlize-ci
-#    - koala-ci
-#  before_script:
-#    - !reference [.setup, script]
-#  script:
-#    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:ts:native:arm32
-
-# todo: enable when meson is configured on CI
-#build arkoala.har:
-#  stage: test
-#  tags:
-#    - idlize-ci
-#    - koala-ci
-#  before_script:
-#    - !reference [.setup, script]
-#  script:
-#    - KOALA_BZ=1 OPENLAB_USERNAME=koala-ci OPENLAB_PASSWORD=w1llUgu3ss npm run arkoala:har-arm32
-#    - cp $CI_PROJECT_DIR/external/arkoala/har/app/arkoala/build/default/outputs/default/arkoala.har $CI_PROJECT_DIR/
-#  artifacts:
-#      expire_in: 1 week
-#      paths:
-#          - arkoala.har
-
-# Build targets
-build arkgen:
-  stage: build
-  tags:
-  - idlize-ci
-  - koala-ci
-  before_script:
-    - !reference [.npm, script]
-    - cd $CI_PROJECT_DIR/arkgen
-  script:
-    - npm run compile
-  artifacts:
-    expire_in: 2 days
-    paths:
-      - arkgen/build
-      - arkgen/lib
-      - arkgen/out
-
-
-build idlize-core:
-  stage: build
-  tags:
-  - idlize-ci
-  - koala-ci
-  before_script:
-    - !reference [.npm, script]
-    - cd $CI_PROJECT_DIR/core
-  script:
-    - npm run compile
-  artifacts:
-    expire_in: 2 days
-    paths:
-      - core/build
-
-build idlize-linter:
-  stage: build
-  tags:
-  - idlize-ci
-  - koala-ci
-  dependencies:
-  - build idlize-core
-  before_script:
-    - !reference [.npm, script]
-    - cd $CI_PROJECT_DIR/linter
-  script:
-    - npm run compile
-  artifacts:
-    expire_in: 2 days
-    paths:
-      - linter/build
-
 # Pack targets
 pack idlize-arkgen:
   extends:
     - .npm-pack
   variables:
     PACKAGE_DIR: arkgen
-  dependencies:
-    - build arkgen
+  needs:
+    - build idlize
 
 pack idlize-core:
   extends:
     - .npm-pack
   variables:
     PACKAGE_DIR: core
-  dependencies:
-    - build idlize-core
+  needs:
+    - build idlize
 
 pack idlize-linter:
   extends:
     - .npm-pack
   variables:
     PACKAGE_DIR: linter
-  dependencies:
-    - build idlize-linter
+  needs:
+    - build idlize
 
 
 # Publish targets
@@ -242,24 +115,24 @@ publish idlize-arkgen:
     - .npm-publish
   variables:
     PACKAGE_DIR: arkgen
-  dependencies:
-    - build arkgen
+  needs:
+    - build idlize
 
 publish idlize-core:
   extends:
     - .npm-publish
   variables:
     PACKAGE_DIR: core
-  dependencies:
-    - build idlize-core
+  needs:
+    - build idlize
 
 publish idlize-linter:
   extends:
     - .npm-publish
   variables:
     PACKAGE_DIR: linter
-  dependencies:
-    - build idlize-linter
+  needs:
+    - build idlize
 
 
 check index-full:
@@ -267,16 +140,17 @@ check index-full:
     tags:
       - idlize-ci
       - koala-ci
-    dependencies:
-    - download sdk
+    needs:
+    - build idlize
     - build external
-    - build interfaces
+    - download sdk
     before_script:
     - !reference [.npm, script]
     - !reference [.panda, script]
     - cd $CI_PROJECT_DIR/arkgen
     script:
-      - npm run check:peers:ets
+      - npm run gen-idl:sdk:ts
+      - npm run gen:sdk:ts
       - npm run check:index-full:ts
 
 subset CAPI golden:
@@ -290,5 +164,4 @@ subset CAPI golden:
   script:
     - npm run test:subset-api
   needs:
-    - build interfaces
-    - build arkgen
+    - build idlize
