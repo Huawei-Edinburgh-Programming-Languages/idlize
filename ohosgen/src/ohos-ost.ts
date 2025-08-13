@@ -54,13 +54,14 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
     selector.register(producers.native.serializerProducer)
     selector.register(producers.managed.serializerProducer)
 
-    // selector.register(producers.native.structureProducer)
-    // selector.register(producers.native.bridgeProducer)
+    selector.register(producers.native.structureProducer)
+    selector.register(producers.native.bridgeProducer)
 
     selector.register(producers.managed.fileProducer)
     selector.register(producers.managed.referenceProducer)
     selector.register(producers.managed.structureProducer)
     selector.register(producers.managed.primitiveProducer)
+    selector.register(producers.managed.functionProducer)
     selector.register(producers.managed.enumProducer)
     selector.register(producers.managed.unionProducer)
     selector.register(producers.managed.callbackProducer)
@@ -69,16 +70,6 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
     selector.register(producers.managed.nativeModuleProducer)
 
     /// fallback producers
-    selector.register(createSpecialProducer(
-        { is: idl.isMethod, role: roles.managed },
-        (method, ctx) => {
-          return { artifact: { reference: T.cc("MANAGED_METHOD_FALLBACK") } }
-        }))
-    selector.register(createSpecialProducer(
-        { is: idl.isMethod, role: roles.native },
-        (method, ctx) => {
-          return { artifact: { reference: T.cc("NATIVE_METHOD_FALLBACK") } }
-        }))
     selector.register(createSpecialProducer(
         { is: idl.isConstant, role: roles.managed },
         (constant, ctx) => {

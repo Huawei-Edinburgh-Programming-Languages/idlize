@@ -73,6 +73,7 @@ export { IdlSkoalaLibrary, IldSkoalaOutFile, IdlWrapperProcessor } from './skoal
 export * from './skoala-generation/SkoalaInstall'
 export * from './skoala-generation/SkoalaGeneration'
 export * from './ost/builder'
+export * from './ost/builders'
 export * from './ost/lws'
 export * from './ost/main'
 export * from './ost/stdlib'

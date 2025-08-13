@@ -24,10 +24,12 @@ import { structureProducer } from "./structure";
 import { unionProducer } from "./union";
 import { callbackProducer } from "./callback";
 import { typedefProducer } from "./typedef";
+import { functionProducer } from "./function";
 
 export const producers = {
     fileProducer,
     enumProducer,
+    functionProducer,
     structureProducer,
     primitiveProducer,
     referenceProducer,
