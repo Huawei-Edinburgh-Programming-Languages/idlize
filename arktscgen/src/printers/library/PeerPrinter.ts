@@ -288,7 +288,7 @@ export class PeerPrinter extends SingleFilePrinter {
         iface: IDLInterface,
         idl: IDLFile
     ): [IDLMethod | IDLProperty, IDLMethod | IDLProperty] {
-        const parents = flatParents(iface, idl)
+        const parents = flatParents(iface, idl) // TODO: replace with typechecker's one for universal resolving
         const methods = parents.flatMap(p => p.methods)
         const props = parents.flatMap(p => p.properties)
         const getters = methods.filter(isGetter)

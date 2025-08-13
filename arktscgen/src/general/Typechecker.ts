@@ -15,7 +15,6 @@
 
 import {
     createReferenceType,
-    IDLEntry,
     IDLFile,
     IDLInterface,
     IDLMethod,
@@ -24,19 +23,15 @@ import {
     IDLNode,
     IDLReferenceType,
     IDLType,
-    IDLVoidType,
-    isEntry,
     isEnum,
     isInterface,
     isNamespace,
     isPrimitiveType,
     isReferenceType,
-    linearizeNamespaceMembers,
-    printType,
     resolveNamedNode
 } from "@idlizer/core"
 import { Config } from "./Config"
-import { baseNameString, flatParentsImpl, fqName, isIrNamespace, nodeNamespace, nodeType, parent } from "../utils/idl"
+import { flatParentsImpl, fqName, nodeType } from "../utils/idl"
 import { isImplInterface } from "./common"
 
 export class Typechecker {
@@ -86,17 +81,18 @@ export class Typechecker {
         return entry
     }
 
+    flatParents(ref: IDLReferenceType|IDLInterface): IDLInterface[] {
+        return flatParentsImpl(ref, (r: IDLReferenceType, _?: IDLNode) => this.resolveReference(r))
+    }
+
     // All classes are consideres heirs of ArktsObject now
     isHeir(ref: IDLReferenceType|IDLInterface, ancestor: string): boolean {
-        const resolveReference =
-            (r: IDLReferenceType, _?: IDLNode) => this.resolveReference(r)
-
-        const iface = isReferenceType(ref) ? resolveReference(ref) : ref
-        if (!iface || !isInterface(iface)) {
+        const iface = isReferenceType(ref) ? this.resolveReference(ref) : ref
+        if (!iface || !isInterface(iface)) { // filter out enums mostly
             return false
         }
 
-        const parents = flatParentsImpl(iface, resolveReference)
+        const parents = this.flatParents(iface)
         if (parents.map(p => p.name).includes(ancestor)) {
             return true
         }
