@@ -21,7 +21,7 @@ import { defaultConfigPath as arkgenConfigPath } from "@idlizer/arkgen/app"
 
 export const WORKING_DIR = resolve(__dirname, '..', 'out')
 export const SDK_PATCH_DIR = join(__dirname, '..', 'patches')
-export const SDK_PATCH_FILE = resolve(SDK_PATCH_DIR, '_default.patch')
+export const SDK_PATCH_FILE = resolve(SDK_PATCH_DIR, 'd322c45c777fc2fed131cf0860e3a827103954d5.patch')
 export const GENERATED_IDL_DIR = join(WORKING_DIR, 'idl')
 export const CLONED_SDK_DIR = join(WORKING_DIR, 'original-sdk')
 export const CLONED_SDK_BUILD_TOOLS = join(CLONED_SDK_DIR, 'build-tools')
