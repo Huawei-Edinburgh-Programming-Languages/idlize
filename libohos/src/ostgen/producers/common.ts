@@ -24,9 +24,9 @@ export const roles = {
     managed: MANAGED_PREFIX,
     cApi: C_API_PREFIX,
     native: NATIVE_PREFIX,
-    nativeModule: "managed.nativeModule",
-    serializerManaged: "managed.serializer",
-    serializerNative: "native.serializer",
+    nativeModule: MANAGED_PREFIX + ".nativeModule",
+    serializerManaged: MANAGED_PREFIX + ".serializer",
+    serializerNative: NATIVE_PREFIX + ".serializer",
 }
 
 export function managedName(name:string) {

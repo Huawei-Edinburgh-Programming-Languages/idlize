@@ -14,7 +14,7 @@
  */
 
 import { D, DD, E, S, T } from "./builder"
-import { CallExpression, ClassDeclaration, FunctionDeclaration, LWExpression, LWStatement, LWType, Modifier } from "./lws"
+import { CallExpression, ClassDeclaration, FunctionDeclaration, LWExpression, LWStatement, LWType, Modifier, StructureDeclaration } from "./lws"
 import { Md, Ts } from "./stdlib";
 
 const id = <T>(it: T) => it
@@ -124,12 +124,50 @@ class FunctionBuilder<P> {
     }
 }
 
-class ClassBuilder {
+class FieldBuilder<P> {
+    constructor(private _cont: (name: string, type: LWType, modifiers?: Modifier[]) => P) {}
+    private _name?: string ///superclass
+    private _type?: LWType
+    private _modifiers: Modifier[] = []
+    static() { this._modifiers.push(Md.static); return this }
+    optional() { this._modifiers.push(Md.optional); return this }
+    readonly() { this._modifiers.push(Md.readonly); return this }
+    name(name: string) { this._name = name; return this }
+    type(type: LWType) { this._type = type; return this }
+    modifiers(modifiers: Modifier[]) { this._modifiers.push(...modifiers); return this }
+    $(): P {
+        check("Field", this._name, this._type)
+        return this._cont(this._name!, this._type!, this._modifiers)
+    }
+}
+
+class StructBuilder {
+    private _name?: string
+    private _fields: { name: string, type: LWType, modifiers?: Modifier[] }[] = []
+    name(name: string) { this._name = name; return this }
+    field(): FieldBuilder<StructBuilder> {
+        return new FieldBuilder((name, type, modifiers) => {
+            this._fields.push({name, type, modifiers})
+            return this
+        })
+    }
+    $(): StructureDeclaration {
+        check("Struct", this._name)
+        return D.struct(this._name!, this._fields)
+    }
+}
+
+class ClassBuilder {///extend StructB
     private _name?: string
     private _fields: { name: string, type: LWType, modifiers?: Modifier[] }[] = []
     private _methods: FunctionDeclaration[] = []
     name(name: string) { this._name = name; return this }
-    // field(): FieldBuilder { return new FieldBuilder(this, field => this._fields.push(field)) }
+    field(): FieldBuilder<ClassBuilder> {
+        return new FieldBuilder((name, type, modifiers) => {
+            this._fields.push({name, type, modifiers})
+            return this
+        })
+    }
     method(): FunctionBuilder<ClassBuilder> {
         return new FunctionBuilder(func => {
             this._methods.push(func)
@@ -143,6 +181,7 @@ class ClassBuilder {
 }
 
 export class Builders {
+    static struct(): StructBuilder { return new StructBuilder() }
     static class(): ClassBuilder { return new ClassBuilder() }
     static function(): FunctionBuilder<FunctionDeclaration> { return new FunctionBuilder(id) }
 }

@@ -24,7 +24,7 @@ export const structureProducer = createSpecialProducer(
   (node, ctx) => {
     if (node.subkind === idl.IDLInterfaceSubkind.Tuple) {
       return {
-        recursive: () => {
+        recursive: () => {///native
           return {
             artifact: {
               reference: Ts.intersection(
@@ -40,6 +40,7 @@ export const structureProducer = createSpecialProducer(
     const implementationGenerator = isMaterialized(node, ctx.base.resolver.R)
       ? undefined
       : () => {
+        ctx.useCApi(node)///inline?
         const superType = getSuperType(node, ctx.base.resolver.R)
         return D.class(generatedDeclName,
           node.properties.map(prop => {

@@ -13,20 +13,20 @@
  * limitations under the License.
  */
 
-import { D, T } from "../../../ost/main";
-import { createProducer } from "../../context";
+import { D, T } from "../../../ost/main"
 import * as idl from "@idlizer/core/idl"
-import { cApiName, createSpecialProducer, roles } from "../common";
+import { cApiName, createSpecialProducer, roles } from "../common"
+import { Builders } from "../../../ost/builders"
 
 export const structureProducer = createSpecialProducer(
   { is: idl.isInterface, role: roles.cApi },
   (node, ctx) => {
-    const generatedDeclName = cApiName(idl.getFQName(node))
+    const name = cApiName(idl.getFQName(node))
     return {
       artifact: {
-        reference: T.cc(generatedDeclName),
+        reference: T.cc(name),
         implementationGenerator: () => {
-          return D.struct(generatedDeclName, node.properties.map(prop => {
+          return D.struct(name, node.properties.map(prop => {
             return {
               name: prop.name,
               type: ctx.useCApi(prop.type).reference()
@@ -37,3 +37,26 @@ export const structureProducer = createSpecialProducer(
     }
   }
 )
+///rm
+// export const optionalProducer = createSpecialProducer(
+//   { is: idl.isInterface, role: roles.optional },
+//   (node, ctx) => {
+//     const fqName = idl.getFQName(node)
+//     const optName = optionalName(fqName)
+//     return {
+//       artifact: {
+//         reference: T.cc(optName),
+//         implementationGenerator: () =>
+//           Builders.struct()
+//             .name(optName)
+//             .field()
+//               .name('tag')
+//               .type(T.cc(cApiName('Tag'))).$()
+//             .field()
+//               .name('value')
+//               .type(ctx.useCApi(node).reference()).$()
+//             .$()
+//       }
+//     }
+//   }
+// )

@@ -13,16 +13,20 @@
  * limitations under the License.
  */
 
-import { bridgeProducer } from "./bridge";
-import { enumProducer } from "./enum";
-import { serializerProducer } from "./serializer";
-import { structureProducer } from "./structure";
-import { unionProducer } from "./union";
+import { D, T } from "../../../ost/main"
+import * as idl from "@idlizer/core/idl"
+import { cApiName, createSpecialProducer, roles } from "../common"
 
-export const producers = {
-    enumProducer,
-    unionProducer,
-    structureProducer,
-    bridgeProducer,
-    serializerProducer,
-}
+export const unionProducer = createSpecialProducer(
+  { is: idl.isUnionType, role: roles.cApi },
+  (node, ctx) => {
+    const name = cApiName(idl.getFQName(node))
+    return {
+      artifact: {
+        reference: T.cc(name),
+        implementationGenerator: () =>
+          D.union(name, node.types.map(type => ctx.useCApi(type).reference()))
+      }
+    }
+  }
+)

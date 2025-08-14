@@ -34,7 +34,8 @@ import {
     lowLevelLike,
     processNPrintCXX,
     roles,
-    processNPrintTS
+    processNPrintTS,
+    createProducer
 } from "@idlizer/libohos"
 
 export function printOstFiles(peerLibrary: PeerLibrary): Map<string, OutputFile> {
@@ -54,6 +55,8 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
     selector.register(producers.native.serializerProducer)
     selector.register(producers.managed.serializerProducer)
 
+    selector.register(producers.native.enumProducer)
+    selector.register(producers.native.unionProducer)
     selector.register(producers.native.structureProducer)
     selector.register(producers.native.bridgeProducer)
 
@@ -73,7 +76,7 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
     selector.register(createSpecialProducer(
         { is: idl.isConstant, role: roles.managed },
         (constant, ctx) => {
-            return { artifact: { reference: T.cc("MANAGED_CONSTANT_FALLBACK")}}
+            return { artifact: { reference: T.cc("///managed.constant.fallback")}}
         }))
 
     const ctx = new GeneratorContext(peerLibrary.files, selector)

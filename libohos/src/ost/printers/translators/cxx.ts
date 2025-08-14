@@ -17,7 +17,8 @@ import { IndentPrinter } from "../indent";
 import * as lw from "../../lws"
 import { std, Ts } from "../../stdlib";
 import { IdentityTransformer } from "../../visitors/identity";
-import { E, T, utils } from "../../builder";
+import { T, utils } from "../../builder";
+import { generatorConfiguration } from "@idlizer/core";
 
 const varMapping = new Map([
   [std.names.vars.base, 'base'],
@@ -28,10 +29,24 @@ const varMapping = new Map([
 ])
 
 export class ConvertCXXTypes extends IdentityTransformer {
-  goConstType(type: lw.ConstType): lw.LWType {
+  private readonly TypePrefix = generatorConfiguration().TypePrefix
+
+  override goConstType(type: lw.ConstType): lw.LWType {
+    const p = (type: string) => T.cc(this.TypePrefix + type)
     switch (type.name) {
-      case std.names.types.i32: return T.cc('int')
-      case std.names.types.string: return Ts.ptr(Ts.const(T.c('char')))
+      case std.names.types.bigint: return T.cc('Int64')
+      case std.names.types.boolean: return T.cc('Boolean')
+      case std.names.types.buffer: return T.cc('Buffer')
+      case std.names.types.f32: return T.cc('Float32')
+      case std.names.types.f64: return T.cc('Float64')
+      case std.names.types.i8: return T.cc('Int8')
+      case std.names.types.i32: return T.cc('Int32')
+      case std.names.types.i64: return T.cc('Int64')
+      case std.names.types.number: return T.cc('Number')
+      case std.names.types.string: return T.cc('String')
+      case std.names.types.u8: return T.cc('Int8')
+      case std.names.types.u32: return T.cc('UInt32')
+      case std.names.types.u64: return T.cc('UInt64')
       case std.names.types.void: return T.cc('void')
     }
     return type
@@ -337,9 +352,39 @@ export class CXXPrinter {
   }
   printDeclaration(declaration: lw.LWDeclaration) {
     switch (declaration.kind) {
-      case lw.LWKind.UnionDeclaration: {
+      case lw.LWKind.EnumDeclaration:
+        this.p.put('typedef', ' ', 'enum', ' ', declaration.name, ' ', '{')
+        this.p.inc().newline()
+        declaration.members.forEach((member, i) => {
+          if (i > 0) {
+            this.p.put(',')
+            this.p.newline()
+          }
+          this.p.put(member.name)
+          if (member.value !== undefined) {
+            const val = typeof member.value === 'number' ? member.value.toString() : `"${member.value}"`
+            this.p.put(' ', '=', ' ', val)
+          }
+        })
+        this.p.dec().newline()
+        this.p.put('}', ' ', declaration.name, ';')
         break
-      }
+      case lw.LWKind.UnionDeclaration:
+        const TypePrefix = generatorConfiguration().TypePrefix///mv
+        this.p.put('typedef', ' ', 'struct', ' ', declaration.name, ' ', '{')
+        this.p.inc().newline()
+        this.p.put(TypePrefix, 'Int32', ' ', 'selector', ';').newline()
+        this.p.put('union', ' ', '{')
+        this.p.inc().newline()
+        declaration.variants.forEach((variant, i) => {
+          if (i > 0) this.p.newline()
+          this.printField('value' + i, variant)
+        })
+        this.p.dec().newline()
+        this.p.put('}', ';')
+        this.p.dec().newline()
+        this.p.put('}', ' ', declaration.name, ';')
+        break
       case lw.LWKind.StructureDeclaration: {
         this.p.put('struct', ' ', declaration.name, ' ', '{')
         this.p.inc().newline()
