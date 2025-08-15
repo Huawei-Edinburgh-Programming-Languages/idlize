@@ -13,13 +13,31 @@
  * limitations under the License.
  */
 
-import { DD, IdentityTransformer, lw, T, Ts } from "../../ost/main";
+import { DD, IdentityTransformer, lw, Md, T, Ts } from "../../ost/main";
 import { throwError } from "../library/utils";
 import { zipStrip } from "@idlizer/core";
 
 export function postprocess(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+    decls = introduceOptionalTypes(decls)
     decls = specializeGenerics(decls)
     return decls
+}
+
+class MakeOptional extends IdentityTransformer {
+    override goStructureDeclaration(decl: lw.StructureDeclaration): lw.StructureDeclaration {
+        decl.members.forEach(field => {
+            if (field.modifiers?.includes(Md.optional))
+                field.type = T.c('idlize.Opt', field.type)
+        })
+        return decl
+    }
+    go(decls: lw.LWDeclaration[]) {
+        return decls.map(decl => this.goDeclaration(decl))
+    }
+}
+
+function introduceOptionalTypes(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+    return new MakeOptional().go(decls)
 }
 
 class MakeInstance extends IdentityTransformer {
@@ -70,10 +88,17 @@ class MakeMono extends IdentityTransformer {
                 { name: 'values', type: Ts.ptr(T.c('V')) },
             ])
         )
+        this.index.set(
+            'idlize.Opt',
+            DD({ generics: [{ name: 'T' }] }).struct('synthetic.mono.Optional', [
+                { name: 'tag', type: T.c('Tag') },
+                { name: 'value', type: T.c('T') },
+            ])
+        )
     }
     private makeSpecializedArgName(type: lw.LWType): string {
         switch (type.kind) {
-            case lw.LWKind.ConstType: return type.name
+            case lw.LWKind.ConstType: return type.name.split('.').pop()!
             case lw.LWKind.AppType: throw new Error("")
             case lw.LWKind.FuncType: throw new Error("")
         }
@@ -118,6 +143,6 @@ class MakeMono extends IdentityTransformer {
     }
 }
 
-export function specializeGenerics(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+function specializeGenerics(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     return new MakeMono(decls).go(decls)
 }

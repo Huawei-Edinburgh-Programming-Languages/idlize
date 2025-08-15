@@ -14,7 +14,7 @@
  */
 
 import * as idl from "@idlizer/core/idl"
-import { Language, PeerLibrary } from "@idlizer/core"
+import { generatorConfiguration, Language, PeerLibrary } from "@idlizer/core"
 import {
     createSpecialProducer,
     LWDeclaration,
@@ -138,6 +138,10 @@ function dumpTsLike(decls: LWDeclaration[], language: Language, packages: Set<st
 
 function dumpCLike(decls: LWDeclaration[]) {
     decls = lowLevelLike.postprocess(decls)
+    // filter out random crap
+    const modulePrefix = `capi.${generatorConfiguration().moduleName}`
+    const synthPrefix = 'synthetic.'
+    decls = decls.filter(it => it.name.startsWith(modulePrefix) || it.name.startsWith(synthPrefix))
     console.log("===================== C-API =====================")
     decls.forEach(decl => {
         console.log(processNPrintCXX(decl))

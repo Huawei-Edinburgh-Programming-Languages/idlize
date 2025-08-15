@@ -31,25 +31,50 @@ const varMapping = new Map([
 export class ConvertCXXTypes extends IdentityTransformer {
   private readonly TypePrefix = generatorConfiguration().TypePrefix
 
+  private goTypeName(name: string): string {
+    const parts = name.split('.')
+    const typeName = parts.pop()!
+    switch (parts.shift()) {
+      case 'capi':
+      case 'managed': return `${this.TypePrefix}${parts.map(it => it.toUpperCase()).join('_')}_${typeName}`
+      case 'synthetic': return typeName
+    }
+    return name
+  }
   override goConstType(type: lw.ConstType): lw.LWType {
     const p = (type: string) => T.cc(this.TypePrefix + type)
     switch (type.name) {
-      case std.names.types.bigint: return T.cc('Int64')
-      case std.names.types.boolean: return T.cc('Boolean')
-      case std.names.types.buffer: return T.cc('Buffer')
-      case std.names.types.f32: return T.cc('Float32')
-      case std.names.types.f64: return T.cc('Float64')
-      case std.names.types.i8: return T.cc('Int8')
-      case std.names.types.i32: return T.cc('Int32')
-      case std.names.types.i64: return T.cc('Int64')
-      case std.names.types.number: return T.cc('Number')
-      case std.names.types.string: return T.cc('String')
-      case std.names.types.u8: return T.cc('Int8')
-      case std.names.types.u32: return T.cc('UInt32')
-      case std.names.types.u64: return T.cc('UInt64')
-      case std.names.types.void: return T.cc('void')
+      case std.names.types.bigint: return p('Int64')
+      case std.names.types.boolean: return p('Boolean')
+      case std.names.types.buffer: return p('Buffer')
+      case std.names.types.f32: return p('Float32')
+      case std.names.types.f64: return p('Float64')
+      case std.names.types.i8: return p('Int8')
+      case std.names.types.i32: return p('Int32')
+      case std.names.types.i64: return p('Int64')
+      case std.names.types.number: return p('Number')
+      case std.names.types.string: return p('String')
+      case std.names.types.u8: return p('Int8')
+      case std.names.types.u32: return p('UInt32')
+      case std.names.types.u64: return p('UInt64')
+      case std.names.types.void: return p('void')
     }
-    return type
+    return T.cc(this.goTypeName(type.name))
+  }
+  override goEnumDeclaration(decl: lw.EnumDeclaration): lw.EnumDeclaration {
+    decl = super.goEnumDeclaration(decl)
+    decl.name = this.goTypeName(decl.name)
+    return decl
+  }
+  override goUnionDeclaration(decl: lw.UnionDeclaration): lw.UnionDeclaration {
+    decl = super.goUnionDeclaration(decl)
+    decl.name = this.goTypeName(decl.name)
+    return decl
+  }
+  override goStructureDeclaration(decl: lw.StructureDeclaration): lw.StructureDeclaration {
+    decl = super.goStructureDeclaration(decl)
+    decl.name = this.goTypeName(decl.name)
+    return decl
   }
 }
 
