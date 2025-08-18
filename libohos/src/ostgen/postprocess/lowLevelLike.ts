@@ -13,13 +13,14 @@
  * limitations under the License.
  */
 
-import { DD, IdentityTransformer, lw, Md, T, Ts } from "../../ost/main";
+import { D, DD, IdentityTransformer, lw, Md, T, Ts } from "../../ost/main";
 import { throwError } from "../library/utils";
 import { zipStrip } from "@idlizer/core";
 
 export function postprocess(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     decls = introduceOptionalTypes(decls)
     decls = specializeGenerics(decls)
+    decls = makeForwardDeclarations(decls)
     return decls
 }
 
@@ -145,4 +146,20 @@ class MakeMono extends IdentityTransformer {
 
 function specializeGenerics(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     return new MakeMono(decls).go(decls)
+}
+
+class MakeForwardDeclarations extends IdentityTransformer {
+    private typedefs: lw.LWDeclaration[] = []
+    override goStructureDeclaration(decl: lw.StructureDeclaration): lw.StructureDeclaration {
+        this.typedefs.push(D.type(decl.name, T.cc(decl.name)))
+        return decl
+    }
+    go(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+        return this.typedefs.concat(
+            decls.map(decl => this.goDeclaration(decl)))
+    }
+}
+
+function makeForwardDeclarations(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+    return new MakeForwardDeclarations().go(decls)
 }

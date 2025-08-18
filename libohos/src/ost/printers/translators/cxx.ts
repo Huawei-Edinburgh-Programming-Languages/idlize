@@ -76,6 +76,11 @@ export class ConvertCXXTypes extends IdentityTransformer {
     decl.name = this.goTypeName(decl.name)
     return decl
   }
+  override goTypedefDeclaration(decl: lw.TypedefDeclaration): lw.TypedefDeclaration {
+    decl = super.goTypedefDeclaration(decl)
+    decl.name = this.goTypeName(decl.name)
+    return decl
+  }
 }
 
 export class CXXPrinter {
