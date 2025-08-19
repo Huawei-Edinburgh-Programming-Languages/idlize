@@ -845,11 +845,14 @@ export class Parser {
         const sloc = this.trackLocation()
         const type = this.parsePrimitiveType()
         const name = this.parseSingleIdentifier()
-        this.skip("=")
-        const value = this.parseLiteral()
-        const extracted = extractLiteral(value)
+        let value: Token | undefined
+        let extracted: ExtractedLiteral | undefined
+        if (this.seeAndSkip("=")) {
+            value = this.parseLiteral()
+            extracted = extractLiteral(value)
+        }
         this.skip(";")
-        return idl.createEnumMember(name.value, undefined as any as idl.IDLEnum, type, extracted.extractedValue, {extendedAttributes: ext, nodeLocation: sloc(), nameLocation: name.location, valueLocation: value.location})
+        return idl.createEnumMember(name.value, undefined as any as idl.IDLEnum, type, extracted?.extractedValue, {extendedAttributes: ext, nodeLocation: sloc(), nameLocation: name.location, valueLocation: value?.location})
     }
 
     parsePackage(): {location: Location, name: string} {
