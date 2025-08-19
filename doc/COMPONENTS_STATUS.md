@@ -2076,10 +2076,10 @@
 |`getFrameNodePtr`| Function | | | | |
 |`createTypedFrameNode`| Function | | |
 |*DrawContext*| *Class* | | | | |
-|`construct`| Function | | | | |
-|`size`| Function | | | | |
-|`sizeInPixel`| Function | | | | |
-|`setCanvas`| Function | | | | |
+|`construct`| Function | Samarin Sergey | in progress | | |
+|`size`| Function | Samarin Sergey | in progress | | |
+|`sizeInPixel`| Function | Samarin Sergey | in progress | | |
+|`setCanvas`| Function | Samarin Sergey | in progress | | |
 |*LengthMetrics*| *Class* | Evstigneev Roman | done | | |
 |`construct`| Function |Evstigneev Roman | done | | |
 |`px`| Function | Evstigneev Roman | done | | |
@@ -3050,13 +3050,13 @@
 |`getObjectFit`| Function | Evstigneev Roman | done | | |
 |`getLayoutStyle`| Function | Evstigneev Roman | done | | |
 |`getColorFilter`| Function | Evstigneev Roman | in progress | | ColorFilter done, feature: API not present |
-|*CustomSpan*| *Class* | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`construct`| Function |Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`invalidate`| Function | Politov Mikhail | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
-|`getOnMeasure`| Function | | |
-|`setOnMeasure`| Function | | |
-|`getOnDraw`| Function | | |
-|`setOnDraw`| Function | | |
+|*CustomSpan*| *Class* | Samarin Sergey | in progress | | |
+|`construct`| Function | Samarin Sergey | in progress | | |
+|`invalidate`| Function | Samarin Sergey | in progress | | |
+|`getOnMeasure`| Function | Samarin Sergey | in progress | | |
+|`setOnMeasure`| Function | Samarin Sergey | in progress | | |
+|`getOnDraw`| Function | Samarin Sergey | in progress | | |
+|`setOnDraw`| Function | Samarin Sergey | in progress | | |
 |*UserDataSpan*| *Class* | Pavelyev Ivan | |
 |`construct`| Function | Pavelyev Ivan | in progress |
 |*SwiperController*| *Class* | Skroba Gleb | done |  |  |
