@@ -99,19 +99,20 @@ function main() {
     if (options.lint) {
         const resolver = new PeerLibrary(Language.TS, NativeModule.Interop)
         const files = dtsInputFiles.map((filePath) => {
-            resolver.files.push(parseIDLFile(filePath))
+            const result = parseIDLFile(filePath)
+            resolver.files.push(result)
             return result
         })
         resolver.disableFallback()
         let totalErrors = 0
         const errorRecords: [string, number][] = []
-        files.forEach(([file, info]) => {
+        files.forEach((file) => {
             try {
                 verifyIDLLinter(file, resolver, {
                     checkEnumsConsistency: true,
                     checkReferencesResolved: true,
                     validEntryAttributes: peerGeneratorConfiguration().linter.validEntryAttributes
-                }, info)
+                })
             } catch (error) {
                 if (error instanceof IDLLinterError) {
                     totalErrors += error.size
