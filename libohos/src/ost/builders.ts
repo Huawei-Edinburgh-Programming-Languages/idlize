@@ -14,7 +14,7 @@
  */
 
 import { D, DD, E, S, T } from "./builder"
-import { CallExpression, ClassDeclaration, FunctionDeclaration, LWExpression, LWStatement, LWType, Modifier, StructureDeclaration } from "./lws"
+import { AccessorExpression, BinaryExpression, CallExpression, ClassDeclaration, ConstType, DeclarationStatement, FunctionDeclaration, IfStatement, LWExpression, LWStatement, LWType, Modifier, StructureDeclaration } from "./lws"
 import { Md, Ts } from "./stdlib";
 
 const id = <T>(it: T) => it
@@ -24,18 +24,119 @@ function check(desc: string, ...data: any[]) {
         throw new Error(desc + "not fully initialized: " + data.join(", "))
 }
 
+class AccessorBuilder<P> {
+    constructor(private _cont: (expr: AccessorExpression) => P, private object: LWExpression) {
+        this._base = object
+    }
+    private _base?: LWExpression
+    private _member?: string
+    member(name: string) { this._member = name; return this }
+    $(): P {
+        check("Accessor", this._base, this._member)
+        return this._cont(E.get(this._base!, this._member!))
+    }
+}
+
+class BinaryBuilder<P> {
+    constructor(private _cont: (expr: BinaryExpression) => P, private op: string) {}
+    private _lhs?: LWExpression
+    private _rhs?: LWExpression
+    leftExpr(value: LWExpression) { this._lhs = value; return this }
+    leftStr(str: string) { this._lhs = E.v(str); return this }
+    rightExpr(value: LWExpression) { this._rhs = value; return this }
+    rightStr(str: string | number) { this._rhs = E.c(str); return this }
+    left(): ExpressionBuilder<BinaryBuilder<P>> {
+        return new ExpressionBuilder(expr => {
+            this._lhs = expr
+            return this
+        })
+    }
+    right(): ExpressionBuilder<BinaryBuilder<P>> {
+        return new ExpressionBuilder(expr => {
+            this._rhs = expr
+            return this
+        })
+    }
+    $(): P {
+        check("Binary", this._lhs, this._rhs)
+        return this._cont(E.bin(this.op, this._lhs!, this._rhs!))
+    }
+}
+
+class ArgBuilder<P> {
+    constructor(private _cont: (args: LWExpression[]) => P) {}
+    private _args: LWExpression[] = []
+    arg(value: LWExpression) { this._args.push(value); return this }
+    $(): P {
+        return this._cont(this._args)
+    }
+}
+
 class CallBuilder<P> {
     constructor(private _cont: (expr: CallExpression) => P) {}
-    private _object?: string
+    private _object?: LWExpression
     private _function?: string
     private _args: LWExpression[] = []
-    object(name: string) { this._object = name; return this }
+    objectName(name: string) { this._object = E.v(name); return this }
+    object(object: LWExpression) { this._object = object; return this }
     function(name: string) { this._function = name; return this }
-    args(args: LWExpression[]) { this._args.push(...args); return this }
+    arguments(args: LWExpression[]) { this._args.push(...args); return this }
+    args(): ArgBuilder<CallBuilder<P>> {
+        return new ArgBuilder(args => {
+            this._args.push(...args)
+            return this
+        })
+    }
     $(): P {
         check("Call", this._function)
-        const callee = this._object ? E.get(E.v(this._object), this._function!) : E.s(this._function!)
+        const callee = this._object ? E.get(this._object, this._function!) : E.s(this._function!)
         return this._cont(E.call(callee, this._args))
+    }
+}
+
+class ExpressionBuilder<P> {
+    constructor(private _cont: (expr: LWExpression) => P) {}
+    private _expr?: LWExpression
+    access(object: LWExpression): AccessorBuilder<ExpressionBuilder<P>> {
+        return new AccessorBuilder(expr => {
+            this._expr = expr
+            return this
+        }, object)
+    }
+    binary(op: string): BinaryBuilder<ExpressionBuilder<P>> {
+        return new BinaryBuilder(expr => {
+            this._expr = expr
+            return this
+        }, op)
+    }
+    call(): CallBuilder<ExpressionBuilder<P>> {
+        return new CallBuilder(expr => {
+            this._expr = expr
+            return this
+        })
+    }
+    instanceof(name: string, type: ConstType) { this._expr = E.bin("instanceof", E.v(name), E.c(type.name))} ///need InstanceofExpression
+    $(): P {
+        check("Expression", this._expr)
+        return this._cont(this._expr!)
+    }
+}
+
+class DeclarationBuilder<P> {
+    constructor(private _cont: (stmt: DeclarationStatement) => P, private _name: string, private _type: LWType) {}
+    private _mutable: boolean = false
+    private _expression?: LWExpression
+    mutable() { this._mutable = true; return this }
+    valueExpr(expr: LWExpression) { this._expression = expr; return this }
+    valueStr(str: string) { this._expression = E.s(str); return this }
+    value(): ExpressionBuilder<DeclarationBuilder<P>> {
+        return new ExpressionBuilder(expr => {
+            this._expression = expr
+            return this
+        })
+    }
+    $(): P {
+        return this._cont(S.declaration(this._name, this._type, this._mutable, this._expression))
     }
 }
 
@@ -56,6 +157,76 @@ class ReturnBuilder<P> {
         }
         // plain `return`
         return this._cont(S.return())
+    }
+}
+
+class IfBuilder<P> {
+    constructor(private _cont: (stmt: IfStatement) => P) {}
+    private _cond?: LWExpression
+    private _then?: LWStatement
+    private _else?: LWStatement
+    condition(cond: LWExpression) { this._cond = cond; return this }
+    cond(): ExpressionBuilder<IfBuilder<P>> {
+        return new ExpressionBuilder(expr => {
+            this._cond = expr
+            return this
+        })
+    }
+    then(): StatementBuilder<IfBuilder<P>> {
+        return new StatementBuilder(stmt => {
+            this._then = stmt
+            return this
+        })
+    }
+    else(): StatementBuilder<IfBuilder<P>> {
+        return new StatementBuilder(stmt => {
+            this._else = stmt
+            return this
+        })
+    }
+    $(): P {
+        check("If", this._cond, this._then)
+        return this._cont(S.if(this._cond!, this._then!, this._else))
+    }
+}
+
+class StatementBuilder<P> {
+    constructor(private _cont: (stmt: LWStatement) => P) {}
+    private _stmt?: LWStatement
+    statements(stmts: LWStatement[]) { this._stmt = S.block(stmts); return this }
+    binary(op: string): BinaryBuilder<StatementBuilder<P>> {
+        return new BinaryBuilder(stmt => {
+            this._stmt = S.e(stmt)
+            return this
+        }, op)
+    }
+    block(): BlockBuilder<StatementBuilder<P>> {
+        return new BlockBuilder(stmts => {
+            this._stmt = S.block(stmts)
+            return this
+        })
+    }
+    call(): CallBuilder<StatementBuilder<P>> {
+        return new CallBuilder(stmt => {
+            this._stmt = S.e(stmt)
+            return this
+        })
+    }
+    decl(name: string, type: LWType): DeclarationBuilder<StatementBuilder<P>> {
+        return new DeclarationBuilder(stmt => {
+            this._stmt = stmt
+            return this
+        }, name, type)
+    }
+    if(): IfBuilder<StatementBuilder<P>> {
+        return new IfBuilder(stmt => {
+            this._stmt = stmt
+            return this
+        })
+    }
+    $(): P {
+        check("Statement", this._stmt)
+        return this._cont(this._stmt!)
     }
 }
 
@@ -181,7 +352,9 @@ class ClassBuilder {///extend StructB
 }
 
 export class Builders {
+    static expr(): ExpressionBuilder<LWExpression> { return new ExpressionBuilder(id) }
+    static stmt(): StatementBuilder<LWStatement> { return new StatementBuilder(id) }
+    static function(): FunctionBuilder<FunctionDeclaration> { return new FunctionBuilder(id) }
     static struct(): StructBuilder { return new StructBuilder() }
     static class(): ClassBuilder { return new ClassBuilder() }
-    static function(): FunctionBuilder<FunctionDeclaration> { return new FunctionBuilder(id) }
 }

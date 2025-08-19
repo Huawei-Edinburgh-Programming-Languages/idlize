@@ -40,7 +40,7 @@ export const structureProducer = createSpecialProducer(
     const implementationGenerator = isMaterialized(node, ctx.base.resolver.R)
       ? undefined
       : () => {
-        ctx.useCApi(node)///inline?
+        ctx.useCApi(node)
         const superType = getSuperType(node, ctx.base.resolver.R)
         return D.class(generatedDeclName,
           node.properties.map(prop => {

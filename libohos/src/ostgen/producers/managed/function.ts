@@ -34,8 +34,8 @@ export const functionProducer = createSpecialProducer(
             .returns(returnType)
             .block()
               .return(returnType)
-                .call().object("GlobalScope").function(method.name)
-                .args(method.parameters.map(it => E.v(it.name))).$()
+                .call().objectName("GlobalScope").function(method.name)
+                .arguments(method.parameters.map(it => E.v(it.name))).$()
             .$().$().$()
         }
       }
