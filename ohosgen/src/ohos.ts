@@ -68,7 +68,7 @@ function printCallbackChecker(peerLibrary: PeerLibrary): PrinterResult[] {
     }]
 }
 
-export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: PeerGeneratorConfiguration) {
+export function generateOhos(outDir: string, peerLibrary: PeerLibrary, useOst: boolean, config: PeerGeneratorConfiguration) {
     const origGenConfig = generatorConfiguration()
     setDefaultConfiguration(config)
     peerLibrary.setFileLayout(ohosLayout(peerLibrary))
@@ -81,28 +81,26 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, config: P
     /////////////////////////////////////////
 
     // install managed part
-    const spreadIfLang = <T>(langs: Language[], ...data: T[]): T[] => {
-        if (langs.includes(peerLibrary.language))
-            return data
-        return []
+    const spread = <T>(cond: boolean, ...data: T[]): T[] => {
+        return cond ? data : []
     }
     let printedFiles = printFiles(
         peerLibrary,
         [
             createCallbackKindPrinter(peerLibrary.language),
             createMaterializedPrinter(false),
-            ...spreadIfLang([Language.CJ, Language.JAVA, Language.KOTLIN],
+            ...spread(!useOst,
                 createInterfacePrinter(false, false),
-                printDataClasses,
-                printGlobal),
+                printDataClasses),
+            printGlobal,
             createSerializerPrinter(peerLibrary.language, ""),
             printCallbackChecker,
             createDeserializeAndCallPrinter(peerLibrary.name, peerLibrary.language),
             createGeneratedNativeModulePrinter(NativeModule.Generated),
-            ...spreadIfLang([Language.ARKTS], printArkTSTypeChecker),
+            ...spread(!useOst && peerLibrary.language === Language.ARKTS, printArkTSTypeChecker),
         ]
     )
-    if ([Language.TS, Language.ARKTS].includes(peerLibrary.language))
+    if (useOst)
         printedFiles = mergeOutputFiles(printedFiles, printOstFiles(peerLibrary))
     const installed = installFiles(ohos.managedDir(), printedFiles)
 

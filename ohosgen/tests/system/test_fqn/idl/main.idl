@@ -12,7 +12,7 @@ interface Sizes {
     attribute IntSize intSize;
     attribute deps.fp.Size floatSize;
 
-    void resize(Sizes sizes);
+///    void resize(Sizes sizes);
 };
 
 void resize(Sizes sizes);

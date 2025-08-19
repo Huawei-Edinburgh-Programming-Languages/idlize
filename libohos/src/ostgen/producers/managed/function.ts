@@ -25,19 +25,20 @@ export const functionProducer = createSpecialProducer(
     return {
       artifact: {
         reference: T.cc("///MANAGED_METHOD_FALLBACK"),
-        implementationGenerator: () => {
-          ctx.useManagedNativeModule(method)///not here, in GS
-          const returnType = ctx.useManaged(method.returnType).reference()
-          return Builders.function()
-            .name(managedName(idl.getFQName(method)))
-            .parameters(method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
-            .returns(returnType)
-            .block()
-              .return(returnType)
-                .call().objectName("GlobalScope").function(method.name)
-                .arguments(method.parameters.map(it => E.v(it.name))).$()
-            .$().$().$()
-        }
+        ///skip OST globals for now
+        // implementationGenerator: () => {
+        //   ctx.useManagedNativeModule(method)///not here, in GS
+        //   const returnType = ctx.useManaged(method.returnType).reference()
+        //   return Builders.function()
+        //     .name(managedName(idl.getFQName(method)))
+        //     .parameters(method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
+        //     .returns(returnType)
+        //     .block()
+        //       .return(returnType)
+        //         .call().objectName("GlobalScope").function(method.name)
+        //         .arguments(method.parameters.map(it => E.v(it.name))).$()
+        //     .$().$().$()
+        // }
       }
     }
   })
