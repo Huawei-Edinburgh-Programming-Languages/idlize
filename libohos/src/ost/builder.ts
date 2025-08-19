@@ -86,8 +86,10 @@ export const S = {
     kind: lw.LWKind.ReturnStatement,
     expression,
   }),
-  loop: (condition: lw.LWExpression, body: lw.LWStatement): lw.LoopStatement => ({
+  loop: (condition: lw.LWExpression, body: lw.LWStatement, init?: lw.LWStatement, step?: lw.LWStatement): lw.LoopStatement => ({
     kind: lw.LWKind.LoopStatement,
+    init,
+    step,
     condition,
     body,
   }),

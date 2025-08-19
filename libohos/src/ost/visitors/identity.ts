@@ -147,6 +147,8 @@ export class IdentityTransformer {
   goLoopStatement(stmt:lw.LoopStatement): lw.LoopStatement {
     return {
       kind: stmt.kind,
+      init: over(stmt.init, i => this.goStatement(i)),
+      step: over(stmt.step, s => this.goStatement(s)),
       condition: this.goExpression(stmt.condition),
       body: this.goStatement(stmt.body)
     }

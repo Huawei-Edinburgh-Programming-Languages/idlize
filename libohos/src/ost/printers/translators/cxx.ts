@@ -352,8 +352,14 @@ export class CXXPrinter {
         break
       }
       case lw.LWKind.LoopStatement: {
-        this.p.put('while', '(')
+        this.p.put('for', ' ', '(')
+        if (statement.init)
+          this.printStatement(statement.init)
+        this.p.put(';', ' ')
         this.printExpression(statement.condition)
+        this.p.put(';', ' ')
+        if (statement.step)
+          this.printStatement(statement.step)
         this.p.put(')', ' ')
         this.printStatement(statement.body)
         break

@@ -172,6 +172,8 @@ export interface ReturnStatement {
 }
 export interface LoopStatement {
   kind: LWKind.LoopStatement
+  init?: LWStatement
+  step?: LWStatement
   condition: LWExpression
   body: LWStatement
 }

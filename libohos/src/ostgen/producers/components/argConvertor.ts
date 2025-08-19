@@ -66,13 +66,18 @@ export class ArgConvertor {
         }
         if (idl.isContainerType(type)) {
             if (idl.IDLContainerUtils.isSequence(type)) {
-                return S.block([
-                    S.declaration('ii', Ts.prim.i32, true, E.c(0)),
-                    S.loop(E.bin(Op.lt, E.v('ii'), E.get(accessor, 'length')), S.block([
-                        this.write(E.call(E.get(accessor, 'get'), [E.v('ii')]), type.elementType[0]),
-                        S.e(E.bin('=', E.v('ii'), E.bin(Op.add, E.v('ii'), E.c(1))))
-                    ]))
-                ])
+                return Builders.stmt().block()
+                    .call().object(this.sName).function('writeInt32')
+                        .arg().access(accessor).member('length').$().$().$()
+                    .loop()
+                        .init().decl('i', Ts.prim.i32).mutable().valueStr('0').$().$()
+                        .cond().binary(Op.lt).leftStr('i').right().access(accessor).member('length').$().$().$().$()
+                        .step().binary('=').leftStr('i').right().binary(Op.add).leftStr('i').rightStr('1').$().$().$().$()
+                        .bodyStmt(
+                            this.write(
+                                Builders.expr().access(accessor).indexStr('i').$().$(),
+                                type.elementType[0]))
+                        .$().$().$()
             }
         }
         if (idl.isUnionType(type)) {

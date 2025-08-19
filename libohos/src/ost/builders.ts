@@ -14,7 +14,7 @@
  */
 
 import { D, DD, E, S, T } from "./builder"
-import { AccessorExpression, BinaryExpression, CallExpression, ClassDeclaration, ConstType, DeclarationStatement, FunctionDeclaration, IfStatement, LWExpression, LWStatement, LWType, Modifier, StructureDeclaration } from "./lws"
+import { AccessorExpression, BinaryExpression, CallExpression, ClassDeclaration, ConstType, DeclarationStatement, FunctionDeclaration, IfStatement, LoopStatement, LWExpression, LWStatement, LWType, Modifier, StructureDeclaration } from "./lws"
 import { Md, Ts } from "./stdlib";
 
 const id = <T>(it: T) => it
@@ -29,11 +29,19 @@ class AccessorBuilder<P> {
         this._base = object
     }
     private _base?: LWExpression
-    private _member?: string
-    member(name: string) { this._member = name; return this }
+    private _accessor?: string | LWExpression
+    member(name: string) { this._accessor = name; return this }
+    indexExpr(expr: LWExpression) { this._accessor = expr; return this }
+    indexStr(str: string) { this._accessor = E.v(str); return this }
+    index(): ExpressionBuilder<AccessorBuilder<P>> {
+        return new ExpressionBuilder(expr => {
+            this._accessor = expr
+            return this
+        })
+    }
     $(): P {
-        check("Accessor", this._base, this._member)
-        return this._cont(E.get(this._base!, this._member!))
+        check("Accessor", this._base, this._accessor)
+        return this._cont(E.get(this._base!, this._accessor!))
     }
 }
 
@@ -64,11 +72,17 @@ class BinaryBuilder<P> {
 }
 
 class ArgBuilder<P> {
-    constructor(private _cont: (args: LWExpression[]) => P) {}
-    private _args: LWExpression[] = []
-    arg(value: LWExpression) { this._args.push(value); return this }
+    constructor(private _cont: (arg: LWExpression) => P) {}
+    private _arg?: LWExpression
+    access(object: LWExpression): AccessorBuilder<ArgBuilder<P>> {
+        return new AccessorBuilder(arg => {
+            this._arg = arg
+            return this
+        }, object)
+    }
     $(): P {
-        return this._cont(this._args)
+        check("Arg", this._arg)
+        return this._cont(this._arg!)
     }
 }
 
@@ -81,9 +95,9 @@ class CallBuilder<P> {
     object(object: LWExpression) { this._object = object; return this }
     function(name: string) { this._function = name; return this }
     arguments(args: LWExpression[]) { this._args.push(...args); return this }
-    args(): ArgBuilder<CallBuilder<P>> {
-        return new ArgBuilder(args => {
-            this._args.push(...args)
+    arg(): ArgBuilder<CallBuilder<P>> {
+        return new ArgBuilder(arg => {
+            this._args.push(arg)
             return this
         })
     }
@@ -128,7 +142,7 @@ class DeclarationBuilder<P> {
     private _expression?: LWExpression
     mutable() { this._mutable = true; return this }
     valueExpr(expr: LWExpression) { this._expression = expr; return this }
-    valueStr(str: string) { this._expression = E.s(str); return this }
+    valueStr(str: string) { this._expression = E.c(str); return this }
     value(): ExpressionBuilder<DeclarationBuilder<P>> {
         return new ExpressionBuilder(expr => {
             this._expression = expr
@@ -190,6 +204,44 @@ class IfBuilder<P> {
     }
 }
 
+class LoopBuilder<P> {
+    constructor(private _cont: (stmt: LoopStatement) => P) {}
+    private _init?: LWStatement
+    private _cond?: LWExpression
+    private _step?: LWStatement
+    private _body?: LWStatement
+    condExpr(cond: LWExpression) { this._cond = cond; return this }
+    bodyStmt(body: LWStatement) { this._body = body; return this }
+    init(): StatementBuilder<LoopBuilder<P>> {
+        return new StatementBuilder(stmt => {
+            this._init = stmt
+            return this
+        })
+    }
+    cond(): ExpressionBuilder<LoopBuilder<P>> {
+        return new ExpressionBuilder(expr => {
+            this._cond = expr
+            return this
+        })
+    }
+    step(): StatementBuilder<LoopBuilder<P>> {
+        return new StatementBuilder(stmt => {
+            this._step = stmt
+            return this
+        })
+    }
+    body(): StatementBuilder<LoopBuilder<P>> {
+        return new StatementBuilder(stmt => {
+            this._body = stmt
+            return this
+        })
+    }
+    $(): P {
+        check("Loop", this._cond, this._body)
+        return this._cont(S.loop(this._cond!, this._body!, this._init, this._step))
+    }
+}
+
 class StatementBuilder<P> {
     constructor(private _cont: (stmt: LWStatement) => P) {}
     private _stmt?: LWStatement
@@ -224,6 +276,12 @@ class StatementBuilder<P> {
             return this
         })
     }
+    loop(): LoopBuilder<StatementBuilder<P>> {
+        return new LoopBuilder(stmt => {
+            this._stmt = stmt
+            return this
+        })
+    }
     $(): P {
         check("Statement", this._stmt)
         return this._cont(this._stmt!)
@@ -236,6 +294,12 @@ class BlockBuilder<P> {
     call(): CallBuilder<BlockBuilder<P>> {
         return new CallBuilder(stmt => {
             this._stmts.push(S.e(stmt))
+            return this
+        })
+    }
+    loop(): LoopBuilder<BlockBuilder<P>> {
+        return new LoopBuilder(stmt => {
+            this._stmts.push(stmt)
             return this
         })
     }
