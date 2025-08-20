@@ -3156,7 +3156,7 @@
 |`construct`| Function |Pavelyev Ivan | done |  | |
 |`setStyledString`| Function | Pavelyev Ivan | done |  | |
 |`getStyledString`| Function | Pavelyev Ivan | done |  | |
-|*LayoutManager*| *Class* | Andrey Khudenkikh, Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
+|*LayoutManager*| *Class* | Andrey Khudenkikh, Vadim Voronov | done |  |  |
 |`construct`| Function | Andrey Khudenkikh | done |  | |
 |`getLineCount`| Function | Andrey Khudenkikh | done |  | |
 |`getGlyphPositionAtCoordinate`| Function | Vadim Voronov | done |  |  |
