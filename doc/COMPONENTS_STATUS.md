@@ -820,7 +820,7 @@
 |*RemoteWindow*| *Component* | Spirin Andrey | done |  | |
 |`construct`| Function |Spirin Andrey | done |  | |
 |`setRemoteWindowOptions`| Function | Spirin Andrey | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+) |
-|*RichEditor*| *Component* | Dudkin Sergey| in progress | Alexander Porodin |  |
+|*RichEditor*| *Component* | Dudkin Sergey| testskipped | Alexander Porodin |  |
 |`construct`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
 |`setRichEditorOptions0`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
 |`setRichEditorOptions1`| Function | Dudkin Sergey| done |  |  |
@@ -2938,7 +2938,7 @@
 |`getLayoutManager`| Function|Dudkin Sergey| done |  | |
 |`getPreviewText`| Function|Dmitry A Smirnov| done |  |  |
 |`getCaretRect`| Function | Erokhin Ilya | done | | |
-|*RichEditorController*| *Class* |Dudkin Sergey| blocked IDL|  |  |
+|*RichEditorController*| *Class* |Dudkin Sergey| testskipped|  |  |
 |`construct`| Function |Dudkin Sergey| done |  |  |
 |`addTextSpan`| Function |Dudkin Sergey | testskipped |  | tests are partially ready, but not all fields inside arguments' structs are tested yet |
 |`addImageSpan`| Function |Dudkin Sergey | done |  |  |
