@@ -1528,7 +1528,7 @@ export function printType(type: IDLType | IDLInterface | undefined, options?:Pri
     if (isPrimitiveType(type)) return type.name
     if (isContainerType(type)) return `${type.containerKind}<${type.elementType.map(it => printType(it)).join(", ")}>`
     if (isReferenceType(type)) {
-        const extAttrs = type.extendedAttributes ? Array.from(type.extendedAttributes) : []
+        const extAttrs = (type.extendedAttributes ?? []).filter(it => it.name != IDLExtendedAttributes.TypeArguments)
         if (type.typeArguments)
             extAttrs.push({ name: IDLExtendedAttributes.TypeArguments, value: type.typeArguments.map(it=>printType(it)).join(",") })
         if (!extAttrs.length)
@@ -1614,7 +1614,8 @@ export function printExtendedAttributes(idl: IDLNode, indentLevel: number): Prin
         typeArguments = (idl as IDLUnspecifiedGenericType).typeArguments
         break
     }
-    const attributes: IDLExtendedAttribute[] = Array.from(idl.extendedAttributes || [])
+
+    const attributes = (idl.extendedAttributes ?? []).filter(it => it.name != IDLExtendedAttributes.TypeParameters && it.name != IDLExtendedAttributes.TypeArguments)
     if (typeParameters?.length)
         attributes.push({ name: IDLExtendedAttributes.TypeParameters, value: typeParameters.join(",") })
     if (typeArguments?.length)
@@ -1627,7 +1628,23 @@ export function printExtendedAttributes(idl: IDLNode, indentLevel: number): Prin
         }
         attributes.push(docs)
     }
-    const attrSpec = quoteAttributeValues(attributes)
+
+    // Deduplicate
+    const names = new Set<string>()
+    const actualAttributes: IDLExtendedAttribute[] = []
+    for (const attr of attributes) {
+        if (names.has(attr.name)) {
+            continue
+        }
+        names.add(attr.name)
+        actualAttributes.push(attr)
+    }
+
+    if (actualAttributes.length == 0) {
+        return []
+    }
+
+    const attrSpec = quoteAttributeValues(actualAttributes)
     return attrSpec ? [`[${attrSpec}]`] : []
 }
 
