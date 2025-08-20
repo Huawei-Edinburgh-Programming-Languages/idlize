@@ -2925,7 +2925,7 @@
 |`construct`| Function |Dmitry A Smirnov| done |  |  |
 |`reset`| Function |Dmitry A Smirnov| done |  |  |
 |`setChallengeResult`| Function |Dmitry A Smirnov| done |  |  |
-|*RichEditorBaseController*| *Class*|Dudkin Sergey| blocked IDL|  | |
+|*RichEditorBaseController*| *Class*|Dudkin Sergey| done|  | |
 |`construct`| Function|Dudkin Sergey| done |  | |
 |`getCaretOffset`| Function|Dudkin Sergey| done |  | |
 |`setCaretOffset`| Function|Dudkin Sergey| done |  | |
