@@ -33,7 +33,8 @@ import {
     processNPrintCXX,
     roles,
     processNPrintTS,
-    createProducer
+    createProducer,
+    mapName
 } from "@idlizer/libohos"
 
 export function printOstFiles(peerLibrary: PeerLibrary): Map<string, OutputFile> {
@@ -104,28 +105,21 @@ function printOstDeclarations(decls: LWDeclaration[], language: Language, packag
     return tsFiles /// ...cFiles, ...nativeFiles])
 }
 
-function mapOstFileName(name: string): string {
-    return name
-        .replace(/^managed\./, '')
-        .replace(/^native\./, '')
-        .replace(/^engine/, generatorConfiguration().moduleName + ".INTERNAL")
-}
-
 function dumpTsLike(decls: LWDeclaration[], language: Language, packages: Set<string>): Map<string, OutputFile> {
     decls = moduleLike.postprocess(decls)
     const files = moduleLike.formFiles(packages, decls)
     const result: Map<string, OutputFile> = new Map()
     const printer = language === Language.ARKTS ? processNPrintArkTS : processNPrintTS
     files.forEach((content, fileName) => {
-        const mappedName = mapOstFileName(fileName)
+        const mappedName = mapName(fileName)
         if (!mappedName)
             return
         const printed = content.body.map(it => printer(it, fileName, packages))
         result.set(mappedName, {
             imports: content.moduleLikeImports,
             content: printed,
-            extension: language === Language.ARKTS ? ".ets" : ".ts",
-            exported: false,
+            extension: ".ts",
+            exported: true,
         })
     })
     return result

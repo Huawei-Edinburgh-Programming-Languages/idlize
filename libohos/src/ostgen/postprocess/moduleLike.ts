@@ -16,6 +16,7 @@
 import { Builders } from "../../ost/builders";
 import { D, E, IdentityTransformer, lw, std, T, utils } from "../../ost/main";
 import { ImportsCollector } from "../../peer-generation/ImportsCollector";
+import { mapName } from "../library/utils";
 import { managedName } from "../producers/common";
 
 export function postprocess(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
@@ -102,7 +103,7 @@ interface ResultFile {
 }
 
 class RefSearcher extends IdentityTransformer {
-    private seenNames: Set<string>
+    private seenNames: Map<string, string[]>
     constructor(
         private decls: lw.LWDeclaration[],
         private fileName: string,
@@ -110,7 +111,7 @@ class RefSearcher extends IdentityTransformer {
         private imports: ImportsCollector
     ) {
         super()
-        this.seenNames = new Set(decls.map(it => it.name))
+        this.seenNames = new Map(decls.map(it => [it.name, ['.']]))
     }
 
     private nsStack: string[] = []
@@ -146,13 +147,17 @@ class RefSearcher extends IdentityTransformer {
                 if (record === this.fileName)
                     return T.c(this.trimNs(val))
                 const baseName = this.getBase(val);
-                const source = record.replace(/^managed\./, '')///how to do this better?
-                if (this.seenNames.has(baseName)) {
+                const source = mapName(record)
+                const conflictingNames = this.seenNames.get(baseName)
+                if (conflictingNames) {
                     const alias = source + '_' + baseName
-                    this.imports.addFeature(baseName, source, alias)
-                    return T.c(this.trimNs(alias))
+                    if (!conflictingNames.includes(source)) {
+                        conflictingNames.push(source)
+                        this.imports.addFeature(baseName, source, alias)
+                    }
+                    return T.c(this.trimNs(conflictingNames.length === 1 ? val : alias))
                 } else {
-                    this.seenNames.add(baseName)
+                    this.seenNames.set(baseName, [source])
                     this.imports.addFeature(baseName, source)
                     return T.c(this.trimNs(val))
                 }
@@ -229,7 +234,7 @@ export function formFiles(knownPackages: Set<string>, declarations: lw.LWDeclara
     // do namespace stuff
     const nsFiles = new Map<string, ResultFile>()
     files.forEach((decls, fileName) => {
-        const imports = new ImportsCollector()
+        const imports = defaultImports()
         const nsDecls = new RefSearcher(putToNs(decls), fileName, refIndex, imports).go()
         nsFiles.set(fileName, {
             moduleLikeImports: imports,
@@ -238,4 +243,10 @@ export function formFiles(knownPackages: Set<string>, declarations: lw.LWDeclara
     })
 
     return nsFiles
+}
+
+function defaultImports(): ImportsCollector {
+    const imports = new ImportsCollector()
+    imports.addFeatures(['SerializerBase', 'DeserializerBase'], '@koalaui/interop')
+    return imports
 }

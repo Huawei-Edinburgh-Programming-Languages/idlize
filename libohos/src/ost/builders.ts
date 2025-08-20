@@ -14,7 +14,7 @@
  */
 
 import { D, DD, E, S, T } from "./builder"
-import { AccessorExpression, BinaryExpression, CallExpression, ClassDeclaration, ConstType, DeclarationStatement, FunctionDeclaration, IfStatement, LoopStatement, LWExpression, LWStatement, LWType, Modifier, StructureDeclaration } from "./lws"
+import { AccessorExpression, Annotation, BinaryExpression, CallExpression, ClassDeclaration, ConstType, DeclarationStatement, FunctionDeclaration, IfStatement, LoopStatement, LWExpression, LWStatement, LWType, Modifier, StructureDeclaration } from "./lws"
 import { Md, Ts } from "./stdlib";
 
 const id = <T>(it: T) => it
@@ -97,7 +97,7 @@ class CallBuilder<P> {
     private _object?: LWExpression
     private _function?: string
     private _args: LWExpression[] = []
-    objectName(name: string) { this._object = E.v(name); return this }
+    objectName(name: string, annotations?: Annotation[]) { this._object = E.v(name, annotations); return this }
     object(object: LWExpression) { this._object = object; return this }
     function(name: string) { this._function = name; return this }
     args(args: LWExpression[]) { this._args.push(...args); return this }

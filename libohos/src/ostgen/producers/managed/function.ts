@@ -18,13 +18,15 @@ import { AdvancedGeneratorContext, createSpecialProducer, managedName, roles } f
 import { E, T } from "../../../ost/builder";
 import { Builders } from "../../../ost/builders";
 import { ArgConvertor } from "../components/argConvertor";
+import { generatorConfiguration } from "@idlizer/core";
+import { An } from "../../../ost/stdlib";
 
 export const functionProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.managed },
   (method, ctx) => {
     return {
       artifact: {
-        reference: T.cc("///FUNCTION"),///what should it be?
+        reference: E.v(method.name),
         implementationGenerator: () => [
           generateFunction(method, ctx),
           generateGlobalScopeFunction(method, ctx),
@@ -40,20 +42,21 @@ function generateFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) 
     .returns(returnType)
     .block()
       .return(returnType)
-        .call().objectName("GlobalScope").function(method.name)
+        .call().objectName(GLOBAL_SCOPE_NAME, [An.isType()]).function(method.name)
         .args(method.parameters.map(it => E.v(it.name))).$()
     .$().$().$()
 }
 
-const GLOBAL_SCOPE_NAME = managedName('engine.GlobalScope')///mv somewhere
+const GLOBAL_SCOPE_NAME = managedName('engine.GlobalScope')
 
 function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
     ctx.useManagedNativeModule(method)
     const serializerName = 'thisSerializer'
-    const convertor = new ArgConvertor(ctx, E.v(serializerName), true)
+    const convertor = new ArgConvertor(ctx, E.v(serializerName), false)
     const fieldWrites = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
     const returnType = ctx.useManaged(method.returnType).reference();
     const params = method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() }));
+    const nativeModuleName = generatorConfiguration().moduleName.toUpperCase() + 'NativeModule'
     return Builders.class(GLOBAL_SCOPE_NAME)
       .method(method.name)
         .static()
@@ -63,7 +66,7 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
           .decl(serializerName, T.c('SerializerBase'))
             .value().call().objectName("SerializerBase").function("hold").$().$().$()
           .statements(fieldWrites)
-          .call().objectName('NativeModule').function('_GlobalScope_' + method.name)
+          .call().objectName(nativeModuleName).function('_GlobalScope_' + method.name)
             .arg().call().objectName(serializerName).function('asBuffer').$().$()
             .arg().call().objectName(serializerName).function('length').$().$().$()
           .call().objectName(serializerName).function('release').$().$()

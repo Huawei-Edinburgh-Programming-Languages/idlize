@@ -75,8 +75,6 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, useOst: b
 
     const ohos = new OhosInstall(outDir, peerLibrary.language)
 
-    const ohosManagedFiles: string[] = []
-
     // MANAGED
     /////////////////////////////////////////
 
@@ -91,9 +89,9 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, useOst: b
             createMaterializedPrinter(false),
             ...spread(!useOst,
                 createInterfacePrinter(false, false),
-                printDataClasses),
-            printGlobal,
-            createSerializerPrinter(peerLibrary.language, ""),
+                printDataClasses,
+                printGlobal,
+                createSerializerPrinter(peerLibrary.language, "")),
             printCallbackChecker,
             createDeserializeAndCallPrinter(peerLibrary.name, peerLibrary.language),
             createGeneratedNativeModulePrinter(NativeModule.Generated),
@@ -107,12 +105,8 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, useOst: b
     // managed-index
 
     if ([Language.TS, Language.ARKTS].includes(peerLibrary.language)) {
-        const generatedFiles = [...installed]
-        ohosManagedFiles.forEach(it => {
-            generatedFiles.push('./' + path.relative(ohos.managedDir(), it))
-        })
         writeIntegratedFile(path.join(ohos.managedDir(), 'index.ts'),
-            makeOhosModule(ohos.managedDir(), generatedFiles)
+            makeOhosModule(ohos.managedDir(), installed)
         )
     }
 
@@ -137,14 +131,18 @@ function makeOhosModule(root:string, componentsFiles: string[]): string {
 
 function mergeOutputFiles(files0: Map<string, OutputFile>, files1: Map<string, OutputFile>): Map<string, OutputFile> {
     for (const [file, output] of files1) {
-        /// wild guessing. Probably need to take useFoldersLayout and moduleName into account somewhere else
+        // ignore junk
+        if (file.startsWith('idlize.'))
+            continue
+        /// probably need to take useFoldersLayout and moduleName into account somewhere else
         const output0 = files0.get(file)
-            ?? files0.get(file.replaceAll(/\./g, '/'))
-            ?? files0.get(file.replace(generatorConfiguration().moduleName + ".", ""))
         if (output0) { // ignore unknown files
-            console.log("merging", file)
+            console.log('[ merged ]', file)
             output0.imports.merge(output.imports)
             output0.content.push(...output.content)
+        } else {
+            console.log('[ ostgen ]', file)
+            files0.set(file, output)
         }
     }
     return files0

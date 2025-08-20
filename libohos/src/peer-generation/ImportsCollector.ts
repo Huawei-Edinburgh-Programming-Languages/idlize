@@ -34,18 +34,9 @@ export class ImportsCollector {
         // Should migrate to multimodules and then remove this hack
         if (normalizedModule.startsWith('@') && normalizedModule != module)
             normalizedModule = './' + normalizedModule
-        // Checking for name collisions between modules
-        // TODO: needs to be done more effectively
-        const featureInAnotherModule = [...this.moduleToFeatures.entries()]
-            .find(it => it[0] !== normalizedModule && it[1].get(feature))
-        // TBD: use modules for externa types
-        if (featureInAnotherModule) {
-            console.warn(`WARNING: Skip feature:'${feature}' is already imported from '${featureInAnotherModule[0]}'`)
-        } else {
-            const features = getOrPut(this.moduleToFeatures, normalizedModule, () => new Map())
-            const aliases = getOrPut(features, feature, () => new Set())
-            aliases.add(alias)
-        }
+        const features = getOrPut(this.moduleToFeatures, normalizedModule, () => new Map())
+        const aliases = getOrPut(features, feature, () => new Set())
+        aliases.add(alias)
     }
 
     addFeatures(features: string[], module: string) {

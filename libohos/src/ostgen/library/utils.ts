@@ -15,6 +15,7 @@
 
 import { readdirSync, statSync } from "node:fs"
 import { join } from "node:path"
+import { generatorConfiguration } from "@idlizer/core"
 
 export function throwError(msg:string): never {
     throw new Error(msg)
@@ -28,4 +29,11 @@ export function scan(root: string): string[] {
 
 export function mkName(...chunks:string[]): string {
   return chunks.join('.')
+}
+
+export function mapName(name: string): string {
+  return name
+      .replace(/^managed\./, '')
+      .replace(/^native\./, '')
+      .replace(/^engine/, generatorConfiguration().moduleName + ".INTERNAL")
 }
