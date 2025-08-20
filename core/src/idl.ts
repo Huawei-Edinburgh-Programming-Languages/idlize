@@ -1528,7 +1528,7 @@ export function printType(type: IDLType | IDLInterface | undefined, options?:Pri
     if (isPrimitiveType(type)) return type.name
     if (isContainerType(type)) return `${type.containerKind}<${type.elementType.map(it => printType(it)).join(", ")}>`
     if (isReferenceType(type)) {
-        const extAttrs = (type.extendedAttributes ?? []).filter(it => it.name != IDLExtendedAttributes.TypeArguments)
+        const extAttrs = (type.extendedAttributes ?? []).filter(it => !type.typeArguments || it.name != IDLExtendedAttributes.TypeArguments)
         if (type.typeArguments)
             extAttrs.push({ name: IDLExtendedAttributes.TypeArguments, value: type.typeArguments.map(it=>printType(it)).join(",") })
         if (!extAttrs.length)
@@ -1615,7 +1615,9 @@ export function printExtendedAttributes(idl: IDLNode, indentLevel: number): Prin
         break
     }
 
-    const attributes = (idl.extendedAttributes ?? []).filter(it => it.name != IDLExtendedAttributes.TypeParameters && it.name != IDLExtendedAttributes.TypeArguments)
+    const attributes = (idl.extendedAttributes ?? []).filter(it =>
+        (!typeParameters?.length || it.name != IDLExtendedAttributes.TypeParameters)
+        && (!typeArguments?.length || it.name != IDLExtendedAttributes.TypeArguments))
     if (typeParameters?.length)
         attributes.push({ name: IDLExtendedAttributes.TypeParameters, value: typeParameters.join(",") })
     if (typeArguments?.length)
