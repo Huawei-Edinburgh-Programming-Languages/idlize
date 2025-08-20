@@ -14,6 +14,7 @@
  */
 
 import { D, E, IdentityTransformer, lw, std, T, utils } from "../../ost/main";
+import { ImportsCollector } from "../../peer-generation/ImportsCollector";
 
 export function postprocess(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     decls = mergeTheSameNamespaces(decls)
@@ -88,15 +89,21 @@ function mergeTheSameClasses(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
 /////////////////////////////////////////////////////
 
 interface ResultFile {
-    moduleLikeImports: Map<string, Set<string>>
+    moduleLikeImports: ImportsCollector
     body: lw.LWDeclaration[]
 }
 
 class RefSearcher extends IdentityTransformer {
+    private seenNames: Set<string>
     constructor(
+        private decls: lw.LWDeclaration[],
+        private fileName: string,
         private registry: Map<string, string>,
-        private imports: Map<string, Set<string>>
-    ) { super() }
+        private imports: ImportsCollector
+    ) {
+        super()
+        this.seenNames = new Set(decls.map(it => it.name))
+    }
 
     private nsStack: string[] = []
     private trimNs(name:string): string {
@@ -121,9 +128,6 @@ class RefSearcher extends IdentityTransformer {
         if (!type.name.startsWith('@')) {
             const record = this.registry.get(type.name)
             if (record) {
-                if (!this.imports.has(record)) {
-                    this.imports.set(record, new Set())
-                }
                 let val = type.name
                 if (val.startsWith(record)) {
                     val = val.substring(record.length)
@@ -131,8 +135,19 @@ class RefSearcher extends IdentityTransformer {
                         val = val.substring(1)
                     }
                 }
-                this.imports.get(record)?.add(this.getBase(val))
-                return T.c(this.trimNs(val))
+                if (record === this.fileName)
+                    return T.c(this.trimNs(val))
+                const baseName = this.getBase(val);
+                const source = record.replace(/^managed\./, '')///how to do this better?
+                if (this.seenNames.has(baseName)) {
+                    const alias = source + '_' + baseName
+                    this.imports.addFeature(baseName, source, alias)
+                    return T.c(this.trimNs(alias))
+                } else {
+                    this.seenNames.add(baseName)
+                    this.imports.addFeature(baseName, source)
+                    return T.c(this.trimNs(val))
+                }
             }
             return T.c(this.trimNs(type.name))
         }
@@ -144,6 +159,9 @@ class RefSearcher extends IdentityTransformer {
             return E.v(r.name, expr.annotations)
         }
         return super.goVariableExpression(expr)
+    }
+    go(): lw.LWDeclaration[] {
+        return this.decls.map(it => this.goDeclaration(it))
     }
 }
 
@@ -202,17 +220,10 @@ export function formFiles(knownPackages: Set<string>, declarations: lw.LWDeclara
 
     // do namespace stuff
     const nsFiles = new Map<string, ResultFile>()
-    files.forEach((decls, name) => {
-        const rowImports = new Map<string, Set<string>>()
-        const refSearcher = new RefSearcher(refIndex, rowImports)
-        const nsDecls = putToNs(decls).map(it => refSearcher.goDeclaration(it))
-        const imports = new Map<string, Set<string>>()
-        rowImports.forEach((vals, imp) => {
-            if (imp !== name) {
-                imports.set(imp, vals)
-            }
-        })
-        nsFiles.set(name, {
+    files.forEach((decls, fileName) => {
+        const imports = new ImportsCollector()
+        const nsDecls = new RefSearcher(putToNs(decls), fileName, refIndex, imports).go()
+        nsFiles.set(fileName, {
             moduleLikeImports: imports,
             body: nsDecls
         })

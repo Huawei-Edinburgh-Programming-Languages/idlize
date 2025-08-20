@@ -122,12 +122,9 @@ function dumpTsLike(decls: LWDeclaration[], language: Language, packages: Set<st
         const mappedName = mapOstFileName(fileName)
         if (!mappedName)
             return
-        const imports = new ImportsCollector()
-        content.moduleLikeImports.forEach((vals, source) =>
-            imports.addFeatures(Array.from(vals), `./${source}`))
         const printed = content.body.map(it => printer(it, fileName, packages))
         result.set(mappedName, {
-            imports,
+            imports: content.moduleLikeImports,
             content: printed,
             extension: language === Language.ARKTS ? ".ets" : ".ts",
             exported: false,
