@@ -13,16 +13,24 @@
  * limitations under the License.
  */
 
+import { Builders } from "../../ost/builders";
 import { D, E, IdentityTransformer, lw, std, T, utils } from "../../ost/main";
 import { ImportsCollector } from "../../peer-generation/ImportsCollector";
+import { managedName } from "../producers/common";
 
 export function postprocess(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
-    decls = mergeTheSameNamespaces(decls)
-    decls = mergeTheSameClasses(decls)
+    decls = mergeNamespaces(decls)
+    decls = mergeClasses(decls)
+    decls = introduceTypeChecker(decls)
     return decls
 }
 
-function mergeTheSameNamespaces(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+function introduceTypeChecker(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+    ///arkts only
+    return decls.concat(Builders.class(managedName('engine.TypeChecker')).$())
+}
+
+function mergeNamespaces(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     const index = new Map<string, lw.NamespaceDeclaration[]>()
     const others: lw.LWDeclaration[] = []
     decls.forEach(decl => {
@@ -45,12 +53,12 @@ function mergeTheSameNamespaces(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
             result.push(records[0])
             return
         }
-        result.push(D.ns(name, mergeTheSameNamespaces(records.map(r => r.members).flat())))
+        result.push(D.ns(name, mergeNamespaces(records.map(r => r.members).flat())))
     })
     return result
 }
 
-function mergeTheSameClasses(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+function mergeClasses(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     const index = new Map<string, lw.ClassDeclaration[]>()
     const others: lw.LWDeclaration[] = []
     decls.forEach(decl => {

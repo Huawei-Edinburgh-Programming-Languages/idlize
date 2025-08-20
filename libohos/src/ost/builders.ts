@@ -327,15 +327,15 @@ class ParamBuilder<P> {
 }
 
 class FunctionBuilder<P> {
-    constructor(private _cont: (decl: FunctionDeclaration) => P) {}
-    private _name?: string
+    constructor(
+        private _cont: (decl: FunctionDeclaration) => P,
+        private _name: string
+    ) {}
     private _modifiers: Modifier[] = []
     private _parameters: { name: string, type: LWType }[] = []
     private _returnType?: LWType
     private _body?: LWStatement
-
     static() { this._modifiers.push(Md.static); return this }
-    name(name: string) { this._name = name; return this }
     returns(type: LWType) { this._returnType = type; return this }
     body(body: LWStatement) { this._body = body; return this }
     parameters(params: {name: string, type: LWType}[]) { this._parameters.push(...params); return this }
@@ -360,14 +360,15 @@ class FunctionBuilder<P> {
 }
 
 class FieldBuilder<P> {
-    constructor(private _cont: (name: string, type: LWType, modifiers?: Modifier[]) => P) {}
-    private _name?: string ///superclass
+    constructor(
+        private _cont: (name: string, type: LWType, modifiers?: Modifier[]) => P,
+        private _name: string
+    ) {}
     private _type?: LWType
     private _modifiers: Modifier[] = []
     static() { this._modifiers.push(Md.static); return this }
     optional() { this._modifiers.push(Md.optional); return this }
     readonly() { this._modifiers.push(Md.readonly); return this }
-    name(name: string) { this._name = name; return this }
     type(type: LWType) { this._type = type; return this }
     modifiers(modifiers: Modifier[]) { this._modifiers.push(...modifiers); return this }
     $(): P {
@@ -377,14 +378,13 @@ class FieldBuilder<P> {
 }
 
 class StructBuilder {
-    private _name?: string
+    constructor(private _name: string) {}
     private _fields: { name: string, type: LWType, modifiers?: Modifier[] }[] = []
-    name(name: string) { this._name = name; return this }
-    field(): FieldBuilder<StructBuilder> {
+    field(name: string): FieldBuilder<StructBuilder> {
         return new FieldBuilder((name, type, modifiers) => {
             this._fields.push({name, type, modifiers})
             return this
-        })
+        }, name)
     }
     $(): StructureDeclaration {
         check("Struct", this._name)
@@ -393,21 +393,20 @@ class StructBuilder {
 }
 
 class ClassBuilder {///extend StructB
-    private _name?: string
+    constructor(private _name: string) {}
     private _fields: { name: string, type: LWType, modifiers?: Modifier[] }[] = []
     private _methods: FunctionDeclaration[] = []
-    name(name: string) { this._name = name; return this }
-    field(): FieldBuilder<ClassBuilder> {
+    field(name: string): FieldBuilder<ClassBuilder> {
         return new FieldBuilder((name, type, modifiers) => {
             this._fields.push({name, type, modifiers})
             return this
-        })
+        }, name)
     }
-    method(): FunctionBuilder<ClassBuilder> {
+    method(name: string): FunctionBuilder<ClassBuilder> {
         return new FunctionBuilder(func => {
             this._methods.push(func)
             return this
-        })
+        }, name)
     }
     $(): ClassDeclaration {
         check("Class", this._name)
@@ -418,7 +417,7 @@ class ClassBuilder {///extend StructB
 export class Builders {
     static expr(): ExpressionBuilder<LWExpression> { return new ExpressionBuilder(id) }
     static stmt(): StatementBuilder<LWStatement> { return new StatementBuilder(id) }
-    static function(): FunctionBuilder<FunctionDeclaration> { return new FunctionBuilder(id) }
-    static struct(): StructBuilder { return new StructBuilder() }
-    static class(): ClassBuilder { return new ClassBuilder() }
+    static function(name: string): FunctionBuilder<FunctionDeclaration> { return new FunctionBuilder(id, name) }
+    static struct(name: string): StructBuilder { return new StructBuilder(name) }
+    static class(name: string): ClassBuilder { return new ClassBuilder(name) }
 }

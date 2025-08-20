@@ -110,7 +110,7 @@ function mapOstFileName(name: string): string {
     return name
         .replace(/^managed\./, '')
         .replace(/^native\./, '')
-        // .replace(/^engine/, generatorConfiguration().moduleName + ".INTERNAL")
+        .replace(/^engine/, generatorConfiguration().moduleName + ".INTERNAL")
 }
 
 function dumpTsLike(decls: LWDeclaration[], language: Language, packages: Set<string>): Map<string, OutputFile> {
