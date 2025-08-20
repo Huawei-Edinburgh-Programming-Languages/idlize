@@ -26,12 +26,12 @@ export const enumProducer = createProducer(
       artifact: {
         reference: T.cc(name),
         implementationGenerator: () =>
-          D.enum(name, node.elements.map(element => {
+          [D.enum(name, node.elements.map(element => {
             return {
               name: element.name,
               value: element.initializer
             }
-          }))
+          }))]
       }
     }
   }

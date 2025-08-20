@@ -42,7 +42,7 @@ export const structureProducer = createSpecialProducer(
       : () => {
         ctx.useCApi(node)
         const superType = getSuperType(node, ctx.base.resolver.R)
-        return D.class(generatedDeclName,
+        return [D.class(generatedDeclName,
           node.properties.map(prop => {
             const modifiers = [
               ...prop.isOptional ? [Md.optional] : [],
@@ -58,7 +58,7 @@ export const structureProducer = createSpecialProducer(
           node.methods.map(method => makePeerMethod(method, ctx)), {
           kind: idl.isClassSubkind(node) ? 'class' : 'interface',
           base: superType ? ctx.useManaged(superType).reference() : undefined
-          })
+          })]
       }
     return {
       artifact: {

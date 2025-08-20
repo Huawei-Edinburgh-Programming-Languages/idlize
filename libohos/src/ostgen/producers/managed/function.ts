@@ -14,7 +14,7 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { createSpecialProducer, managedName, roles } from "../common";
+import { AdvancedGeneratorContext, createSpecialProducer, managedName, roles } from "../common";
 import { E, T } from "../../../ost/builder";
 import { Builders } from "../../../ost/builders";
 import { ArgConvertor } from "../components/argConvertor";
@@ -24,61 +24,48 @@ export const functionProducer = createSpecialProducer(
   (method, ctx) => {
     return {
       artifact: {
-        reference: T.cc("///MANAGED_METHOD_FALLBACK"),
-        ///skip OST globals for now
-        // implementationGenerator: () => {
-        //   ctx.useManagedNativeModule(method)///not here, in GS
-        //   const returnType = ctx.useManaged(method.returnType).reference()
-        //   return Builders.function()
-        //     .name(managedName(idl.getFQName(method)))
-        //     .parameters(method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
-        //     .returns(returnType)
-        //     .block()
-        //       .return(returnType)
-        //         .call().objectName("GlobalScope").function(method.name)
-        //         .arguments(method.parameters.map(it => E.v(it.name))).$()
-        //     .$().$().$()
-        // }
+        reference: T.cc("///FUNCTION"),///what should it be?
+        implementationGenerator: () => [
+          generateFunction(method, ctx),
+          generateGlobalScopeFunction(method, ctx),
+        ]
       }
     }
   })
 
-// const GLOBAL_SCOPE_NAME = managedName('engine.GlobalScope')
+function generateFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
+  const returnType = ctx.useManaged(method.returnType).reference()
+  return Builders.function(managedName(idl.getFQName(method)))
+    .parameters(method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
+    .returns(returnType)
+    .block()
+      .return(returnType)
+        .call().objectName("GlobalScope").function(method.name)
+        .args(method.parameters.map(it => E.v(it.name))).$()
+    .$().$().$()
+}
 
-// export const globalScopeProducer = createSpecialProducer(
-//   { is: idl.isMethod, role: roles.globalScope },
-//   (method, ctx) => {
-//     const serializerName = 'thisSerializer'
-//     const convertor = new ArgConvertor(ctx, E.v(serializerName), true)
-//     const stmts = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
-//     const returnType = ctx.useManaged(method.returnType).reference();
-//     const params = method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() }));
-//     return {
-//       artifact: {
-//         reference: E.get(E.v(GLOBAL_SCOPE_NAME), method.name),
-//         implementationGenerator: () =>
-//           Builders.class()
-//             .name(GLOBAL_SCOPE_NAME)
-//             .method()
-//               .static()
-//               .name(method.name)
-//               .parameters(params)
-//               .returns(returnType)
-//               .block()
-//                 .return(returnType)
-//                   .call().object("GlobalScope").function(method.name + '_serialize')
-//                   .args(method.parameters.map(it => E.v(it.name))).$()
-//               .$().$().$()
-//             .method()
-//               .static()
-//               .name(method.name + '_serialize')
-//               .parameters(params)
-//               .returns(returnType)
-//               .block()
-//                 .return(returnType)
-//                   .call().object('NativeModule').function('_GlobalScope_' + method.name)
-//                   .args(method.parameters.map(it => E.v(it.name))).$()
-//               .$().$().$().$()
-//       }
-//     }
-//   })
+const GLOBAL_SCOPE_NAME = managedName('engine.GlobalScope')///mv somewhere
+
+function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
+    ctx.useManagedNativeModule(method)
+    const serializerName = 'thisSerializer'
+    const convertor = new ArgConvertor(ctx, E.v(serializerName), true)
+    const fieldWrites = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
+    const returnType = ctx.useManaged(method.returnType).reference();
+    const params = method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() }));
+    return Builders.class(GLOBAL_SCOPE_NAME)
+      .method(method.name)
+        .static()
+        .parameters(params)
+        .returns(returnType)
+        .block()
+          .decl(serializerName, T.c('SerializerBase'))
+            .value().call().objectName("SerializerBase").function("hold").$().$().$()
+          .statements(fieldWrites)
+          .call().objectName('NativeModule').function('_GlobalScope_' + method.name)
+            .arg().call().objectName(serializerName).function('asBuffer').$().$()
+            .arg().call().objectName(serializerName).function('length').$().$().$()
+          .call().objectName(serializerName).function('release').$().$()
+        .$().$()
+}

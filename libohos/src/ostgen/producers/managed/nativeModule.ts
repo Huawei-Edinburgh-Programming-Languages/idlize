@@ -29,9 +29,9 @@ export const nativeModuleProducer = createSpecialProducer(
         reference: E.get(E.v(NATIVE_MODULE_NAME, [An.isType()]), methodName),
         implementationGenerator: () => {
           ctx.useBridge(method)
-          return D.class(NATIVE_MODULE_NAME, [], [
+          return [D.class(NATIVE_MODULE_NAME, [], [
             D.func(methodName, [{ name: 'buffer', type: T.c('SerializerBase') }], Ts.prim.void, S.block([]))
-          ])
+          ])]
         }
       }
     }

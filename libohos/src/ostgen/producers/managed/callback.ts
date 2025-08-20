@@ -25,11 +25,11 @@ export const callbackProducer = createSpecialProducer(
       artifact: {
         reference: T.cc(generatedDeclName),
         implementationGenerator: () => {
-          return D.type(
+          return [D.type(
             generatedDeclName,
             T.fn(
               callback.parameters.map(it => [it.name, ctx.useManaged(it.type).reference()]),
-              ctx.useManaged(callback.returnType).reference()))
+              ctx.useManaged(callback.returnType).reference()))]
         }
       }
     }

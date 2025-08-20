@@ -33,20 +33,19 @@ export function makeSerializer(
   return {
     artifact: {
       reference: E.v(makeSerializerName(node, isNative), [An.isType()]),
-      ///skip OST serializers for now
-      // implementationGenerator: () => {
-      //   const serializerName = 'serializer'
-      //   const convertor = new ArgConvertor(ctx, E.v(serializerName), isNative)
-      //   return D.class(makeSerializerName(node, isNative), [], [
-      //     DD({ modifiers: [Md.static] }).func('write', [
-      //       { name: serializerName, type: T.c('SerializerBase') },
-      //       { name: 'value', type: ctx.useManaged(node).reference() },
-      //     ], Ts.prim.void, S.block(
-      //       node.properties.map(prop => convertor.write(E.get(E.v('value'), prop.name), prop.type))
-      //     )),
-      //     DD({ modifiers: [Md.static] }).func('read', [], Ts.prim.void, S.block([]))
-      //   ])
-      // }
+      implementationGenerator: () => {
+        const serializerName = 'serializer'
+        const convertor = new ArgConvertor(ctx, E.v(serializerName), isNative)
+        return [D.class(makeSerializerName(node, isNative), [], [
+          DD({ modifiers: [Md.static] }).func('write', [
+            { name: serializerName, type: T.c('SerializerBase') },
+            { name: 'value', type: ctx.useManaged(node).reference() },
+          ], Ts.prim.void, S.block(
+            node.properties.map(prop => convertor.write(E.get(E.v('value'), prop.name), prop.type))
+          )),
+          DD({ modifiers: [Md.static] }).func('read', [], Ts.prim.void, S.block([]))
+        ])]
+      }
     }
   }
 }

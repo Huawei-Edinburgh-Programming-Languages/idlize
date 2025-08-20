@@ -25,7 +25,7 @@ export const unionProducer = createSpecialProducer(
       artifact: {
         reference: T.cc(name),
         implementationGenerator: () =>
-          D.union(name, node.types.map(type => ctx.useCApi(type).reference()))
+          [D.union(name, node.types.map(type => ctx.useCApi(type).reference()))]
       }
     }
   }

@@ -25,13 +25,13 @@ export const enumProducer = createSpecialProducer(
       artifact: {
         reference: T.cc(generatedDeclName),
         implementationGenerator: () => {
-          return D.enum(generatedDeclName,
+          return [D.enum(generatedDeclName,
             node.elements.map(element => {
               return {
                 name: element.name,
                 value: element.initializer
               }
-            }))
+            }))]
         }
       }
     }

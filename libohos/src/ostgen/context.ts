@@ -84,7 +84,7 @@ export interface MiddlewareProducerDescription {
 export interface TerminalProducerDescription {
     artifact: {
         reference: lw.LWStatement | lw.LWExpression | lw.LWType
-        implementationGenerator?: () => lw.LWDeclaration
+        implementationGenerator?: () => lw.LWDeclaration[]
     }
 }
 export interface RedirectProducerDescription {
@@ -276,14 +276,10 @@ export class GeneratorContext {
         while (this.generatingQueue.length) {
             const generator = this.generatingQueue.shift()!
             this.renderContext = true
-            const decl = generator()
+            const decls = generator()
             this.renderContext = false
-            if (decl) {
-                declarations.push(decl)
-            }
+            declarations.push(...decls)
         }
         return declarations
     }
 }
-
-

@@ -80,6 +80,12 @@ class ArgBuilder<P> {
             return this
         }, object)
     }
+    call(): CallBuilder<ArgBuilder<P>> {
+        return new CallBuilder(arg => {
+            this._arg = arg
+            return this
+        })
+    }
     $(): P {
         check("Arg", this._arg)
         return this._cont(this._arg!)
@@ -94,7 +100,7 @@ class CallBuilder<P> {
     objectName(name: string) { this._object = E.v(name); return this }
     object(object: LWExpression) { this._object = object; return this }
     function(name: string) { this._function = name; return this }
-    arguments(args: LWExpression[]) { this._args.push(...args); return this }
+    args(args: LWExpression[]) { this._args.push(...args); return this }
     arg(): ArgBuilder<CallBuilder<P>> {
         return new ArgBuilder(arg => {
             this._args.push(arg)
@@ -291,9 +297,34 @@ class StatementBuilder<P> {
 class BlockBuilder<P> {
     constructor(private _cont: (stmts: LWStatement[]) => P) {}
     private _stmts: LWStatement[] = []
+    statements(stmts: LWStatement[]) { this._stmts.push(...stmts); return this }
+    binary(op: string): BinaryBuilder<BlockBuilder<P>> {
+        return new BinaryBuilder(stmt => {
+            this._stmts.push(S.e(stmt))
+            return this
+        }, op)
+    }
+    block(): BlockBuilder<BlockBuilder<P>> {
+        return new BlockBuilder(stmts => {
+            this._stmts.push(S.block(stmts))
+            return this
+        })
+    }
     call(): CallBuilder<BlockBuilder<P>> {
         return new CallBuilder(stmt => {
             this._stmts.push(S.e(stmt))
+            return this
+        })
+    }
+    decl(name: string, type: LWType): DeclarationBuilder<BlockBuilder<P>> {
+        return new DeclarationBuilder(stmt => {
+            this._stmts.push(stmt)
+            return this
+        }, name, type)
+    }
+    if(): IfBuilder<BlockBuilder<P>> {
+        return new IfBuilder(stmt => {
+            this._stmts.push(stmt)
             return this
         })
     }

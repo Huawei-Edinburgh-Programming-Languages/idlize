@@ -16,7 +16,6 @@
 import * as idl from "@idlizer/core/idl"
 import { generatorConfiguration, Language, PeerLibrary } from "@idlizer/core"
 import {
-    createSpecialProducer,
     LWDeclaration,
     MakeSelector,
     MANAGED_PREFIX,
@@ -29,7 +28,6 @@ import {
     isNative,
     dumpToString,
     moduleLike,
-    ImportsCollector,
     processNPrintArkTS,
     lowLevelLike,
     processNPrintCXX,
@@ -73,7 +71,7 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
     selector.register(producers.managed.nativeModuleProducer)
 
     /// fallback producers
-    selector.register(createSpecialProducer(
+    selector.register(createProducer(
         { is: idl.isConstant, role: roles.managed },
         (constant, ctx) => {
             return { artifact: { reference: T.cc("///managed.constant.fallback")}}

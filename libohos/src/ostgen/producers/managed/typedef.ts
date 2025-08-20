@@ -25,7 +25,7 @@ export const typedefProducer = createSpecialProducer(
       artifact: {
         reference: T.cc(generatedDeclName),
         implementationGenerator: () =>
-          D.type(generatedDeclName, ctx.useManaged(typedef.type).reference())
+          [D.type(generatedDeclName, ctx.useManaged(typedef.type).reference())]
       }
     }
   }

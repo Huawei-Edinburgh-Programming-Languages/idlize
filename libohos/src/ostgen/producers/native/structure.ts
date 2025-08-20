@@ -25,7 +25,7 @@ export const structureProducer = createSpecialProducer(
       artifact: {
         reference: T.cc(name),
         implementationGenerator: () => {
-          return D.struct(name, node.properties.map(prop => {
+          return [D.struct(name, node.properties.map(prop => {
             const modifiers = [
               ...prop.isOptional ? [Md.optional] : [],
               ...prop.isReadonly ? [Md.readonly] : [],
@@ -36,7 +36,7 @@ export const structureProducer = createSpecialProducer(
               type: ctx.useCApi(prop.type).reference(),
               modifiers,
             }
-          }))
+          }))]
         },
       }
     }
