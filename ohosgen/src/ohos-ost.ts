@@ -127,19 +127,11 @@ function dumpTsLike(decls: LWDeclaration[], language: Language, packages: Set<st
 
 function dumpCLike(decls: LWDeclaration[]) {
     decls = lowLevelLike.postprocess(decls)
-    // filter out random crap
-    const modulePrefix = `capi.${generatorConfiguration().moduleName}`
-    const synthPrefix = 'synthetic.'
-    decls = decls.filter(it => it.name.startsWith(modulePrefix) || it.name.startsWith(synthPrefix))
     console.log("===================== C-API =====================")
-    decls.forEach(decl => {
-        console.log(processNPrintCXX(decl))
-    })
+    console.log(processNPrintCXX(decls))
 }
 
 function dumpAsIs(decls: LWDeclaration[]) {
     console.log("==================== NATIVE ====================")
-    decls.forEach(decl => {
-        console.log(processNPrintCXX(decl))
-    })
+    console.log(processNPrintCXX(decls))
 }

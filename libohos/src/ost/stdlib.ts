@@ -46,6 +46,7 @@ const specialTypeNames = {
     constant: '@CONST',
     reference: '@REF',
     pointer: '@PTR',
+    tag: '@TAG',
 
     hole: '@UNDEFINED',
 
@@ -139,6 +140,7 @@ const primitiveTypes = {
     i32: T.c(specialTypeNames.i32),
     i64: T.c(specialTypeNames.i64),
     pointer: T.c(specialTypeNames.pointer),
+    tag: T.c(specialTypeNames.tag),
     object: T.c(specialTypeNames.object),
     number: T.c(specialTypeNames.number),
     serializerBuffer: T.c(specialTypeNames.serializerBuffer),

@@ -155,7 +155,7 @@ class RefSearcher extends IdentityTransformer {
                         conflictingNames.push(source)
                         this.imports.addFeature(baseName, source, alias)
                     }
-                    return T.c(this.trimNs(conflictingNames.length === 1 ? val : alias))
+                    return T.c(this.trimNs(conflictingNames[0] === source ? val : alias))
                 } else {
                     this.seenNames.set(baseName, [source])
                     this.imports.addFeature(baseName, source)

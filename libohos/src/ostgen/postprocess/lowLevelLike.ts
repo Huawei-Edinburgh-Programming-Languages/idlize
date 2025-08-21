@@ -18,10 +18,15 @@ import { throwError } from "../library/utils";
 import { zipStrip } from "@idlizer/core";
 
 export function postprocess(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+    decls = removeInternal(decls)
     decls = introduceOptionalTypes(decls)
     decls = specializeGenerics(decls)
     decls = makeForwardDeclarations(decls)
     return decls
+}
+
+function removeInternal(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+    return decls.filter(it => !it.name.startsWith('capi.idlize.'))
 }
 
 class MakeOptional extends IdentityTransformer {
@@ -92,7 +97,7 @@ class MakeMono extends IdentityTransformer {
         this.index.set(
             'idlize.Opt',
             DD({ generics: [{ name: 'T' }] }).struct('synthetic.mono.Optional', [
-                { name: 'tag', type: T.c('Tag') },
+                { name: 'tag', type: Ts.prim.tag },
                 { name: 'value', type: T.c('T') },
             ])
         )
@@ -148,18 +153,9 @@ function specializeGenerics(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     return new MakeMono(decls).go(decls)
 }
 
-class MakeForwardDeclarations extends IdentityTransformer {
-    private typedefs: lw.LWDeclaration[] = []
-    override goStructureDeclaration(decl: lw.StructureDeclaration): lw.StructureDeclaration {
-        this.typedefs.push(D.type(decl.name, T.cc(decl.name)))
-        return decl
-    }
-    go(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
-        return this.typedefs.concat(
-            decls.map(decl => this.goDeclaration(decl)))
-    }
-}
-
 function makeForwardDeclarations(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
-    return new MakeForwardDeclarations().go(decls)
+    return decls
+        .filter(it => it.kind === lw.LWKind.StructureDeclaration)
+        .map(it => D.type(it.name, T.cc(it.name)) as lw.LWDeclaration)
+        .concat(decls)
 }

@@ -30,16 +30,25 @@ const varMapping = new Map([
 
 export class ConvertCXXTypes extends IdentityTransformer {
   private readonly TypePrefix = generatorConfiguration().TypePrefix
+  private seenNames: Map<string, string[]> = new Map()
 
+  /// type aliasing is better done before monomorphization
   private goTypeName(name: string): string {
-    const parts = name.split('.')
-    const typeName = parts.pop()!
-    switch (parts.shift()) {
-      case 'capi':
-      case 'managed': return `${this.TypePrefix}${parts.map(it => it.toUpperCase()).join('_')}_${typeName}`
-      case 'synthetic': return typeName
+    if (name.startsWith('@'))
+      throw new Error('Unhandled builtin type: ' + name)
+    const path = name.split('.')
+    const prefix = path.shift()
+    let typeName = path[path.length - 1]
+    const conflictingNames = this.seenNames.get(typeName)
+    if (conflictingNames) {
+      if (!conflictingNames.includes(name))
+        conflictingNames.push(name)
+      if (conflictingNames[0] !== name)
+        typeName = path.join('_')
+    } else {
+      this.seenNames.set(typeName, [name])
     }
-    return name
+    return prefix === 'synthetic' ? typeName : this.TypePrefix + typeName
   }
   override goConstType(type: lw.ConstType): lw.LWType {
     const p = (type: string) => T.cc(this.TypePrefix + type)
@@ -57,7 +66,8 @@ export class ConvertCXXTypes extends IdentityTransformer {
       case std.names.types.u8: return p('Int8')
       case std.names.types.u32: return p('UInt32')
       case std.names.types.u64: return p('UInt64')
-      case std.names.types.void: return p('void')
+      case std.names.types.tag: return p('Tag')
+      case std.names.types.void: return T.cc('void')
     }
     return T.cc(this.goTypeName(type.name))
   }
@@ -528,12 +538,14 @@ export class CXXPrinter {
   }
 }
 
-export function processNPrintCXX(chunk: lw.LWDeclaration) {
-  let tree = chunk
-
-  tree = new ConvertCXXTypes().goDeclaration(tree)
-
-  const printer = new CXXPrinter()
-  printer.printDeclaration(tree)
-  return printer.render()
+export function processNPrintCXX(decls: lw.LWDeclaration[]) {
+  const convertor = new ConvertCXXTypes()
+  return decls
+    .map(it => convertor.goDeclaration(it))
+    .map(it => {
+      const printer = new CXXPrinter()
+      printer.printDeclaration(it)
+      return printer.render()
+    })
+    .join('\n')
 }
