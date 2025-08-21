@@ -1,14 +1,9 @@
 {
     "moduleName": "test_fqn",
     "modules": {
-        "ohos.base": {
-            "name": "ohos.base",
-            "packages": ["ohos.base"]
-        },
         "test_fqn": {
             "name": "test_fqn",
-            "packages": ["test_fqn", "deps"],
-            "useFoldersLayout": true
+            "packages": ["main", "deps", "ohos.base"]
         }
     }
 }
