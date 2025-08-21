@@ -1,0 +1,2 @@
+Using Panda 1.5.0-dev.42554
+File path doesn't exist: /home/huawei/work/idlize_copy/'/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.InputMethodSubtype.d.ets'

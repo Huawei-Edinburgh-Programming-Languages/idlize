@@ -1,0 +1,2049 @@
+{
+    "compilerOptions": {
+        "package": "api",
+        "baseUrl": "./api",
+        "outDir": "./build",
+        "paths": {
+            "@ohos.InputMethodSubtype": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.InputMethodSubtype"
+            ],
+            "@ohos.UiTest": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.UiTest"
+            ],
+            "@ohos.WorkSchedulerExtensionAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.WorkSchedulerExtensionAbility"
+            ],
+            "@ohos.ability.errorCode": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.ability.errorCode"
+            ],
+            "@ohos.ability.screenLockFileManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.ability.screenLockFileManager"
+            ],
+            "@ohos.abilityAccessCtrl": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.abilityAccessCtrl"
+            ],
+            "@ohos.accessibility.config": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.accessibility.config"
+            ],
+            "@ohos.accessibility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.accessibility"
+            ],
+            "@ohos.account.appAccount": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.account.appAccount"
+            ],
+            "@ohos.account.distributedAccount": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.account.distributedAccount"
+            ],
+            "@ohos.account.osAccount": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.account.osAccount"
+            ],
+            "@ohos.animation.windowAnimationManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.animation.windowAnimationManager"
+            ],
+            "@ohos.animator": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.animator"
+            ],
+            "@ohos.app.ability.Ability": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.Ability"
+            ],
+            "@ohos.app.ability.AbilityConstant": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.AbilityConstant"
+            ],
+            "@ohos.app.ability.AbilityLifecycleCallback": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.AbilityLifecycleCallback"
+            ],
+            "@ohos.app.ability.AbilityStage": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.AbilityStage"
+            ],
+            "@ohos.app.ability.ApplicationStateChangeCallback": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.ApplicationStateChangeCallback"
+            ],
+            "@ohos.app.ability.AtomicServiceOptions": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.AtomicServiceOptions"
+            ],
+            "@ohos.app.ability.Configuration": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.Configuration"
+            ],
+            "@ohos.app.ability.ConfigurationConstant": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.ConfigurationConstant"
+            ],
+            "@ohos.app.ability.DriverExtensionAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.DriverExtensionAbility"
+            ],
+            "@ohos.app.ability.EnvironmentCallback": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.EnvironmentCallback"
+            ],
+            "@ohos.app.ability.ExtensionAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.ExtensionAbility"
+            ],
+            "@ohos.app.ability.InsightIntentContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.InsightIntentContext"
+            ],
+            "@ohos.app.ability.InsightIntentExecutor": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.InsightIntentExecutor"
+            ],
+            "@ohos.app.ability.InteropAbilityLifecycleCallback": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.InteropAbilityLifecycleCallback"
+            ],
+            "@ohos.app.ability.MediaControlExtensionAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.MediaControlExtensionAbility"
+            ],
+            "@ohos.app.ability.OpenLinkOptions": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.OpenLinkOptions"
+            ],
+            "@ohos.app.ability.ServiceExtensionAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.ServiceExtensionAbility"
+            ],
+            "@ohos.app.ability.ShareExtensionAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.ShareExtensionAbility"
+            ],
+            "@ohos.app.ability.StartOptions": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.StartOptions"
+            ],
+            "@ohos.app.ability.UIAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.UIAbility"
+            ],
+            "@ohos.app.ability.UIExtensionAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.UIExtensionAbility"
+            ],
+            "@ohos.app.ability.UIExtensionContentSession": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.UIExtensionContentSession"
+            ],
+            "@ohos.app.ability.UserAuthExtensionAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.UserAuthExtensionAbility"
+            ],
+            "@ohos.app.ability.Want": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.Want"
+            ],
+            "@ohos.app.ability.abilityDelegatorRegistry": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.abilityDelegatorRegistry"
+            ],
+            "@ohos.app.ability.abilityManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.abilityManager"
+            ],
+            "@ohos.app.ability.appManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.appManager"
+            ],
+            "@ohos.app.ability.appRecovery": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.appRecovery"
+            ],
+            "@ohos.app.ability.application": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.application"
+            ],
+            "@ohos.app.ability.autoFillManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.autoFillManager"
+            ],
+            "@ohos.app.ability.common": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.common"
+            ],
+            "@ohos.app.ability.contextConstant": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.contextConstant"
+            ],
+            "@ohos.app.ability.dataUriUtils": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.dataUriUtils"
+            ],
+            "@ohos.app.ability.dialogRequest": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.dialogRequest"
+            ],
+            "@ohos.app.ability.dialogSession": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.dialogSession"
+            ],
+            "@ohos.app.ability.insightIntent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.insightIntent"
+            ],
+            "@ohos.app.ability.insightIntentDriver": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.insightIntentDriver"
+            ],
+            "@ohos.app.ability.missionManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.missionManager"
+            ],
+            "@ohos.app.ability.wantAgent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.wantAgent"
+            ],
+            "@ohos.app.ability.wantConstant": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.ability.wantConstant"
+            ],
+            "@ohos.app.form.FormExtensionAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.form.FormExtensionAbility"
+            ],
+            "@ohos.app.form.formBindingData": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.form.formBindingData"
+            ],
+            "@ohos.app.form.formInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.form.formInfo"
+            ],
+            "@ohos.app.form.formProvider": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.app.form.formProvider"
+            ],
+            "@ohos.application.BackupExtensionAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.application.BackupExtensionAbility"
+            ],
+            "@ohos.application.DataShareExtensionAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.application.DataShareExtensionAbility"
+            ],
+            "@ohos.application.StaticSubscriberExtensionAbility": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.application.StaticSubscriberExtensionAbility"
+            ],
+            "@ohos.application.StaticSubscriberExtensionContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.application.StaticSubscriberExtensionContext"
+            ],
+            "@ohos.application.formError": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.application.formError"
+            ],
+            "@ohos.application.testRunner": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.application.testRunner"
+            ],
+            "@ohos.application.uriPermissionManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.application.uriPermissionManager"
+            ],
+            "@ohos.arkui.Parallelize": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.Parallelize"
+            ],
+            "@ohos.arkui.UIContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.UIContext"
+            ],
+            "@ohos.arkui.advanced.FullScreenLaunchComponent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.advanced.FullScreenLaunchComponent"
+            ],
+            "@ohos.arkui.advanced.SplitLayout": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.advanced.SplitLayout"
+            ],
+            "@ohos.arkui.advanced.SwipeRefresher": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.advanced.SwipeRefresher"
+            ],
+            "@ohos.arkui.component": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.component"
+            ],
+            "@ohos.arkui.componentSnapshot": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.componentSnapshot"
+            ],
+            "@ohos.arkui.componentUtils": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.componentUtils"
+            ],
+            "@ohos.arkui.dragController": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.dragController"
+            ],
+            "@ohos.arkui.drawableDescriptor": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.drawableDescriptor"
+            ],
+            "@ohos.arkui.inspector": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.inspector"
+            ],
+            "@ohos.arkui.modifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.modifier"
+            ],
+            "@ohos.arkui.node": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.node"
+            ],
+            "@ohos.arkui.observer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.observer"
+            ],
+            "@ohos.arkui.performanceMonitor": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.performanceMonitor"
+            ],
+            "@ohos.arkui.shape": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.shape"
+            ],
+            "@ohos.arkui.stateManagement": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.stateManagement"
+            ],
+            "@ohos.arkui.theme": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.theme"
+            ],
+            "@ohos.arkui.uiExtension": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.arkui.uiExtension"
+            ],
+            "@ohos.base": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.base"
+            ],
+            "@ohos.batteryInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.batteryInfo"
+            ],
+            "@ohos.batteryStatistics": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.batteryStatistics"
+            ],
+            "@ohos.bluetooth.a2dp": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bluetooth.a2dp"
+            ],
+            "@ohos.bluetooth.access": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bluetooth.access"
+            ],
+            "@ohos.bluetooth.baseProfile": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bluetooth.baseProfile"
+            ],
+            "@ohos.bluetooth.ble": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bluetooth.ble"
+            ],
+            "@ohos.bluetooth.connection": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bluetooth.connection"
+            ],
+            "@ohos.bluetooth.constant": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bluetooth.constant"
+            ],
+            "@ohos.bluetooth.hfp": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bluetooth.hfp"
+            ],
+            "@ohos.bluetooth.hid": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bluetooth.hid"
+            ],
+            "@ohos.brightness": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.brightness"
+            ],
+            "@ohos.buffer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.buffer"
+            ],
+            "@ohos.bundle.appControl": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bundle.appControl"
+            ],
+            "@ohos.bundle.bundleManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bundle.bundleManager"
+            ],
+            "@ohos.bundle.bundleMonitor": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bundle.bundleMonitor"
+            ],
+            "@ohos.bundle.bundleResourceManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bundle.bundleResourceManager"
+            ],
+            "@ohos.bundle.defaultAppManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bundle.defaultAppManager"
+            ],
+            "@ohos.bundle.distributedBundleManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bundle.distributedBundleManager"
+            ],
+            "@ohos.bundle.freeInstall": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bundle.freeInstall"
+            ],
+            "@ohos.bundle.installer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bundle.installer"
+            ],
+            "@ohos.bundle.launcherBundleManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bundle.launcherBundleManager"
+            ],
+            "@ohos.bundle.overlay": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bundle.overlay"
+            ],
+            "@ohos.bundle.shortcutManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.bundle.shortcutManager"
+            ],
+            "@ohos.charger": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.charger"
+            ],
+            "@ohos.commonEventManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.commonEventManager"
+            ],
+            "@ohos.configPolicy": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.configPolicy"
+            ],
+            "@ohos.curves": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.curves"
+            ],
+            "@ohos.customization.customConfig": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.customization.customConfig"
+            ],
+            "@ohos.data.DataShareResultSet": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.data.DataShareResultSet"
+            ],
+            "@ohos.data.ValuesBucket": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.data.ValuesBucket"
+            ],
+            "@ohos.data.dataShare": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.data.dataShare"
+            ],
+            "@ohos.data.dataSharePredicates": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.data.dataSharePredicates"
+            ],
+            "@ohos.data.distributedKVStore": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.data.distributedKVStore"
+            ],
+            "@ohos.data.preferences": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.data.preferences"
+            ],
+            "@ohos.data.relationalStore": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.data.relationalStore"
+            ],
+            "@ohos.data.unifiedDataChannel": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.data.unifiedDataChannel"
+            ],
+            "@ohos.data.uniformTypeDescriptor": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.data.uniformTypeDescriptor"
+            ],
+            "@ohos.deviceInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.deviceInfo"
+            ],
+            "@ohos.deviceStatus.dragInteraction": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.deviceStatus.dragInteraction"
+            ],
+            "@ohos.display": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.display"
+            ],
+            "@ohos.distributedDeviceManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.distributedDeviceManager"
+            ],
+            "@ohos.distributedHardware.mechanicManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.distributedHardware.mechanicManager"
+            ],
+            "@ohos.driver.deviceManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.driver.deviceManager"
+            ],
+            "@ohos.effectKit": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.effectKit"
+            ],
+            "@ohos.enterprise.adminManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.enterprise.adminManager"
+            ],
+            "@ohos.enterprise.securityManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.enterprise.securityManager"
+            ],
+            "@ohos.events.emitter": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.events.emitter"
+            ],
+            "@ohos.file.cloudSync": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.file.cloudSync"
+            ],
+            "@ohos.file.cloudSyncManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.file.cloudSyncManager"
+            ],
+            "@ohos.file.environment": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.file.environment"
+            ],
+            "@ohos.file.fileuri": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.file.fileuri"
+            ],
+            "@ohos.file.fs": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.file.fs"
+            ],
+            "@ohos.file.hash": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.file.hash"
+            ],
+            "@ohos.file.photoAccessHelper": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.file.photoAccessHelper"
+            ],
+            "@ohos.file.securityLabel": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.file.securityLabel"
+            ],
+            "@ohos.file.statvfs": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.file.statvfs"
+            ],
+            "@ohos.file.storageStatistics": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.file.storageStatistics"
+            ],
+            "@ohos.file.volumeManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.file.volumeManager"
+            ],
+            "@ohos.fileshare": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.fileshare"
+            ],
+            "@ohos.font": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.font"
+            ],
+            "@ohos.fontManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.fontManager"
+            ],
+            "@ohos.geoLocationManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.geoLocationManager"
+            ],
+            "@ohos.graphics.colorSpaceManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.graphics.colorSpaceManager"
+            ],
+            "@ohos.graphics.common2D": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.graphics.common2D"
+            ],
+            "@ohos.graphics.displaySync": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.graphics.displaySync"
+            ],
+            "@ohos.graphics.drawing": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.graphics.drawing"
+            ],
+            "@ohos.graphics.hdrCapability": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.graphics.hdrCapability"
+            ],
+            "@ohos.graphics.scene": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.graphics.scene"
+            ],
+            "@ohos.graphics.text": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.graphics.text"
+            ],
+            "@ohos.graphics.uiEffect": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.graphics.uiEffect"
+            ],
+            "@ohos.hiSysEvent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.hiSysEvent"
+            ],
+            "@ohos.hiTraceChain": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.hiTraceChain"
+            ],
+            "@ohos.hiTraceMeter": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.hiTraceMeter"
+            ],
+            "@ohos.hichecker": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.hichecker"
+            ],
+            "@ohos.hidebug": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.hidebug"
+            ],
+            "@ohos.hilog": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.hilog"
+            ],
+            "@ohos.hiviewdfx.hiAppEvent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.hiviewdfx.hiAppEvent"
+            ],
+            "@ohos.i18n": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.i18n"
+            ],
+            "@ohos.inputMethod.Panel": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.inputMethod.Panel"
+            ],
+            "@ohos.inputMethod": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.inputMethod"
+            ],
+            "@ohos.intl": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.intl"
+            ],
+            "@ohos.logLibrary": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.logLibrary"
+            ],
+            "@ohos.matrix4": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.matrix4"
+            ],
+            "@ohos.measure": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.measure"
+            ],
+            "@ohos.mediaquery": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.mediaquery"
+            ],
+            "@ohos.multimedia.audio": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimedia.audio"
+            ],
+            "@ohos.multimedia.audioHaptic": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimedia.audioHaptic"
+            ],
+            "@ohos.multimedia.avCastPickerParam": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimedia.avCastPickerParam"
+            ],
+            "@ohos.multimedia.avsession": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimedia.avsession"
+            ],
+            "@ohos.multimedia.camera": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimedia.camera"
+            ],
+            "@ohos.multimedia.cameraPicker": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimedia.cameraPicker"
+            ],
+            "@ohos.multimedia.drm": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimedia.drm"
+            ],
+            "@ohos.multimedia.image": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimedia.image"
+            ],
+            "@ohos.multimedia.media": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimedia.media"
+            ],
+            "@ohos.multimedia.systemSoundManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimedia.systemSoundManager"
+            ],
+            "@ohos.multimodalInput.gestureEvent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimodalInput.gestureEvent"
+            ],
+            "@ohos.multimodalInput.inputConsumer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimodalInput.inputConsumer"
+            ],
+            "@ohos.multimodalInput.inputDevice": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimodalInput.inputDevice"
+            ],
+            "@ohos.multimodalInput.inputEvent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimodalInput.inputEvent"
+            ],
+            "@ohos.multimodalInput.intentionCode": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimodalInput.intentionCode"
+            ],
+            "@ohos.multimodalInput.keyCode": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimodalInput.keyCode"
+            ],
+            "@ohos.multimodalInput.keyEvent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimodalInput.keyEvent"
+            ],
+            "@ohos.multimodalInput.mouseEvent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimodalInput.mouseEvent"
+            ],
+            "@ohos.multimodalInput.pointer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimodalInput.pointer"
+            ],
+            "@ohos.multimodalInput.shortKey": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimodalInput.shortKey"
+            ],
+            "@ohos.multimodalInput.touchEvent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.multimodalInput.touchEvent"
+            ],
+            "@ohos.net.connection": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.net.connection"
+            ],
+            "@ohos.net.http": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.net.http"
+            ],
+            "@ohos.net.networkSecurity": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.net.networkSecurity"
+            ],
+            "@ohos.net.sharing": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.net.sharing"
+            ],
+            "@ohos.net.statistics": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.net.statistics"
+            ],
+            "@ohos.net.webSocket": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.net.webSocket"
+            ],
+            "@ohos.nfc.cardEmulation": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.nfc.cardEmulation"
+            ],
+            "@ohos.nfc.controller": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.nfc.controller"
+            ],
+            "@ohos.nfc.tag": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.nfc.tag"
+            ],
+            "@ohos.notificationManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.notificationManager"
+            ],
+            "@ohos.notificationSubscribe": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.notificationSubscribe"
+            ],
+            "@ohos.pasteboard": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.pasteboard"
+            ],
+            "@ohos.pluginComponent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.pluginComponent"
+            ],
+            "@ohos.power": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.power"
+            ],
+            "@ohos.print": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.print"
+            ],
+            "@ohos.privacyManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.privacyManager"
+            ],
+            "@ohos.prompt": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.prompt"
+            ],
+            "@ohos.promptAction": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.promptAction"
+            ],
+            "@ohos.reminderAgentManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.reminderAgentManager"
+            ],
+            "@ohos.request": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.request"
+            ],
+            "@ohos.resourceManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.resourceManager"
+            ],
+            "@ohos.resourceschedule.backgroundProcessManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.resourceschedule.backgroundProcessManager"
+            ],
+            "@ohos.resourceschedule.backgroundTaskManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.resourceschedule.backgroundTaskManager"
+            ],
+            "@ohos.resourceschedule.systemload": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.resourceschedule.systemload"
+            ],
+            "@ohos.resourceschedule.usageStatistics": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.resourceschedule.usageStatistics"
+            ],
+            "@ohos.resourceschedule.workScheduler": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.resourceschedule.workScheduler"
+            ],
+            "@ohos.router": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.router"
+            ],
+            "@ohos.rpc": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.rpc"
+            ],
+            "@ohos.runningLock": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.runningLock"
+            ],
+            "@ohos.screen": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.screen"
+            ],
+            "@ohos.screenLock": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.screenLock"
+            ],
+            "@ohos.screenshot": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.screenshot"
+            ],
+            "@ohos.security.cert": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.security.cert"
+            ],
+            "@ohos.security.certManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.security.certManager"
+            ],
+            "@ohos.security.certManagerDialog": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.security.certManagerDialog"
+            ],
+            "@ohos.security.cryptoFramework": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.security.cryptoFramework"
+            ],
+            "@ohos.security.huks": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.security.huks"
+            ],
+            "@ohos.sensor": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.sensor"
+            ],
+            "@ohos.settings": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.settings"
+            ],
+            "@ohos.systemCapability": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.systemCapability"
+            ],
+            "@ohos.systemDateTime": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.systemDateTime"
+            ],
+            "@ohos.systemParameterEnhance": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.systemParameterEnhance"
+            ],
+            "@ohos.systemTimer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.systemTimer"
+            ],
+            "@ohos.telephony.call": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.telephony.call"
+            ],
+            "@ohos.telephony.data": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.telephony.data"
+            ],
+            "@ohos.telephony.esim": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.telephony.esim"
+            ],
+            "@ohos.telephony.observer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.telephony.observer"
+            ],
+            "@ohos.telephony.radio": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.telephony.radio"
+            ],
+            "@ohos.telephony.sim": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.telephony.sim"
+            ],
+            "@ohos.telephony.sms": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.telephony.sms"
+            ],
+            "@ohos.thermal": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.thermal"
+            ],
+            "@ohos.transfer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.transfer"
+            ],
+            "@ohos.uiAppearance": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.uiAppearance"
+            ],
+            "@ohos.uiExtensionHost": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.uiExtensionHost"
+            ],
+            "@ohos.update": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.update"
+            ],
+            "@ohos.uri": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.uri"
+            ],
+            "@ohos.url": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.url"
+            ],
+            "@ohos.usbManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.usbManager"
+            ],
+            "@ohos.usbManager.serial": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.usbManager.serial"
+            ],
+            "@ohos.userIAM.faceAuth": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.userIAM.faceAuth"
+            ],
+            "@ohos.userIAM.userAccessCtrl": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.userIAM.userAccessCtrl"
+            ],
+            "@ohos.userIAM.userAuth": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.userIAM.userAuth"
+            ],
+            "@ohos.util.ArrayList": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.ArrayList"
+            ],
+            "@ohos.util.Deque": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.Deque"
+            ],
+            "@ohos.util.HashMap": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.HashMap"
+            ],
+            "@ohos.util.HashSet": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.HashSet"
+            ],
+            "@ohos.util.LightWeightMap": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.LightWeightMap"
+            ],
+            "@ohos.util.LightWeightSet": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.LightWeightSet"
+            ],
+            "@ohos.util.LinkedList": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.LinkedList"
+            ],
+            "@ohos.util.List": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.List"
+            ],
+            "@ohos.util.PlainArray": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.PlainArray"
+            ],
+            "@ohos.util.Queue": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.Queue"
+            ],
+            "@ohos.util.Stack": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.Stack"
+            ],
+            "@ohos.util.TreeMap": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.TreeMap"
+            ],
+            "@ohos.util.TreeSet": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.TreeSet"
+            ],
+            "@ohos.util": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util"
+            ],
+            "@ohos.util.json": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.json"
+            ],
+            "@ohos.util.stream": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.util.stream"
+            ],
+            "@ohos.vibrator": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.vibrator"
+            ],
+            "@ohos.web.netErrorList": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.web.netErrorList"
+            ],
+            "@ohos.web.webview": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.web.webview"
+            ],
+            "@ohos.wifi": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.wifi"
+            ],
+            "@ohos.wifiManager": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.wifiManager"
+            ],
+            "@ohos.window": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.window"
+            ],
+            "@ohos.xml": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.xml"
+            ],
+            "@ohos.zlib": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@ohos.zlib"
+            ],
+            "@system.app": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@system.app"
+            ],
+            "@system.mediaquery": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@system.mediaquery"
+            ],
+            "@system.prompt": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@system.prompt"
+            ],
+            "@system.router": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/@system.router"
+            ],
+            "permissions": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/permissions"
+            ],
+            "ability/abilityResult": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/ability/abilityResult"
+            ],
+            "ability/connectOptions": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/ability/connectOptions"
+            ],
+            "ability/dataAbilityHelper": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/ability/dataAbilityHelper"
+            ],
+            "application/AbilityDelegator": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AbilityDelegator"
+            ],
+            "application/AbilityFirstFrameStateData": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AbilityFirstFrameStateData"
+            ],
+            "application/AbilityFirstFrameStateObserver": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AbilityFirstFrameStateObserver"
+            ],
+            "application/AbilityForegroundStateObserver": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AbilityForegroundStateObserver"
+            ],
+            "application/AbilityMonitor": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AbilityMonitor"
+            ],
+            "application/AbilityRunningInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AbilityRunningInfo"
+            ],
+            "application/AbilityStageContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AbilityStageContext"
+            ],
+            "application/AbilityStageMonitor": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AbilityStageMonitor"
+            ],
+            "application/AbilityStartCallback": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AbilityStartCallback"
+            ],
+            "application/AbilityStateData": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AbilityStateData"
+            ],
+            "application/AppForegroundStateObserver": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AppForegroundStateObserver"
+            ],
+            "application/AppStateData": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AppStateData"
+            ],
+            "application/ApplicationContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/ApplicationContext"
+            ],
+            "application/ApplicationStateObserver": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/ApplicationStateObserver"
+            ],
+            "application/AutoFillType": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/AutoFillType"
+            ],
+            "application/BaseContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/BaseContext"
+            ],
+            "application/Context": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/Context"
+            ],
+            "application/DriverExtensionContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/DriverExtensionContext"
+            ],
+            "application/EventHub": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/EventHub"
+            ],
+            "application/ExtensionContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/ExtensionContext"
+            ],
+            "application/ExtensionRunningInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/ExtensionRunningInfo"
+            ],
+            "application/FormExtensionContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/FormExtensionContext"
+            ],
+            "application/MediaControlExtensionContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/MediaControlExtensionContext"
+            ],
+            "application/MissionInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/MissionInfo"
+            ],
+            "application/MultiAppMode": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/MultiAppMode"
+            ],
+            "application/ProcessData": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/ProcessData"
+            ],
+            "application/ProcessInformation": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/ProcessInformation"
+            ],
+            "application/RunningAppClone": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/RunningAppClone"
+            ],
+            "application/RunningMultiAppInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/RunningMultiAppInfo"
+            ],
+            "application/RunningMultiInstanceInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/RunningMultiInstanceInfo"
+            ],
+            "application/ServiceExtensionContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/ServiceExtensionContext"
+            ],
+            "application/UIAbilityContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/UIAbilityContext"
+            ],
+            "application/UIExtensionContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/UIExtensionContext"
+            ],
+            "application/WorkSchedulerExtensionContext": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/WorkSchedulerExtensionContext"
+            ],
+            "application/abilityDelegatorArgs": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/abilityDelegatorArgs"
+            ],
+            "application/shellCmdResult": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/application/shellCmdResult"
+            ],
+            "arkui/AttributeUpdater": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/AttributeUpdater"
+            ],
+            "arkui/BlankModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/BlankModifier"
+            ],
+            "arkui/BuilderNode": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/BuilderNode"
+            ],
+            "arkui/ButtonModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/ButtonModifier"
+            ],
+            "arkui/CheckboxModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/CheckboxModifier"
+            ],
+            "arkui/ColumnModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/ColumnModifier"
+            ],
+            "arkui/ColumnSplitModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/ColumnSplitModifier"
+            ],
+            "arkui/CommonModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/CommonModifier"
+            ],
+            "arkui/ComponentContent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/ComponentContent"
+            ],
+            "arkui/ContainerSpanModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/ContainerSpanModifier"
+            ],
+            "arkui/Content": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/Content"
+            ],
+            "arkui/DividerModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/DividerModifier"
+            ],
+            "arkui/FlexModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/FlexModifier"
+            ],
+            "arkui/FolderStackModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/FolderStackModifier"
+            ],
+            "arkui/FrameNode": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/FrameNode"
+            ],
+            "arkui/Graphics": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/Graphics"
+            ],
+            "arkui/GridColModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/GridColModifier"
+            ],
+            "arkui/GridItemModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/GridItemModifier"
+            ],
+            "arkui/GridModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/GridModifier"
+            ],
+            "arkui/GridRowModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/GridRowModifier"
+            ],
+            "arkui/HyperlinkModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/HyperlinkModifier"
+            ],
+            "arkui/ImageSpanModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/ImageSpanModifier"
+            ],
+            "arkui/LineModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/LineModifier"
+            ],
+            "arkui/ListItemGroupModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/ListItemGroupModifier"
+            ],
+            "arkui/ListItemModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/ListItemModifier"
+            ],
+            "arkui/ListModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/ListModifier"
+            ],
+            "arkui/MenuItemModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/MenuItemModifier"
+            ],
+            "arkui/MenuModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/MenuModifier"
+            ],
+            "arkui/NavDestinationModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/NavDestinationModifier"
+            ],
+            "arkui/NavigationModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/NavigationModifier"
+            ],
+            "arkui/NodeContent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/NodeContent"
+            ],
+            "arkui/NodeController": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/NodeController"
+            ],
+            "arkui/PathModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/PathModifier"
+            ],
+            "arkui/PolygonModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/PolygonModifier"
+            ],
+            "arkui/PolylineModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/PolylineModifier"
+            ],
+            "arkui/RectModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/RectModifier"
+            ],
+            "arkui/RefreshModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/RefreshModifier"
+            ],
+            "arkui/RelativeContainerModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/RelativeContainerModifier"
+            ],
+            "arkui/RenderNode": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/RenderNode"
+            ],
+            "arkui/RichEditorModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/RichEditorModifier"
+            ],
+            "arkui/RowModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/RowModifier"
+            ],
+            "arkui/RowSplitModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/RowSplitModifier"
+            ],
+            "arkui/ScrollModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/ScrollModifier"
+            ],
+            "arkui/SearchModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/SearchModifier"
+            ],
+            "arkui/SelectModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/SelectModifier"
+            ],
+            "arkui/ShapeModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/ShapeModifier"
+            ],
+            "arkui/SideBarContainerModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/SideBarContainerModifier"
+            ],
+            "arkui/SpanModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/SpanModifier"
+            ],
+            "arkui/StackModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/StackModifier"
+            ],
+            "arkui/StepperItemModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/StepperItemModifier"
+            ],
+            "arkui/StepperModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/StepperModifier"
+            ],
+            "arkui/SwiperModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/SwiperModifier"
+            ],
+            "arkui/SymbolGlyphModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/SymbolGlyphModifier"
+            ],
+            "arkui/SymbolSpanModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/SymbolSpanModifier"
+            ],
+            "arkui/TextAreaModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/TextAreaModifier"
+            ],
+            "arkui/TextInputModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/TextInputModifier"
+            ],
+            "arkui/TextModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/TextModifier"
+            ],
+            "arkui/UserView": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/UserView"
+            ],
+            "arkui/VideoModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/VideoModifier"
+            ],
+            "arkui/WaterFlowModifier": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/WaterFlowModifier"
+            ],
+            "bundleManager/AbilityInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/AbilityInfo"
+            ],
+            "bundleManager/AppProvisionInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/AppProvisionInfo"
+            ],
+            "bundleManager/ApplicationInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/ApplicationInfo"
+            ],
+            "bundleManager/BundleInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/BundleInfo"
+            ],
+            "bundleManager/BundlePackInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/BundlePackInfo"
+            ],
+            "bundleManager/BundleResourceInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/BundleResourceInfo"
+            ],
+            "bundleManager/DispatchInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/DispatchInfo"
+            ],
+            "bundleManager/ElementName": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/ElementName"
+            ],
+            "bundleManager/ExtensionAbilityInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/ExtensionAbilityInfo"
+            ],
+            "bundleManager/HapModuleInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/HapModuleInfo"
+            ],
+            "bundleManager/LauncherAbilityInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/LauncherAbilityInfo"
+            ],
+            "bundleManager/LauncherAbilityResourceInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/LauncherAbilityResourceInfo"
+            ],
+            "bundleManager/Metadata": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/Metadata"
+            ],
+            "bundleManager/OverlayModuleInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/OverlayModuleInfo"
+            ],
+            "bundleManager/PermissionDef": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/PermissionDef"
+            ],
+            "bundleManager/PluginBundleInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/PluginBundleInfo"
+            ],
+            "bundleManager/RecoverableApplicationInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/RecoverableApplicationInfo"
+            ],
+            "bundleManager/RemoteAbilityInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/RemoteAbilityInfo"
+            ],
+            "bundleManager/SharedBundleInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/SharedBundleInfo"
+            ],
+            "bundleManager/ShortcutInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/ShortcutInfo"
+            ],
+            "bundleManager/Skill": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/bundleManager/Skill"
+            ],
+            "commonEvent/commonEventData": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/commonEvent/commonEventData"
+            ],
+            "commonEvent/commonEventPublishData": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/commonEvent/commonEventPublishData"
+            ],
+            "commonEvent/commonEventSubscribeInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/commonEvent/commonEventSubscribeInfo"
+            ],
+            "commonEvent/commonEventSubscriber": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/commonEvent/commonEventSubscriber"
+            ],
+            "device-define/2in": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/device-define/2in"
+            ],
+            "device-define/defaul": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/device-define/defaul"
+            ],
+            "device-define/liteWearabl": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/device-define/liteWearabl"
+            ],
+            "device-define/table": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/device-define/table"
+            ],
+            "device-define/t": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/device-define/t"
+            ],
+            "device-define/wearabl": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/device-define/wearabl"
+            ],
+            "global/rawFileDescriptor": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/global/rawFileDescriptor"
+            ],
+            "global/resource": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/global/resource"
+            ],
+            "graphics3d/Scene": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/graphics3d/Scene"
+            ],
+            "graphics3d/SceneNodes": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/graphics3d/SceneNodes"
+            ],
+            "graphics3d/ScenePostProcessSettings": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/graphics3d/ScenePostProcessSettings"
+            ],
+            "graphics3d/SceneResources": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/graphics3d/SceneResources"
+            ],
+            "graphics3d/SceneTypes": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/graphics3d/SceneTypes"
+            ],
+            "multimedia/ringtonePlayer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/multimedia/ringtonePlayer"
+            ],
+            "multimedia/soundPool": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/multimedia/soundPool"
+            ],
+            "multimedia/systemTonePlayer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/multimedia/systemTonePlayer"
+            ],
+            "notification/NotificationCommonDef": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/notification/NotificationCommonDef"
+            ],
+            "notification/notificationActionButton": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/notification/notificationActionButton"
+            ],
+            "notification/notificationContent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/notification/notificationContent"
+            ],
+            "notification/notificationFlags": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/notification/notificationFlags"
+            ],
+            "notification/notificationRequest": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/notification/notificationRequest"
+            ],
+            "notification/notificationSlot": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/notification/notificationSlot"
+            ],
+            "notification/notificationSorting": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/notification/notificationSorting"
+            ],
+            "notification/notificationSortingMap": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/notification/notificationSortingMap"
+            ],
+            "notification/notificationSubscribeInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/notification/notificationSubscribeInfo"
+            ],
+            "notification/notificationSubscriber": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/notification/notificationSubscriber"
+            ],
+            "notification/notificationTemplate": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/notification/notificationTemplate"
+            ],
+            "notification/notificationUserInput": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/notification/notificationUserInput"
+            ],
+            "security/PermissionRequestResult": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/security/PermissionRequestResult"
+            ],
+            "syscapCheck/sysCapSchem": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/syscapCheck/sysCapSchem"
+            ],
+            "tag/nfctech": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/tag/nfctech"
+            ],
+            "tag/tagSession": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/tag/tagSession"
+            ],
+            "wantAgent/triggerInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/wantAgent/triggerInfo"
+            ],
+            "wantAgent/wantAgentInfo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/wantAgent/wantAgentInfo"
+            ],
+            "arkui/component/actionSheet": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/actionSheet"
+            ],
+            "arkui/component/alertDialog": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/alertDialog"
+            ],
+            "arkui/component/alphabetIndexer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/alphabetIndexer"
+            ],
+            "arkui/component/animation": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/animation"
+            ],
+            "arkui/component/animator": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/animator"
+            ],
+            "arkui/component/badge": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/badge"
+            ],
+            "arkui/component/blank": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/blank"
+            ],
+            "arkui/component/builder": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/builder"
+            ],
+            "arkui/component/button": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/button"
+            ],
+            "arkui/component/calendarPicker": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/calendarPicker"
+            ],
+            "arkui/component/canvas": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/canvas"
+            ],
+            "arkui/component/checkbox": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/checkbox"
+            ],
+            "arkui/component/checkboxgroup": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/checkboxgroup"
+            ],
+            "arkui/component/circle": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/circle"
+            ],
+            "arkui/component/column": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/column"
+            ],
+            "arkui/component/columnSplit": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/columnSplit"
+            ],
+            "arkui/component/common": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/common"
+            ],
+            "arkui/component/containerSpan": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/containerSpan"
+            ],
+            "arkui/component/contentSlot": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/contentSlot"
+            ],
+            "arkui/component/counter": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/counter"
+            ],
+            "arkui/component/customComponent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/customComponent"
+            ],
+            "arkui/component/customDialogController": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/customDialogController"
+            ],
+            "arkui/component/dataPanel": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/dataPanel"
+            ],
+            "arkui/component/datePicker": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/datePicker"
+            ],
+            "arkui/component/divider": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/divider"
+            ],
+            "arkui/component/effectComponent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/effectComponent"
+            ],
+            "arkui/component/ellipse": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/ellipse"
+            ],
+            "arkui/component/embeddedComponent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/embeddedComponent"
+            ],
+            "arkui/component/enums": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/enums"
+            ],
+            "arkui/component/extendableComponent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/extendableComponent"
+            ],
+            "arkui/component/flex": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/flex"
+            ],
+            "arkui/component/flowItem": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/flowItem"
+            ],
+            "arkui/component/focus": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/focus"
+            ],
+            "arkui/component/folderStack": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/folderStack"
+            ],
+            "arkui/component/forEach": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/forEach"
+            ],
+            "arkui/component/formComponent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/formComponent"
+            ],
+            "arkui/component/formLink": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/formLink"
+            ],
+            "arkui/component/gauge": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/gauge"
+            ],
+            "arkui/component/gesture": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/gesture"
+            ],
+            "arkui/component/grid": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/grid"
+            ],
+            "arkui/component/gridCol": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/gridCol"
+            ],
+            "arkui/component/gridItem": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/gridItem"
+            ],
+            "arkui/component/gridRow": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/gridRow"
+            ],
+            "arkui/component/hyperlink": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/hyperlink"
+            ],
+            "arkui/component/image": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/image"
+            ],
+            "arkui/component/imageAnimator": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/imageAnimator"
+            ],
+            "arkui/component/imageCommon": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/imageCommon"
+            ],
+            "arkui/component/imageSpan": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/imageSpan"
+            ],
+            "arkui/component/indicatorcomponent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/indicatorcomponent"
+            ],
+            "arkui/component/inspector": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/inspector"
+            ],
+            "arkui/component/interop": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/interop"
+            ],
+            "arkui/component/lazyForEach": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/lazyForEach"
+            ],
+            "arkui/component/lazyGridLayout": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/lazyGridLayout"
+            ],
+            "arkui/component/line": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/line"
+            ],
+            "arkui/component/linearindicator": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/linearindicator"
+            ],
+            "arkui/component/list": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/list"
+            ],
+            "arkui/component/listItem": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/listItem"
+            ],
+            "arkui/component/listItemGroup": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/listItemGroup"
+            ],
+            "arkui/component/loadingProgress": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/loadingProgress"
+            ],
+            "arkui/component/marquee": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/marquee"
+            ],
+            "arkui/component/matrix2d": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/matrix2d"
+            ],
+            "arkui/component/mediaCachedImage": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/mediaCachedImage"
+            ],
+            "arkui/component/menu": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/menu"
+            ],
+            "arkui/component/menuItem": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/menuItem"
+            ],
+            "arkui/component/menuItemGroup": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/menuItemGroup"
+            ],
+            "arkui/component/navDestination": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/navDestination"
+            ],
+            "arkui/component/navigation": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/navigation"
+            ],
+            "arkui/component/nodeContainer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/nodeContainer"
+            ],
+            "arkui/component/pageTransition": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/pageTransition"
+            ],
+            "arkui/component/particle": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/particle"
+            ],
+            "arkui/component/pasteButton": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/pasteButton"
+            ],
+            "arkui/component/path": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/path"
+            ],
+            "arkui/component/patternLock": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/patternLock"
+            ],
+            "arkui/component/pluginComponent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/pluginComponent"
+            ],
+            "arkui/component/polygon": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/polygon"
+            ],
+            "arkui/component/polyline": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/polyline"
+            ],
+            "arkui/component/progress": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/progress"
+            ],
+            "arkui/component/qrcode": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/qrcode"
+            ],
+            "arkui/component/radio": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/radio"
+            ],
+            "arkui/component/rating": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/rating"
+            ],
+            "arkui/component/rect": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/rect"
+            ],
+            "arkui/component/refresh": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/refresh"
+            ],
+            "arkui/component/relativeContainer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/relativeContainer"
+            ],
+            "arkui/component/remoteWindow": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/remoteWindow"
+            ],
+            "arkui/component/repeat": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/repeat"
+            ],
+            "arkui/component/resources": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/resources"
+            ],
+            "arkui/component/richEditor": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/richEditor"
+            ],
+            "arkui/component/richText": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/richText"
+            ],
+            "arkui/component/rootScene": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/rootScene"
+            ],
+            "arkui/component/row": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/row"
+            ],
+            "arkui/component/rowSplit": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/rowSplit"
+            ],
+            "arkui/component/saveButton": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/saveButton"
+            ],
+            "arkui/component/screen": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/screen"
+            ],
+            "arkui/component/scroll": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/scroll"
+            ],
+            "arkui/component/scrollBar": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/scrollBar"
+            ],
+            "arkui/component/search": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/search"
+            ],
+            "arkui/component/securityComponent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/securityComponent"
+            ],
+            "arkui/component/select": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/select"
+            ],
+            "arkui/component/shape": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/shape"
+            ],
+            "arkui/component/sidebar": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/sidebar"
+            ],
+            "arkui/component/slider": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/slider"
+            ],
+            "arkui/component/span": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/span"
+            ],
+            "arkui/component/stack": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/stack"
+            ],
+            "arkui/component/stepper": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/stepper"
+            ],
+            "arkui/component/stepperItem": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/stepperItem"
+            ],
+            "arkui/component/styledString": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/styledString"
+            ],
+            "arkui/component/swiper": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/swiper"
+            ],
+            "arkui/component/symbolSpan": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/symbolSpan"
+            ],
+            "arkui/component/symbolglyph": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/symbolglyph"
+            ],
+            "arkui/component/tabContent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/tabContent"
+            ],
+            "arkui/component/tabs": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/tabs"
+            ],
+            "arkui/component/text": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/text"
+            ],
+            "arkui/component/textArea": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/textArea"
+            ],
+            "arkui/component/textClock": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/textClock"
+            ],
+            "arkui/component/textCommon": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/textCommon"
+            ],
+            "arkui/component/textInput": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/textInput"
+            ],
+            "arkui/component/textPicker": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/textPicker"
+            ],
+            "arkui/component/textTimer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/textTimer"
+            ],
+            "arkui/component/timePicker": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/timePicker"
+            ],
+            "arkui/component/toggle": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/toggle"
+            ],
+            "arkui/component/toolbar": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/toolbar"
+            ],
+            "arkui/component/uiExtensionComponent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/uiExtensionComponent"
+            ],
+            "arkui/component/units": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/units"
+            ],
+            "arkui/component/video": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/video"
+            ],
+            "arkui/component/waterFlow": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/waterFlow"
+            ],
+            "arkui/component/web": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/web"
+            ],
+            "arkui/component/windowScene": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/windowScene"
+            ],
+            "arkui/component/withTheme": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/withTheme"
+            ],
+            "arkui/component/xcomponent": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/component/xcomponent"
+            ],
+            "arkui/external/resource": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/external/resource"
+            ],
+            "arkui/runtime-api/@koalaui.runtime.common": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/runtime-api/@koalaui.runtime.common"
+            ],
+            "arkui/runtime-api/@koalaui.runtime.states.Disposable": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/runtime-api/@koalaui.runtime.states.Disposable"
+            ],
+            "arkui/runtime-api/@koalaui.runtime.states.State": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/runtime-api/@koalaui.runtime.states.State"
+            ],
+            "arkui/runtime-api/@koalaui.runtime.tree.IncrementalNode": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/runtime-api/@koalaui.runtime.tree.IncrementalNode"
+            ],
+            "arkui/runtime-api/@koalaui.runtime.tree.ReadonlyTreeNode": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/runtime-api/@koalaui.runtime.tree.ReadonlyTreeNode"
+            ],
+            "arkui/stateManagement/decorator": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/stateManagement/decorator"
+            ],
+            "arkui/stateManagement/remember": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/stateManagement/remember"
+            ],
+            "arkui/stateManagement/runtime": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/stateManagement/runtime"
+            ],
+            "arkui/stateManagement/utils": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/stateManagement/utils"
+            ],
+            "common/full/canvaspattern": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/common/full/canvaspattern"
+            ],
+            "config/css/css-json-schem": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/css/css-json-schem"
+            ],
+            "config/css/cssConfi": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/css/cssConfi"
+            ],
+            "config/hml/hml-json-schem": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/hml-json-schem"
+            ],
+            "form/action/form-schem": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/action/form-schem"
+            ],
+            "form/css/css-json-schem": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/css/css-json-schem"
+            ],
+            "form/css/cssConfi": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/css/cssConfi"
+            ],
+            "form/hml/hml-json-schem": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/hml-json-schem"
+            ],
+            "arkui/stateManagement/memorize/state": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/stateManagement/memorize/state"
+            ],
+            "arkui/stateManagement/storage/appStorage": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/stateManagement/storage/appStorage"
+            ],
+            "arkui/stateManagement/storage/environment": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/stateManagement/storage/environment"
+            ],
+            "arkui/stateManagement/storage/localStorage": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/stateManagement/storage/localStorage"
+            ],
+            "arkui/stateManagement/storage/persistentStorage": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/stateManagement/storage/persistentStorage"
+            ],
+            "arkui/stateManagement/storage/storageProperty": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/arkui/stateManagement/storage/storageProperty"
+            ],
+            "config/hml/basic/animat": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/animat"
+            ],
+            "config/hml/basic/animateMotio": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/animateMotio"
+            ],
+            "config/hml/basic/animateTransfor": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/animateTransfor"
+            ],
+            "config/hml/basic/bloc": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/bloc"
+            ],
+            "config/hml/basic/butto": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/butto"
+            ],
+            "config/hml/basic/calenda": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/calenda"
+            ],
+            "config/hml/basic/char": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/char"
+            ],
+            "config/hml/basic/circl": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/circl"
+            ],
+            "config/hml/basic/divide": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/divide"
+            ],
+            "config/hml/basic/ellips": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/ellips"
+            ],
+            "config/hml/basic/image-animato": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/image-animato"
+            ],
+            "config/hml/basic/imag": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/imag"
+            ],
+            "config/hml/basic/inpu": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/inpu"
+            ],
+            "config/hml/basic/labe": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/labe"
+            ],
+            "config/hml/basic/lin": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/lin"
+            ],
+            "config/hml/basic/marque": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/marque"
+            ],
+            "config/hml/basic/men": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/men"
+            ],
+            "config/hml/basic/optio": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/optio"
+            ],
+            "config/hml/basic/pat": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/pat"
+            ],
+            "config/hml/basic/picker-vie": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/picker-vie"
+            ],
+            "config/hml/basic/picke": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/picke"
+            ],
+            "config/hml/basic/piec": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/piec"
+            ],
+            "config/hml/basic/polygo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/polygo"
+            ],
+            "config/hml/basic/polylin": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/polylin"
+            ],
+            "config/hml/basic/progres": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/progres"
+            ],
+            "config/hml/basic/qrcod": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/qrcod"
+            ],
+            "config/hml/basic/ratin": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/ratin"
+            ],
+            "config/hml/basic/rec": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/rec"
+            ],
+            "config/hml/basic/richtex": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/richtex"
+            ],
+            "config/hml/basic/searc": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/searc"
+            ],
+            "config/hml/basic/selec": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/selec"
+            ],
+            "config/hml/basic/slide": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/slide"
+            ],
+            "config/hml/basic/slo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/slo"
+            ],
+            "config/hml/basic/spa": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/spa"
+            ],
+            "config/hml/basic/switc": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/switc"
+            ],
+            "config/hml/basic/tex": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/tex"
+            ],
+            "config/hml/basic/textare": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/textare"
+            ],
+            "config/hml/basic/textpat": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/textpat"
+            ],
+            "config/hml/basic/toggl": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/toggl"
+            ],
+            "config/hml/basic/toolbar-ite": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/toolbar-ite"
+            ],
+            "config/hml/basic/toolba": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/toolba"
+            ],
+            "config/hml/basic/tspa": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/tspa"
+            ],
+            "config/hml/basic/we": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/we"
+            ],
+            "config/hml/basic/xcomponen": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/basic/xcomponen"
+            ],
+            "config/hml/canvas/canva": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/canvas/canva"
+            ],
+            "config/hml/container/badg": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/badg"
+            ],
+            "config/hml/container/dialo": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/dialo"
+            ],
+            "config/hml/container/di": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/di"
+            ],
+            "config/hml/container/for": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/for"
+            ],
+            "config/hml/container/list-item-grou": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/list-item-grou"
+            ],
+            "config/hml/container/list-ite": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/list-ite"
+            ],
+            "config/hml/container/lis": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/lis"
+            ],
+            "config/hml/container/pane": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/pane"
+            ],
+            "config/hml/container/popu": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/popu"
+            ],
+            "config/hml/container/refres": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/refres"
+            ],
+            "config/hml/container/stac": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/stac"
+            ],
+            "config/hml/container/stepper-ite": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/stepper-ite"
+            ],
+            "config/hml/container/steppe": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/steppe"
+            ],
+            "config/hml/container/sv": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/sv"
+            ],
+            "config/hml/container/swipe": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/swipe"
+            ],
+            "config/hml/container/tab-ba": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/tab-ba"
+            ],
+            "config/hml/container/tab-conten": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/tab-conten"
+            ],
+            "config/hml/container/tab": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/container/tab"
+            ],
+            "config/hml/custom/elemen": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/custom/elemen"
+            ],
+            "config/hml/grid/grid-co": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/grid/grid-co"
+            ],
+            "config/hml/grid/grid-containe": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/grid/grid-containe"
+            ],
+            "config/hml/grid/grid-ro": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/grid/grid-ro"
+            ],
+            "config/hml/media/camer": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/media/camer"
+            ],
+            "config/hml/media/vide": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/config/hml/media/vide"
+            ],
+            "form/hml/basic/bloc": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/basic/bloc"
+            ],
+            "form/hml/basic/butto": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/basic/butto"
+            ],
+            "form/hml/basic/calenda": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/basic/calenda"
+            ],
+            "form/hml/basic/char": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/basic/char"
+            ],
+            "form/hml/basic/cloc": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/basic/cloc"
+            ],
+            "form/hml/basic/divide": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/basic/divide"
+            ],
+            "form/hml/basic/imag": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/basic/imag"
+            ],
+            "form/hml/basic/inpu": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/basic/inpu"
+            ],
+            "form/hml/basic/progres": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/basic/progres"
+            ],
+            "form/hml/basic/spa": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/basic/spa"
+            ],
+            "form/hml/basic/tex": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/basic/tex"
+            ],
+            "form/hml/container/badg": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/container/badg"
+            ],
+            "form/hml/container/di": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/container/di"
+            ],
+            "form/hml/container/list-ite": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/container/list-ite"
+            ],
+            "form/hml/container/lis": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/container/lis"
+            ],
+            "form/hml/container/stac": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/container/stac"
+            ],
+            "form/hml/container/swipe": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/container/swipe"
+            ],
+            "form/hml/custom/elemen": [
+                "/home/huawei/work/idlize_copy/absolute-sdk-patched-arkts/api/form/hml/custom/elemen"
+            ]
+        }
+    },
+    "include": [
+        "./api/**/*"
+    ]
+}

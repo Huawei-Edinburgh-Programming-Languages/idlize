@@ -1,0 +1,2050 @@
+{
+  "compilerOptions": {
+    "package": "api",
+    "outDir": ".",
+    "baseUrl": "../api",
+    "paths": {
+      "@ohos.InputMethodSubtype": [
+        "./@ohos.InputMethodSubtype"
+      ],
+      "@ohos.UiTest": [
+        "@ohos.UiTest"
+      ],
+      "@ohos.WorkSchedulerExtensionAbility": [
+        "@ohos.WorkSchedulerExtensionAbility"
+      ],
+      "@ohos.ability.errorCode": [
+        "@ohos.ability.errorCode"
+      ],
+      "@ohos.ability.screenLockFileManager": [
+        "@ohos.ability.screenLockFileManager"
+      ],
+      "@ohos.abilityAccessCtrl": [
+        "@ohos.abilityAccessCtrl"
+      ],
+      "@ohos.accessibility.config": [
+        "@ohos.accessibility.config"
+      ],
+      "@ohos.accessibility": [
+        "@ohos.accessibility"
+      ],
+      "@ohos.account.appAccount": [
+        "@ohos.account.appAccount"
+      ],
+      "@ohos.account.distributedAccount": [
+        "@ohos.account.distributedAccount"
+      ],
+      "@ohos.account.osAccount": [
+        "@ohos.account.osAccount"
+      ],
+      "@ohos.animation.windowAnimationManager": [
+        "@ohos.animation.windowAnimationManager"
+      ],
+      "@ohos.animator": [
+        "@ohos.animator"
+      ],
+      "@ohos.app.ability.Ability": [
+        "@ohos.app.ability.Ability"
+      ],
+      "@ohos.app.ability.AbilityConstant": [
+        "@ohos.app.ability.AbilityConstant"
+      ],
+      "@ohos.app.ability.AbilityLifecycleCallback": [
+        "@ohos.app.ability.AbilityLifecycleCallback"
+      ],
+      "@ohos.app.ability.AbilityStage": [
+        "@ohos.app.ability.AbilityStage"
+      ],
+      "@ohos.app.ability.ApplicationStateChangeCallback": [
+        "@ohos.app.ability.ApplicationStateChangeCallback"
+      ],
+      "@ohos.app.ability.AtomicServiceOptions": [
+        "@ohos.app.ability.AtomicServiceOptions"
+      ],
+      "@ohos.app.ability.Configuration": [
+        "@ohos.app.ability.Configuration"
+      ],
+      "@ohos.app.ability.ConfigurationConstant": [
+        "@ohos.app.ability.ConfigurationConstant"
+      ],
+      "@ohos.app.ability.DriverExtensionAbility": [
+        "@ohos.app.ability.DriverExtensionAbility"
+      ],
+      "@ohos.app.ability.EnvironmentCallback": [
+        "@ohos.app.ability.EnvironmentCallback"
+      ],
+      "@ohos.app.ability.ExtensionAbility": [
+        "@ohos.app.ability.ExtensionAbility"
+      ],
+      "@ohos.app.ability.InsightIntentContext": [
+        "@ohos.app.ability.InsightIntentContext"
+      ],
+      "@ohos.app.ability.InsightIntentExecutor": [
+        "@ohos.app.ability.InsightIntentExecutor"
+      ],
+      "@ohos.app.ability.InteropAbilityLifecycleCallback": [
+        "@ohos.app.ability.InteropAbilityLifecycleCallback"
+      ],
+      "@ohos.app.ability.MediaControlExtensionAbility": [
+        "@ohos.app.ability.MediaControlExtensionAbility"
+      ],
+      "@ohos.app.ability.OpenLinkOptions": [
+        "@ohos.app.ability.OpenLinkOptions"
+      ],
+      "@ohos.app.ability.ServiceExtensionAbility": [
+        "@ohos.app.ability.ServiceExtensionAbility"
+      ],
+      "@ohos.app.ability.ShareExtensionAbility": [
+        "@ohos.app.ability.ShareExtensionAbility"
+      ],
+      "@ohos.app.ability.StartOptions": [
+        "@ohos.app.ability.StartOptions"
+      ],
+      "@ohos.app.ability.UIAbility": [
+        "@ohos.app.ability.UIAbility"
+      ],
+      "@ohos.app.ability.UIExtensionAbility": [
+        "@ohos.app.ability.UIExtensionAbility"
+      ],
+      "@ohos.app.ability.UIExtensionContentSession": [
+        "@ohos.app.ability.UIExtensionContentSession"
+      ],
+      "@ohos.app.ability.UserAuthExtensionAbility": [
+        "@ohos.app.ability.UserAuthExtensionAbility"
+      ],
+      "@ohos.app.ability.Want": [
+        "@ohos.app.ability.Want"
+      ],
+      "@ohos.app.ability.abilityDelegatorRegistry": [
+        "@ohos.app.ability.abilityDelegatorRegistry"
+      ],
+      "@ohos.app.ability.abilityManager": [
+        "@ohos.app.ability.abilityManager"
+      ],
+      "@ohos.app.ability.appManager": [
+        "@ohos.app.ability.appManager"
+      ],
+      "@ohos.app.ability.appRecovery": [
+        "@ohos.app.ability.appRecovery"
+      ],
+      "@ohos.app.ability.application": [
+        "@ohos.app.ability.application"
+      ],
+      "@ohos.app.ability.autoFillManager": [
+        "@ohos.app.ability.autoFillManager"
+      ],
+      "@ohos.app.ability.common": [
+        "@ohos.app.ability.common"
+      ],
+      "@ohos.app.ability.contextConstant": [
+        "@ohos.app.ability.contextConstant"
+      ],
+      "@ohos.app.ability.dataUriUtils": [
+        "@ohos.app.ability.dataUriUtils"
+      ],
+      "@ohos.app.ability.dialogRequest": [
+        "@ohos.app.ability.dialogRequest"
+      ],
+      "@ohos.app.ability.dialogSession": [
+        "@ohos.app.ability.dialogSession"
+      ],
+      "@ohos.app.ability.insightIntent": [
+        "@ohos.app.ability.insightIntent"
+      ],
+      "@ohos.app.ability.insightIntentDriver": [
+        "@ohos.app.ability.insightIntentDriver"
+      ],
+      "@ohos.app.ability.missionManager": [
+        "@ohos.app.ability.missionManager"
+      ],
+      "@ohos.app.ability.wantAgent": [
+        "@ohos.app.ability.wantAgent"
+      ],
+      "@ohos.app.ability.wantConstant": [
+        "@ohos.app.ability.wantConstant"
+      ],
+      "@ohos.app.form.FormExtensionAbility": [
+        "@ohos.app.form.FormExtensionAbility"
+      ],
+      "@ohos.app.form.formBindingData": [
+        "@ohos.app.form.formBindingData"
+      ],
+      "@ohos.app.form.formInfo": [
+        "@ohos.app.form.formInfo"
+      ],
+      "@ohos.app.form.formProvider": [
+        "@ohos.app.form.formProvider"
+      ],
+      "@ohos.application.BackupExtensionAbility": [
+        "@ohos.application.BackupExtensionAbility"
+      ],
+      "@ohos.application.DataShareExtensionAbility": [
+        "@ohos.application.DataShareExtensionAbility"
+      ],
+      "@ohos.application.StaticSubscriberExtensionAbility": [
+        "@ohos.application.StaticSubscriberExtensionAbility"
+      ],
+      "@ohos.application.StaticSubscriberExtensionContext": [
+        "@ohos.application.StaticSubscriberExtensionContext"
+      ],
+      "@ohos.application.formError": [
+        "@ohos.application.formError"
+      ],
+      "@ohos.application.testRunner": [
+        "@ohos.application.testRunner"
+      ],
+      "@ohos.application.uriPermissionManager": [
+        "@ohos.application.uriPermissionManager"
+      ],
+      "@ohos.arkui.Parallelize": [
+        "@ohos.arkui.Parallelize"
+      ],
+      "@ohos.arkui.UIContext": [
+        "@ohos.arkui.UIContext"
+      ],
+      "@ohos.arkui.advanced.FullScreenLaunchComponent": [
+        "@ohos.arkui.advanced.FullScreenLaunchComponent"
+      ],
+      "@ohos.arkui.advanced.SplitLayout": [
+        "@ohos.arkui.advanced.SplitLayout"
+      ],
+      "@ohos.arkui.advanced.SwipeRefresher": [
+        "@ohos.arkui.advanced.SwipeRefresher"
+      ],
+      "@ohos.arkui.component": [
+        "@ohos.arkui.component"
+      ],
+      "@ohos.arkui.componentSnapshot": [
+        "@ohos.arkui.componentSnapshot"
+      ],
+      "@ohos.arkui.componentUtils": [
+        "@ohos.arkui.componentUtils"
+      ],
+      "@ohos.arkui.dragController": [
+        "@ohos.arkui.dragController"
+      ],
+      "@ohos.arkui.drawableDescriptor": [
+        "@ohos.arkui.drawableDescriptor"
+      ],
+      "@ohos.arkui.inspector": [
+        "@ohos.arkui.inspector"
+      ],
+      "@ohos.arkui.modifier": [
+        "@ohos.arkui.modifier"
+      ],
+      "@ohos.arkui.node": [
+        "@ohos.arkui.node"
+      ],
+      "@ohos.arkui.observer": [
+        "@ohos.arkui.observer"
+      ],
+      "@ohos.arkui.performanceMonitor": [
+        "@ohos.arkui.performanceMonitor"
+      ],
+      "@ohos.arkui.shape": [
+        "@ohos.arkui.shape"
+      ],
+      "@ohos.arkui.stateManagement": [
+        "@ohos.arkui.stateManagement"
+      ],
+      "@ohos.arkui.theme": [
+        "@ohos.arkui.theme"
+      ],
+      "@ohos.arkui.uiExtension": [
+        "@ohos.arkui.uiExtension"
+      ],
+      "@ohos.base": [
+        "@ohos.base"
+      ],
+      "@ohos.batteryInfo": [
+        "@ohos.batteryInfo"
+      ],
+      "@ohos.batteryStatistics": [
+        "@ohos.batteryStatistics"
+      ],
+      "@ohos.bluetooth.a2dp": [
+        "@ohos.bluetooth.a2dp"
+      ],
+      "@ohos.bluetooth.access": [
+        "@ohos.bluetooth.access"
+      ],
+      "@ohos.bluetooth.baseProfile": [
+        "@ohos.bluetooth.baseProfile"
+      ],
+      "@ohos.bluetooth.ble": [
+        "@ohos.bluetooth.ble"
+      ],
+      "@ohos.bluetooth.connection": [
+        "@ohos.bluetooth.connection"
+      ],
+      "@ohos.bluetooth.constant": [
+        "@ohos.bluetooth.constant"
+      ],
+      "@ohos.bluetooth.hfp": [
+        "@ohos.bluetooth.hfp"
+      ],
+      "@ohos.bluetooth.hid": [
+        "@ohos.bluetooth.hid"
+      ],
+      "@ohos.brightness": [
+        "@ohos.brightness"
+      ],
+      "@ohos.buffer": [
+        "@ohos.buffer"
+      ],
+      "@ohos.bundle.appControl": [
+        "@ohos.bundle.appControl"
+      ],
+      "@ohos.bundle.bundleManager": [
+        "@ohos.bundle.bundleManager"
+      ],
+      "@ohos.bundle.bundleMonitor": [
+        "@ohos.bundle.bundleMonitor"
+      ],
+      "@ohos.bundle.bundleResourceManager": [
+        "@ohos.bundle.bundleResourceManager"
+      ],
+      "@ohos.bundle.defaultAppManager": [
+        "@ohos.bundle.defaultAppManager"
+      ],
+      "@ohos.bundle.distributedBundleManager": [
+        "@ohos.bundle.distributedBundleManager"
+      ],
+      "@ohos.bundle.freeInstall": [
+        "@ohos.bundle.freeInstall"
+      ],
+      "@ohos.bundle.installer": [
+        "@ohos.bundle.installer"
+      ],
+      "@ohos.bundle.launcherBundleManager": [
+        "@ohos.bundle.launcherBundleManager"
+      ],
+      "@ohos.bundle.overlay": [
+        "@ohos.bundle.overlay"
+      ],
+      "@ohos.bundle.shortcutManager": [
+        "@ohos.bundle.shortcutManager"
+      ],
+      "@ohos.charger": [
+        "@ohos.charger"
+      ],
+      "@ohos.commonEventManager": [
+        "@ohos.commonEventManager"
+      ],
+      "@ohos.configPolicy": [
+        "@ohos.configPolicy"
+      ],
+      "@ohos.curves": [
+        "@ohos.curves"
+      ],
+      "@ohos.customization.customConfig": [
+        "@ohos.customization.customConfig"
+      ],
+      "@ohos.data.DataShareResultSet": [
+        "@ohos.data.DataShareResultSet"
+      ],
+      "@ohos.data.ValuesBucket": [
+        "@ohos.data.ValuesBucket"
+      ],
+      "@ohos.data.dataShare": [
+        "@ohos.data.dataShare"
+      ],
+      "@ohos.data.dataSharePredicates": [
+        "@ohos.data.dataSharePredicates"
+      ],
+      "@ohos.data.distributedKVStore": [
+        "@ohos.data.distributedKVStore"
+      ],
+      "@ohos.data.preferences": [
+        "@ohos.data.preferences"
+      ],
+      "@ohos.data.relationalStore": [
+        "@ohos.data.relationalStore"
+      ],
+      "@ohos.data.unifiedDataChannel": [
+        "@ohos.data.unifiedDataChannel"
+      ],
+      "@ohos.data.uniformTypeDescriptor": [
+        "@ohos.data.uniformTypeDescriptor"
+      ],
+      "@ohos.deviceInfo": [
+        "@ohos.deviceInfo"
+      ],
+      "@ohos.deviceStatus.dragInteraction": [
+        "@ohos.deviceStatus.dragInteraction"
+      ],
+      "@ohos.display": [
+        "@ohos.display"
+      ],
+      "@ohos.distributedDeviceManager": [
+        "@ohos.distributedDeviceManager"
+      ],
+      "@ohos.distributedHardware.mechanicManager": [
+        "@ohos.distributedHardware.mechanicManager"
+      ],
+      "@ohos.driver.deviceManager": [
+        "@ohos.driver.deviceManager"
+      ],
+      "@ohos.effectKit": [
+        "@ohos.effectKit"
+      ],
+      "@ohos.enterprise.adminManager": [
+        "@ohos.enterprise.adminManager"
+      ],
+      "@ohos.enterprise.securityManager": [
+        "@ohos.enterprise.securityManager"
+      ],
+      "@ohos.events.emitter": [
+        "@ohos.events.emitter"
+      ],
+      "@ohos.file.cloudSync": [
+        "@ohos.file.cloudSync"
+      ],
+      "@ohos.file.cloudSyncManager": [
+        "@ohos.file.cloudSyncManager"
+      ],
+      "@ohos.file.environment": [
+        "@ohos.file.environment"
+      ],
+      "@ohos.file.fileuri": [
+        "@ohos.file.fileuri"
+      ],
+      "@ohos.file.fs": [
+        "@ohos.file.fs"
+      ],
+      "@ohos.file.hash": [
+        "@ohos.file.hash"
+      ],
+      "@ohos.file.photoAccessHelper": [
+        "@ohos.file.photoAccessHelper"
+      ],
+      "@ohos.file.securityLabel": [
+        "@ohos.file.securityLabel"
+      ],
+      "@ohos.file.statvfs": [
+        "@ohos.file.statvfs"
+      ],
+      "@ohos.file.storageStatistics": [
+        "@ohos.file.storageStatistics"
+      ],
+      "@ohos.file.volumeManager": [
+        "@ohos.file.volumeManager"
+      ],
+      "@ohos.fileshare": [
+        "@ohos.fileshare"
+      ],
+      "@ohos.font": [
+        "@ohos.font"
+      ],
+      "@ohos.fontManager": [
+        "@ohos.fontManager"
+      ],
+      "@ohos.geoLocationManager": [
+        "@ohos.geoLocationManager"
+      ],
+      "@ohos.graphics.colorSpaceManager": [
+        "@ohos.graphics.colorSpaceManager"
+      ],
+      "@ohos.graphics.common2D": [
+        "@ohos.graphics.common2D"
+      ],
+      "@ohos.graphics.displaySync": [
+        "@ohos.graphics.displaySync"
+      ],
+      "@ohos.graphics.drawing": [
+        "@ohos.graphics.drawing"
+      ],
+      "@ohos.graphics.hdrCapability": [
+        "@ohos.graphics.hdrCapability"
+      ],
+      "@ohos.graphics.scene": [
+        "@ohos.graphics.scene"
+      ],
+      "@ohos.graphics.text": [
+        "@ohos.graphics.text"
+      ],
+      "@ohos.graphics.uiEffect": [
+        "@ohos.graphics.uiEffect"
+      ],
+      "@ohos.hiSysEvent": [
+        "@ohos.hiSysEvent"
+      ],
+      "@ohos.hiTraceChain": [
+        "@ohos.hiTraceChain"
+      ],
+      "@ohos.hiTraceMeter": [
+        "@ohos.hiTraceMeter"
+      ],
+      "@ohos.hichecker": [
+        "@ohos.hichecker"
+      ],
+      "@ohos.hidebug": [
+        "@ohos.hidebug"
+      ],
+      "@ohos.hilog": [
+        "@ohos.hilog"
+      ],
+      "@ohos.hiviewdfx.hiAppEvent": [
+        "@ohos.hiviewdfx.hiAppEvent"
+      ],
+      "@ohos.i18n": [
+        "@ohos.i18n"
+      ],
+      "@ohos.inputMethod.Panel": [
+        "@ohos.inputMethod.Panel"
+      ],
+      "@ohos.inputMethod": [
+        "@ohos.inputMethod"
+      ],
+      "@ohos.intl": [
+        "@ohos.intl"
+      ],
+      "@ohos.logLibrary": [
+        "@ohos.logLibrary"
+      ],
+      "@ohos.matrix4": [
+        "@ohos.matrix4"
+      ],
+      "@ohos.measure": [
+        "@ohos.measure"
+      ],
+      "@ohos.mediaquery": [
+        "@ohos.mediaquery"
+      ],
+      "@ohos.multimedia.audio": [
+        "@ohos.multimedia.audio"
+      ],
+      "@ohos.multimedia.audioHaptic": [
+        "@ohos.multimedia.audioHaptic"
+      ],
+      "@ohos.multimedia.avCastPickerParam": [
+        "@ohos.multimedia.avCastPickerParam"
+      ],
+      "@ohos.multimedia.avsession": [
+        "@ohos.multimedia.avsession"
+      ],
+      "@ohos.multimedia.camera": [
+        "@ohos.multimedia.camera"
+      ],
+      "@ohos.multimedia.cameraPicker": [
+        "@ohos.multimedia.cameraPicker"
+      ],
+      "@ohos.multimedia.drm": [
+        "@ohos.multimedia.drm"
+      ],
+      "@ohos.multimedia.image": [
+        "@ohos.multimedia.image"
+      ],
+      "@ohos.multimedia.media": [
+        "@ohos.multimedia.media"
+      ],
+      "@ohos.multimedia.systemSoundManager": [
+        "@ohos.multimedia.systemSoundManager"
+      ],
+      "@ohos.multimodalInput.gestureEvent": [
+        "@ohos.multimodalInput.gestureEvent"
+      ],
+      "@ohos.multimodalInput.inputConsumer": [
+        "@ohos.multimodalInput.inputConsumer"
+      ],
+      "@ohos.multimodalInput.inputDevice": [
+        "@ohos.multimodalInput.inputDevice"
+      ],
+      "@ohos.multimodalInput.inputEvent": [
+        "@ohos.multimodalInput.inputEvent"
+      ],
+      "@ohos.multimodalInput.intentionCode": [
+        "@ohos.multimodalInput.intentionCode"
+      ],
+      "@ohos.multimodalInput.keyCode": [
+        "@ohos.multimodalInput.keyCode"
+      ],
+      "@ohos.multimodalInput.keyEvent": [
+        "@ohos.multimodalInput.keyEvent"
+      ],
+      "@ohos.multimodalInput.mouseEvent": [
+        "@ohos.multimodalInput.mouseEvent"
+      ],
+      "@ohos.multimodalInput.pointer": [
+        "@ohos.multimodalInput.pointer"
+      ],
+      "@ohos.multimodalInput.shortKey": [
+        "@ohos.multimodalInput.shortKey"
+      ],
+      "@ohos.multimodalInput.touchEvent": [
+        "@ohos.multimodalInput.touchEvent"
+      ],
+      "@ohos.net.connection": [
+        "@ohos.net.connection"
+      ],
+      "@ohos.net.http": [
+        "@ohos.net.http"
+      ],
+      "@ohos.net.networkSecurity": [
+        "@ohos.net.networkSecurity"
+      ],
+      "@ohos.net.sharing": [
+        "@ohos.net.sharing"
+      ],
+      "@ohos.net.statistics": [
+        "@ohos.net.statistics"
+      ],
+      "@ohos.net.webSocket": [
+        "@ohos.net.webSocket"
+      ],
+      "@ohos.nfc.cardEmulation": [
+        "@ohos.nfc.cardEmulation"
+      ],
+      "@ohos.nfc.controller": [
+        "@ohos.nfc.controller"
+      ],
+      "@ohos.nfc.tag": [
+        "@ohos.nfc.tag"
+      ],
+      "@ohos.notificationManager": [
+        "@ohos.notificationManager"
+      ],
+      "@ohos.notificationSubscribe": [
+        "@ohos.notificationSubscribe"
+      ],
+      "@ohos.pasteboard": [
+        "@ohos.pasteboard"
+      ],
+      "@ohos.pluginComponent": [
+        "@ohos.pluginComponent"
+      ],
+      "@ohos.power": [
+        "@ohos.power"
+      ],
+      "@ohos.print": [
+        "@ohos.print"
+      ],
+      "@ohos.privacyManager": [
+        "@ohos.privacyManager"
+      ],
+      "@ohos.prompt": [
+        "@ohos.prompt"
+      ],
+      "@ohos.promptAction": [
+        "@ohos.promptAction"
+      ],
+      "@ohos.reminderAgentManager": [
+        "@ohos.reminderAgentManager"
+      ],
+      "@ohos.request": [
+        "@ohos.request"
+      ],
+      "@ohos.resourceManager": [
+        "@ohos.resourceManager"
+      ],
+      "@ohos.resourceschedule.backgroundProcessManager": [
+        "@ohos.resourceschedule.backgroundProcessManager"
+      ],
+      "@ohos.resourceschedule.backgroundTaskManager": [
+        "@ohos.resourceschedule.backgroundTaskManager"
+      ],
+      "@ohos.resourceschedule.systemload": [
+        "@ohos.resourceschedule.systemload"
+      ],
+      "@ohos.resourceschedule.usageStatistics": [
+        "@ohos.resourceschedule.usageStatistics"
+      ],
+      "@ohos.resourceschedule.workScheduler": [
+        "@ohos.resourceschedule.workScheduler"
+      ],
+      "@ohos.router": [
+        "@ohos.router"
+      ],
+      "@ohos.rpc": [
+        "@ohos.rpc"
+      ],
+      "@ohos.runningLock": [
+        "@ohos.runningLock"
+      ],
+      "@ohos.screen": [
+        "@ohos.screen"
+      ],
+      "@ohos.screenLock": [
+        "@ohos.screenLock"
+      ],
+      "@ohos.screenshot": [
+        "@ohos.screenshot"
+      ],
+      "@ohos.security.cert": [
+        "@ohos.security.cert"
+      ],
+      "@ohos.security.certManager": [
+        "@ohos.security.certManager"
+      ],
+      "@ohos.security.certManagerDialog": [
+        "@ohos.security.certManagerDialog"
+      ],
+      "@ohos.security.cryptoFramework": [
+        "@ohos.security.cryptoFramework"
+      ],
+      "@ohos.security.huks": [
+        "@ohos.security.huks"
+      ],
+      "@ohos.sensor": [
+        "@ohos.sensor"
+      ],
+      "@ohos.settings": [
+        "@ohos.settings"
+      ],
+      "@ohos.systemCapability": [
+        "@ohos.systemCapability"
+      ],
+      "@ohos.systemDateTime": [
+        "@ohos.systemDateTime"
+      ],
+      "@ohos.systemParameterEnhance": [
+        "@ohos.systemParameterEnhance"
+      ],
+      "@ohos.systemTimer": [
+        "@ohos.systemTimer"
+      ],
+      "@ohos.telephony.call": [
+        "@ohos.telephony.call"
+      ],
+      "@ohos.telephony.data": [
+        "@ohos.telephony.data"
+      ],
+      "@ohos.telephony.esim": [
+        "@ohos.telephony.esim"
+      ],
+      "@ohos.telephony.observer": [
+        "@ohos.telephony.observer"
+      ],
+      "@ohos.telephony.radio": [
+        "@ohos.telephony.radio"
+      ],
+      "@ohos.telephony.sim": [
+        "@ohos.telephony.sim"
+      ],
+      "@ohos.telephony.sms": [
+        "@ohos.telephony.sms"
+      ],
+      "@ohos.thermal": [
+        "@ohos.thermal"
+      ],
+      "@ohos.transfer": [
+        "@ohos.transfer"
+      ],
+      "@ohos.uiAppearance": [
+        "@ohos.uiAppearance"
+      ],
+      "@ohos.uiExtensionHost": [
+        "@ohos.uiExtensionHost"
+      ],
+      "@ohos.update": [
+        "@ohos.update"
+      ],
+      "@ohos.uri": [
+        "@ohos.uri"
+      ],
+      "@ohos.url": [
+        "@ohos.url"
+      ],
+      "@ohos.usbManager": [
+        "@ohos.usbManager"
+      ],
+      "@ohos.usbManager.serial": [
+        "@ohos.usbManager.serial"
+      ],
+      "@ohos.userIAM.faceAuth": [
+        "@ohos.userIAM.faceAuth"
+      ],
+      "@ohos.userIAM.userAccessCtrl": [
+        "@ohos.userIAM.userAccessCtrl"
+      ],
+      "@ohos.userIAM.userAuth": [
+        "@ohos.userIAM.userAuth"
+      ],
+      "@ohos.util.ArrayList": [
+        "@ohos.util.ArrayList"
+      ],
+      "@ohos.util.Deque": [
+        "@ohos.util.Deque"
+      ],
+      "@ohos.util.HashMap": [
+        "@ohos.util.HashMap"
+      ],
+      "@ohos.util.HashSet": [
+        "@ohos.util.HashSet"
+      ],
+      "@ohos.util.LightWeightMap": [
+        "@ohos.util.LightWeightMap"
+      ],
+      "@ohos.util.LightWeightSet": [
+        "@ohos.util.LightWeightSet"
+      ],
+      "@ohos.util.LinkedList": [
+        "@ohos.util.LinkedList"
+      ],
+      "@ohos.util.List": [
+        "@ohos.util.List"
+      ],
+      "@ohos.util.PlainArray": [
+        "@ohos.util.PlainArray"
+      ],
+      "@ohos.util.Queue": [
+        "@ohos.util.Queue"
+      ],
+      "@ohos.util.Stack": [
+        "@ohos.util.Stack"
+      ],
+      "@ohos.util.TreeMap": [
+        "@ohos.util.TreeMap"
+      ],
+      "@ohos.util.TreeSet": [
+        "@ohos.util.TreeSet"
+      ],
+      "@ohos.util": [
+        "@ohos.util"
+      ],
+      "@ohos.util.json": [
+        "@ohos.util.json"
+      ],
+      "@ohos.util.stream": [
+        "@ohos.util.stream"
+      ],
+      "@ohos.vibrator": [
+        "@ohos.vibrator"
+      ],
+      "@ohos.web.netErrorList": [
+        "@ohos.web.netErrorList"
+      ],
+      "@ohos.web.webview": [
+        "@ohos.web.webview"
+      ],
+      "@ohos.wifi": [
+        "@ohos.wifi"
+      ],
+      "@ohos.wifiManager": [
+        "@ohos.wifiManager"
+      ],
+      "@ohos.window": [
+        "@ohos.window"
+      ],
+      "@ohos.xml": [
+        "@ohos.xml"
+      ],
+      "@ohos.zlib": [
+        "@ohos.zlib"
+      ],
+      "@system.app": [
+        "@system.app"
+      ],
+      "@system.mediaquery": [
+        "@system.mediaquery"
+      ],
+      "@system.prompt": [
+        "@system.prompt"
+      ],
+      "@system.router": [
+        "@system.router"
+      ],
+      "permissions": [
+        "permissions"
+      ],
+      "ability/abilityResult": [
+        "ability/abilityResult"
+      ],
+      "ability/connectOptions": [
+        "ability/connectOptions"
+      ],
+      "ability/dataAbilityHelper": [
+        "ability/dataAbilityHelper"
+      ],
+      "application/AbilityDelegator": [
+        "application/AbilityDelegator"
+      ],
+      "application/AbilityFirstFrameStateData": [
+        "application/AbilityFirstFrameStateData"
+      ],
+      "application/AbilityFirstFrameStateObserver": [
+        "application/AbilityFirstFrameStateObserver"
+      ],
+      "application/AbilityForegroundStateObserver": [
+        "application/AbilityForegroundStateObserver"
+      ],
+      "application/AbilityMonitor": [
+        "application/AbilityMonitor"
+      ],
+      "application/AbilityRunningInfo": [
+        "application/AbilityRunningInfo"
+      ],
+      "application/AbilityStageContext": [
+        "application/AbilityStageContext"
+      ],
+      "application/AbilityStageMonitor": [
+        "application/AbilityStageMonitor"
+      ],
+      "application/AbilityStartCallback": [
+        "application/AbilityStartCallback"
+      ],
+      "application/AbilityStateData": [
+        "application/AbilityStateData"
+      ],
+      "application/AppForegroundStateObserver": [
+        "application/AppForegroundStateObserver"
+      ],
+      "application/AppStateData": [
+        "application/AppStateData"
+      ],
+      "application/ApplicationContext": [
+        "application/ApplicationContext"
+      ],
+      "application/ApplicationStateObserver": [
+        "application/ApplicationStateObserver"
+      ],
+      "application/AutoFillType": [
+        "application/AutoFillType"
+      ],
+      "application/BaseContext": [
+        "application/BaseContext"
+      ],
+      "application/Context": [
+        "application/Context"
+      ],
+      "application/DriverExtensionContext": [
+        "application/DriverExtensionContext"
+      ],
+      "application/EventHub": [
+        "application/EventHub"
+      ],
+      "application/ExtensionContext": [
+        "application/ExtensionContext"
+      ],
+      "application/ExtensionRunningInfo": [
+        "application/ExtensionRunningInfo"
+      ],
+      "application/FormExtensionContext": [
+        "application/FormExtensionContext"
+      ],
+      "application/MediaControlExtensionContext": [
+        "application/MediaControlExtensionContext"
+      ],
+      "application/MissionInfo": [
+        "application/MissionInfo"
+      ],
+      "application/MultiAppMode": [
+        "application/MultiAppMode"
+      ],
+      "application/ProcessData": [
+        "application/ProcessData"
+      ],
+      "application/ProcessInformation": [
+        "application/ProcessInformation"
+      ],
+      "application/RunningAppClone": [
+        "application/RunningAppClone"
+      ],
+      "application/RunningMultiAppInfo": [
+        "application/RunningMultiAppInfo"
+      ],
+      "application/RunningMultiInstanceInfo": [
+        "application/RunningMultiInstanceInfo"
+      ],
+      "application/ServiceExtensionContext": [
+        "application/ServiceExtensionContext"
+      ],
+      "application/UIAbilityContext": [
+        "application/UIAbilityContext"
+      ],
+      "application/UIExtensionContext": [
+        "application/UIExtensionContext"
+      ],
+      "application/WorkSchedulerExtensionContext": [
+        "application/WorkSchedulerExtensionContext"
+      ],
+      "application/abilityDelegatorArgs": [
+        "application/abilityDelegatorArgs"
+      ],
+      "application/shellCmdResult": [
+        "application/shellCmdResult"
+      ],
+      "arkui/AttributeUpdater": [
+        "arkui/AttributeUpdater"
+      ],
+      "arkui/BlankModifier": [
+        "arkui/BlankModifier"
+      ],
+      "arkui/BuilderNode": [
+        "arkui/BuilderNode"
+      ],
+      "arkui/ButtonModifier": [
+        "arkui/ButtonModifier"
+      ],
+      "arkui/CheckboxModifier": [
+        "arkui/CheckboxModifier"
+      ],
+      "arkui/ColumnModifier": [
+        "arkui/ColumnModifier"
+      ],
+      "arkui/ColumnSplitModifier": [
+        "arkui/ColumnSplitModifier"
+      ],
+      "arkui/CommonModifier": [
+        "arkui/CommonModifier"
+      ],
+      "arkui/ComponentContent": [
+        "arkui/ComponentContent"
+      ],
+      "arkui/ContainerSpanModifier": [
+        "arkui/ContainerSpanModifier"
+      ],
+      "arkui/Content": [
+        "arkui/Content"
+      ],
+      "arkui/DividerModifier": [
+        "arkui/DividerModifier"
+      ],
+      "arkui/FlexModifier": [
+        "arkui/FlexModifier"
+      ],
+      "arkui/FolderStackModifier": [
+        "arkui/FolderStackModifier"
+      ],
+      "arkui/FrameNode": [
+        "arkui/FrameNode"
+      ],
+      "arkui/Graphics": [
+        "arkui/Graphics"
+      ],
+      "arkui/GridColModifier": [
+        "arkui/GridColModifier"
+      ],
+      "arkui/GridItemModifier": [
+        "arkui/GridItemModifier"
+      ],
+      "arkui/GridModifier": [
+        "arkui/GridModifier"
+      ],
+      "arkui/GridRowModifier": [
+        "arkui/GridRowModifier"
+      ],
+      "arkui/HyperlinkModifier": [
+        "arkui/HyperlinkModifier"
+      ],
+      "arkui/ImageSpanModifier": [
+        "arkui/ImageSpanModifier"
+      ],
+      "arkui/LineModifier": [
+        "arkui/LineModifier"
+      ],
+      "arkui/ListItemGroupModifier": [
+        "arkui/ListItemGroupModifier"
+      ],
+      "arkui/ListItemModifier": [
+        "arkui/ListItemModifier"
+      ],
+      "arkui/ListModifier": [
+        "arkui/ListModifier"
+      ],
+      "arkui/MenuItemModifier": [
+        "arkui/MenuItemModifier"
+      ],
+      "arkui/MenuModifier": [
+        "arkui/MenuModifier"
+      ],
+      "arkui/NavDestinationModifier": [
+        "arkui/NavDestinationModifier"
+      ],
+      "arkui/NavigationModifier": [
+        "arkui/NavigationModifier"
+      ],
+      "arkui/NodeContent": [
+        "arkui/NodeContent"
+      ],
+      "arkui/NodeController": [
+        "arkui/NodeController"
+      ],
+      "arkui/PathModifier": [
+        "arkui/PathModifier"
+      ],
+      "arkui/PolygonModifier": [
+        "arkui/PolygonModifier"
+      ],
+      "arkui/PolylineModifier": [
+        "arkui/PolylineModifier"
+      ],
+      "arkui/RectModifier": [
+        "arkui/RectModifier"
+      ],
+      "arkui/RefreshModifier": [
+        "arkui/RefreshModifier"
+      ],
+      "arkui/RelativeContainerModifier": [
+        "arkui/RelativeContainerModifier"
+      ],
+      "arkui/RenderNode": [
+        "arkui/RenderNode"
+      ],
+      "arkui/RichEditorModifier": [
+        "arkui/RichEditorModifier"
+      ],
+      "arkui/RowModifier": [
+        "arkui/RowModifier"
+      ],
+      "arkui/RowSplitModifier": [
+        "arkui/RowSplitModifier"
+      ],
+      "arkui/ScrollModifier": [
+        "arkui/ScrollModifier"
+      ],
+      "arkui/SearchModifier": [
+        "arkui/SearchModifier"
+      ],
+      "arkui/SelectModifier": [
+        "arkui/SelectModifier"
+      ],
+      "arkui/ShapeModifier": [
+        "arkui/ShapeModifier"
+      ],
+      "arkui/SideBarContainerModifier": [
+        "arkui/SideBarContainerModifier"
+      ],
+      "arkui/SpanModifier": [
+        "arkui/SpanModifier"
+      ],
+      "arkui/StackModifier": [
+        "arkui/StackModifier"
+      ],
+      "arkui/StepperItemModifier": [
+        "arkui/StepperItemModifier"
+      ],
+      "arkui/StepperModifier": [
+        "arkui/StepperModifier"
+      ],
+      "arkui/SwiperModifier": [
+        "arkui/SwiperModifier"
+      ],
+      "arkui/SymbolGlyphModifier": [
+        "arkui/SymbolGlyphModifier"
+      ],
+      "arkui/SymbolSpanModifier": [
+        "arkui/SymbolSpanModifier"
+      ],
+      "arkui/TextAreaModifier": [
+        "arkui/TextAreaModifier"
+      ],
+      "arkui/TextInputModifier": [
+        "arkui/TextInputModifier"
+      ],
+      "arkui/TextModifier": [
+        "arkui/TextModifier"
+      ],
+      "arkui/UserView": [
+        "arkui/UserView"
+      ],
+      "arkui/VideoModifier": [
+        "arkui/VideoModifier"
+      ],
+      "arkui/WaterFlowModifier": [
+        "arkui/WaterFlowModifier"
+      ],
+      "bundleManager/AbilityInfo": [
+        "bundleManager/AbilityInfo"
+      ],
+      "bundleManager/AppProvisionInfo": [
+        "bundleManager/AppProvisionInfo"
+      ],
+      "bundleManager/ApplicationInfo": [
+        "bundleManager/ApplicationInfo"
+      ],
+      "bundleManager/BundleInfo": [
+        "bundleManager/BundleInfo"
+      ],
+      "bundleManager/BundlePackInfo": [
+        "bundleManager/BundlePackInfo"
+      ],
+      "bundleManager/BundleResourceInfo": [
+        "bundleManager/BundleResourceInfo"
+      ],
+      "bundleManager/DispatchInfo": [
+        "bundleManager/DispatchInfo"
+      ],
+      "bundleManager/ElementName": [
+        "bundleManager/ElementName"
+      ],
+      "bundleManager/ExtensionAbilityInfo": [
+        "bundleManager/ExtensionAbilityInfo"
+      ],
+      "bundleManager/HapModuleInfo": [
+        "bundleManager/HapModuleInfo"
+      ],
+      "bundleManager/LauncherAbilityInfo": [
+        "bundleManager/LauncherAbilityInfo"
+      ],
+      "bundleManager/LauncherAbilityResourceInfo": [
+        "bundleManager/LauncherAbilityResourceInfo"
+      ],
+      "bundleManager/Metadata": [
+        "bundleManager/Metadata"
+      ],
+      "bundleManager/OverlayModuleInfo": [
+        "bundleManager/OverlayModuleInfo"
+      ],
+      "bundleManager/PermissionDef": [
+        "bundleManager/PermissionDef"
+      ],
+      "bundleManager/PluginBundleInfo": [
+        "bundleManager/PluginBundleInfo"
+      ],
+      "bundleManager/RecoverableApplicationInfo": [
+        "bundleManager/RecoverableApplicationInfo"
+      ],
+      "bundleManager/RemoteAbilityInfo": [
+        "bundleManager/RemoteAbilityInfo"
+      ],
+      "bundleManager/SharedBundleInfo": [
+        "bundleManager/SharedBundleInfo"
+      ],
+      "bundleManager/ShortcutInfo": [
+        "bundleManager/ShortcutInfo"
+      ],
+      "bundleManager/Skill": [
+        "bundleManager/Skill"
+      ],
+      "commonEvent/commonEventData": [
+        "commonEvent/commonEventData"
+      ],
+      "commonEvent/commonEventPublishData": [
+        "commonEvent/commonEventPublishData"
+      ],
+      "commonEvent/commonEventSubscribeInfo": [
+        "commonEvent/commonEventSubscribeInfo"
+      ],
+      "commonEvent/commonEventSubscriber": [
+        "commonEvent/commonEventSubscriber"
+      ],
+      "device-define/2in": [
+        "device-define/2in"
+      ],
+      "device-define/defaul": [
+        "device-define/defaul"
+      ],
+      "device-define/liteWearabl": [
+        "device-define/liteWearabl"
+      ],
+      "device-define/table": [
+        "device-define/table"
+      ],
+      "device-define/t": [
+        "device-define/t"
+      ],
+      "device-define/wearabl": [
+        "device-define/wearabl"
+      ],
+      "global/rawFileDescriptor": [
+        "global/rawFileDescriptor"
+      ],
+      "global/resource": [
+        "global/resource"
+      ],
+      "graphics3d/Scene": [
+        "graphics3d/Scene"
+      ],
+      "graphics3d/SceneNodes": [
+        "graphics3d/SceneNodes"
+      ],
+      "graphics3d/ScenePostProcessSettings": [
+        "graphics3d/ScenePostProcessSettings"
+      ],
+      "graphics3d/SceneResources": [
+        "graphics3d/SceneResources"
+      ],
+      "graphics3d/SceneTypes": [
+        "graphics3d/SceneTypes"
+      ],
+      "multimedia/ringtonePlayer": [
+        "multimedia/ringtonePlayer"
+      ],
+      "multimedia/soundPool": [
+        "multimedia/soundPool"
+      ],
+      "multimedia/systemTonePlayer": [
+        "multimedia/systemTonePlayer"
+      ],
+      "notification/NotificationCommonDef": [
+        "notification/NotificationCommonDef"
+      ],
+      "notification/notificationActionButton": [
+        "notification/notificationActionButton"
+      ],
+      "notification/notificationContent": [
+        "notification/notificationContent"
+      ],
+      "notification/notificationFlags": [
+        "notification/notificationFlags"
+      ],
+      "notification/notificationRequest": [
+        "notification/notificationRequest"
+      ],
+      "notification/notificationSlot": [
+        "notification/notificationSlot"
+      ],
+      "notification/notificationSorting": [
+        "notification/notificationSorting"
+      ],
+      "notification/notificationSortingMap": [
+        "notification/notificationSortingMap"
+      ],
+      "notification/notificationSubscribeInfo": [
+        "notification/notificationSubscribeInfo"
+      ],
+      "notification/notificationSubscriber": [
+        "notification/notificationSubscriber"
+      ],
+      "notification/notificationTemplate": [
+        "notification/notificationTemplate"
+      ],
+      "notification/notificationUserInput": [
+        "notification/notificationUserInput"
+      ],
+      "security/PermissionRequestResult": [
+        "security/PermissionRequestResult"
+      ],
+      "syscapCheck/sysCapSchem": [
+        "syscapCheck/sysCapSchem"
+      ],
+      "tag/nfctech": [
+        "tag/nfctech"
+      ],
+      "tag/tagSession": [
+        "tag/tagSession"
+      ],
+      "wantAgent/triggerInfo": [
+        "wantAgent/triggerInfo"
+      ],
+      "wantAgent/wantAgentInfo": [
+        "wantAgent/wantAgentInfo"
+      ],
+      "arkui/component/actionSheet": [
+        "arkui/component/actionSheet"
+      ],
+      "arkui/component/alertDialog": [
+        "arkui/component/alertDialog"
+      ],
+      "arkui/component/alphabetIndexer": [
+        "arkui/component/alphabetIndexer"
+      ],
+      "arkui/component/animation": [
+        "arkui/component/animation"
+      ],
+      "arkui/component/animator": [
+        "arkui/component/animator"
+      ],
+      "arkui/component/badge": [
+        "arkui/component/badge"
+      ],
+      "arkui/component/blank": [
+        "arkui/component/blank"
+      ],
+      "arkui/component/builder": [
+        "arkui/component/builder"
+      ],
+      "arkui/component/button": [
+        "arkui/component/button"
+      ],
+      "arkui/component/calendarPicker": [
+        "arkui/component/calendarPicker"
+      ],
+      "arkui/component/canvas": [
+        "arkui/component/canvas"
+      ],
+      "arkui/component/checkbox": [
+        "arkui/component/checkbox"
+      ],
+      "arkui/component/checkboxgroup": [
+        "arkui/component/checkboxgroup"
+      ],
+      "arkui/component/circle": [
+        "arkui/component/circle"
+      ],
+      "arkui/component/column": [
+        "arkui/component/column"
+      ],
+      "arkui/component/columnSplit": [
+        "arkui/component/columnSplit"
+      ],
+      "arkui/component/common": [
+        "arkui/component/common"
+      ],
+      "arkui/component/containerSpan": [
+        "arkui/component/containerSpan"
+      ],
+      "arkui/component/contentSlot": [
+        "arkui/component/contentSlot"
+      ],
+      "arkui/component/counter": [
+        "arkui/component/counter"
+      ],
+      "arkui/component/customComponent": [
+        "arkui/component/customComponent"
+      ],
+      "arkui/component/customDialogController": [
+        "arkui/component/customDialogController"
+      ],
+      "arkui/component/dataPanel": [
+        "arkui/component/dataPanel"
+      ],
+      "arkui/component/datePicker": [
+        "arkui/component/datePicker"
+      ],
+      "arkui/component/divider": [
+        "arkui/component/divider"
+      ],
+      "arkui/component/effectComponent": [
+        "arkui/component/effectComponent"
+      ],
+      "arkui/component/ellipse": [
+        "arkui/component/ellipse"
+      ],
+      "arkui/component/embeddedComponent": [
+        "arkui/component/embeddedComponent"
+      ],
+      "arkui/component/enums": [
+        "arkui/component/enums"
+      ],
+      "arkui/component/extendableComponent": [
+        "arkui/component/extendableComponent"
+      ],
+      "arkui/component/flex": [
+        "arkui/component/flex"
+      ],
+      "arkui/component/flowItem": [
+        "arkui/component/flowItem"
+      ],
+      "arkui/component/focus": [
+        "arkui/component/focus"
+      ],
+      "arkui/component/folderStack": [
+        "arkui/component/folderStack"
+      ],
+      "arkui/component/forEach": [
+        "arkui/component/forEach"
+      ],
+      "arkui/component/formComponent": [
+        "arkui/component/formComponent"
+      ],
+      "arkui/component/formLink": [
+        "arkui/component/formLink"
+      ],
+      "arkui/component/gauge": [
+        "arkui/component/gauge"
+      ],
+      "arkui/component/gesture": [
+        "arkui/component/gesture"
+      ],
+      "arkui/component/grid": [
+        "arkui/component/grid"
+      ],
+      "arkui/component/gridCol": [
+        "arkui/component/gridCol"
+      ],
+      "arkui/component/gridItem": [
+        "arkui/component/gridItem"
+      ],
+      "arkui/component/gridRow": [
+        "arkui/component/gridRow"
+      ],
+      "arkui/component/hyperlink": [
+        "arkui/component/hyperlink"
+      ],
+      "arkui/component/image": [
+        "arkui/component/image"
+      ],
+      "arkui/component/imageAnimator": [
+        "arkui/component/imageAnimator"
+      ],
+      "arkui/component/imageCommon": [
+        "arkui/component/imageCommon"
+      ],
+      "arkui/component/imageSpan": [
+        "arkui/component/imageSpan"
+      ],
+      "arkui/component/indicatorcomponent": [
+        "arkui/component/indicatorcomponent"
+      ],
+      "arkui/component/inspector": [
+        "arkui/component/inspector"
+      ],
+      "arkui/component/interop": [
+        "arkui/component/interop"
+      ],
+      "arkui/component/lazyForEach": [
+        "arkui/component/lazyForEach"
+      ],
+      "arkui/component/lazyGridLayout": [
+        "arkui/component/lazyGridLayout"
+      ],
+      "arkui/component/line": [
+        "arkui/component/line"
+      ],
+      "arkui/component/linearindicator": [
+        "arkui/component/linearindicator"
+      ],
+      "arkui/component/list": [
+        "arkui/component/list"
+      ],
+      "arkui/component/listItem": [
+        "arkui/component/listItem"
+      ],
+      "arkui/component/listItemGroup": [
+        "arkui/component/listItemGroup"
+      ],
+      "arkui/component/loadingProgress": [
+        "arkui/component/loadingProgress"
+      ],
+      "arkui/component/marquee": [
+        "arkui/component/marquee"
+      ],
+      "arkui/component/matrix2d": [
+        "arkui/component/matrix2d"
+      ],
+      "arkui/component/mediaCachedImage": [
+        "arkui/component/mediaCachedImage"
+      ],
+      "arkui/component/menu": [
+        "arkui/component/menu"
+      ],
+      "arkui/component/menuItem": [
+        "arkui/component/menuItem"
+      ],
+      "arkui/component/menuItemGroup": [
+        "arkui/component/menuItemGroup"
+      ],
+      "arkui/component/navDestination": [
+        "arkui/component/navDestination"
+      ],
+      "arkui/component/navigation": [
+        "arkui/component/navigation"
+      ],
+      "arkui/component/nodeContainer": [
+        "arkui/component/nodeContainer"
+      ],
+      "arkui/component/pageTransition": [
+        "arkui/component/pageTransition"
+      ],
+      "arkui/component/particle": [
+        "arkui/component/particle"
+      ],
+      "arkui/component/pasteButton": [
+        "arkui/component/pasteButton"
+      ],
+      "arkui/component/path": [
+        "arkui/component/path"
+      ],
+      "arkui/component/patternLock": [
+        "arkui/component/patternLock"
+      ],
+      "arkui/component/pluginComponent": [
+        "arkui/component/pluginComponent"
+      ],
+      "arkui/component/polygon": [
+        "arkui/component/polygon"
+      ],
+      "arkui/component/polyline": [
+        "arkui/component/polyline"
+      ],
+      "arkui/component/progress": [
+        "arkui/component/progress"
+      ],
+      "arkui/component/qrcode": [
+        "arkui/component/qrcode"
+      ],
+      "arkui/component/radio": [
+        "arkui/component/radio"
+      ],
+      "arkui/component/rating": [
+        "arkui/component/rating"
+      ],
+      "arkui/component/rect": [
+        "arkui/component/rect"
+      ],
+      "arkui/component/refresh": [
+        "arkui/component/refresh"
+      ],
+      "arkui/component/relativeContainer": [
+        "arkui/component/relativeContainer"
+      ],
+      "arkui/component/remoteWindow": [
+        "arkui/component/remoteWindow"
+      ],
+      "arkui/component/repeat": [
+        "arkui/component/repeat"
+      ],
+      "arkui/component/resources": [
+        "arkui/component/resources"
+      ],
+      "arkui/component/richEditor": [
+        "arkui/component/richEditor"
+      ],
+      "arkui/component/richText": [
+        "arkui/component/richText"
+      ],
+      "arkui/component/rootScene": [
+        "arkui/component/rootScene"
+      ],
+      "arkui/component/row": [
+        "arkui/component/row"
+      ],
+      "arkui/component/rowSplit": [
+        "arkui/component/rowSplit"
+      ],
+      "arkui/component/saveButton": [
+        "arkui/component/saveButton"
+      ],
+      "arkui/component/screen": [
+        "arkui/component/screen"
+      ],
+      "arkui/component/scroll": [
+        "arkui/component/scroll"
+      ],
+      "arkui/component/scrollBar": [
+        "arkui/component/scrollBar"
+      ],
+      "arkui/component/search": [
+        "arkui/component/search"
+      ],
+      "arkui/component/securityComponent": [
+        "arkui/component/securityComponent"
+      ],
+      "arkui/component/select": [
+        "arkui/component/select"
+      ],
+      "arkui/component/shape": [
+        "arkui/component/shape"
+      ],
+      "arkui/component/sidebar": [
+        "arkui/component/sidebar"
+      ],
+      "arkui/component/slider": [
+        "arkui/component/slider"
+      ],
+      "arkui/component/span": [
+        "arkui/component/span"
+      ],
+      "arkui/component/stack": [
+        "arkui/component/stack"
+      ],
+      "arkui/component/stepper": [
+        "arkui/component/stepper"
+      ],
+      "arkui/component/stepperItem": [
+        "arkui/component/stepperItem"
+      ],
+      "arkui/component/styledString": [
+        "arkui/component/styledString"
+      ],
+      "arkui/component/swiper": [
+        "arkui/component/swiper"
+      ],
+      "arkui/component/symbolSpan": [
+        "arkui/component/symbolSpan"
+      ],
+      "arkui/component/symbolglyph": [
+        "arkui/component/symbolglyph"
+      ],
+      "arkui/component/tabContent": [
+        "arkui/component/tabContent"
+      ],
+      "arkui/component/tabs": [
+        "arkui/component/tabs"
+      ],
+      "arkui/component/text": [
+        "arkui/component/text"
+      ],
+      "arkui/component/textArea": [
+        "arkui/component/textArea"
+      ],
+      "arkui/component/textClock": [
+        "arkui/component/textClock"
+      ],
+      "arkui/component/textCommon": [
+        "arkui/component/textCommon"
+      ],
+      "arkui/component/textInput": [
+        "arkui/component/textInput"
+      ],
+      "arkui/component/textPicker": [
+        "arkui/component/textPicker"
+      ],
+      "arkui/component/textTimer": [
+        "arkui/component/textTimer"
+      ],
+      "arkui/component/timePicker": [
+        "arkui/component/timePicker"
+      ],
+      "arkui/component/toggle": [
+        "arkui/component/toggle"
+      ],
+      "arkui/component/toolbar": [
+        "arkui/component/toolbar"
+      ],
+      "arkui/component/uiExtensionComponent": [
+        "arkui/component/uiExtensionComponent"
+      ],
+      "arkui/component/units": [
+        "arkui/component/units"
+      ],
+      "arkui/component/video": [
+        "arkui/component/video"
+      ],
+      "arkui/component/waterFlow": [
+        "arkui/component/waterFlow"
+      ],
+      "arkui/component/web": [
+        "arkui/component/web"
+      ],
+      "arkui/component/windowScene": [
+        "arkui/component/windowScene"
+      ],
+      "arkui/component/withTheme": [
+        "arkui/component/withTheme"
+      ],
+      "arkui/component/xcomponent": [
+        "arkui/component/xcomponent"
+      ],
+      "arkui/external/resource": [
+        "arkui/external/resource"
+      ],
+      "arkui/runtime-api/@koalaui.runtime.common": [
+        "arkui/runtime-api/@koalaui.runtime.common"
+      ],
+      "arkui/runtime-api/@koalaui.runtime.states.Disposable": [
+        "arkui/runtime-api/@koalaui.runtime.states.Disposable"
+      ],
+      "arkui/runtime-api/@koalaui.runtime.states.State": [
+        "arkui/runtime-api/@koalaui.runtime.states.State"
+      ],
+      "arkui/runtime-api/@koalaui.runtime.tree.IncrementalNode": [
+        "arkui/runtime-api/@koalaui.runtime.tree.IncrementalNode"
+      ],
+      "arkui/runtime-api/@koalaui.runtime.tree.ReadonlyTreeNode": [
+        "arkui/runtime-api/@koalaui.runtime.tree.ReadonlyTreeNode"
+      ],
+      "arkui/stateManagement/decorator": [
+        "arkui/stateManagement/decorator"
+      ],
+      "arkui/stateManagement/remember": [
+        "arkui/stateManagement/remember"
+      ],
+      "arkui/stateManagement/runtime": [
+        "arkui/stateManagement/runtime"
+      ],
+      "arkui/stateManagement/utils": [
+        "arkui/stateManagement/utils"
+      ],
+      "common/full/canvaspattern": [
+        "common/full/canvaspattern"
+      ],
+      "config/css/css-json-schem": [
+        "config/css/css-json-schem"
+      ],
+      "config/css/cssConfi": [
+        "config/css/cssConfi"
+      ],
+      "config/hml/hml-json-schem": [
+        "config/hml/hml-json-schem"
+      ],
+      "form/action/form-schem": [
+        "form/action/form-schem"
+      ],
+      "form/css/css-json-schem": [
+        "form/css/css-json-schem"
+      ],
+      "form/css/cssConfi": [
+        "form/css/cssConfi"
+      ],
+      "form/hml/hml-json-schem": [
+        "form/hml/hml-json-schem"
+      ],
+      "arkui/stateManagement/memorize/state": [
+        "arkui/stateManagement/memorize/state"
+      ],
+      "arkui/stateManagement/storage/appStorage": [
+        "arkui/stateManagement/storage/appStorage"
+      ],
+      "arkui/stateManagement/storage/environment": [
+        "arkui/stateManagement/storage/environment"
+      ],
+      "arkui/stateManagement/storage/localStorage": [
+        "arkui/stateManagement/storage/localStorage"
+      ],
+      "arkui/stateManagement/storage/persistentStorage": [
+        "arkui/stateManagement/storage/persistentStorage"
+      ],
+      "arkui/stateManagement/storage/storageProperty": [
+        "arkui/stateManagement/storage/storageProperty"
+      ],
+      "config/hml/basic/animat": [
+        "config/hml/basic/animat"
+      ],
+      "config/hml/basic/animateMotio": [
+        "config/hml/basic/animateMotio"
+      ],
+      "config/hml/basic/animateTransfor": [
+        "config/hml/basic/animateTransfor"
+      ],
+      "config/hml/basic/bloc": [
+        "config/hml/basic/bloc"
+      ],
+      "config/hml/basic/butto": [
+        "config/hml/basic/butto"
+      ],
+      "config/hml/basic/calenda": [
+        "config/hml/basic/calenda"
+      ],
+      "config/hml/basic/char": [
+        "config/hml/basic/char"
+      ],
+      "config/hml/basic/circl": [
+        "config/hml/basic/circl"
+      ],
+      "config/hml/basic/divide": [
+        "config/hml/basic/divide"
+      ],
+      "config/hml/basic/ellips": [
+        "config/hml/basic/ellips"
+      ],
+      "config/hml/basic/image-animato": [
+        "config/hml/basic/image-animato"
+      ],
+      "config/hml/basic/imag": [
+        "config/hml/basic/imag"
+      ],
+      "config/hml/basic/inpu": [
+        "config/hml/basic/inpu"
+      ],
+      "config/hml/basic/labe": [
+        "config/hml/basic/labe"
+      ],
+      "config/hml/basic/lin": [
+        "config/hml/basic/lin"
+      ],
+      "config/hml/basic/marque": [
+        "config/hml/basic/marque"
+      ],
+      "config/hml/basic/men": [
+        "config/hml/basic/men"
+      ],
+      "config/hml/basic/optio": [
+        "config/hml/basic/optio"
+      ],
+      "config/hml/basic/pat": [
+        "config/hml/basic/pat"
+      ],
+      "config/hml/basic/picker-vie": [
+        "config/hml/basic/picker-vie"
+      ],
+      "config/hml/basic/picke": [
+        "config/hml/basic/picke"
+      ],
+      "config/hml/basic/piec": [
+        "config/hml/basic/piec"
+      ],
+      "config/hml/basic/polygo": [
+        "config/hml/basic/polygo"
+      ],
+      "config/hml/basic/polylin": [
+        "config/hml/basic/polylin"
+      ],
+      "config/hml/basic/progres": [
+        "config/hml/basic/progres"
+      ],
+      "config/hml/basic/qrcod": [
+        "config/hml/basic/qrcod"
+      ],
+      "config/hml/basic/ratin": [
+        "config/hml/basic/ratin"
+      ],
+      "config/hml/basic/rec": [
+        "config/hml/basic/rec"
+      ],
+      "config/hml/basic/richtex": [
+        "config/hml/basic/richtex"
+      ],
+      "config/hml/basic/searc": [
+        "config/hml/basic/searc"
+      ],
+      "config/hml/basic/selec": [
+        "config/hml/basic/selec"
+      ],
+      "config/hml/basic/slide": [
+        "config/hml/basic/slide"
+      ],
+      "config/hml/basic/slo": [
+        "config/hml/basic/slo"
+      ],
+      "config/hml/basic/spa": [
+        "config/hml/basic/spa"
+      ],
+      "config/hml/basic/switc": [
+        "config/hml/basic/switc"
+      ],
+      "config/hml/basic/tex": [
+        "config/hml/basic/tex"
+      ],
+      "config/hml/basic/textare": [
+        "config/hml/basic/textare"
+      ],
+      "config/hml/basic/textpat": [
+        "config/hml/basic/textpat"
+      ],
+      "config/hml/basic/toggl": [
+        "config/hml/basic/toggl"
+      ],
+      "config/hml/basic/toolbar-ite": [
+        "config/hml/basic/toolbar-ite"
+      ],
+      "config/hml/basic/toolba": [
+        "config/hml/basic/toolba"
+      ],
+      "config/hml/basic/tspa": [
+        "config/hml/basic/tspa"
+      ],
+      "config/hml/basic/we": [
+        "config/hml/basic/we"
+      ],
+      "config/hml/basic/xcomponen": [
+        "config/hml/basic/xcomponen"
+      ],
+      "config/hml/canvas/canva": [
+        "config/hml/canvas/canva"
+      ],
+      "config/hml/container/badg": [
+        "config/hml/container/badg"
+      ],
+      "config/hml/container/dialo": [
+        "config/hml/container/dialo"
+      ],
+      "config/hml/container/di": [
+        "config/hml/container/di"
+      ],
+      "config/hml/container/for": [
+        "config/hml/container/for"
+      ],
+      "config/hml/container/list-item-grou": [
+        "config/hml/container/list-item-grou"
+      ],
+      "config/hml/container/list-ite": [
+        "config/hml/container/list-ite"
+      ],
+      "config/hml/container/lis": [
+        "config/hml/container/lis"
+      ],
+      "config/hml/container/pane": [
+        "config/hml/container/pane"
+      ],
+      "config/hml/container/popu": [
+        "config/hml/container/popu"
+      ],
+      "config/hml/container/refres": [
+        "config/hml/container/refres"
+      ],
+      "config/hml/container/stac": [
+        "config/hml/container/stac"
+      ],
+      "config/hml/container/stepper-ite": [
+        "config/hml/container/stepper-ite"
+      ],
+      "config/hml/container/steppe": [
+        "config/hml/container/steppe"
+      ],
+      "config/hml/container/sv": [
+        "config/hml/container/sv"
+      ],
+      "config/hml/container/swipe": [
+        "config/hml/container/swipe"
+      ],
+      "config/hml/container/tab-ba": [
+        "config/hml/container/tab-ba"
+      ],
+      "config/hml/container/tab-conten": [
+        "config/hml/container/tab-conten"
+      ],
+      "config/hml/container/tab": [
+        "config/hml/container/tab"
+      ],
+      "config/hml/custom/elemen": [
+        "config/hml/custom/elemen"
+      ],
+      "config/hml/grid/grid-co": [
+        "config/hml/grid/grid-co"
+      ],
+      "config/hml/grid/grid-containe": [
+        "config/hml/grid/grid-containe"
+      ],
+      "config/hml/grid/grid-ro": [
+        "config/hml/grid/grid-ro"
+      ],
+      "config/hml/media/camer": [
+        "config/hml/media/camer"
+      ],
+      "config/hml/media/vide": [
+        "config/hml/media/vide"
+      ],
+      "form/hml/basic/bloc": [
+        "form/hml/basic/bloc"
+      ],
+      "form/hml/basic/butto": [
+        "form/hml/basic/butto"
+      ],
+      "form/hml/basic/calenda": [
+        "form/hml/basic/calenda"
+      ],
+      "form/hml/basic/char": [
+        "form/hml/basic/char"
+      ],
+      "form/hml/basic/cloc": [
+        "form/hml/basic/cloc"
+      ],
+      "form/hml/basic/divide": [
+        "form/hml/basic/divide"
+      ],
+      "form/hml/basic/imag": [
+        "form/hml/basic/imag"
+      ],
+      "form/hml/basic/inpu": [
+        "form/hml/basic/inpu"
+      ],
+      "form/hml/basic/progres": [
+        "form/hml/basic/progres"
+      ],
+      "form/hml/basic/spa": [
+        "form/hml/basic/spa"
+      ],
+      "form/hml/basic/tex": [
+        "form/hml/basic/tex"
+      ],
+      "form/hml/container/badg": [
+        "form/hml/container/badg"
+      ],
+      "form/hml/container/di": [
+        "form/hml/container/di"
+      ],
+      "form/hml/container/list-ite": [
+        "form/hml/container/list-ite"
+      ],
+      "form/hml/container/lis": [
+        "form/hml/container/lis"
+      ],
+      "form/hml/container/stac": [
+        "form/hml/container/stac"
+      ],
+      "form/hml/container/swipe": [
+        "form/hml/container/swipe"
+      ],
+      "form/hml/custom/elemen": [
+        "form/hml/custom/elemen"
+      ]
+    },
+    "plugins": []
+  },
+  "include": [
+    "../api/**/*"
+  ]
+}
