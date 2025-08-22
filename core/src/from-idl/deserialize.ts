@@ -210,6 +210,8 @@ class IDLDeserializer {
             // is it IDLStringType?
             const refType = idl.createReferenceType(type)
             refType.fileName = file
+            // Here is a bug: type.extAttrs are ignored, so typeArguments on ([TypeArguments="T"] Something) are always lost
+            // That must be fixed together with fixing non-generic placeholders on generic types in pipelines (like WrappedBuilder)
             refType.typeArguments = this.extractTypeArguments(file, extAttrs, idl.IDLExtendedAttributes.TypeArguments)
             return refType
         }
@@ -721,7 +723,10 @@ export function parseIDLFile(fileName: string, content?: string, quiet?: boolean
     const previousDiagnosticsCount = DiagnosticMessageGroup.allGroupsEntries.length
     try {
         let newFile!: idl.IDLFile
-        const mode = process.env.IDLPARSE ?? "new"
+        // Temporarily is set to use old parser by default
+        // Old parser has a bug, it ignores extended attributes on return types, but some pipelines depend on that behavior
+        // So pipelines and old parser must be fixed before permanent switch to a new parser
+        const mode = process.env.IDLPARSE
         if (mode == "compare" || mode == "new") {
             newFile = parseIDLFileNew(fileName, content, mode == "new")
             if (mode == "new") {
