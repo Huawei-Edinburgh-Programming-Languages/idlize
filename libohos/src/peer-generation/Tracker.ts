@@ -17,12 +17,24 @@ import * as fs from 'fs'
 import * as path from 'path'
 import * as idl from '@idlizer/core/idl'
 
-import { capitalize, IndentedPrinter, PeerClass, createConstructPeerMethod, MaterializedClass, PeerLibrary } from '@idlizer/core'
-import { IDLEnum } from '@idlizer/core/idl'
+import {
+    IndentedPrinter,
+    MaterializedClass,
+    PeerClass,
+    PeerLibrary,
+    capitalize,
+    createConstructPeerMethod,
+    generatorConfiguration,
+    getHookMethod,
+    isImportAttr,
+} from '@idlizer/core'
+import { createGlobalScopeLegacy } from './GlobalScopeUtils';
 import { collectDeclarationTargets } from "./DeclarationTargetCollector"
 import { collectPeersForFile } from './PeersCollector'
+import { peerGeneratorConfiguration } from "../DefaultConfiguration"
 
-const STATUSES = ["Total", "In Progress", "Done", "Blocked", "Managed side"]
+const STATUSES = ["Total", "In Progress", "Done", "Blocked", "Managed side", "TestSkipped", "Out of Scope"]
+const TOP_PARENT = 'unnamed'
 
 function getFileName(node: idl.IDLNode | undefined) {
     if (node && idl.isEnumMember(node)) node = node.parent // Fix for enum member not having fileName
@@ -49,25 +61,46 @@ class TrackerVisitor {
     private allFunctions = Array(STATUSES.length).fill(0)
     private tracked = new Set<string>()
 
-    tracking(key: string): string {
+    tracking(key: string, status?: string): string {
         let record = this.track.get(key)
         if (record === undefined && key.endsWith('0')) record = this.track.get(key.substr(0, key.length - 1))
         if (record) {
-            return `${record.owner} | ${record.status} | ${record.comment} |`
+            return `${record.owner} | ${record.status} | ${record.testStatus} | ${record.testVersion} | ${record.comment} |`
         }
-        return ` |  |  |`
+        return ` | ${status ?? ''} |  |  |  |`
+    }
+
+    printEntry(entry: idl.IDLNamedNode, parent: string, type: string, status?: string) {
+        let kk = key(parent, entry.name)
+        let wrap = (str: string, em: string, flag: boolean = true) => flag ? `${em}${str}${em}` : str
+        let isTop = parent == TOP_PARENT
+        this.out.print(`${traceColumns(entry)}|${parent}|${wrap(entry.name, isTop ? '*' : '`')}|${wrap(type, '*', isTop)}| ${this.tracking(kk, status)}`)
     }
 
     printPeerClass(clazz: PeerClass): void {
-        const compKey = key(clazz.componentName, `set${clazz.componentName}Options`)
+        let compKey = key(clazz.componentName, `set${clazz.componentName}Options0`)
+        if (!this.track.has(compKey)) {
+            compKey = key(clazz.componentName, `set${clazz.componentName}Options`)
+        }
         this.incAllStatus(compKey, this.allComponents)
         this.out.print(`${traceColumns(clazz.decl)}|unnamed|*${clazz.componentName}*|*Component*| ${this.tracking(compKey)}`)
-        let methods = [createConstructPeerMethod(clazz), ...clazz.methods]
-        methods.forEach(method => {
+        {
+            let method = createConstructPeerMethod(clazz)
             let mname = method.sig.name
             const funcKey = key(clazz.componentName, mname)
             this.incAllStatus(funcKey, this.allFunctions)
-            this.out.print(`${traceColumns(method.decl)}|${clazz.componentName}|${mname}|Function| ${this.tracking(funcKey)}`)
+            // Special case, constructor is absent in SDK
+            let classTc = traceColumns(clazz.decl).split('|')
+            let tc = `|${classTc[1]}|${classTc[3]}|undeclared|-1`
+            this.out.print(`${tc}|${clazz.componentName}|\`${mname}\`|Function| ${this.tracking(funcKey)}`)
+        }
+        clazz.methods.forEach(method => {
+            const hookMethod = getHookMethod(method.originalParentName, method.method.name)
+            if (hookMethod?.replaceImplementation) return
+            let mname = method.sig.name
+            const funcKey = key(clazz.componentName, mname)
+            this.incAllStatus(funcKey, this.allFunctions)
+            this.out.print(`${traceColumns(method.decl)}|${clazz.componentName}|\`${mname}\`|Function| ${this.tracking(funcKey)}`)
         })
     }
 
@@ -75,7 +108,21 @@ class TrackerVisitor {
         const classKey = key(clazz.className, "Class")
         this.incAllStatus(classKey, this.allMaterialized)
         this.out.print(`${traceColumns(clazz.decl)}|unnamed|*${clazz.className}*|*Class*| ${this.tracking(classKey)}`)
-        clazz.ctors.concat(clazz.methods).forEach(method => {
+        clazz.ctors.forEach(method => {
+            let mname = method.sig.name
+            const funcKey = key(clazz.className, mname)
+            this.incAllStatus(funcKey, this.allFunctions)
+            // Special case, constructor is absent in SDK
+            let tc = traceColumns(method.decl)
+            if (tc.startsWith('|undefined|')) {
+                let classTc = traceColumns(clazz.decl).split('|')
+                tc = `|${classTc[1]}|${classTc[3]}|undeclared|-1`
+            }
+            this.out.print(`${tc}|${clazz.className}|\`${mname}\`|Function| ${this.tracking(funcKey)}`)
+        })
+        clazz.methods.forEach(method => {
+            const hookMethod = getHookMethod(method.originalParentName, method.method.name)
+            if (hookMethod?.replaceImplementation) return
             let mname = method.sig.name
             const funcKey = key(clazz.className, mname)
             this.incAllStatus(funcKey, this.allFunctions)
@@ -83,34 +130,61 @@ class TrackerVisitor {
             if (origName.startsWith("set") || origName.startsWith("get")) {
                 if (clazz.decl.methods.findIndex(it => it.name == origName) == -1) {
                     let noPrefix = origName.substr(3)
-                    let idx = clazz.decl.properties.findIndex(it => capitalize(it.name) == noPrefix)
+                    let idx = clazz.decl.properties.findIndex(it => {
+                        let res = capitalize(it.name) == noPrefix
+                        if (res) {
+                            let accessor = idl.getExtAttribute(it, idl.IDLExtendedAttributes.Accessor)
+                            if (!accessor) return true
+                            if (accessor == idl.IDLAccessorAttribute.Getter) return origName.startsWith("get")
+                            if (accessor == idl.IDLAccessorAttribute.Setter) return origName.startsWith("set")
+                            throw "Shouldn't happen!"
+                        }
+                    })
                     if (idx != -1) {
                         let prop = clazz.decl.properties[idx]
-                        this.out.print(`${traceColumns(prop)}|${clazz.className}|${mname}|Property| ${this.tracking(funcKey)}`)
+                        this.out.print(`${traceColumns(prop)}|${clazz.className}|\`${mname}\`|Property| ${this.tracking(funcKey)}`)
                         return
                     }
                 }
             }
-            this.out.print(`${traceColumns(method.decl)}|${clazz.className}|${mname}|Function| ${this.tracking(funcKey)}`)
+            this.out.print(`${traceColumns(method.decl)}|${clazz.className}|\`${mname}\`|Function| ${this.tracking(funcKey)}`)
         })
     }
 
     printStruct(struct: idl.IDLInterface) {
-        this.out.print(`${traceColumns(struct)}|unnamed|*${struct.name}*|*Interface*| |generated| |`)
+        this.printEntry(struct, TOP_PARENT, 'Interface', 'generated')
+        if (struct.subkind == idl.IDLInterfaceSubkind.Tuple) return
         struct.properties.forEach(prop => {
-            this.out.print(`${traceColumns(prop)}|${struct.name}|${prop.name}|Property| |generated| |`)
+            this.printEntry(prop, struct.name, 'Property', 'generated')
+        })
+        struct.constructors.forEach(it => {
+            this.printEntry(it, struct.name, 'Function', 'ignored')
+        })
+    }
+
+    printBuilder(struct: idl.IDLInterface) {
+        this.printEntry(struct, TOP_PARENT, 'Interface', 'generated')
+        struct.methods.forEach(it => {
+            this.printEntry(it, struct.name, 'Property', 'generated')
+        })
+        struct.constructors.forEach(it => {
+            this.printEntry(it, struct.name, 'Function', 'ignored')
         })
     }
 
     printEnum(enam: idl.IDLEnum) {
-        this.out.print(`${traceColumns(enam)}|unnamed|*${enam.name}*|*Enum*| |generated| |`)
+        this.printEntry(enam, TOP_PARENT, 'Enum', 'generated')
         enam.elements.forEach(elem => {
-            this.out.print(`${traceColumns(elem)}|${enam.name}|${elem.name}|Enum| |generated| |`)
+            this.printEntry(elem, enam.name, 'Enum', 'generated')
         })
     }
 
     printTypedef(ref: idl.IDLNamedNode) {
-        this.out.print(`${traceColumns(ref)}|unnamed|${ref.name}|Typedef| |generated| |`)
+        this.printEntry(ref, TOP_PARENT, 'Typedef', 'generated')
+    }
+
+    printFunction(func: idl.IDLNamedNode) {
+        this.printEntry(func, TOP_PARENT, 'Function')
     }
 
     printStats() {
@@ -147,31 +221,67 @@ class TrackerVisitor {
     }
 
     printTo(fileName: string) {
-        this.out.print(`| Package | SDK Parent | SDK Name | Ovr | C API Parent | C API Name | Type | Owner | Status | Comments |`)
-        this.out.print(`| ------- | ---------- | -------- | --- | ------------ | ---------- | ---- | ----- | ------ | -------- |`)
+        this.out.print(`| Package | SDK Parent | SDK Name | Ovr | C API Parent | C API Name | Type | Owner | Status | Test status | Test version | Comments |`)
+        this.out.print(`| ------- | ---------- | -------- | --- | ------------ | ---------- | ---- | ----- | ------ | ----------- | ------------ | -------- |`)
 
-        this.library.files.forEach(file => {
-            collectPeersForFile(this.library, file).forEach(clazz => this.printPeerClass(clazz))
-            file.entries.forEach(target => {
+        let printEntry = (target: idl.IDLNode) => {
+                if (!idl.isNamedNode(target) || peerGeneratorConfiguration().serializer.ignore.includes(target.name)) return
+                if (isImportAttr(target)) return
                 if (idl.hasExtAttribute(target, idl.IDLExtendedAttributes.ComponentInterface)) return
-                if (idl.isInterface(target) && idl.isInterfaceSubkind(target) && target.methods.length == 0) {
-                    this.printStruct(target)
+                if (idl.isSyntheticEntry(target)) {
+                    return
                 }
-                if (idl.isSyntheticEntry(target)) return
+                let cfg = generatorConfiguration()
+                if (idl.isInterface(target) && !idl.hasExtAttribute(target, idl.IDLExtendedAttributes.Component) &&
+                    (target.methods.length == 0 || target.subkind == idl.IDLInterfaceSubkind.Interface) &&
+                    (target.constructors.length == 0 || cfg.ignoreMaterialized.includes(target.name)) &&
+                    target.properties.length != 0) {
+                    this.printStruct(target)
+                    return
+                }
+                if (idl.isInterface(target) && cfg.builderClasses.includes(target.name)) {
+                    this.printBuilder(target)
+                    return
+                }
                 if (idl.isEnum(target)) {
                     this.printEnum(target)
+                    return
                 }
                 if (idl.isTypedef(target) && !idl.hasExtAttribute(target, idl.IDLExtendedAttributes.Import)) {
                     this.printTypedef(target)
+                    return
                 }
                 if (idl.isCallback(target)) {
                     this.printTypedef(target)
+                    return
                 }
-            })
+                if (idl.isMethod(target)) {
+                    this.printFunction(target)
+                    return
+                }
+                if (idl.isNamespace(target)) {
+                    target.members.forEach(target => printEntry(target))
+                    return
+                }
+                if (idl.isUnionType(target)) {
+                    // Most probably synthetic union type
+                    if (!idl.hasExtAttribute(target, idl.IDLExtendedAttributes.TraceKey)) return
+                    this.printTypedef(target)
+                    return
+                }
+        }
+
+        this.library.files.forEach(file => {
+            collectPeersForFile(this.library, file).forEach(clazz => this.printPeerClass(clazz))
+            //file.entries.forEach(target => printEntry(target))
         })
-        this.library.materializedClasses.forEach(clazz => {
+        this.library.orderedMaterialized.forEach(clazz => {
             this.printMaterializedClass(clazz)
         })
+        const globals = createGlobalScopeLegacy(this.library)
+        this.printMaterializedClass(globals)
+
+        collectDeclarationTargets(this.library, true).forEach(it => printEntry(it))
         this.out.print('')
 
         this.stats.print(`# All components`)
@@ -190,6 +300,8 @@ class StatusRecord {
         public func: string,
         public owner: string,
         public status: string,
+        public testStatus: string,
+        public testVersion: string,
         public comment: string,
     ) { }
 }
@@ -212,16 +324,30 @@ export function generateTracker(outDir: string, peerLibrary: PeerLibrary, tracke
         let parent = ""
         lines.forEach(line => {
             const parts = line.split('|')
-            if (parts.length > 10) {
+            if (parts.length > 12) {
                 // New format
                 let parent = trimName(parts[5].trim())
                 let name = trimName(parts[6].trim())
                 let kind = trimName(parts[7].trim())
                 let owner = parts[8].trim()
                 let status = parts[9].trim()
-                let comment = parts[10].trim()
+                let testStatus = parts[10].trim()
+                let testVersion = parts[11].trim()
+                let comment = parts[12].trim()
                 const k = kind === "Class" ? key(name, kind) : key(parent, name)
-                track.set(k, new StatusRecord(name, kind, owner, status, comment))
+                track.set(k, new StatusRecord(name, kind, owner, status, testStatus, testVersion, comment))
+            } else if (parts.length > 6) {
+                let name = trimName(parts[1].trim())
+                let kind = trimName(parts[2].trim())
+                let owner = parts[3].trim()
+                let status = parts[4].trim()
+                let testStatus = parts[5].trim()
+                let comment = parts[6].trim()
+                if (kind === "Component" || kind === "Class") {
+                    parent = name
+                }
+                const k = kind === "Function" ? key(parent, name) : key(name, kind)
+                track.set(k, new StatusRecord(name, kind, owner, status, testStatus, '', comment))
             } else if (parts.length > 4) {
                 let name = trimName(parts[1].trim())
                 let kind = trimName(parts[2].trim())
@@ -231,7 +357,7 @@ export function generateTracker(outDir: string, peerLibrary: PeerLibrary, tracke
                     parent = name
                 }
                 const k = kind === "Function" ? key(parent, name) : key(name, kind)
-                track.set(k, new StatusRecord(name, kind, owner, status, ''))
+                track.set(k, new StatusRecord(name, kind, owner, status, '', '', ''))
             }
         })
     }

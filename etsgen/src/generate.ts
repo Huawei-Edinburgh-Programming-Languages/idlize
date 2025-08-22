@@ -981,6 +981,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 return
             }
             if (arkts.isOverloadDeclaration(member)) {
+                this.traceDeleted('overload')
                 return
             }
             console.error(member)
@@ -1677,8 +1678,18 @@ class IDLVisitor extends arkts.AbstractVisitor {
             },
             (node: idl.IDLNode) => {
                 if (idl.isInterface(node)) {
-                    node.properties = filterRedundantAttributesOverloads(node.properties)
-                    node.methods = filterRedundantMethodsOverloads(node.methods)
+                    let newProps = filterRedundantAttributesOverloads(node.properties)
+                    if (newProps.length != node.properties.length) {
+                        this.retraceDeleted(node.properties, newProps, 'RedundantAttributesOverloads')
+                    }
+                    node.properties = newProps
+                    let newMethods = filterRedundantMethodsOverloads(node.methods)
+                    if (newMethods.length != node.methods.length) {
+                        let newSet = new Set(newMethods)
+                        let oldSet = new Set(node.methods)
+                        this.retraceDeleted(node.methods, newMethods, 'RedundantMethodsOverloads')
+                    }
+                    node.methods = newMethods
                 }
             }
         ]
@@ -1751,6 +1762,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         if (arkts.isETSModule(node)) return 'namespace'
         if (arkts.isClassProperty(node)) return 'field'
         if (arkts.isMethodDefinition(node)) return 'method'
+        if (arkts.isOverloadDeclaration(node)) return 'method'
         if (arkts.isTSTypeAliasDeclaration(node)) return 'field' // !!!
         throw new Error("Unknown node type!")
     }
@@ -1765,6 +1777,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         if (arkts.isClassProperty(node)) return node.id!.name
         if (arkts.isMethodDefinition(node)) return node.id!.name
         if (arkts.isTSTypeAliasDeclaration(node)) return node.id!.name
+        if (arkts.isOverloadDeclaration(node)) return node.id!.name
         throw new Error("Unknown node type!")
     }
 
@@ -1792,5 +1805,19 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
     private traceDeleted(reason: string) {
         this.saveStatus(reason)
+    }
+
+    private retraceDeleted(oldArr: Array<idl.IDLNode>, newArr: Array<idl.IDLNode>, reason: string) {
+        if (!this.status.enabled) return
+        let newSet = new Set(newArr.map(it => idl.getExtAttribute(it, idl.IDLExtendedAttributes.TraceKey) ?? ''))
+        oldArr.forEach(it => {
+            let key = idl.getExtAttribute(it, idl.IDLExtendedAttributes.TraceKey) ?? ''
+            if (newSet.has(key)) return
+            let [fpkg, parent, name, override] = key.split(':')
+            let found = this.status.status.find(st => st.fullPackage == fpkg && st.parent == parent && st.name == name && `${st.override}` == override)
+            if (found) {
+                found.status = reason
+            }
+        })
     }
 }
