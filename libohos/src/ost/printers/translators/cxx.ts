@@ -15,7 +15,7 @@
 
 import { IndentPrinter } from "../indent";
 import * as lw from "../../lws"
-import { std, Ts } from "../../stdlib";
+import { Op, std, Ts } from "../../stdlib";
 import { IdentityTransformer } from "../../visitors/identity";
 import { T, utils } from "../../builder";
 import { generatorConfiguration } from "@idlizer/core";
@@ -62,6 +62,7 @@ export class ConvertCXXTypes extends IdentityTransformer {
       case std.names.types.i32: return p('Int32')
       case std.names.types.i64: return p('Int64')
       case std.names.types.number: return p('Number')
+      case std.names.types.serializerBuffer: return T.cc('KSerializerBuffer')
       case std.names.types.string: return p('String')
       case std.names.types.u8: return p('Int8')
       case std.names.types.u32: return p('UInt32')
@@ -120,6 +121,7 @@ export class CXXPrinter {
           }
           this.printAbstractType(param.type)
         })
+        this.p.put(')')
         break
       }
     }
@@ -196,7 +198,11 @@ export class CXXPrinter {
         break
       }
       case lw.LWKind.UnaryExpression: {
-        this.p.put(expression.op)
+        const op =
+            expression.op === Op.ref ? "&"
+          : expression.op === Op.deref ? "*"
+          : expression.op
+        this.p.put(op)
         this.printExpression(expression.expression)
         break
       }

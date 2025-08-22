@@ -14,8 +14,8 @@
  */
 
 import { D, DD, E, S, T } from "./builder"
-import { AccessorExpression, Annotation, BinaryExpression, CallExpression, ClassDeclaration, ConstType, DeclarationStatement, FunctionDeclaration, IfStatement, LoopStatement, LWExpression, LWStatement, LWType, Modifier, StructureDeclaration } from "./lws"
-import { Md, Ts } from "./stdlib";
+import { AccessorExpression, Annotation, BinaryExpression, CallExpression, ClassDeclaration, ConstType, DeclarationStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWStatement, LWType, Modifier, StructureDeclaration } from "./lws"
+import { An, Md, Ts } from "./stdlib";
 
 const id = <T>(it: T) => it
 
@@ -25,11 +25,20 @@ function check(desc: string, ...data: any[]) {
 }
 
 class AccessorBuilder<P> {
-    constructor(private _cont: (expr: AccessorExpression) => P, private object: LWExpression) {
-        this._base = object
-    }
-    private _base?: LWExpression
+    constructor(
+        private _cont: (expr: AccessorExpression) => P,
+        private _object?: LWExpression
+    ) {}
     private _accessor?: string | LWExpression
+    private _annotations: Annotation[] = []
+    object(): ExpressionBuilder<AccessorBuilder<P>> {
+        return new ExpressionBuilder(expr => {
+            this._object = expr
+            return this
+        })
+    }
+    ptr() { this._object?.annotations.push(An.ptrVal()); return this }
+    static() { this._annotations.push(An.staticMethod()); return this }
     member(name: string) { this._accessor = name; return this }
     indexExpr(expr: LWExpression) { this._accessor = expr; return this }
     indexStr(str: string) { this._accessor = E.v(str); return this }
@@ -40,8 +49,8 @@ class AccessorBuilder<P> {
         })
     }
     $(): P {
-        check("Accessor", this._base, this._accessor)
-        return this._cont(E.get(this._base!, this._accessor!))
+        check("Accessor", this._object, this._accessor)
+        return this._cont(E.get(this._object!, this._accessor!, this._annotations))
     }
 }
 
@@ -72,9 +81,11 @@ class BinaryBuilder<P> {
 }
 
 class ArgBuilder<P> {
-    constructor(private _cont: (arg: LWExpression) => P) {}
-    private _arg?: LWExpression
-    access(object: LWExpression): AccessorBuilder<ArgBuilder<P>> {
+    constructor(
+        private _cont: (arg: LWExpression) => P,
+        private _arg?: LWExpression
+    ) {}
+    access(object?: LWExpression): AccessorBuilder<ArgBuilder<P>> {
         return new AccessorBuilder(arg => {
             this._arg = arg
             return this
@@ -94,30 +105,39 @@ class ArgBuilder<P> {
 
 class CallBuilder<P> {
     constructor(private _cont: (expr: CallExpression) => P) {}
-    private _object?: LWExpression
+    private _callee?: LWExpression
+    private _receiver?: LWExpression
     private _function?: string
     private _args: LWExpression[] = []
-    objectName(name: string, annotations?: Annotation[]) { this._object = E.v(name, annotations); return this }
-    object(object: LWExpression) { this._object = object; return this }
-    function(name: string) { this._function = name; return this }
+    receiverName(name: string, annotations?: Annotation[]) { this._receiver = E.v(name, annotations); return this }
+    receiverExpr(object: LWExpression) { this._receiver = object; return this }
+    functionName(name: string) { this._function = name; return this }
     args(args: LWExpression[]) { this._args.push(...args); return this }
-    arg(): ArgBuilder<CallBuilder<P>> {
-        return new ArgBuilder(arg => {
-            this._args.push(arg)
+    function(): ExpressionBuilder<CallBuilder<P>> {
+        return new ExpressionBuilder(expr => {
+            this._callee = expr
             return this
         })
     }
+    arg(value?: string): ArgBuilder<CallBuilder<P>> {
+        return new ArgBuilder(arg => {
+            this._args.push(arg)
+            return this
+        }, value ? E.v(value) : undefined)
+    }
     $(): P {
-        check("Call", this._function)
-        const callee = this._object ? E.get(this._object, this._function!) : E.s(this._function!)
-        return this._cont(E.call(callee, this._args))
+        if (!this._callee) {
+            check("Call", this._function)
+            this._callee = this._receiver ? E.get(this._receiver, this._function!) : E.v(this._function!)
+        }
+        return this._cont(E.call(this._callee, this._args))
     }
 }
 
 class ExpressionBuilder<P> {
     constructor(private _cont: (expr: LWExpression) => P) {}
     private _expr?: LWExpression
-    access(object: LWExpression): AccessorBuilder<ExpressionBuilder<P>> {
+    access(object?: LWExpression): AccessorBuilder<ExpressionBuilder<P>> {
         return new AccessorBuilder(expr => {
             this._expr = expr
             return this
@@ -346,14 +366,34 @@ class BlockBuilder<P> {
 }
 
 class ParamBuilder<P> {
-    constructor(private _cont: (name: string, type: LWType) => P) {}
-    private _name?: string
+    constructor(
+        private _cont: (name: string, type: LWType) => P,
+        private _name: string
+    ) {}
     private _type?: LWType
-    name(name: string) { this._name = name; return this }
-    type(type: string) { this._type = T.cc(type); return this }
+    type(type: LWType) { this._type = type; return this }
+    typeStr(type: string) { this._type = T.cc(type); return this }
     $(): P {
-        check("Parameter", this._name, this._type)
-        return this._cont(this._name!, this._type!)
+        check("Parameter", this._type)
+        return this._cont(this._name, this._type!)
+    }
+}
+
+class FunctionTypeBuilder<P> {
+    constructor(private _cont: (type: FuncType) => P) {}
+    private _parameters: [name: string, type: LWType][] = []
+    private _returnType?: LWType
+    returns(type: LWType) { this._returnType = type; return this }
+    parameters(params: [name: string, type: LWType][]) { this._parameters.push(...params); return this }
+    param(name: string): ParamBuilder<FunctionTypeBuilder<P>> {
+        return new ParamBuilder((name, type) => {
+            this._parameters.push([name, type])
+            return this
+        }, name)
+    }
+    $(): P {
+        check("FunctionType", this._returnType)
+        return this._cont(T.fn(this._parameters, this._returnType!))
     }
 }
 
@@ -370,11 +410,11 @@ class FunctionBuilder<P> {
     returns(type: LWType) { this._returnType = type; return this }
     body(body: LWStatement) { this._body = body; return this }
     parameters(params: {name: string, type: LWType}[]) { this._parameters.push(...params); return this }
-    param(): ParamBuilder<FunctionBuilder<P>> {
+    param(name: string): ParamBuilder<FunctionBuilder<P>> {
         return new ParamBuilder((name, type) => {
             this._parameters.push({name, type})
             return this
-        })
+        }, name)
     }
     block(): BlockBuilder<FunctionBuilder<P>> {
         return new BlockBuilder(stmts => {
@@ -400,8 +440,14 @@ class FieldBuilder<P> {
     static() { this._modifiers.push(Md.static); return this }
     optional() { this._modifiers.push(Md.optional); return this }
     readonly() { this._modifiers.push(Md.readonly); return this }
-    type(type: LWType) { this._type = type; return this }
     modifiers(modifiers: Modifier[]) { this._modifiers.push(...modifiers); return this }
+    type(type: LWType) { this._type = type; return this }
+    funcType(): FunctionTypeBuilder<FieldBuilder<P>> {
+        return new FunctionTypeBuilder(type => {
+            this._type = type
+            return this
+        })
+    }
     $(): P {
         check("Field", this._name, this._type)
         return this._cont(this._name!, this._type!, this._modifiers)

@@ -15,7 +15,7 @@
 
 import * as idl from "@idlizer/core/idl";
 import { E, lw, Op, S, T, Ts } from "../../../ost/main";
-import { AdvancedGeneratorContext } from "../common";
+import { AdvancedGeneratorContext, nativeName } from "../common";
 import { Builders } from "../../../ost/builders";
 import { IfStatement } from "../../../ost/lws";
 
@@ -67,7 +67,7 @@ export class ArgConvertor {
         if (idl.isContainerType(type)) {
             if (idl.IDLContainerUtils.isSequence(type)) {
                 return Builders.stmt().block()
-                    .call().object(this.sName).function('writeInt32')
+                    .call().receiverExpr(this.sName).functionName('writeInt32')
                         .arg().access(accessor).member('length').$().$().$()
                     .loop()
                         .init().decl('i', Ts.prim.i32).mutable().valueStr('0').$().$()
@@ -94,8 +94,8 @@ export class ArgConvertor {
                     return Builders.stmt().if()
                         .condition(cond)
                         .then().block()
-                            .call().object(this.sName).function('writeInt8').args([E.c(i)]).$().$()
-                            .call().object(this.sName).function('write///TYPE').args([value]).$().$()
+                            .call().receiverExpr(this.sName).functionName('writeInt8').args([E.c(i)]).$().$()
+                            .call().receiverExpr(this.sName).functionName('write///TYPE').args([value]).$().$()
                         .$().$()
                 })
                 .reduceRight((a, b) => (a as IfStatement).elseBody = b)
@@ -121,12 +121,12 @@ export class ArgConvertor {
         }
         if (idl.isUnionType(type)) {
             const selectorDecl = Builders.stmt().decl('selector', Ts.prim.i8)
-                .value().call().object(this.sName).function('readInt8').$().$().$().$()
+                .value().call().receiverExpr(this.sName).functionName('readInt8').$().$().$().$()
             const tmpDecl = this.isNative
                 ? Builders.stmt().decl('tmp', T.c('///UNION')).valueStr('{}').$().$()
                 : Builders.stmt().decl('tmp', T.c('///UNION')).$().$()
             const ifs = type.types.map((ty, i) => {
-                const call = Builders.expr().call().object(this.sName).function('read///TYPE').$().$()
+                const call = Builders.expr().call().receiverExpr(this.sName).functionName('read///TYPE').$().$()
                 const assignments = this.isNative
                     ? [ Builders.stmt().binary(Op.eq)
                             .left().access(E.v('tmp')).member('selector').$().$()
@@ -145,11 +145,17 @@ export class ArgConvertor {
             const decl = this.ctx.base.resolver.toDeclaration(type)
             if (decl && idl.isEnum(decl))
                 return [[],
-                    E.call(E.get(this.sName, 'readInt32'), [accessor])]///cast
+                    Builders.expr().call().receiverExpr(this.sName).functionName('readInt32').$().$()///cast
+                ]
             return [[],
-                E.call(
-                    E.get(this.getSerializer(type).name(), 'write'),
-                    [this.sName, accessor])]
+                Builders.expr()
+                    .call().function()
+                        .access(this.getSerializer(type).name())
+                        .member('read')
+                        .static().$().$()
+                    .args([this.sName])
+                    .$().$()
+            ]
         }
         throw new Error(`Can not process "${idl.DebugUtils.debugPrintType(type)}"`)
     }

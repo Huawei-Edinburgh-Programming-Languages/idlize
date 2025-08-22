@@ -16,23 +16,21 @@
 import { An, D, E, S, T, Ts } from "../../../ost/main";
 import { createProducer } from "../../context"
 import * as idl from "@idlizer/core/idl";
-import { createSpecialProducer, managedName, roles } from "../common";
+import { managedName, roles } from "../common";
 
 const NATIVE_MODULE_NAME = managedName('engine.NativeModule')
 
-export const nativeModuleProducer = createSpecialProducer(
+export const nativeModuleProducer = createProducer(
   { is: idl.isMethod, role: roles.nativeModule },
-  (method, ctx) => {
+  method => {
     const methodName = idl.getFQName(method).split('.').join('_')
     return {
       artifact: {
         reference: E.get(E.v(NATIVE_MODULE_NAME, [An.isType()]), methodName),
-        implementationGenerator: () => {
-          ctx.useBridge(method)
-          return [D.class(NATIVE_MODULE_NAME, [], [
+        implementationGenerator: () =>
+          [D.class(NATIVE_MODULE_NAME, [], [
             D.func(methodName, [{ name: 'buffer', type: T.c('SerializerBase') }], Ts.prim.void, S.block([]))
           ])]
-        }
       }
     }
   }

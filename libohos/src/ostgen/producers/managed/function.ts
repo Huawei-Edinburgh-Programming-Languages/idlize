@@ -14,12 +14,13 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { AdvancedGeneratorContext, createSpecialProducer, managedName, roles } from "../common";
+import { AdvancedGeneratorContext, cApiName, createSpecialProducer, managedName, nativeName, roles } from "../common";
 import { E, T } from "../../../ost/builder";
 import { Builders } from "../../../ost/builders";
 import { ArgConvertor } from "../components/argConvertor";
 import { generatorConfiguration } from "@idlizer/core";
-import { An } from "../../../ost/stdlib";
+import { An, Op, Ts } from "../../../ost/stdlib";
+import { LWType } from "../../../ost/lws";
 
 export const functionProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.managed },
@@ -30,10 +31,15 @@ export const functionProducer = createSpecialProducer(
         implementationGenerator: () => [
           generateFunction(method, ctx),
           generateGlobalScopeFunction(method, ctx),
+          generateModifier(method, ctx),
+          generateBridge(method, ctx),
+          /// generateMacroCall(method, ctx),
         ]
       }
     }
   })
+
+const GLOBAL_SCOPE_NAME = managedName('engine.GlobalScope')
 
 function generateFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
   const returnType = ctx.useManaged(method.returnType).reference()
@@ -42,12 +48,10 @@ function generateFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) 
     .returns(returnType)
     .block()
       .return(returnType)
-        .call().objectName(GLOBAL_SCOPE_NAME, [An.isType()]).function(method.name)
+        .call().receiverName(GLOBAL_SCOPE_NAME, [An.isType()]).functionName(method.name)
         .args(method.parameters.map(it => E.v(it.name))).$()
     .$().$().$()
 }
-
-const GLOBAL_SCOPE_NAME = managedName('engine.GlobalScope')
 
 function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
     ctx.useManagedNativeModule(method)
@@ -64,11 +68,62 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
         .returns(returnType)
         .block()
           .decl(serializerName, T.c('SerializerBase'))
-            .value().call().objectName("SerializerBase").function("hold").$().$().$()
+            .value().call().receiverName("SerializerBase").functionName("hold").$().$().$()
           .statements(fieldWrites)
-          .call().objectName(nativeModuleName).function('_GlobalScope_' + method.name)
-            .arg().call().objectName(serializerName).function('asBuffer').$().$()
-            .arg().call().objectName(serializerName).function('length').$().$().$()
-          .call().objectName(serializerName).function('release').$().$()
+          .call().receiverName(nativeModuleName).functionName('_GlobalScope_' + method.name)
+            .arg().call().receiverName(serializerName).functionName('asBuffer').$().$()
+            .arg().call().receiverName(serializerName).functionName('length').$().$().$()
+          .call().receiverName(serializerName).functionName('release').$().$()
         .$().$()
+}
+
+function generateModifier(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
+  const returnType = ctx.useManaged(method.returnType).reference();
+  const params: [string, LWType][] = method.parameters.map(it =>
+    [it.name, Ts.const(Ts.ptr(ctx.useManaged(it.type).reference()))])
+  return Builders.struct(cApiName(generatorConfiguration().moduleName.toUpperCase() + '_GlobalScopeModifier'))
+    .field(method.name)
+      .funcType().parameters(params).returns(returnType).$().$().$()
+}
+
+function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
+  const returnType = ctx.useManaged(method.returnType).reference();
+  const argReads = method.parameters.map(it => {
+    const convertor = new ArgConvertor(ctx, E.v('deserializer'), true)
+    return Builders.stmt()
+      .decl(it.name, ctx.useManaged(it.type).reference())
+        .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$().$()
+  })
+  const modulePrefix = generatorConfiguration().moduleName.toUpperCase();
+  return Builders.function(nativeName('impl_GlobalScope_' + method.name))
+    .param('thisArray').type(Ts.prim.serializerBuffer).$()
+    .param('thisLength').type(Ts.prim.i32).$()
+    .returns(returnType)
+    .block()
+      .decl('deserializer', T.c(nativeName('DeserializerBase'))).$()
+      .statements(argReads)
+      .return(returnType)
+        .call().function().access()
+          .object()
+            .call().function().access()
+              .object()
+                .call()
+                  .functionName(('Get' + generatorConfiguration().TypePrefix + modulePrefix + '_API'))
+                  .arg(modulePrefix + '_API_VERSION').$().$().$()
+              .member('GlobalScope')
+              .ptr().$().$().$().$()
+          .member(method.name)
+          .ptr().$().$()
+        .args(method.parameters.map(it => E.unary(Op.ref, E.v(it.name)))).$().$().$().$()
+}
+
+function generateMacroCall(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
+  const returnType = ctx.useManaged(method.returnType).reference();
+  const params: [string, LWType][] = method.parameters.map(it =>
+    [it.name, Ts.const(Ts.ptr(ctx.useManaged(it.type).reference()))])
+  return Builders.stmt().call()
+    .args([
+      E.v('GlobalScope_' + method.name),
+      E.v(Ts.prim.serializerBuffer.name, [An.isType()]),
+      E.v(Ts.prim.i32.name, [An.isType()])]).$().$()
 }

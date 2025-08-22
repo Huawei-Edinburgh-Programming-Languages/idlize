@@ -14,7 +14,7 @@
  */
 
 import { E, T } from "./builder"
-import { Annotation, DecoratorKind, LWType, Modifier } from "./lws"
+import { Annotation, ConstType, DecoratorKind, LWType, Modifier } from "./lws"
 
 const knownAnnotations = {
     ptrVal: 'ptrVal',
@@ -131,24 +131,24 @@ const knownOperations = {
 export const Op = knownOperations
 
 const primitiveTypes = {
-    bigint: T.c(specialTypeNames.bigint),
-    boolean: T.c(specialTypeNames.boolean),
-    buffer: T.c(specialTypeNames.buffer),
-    f32: T.c(specialTypeNames.f32),
-    f64: T.c(specialTypeNames.f64),
-    i8: T.c(specialTypeNames.i8),
-    i32: T.c(specialTypeNames.i32),
-    i64: T.c(specialTypeNames.i64),
-    pointer: T.c(specialTypeNames.pointer),
-    tag: T.c(specialTypeNames.tag),
-    object: T.c(specialTypeNames.object),
-    number: T.c(specialTypeNames.number),
-    serializerBuffer: T.c(specialTypeNames.serializerBuffer),
-    str: T.c(specialTypeNames.string),
-    u8: T.c(specialTypeNames.u8),
-    u32: T.c(specialTypeNames.u32),
-    u64: T.c(specialTypeNames.u64),
-    void: T.c(specialTypeNames.void),
+    bigint: T.cc(specialTypeNames.bigint),
+    boolean: T.cc(specialTypeNames.boolean),
+    buffer: T.cc(specialTypeNames.buffer),
+    f32: T.cc(specialTypeNames.f32),
+    f64: T.cc(specialTypeNames.f64),
+    i8: T.cc(specialTypeNames.i8),
+    i32: T.cc(specialTypeNames.i32),
+    i64: T.cc(specialTypeNames.i64),
+    pointer: T.cc(specialTypeNames.pointer),
+    tag: T.cc(specialTypeNames.tag),
+    object: T.cc(specialTypeNames.object),
+    number: T.cc(specialTypeNames.number),
+    serializerBuffer: T.cc(specialTypeNames.serializerBuffer),
+    str: T.cc(specialTypeNames.string),
+    u8: T.cc(specialTypeNames.u8),
+    u32: T.cc(specialTypeNames.u32),
+    u64: T.cc(specialTypeNames.u64),
+    void: T.cc(specialTypeNames.void),
 }
 
 export const Ts = {
