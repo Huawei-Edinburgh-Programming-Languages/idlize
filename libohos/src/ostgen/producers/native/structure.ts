@@ -27,9 +27,9 @@ export const structureProducer = createSpecialProducer(
         implementationGenerator: () => {
           return [D.struct(name, node.properties.map(prop => {
             const modifiers = [
-              ...prop.isOptional ? [Md.optional] : [],
-              ...prop.isReadonly ? [Md.readonly] : [],
-              ...prop.isStatic ? [Md.static] : [],
+              ...prop.isOptional ? [Md.optional()] : [],
+              ...prop.isReadonly ? [Md.readonly()] : [],
+              ...prop.isStatic ? [Md.static()] : [],
             ]
             return {
               name: prop.name,

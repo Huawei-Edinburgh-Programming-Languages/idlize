@@ -32,7 +32,7 @@ function removeInternal(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
 class MakeOptional extends IdentityTransformer {
     override goStructureDeclaration(decl: lw.StructureDeclaration): lw.StructureDeclaration {
         decl.members.forEach(field => {
-            if (field.modifiers?.includes(Md.optional))
+            if (field.modifiers?.includes(Md.optional()))
                 field.type = T.c('idlize.Opt', field.type)
         })
         return decl

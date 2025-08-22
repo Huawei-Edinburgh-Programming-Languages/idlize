@@ -93,9 +93,9 @@ export const An = {
 }
 
 export const Md = {
-    optional: { kind: DecoratorKind.Modifier, name: knownModifiers.optional } as Modifier,
-    readonly: { kind: DecoratorKind.Modifier, name: knownModifiers.readonly } as Modifier,
-    static: { kind: DecoratorKind.Modifier, name: knownModifiers.static } as Modifier,
+    optional: (): Modifier => ({ kind: DecoratorKind.Modifier, name: knownModifiers.optional }),
+    readonly: (): Modifier => ({ kind: DecoratorKind.Modifier, name: knownModifiers.readonly }),
+    static: (): Modifier => ({ kind: DecoratorKind.Modifier, name: knownModifiers.static }),
 }
 
 export const Vs = {

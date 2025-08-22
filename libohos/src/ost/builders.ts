@@ -406,7 +406,7 @@ class FunctionBuilder<P> {
     private _parameters: { name: string, type: LWType }[] = []
     private _returnType?: LWType
     private _body?: LWStatement
-    static() { this._modifiers.push(Md.static); return this }
+    static() { this._modifiers.push(Md.static()); return this }
     returns(type: LWType) { this._returnType = type; return this }
     body(body: LWStatement) { this._body = body; return this }
     parameters(params: {name: string, type: LWType}[]) { this._parameters.push(...params); return this }
@@ -437,9 +437,9 @@ class FieldBuilder<P> {
     ) {}
     private _type?: LWType
     private _modifiers: Modifier[] = []
-    static() { this._modifiers.push(Md.static); return this }
-    optional() { this._modifiers.push(Md.optional); return this }
-    readonly() { this._modifiers.push(Md.readonly); return this }
+    static() { this._modifiers.push(Md.static()); return this }
+    optional() { this._modifiers.push(Md.optional()); return this }
+    readonly() { this._modifiers.push(Md.readonly()); return this }
     modifiers(modifiers: Modifier[]) { this._modifiers.push(...modifiers); return this }
     type(type: LWType) { this._type = type; return this }
     funcType(): FunctionTypeBuilder<FieldBuilder<P>> {

@@ -15,7 +15,7 @@
 
 import { IndentPrinter } from "../indent";
 import * as lw from "../../lws"
-import { Md, std } from "../../stdlib";
+import { std } from "../../stdlib";
 import { IdentityTransformer } from "../../visitors/identity";
 import { T, utils } from "../../builder";
 import { peerGeneratorConfiguration } from "../../../DefaultConfiguration";
@@ -312,10 +312,10 @@ export class TSPrinter {
 
   private printField(name: string, type: lw.LWType, modifiers?: lw.Modifier[], initializer?: string) {
     modifiers
-      ?.filter(it => it !== Md.optional)
+      ?.filter(it => it.name !== std.names.modifiers.optional)
       .forEach(it => this.p.put(it.name, ' '))
     this.p.put(name)
-    if (modifiers?.includes(Md.optional))
+    if (modifiers?.map(it => it.name).includes(std.names.modifiers.optional))
       this.p.put('?')
     this.p.put(':', ' ')
     this.printType(type)
