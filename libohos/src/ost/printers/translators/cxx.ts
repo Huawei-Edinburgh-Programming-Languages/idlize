@@ -465,6 +465,10 @@ export class CXXPrinter {
         this.printStatement(declaration.body)
         break
       }
+      case lw.LWKind.StatementDeclaration: {
+        this.printStatement(declaration.statement)
+        break
+      }
     }
   }
 

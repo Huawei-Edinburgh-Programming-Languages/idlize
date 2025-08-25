@@ -21,7 +21,6 @@ import { ArgConvertor } from "../components/argConvertor";
 import { generatorConfiguration } from "@idlizer/core";
 import { An, Op, Ts } from "../../../ost/stdlib";
 import { LWType } from "../../../ost/lws";
-import { lw } from "../../../ost/main";
 
 export const functionProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.managed },
@@ -34,7 +33,7 @@ export const functionProducer = createSpecialProducer(
           generateGlobalScopeFunction(method, ctx),
           generateModifier(method, ctx),
           generateBridge(method, ctx),
-          /// generateMacroCall(method, ctx),
+          generateMacroCall(method, ctx),
         ]
       }
     }
@@ -119,12 +118,11 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
 }
 
 function generateMacroCall(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
-  const returnType = ctx.useCApi(method.returnType).reference();
-  const params: [string, LWType][] = method.parameters.map(it =>
-    [it.name, Ts.const(Ts.ptr(ctx.useCApi(it.type).reference()))])
   return Builders.stmt().call()
+    .functionName('KOALA_INTEROP_DIRECT_V2')
     .args([
       E.v('GlobalScope_' + method.name),
       E.v(Ts.prim.serializerBuffer.name, [An.isType()]),
-      E.v(Ts.prim.i32.name, [An.isType()])]).$().$()
+      E.v(Ts.prim.i32.name, [An.isType()])]).$()
+    .$decl(nativeName('koala.interop.macro' + method.name))
 }

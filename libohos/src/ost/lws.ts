@@ -21,6 +21,7 @@ export enum LWKind {
   NamespaceDeclaration,
   TypedefDeclaration,
   FunctionDeclaration,
+  StatementDeclaration,
 
   DeclarationStatement,
   CompoundStatement,
@@ -142,6 +143,14 @@ export interface FunctionDeclaration {
   returnType: LWType
   body: LWStatement
 }
+/// this is utter bs
+/// needed for interop macro calls plus, in theory, arbitrary toplevel calls and declarations
+export interface StatementDeclaration {
+  kind: LWKind.StatementDeclaration
+  generics: GenericDescriptor[]
+  name: string
+  statement: LWStatement
+}
 export type LWDeclaration =
     UnionDeclaration
   | EnumDeclaration
@@ -150,6 +159,7 @@ export type LWDeclaration =
   | NamespaceDeclaration
   | TypedefDeclaration
   | FunctionDeclaration
+  | StatementDeclaration
 
 export interface DeclarationStatement {
   kind: LWKind.DeclarationStatement
