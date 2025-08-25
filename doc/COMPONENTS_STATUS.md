@@ -475,8 +475,8 @@
 |`setOnItemDrop`|Function| Erokhin Ilya | done |  |  |
 |`setAlignItems`| Function | Erokhin Ilya | done | pass |  |
 |`setOnScrollFrameBegin`|Function| Skroba Gleb | done |  |   |
-|`setOnWillScroll`| Function | | | | |
-|`setOnDidScroll`| Function | | | | |
+|`setOnWillScroll`| Function | wangtao | done | | |
+|`setOnDidScroll`| Function | wangtao | done | | |
 |*GridCol*| *Component* | Lobah Mikhail| done |  |  |
 |`construct`| Function |Lobah Mikhail| done | pass |  |
 |`setGridColOptions`| Function |Lobah Mikhail| done | pass |  |
@@ -605,8 +605,8 @@
 |`setOnItemDragLeave`|Function|Morozov Sergey| done | in progress |  |
 |`setOnItemDrop`|Function|Morozov Sergey| done | in progress |  |
 |`setOnScrollFrameBegin`|Function| Skroba Gleb | done | in progress |   |
-|`setOnWillScroll`| Function | | | | |
-|`setOnDidScroll`| Function | | | | |
+|`setOnWillScroll`| Function | wangtao | done | | |
+|`setOnDidScroll`| Function | wangtao | done | | |
 |`setLanes`|Function|Morozov Sergey| done | in progress |  |
 |*ListItem*|*Component*|Morozov Sergey| done | Evstigneev Roman, test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`construct`| Function |Morozov Sergey| done | in progress |  |
@@ -1457,8 +1457,8 @@
 |`setCachedCount1`| Function | Kovalev Sergey | done | | |
 |`setOnScrollFrameBegin`| Function | Dudkin Sergey | in progress | |
 |`setOnScrollIndex`| Function | Kovalev Sergey | done | | |
-|`setOnWillScroll`| Function | | | | |
-|`setOnDidScroll`| Function | | | | |
+|`setOnWillScroll`| Function | wangtao | done | | |
+|`setOnDidScroll`| Function | wangtao | done | | |
 |*WindowScene*| *Component* | Dudkin Sergey | done |  | |
 |`construct`| Function |Dudkin Sergey | done |  | |
 |`setWindowSceneOptions`| Function | Dudkin Sergey | done |  | |
