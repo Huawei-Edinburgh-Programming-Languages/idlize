@@ -99,8 +99,7 @@ function printOstDeclarations(decls: LWDeclaration[], language: Language, packag
     const [ managed, cApi, native ] = buckets.map(e => e[1])
 
     const tsFiles = dumpTsLike(managed, language, packages)
-    const cFiles = dumpCLike(cApi)
-    const nativeFiles = dumpAsIs(native)
+    const cFiles = dumpCLike([...cApi, ...native])
     return tsFiles /// ...cFiles, ...nativeFiles])
 }
 
@@ -125,12 +124,9 @@ function dumpTsLike(decls: LWDeclaration[], language: Language, packages: Set<st
 }
 
 function dumpCLike(decls: LWDeclaration[]) {
-    decls = lowLevelLike.postprocess(decls)
+    const [capi, native] = lowLevelLike.postprocess(decls)
     console.log("===================== C-API =====================")
-    console.log(processNPrintCXX(decls))
-}
-
-function dumpAsIs(decls: LWDeclaration[]) {
+    console.log(processNPrintCXX(capi))
     console.log("==================== NATIVE ====================")
-    console.log(processNPrintCXX(decls))
+    console.log(processNPrintCXX(native))
 }

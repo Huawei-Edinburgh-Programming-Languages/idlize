@@ -29,7 +29,7 @@ export const nativeModuleProducer = createProducer(
         reference: E.get(E.v(NATIVE_MODULE_NAME, [An.isType()]), methodName),
         implementationGenerator: () =>
           [D.class(NATIVE_MODULE_NAME, [], [
-            D.func(methodName, [{ name: 'buffer', type: T.c('SerializerBase') }], Ts.prim.void, S.block([]))
+            D.func(methodName, [{ name: 'buffer', type: T.c(managedName('SerializerBase')) }], Ts.prim.void, S.block([]))
           ])]
       }
     }

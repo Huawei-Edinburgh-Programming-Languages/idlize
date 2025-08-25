@@ -18,11 +18,12 @@ import { ProducerDescription } from "../../context";
 import { An, D, DD, E, Md, S, T, Ts } from "../../../ost/main";
 import { ArgConvertor } from "./argConvertor";
 
-function makeSerializerName(node:idl.IDLInterface, native:boolean) {
-  const name = idl.getFQName(node) + 'Serializer'
-    return native
-      ? nativeName(name)
-      : managedName(name)
+function makeName(name: string, native: boolean): string {
+  return (native ? nativeName : managedName)(name)
+}
+
+function makeSerializerName(node: idl.IDLInterface, native: boolean) {
+  return makeName(idl.getFQName(node) + 'Serializer', native)
 }
 
 export function makeSerializer(
@@ -38,7 +39,7 @@ export function makeSerializer(
         const convertor = new ArgConvertor(ctx, E.v(serializerName), isNative)
         return [D.class(makeSerializerName(node, isNative), [], [
           DD({ modifiers: [Md.static()] }).func('write', [
-            { name: serializerName, type: T.c('SerializerBase') },
+            { name: serializerName, type: T.c(makeName('SerializerBase', isNative)) },
             { name: 'value', type: ctx.useManaged(node).reference() },
           ], Ts.prim.void, S.block(
             node.properties.map(prop => convertor.write(E.get(E.v('value'), prop.name), prop.type))

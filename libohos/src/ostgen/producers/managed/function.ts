@@ -67,7 +67,7 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
         .parameters(params)
         .returns(returnType)
         .block()
-          .decl(serializerName, T.c('SerializerBase'))
+          .decl(serializerName, T.c(managedName('SerializerBase')))
             .value().call().receiverName("SerializerBase").functionName("hold").$().$().$()
           .statements(fieldWrites)
           .call().receiverName(nativeModuleName).functionName('_GlobalScope_' + method.name)

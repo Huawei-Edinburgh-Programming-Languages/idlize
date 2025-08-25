@@ -16,8 +16,7 @@
 import { IndentPrinter } from "../indent";
 import * as lw from "../../lws"
 import { Op, std, Ts } from "../../stdlib";
-import { IdentityTransformer } from "../../visitors/identity";
-import { T, utils } from "../../builder";
+import { utils } from "../../builder";
 import { generatorConfiguration } from "@idlizer/core";
 
 const varMapping = new Map([
@@ -27,72 +26,6 @@ const varMapping = new Map([
   [std.names.vars.print, 'printf'],
   [std.names.vars.self, 'this'],
 ])
-
-export class ConvertCXXTypes extends IdentityTransformer {
-  private readonly TypePrefix = generatorConfiguration().TypePrefix
-  private seenNames: Map<string, string[]> = new Map()
-
-  /// type aliasing is better done before monomorphization
-  private goTypeName(name: string): string {
-    if (name.startsWith('@'))
-      throw new Error('Unhandled builtin type: ' + name)
-    const path = name.split('.')
-    const prefix = path.shift()
-    let typeName = path[path.length - 1]
-    const conflictingNames = this.seenNames.get(typeName)
-    if (conflictingNames) {
-      if (!conflictingNames.includes(name))
-        conflictingNames.push(name)
-      if (conflictingNames[0] !== name)
-        typeName = path.join('_')
-    } else {
-      this.seenNames.set(typeName, [name])
-    }
-    return prefix === 'synthetic' ? typeName : this.TypePrefix + typeName
-  }
-  override goConstType(type: lw.ConstType): lw.LWType {
-    const p = (type: string) => T.cc(this.TypePrefix + type)
-    switch (type.name) {
-      case std.names.types.bigint: return p('Int64')
-      case std.names.types.boolean: return p('Boolean')
-      case std.names.types.buffer: return p('Buffer')
-      case std.names.types.f32: return p('Float32')
-      case std.names.types.f64: return p('Float64')
-      case std.names.types.i8: return p('Int8')
-      case std.names.types.i32: return p('Int32')
-      case std.names.types.i64: return p('Int64')
-      case std.names.types.number: return p('Number')
-      case std.names.types.serializerBuffer: return T.cc('KSerializerBuffer')
-      case std.names.types.string: return p('String')
-      case std.names.types.u8: return p('Int8')
-      case std.names.types.u32: return p('UInt32')
-      case std.names.types.u64: return p('UInt64')
-      case std.names.types.tag: return p('Tag')
-      case std.names.types.void: return T.cc('void')
-    }
-    return T.cc(this.goTypeName(type.name))
-  }
-  override goEnumDeclaration(decl: lw.EnumDeclaration): lw.EnumDeclaration {
-    decl = super.goEnumDeclaration(decl)
-    decl.name = this.goTypeName(decl.name)
-    return decl
-  }
-  override goUnionDeclaration(decl: lw.UnionDeclaration): lw.UnionDeclaration {
-    decl = super.goUnionDeclaration(decl)
-    decl.name = this.goTypeName(decl.name)
-    return decl
-  }
-  override goStructureDeclaration(decl: lw.StructureDeclaration): lw.StructureDeclaration {
-    decl = super.goStructureDeclaration(decl)
-    decl.name = this.goTypeName(decl.name)
-    return decl
-  }
-  override goTypedefDeclaration(decl: lw.TypedefDeclaration): lw.TypedefDeclaration {
-    decl = super.goTypedefDeclaration(decl)
-    decl.name = this.goTypeName(decl.name)
-    return decl
-  }
-}
 
 export class CXXPrinter {
   private readonly p = new IndentPrinter()
@@ -545,9 +478,7 @@ export class CXXPrinter {
 }
 
 export function processNPrintCXX(decls: lw.LWDeclaration[]) {
-  const convertor = new ConvertCXXTypes()
   return decls
-    .map(it => convertor.goDeclaration(it))
     .map(it => {
       const printer = new CXXPrinter()
       printer.printDeclaration(it)

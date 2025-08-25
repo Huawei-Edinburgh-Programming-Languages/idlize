@@ -13,16 +13,17 @@
  * limitations under the License.
  */
 
-import { D, DD, IdentityTransformer, lw, Md, T, Ts } from "../../ost/main";
+import { D, DD, IdentityTransformer, lw, Md, std, T, Ts } from "../../ost/main";
 import { throwError } from "../library/utils";
-import { zipStrip } from "@idlizer/core";
+import { generatorConfiguration, zipStrip } from "@idlizer/core";
 
-export function postprocess(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+export function postprocess(decls: lw.LWDeclaration[]): [lw.LWDeclaration[], lw.LWDeclaration[]] {
     decls = removeInternal(decls)
     decls = introduceOptionalTypes(decls)
     decls = specializeGenerics(decls)
-    decls = makeForwardDeclarations(decls)
-    return decls
+    let [capi, native] = aliasTypes(decls)
+    capi = makeForwardDeclarations(capi)
+    return [capi, native]
 }
 
 function removeInternal(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
@@ -151,6 +152,91 @@ class MakeMono extends IdentityTransformer {
 
 function specializeGenerics(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     return new MakeMono(decls).go(decls)
+}
+
+class TypeAliasing extends IdentityTransformer {
+    private readonly TypePrefix = generatorConfiguration().TypePrefix
+    private conflicts: Set<string> = new Set()
+
+    private goTypeName(name: string): string {
+        if (name.startsWith('@'))
+            throw new Error('Unhandled builtin type: ' + name)
+        const path = name.split('.').slice(1)
+        return this.conflicts.has(name)
+            ? path.join('_')
+            : path[path.length - 1]
+    }
+    override goConstType(type: lw.ConstType): lw.LWType {
+        const p = (type: string) => T.cc(this.TypePrefix + type)
+        switch (type.name) {
+            case std.names.types.bigint: return p('Int64')
+            case std.names.types.boolean: return p('Boolean')
+            case std.names.types.buffer: return p('Buffer')
+            case std.names.types.f32: return p('Float32')
+            case std.names.types.f64: return p('Float64')
+            case std.names.types.i8: return p('Int8')
+            case std.names.types.i32: return p('Int32')
+            case std.names.types.i64: return p('Int64')
+            case std.names.types.number: return p('Number')
+            case std.names.types.serializerBuffer: return T.cc('KSerializerBuffer')
+            case std.names.types.string: return p('String')
+            case std.names.types.u8: return p('Int8')
+            case std.names.types.u32: return p('UInt32')
+            case std.names.types.u64: return p('UInt64')
+            case std.names.types.tag: return p('Tag')
+            case std.names.types.void: return T.cc('void')
+        }
+        return T.cc(this.goTypeName(type.name))
+    }
+    override goEnumDeclaration(decl: lw.EnumDeclaration): lw.EnumDeclaration {
+        decl = super.goEnumDeclaration(decl)
+        decl.name = this.goTypeName(decl.name)
+        return decl
+    }
+    override goUnionDeclaration(decl: lw.UnionDeclaration): lw.UnionDeclaration {
+        decl = super.goUnionDeclaration(decl)
+        decl.name = this.goTypeName(decl.name)
+        return decl
+    }
+    override goStructureDeclaration(decl: lw.StructureDeclaration): lw.StructureDeclaration {
+        decl = super.goStructureDeclaration(decl)
+        decl.name = this.goTypeName(decl.name)
+        return decl
+    }
+    override goTypedefDeclaration(decl: lw.TypedefDeclaration): lw.TypedefDeclaration {
+        decl = super.goTypedefDeclaration(decl)
+        decl.name = this.goTypeName(decl.name)
+        return decl
+    }
+    go(decls: lw.LWDeclaration[]) {
+        const seenNames: Map<string, string[]> = new Map()
+        decls.forEach(decl => {
+            const path = decl.name.split('.')
+            let name = path[path.length - 1]
+            const conflictingNames = seenNames.get(name)
+            if (conflictingNames) {
+                if (!conflictingNames.includes(decl.name))
+                    conflictingNames.push(decl.name)
+            } else {
+                seenNames.set(name, [decl.name])
+            }
+        })
+        this.conflicts = new Set(
+            Array.from(seenNames.entries())
+                .filter(([_, names]) => names.length > 1)
+                .flatMap(([_, names]) => names))
+        return decls.reduce<[lw.LWDeclaration[], lw.LWDeclaration[]]>(([capi, native], decl) => {
+            if (decl.name.startsWith('capi.'))
+                capi.push(this.goDeclaration(decl))
+            else
+                native.push(this.goDeclaration(decl))
+            return [capi, native]
+        }, [[], []])
+    }
+}
+
+function aliasTypes(decls: lw.LWDeclaration[]): [lw.LWDeclaration[], lw.LWDeclaration[]] {
+    return new TypeAliasing().go(decls)
 }
 
 function makeForwardDeclarations(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
