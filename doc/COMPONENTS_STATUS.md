@@ -2045,36 +2045,36 @@
 |`getParent`| Function | Tuzhilkin Ivan | done |  | |
 |`getChildrenCount`| Function | Tuzhilkin Ivan | done |  | |
 |`dispose`| Function | Tuzhilkin Ivan | done |  | |
-|`getId`| Function | | |
-|`getUniqueId`| Function | | |
-|`getNodeType`| Function | | |
+|`getId`| Function | wangtao | done | | |
+|`getUniqueId`| Function | wangtao | done | | |
+|`getNodeType`| Function | wangtao | done | | |
 |`getOpacity`| Function | Morozov Sergey | done | | |
-|`isVisible`| Function | | |
-|`isClipToFrame`| Function | | |
-|`isAttached`| Function | | |
-|`getInspectorInfo`| Function | | |
-|`invalidate`| Function | | |
-|`disposeTree`| Function | | |
-|`setCrossLanguageOptions`| Function | | |
-|`getCrossLanguageOptions`| Function | | |
-|`setMeasuredSize`| Function | | |
-|`setLayoutPosition`| Function | | |
-|`measure`| Function | | |
-|`layout`| Function | | |
-|`setNeedsLayout`| Function | | |
+|`isVisible`| Function | wangtao | done | | |
+|`isClipToFrame`| Function | wangtao | done | | |
+|`isAttached`| Function | wangtao | done | | |
+|`getInspectorInfo`| Function | wangtao | done | | |
+|`invalidate`| Function | wangtao | done | |
+|`disposeTree`| Function | wangtao | done | |
+|`setCrossLanguageOptions`| Function | wangtao | done | |
+|`getCrossLanguageOptions`| Function | wangtao | done | |
+|`setMeasuredSize`| Function | wangtao | done | |
+|`setLayoutPosition`| Function | wangtao | done | |
+|`measure`| Function | wangtao | done  | |
+|`layout`| Function | wangtao | done | |
+|`setNeedsLayout`| Function | wangtao | done | |
 |`getPositionToWindowWithTransform`| Function | Morozov Sergey | done | | |
-|`getFrameNodeByKey`| Function | | | | |
-|`getIdByFrameNode`| Function | | | | |
-|`moveTo`| Function | | | | |
-|`getFirstChildIndexWithoutExpand`| Function | | | | |
-|`getLastChildIndexWithoutExpand`| Function | | | | |
-|`getAttachedFrameNodeById`| Function | | | | |
-|`getFrameNodeById`| Function | | | | |
-|`getFrameNodeByUniqueId`| Function | | | | |
-|`reuse`| Function | | | | |
-|`recycle`| Function | | | | |
-|`getFrameNodePtr`| Function | | | | |
-|`createTypedFrameNode`| Function | | |
+|`getFrameNodeByKey`| Function | wangtao | done | | | |
+|`getIdByFrameNode`| Function | wangtao | done | | |
+|`moveTo`| Function | wangtao | done | | |
+|`getFirstChildIndexWithoutExpand`| Function | wangtao | done | | |
+|`getLastChildIndexWithoutExpand`| Function | wangtao | done | | |
+|`getAttachedFrameNodeById`| Function | wangtao | done | | |
+|`getFrameNodeById`| Function | wangtao | done | | |
+|`getFrameNodeByUniqueId`| Function | wangtao | done | | |
+|`reuse`| Function | wangtao | done | | |
+|`recycle`| Function | wangtao | done | | |
+|`getFrameNodePtr`| Function | wangtao | done | | |
+|`createTypedFrameNode`| Function | wangtao | done | | |
 |*DrawContext*| *Class* | | | | |
 |`construct`| Function | Samarin Sergey | in progress | | |
 |`size`| Function | Samarin Sergey | in progress | | |
@@ -2546,7 +2546,7 @@
 |`getVelocityX`| Function | Tuzhilkin Ivan | done | | |
 |`getVelocityY`| Function | Tuzhilkin Ivan | done | | |
 |`getVelocity`| Function | Tuzhilkin Ivan | done | | |
-|`executeDropAnimation`| Function | | | | can be implemented on 125 generation |
+|`executeDropAnimation`| Function | wangtao | done | | can be implemented on 125 generation |
 |`enableInternalDropAnimation`| Function | | |
 |`getDragBehavior`| Function | Tuzhilkin Ivan | done | | |
 |`setDragBehavior`| Function | Tuzhilkin Ivan | done | | |
