@@ -17,7 +17,7 @@ import { toIDLFile } from "@idlizer/core"
 import { Command } from "commander"
 import { existsSync, mkdirSync, readFileSync } from "node:fs"
 import { resolve } from "node:path"
-import { solve } from "./alporithm"
+import { solve } from "./algorithm"
 import { ADDITIONAL_CONFIG_DIR, AppConfigSchema, AppOptions, CONFIG_PATH, OUT_DIR } from "./shared"
 import { scan } from "./utils"
 
@@ -54,6 +54,7 @@ function main(args:string[]) {
     new Command("@idlizer/scraper")
         .argument('<input-directory>', 'Input directory')
         .option('--target <target-names...>', 'Packages', [])
+        .option('--output <output>', 'Output directory', 'out')
         .action(go)
         .parse(args, { from: 'user' })
 }
