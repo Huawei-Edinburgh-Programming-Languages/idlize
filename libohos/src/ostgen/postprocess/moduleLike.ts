@@ -18,10 +18,11 @@ import { D, E, IdentityTransformer, lw, std, T, utils } from "../../ost/main";
 import { ImportsCollector } from "../../peer-generation/ImportsCollector";
 import { mapName } from "../library/utils";
 import { managedName } from "../producers/common";
+import { mergeStructs } from "./postprocess";
 
 export function postprocess(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     decls = mergeNamespaces(decls)
-    decls = mergeClasses(decls)
+    decls = mergeStructs(decls)
     decls = introduceTypeChecker(decls)
     return decls
 }
@@ -55,42 +56,6 @@ function mergeNamespaces(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
             return
         }
         result.push(D.ns(name, mergeNamespaces(records.map(r => r.members).flat())))
-    })
-    return result
-}
-
-function mergeClasses(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
-    const index = new Map<string, lw.ClassDeclaration[]>()
-    const others: lw.LWDeclaration[] = []
-    decls.forEach(decl => {
-        if (decl.kind !== lw.LWKind.ClassDeclaration) {
-            others.push(decl)
-            return
-        }
-        if (decl.generics.length > 0) {
-            return
-        }
-        if (!index.has(decl.name)) {
-            index.set(decl.name, [])
-        }
-        index.get(decl.name)?.push(decl)
-    })
-
-    const result: lw.LWDeclaration[] = others
-    index.forEach((records, name) => {
-        if (records.length === 0) {
-            return
-        }
-        if (records.length === 1) {
-            result.push(records[0])
-            return
-        }
-        const tmp = D.class(name, [], [])
-        records.forEach(rec => {
-            tmp.fields.push(...rec.fields)
-            tmp.methods.push(...rec.methods)
-        })
-        result.push(tmp)
     })
     return result
 }

@@ -13,12 +13,14 @@
  * limitations under the License.
  */
 
-import { D, DD, IdentityTransformer, lw, Md, std, T, Ts } from "../../ost/main";
+import { D, DD, IdentityTransformer, lw, Md, std, T, Ts, utils } from "../../ost/main";
 import { throwError } from "../library/utils";
 import { generatorConfiguration, zipStrip } from "@idlizer/core";
+import { mergeStructs } from "./postprocess";
 
 export function postprocess(decls: lw.LWDeclaration[]): [lw.LWDeclaration[], lw.LWDeclaration[]] {
     decls = removeInternal(decls)
+    decls = mergeStructs(decls)
     decls = introduceOptionalTypes(decls)
     decls = specializeGenerics(decls)
     let [capi, native] = aliasTypes(decls)
@@ -155,19 +157,24 @@ function specializeGenerics(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
 }
 
 class TypeAliasing extends IdentityTransformer {
-    private readonly TypePrefix = generatorConfiguration().TypePrefix
+    private readonly ShortPrefix = generatorConfiguration().TypePrefix
+    private readonly LongPrefix = this.ShortPrefix + generatorConfiguration().moduleName.toUpperCase() + '_'
     private conflicts: Set<string> = new Set()
 
     private goTypeName(name: string): string {
         if (name.startsWith('@'))
             throw new Error('Unhandled builtin type: ' + name)
-        const path = name.split('.').slice(1)
-        return this.conflicts.has(name)
+        const path = name.split('.')
+        if (path.length === 1)
+            return name
+        const prefix = path.shift()
+        const typeName = this.conflicts.has(name)
             ? path.join('_')
             : path[path.length - 1]
+        return prefix === 'capi' ? this.LongPrefix + typeName : typeName
     }
     override goConstType(type: lw.ConstType): lw.LWType {
-        const p = (type: string) => T.cc(this.TypePrefix + type)
+        const p = (type: string) => T.cc(this.ShortPrefix + type)
         switch (type.name) {
             case std.names.types.bigint: return p('Int64')
             case std.names.types.boolean: return p('Boolean')
@@ -203,10 +210,27 @@ class TypeAliasing extends IdentityTransformer {
         decl.name = this.goTypeName(decl.name)
         return decl
     }
+    override goClassDeclaration(decl: lw.ClassDeclaration): lw.ClassDeclaration {
+        decl = super.goClassDeclaration(decl)
+        decl.name = this.goTypeName(decl.name)
+        return decl
+    }
     override goTypedefDeclaration(decl: lw.TypedefDeclaration): lw.TypedefDeclaration {
         decl = super.goTypedefDeclaration(decl)
         decl.name = this.goTypeName(decl.name)
         return decl
+    }
+    override goFunctionDeclaration(decl: lw.FunctionDeclaration): lw.FunctionDeclaration {
+        decl = super.goFunctionDeclaration(decl)
+        decl.name = this.goTypeName(decl.name)
+        return decl
+    }
+    override goVariableExpression(expr: lw.VariableExpression): lw.VariableExpression {
+        expr = super.goVariableExpression(expr)
+        expr.name = utils.hasAnnotation(expr, std.names.annotations.isType)
+            ? this.goTypeName(expr.name)
+            : expr.name
+        return expr
     }
     go(decls: lw.LWDeclaration[]) {
         const seenNames: Map<string, string[]> = new Map()

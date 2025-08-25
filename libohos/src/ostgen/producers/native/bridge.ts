@@ -31,7 +31,7 @@ export const bridgeProducer = createSpecialProducer(
           const readers = method.parameters.map(param => {
             return convertor.read(E.v(param.name), param.type)
           })
-          return [D.func(generatedDeclName, [{ name: 'buffer', type: T.c(nativeName('SerializerBase')) }], Ts.prim.void, S.block([
+          return [D.func(generatedDeclName, [{ name: 'buffer', type: T.c('SerializerBase') }], Ts.prim.void, S.block([
             ...readers.flatMap(x => x[0])
           ]))]
         }

@@ -21,6 +21,7 @@ import { ArgConvertor } from "../components/argConvertor";
 import { generatorConfiguration } from "@idlizer/core";
 import { An, Op, Ts } from "../../../ost/stdlib";
 import { LWType } from "../../../ost/lws";
+import { lw } from "../../../ost/main";
 
 export const functionProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.managed },
@@ -67,8 +68,8 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
         .parameters(params)
         .returns(returnType)
         .block()
-          .decl(serializerName, T.c(managedName('SerializerBase')))
-            .value().call().receiverName("SerializerBase").functionName("hold").$().$().$()
+          .decl(serializerName, T.c('SerializerBase'))
+            .value().call().receiverName('SerializerBase').functionName('hold').$().$().$()
           .statements(fieldWrites)
           .call().receiverName(nativeModuleName).functionName('_GlobalScope_' + method.name)
             .arg().call().receiverName(serializerName).functionName('asBuffer').$().$()
@@ -78,20 +79,20 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
 }
 
 function generateModifier(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
-  const returnType = ctx.useManaged(method.returnType).reference();
+  const returnType = ctx.useCApi(method.returnType).reference();
   const params: [string, LWType][] = method.parameters.map(it =>
-    [it.name, Ts.const(Ts.ptr(ctx.useManaged(it.type).reference()))])
+    [it.name, Ts.const(Ts.ptr(ctx.useCApi(it.type).reference()))])
   return Builders.struct(cApiName(generatorConfiguration().moduleName.toUpperCase() + '_GlobalScopeModifier'))
     .field(method.name)
       .funcType().parameters(params).returns(returnType).$().$().$()
 }
 
 function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
-  const returnType = ctx.useManaged(method.returnType).reference();
+  const returnType = ctx.useCApi(method.returnType).reference();
   const argReads = method.parameters.map(it => {
     const convertor = new ArgConvertor(ctx, E.v('deserializer'), true)
     return Builders.stmt()
-      .decl(it.name, ctx.useManaged(it.type).reference())
+      .decl(it.name, ctx.useCApi(it.type).reference())
         .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$().$()
   })
   const modulePrefix = generatorConfiguration().moduleName.toUpperCase();
@@ -100,7 +101,7 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
     .param('thisLength').type(Ts.prim.i32).$()
     .returns(returnType)
     .block()
-      .decl('deserializer', T.c(nativeName('DeserializerBase'))).$()
+      .decl('deserializer', T.c('DeserializerBase')).$()
       .statements(argReads)
       .return(returnType)
         .call().function().access()
@@ -118,9 +119,9 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
 }
 
 function generateMacroCall(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
-  const returnType = ctx.useManaged(method.returnType).reference();
+  const returnType = ctx.useCApi(method.returnType).reference();
   const params: [string, LWType][] = method.parameters.map(it =>
-    [it.name, Ts.const(Ts.ptr(ctx.useManaged(it.type).reference()))])
+    [it.name, Ts.const(Ts.ptr(ctx.useCApi(it.type).reference()))])
   return Builders.stmt().call()
     .args([
       E.v('GlobalScope_' + method.name),
