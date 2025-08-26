@@ -14,7 +14,7 @@
  */
 
 import { D, DD, E, S, T } from "./builder"
-import { AccessorExpression, Annotation, BinaryExpression, CallExpression, ClassDeclaration, ConstType, DeclarationStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWKind, LWStatement, LWType, Modifier, StatementDeclaration, StructureDeclaration } from "./lws"
+import { AccessorExpression, Annotation, BinaryExpression, CallExpression, ClassDeclaration, ConstructorExpression, ConstType, DeclarationStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWKind, LWStatement, LWType, Modifier, StatementDeclaration, StructureDeclaration } from "./lws"
 import { An, Md, Ts } from "./stdlib";
 
 const id = <T>(it: T) => it
@@ -31,12 +31,6 @@ class AccessorBuilder<P> {
     ) {}
     private _accessor?: string | LWExpression
     private _annotations: Annotation[] = []
-    object(): ExpressionBuilder<AccessorBuilder<P>> {
-        return new ExpressionBuilder(expr => {
-            this._object = expr
-            return this
-        })
-    }
     ptr() { this._object?.annotations.push(An.ptrVal()); return this }
     static() { this._annotations.push(An.staticMethod()); return this }
     member(name: string) { this._accessor = name; return this }
@@ -45,6 +39,12 @@ class AccessorBuilder<P> {
     index(): ExpressionBuilder<AccessorBuilder<P>> {
         return new ExpressionBuilder(expr => {
             this._accessor = expr
+            return this
+        })
+    }
+    object(): ExpressionBuilder<AccessorBuilder<P>> {
+        return new ExpressionBuilder(expr => {
+            this._object = expr
             return this
         })
     }
@@ -134,6 +134,20 @@ class CallBuilder<P> {
     }
 }
 
+class ConstructorBuilder<P> {
+    constructor(
+        private _cont: (expr: ConstructorExpression) => P,
+        private _name: string
+    ) {}
+    private _args: LWExpression[] = []
+    private _annotations: Annotation[] = []
+    args(args: LWExpression[]) { this._args.push(...args); return this }
+    stack() { this._annotations.push(An.stackInstance()); return this }
+    $(): P {
+        return this._cont(E.instance(this._name, this._args, [], this._annotations))
+    }
+}
+
 class ExpressionBuilder<P> {
     constructor(private _cont: (expr: LWExpression) => P) {}
     private _expr?: LWExpression
@@ -154,6 +168,12 @@ class ExpressionBuilder<P> {
             this._expr = expr
             return this
         })
+    }
+    ctor(name: string): ConstructorBuilder<ExpressionBuilder<P>> {
+        return new ConstructorBuilder(expr => {
+            this._expr = expr
+            return this
+        }, name)
     }
     instanceof(name: string, type: ConstType) { this._expr = E.bin("instanceof", E.v(name), E.c(type.name))} ///need InstanceofExpression
     $(): P {

@@ -266,25 +266,28 @@ export class CXXPrinter {
       case lw.LWKind.DeclarationStatement: {
         this.printDirectType(statement.varType, statement.varName)
         if (statement.expression) {
-          if (!(
-            statement.expression.kind === lw.LWKind.ConstructorExpression
-            && (
-              utils.hasAnnotation(statement.expression, std.names.annotations.asStruct)
-              || utils.hasAnnotation(statement.expression, std.names.annotations.stackInstance)
-            )
-          )) {
-            this.p.put(' ', '=', ' ')
-            this.printExpression(statement.expression)
-          } else {
-            this.p.put(' ', '{')
-            statement.expression.args.forEach((arg, i) => {
-              if (i > 0) {
-                this.p.put(',', ' ')
-              }
-              this.printExpression(arg)
-            })
-            this.p.put('}')
+          if (statement.expression.kind === lw.LWKind.ConstructorExpression) {
+            let closer: string | undefined
+            if (utils.hasAnnotation(statement.expression, std.names.annotations.asStruct)) {
+              this.p.put(' ', '{')
+              closer = '}'
+            } else if (utils.hasAnnotation(statement.expression, std.names.annotations.stackInstance)) {
+              this.p.put('(')
+              closer = ')'
+            }
+            if (closer) {
+              statement.expression.args.forEach((arg, i) => {
+                if (i > 0) {
+                  this.p.put(',', ' ')
+                }
+                this.printExpression(arg)
+              })
+              this.p.put(closer, ';')
+              break
+            }
           }
+          this.p.put(' ', '=', ' ')
+          this.printExpression(statement.expression)
         }
         this.p.put(';')
         break
