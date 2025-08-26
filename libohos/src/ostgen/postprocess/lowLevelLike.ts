@@ -17,12 +17,14 @@ import { D, DD, IdentityTransformer, lw, Md, std, T, Ts, utils } from "../../ost
 import { throwError } from "../library/utils";
 import { generatorConfiguration, zipStrip } from "@idlizer/core";
 import { mergeStructs } from "./postprocess";
+import { Builders } from "../../ost/builders";
 
 export function postprocess(decls: lw.LWDeclaration[]): [lw.LWDeclaration[], lw.LWDeclaration[]] {
     decls = removeInternal(decls)
     decls = mergeStructs(decls)
     decls = introduceOptionalTypes(decls)
     decls = specializeGenerics(decls)
+    decls = makeApiStruct(decls)
     let [capi, native] = aliasTypes(decls)
     capi = makeForwardDeclarations(capi)
     return [capi, native]
@@ -258,6 +260,22 @@ class TypeAliasing extends IdentityTransformer {
             return [capi, native]
         }, [[], []])
     }
+}
+
+function makeApiStruct(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+    const apiStructName = 'capi.modifier.API';
+    const modifiers = decls
+        .map((decl, i) => [decl, i] as [lw.LWDeclaration, number])
+        .filter(([decl, i]) => decl.name.startsWith('capi.modifier'))
+    const apiStruct = Builders.struct(apiStructName)
+        .field('version').type(Ts.prim.i32).$()
+    modifiers.forEach(([decl, i]) => {
+        apiStruct.field(decl.name.split('.').pop()!.replace(/Modifier$/, ''))
+            .funcType().returns(Ts.const(Ts.ptr(T.cc(decl.name)))).$().$()
+    })
+    const lastIndex = modifiers.at(-1)![1]
+    decls.splice(lastIndex + 1, 0, apiStruct.$())
+    return decls
 }
 
 function aliasTypes(decls: lw.LWDeclaration[]): [lw.LWDeclaration[], lw.LWDeclaration[]] {

@@ -81,7 +81,7 @@ function generateModifier(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) 
   const returnType = ctx.useCApi(method.returnType).reference();
   const params: [string, LWType][] = method.parameters.map(it =>
     [it.name, Ts.const(Ts.ptr(ctx.useCApi(it.type).reference()))])
-  return Builders.struct(cApiName('GlobalScopeModifier'))
+  return Builders.struct(cApiName('modifier.GlobalScopeModifier'))
     .field(method.name)
       .funcType().parameters(params).returns(returnType).$().$().$()
 }
@@ -94,7 +94,7 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
       .decl(it.name, ctx.useCApi(it.type).reference())
         .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$().$())
   const modulePrefix = generatorConfiguration().moduleName.toUpperCase();
-  return Builders.function(nativeName('impl_GlobalScope_' + method.name))
+  return Builders.function(nativeName('modifier.impl_GlobalScope_' + method.name))
     .param('thisArray').type(Ts.prim.serializerBuffer).$()
     .param('thisLength').type(Ts.prim.i32).$()
     .returns(returnType)

@@ -154,11 +154,14 @@ function dumpCLike(decls: LWDeclaration[], moduleName: string): Map<TargetFile, 
     const cc = [
         readLangTemplate('api_impl_prologue.cc', Language.CPP),
         libraryCcDeclaration({removeCopyright: true}),
+        readTemplate("api_getter.cc"),
         processNPrintCXX(native)
         ].join('\n')
         .replaceAll("%INTEROP_MODULE_NAME%", `${moduleName.toUpperCase()}NativeModule`)
         .replaceAll("%API_HEADER_PATH%", `${moduleName.toLowerCase()}.h`)
-        .replaceAll("%CALLBACK_KINDS%", "\n")///
+        .replaceAll("%API_KIND%", `OH_${moduleName}_APIKind::OH_${moduleName}_API_KIND`)
+        .replaceAll("%API_NAME%", `OH_${moduleName}_API`)
+        .replaceAll("%CALLBACK_KINDS%", 'typedef enum CallbackKind {\n} CallbackKind;') ///
         .replaceAll("%LIBRARY_NAME%", moduleName.toUpperCase())
     return new Map([
         [new TargetFile(`${moduleName.toLowerCase()}.h`), h],
