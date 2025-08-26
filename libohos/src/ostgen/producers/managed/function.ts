@@ -87,13 +87,12 @@ function generateModifier(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) 
 }
 
 function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
+  const convertor = new ArgConvertor(ctx, E.v('deserializer'), true)
   const returnType = ctx.useCApi(method.returnType).reference();
-  const argReads = method.parameters.map(it => {
-    const convertor = new ArgConvertor(ctx, E.v('deserializer'), true)
-    return Builders.stmt()
+  const argReads = method.parameters.map(it =>
+    Builders.stmt()
       .decl(it.name, ctx.useCApi(it.type).reference())
-        .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$().$()
-  })
+        .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$().$())
   const modulePrefix = generatorConfiguration().moduleName.toUpperCase();
   return Builders.function(nativeName('impl_GlobalScope_' + method.name))
     .param('thisArray').type(Ts.prim.serializerBuffer).$()

@@ -41,16 +41,17 @@ export function mergeStructs(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
             result.push(records[0])
             return
         }
-        const tmp = D.class(name, [], [])
+        const fields: lw.StructureDeclaration['members'] = []
+        const methods: lw.FunctionDeclaration[] = []
         records.forEach(rec => {
             if (rec.kind === lw.LWKind.ClassDeclaration) {
-                tmp.fields.push(...rec.fields)
-                tmp.methods.push(...rec.methods)
+                fields.push(...rec.fields)
+                methods.push(...rec.methods)
             } else {
-                tmp.fields.push(...rec.members)
+                fields.push(...rec.members)
             }
         })
-        result.push(tmp)
+        result.push(methods.length ? D.class(name, fields, methods) : D.struct(name, fields))
     })
     return result
 }
