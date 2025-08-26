@@ -33,6 +33,11 @@ export const HookMethodSchema = D.object({
     replaceImplementation: D.boolean()
 })
 
+export const TransformOnSerializeSchema = D.object({
+    from: D.string(),
+    to: D.string(),
+})
+
 export type ModuleConfiguration = ConfigTypeInfer<typeof ModuleConfigurationSchema>
 
 export const CoreConfigurationSchema = D.object({
@@ -41,6 +46,7 @@ export const CoreConfigurationSchema = D.object({
     LibraryPrefix: D.string(),
     OptionalPrefix: D.string(),
 
+    transformOnSerialize: D.array(TransformOnSerializeSchema),
     rootComponents: T.stringArray(),
     standaloneComponents: T.stringArray(),
     parameterized: T.stringArray(),
@@ -67,6 +73,7 @@ export const defaultCoreConfiguration: CoreConfiguration = {
     LibraryPrefix: "",
     OptionalPrefix: "",
 
+    transformOnSerialize: [],
     rootComponents: [],
     standaloneComponents: [],
     parameterized: [],

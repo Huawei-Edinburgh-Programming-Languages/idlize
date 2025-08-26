@@ -28,6 +28,7 @@ import {
     NativeModuleType,
     inplaceGenerics,
     inplaceNullsAsUndefined,
+    inplaceTransformOnSerializeFromConfig,
 } from "@idlizer/core"
 import {
     linearizeNamespaceMembers,
@@ -118,6 +119,7 @@ if (options.idl2peer) {
     }
 
     initLibraryName(idlLibrary)
+    idlLibrary.files.forEach(inplaceTransformOnSerializeFromConfig)
     idlLibrary.files.forEach(inplaceNullsAsUndefined)
     idlLibrary.files.forEach(file => inplaceGenerics(file, idlLibrary))
     fillSyntheticDeclarations(idlLibrary)

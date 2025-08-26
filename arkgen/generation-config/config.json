@@ -429,6 +429,12 @@
         "ohos.arkui.uiExtension.AvoidAreaInfo",
         "ohos.arkui.uiExtension.WindowProxyProperties"
     ],
+    "transformOnSerialize": [
+        {
+            "from": "ohos.base.BusinessError",
+            "to": "arkui.component.idlize.BusinessErrorInterface"
+        }
+    ],
     "forceCallback": {
         "EditMenuOptions": [],
         "XComponentController": [
@@ -629,7 +635,6 @@
             "RectShape",
             "EllipseShape",
             "CircleShape",
-            "BusinessError",
             "Error",
             "ErrorCallback",
             "getRectangleById",
