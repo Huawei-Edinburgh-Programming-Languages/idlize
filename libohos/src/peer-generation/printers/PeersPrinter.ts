@@ -207,15 +207,15 @@ function makeDeserializedReturn(library: PeerLibrary, writer: LanguageWriter, re
     )
 
     const returnConvertor = library.typeConvertor(returnValName, returnType)
-    const returnResultValName = "returnResult"
+    const returnResult = "returnResult"
     return [
         returnConvertor.convertorDeserialize(
-            'buffer',
+            `${returnResult}Buf`,
             deserializerName,
-            (expr) => writer.makeAssign(returnResultValName, returnType, expr, true),
+            (expr) => writer.makeAssign(returnResult, returnType, expr, true),
             writer
         ),
-        writer.makeReturn(writer.makeString(returnResultValName))
+        writer.makeReturn(writer.makeString(returnResult))
     ]
 }
 

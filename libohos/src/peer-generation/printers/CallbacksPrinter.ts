@@ -185,8 +185,8 @@ class DeserializeCallbacksVisitor {
             signature = new NamedMethodSignature(idl.IDLVoidType, [idl.createReferenceType(`DeserializerBase`)], [`thisDeserializer`])
         }
         this.writer.writeFunctionImplementation(`deserializeAndCall${callback.name}`, signature, writer => {
-            const resourceIdName = `_resourceId`
-            const callName = `_call`
+            const resourceIdName = `resourceIdValue`
+            const callName = `caller`
             if (writer.language === Language.CPP) {
                 writer.writeStatement(writer.makeAssign(`thisDeserializer`, idl.createReferenceType(`DeserializerBase`),
                     writer.makeClassInit(idl.createReferenceType('DeserializerBase'), [writer.makeString('thisArray'), writer.makeString('thisLength')]),
@@ -220,7 +220,7 @@ class DeserializeCallbacksVisitor {
             const argsNames = []
             for (const param of callback.parameters) {
                 const convertor = this.library.typeConvertor(param.name, param.type!, param.isOptional)
-                writer.writeStatement(convertor.convertorDeserialize(`${param.name}TmpBuf`, `thisDeserializer`, (expr) => {
+                writer.writeStatement(convertor.convertorDeserialize(`${param.name}Buf`, `thisDeserializer`, (expr) => {
                     const maybeOptionalType = idl.maybeOptional(param.type!, param.isOptional)
                     return writer.makeAssign(param.name, maybeOptionalType, expr, true, false)
                 }, writer))
@@ -280,7 +280,7 @@ class DeserializeCallbacksVisitor {
                 const argsNames = []
                 for (const param of callback.parameters) {
                     const convertor = this.library.typeConvertor(param.name, param.type!, param.isOptional)
-                    writer.writeStatement(convertor.convertorDeserialize(`${param.name}TmpBuf`, `thisDeserializer`, (expr) => {
+                    writer.writeStatement(convertor.convertorDeserialize(`${param.name}Buf`, `thisDeserializer`, (expr) => {
                         const maybeOptionalType = idl.maybeOptional(param.type!, param.isOptional)
                         return writer.makeAssign(param.name, maybeOptionalType, expr, true, false)
                     }, writer))

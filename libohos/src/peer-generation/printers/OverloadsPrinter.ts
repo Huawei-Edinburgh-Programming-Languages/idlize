@@ -402,7 +402,7 @@ export class OverloadsPrinter {
     public printPeerCallAndReturn(peer: string, collapsedMethod: Method, peerMethod: PeerMethod) {
         const argsNames = peerMethod.argConvertors(this.library).map((conv, index) => {
             const argName = collapsedMethod.signature.argName(index)
-            const castedArgName = `${(peerMethod.method.signature as NamedMethodSignature).argsNames[index]}_casted`
+            const castedArgName = `${(peerMethod.method.signature as NamedMethodSignature).argsNames[index]}Casted`
             const castedType = idl.maybeOptional(peerMethod.method.signature.args[index], peerMethod.method.signature.isArgOptional(index))
             if (this.printer.language == Language.CJ) {
                 if (idl.isOptionalType(collapsedMethod.signature.args[index])) {
@@ -424,7 +424,7 @@ export class OverloadsPrinter {
         const receiver = isStatic
             ? peer
             : this.isComponent ? `this.getPeer()` : `this`
-        const namePostifx = this.isComponent ? "Attribute" : `${this.posfix}_serialize`
+        const namePostifx = this.isComponent ? "Attribute" : `${this.posfix}Serialize`
         const methodName = `${peerMethod.sig.name}${namePostifx}`
         if (collapsedMethod.signature.returnType === idl.IDLThisType) {
             if (this.printer.language == Language.CJ) {

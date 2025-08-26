@@ -659,8 +659,8 @@ export class TupleConvertor extends AggregateConvertor {
     convertorSerialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
         const stmts: LanguageStatement[] = this.memberConvertors.flatMap((it, index) => {
             return [
-                printer.makeAssign(`${value}_${index}`, undefined, printer.makeTupleAccess(value, index), true),
-                it.convertorSerialize(param, `${value}_${index}`, printer)
+                printer.makeAssign(`${value}${index}`, undefined, printer.makeTupleAccess(value, index), true),
+                it.convertorSerialize(param, `${value}${index}`, printer)
             ]
         })
         return printer.makeBlock(stmts, false)
@@ -759,7 +759,7 @@ export class ArrayConvertor extends BaseArgConvertor { //
         )
 
         const loopCounter = `${value}CounterI`
-        const elementName = `${value}TmpElement`
+        const elementName = `${value}Element`
         statements.push(printer.makeLoop(loopCounter, valueLength, printer.makeBlock([
             printer.makeAssign(elementName,
                 this.elementType,
@@ -771,14 +771,14 @@ export class ArrayConvertor extends BaseArgConvertor { //
     }
     convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
         const lengthBuffer = `${bufferName}Length`
-        const counterBuffer = `${bufferName}BufCounterI`
+        const counterBuffer = `${bufferName}CounterI`
         const statements: LanguageStatement[] = []
         const arrayType = this.idlType
         statements.push(writer.makeAssign(lengthBuffer, idl.IDLI32Type, writer.makeString(`${deserializerName}.readInt32()`), true))
         statements.push(writer.makeAssign(bufferName, arrayType, writer.makeArrayInit(this.type, lengthBuffer), true, false))
         statements.push(writer.makeArrayResize(bufferName, writer.getNodeName(arrayType), lengthBuffer, deserializerName))
         statements.push(writer.makeLoop(counterBuffer, lengthBuffer,
-            this.elementConvertor.convertorDeserialize(`${bufferName}TempBuf`, deserializerName, (expr) => {
+            this.elementConvertor.convertorDeserialize(`${bufferName}Tmp`, deserializerName, (expr) => {
                 return writer.makeAssign(writer.makeArrayAccess(bufferName, counterBuffer).asString(), undefined, expr, false)
             }, writer)))
         statements.push(assigneer(writer.makeString(bufferName)))
@@ -827,9 +827,9 @@ export class MapConvertor extends BaseArgConvertor {
         const mapSize = printer.makeMapSize(value)
         return printer.makeBlock([
             printer.makeStatement(printer.makeMethodCall(`${param}Serializer`, "writeInt32", [printer.makeString(printer.castToInt(mapSize.asString(), 32))])),
-            printer.makeMapForEach(value, `${value}KeyVar`, `${value}ValueVar`, [
-                this.keyConvertor.convertorSerialize(param, `${value}KeyVar`, printer),
-                this.valueConvertor.convertorSerialize(param, `${value}ValueVar`, printer)
+            printer.makeMapForEach(value, `${value}Key`, `${value}Value`, [
+                this.keyConvertor.convertorSerialize(param, `${value}Key`, printer),
+                this.valueConvertor.convertorSerialize(param, `${value}Value`, printer)
             ])
         ], false)
     }
@@ -837,10 +837,10 @@ export class MapConvertor extends BaseArgConvertor {
         const mapTypeName = writer.getNodeName(this.idlType)
         const keyType = this.keyType
         const valueType = this.valueType
-        const sizeBuffer = `${bufferName}SizeVar`
-        const keyBuffer = `${bufferName}KeyVar`
-        const valueBuffer = `${bufferName}ValueVar`
-        const counterBuffer = `${bufferName}IVar`
+        const sizeBuffer = `${bufferName}Size`
+        const keyBuffer = `${bufferName}Key`
+        const valueBuffer = `${bufferName}Value`
+        const counterBuffer = `${bufferName}CounterI`
         const keyAccessor = this.getObjectAccessor(writer.language, bufferName, {index: counterBuffer, field: "keys"})
         const valueAccessor = this.getObjectAccessor(writer.language, bufferName, {index: counterBuffer, field: "values"})
         return new BlockStatement([
@@ -849,10 +849,10 @@ export class MapConvertor extends BaseArgConvertor {
             writer.makeAssign(bufferName, this.idlType, writer.makeMapInit(this.idlType), true, false),
             writer.makeMapResize(mapTypeName, keyType, valueType, bufferName, sizeBuffer, deserializerName),
             writer.makeLoop(counterBuffer, sizeBuffer, new BlockStatement([
-                this.keyConvertor.convertorDeserialize(`${keyBuffer}TempBuf`, deserializerName, (expr) => {
+                this.keyConvertor.convertorDeserialize(`${keyBuffer}Tmp`, deserializerName, (expr) => {
                     return writer.makeAssign(keyBuffer, keyType, expr, true, true)
                 }, writer),
-                this.valueConvertor.convertorDeserialize(`${valueBuffer}TempBuf`, deserializerName, (expr) => {
+                this.valueConvertor.convertorDeserialize(`${valueBuffer}Tmp`, deserializerName, (expr) => {
                     return writer.makeAssign(valueBuffer, valueType, expr, true, true)
                 }, writer),
                 writer.makeMapInsert(keyAccessor, keyBuffer, valueAccessor, valueBuffer),
@@ -1024,7 +1024,7 @@ export class OptionConvertor extends BaseArgConvertor {
         throw new Error("Must never be used")
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
-        const valueValue = `${value}TmpValue`.replaceAll('.', '_')
+        const valueValue = `${value}Tmp`
         return printer.makeCondition(
             printer.makeDefinedCheck(value, this.type),
             new BlockStatement([
@@ -1131,7 +1131,7 @@ export class UnionConvertor extends BaseArgConvertor {
             const expr = writer.makeString(`${selectorBuffer} == ${writer.castToInt(index.toString(), 8)}`)
             const stmt = new BlockStatement([
                 writer.makeSetUnionSelector(bufferName, `${index}`),
-                it.convertorDeserialize(`${bufferName}BufU`, deserializerName, (expr) => {
+                it.convertorDeserialize(`${bufferName}Tmp`, deserializerName, (expr) => {
                     if (writer.language == Language.CJ || writer.language == Language.KOTLIN) {
                         return writer.makeAssign(receiver, undefined, writer.makeFunctionCall(writer.getNodeName(this.type), [expr]), false)
                     } else {
@@ -1338,12 +1338,12 @@ export class CallbackConvertor extends BaseArgConvertor {
             return assigneer(writer.makeString(`{${resourceReadExpr.asString()}, ${callReadExpr.asString()}, ${callSyncReadExpr.asString()}}`))
         }
 
-        const resourceName = bufferName + "BufResource"
-        const callName = bufferName + "BufCall"
-        const callSyncName = bufferName + 'BufCallSync'
-        const argsSerializer = bufferName + "BufArgs"
-        const continuationValueName = bufferName + "BufContinuationValue"
-        const continuationCallbackName = bufferName + "BufContinuationCallback"
+        const resourceName = bufferName + "Resource"
+        const callName = bufferName + "Call"
+        const callSyncName = bufferName + 'CallSync'
+        const argsSerializer = bufferName + "Args"
+        const continuationValueName = bufferName + "ContinuationValue"
+        const continuationCallbackName = bufferName + "ContinuationCallback"
         const statements: LanguageStatement[] = []
         statements.push(writer.makeAssign(
             resourceName,

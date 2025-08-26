@@ -95,7 +95,7 @@ class NativeModuleRecorderVisitor {
 
                     const fieldName = `${method.sig.name}_${argConvertors[i].param}`
                     printer.writeStatement(
-                        argConvertors[i].convertorDeserialize(`${fieldName}TmpBuf`, `thisDeserializer`, (expr) => {
+                        argConvertors[i].convertorDeserialize(`${fieldName}Buf`, `thisDeserializer`, (expr) => {
                             return printer.makeAssign(`node.${fieldName}`, undefined, expr, false)
                         }, printer)
                     )

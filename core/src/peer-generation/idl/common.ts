@@ -15,7 +15,7 @@
 
 import * as idl from "../../idl"
 import { Language } from "../../Language"
-import { capitalize } from "../../util"
+import { capitalize, Casing, changeCase } from "../../util"
 
 export function generateSyntheticIdlNodeName(type: idl.IDLType): string {
     if (idl.isPrimitiveType(type)) return capitalize(type.name)
@@ -89,7 +89,8 @@ export function generateSyntheticFunctionParameterName(parameter:idl.IDLParamete
 export function generateSyntheticFunctionName(parameters: idl.IDLParameter[], returnType: idl.IDLType, isAsync: boolean = false): string {
     let prefix = isAsync ? "AsyncCallback" : "Callback"
     const names = parameters.map(generateSyntheticFunctionParameterName).concat(generateSyntheticIdlNodeName(returnType))
-    return `${prefix}_${names.join("_").replaceAll(".", "_")}`
+    const funName = changeCase(names.join('_').replaceAll(".", "_"), Casing.PascalCase)
+    return `${prefix}${funName}`
 }
 
 export function isImportAttr(decl: idl.IDLNode): boolean {

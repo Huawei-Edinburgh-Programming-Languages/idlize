@@ -166,27 +166,27 @@ class PeerFileVisitor {
                 writer.writeStatement(
                     writer.makeAssign(peerId, undefined, writer.makeString('PeerNode.nextId()'), true)
                 )
-                const _peerPtr = '_peerPtr'
+                const newPeerPtr = 'newPeerPtr'
                 writer.writeStatement(
-                    writer.makeAssign(_peerPtr, undefined, writer.makeNativeCall(
+                    writer.makeAssign(newPeerPtr, undefined, writer.makeNativeCall(
                         NativeModule.Generated,
                         `_${peer.componentName}_${createConstructPeerMethod(peer).sig.name}`,
                         [writer.makeString(peerId), writer.makeString(signature.argName(1))]
                     ), true)
                 )
 
-                const _peer = '_peer'
+                const newPeer = 'newPeer'
                 writer.writeStatement(
-                    writer.makeAssign(_peer, undefined,
+                    writer.makeAssign(newPeer, undefined,
                         writer.makeNewObject(peerClass, [
-                            writer.makeString(_peerPtr),
+                            writer.makeString(newPeerPtr),
                             writer.makeString(peerId),
                             writer.makeString(`"${peer.componentName}"`),
                             writer.makeString('flags')]),
                         true)
                 )
-                writer.writeMethodCall(signature.argName(0), 'setPeer', [_peer], true)
-                writer.writeStatement(writer.makeReturn(writer.makeString(_peer)))
+                writer.writeMethodCall(signature.argName(0), 'setPeer', [newPeer], true)
+                writer.writeStatement(writer.makeReturn(writer.makeString(newPeer)))
             })
         })
     }

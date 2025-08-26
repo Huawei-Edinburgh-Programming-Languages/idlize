@@ -142,7 +142,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
     }
 
     printCollapsedCtors(clazz: MaterializedClass, superClassName?: string) {
-        const ctorPostfix = `_${clazz.className.toLowerCase()}`
+        const ctorPostfix = `${capitalize(clazz.className)}`
         const ctors = clazz.ctors.map(ctor => ctor.withReturnType(idl.IDLPointerType))
         const collapsedCtor = collapseSameNamedMethods(ctors.map(it => it.method), undefined, undefined)
         this.printCollapsedCtor(clazz, collapsedCtor, ctorPostfix, superClassName)
@@ -150,7 +150,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         this.overloadsPrinter.printGroupedComponentOverloads(clazz.getImplementationName(), ctors)
         this.overloadsPrinter.setPostfix()
         for (const ctor of clazz.ctors) {
-            this.printMethod(ctor, `${ctorPostfix}_serialize`, idl.IDLPointerType)
+            this.printMethod(ctor, `${ctorPostfix}Serialize`, idl.IDLPointerType)
         }
     }
 
@@ -295,13 +295,13 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
 
     printMethods(clazz: MaterializedClass) {
         clazz.methods.filter(m => !m.method.modifiers?.includes(MethodModifier.STATIC)).forEach(method => {
-            this.printMethod(method, "_serialize")
+            this.printMethod(method, "Serialize")
         })
     }
 
     printStaticMethods(clazz: MaterializedClass) {
         clazz.methods.filter(m => m.method.modifiers?.includes(MethodModifier.STATIC)).forEach(method => {
-            this.printMethod(method, "_serialize")
+            this.printMethod(method, "Serialize")
         })
     }
     printMethod(method: MaterializedMethod, postfix: string = "", returnType?: idl.IDLType) {

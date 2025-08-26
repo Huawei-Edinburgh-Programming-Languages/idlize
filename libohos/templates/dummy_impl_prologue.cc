@@ -137,7 +137,7 @@ void EmitOnClick(Ark_NativePointer node, Ark_ClickEvent event) {
     auto frameNode = AsNode(node);
     frameNode->callClickEvent(event);
 }
-void RegisterOnClick(Ark_NativePointer node, const Callback_ClickEvent_Void* event) {
+void RegisterOnClick(Ark_NativePointer node, const CallbackClickEventVoid* event) {
     auto frameNode = AsNode(node);
     auto callback = *event;
     callback.resource.hold(callback.resource.resourceId);
@@ -149,7 +149,7 @@ void RegisterOnClick(Ark_NativePointer node, const Callback_ClickEvent_Void* eve
     frameNode->setClickEvent(std::move(onEvent));
 }
 
-void RegisterDrawModifierCallback(Ark_DrawModifier peer, const Callback_DrawContext_Void* event, int type) {
+void RegisterDrawModifierCallback(Ark_DrawModifier peer, const CallbackDrawContextVoid* event, int type) {
     std::shared_ptr<DrawModifierCaller> modifier = (DrawModifiersQueue.find(peer) != DrawModifiersQueue.end())
         ? DrawModifiersQueue[peer]
         : std::make_shared<DrawModifierCaller>();
@@ -831,7 +831,7 @@ void ShowCrash(Ark_CharPtr message) {}
 namespace OHOS::Ace::NG::GeneratedModifier {
     namespace CommonMethodModifier {
         void SetOnClick0Impl(Ark_NativePointer node,
-                      const Opt_Callback_ClickEvent_Void* event)
+                      const Opt_CallbackClickEventVoid* event)
     {
         RegisterOnClick(node, &event->value);
         if (!needGroupedLog(1)) {
@@ -843,7 +843,7 @@ namespace OHOS::Ace::NG::GeneratedModifier {
         appendGroupedLog(1, out);
     }
     void SetOnClick1Impl(Ark_NativePointer node,
-                      const Opt_Callback_ClickEvent_Void* event,
+                      const Opt_CallbackClickEventVoid* event,
                       const Opt_Number* distanceThreshold)
     {
         RegisterOnClick(node, &event->value);
@@ -858,7 +858,7 @@ namespace OHOS::Ace::NG::GeneratedModifier {
         appendGroupedLog(1, out);
     }
     void SetOnClickImpl(Ark_NativePointer node,
-        const Callback_ClickEvent_Void* event,
+        const CallbackClickEventVoid* event,
         const Ark_Number* distanceThreshold)
     {
         RegisterOnClick(node, event);
@@ -1015,7 +1015,7 @@ namespace OHOS::Ace::NG::GeneratedModifier {
             appendGroupedLog(1, out);
         }
         void SetDrawBehind_callbackImpl(Ark_DrawModifier peer,
-                                        const Callback_DrawContext_Void* drawBehind_callback)
+                                        const CallbackDrawContextVoid* drawBehind_callback)
         {
             RegisterDrawModifierCallback(peer, drawBehind_callback, DrawBehind);
             if (!needGroupedLog(1)) {
@@ -1027,7 +1027,7 @@ namespace OHOS::Ace::NG::GeneratedModifier {
             appendGroupedLog(1, out);
         }
         void SetDrawContent_callbackImpl(Ark_DrawModifier peer,
-                                        const Callback_DrawContext_Void* drawContent_callback)
+                                        const CallbackDrawContextVoid* drawContent_callback)
         {
             RegisterDrawModifierCallback(peer, drawContent_callback, DrawContent);
             if (!needGroupedLog(1)) {
@@ -1039,7 +1039,7 @@ namespace OHOS::Ace::NG::GeneratedModifier {
             appendGroupedLog(1, out);
         }
         void SetDrawFront_callbackImpl(Ark_DrawModifier peer,
-                                    const Callback_DrawContext_Void* drawFront_callback)
+                                    const CallbackDrawContextVoid* drawFront_callback)
         {
             RegisterDrawModifierCallback(peer, drawFront_callback, DrawFront);
             if (!needGroupedLog(1)) {

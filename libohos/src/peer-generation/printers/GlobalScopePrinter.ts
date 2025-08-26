@@ -100,7 +100,7 @@ export function printGlobal(library: PeerLibrary): PrinterResult[] {
                     peerMethod,
                     true,
                     false,
-                    '_serialize',
+                    'Serialize',
                     '',
                     peerMethod.returnType,
                 )

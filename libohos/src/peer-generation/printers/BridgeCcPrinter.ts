@@ -177,7 +177,7 @@ export class BridgeCcVisitor {
                     deserializerCreated = true
                 }
                 let result = `${it.param}ValueTemp`
-                this.generatedApi.writeStatement(it.convertorDeserialize(`${result}TmpBuf`, `thisDeserializer`, (expr) => {
+                this.generatedApi.writeStatement(it.convertorDeserialize(`${result}Buf`, `thisDeserializer`, (expr) => {
                     return new ExpressionStatement(this.generatedApi.makeString(
                         `${this.generatedApi.getNodeName(it.nativeType())} ${result} = ${expr.asString()};`
                     ))
