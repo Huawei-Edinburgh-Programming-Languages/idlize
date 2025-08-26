@@ -39,6 +39,7 @@ import {
     createGeneratedNativeModulePrinter,
     printArkTSTypeChecker,
     createInterfacePrinter,
+    TargetFile,
 } from '@idlizer/libohos'
 import {
     printFiles,
@@ -98,8 +99,12 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, useOst: b
             ...spread(!useOst && peerLibrary.language === Language.ARKTS, printArkTSTypeChecker),
         ]
     )
-    if (useOst)
-        printedFiles = mergeOutputFiles(printedFiles, printOstFiles(peerLibrary))
+    let nativeFiles: Map<TargetFile, string> | undefined
+    if (useOst) {
+        const [tsFiles, cFiles] = printOstFiles(peerLibrary)
+        printedFiles = mergeOutputFiles(printedFiles, tsFiles)
+        nativeFiles = cFiles
+    }
     const installed = installFiles(ohos.managedDir(), printedFiles)
 
     // managed-index
@@ -113,8 +118,8 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, useOst: b
     // NATIVE
     /////////////////////////////////////////
 
-    const native = generateNativeOhos(peerLibrary)
-    for (const [ file, content ] of native) {
+    nativeFiles ??= generateNativeOhos(peerLibrary)
+    for (const [ file, content ] of nativeFiles) {
         writeIntegratedFile(ohos.native(file), content)
     }
 

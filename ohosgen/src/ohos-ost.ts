@@ -13,8 +13,10 @@
  * limitations under the License.
  */
 
+import * as fs from 'fs'
+import * as path from 'path'
 import * as idl from "@idlizer/core/idl"
-import { generatorConfiguration, Language, PeerLibrary } from "@idlizer/core"
+import { Language, PeerLibrary } from "@idlizer/core"
 import {
     LWDeclaration,
     MakeSelector,
@@ -34,10 +36,16 @@ import {
     roles,
     processNPrintTS,
     createProducer,
-    mapName
+    mapName,
+    TargetFile,
+    readLangTemplate,
+    getInteropRootPath,
+    peerGeneratorConfiguration,
+    readTemplate,
+    libraryCcDeclaration
 } from "@idlizer/libohos"
 
-export function printOstFiles(peerLibrary: PeerLibrary): Map<string, OutputFile> {
+export function printOstFiles(peerLibrary: PeerLibrary): [Map<string, OutputFile>, Map<TargetFile, string>] {
     const declarations = generateOstDeclarations(peerLibrary)
     const SPECIAL_PACKAGES = [
         [MANAGED_PREFIX, 'engine'].join('.')
@@ -45,7 +53,7 @@ export function printOstFiles(peerLibrary: PeerLibrary): Map<string, OutputFile>
     const knownPackages = peerLibrary.files
         .map(file => file.packageClause.length ? file.packageClause : [peerLibrary.name.toLowerCase()])
         .map(clause => [MANAGED_PREFIX, ...clause].join('.'))
-    return printOstDeclarations(declarations, peerLibrary.language, new Set(knownPackages.concat(SPECIAL_PACKAGES)))
+    return printOstDeclarations(declarations, peerLibrary, new Set(knownPackages.concat(SPECIAL_PACKAGES)))
 }
 
 function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
@@ -82,7 +90,9 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
 }
 
 
-function printOstDeclarations(decls: LWDeclaration[], language: Language, packages: Set<string>): Map<string, OutputFile> {
+function printOstDeclarations(decls: LWDeclaration[], peerLibrary: PeerLibrary, packages: Set<string>)
+    : [Map<string, OutputFile>, Map<TargetFile, string>]
+{
     const selectors = [ isManaged, isCApi, isNative ]
     const buckets = selectors.map(predicate => [predicate, [] as LWDeclaration[]] as const)
 
@@ -98,9 +108,9 @@ function printOstDeclarations(decls: LWDeclaration[], language: Language, packag
     })
     const [ managed, cApi, native ] = buckets.map(e => e[1])
 
-    const tsFiles = dumpTsLike(managed, language, packages)
-    const cFiles = dumpCLike([...cApi, ...native])
-    return tsFiles /// ...cFiles, ...nativeFiles])
+    const tsFiles = dumpTsLike(managed, peerLibrary.language, packages)
+    const cFiles = dumpCLike([...cApi, ...native], peerLibrary.name)
+    return [tsFiles, cFiles]
 }
 
 function dumpTsLike(decls: LWDeclaration[], language: Language, packages: Set<string>): Map<string, OutputFile> {
@@ -123,10 +133,37 @@ function dumpTsLike(decls: LWDeclaration[], language: Language, packages: Set<st
     return result
 }
 
-function dumpCLike(decls: LWDeclaration[]) {
+function dumpCLike(decls: LWDeclaration[], moduleName: string): Map<TargetFile, string> {
     const [capi, native] = lowLevelLike.postprocess(decls)
-    console.log("===================== C-API =====================")
-    console.log(processNPrintCXX(capi))
-    console.log("==================== NATIVE ====================")
-    console.log(processNPrintCXX(native))
+
+    ///copied from OhosNativeVisitor
+    const interopRootPath = getInteropRootPath()
+    const interopTypesPath = path.resolve(interopRootPath, 'src', 'cpp', 'interop-types.h')
+    const interopTypesContent = fs.readFileSync(interopTypesPath, 'utf-8')
+    const h = [
+        readLangTemplate('ohos_api_prologue.h', Language.CPP),
+        readTemplate('any_api.h'),
+        readTemplate('generic_service_api.h'),
+        processNPrintCXX(capi),
+        readLangTemplate('ohos_api_epilogue.h', Language.CPP)
+        ].join('\n')
+        .replaceAll("%INTEROP_TYPES_HEADER", interopTypesContent)
+        .replaceAll("%INCLUDE_GUARD_DEFINE%", `OH_${moduleName.toUpperCase()}_H`)
+        .replaceAll("%LIBRARY_NAME%", moduleName.toUpperCase())
+        .replaceAll("%API_KIND%", peerGeneratorConfiguration().ApiKind.toString())
+    const cc = [
+        readLangTemplate('api_impl_prologue.cc', Language.CPP),
+        libraryCcDeclaration({removeCopyright: true}),
+        processNPrintCXX(native)
+        ].join('\n')
+        .replaceAll("%INTEROP_MODULE_NAME%", `${moduleName.toUpperCase()}NativeModule`)
+        .replaceAll("%API_HEADER_PATH%", `${moduleName.toLowerCase()}.h`)
+        .replaceAll("%CALLBACK_KINDS%", "\n")///
+        .replaceAll("%LIBRARY_NAME%", moduleName.toUpperCase())
+    return new Map([
+        [new TargetFile(`${moduleName.toLowerCase()}.h`), h],
+        [new TargetFile(`${moduleName.toLowerCase()}.cc`), cc],
+        [new TargetFile(`${moduleName.toLowerCase()}Impl_temp.cc`), ''],
+        [new TargetFile(`${moduleName.toLowerCase()}ApiImpl_temp.cc`), ''],
+    ])
 }
