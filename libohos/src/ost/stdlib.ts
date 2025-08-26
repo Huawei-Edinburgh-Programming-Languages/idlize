@@ -47,6 +47,7 @@ const specialTypeNames = {
     reference: '@REF',
     pointer: '@PTR',
     tag: '@TAG',
+    struct: '@STRUCT',
 
     hole: '@UNDEFINED',
 
@@ -157,6 +158,7 @@ export const Ts = {
     ref: (type:LWType) => T.c(specialTypeNames.reference, type),
     ptr: (type:LWType) => T.c(specialTypeNames.pointer, type),
     const: (type:LWType) => T.c(specialTypeNames.constant, type),
+    struct: (type:LWType) => T.c(specialTypeNames.struct, type),
 
     union: (types: LWType[]) => T.c(specialTypeNames.union, ...types),
     intersection: (types: LWType[]) => T.c(specialTypeNames.intersection, ...types),

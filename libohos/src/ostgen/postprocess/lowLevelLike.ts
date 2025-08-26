@@ -267,6 +267,6 @@ function aliasTypes(decls: lw.LWDeclaration[]): [lw.LWDeclaration[], lw.LWDeclar
 function makeForwardDeclarations(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     return decls
         .filter(it => it.kind === lw.LWKind.StructureDeclaration)
-        .map(it => D.type(it.name, T.cc(it.name)) as lw.LWDeclaration)
+        .map(it => D.type(it.name, Ts.struct(T.cc(it.name))) as lw.LWDeclaration)
         .concat(decls)
 }
