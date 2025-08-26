@@ -1,6 +1,6 @@
 {
   "name": "@idlizer/runner",
-  "version": "2.1.9+devel",
+  "version": "2.1.10+devel",
   "description": "",
   "main": "lib/index.js",
   "bin": "lib/index.js",
@@ -13,8 +13,9 @@
   "keywords": [],
   "dependencies": {
     "@types/node": "^18.0.0",
-    "@idlizer/arkgen": "2.1.7+devel",
-    "@idlizer/etsgen": "2.1.7+devel",
+    "@idlizer/arkgen": "2.1.10+devel",
+    "@idlizer/core": "2.1.10+devel",
+    "@idlizer/etsgen": "2.1.10+devel",
     "commander": "^10.0.0"
   },
   "devDependencies": {
@@ -31,8 +32,8 @@
   "scripts": {
     "compile:self": "rollup -c",
     "compile": "npm run compile -C ../etsgen && npm run compile -C ../arkgen && npm run compile:self",
-    "prepare:sdk": "rimraf ../sdk-patched-arkts ../sdk-patched && npm run compile && node . sdk ../interface_sdk-js ../sdk-patched-arkts ../sdk-patched",
-    "absolute:sdk": "rimraf ../absolute-sdk-patched-arkts && npm run compile && node . absolute-sdk ../sdk-patched-arkts ../absolute-sdk-patched-arkts",
+    "prepare:sdk": "rimraf ../sdk-patched-arkts ../sdk-patched ../absolute-sdk-patched-arkts && npm run compile && node . sdk ../interface_sdk-js ../sdk-patched-arkts ../sdk-patched",
+    "absolute:sdk": "rimraf ../absolute-sdk-patched-arkts && npm run compile && node . m3-sdk ../sdk-patched-arkts ../absolute-sdk-patched-arkts",
     "compile:parallel": "npm run compile -C core"
   }
 }

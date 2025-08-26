@@ -13,49 +13,6 @@
  * limitations under the License.
  */
 
-import { toIDLFile } from "@idlizer/core"
-import { Command } from "commander"
-import { existsSync, mkdirSync, readFileSync } from "node:fs"
-import { resolve } from "node:path"
-import { solve } from "./algorithm"
-import { ADDITIONAL_CONFIG_DIR, AppConfigSchema, AppOptions, CONFIG_PATH, OUT_DIR } from "./shared"
-import { scan } from "./utils"
+import { scraper } from "./app";
 
-function prepare() {
-    if (!existsSync(OUT_DIR)) {
-        mkdirSync(OUT_DIR, { recursive: true })
-    }
-    if (!existsSync(ADDITIONAL_CONFIG_DIR)) {
-        mkdirSync(ADDITIONAL_CONFIG_DIR, { recursive: true })
-    }
-}
-
-function go(root:string, options:AppOptions) {
-    const configText = readFileSync(CONFIG_PATH, 'utf-8')
-    const configContent = JSON.parse(configText)
-    const config = AppConfigSchema.validate(configContent).unwrap()
-    prepare()
-
-    const input = scan(resolve(root))
-    const library = input.flatMap(source => {
-        try {
-            return [toIDLFile(source)[0]]
-        } catch (e) {
-            console.error('skipped', source)
-            return []
-        }
-    })
-
-    config.target.push(...options.target)
-    solve(root, library, config.target, config)
-}
-
-function main(args:string[]) {
-    new Command("@idlizer/scraper")
-        .argument('<input-directory>', 'Input directory')
-        .option('--target <target-names...>', 'Packages', [])
-        .option('--output <output>', 'Output directory', 'out')
-        .action(go)
-        .parse(args, { from: 'user' })
-}
-main(process.argv.slice(2))
+scraper(process.argv.slice(2))

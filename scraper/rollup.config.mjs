@@ -74,6 +74,7 @@ function createTarget(sourcePath, targetPath) {
 /** @type {import("rollup").RollupOptions} */
 export default [
     createTarget("./src/main.ts", "./build/lib/main.js"),
+    createTarget("./src/app.ts", "./build/lib/library.js"),
 ]
 
 function APACHE_LICENSE_HEADER() {
