@@ -90,11 +90,13 @@ export enum IDLExtendedAttributes {
     TypeAnnotations = "TypeAnnotations",
     TypeArguments = "TypeArguments",
     TypeParameters = "TypeParameters",
+    TypeParametersDefaults = "TypeParametersDefaults",
     VerbatimDts = "VerbatimDts",
     HandWrittenImplementation = "HandWrittenImplementation",
     ExtraMethod = "ExtraMethod",
     OverloadAlias = "OverloadAlias",
     OverloadPriority = "OverloadPriority",
+    TransformOnSerialize = "TransformOnSerialize",
 }
 
 export enum IDLAccessorAttribute {
@@ -668,6 +670,8 @@ export const IDLSerializerBuffer = createPrimitiveType('SerializerBuffer')
 export const IDLFunctionType = createPrimitiveType('Function')
 export const IDLCustomObjectType = createPrimitiveType('CustomObject')
 export const IDLInteropReturnBufferType = createPrimitiveType('InteropReturnBuffer')
+
+export const IDLNullTypeName = "idlize.stdlib.Null"
 
 export type IDLNodeInitializer = {
     extendedAttributes?: IDLExtendedAttribute[]
@@ -1525,16 +1529,22 @@ type PrintTypeOptions = {
 export function printType(type: IDLType | IDLInterface | undefined, options?:PrintTypeOptions): string {
     if (!type) throw new Error("Missing type")
     if (isInterface(type)) return type.name
-    if (isOptionalType(type)) return `(${printType(type.type)} or ${IDLUndefinedType.name})`
+    if (isOptionalType(type)) {
+        if (hasExtAttribute(type, IDLExtendedAttributes.UnionOnlyNull))
+            return `(${printType(type.type)} or ${IDLNullTypeName})`
+        else if (hasExtAttribute(type, IDLExtendedAttributes.UnionWithNull))
+            return `(${printType(type.type)} or ${IDLUndefinedType.name} or${IDLNullTypeName})`
+        else
+            return `(${printType(type.type)} or ${IDLUndefinedType.name})`
+    }
     if (isPrimitiveType(type)) return type.name
     if (isContainerType(type)) return `${type.containerKind}<${type.elementType.map(it => printType(it)).join(", ")}>`
     if (isReferenceType(type)) {
-        const extAttrs = type.extendedAttributes ? Array.from(type.extendedAttributes) : []
         if (type.typeArguments)
-            extAttrs.push({ name: IDLExtendedAttributes.TypeArguments, value: type.typeArguments.map(it=>printType(it)).join(",") })
-        if (!extAttrs.length)
+            updateExtAttribute(type, IDLExtendedAttributes.TypeArguments, type.typeArguments.map(it=>printType(it)).join(","))
+        if (!type.extendedAttributes?.length)
             return type.name;
-        let res = `[${quoteAttributeValues(extAttrs)}] ${type.name}`;
+        let res = `[${quoteAttributeValues(type.extendedAttributes)}] ${type.name}`;
         if (options?.bracketsAroundReferenceTypeWithExtAttrs)
             return `(${res})`;
         return res;
@@ -1641,6 +1651,7 @@ export const attributesToQuote = new Set([
     IDLExtendedAttributes.TraceKey,
     IDLExtendedAttributes.TypeArguments,
     IDLExtendedAttributes.TypeParameters,
+    IDLExtendedAttributes.TypeParametersDefaults,
 ])
 
 function quoteAttributeValues(attributes?: IDLExtendedAttribute[]): stringOrNone {
@@ -1849,6 +1860,18 @@ export function hasExtAttribute(node: IDLNode, attribute: IDLExtendedAttributes)
 
 export function getExtAttribute(node: IDLNode, name: IDLExtendedAttributes): stringOrNone {
     return node.extendedAttributes?.find(it => it.name === name)?.value
+}
+
+export function removeExtAttribute(node: IDLNode, name: IDLExtendedAttributes): void {
+    if (node.extendedAttributes) {
+        node.extendedAttributes = node.extendedAttributes.filter(it => it.name !== name)
+    }
+}
+
+export function updateExtAttribute(node: IDLNode, name: IDLExtendedAttributes, value: string | undefined) {
+    removeExtAttribute(node, name)
+    node.extendedAttributes ??= []
+    node.extendedAttributes.push({ name, value })
 }
 
 export function getVerbatimDts(node: IDLEntry): stringOrNone {

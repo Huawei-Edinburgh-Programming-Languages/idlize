@@ -37,11 +37,6 @@ import { ETSVisitorConfig } from "./config"
 import { NativeModule } from "@idlizer/libohos"
 
 const MaxSyntheticTypeLength = 60
-// must be moved to config!
-const TypeParameterMap: Map<string, Map<string, idl.IDLType>> = new Map([
-    ["DirectionalEdgesT", new Map([
-        ["T", idl.IDLNumberType]])],
-])
 
 class StatusRecord {
     constructor(
@@ -298,6 +293,7 @@ interface IDLSuperFile {
 interface ExtractTypeParameterInfo {
     set: Set<string>
     parameters: string[] | undefined,
+    defaults: idl.IDLType[] | undefined,
     attrs: idl.IDLExtendedAttribute[]
 }
 
@@ -642,14 +638,13 @@ class IDLVisitor extends arkts.AbstractVisitor {
             this.traceDeleted('DeletedDeclarations')
             return node
         }
-        const { set: paramsSet, parameters } = this.extractTypeParameters(func.typeParams)
+        const { set: paramsSet, attrs: typeParametersAttrs, parameters } = this.extractTypeParameters(func.typeParams)
         this.withTypeParamContext(paramsSet, () => this.contextual.suggestWithTypePrefix(func.id!.name, false, () => {
-            let extendedAttributes = this.traceAttrs()
+            let extendedAttributes = this.traceAttrs().concat(typeParametersAttrs)
             const annotations = this.extractAnnotations(node.annotations)
             if (annotations !== "") {
                 extendedAttributes.push({name: idl.IDLExtendedAttributes.Annotations, value: annotations})
             }
-
             if (func.isExtensionMethod) {
                 extendedAttributes.push({ name: idl.IDLExtendedAttributes.ExtensionMethod })
             }
@@ -770,9 +765,9 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 this.entries.push(this.serializeTupleType(declaration.typeAnnotation as arkts.ETSTuple)[0])
             })
         } else {
-            const { set: paramsSet, parameters } = this.extractTypeParameters(declaration.typeParams)
+            const { set: paramsSet, parameters, attrs } = this.extractTypeParameters(declaration.typeParams)
             this.withTypeParamContext(paramsSet, () => {
-                let extendedAttributes = this.traceAttrs()
+                let extendedAttributes = this.traceAttrs().concat(attrs)
                 this.entries.push(idl.createTypedef(
                     name,
                     this.serializeType(declaration.typeAnnotation),
@@ -936,54 +931,53 @@ class IDLVisitor extends arkts.AbstractVisitor {
             return declaration
         }
         const definition = declaration.definition!
-        const { set: paramsSet, parameters } = this.extractTypeParameters(definition.typeParams)
-        this.withReplacementContext(name, (replacementUsed) => {
-            this.withTypeParamContext(paramsSet, () => this.contextual.suggestWithTypePrefix(name, false, () => {
-                const inheritance: idl.IDLReferenceType[] = []
-                if (definition.super) {
-                    const sup = this.serializeType(definition.super)
-                    if (!idl.isReferenceType(sup)) {
+        const { set: paramsSet, parameters, attrs: typeParametersAttrs } = this.extractTypeParameters(definition.typeParams)
+        this.withTypeParamContext(paramsSet, () => this.contextual.suggestWithTypePrefix(name, false, () => {
+            const inheritance: idl.IDLReferenceType[] = []
+            if (definition.super) {
+                const sup = this.serializeType(definition.super)
+                if (!idl.isReferenceType(sup)) {
+                    throw new Error("Expected reference type")
+                }
+                sup.extendedAttributes ??= []
+                sup.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Extends })
+                inheritance.push(sup)
+            }
+            if (definition.implements.length) {
+                definition.implements.forEach(int => {
+                    const type = this.serializeType(int.expr)
+                    if (!idl.isReferenceType(type)) {
                         throw new Error("Expected reference type")
                     }
-                    sup.extendedAttributes ??= []
-                    sup.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Extends })
-                    inheritance.push(sup)
-                }
-                if (definition.implements.length) {
-                    definition.implements.forEach(int => {
-                        const type = this.serializeType(int.expr)
-                        if (!idl.isReferenceType(type)) {
-                            throw new Error("Expected reference type")
-                        }
-                        inheritance.push(type)
-                    })
-                }
+                    inheritance.push(type)
+                })
+            }
 
-                const attrs: idl.IDLExtendedAttribute[] = [
-                    ...this.traceAttrs(),
-                    { name: idl.IDLExtendedAttributes.Entity, value: idl.IDLEntity.Class }
-                ]
-                if (declaration.definition.modifierFlags & arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_ABSTRACT) {
-                    attrs.push({ name: idl.IDLExtendedAttributes.Abstract })
+            const attrs: idl.IDLExtendedAttribute[] = [
+                ...this.traceAttrs(),
+                { name: idl.IDLExtendedAttributes.Entity, value: idl.IDLEntity.Class },
+                ...typeParametersAttrs,
+            ]
+            if (declaration.definition.modifierFlags & arkts.Es2pandaModifierFlags.MODIFIER_FLAGS_ABSTRACT) {
+                attrs.push({ name: idl.IDLExtendedAttributes.Abstract })
+            }
+            const { properties, methods, constructors } = this.processBody(name, declaration.definition?.body)
+            this.entries.push(idl.createInterface(
+                name,
+                idl.IDLInterfaceSubkind.Class,
+                inheritance,
+                constructors, // ctors
+                undefined, // constants
+                properties,
+                methods,
+                [], // callables
+                parameters,
+                {
+                    fileName: this.fileName,
+                    extendedAttributes: attrs.length === 0 ? undefined : attrs
                 }
-                const { properties, methods, constructors } = this.processBody(name, declaration.definition?.body)
-                this.entries.push(idl.createInterface(
-                    name,
-                    idl.IDLInterfaceSubkind.Class,
-                    inheritance,
-                    constructors, // ctors
-                    undefined, // constants
-                    properties,
-                    methods,
-                    [], // callables
-                    replacementUsed ? undefined : parameters,
-                    {
-                        fileName: this.fileName,
-                        extendedAttributes: attrs.length === 0 ? undefined : attrs
-                    }
-                ))
-            }))
-        })
+            ))
+        }))
         return declaration
     }
 
@@ -1011,38 +1005,36 @@ class IDLVisitor extends arkts.AbstractVisitor {
             ))
             return declaration
         }
-        const { set: paramsSet, parameters } = this.extractTypeParameters(declaration.typeParams)
-        this.withReplacementContext(name, (replacementUsed) => {
-            this.withTypeParamContext(paramsSet, () => this.contextual.suggestWithTypePrefix(name, () => {
-                const inheritance: idl.IDLReferenceType[] = []
-                if (declaration.extends.length) {
-                    declaration.extends.forEach(int => {
-                        const type = this.serializeType(int.expr)
-                        if (!idl.isReferenceType(type)) {
-                            throw new Error("Expected reference type")
-                        }
-                        inheritance.push(type)
-                    })
-                }
-                const attrs: idl.IDLExtendedAttribute[] = this.traceAttrs()
-                const { properties, methods, constructors } = this.processBody(name, declaration.body?.getChildren())
-                this.entries.push(idl.createInterface(
-                    name,
-                    idl.IDLInterfaceSubkind.Interface,
-                    inheritance,
-                    constructors, // ctors
-                    undefined, // constants
-                    properties,
-                    methods,
-                    [], // callables
-                    replacementUsed ? undefined : parameters,
-                    {
-                        fileName: this.fileName,
-                        extendedAttributes: attrs.length === 0 ? undefined : attrs
+        const { set: paramsSet, parameters, attrs: typeParametersAttrs } = this.extractTypeParameters(declaration.typeParams)
+        this.withTypeParamContext(paramsSet, () => this.contextual.suggestWithTypePrefix(name, () => {
+            const inheritance: idl.IDLReferenceType[] = []
+            if (declaration.extends.length) {
+                declaration.extends.forEach(int => {
+                    const type = this.serializeType(int.expr)
+                    if (!idl.isReferenceType(type)) {
+                        throw new Error("Expected reference type")
                     }
-                ))
-            }))
-        })
+                    inheritance.push(type)
+                })
+            }
+            const attrs: idl.IDLExtendedAttribute[] = this.traceAttrs().concat(typeParametersAttrs)
+            const { properties, methods, constructors } = this.processBody(name, declaration.body?.getChildren())
+            this.entries.push(idl.createInterface(
+                name,
+                idl.IDLInterfaceSubkind.Interface,
+                inheritance,
+                constructors, // ctors
+                undefined, // constants
+                properties,
+                methods,
+                [], // callables
+                parameters,
+                {
+                    fileName: this.fileName,
+                    extendedAttributes: attrs.length === 0 ? undefined : attrs
+                }
+            ))
+        }))
         return declaration
     }
 
@@ -1090,11 +1082,12 @@ class IDLVisitor extends arkts.AbstractVisitor {
     }
 
     serializeMethod(method: arkts.MethodDefinition, parentName:string): idl.IDLMethod | idl.IDLConstructor {
-        const { set: paramsSet, parameters: typeParameters } = this.extractTypeParameters((method.value as arkts.FunctionExpression).function?.typeParams)
+        const { set: paramsSet, parameters: typeParameters, attrs: typeParametersAttrs } = this.extractTypeParameters((method.value as arkts.FunctionExpression).function?.typeParams)
         return this.withTypeParamContext(paramsSet, () => {
             let { methodName, parameters: arktsParameters, extendedAttributes } = this.processMethodLiteralParameters(method)
             let traceAttrs = this.traceAttrs()
             extendedAttributes.push(...traceAttrs)
+            extendedAttributes.push(...typeParametersAttrs)
             return this.contextual.extend(methodName, () => {
                 const key = parentName + '.' + methodName
                 if (this.config.Throws.includes(key)) {
@@ -1108,7 +1101,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 let ii = parameters.length - 1
                 while (ii >= 0) {
                     const last = parameters.at(-1)!
-                    if (last.type === idl.IDLUndefinedType || idl.isReferenceType(last.type) && last.type.name === "idlize.stdlib.Null") {
+                    if (last.type === idl.IDLUndefinedType || idl.isReferenceType(last.type) && last.type.name === idl.IDLNullTypeName) {
                         parameters.pop()
                     } else {
                         break
@@ -1219,7 +1212,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
         if (arkts.isTSStringKeyword(type))
             return idl.IDLStringType
         if (arkts.isETSNullType(type))
-            return idl.createReferenceType('idlize.stdlib.Null')
+            return idl.createReferenceType(idl.IDLNullTypeName)
         if (arkts.isTSArrayType(type))
             return idl.createContainerType('sequence', [this.serializeType((type as arkts.TSArrayType).elementType)])
         if (arkts.isETSUnionType(type))
@@ -1262,8 +1255,7 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 )
             }
 
-            const typeWillBeReplaced = TypeParameterMap.has(name)
-            const typeArgs = typeWillBeReplaced ? undefined : type.part?.typeParams?.params.map(it => this.serializeType(it))
+            const typeArgs = type.part?.typeParams?.params.map(it => this.serializeType(it))
             // special cases //
             switch (name) {
                 case 'string': return idl.IDLStringType
@@ -1285,7 +1277,6 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 case 'ReadonlyArray': return idl.createContainerType('sequence', typeArgs ?? [] /* better check here? */)
                 case 'FixedArray': return idl.createContainerType('sequence', typeArgs ?? [] /* better check here? */)
                 case 'number': return idl.IDLNumberType
-                case 'BusinessError': return idl.createReferenceType(name)
                 case 'Required':
                 case 'Readonly': return typeArgs![0]
                 case 'Optional': return idl.createOptionalType(typeArgs![0])
@@ -1381,6 +1372,8 @@ class IDLVisitor extends arkts.AbstractVisitor {
             result.extendedAttributes.push({ name: idl.IDLExtendedAttributes.Synthetic })
         else
             result.extendedAttributes.push(...this.traceAttrs())
+        if (parentTypeParams !== undefined)
+            result.extendedAttributes.push(...parentTypeParams.attrs)
 
         return [result, orderedTypeParameters]
     }
@@ -1431,23 +1424,36 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
     extractTypeParameters(node: arkts.TSTypeParameterDeclaration | undefined): ExtractTypeParameterInfo {
         const result: string[] = []
+        const defaults: idl.IDLType[] = []
         node?.params.forEach(param => {
             if (param.name) {
                 // constraint and default value lost here
                 result.push(param.name?.name)
+            }
+            if (param.defaultType) {
+                defaults.push(this.serializeType(param.defaultType))
             }
         })
         if (result.length === 0) {
             return {
                 parameters: undefined,
                 set: new Set(),
-                attrs: []
+                attrs: [],
+                defaults: undefined
             }
+        }
+        const attrs = [{ name: idl.IDLExtendedAttributes.TypeParameters, value: result.join(',') }]
+        if (defaults.length > 0) {
+            attrs.push({
+                name: idl.IDLExtendedAttributes.TypeParametersDefaults,
+                value: defaults.map(it => idl.printType(it)).join(",")
+            })
         }
         return {
             set: new Set(result),
-            attrs: [{ name: idl.IDLExtendedAttributes.TypeParameters, value: result.join(',') }],
-            parameters: result
+            attrs,
+            parameters: result,
+            defaults
         }
     }
 
@@ -1456,16 +1462,6 @@ class IDLVisitor extends arkts.AbstractVisitor {
         const r = op()
         this.typeParamsStack.pop()
         return r
-    }
-    withReplacementContext<T>(name: string, op: (found:boolean) => T): T {
-        if (TypeParameterMap.has(name)) {
-            const mapping = TypeParameterMap.get(name)!
-            this.typeReplacements.push(mapping)
-            const r = op(true)
-            this.typeReplacements.pop()
-            return r
-        }
-        return op(false)
     }
     isTypeParameter(name: string) {
         return this.typeParamsStack.find(bucket => bucket.has(name)) !== undefined
