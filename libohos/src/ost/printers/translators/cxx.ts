@@ -83,6 +83,11 @@ export class CXXPrinter {
             this.printAbstractType(type.args[0])
             return
           }
+          case std.names.types.struct: {
+            this.p.put('struct', ' ')
+            this.printAbstractType(type.args[0])
+            return
+          }
         }
 
         this.p.put(type.head)
@@ -229,6 +234,17 @@ export class CXXPrinter {
           this.printExpression(arg)
         })
         this.p.put(')')
+        break
+      }
+      case lw.LWKind.CastExpression: {
+        const cast = utils.hasAnnotation(expression, std.names.annotations.staticMethod)
+          ? 'static_cast' : 'reinterpret_cast'
+        this.p.put(cast, '<')
+        this.printAbstractType(expression.type)
+        this.p.put('>', '(', )
+        this.printExpression(expression.expression)
+        this.p.put(')')
+        break
       }
     }
   }

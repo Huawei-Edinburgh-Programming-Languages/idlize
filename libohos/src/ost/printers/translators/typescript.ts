@@ -238,6 +238,15 @@ export class TSPrinter {
           this.printExpression(arg)
         })
         this.p.put(')')
+        break
+      }
+      case lw.LWKind.CastExpression: {
+        this.p.put('(')
+        this.printExpression(expression.expression)
+        this.p.put(' ', 'as', ' ')
+        this.printType(expression.type)
+        this.p.put(')')
+        break
       }
     }
   }

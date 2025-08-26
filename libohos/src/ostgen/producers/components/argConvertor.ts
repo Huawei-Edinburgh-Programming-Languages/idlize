@@ -116,8 +116,12 @@ export class ArgConvertor {
 
     read(accessor:lw.LWExpression, type:idl.IDLType): [lw.LWStatement[], lw.LWExpression] {
         if (idl.isPrimitiveType(type)) {
-            return [[],
-                E.call(E.get(this.sName, selectReadName(type)), [accessor])]
+            const expr = Builders.expr().call()
+                .receiverExpr(this.sName)
+                .functionName(selectReadName(type)).$()
+            if (!this.isNative && type === idl.IDLNumberType) // ugh
+                expr.cast(Ts.prim.number)
+            return [[], expr.$()]
         }
         if (idl.isUnionType(type)) {
             const selectorDecl = Builders.stmt().decl('selector', Ts.prim.i8)

@@ -20,8 +20,8 @@ import { An, Md, Ts } from "./stdlib";
 const id = <T>(it: T) => it
 
 function check(desc: string, ...data: any[]) {
-    if (data.find(it => it === undefined))
-        throw new Error(desc + "not fully initialized: " + data.join(", "))
+    if (data.includes(undefined))
+        throw new Error(desc + ' not fully initialized: ' + data.join(", "))
 }
 
 class AccessorBuilder<P> {
@@ -175,7 +175,16 @@ class ExpressionBuilder<P> {
             return this
         }, name)
     }
-    instanceof(name: string, type: ConstType) { this._expr = E.bin("instanceof", E.v(name), E.c(type.name))} ///need InstanceofExpression
+    cast(type: LWType) {
+        this._expr = {
+            kind: LWKind.CastExpression,
+            expression: this._expr!,
+            type,
+            annotations: []
+        }
+        return this
+    }
+    instanceof(name: string, type: ConstType) { this._expr = E.bin("instanceof", E.v(name), E.c(type.name))} ///need InstanceofExpression?
     $(): P {
         check("Expression", this._expr)
         return this._cont(this._expr!)
@@ -203,6 +212,14 @@ class DeclarationBuilder<P> {
 class ReturnBuilder<P> {
     constructor(private _cont: (stmt: LWStatement) => P, private _type?: LWType) {}
     private _expr?: LWExpression
+    valueExpr(expr: LWExpression) { this._expr = expr; return this }
+    valueStr(value: string) { this._expr = E.v(value); return this }
+    value(): ExpressionBuilder<ReturnBuilder<P>> {
+        return new ExpressionBuilder(expr => {
+            this._expr = expr
+            return this
+        })
+    }
     call(): CallBuilder<ReturnBuilder<P>> {
         return new CallBuilder(expr => {
             this._expr = expr
@@ -452,10 +469,11 @@ class FunctionBuilder<P> {
         })
     }
     $(): P {
-        check("Function", this._name, this._returnType, this._body)
         return this._cont(
             DD({generics: [], modifiers: this._modifiers})
-                .func(this._name!, this._parameters, this._returnType!, this._body!))
+                .func(this._name!, this._parameters,
+                    this._returnType ?? Ts.prim.void,
+                    this._body ?? S.block([])))
     }
 }
 

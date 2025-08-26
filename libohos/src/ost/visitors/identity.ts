@@ -245,6 +245,14 @@ export class IdentityTransformer {
       annotations: expr.annotations,
     }
   }
+  goCastExpression(expr:lw.CastExpression): lw.CastExpression {
+    return {
+      kind: expr.kind,
+      expression: this.goExpression(expr.expression),
+      type: this.goType(expr.type),
+      annotations: expr.annotations,
+    }
+  }
   goExpression(expr:lw.LWExpression): lw.LWExpression {
     switch (expr.kind) {
       case lw.LWKind.VariableExpression: return this.goVariableExpression(expr)
@@ -255,6 +263,7 @@ export class IdentityTransformer {
       case lw.LWKind.CallExpression: return this.goCallExpression(expr)
       case lw.LWKind.AccessorExpression: return this.goAccessorExpression(expr)
       case lw.LWKind.ConstructorExpression: return this.goConstructorExpression(expr)
+      case lw.LWKind.CastExpression: return this.goCastExpression(expr)
     }
   }
 

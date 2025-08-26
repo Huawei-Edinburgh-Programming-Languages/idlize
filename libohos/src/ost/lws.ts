@@ -38,6 +38,7 @@ export enum LWKind {
   CallExpression,
   AccessorExpression,
   ConstructorExpression,
+  CastExpression,
 
   ConstType,
   FuncType,
@@ -249,6 +250,12 @@ export interface ConstructorExpression {
   typeArgs?: LWType[]
   annotations: Annotation[]
 }
+export interface CastExpression {
+  kind: LWKind.CastExpression
+  expression: LWExpression
+  type: LWType
+  annotations: Annotation[]
+}
 export type LWExpression =
     VariableExpression
   | ConstantExpression
@@ -258,6 +265,7 @@ export type LWExpression =
   | CallExpression
   | AccessorExpression
   | ConstructorExpression
+  | CastExpression
 
 export interface ConstType {
   kind: LWKind.ConstType
