@@ -32,13 +32,13 @@ export function mergeStructs(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
         index.get(decl.name)?.push(decl)
     })
 
-    const result: lw.LWDeclaration[] = others
+    const merged: lw.LWDeclaration[] = []
     index.forEach((records, name) => {
         if (records.length === 0) {
             return
         }
         if (records.length === 1) {
-            result.push(records[0])
+            merged.push(records[0])
             return
         }
         const fields: lw.StructureDeclaration['members'] = []
@@ -51,7 +51,7 @@ export function mergeStructs(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
                 fields.push(...rec.members)
             }
         })
-        result.push(methods.length ? D.class(name, fields, methods) : D.struct(name, fields))
+        merged.push(methods.length ? D.class(name, fields, methods) : D.struct(name, fields))
     })
-    return result
+    return [...merged, ...others]
 }

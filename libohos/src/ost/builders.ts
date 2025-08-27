@@ -14,7 +14,7 @@
  */
 
 import { D, DD, E, S, T } from "./builder"
-import { AccessorExpression, Annotation, BinaryExpression, CallExpression, ClassDeclaration, ConstructorExpression, ConstType, DeclarationStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWKind, LWStatement, LWType, Modifier, StatementDeclaration, StructureDeclaration } from "./lws"
+import { AccessorExpression, Annotation, BinaryExpression, CallExpression, ClassDeclaration, ConstructorExpression, ConstType, DeclarationStatement, ExpressionStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWKind, LWStatement, LWType, Modifier, StatementDeclaration, StructureDeclaration } from "./lws"
 import { An, Md, Ts } from "./stdlib";
 
 const id = <T>(it: T) => it
@@ -188,6 +188,10 @@ class ExpressionBuilder<P> {
     $(): P {
         check("Expression", this._expr)
         return this._cont(this._expr!)
+    }
+    $stmt(): ExpressionStatement {
+        check("Expression", this._expr)
+        return S.e(this._expr!)
     }
 }
 
@@ -473,7 +477,7 @@ class FunctionBuilder<P> {
             DD({generics: [], modifiers: this._modifiers})
                 .func(this._name!, this._parameters,
                     this._returnType ?? Ts.prim.void,
-                    this._body ?? S.block([])))
+                    this._body))
     }
 }
 

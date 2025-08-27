@@ -15,50 +15,79 @@
 import * as idl from "@idlizer/core/idl"
 import { AdvancedGeneratorContext, managedName, nativeName } from "../common";
 import { ProducerDescription } from "../../context";
-import { An, D, DD, E, Md, S, T, Ts } from "../../../ost/main";
+import { An, E, T, Ts } from "../../../ost/main";
 import { ArgConvertor } from "./argConvertor";
 import { Builders } from "../../../ost/builders";
+import { LWType } from "../../../ost/lws";
 
-function makeSerializerName(node:idl.IDLInterface, native:boolean) {
+function makeSerializerName(node: idl.IDLInterface, native: boolean) {
   const name = idl.getFQName(node) + 'Serializer'
     return native
       ? nativeName(name)
       : managedName(name)
 }
 
+/**
+ * For TS, produce serializer class with method implementations.
+ * Native needs forward class declaration + separate method implementations.
+ */
 export function makeSerializer(
-  isNative: boolean,
+  native: boolean,
   node: idl.IDLInterface,
   ctx: AdvancedGeneratorContext
 ): ProducerDescription {
   return {
     artifact: {
-      reference: E.v(makeSerializerName(node, isNative), [An.isType()]),
+      reference: E.v(makeSerializerName(node, native), [An.isType()]),
       implementationGenerator: () => {
-        const valueType = (isNative ? ctx.useCApi(node) : ctx.useManaged(node)).reference()
-        const sconv = new ArgConvertor(ctx, E.v('serializer'), isNative)
-        const dconv = new ArgConvertor(ctx, E.v('deserializer'), isNative)
-        return [Builders.class(makeSerializerName(node, isNative))
-          .method('write')
-            .static()
-            .param('serializer').type(Ts.ref(T.cc('SerializerBase'))).$()
-            .param('value').type(valueType).$()
-            .block().statements(node.properties.map(prop =>
-              sconv.write(E.get(E.v('value'), prop.name), prop.type))).$().$()
-          .method('read')
-            .static()
-            .param('deserializer').type(Ts.ref(T.cc('DeserializerBase'))).$()
-            .returns(valueType)
-            .block()
-              .decl('value', valueType).valueStr('{}').$()
-              .statements(node.properties.map(prop =>
-                Builders.stmt()
-                  .binary('=')
-                    .left().access(E.v('value')).member(prop.name).$().$()
-                    .rightExpr(dconv.read(E.v(prop.name), prop.type)[1]).$().$()))
-              .return(valueType).valueStr('value').$().$().$().$()
-        ]
+        const valueType = (native ? ctx.useCApi(node) : ctx.useManaged(node)).reference()
+        const clazz = makeSerializerClass(native, node, valueType)
+        const write = makeSerializerWrite(native, node, valueType, ctx)
+        const read = makeSerializerRead(native, node, valueType, ctx)
+        if (native) {
+          return [clazz, write, read]
+        } else {
+          clazz.methods[0].body = write.body
+          clazz.methods[1].body = read.body
+          return [clazz]
+        }
       }
     }
   }
+}
+
+function makeSerializerClass(native: boolean, node: idl.IDLInterface, type: LWType) {
+  return Builders.class(makeSerializerName(node, native))
+    .method('write')
+      .static()
+      .param('serializer').type(Ts.ref(T.cc('SerializerBase'))).$()
+      .param('value').type(type).$().$()
+    .method('read')
+      .static()
+      .param('deserializer').type(Ts.ref(T.cc('DeserializerBase'))).$()
+      .returns(type).$().$()
+}
+
+function makeSerializerWrite(native: boolean, node: idl.IDLInterface, type: LWType, ctx: AdvancedGeneratorContext) {
+  const conv = new ArgConvertor(ctx, E.v('serializer'), native)
+  return Builders.function(makeSerializerName(node, native) + '::write')
+    .param('serializer').type(Ts.ref(T.cc('SerializerBase'))).$()
+    .param('value').type(type).$()
+    .block().statements(node.properties.map(prop =>
+      conv.write(E.get(E.v('value'), prop.name), prop.type))).$().$()
+}
+
+function makeSerializerRead(native: boolean, node: idl.IDLInterface, type: LWType, ctx: AdvancedGeneratorContext) {
+  const conv = new ArgConvertor(ctx, E.v('deserializer'), native)
+  return Builders.function(makeSerializerName(node, native) + '::read')
+    .param('deserializer').type(Ts.ref(T.cc('DeserializerBase'))).$()
+    .returns(type)
+    .block()
+      .decl('value', type).valueStr('{}').$()
+      .statements(node.properties.map(prop =>
+        Builders.stmt()
+          .binary('=')
+            .left().access(E.v('value')).member(prop.name).$().$()
+            .rightExpr(conv.read(E.v(prop.name), prop.type)[1]).$().$()))
+      .return(type).valueStr('value').$().$().$()
 }

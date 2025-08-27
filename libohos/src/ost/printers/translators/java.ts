@@ -367,8 +367,12 @@ export class JavaPrinter {
           this.p.put(' ', param.name)
         })
         this.p.put(')')
-        this.p.put(' ')
-        this.printStatement(declaration.body)
+        if (declaration.body) {
+          this.p.put(' ')
+          this.printStatement(declaration.body)
+        } else {
+          this.p.put(';')
+        }
         break
       }
     }

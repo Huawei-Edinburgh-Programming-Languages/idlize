@@ -102,12 +102,16 @@ export class ArgConvertor {
         }
         if (idl.isReferenceType(type)) {
             const decl = this.ctx.base.resolver.toDeclaration(type)
-            if (decl && idl.isEnum(decl))
-                return S.e(E.call(E.get(this.sName, 'writeInt32'), [accessor]))///cast
-            return S.e(E.call(
-                E.get(this.getSerializer(type).name(), 'write'),
-                [this.sName, accessor]
-            ))
+            return decl && idl.isEnum(decl)
+                ? Builders.expr().call()
+                    .receiverExpr(this.sName)
+                    .functionName('writeInt32')
+                    .args([accessor]).$().$stmt()
+                : Builders.expr().call().function()
+                    .access(this.getSerializer(type).name())
+                    .member('write')
+                    .static().$().$()
+                    .args([this.sName, accessor]).$().$stmt()
         }
         throw new Error(`Can not process "${idl.DebugUtils.debugPrintType(type)}"`)
     }

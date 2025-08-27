@@ -102,7 +102,7 @@ export class IdentityTransformer {
         type: this.goType(p.type)
       })),
       returnType: this.goType(decl.returnType),
-      body: this.goStatement(decl.body)
+      body: decl.body ? this.goStatement(decl.body) : undefined
     }
   }
   goStatementDeclaration(decl:lw.StatementDeclaration): lw.StatementDeclaration {

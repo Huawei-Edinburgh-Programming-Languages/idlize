@@ -142,7 +142,7 @@ export interface FunctionDeclaration {
     type: LWType
   }[]
   returnType: LWType
-  body: LWStatement
+  body?: LWStatement
 }
 /// this is utter bs
 /// needed for interop macro calls plus, in theory, arbitrary toplevel calls and declarations

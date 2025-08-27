@@ -322,7 +322,7 @@ export class DumpPrinter {
         this.p.put(':', ' ')
         this.printType(declaration.returnType)
         this.p.put(' ')
-        this.printStatement(declaration.body)
+        this.printStatement(declaration.body!)
         break
       }
     }
