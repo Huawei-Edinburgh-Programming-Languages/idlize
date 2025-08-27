@@ -27,8 +27,7 @@
     "ignoreGenerics": [
         "arkui.component.common.AttributeModifier",
         "arkui.component.common.ContentModifier",
-        "arkui.component.ContentModifier",
-        "ohos.base.AsyncCallback"
+        "arkui.component.ContentModifier"
     ],
     "forceMaterialized": [
         "TapGestureInterface",

@@ -16,7 +16,6 @@
         "arkui": "@ohos.arkui.component"
     },
     "rewriteArkConfigPath": {
-        "@ohos.base": ["./framework/ohos.base"],
         "arkui.SymbolGlyphModifier": ["./SymbolGlyphModifier"],
         "arkui.TextModifier": ["./TextModifier"],
         "arkui.component.enums": ["./component/enums"],
