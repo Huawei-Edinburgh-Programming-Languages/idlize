@@ -434,6 +434,12 @@
             "to": "arkui.component.idlize.BusinessErrorInterface"
         }
     ],
+    "transformOnSerialize": [
+        {
+            "from": "ohos.base.BusinessError",
+            "to": "arkui.component.idlize.BusinessErrorInterface"
+        }
+    ],
     "forceCallback": {
         "EditMenuOptions": [],
         "XComponentController": [
@@ -635,7 +641,6 @@
             "EllipseShape",
             "CircleShape",
             "Error",
-            "ErrorCallback",
             "getRectangleById",
             "edgeColors",
             "edgeWidths",

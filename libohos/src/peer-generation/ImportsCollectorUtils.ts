@@ -59,6 +59,9 @@ export function collectDeclItself(
         includeTransformedCallbacks?: boolean,
     },
 ): void {
+    if (idl.isReferenceType(node)) {
+        node = library.resolveTypeReference(node) ?? node
+    }
     if (idl.isSyntheticEntry(node)) {
         // TS needs no synthetic types
         if (library.language === Language.TS)
