@@ -79,7 +79,7 @@ function sdk(sdkPathInput: string, installPath12: string, installPath11: string)
 
     const { sdkPath11, sdkPath12 } = commands.prepareSdk({
         sdkPath: sdkPathInput,
-        installArktsConfig: false
+        installArktsConfig: false,
     })
     commands.install({ sourceDir: sdkPath12, installPath: installPath12 })
     commands.install({ sourceDir: sdkPath11, installPath: installPath11 })
@@ -87,7 +87,7 @@ function sdk(sdkPathInput: string, installPath12: string, installPath11: string)
 
 ///
 interface AbsoluteSdkOptions {
-    originalSdk?: boolean
+    originalSdk?: boolean,
 }
 
 function sdkM3(preparedSdk12: string, absolutePreparedSdk12: string, options: AbsoluteSdkOptions) {

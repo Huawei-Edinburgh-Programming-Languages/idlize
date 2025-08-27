@@ -17,7 +17,7 @@ export function absoluteSdk({
 
     fs.mkdirSync(absolutePreparedSdk12, { recursive: true })
     fs.cpSync(path.join(preparedSdk12, "api"), path.join(absolutePreparedSdk12, "api"), { recursive: true })
-    fs.rmSync(path.join(absolutePreparedSdk12, "api", "@internal"), { recursive: true })
+    fs.rmSync(path.join(absolutePreparedSdk12, "api", "@internal"), { recursive: true, force: true })
 
     const arktsconfig = {
         "compilerOptions": {
