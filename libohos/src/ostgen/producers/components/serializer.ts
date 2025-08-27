@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import * as idl from "@idlizer/core/idl"
-import { AdvancedGeneratorContext, managedName, nativeName } from "../common";
+import { AdvancedGeneratorContext, managedName, bridgeName } from "../common";
 import { ProducerDescription } from "../../context";
 import { An, E, T, Ts } from "../../../ost/main";
 import { ArgConvertor } from "./argConvertor";
@@ -23,7 +23,7 @@ import { LWType } from "../../../ost/lws";
 function makeSerializerName(node: idl.IDLInterface, native: boolean) {
   const name = idl.getFQName(node) + 'Serializer'
     return native
-      ? nativeName(name)
+      ? bridgeName(name)
       : managedName(name)
 }
 

@@ -15,7 +15,7 @@
 
 import * as idl from "@idlizer/core/idl";
 import { E, lw, Op, S, T, Ts } from "../../../ost/main";
-import { AdvancedGeneratorContext, nativeName } from "../common";
+import { AdvancedGeneratorContext, bridgeName } from "../common";
 import { Builders } from "../../../ost/builders";
 import { IfStatement } from "../../../ost/lws";
 

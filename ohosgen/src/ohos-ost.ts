@@ -26,9 +26,6 @@ import {
     T,
     GeneratorContext,
     isManaged,
-    isCApi,
-    isNative,
-    dumpToString,
     moduleLike,
     processNPrintArkTS,
     lowLevelLike,
@@ -42,7 +39,10 @@ import {
     getInteropRootPath,
     peerGeneratorConfiguration,
     readTemplate,
-    libraryCcDeclaration
+    libraryCcDeclaration,
+    C_API_PREFIX,
+    BRIDGE_PREFIX,
+    IMPL_PREFIX
 } from "@idlizer/libohos"
 
 export function printOstFiles(peerLibrary: PeerLibrary): [Map<string, OutputFile>, Map<TargetFile, string>] {
@@ -93,24 +93,14 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
 function printOstDeclarations(decls: LWDeclaration[], peerLibrary: PeerLibrary, packages: Set<string>)
     : [Map<string, OutputFile>, Map<TargetFile, string>]
 {
-    const selectors = [ isManaged, isCApi, isNative ]
-    const buckets = selectors.map(predicate => [predicate, [] as LWDeclaration[]] as const)
-
-    decls.forEach(decl => {
-        for (const [predicate, bucket] of buckets) {
-            if (predicate(decl.name)) {
-                bucket.push(decl)
-                return
-            }
-        }
-        console.error(dumpToString(decl))
-        throw new Error("Can not process generated code!")
-    })
-    const [ managed, cApi, native ] = buckets.map(e => e[1])
-
-    const tsFiles = dumpTsLike(managed, peerLibrary.language, packages)
-    const cFiles = dumpCLike([...cApi, ...native], peerLibrary.name)
-    return [tsFiles, cFiles]
+    const [managed, native] = decls.reduce<[LWDeclaration[], LWDeclaration[]]>(([m, n], decl) => {
+        (isManaged(decl.name) ? m : n).push(decl)
+        return [m, n]
+    }, [[], []])
+    return [
+        dumpTsLike(managed, peerLibrary.language, packages),
+        dumpCLike(native, peerLibrary.name)
+    ]
 }
 
 function dumpTsLike(decls: LWDeclaration[], language: Language, packages: Set<string>): Map<string, OutputFile> {
@@ -134,8 +124,7 @@ function dumpTsLike(decls: LWDeclaration[], language: Language, packages: Set<st
 }
 
 function dumpCLike(decls: LWDeclaration[], moduleName: string): Map<TargetFile, string> {
-    const [capi, native] = lowLevelLike.postprocess(decls)
-
+    const files: Map<string, LWDeclaration[]> = lowLevelLike.postprocess(decls)
     ///copied from OhosNativeVisitor
     const interopRootPath = getInteropRootPath()
     const interopTypesPath = path.resolve(interopRootPath, 'src', 'cpp', 'interop-types.h')
@@ -144,7 +133,7 @@ function dumpCLike(decls: LWDeclaration[], moduleName: string): Map<TargetFile, 
         readLangTemplate('ohos_api_prologue.h', Language.CPP),
         readTemplate('any_api.h'),
         readTemplate('generic_service_api.h'),
-        processNPrintCXX(capi),
+        processNPrintCXX(files.get(C_API_PREFIX)!),
         readLangTemplate('ohos_api_epilogue.h', Language.CPP)
         ].join('\n')
         .replaceAll("%INTEROP_TYPES_HEADER", interopTypesContent)
@@ -155,7 +144,7 @@ function dumpCLike(decls: LWDeclaration[], moduleName: string): Map<TargetFile, 
         readLangTemplate('api_impl_prologue.cc', Language.CPP),
         libraryCcDeclaration({removeCopyright: true}),
         readTemplate("api_getter.cc"),
-        processNPrintCXX(native)
+        processNPrintCXX(files.get(BRIDGE_PREFIX)!),
         ].join('\n')
         .replaceAll("%INTEROP_MODULE_NAME%", `${moduleName.toUpperCase()}NativeModule`)
         .replaceAll("%API_HEADER_PATH%", `${moduleName.toLowerCase()}.h`)
@@ -163,10 +152,17 @@ function dumpCLike(decls: LWDeclaration[], moduleName: string): Map<TargetFile, 
         .replaceAll("%API_NAME%", `OH_${moduleName}_API`)
         .replaceAll("%CALLBACK_KINDS%", 'typedef enum CallbackKind {\n} CallbackKind;') ///
         .replaceAll("%LIBRARY_NAME%", moduleName.toUpperCase())
+    const apiImpl = [
+        `#include "common-interop.h"`,
+        `#include "${moduleName.toLowerCase()}.h"`,
+        processNPrintCXX(files.get(IMPL_PREFIX)!),
+        readLangTemplate('api_impl_epilogue.cc', Language.CPP)
+        ].join('\n')
+        .replaceAll("%LIBRARY_NAME%", moduleName.toUpperCase())
     return new Map([
         [new TargetFile(`${moduleName.toLowerCase()}.h`), h],
         [new TargetFile(`${moduleName.toLowerCase()}.cc`), cc],
         [new TargetFile(`${moduleName.toLowerCase()}Impl_temp.cc`), ''],
-        [new TargetFile(`${moduleName.toLowerCase()}ApiImpl_temp.cc`), ''],
+        [new TargetFile(`${moduleName.toLowerCase()}ApiImpl_temp.cc`), apiImpl],
     ])
 }

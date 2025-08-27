@@ -15,13 +15,13 @@
 
 import { D, E, S, T, Ts } from "../../../ost/main";
 import * as idl from "@idlizer/core/idl"
-import { cApiName, createSpecialProducer, nativeName, roles } from "../common";
+import { createSpecialProducer, bridgeName, roles } from "../common";
 import { ArgConvertor } from "../components/argConvertor";
 
 export const bridgeProducer = createSpecialProducer(
-  { is: idl.isMethod, role: roles.native },
+  { is: idl.isMethod, role: roles.bridge },
   (method, ctx) => {
-    const generatedDeclName = nativeName(idl.getFQName(method))
+    const generatedDeclName = bridgeName(idl.getFQName(method))
     return {
       artifact: {
         reference: E.v(generatedDeclName),

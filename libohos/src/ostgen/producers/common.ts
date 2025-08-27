@@ -18,15 +18,16 @@ import { createProducer, GeneratorContext, MakeSelectorPattern, MakeSelectorQuer
 
 export const MANAGED_PREFIX = 'managed'
 export const C_API_PREFIX = 'capi'
-export const NATIVE_PREFIX = 'native'
+export const BRIDGE_PREFIX = 'bridge'
+export const IMPL_PREFIX = 'impl'
 
 export const roles = {
     managed: MANAGED_PREFIX,
     cApi: C_API_PREFIX,
-    native: NATIVE_PREFIX,
+    bridge: BRIDGE_PREFIX,
     nativeModule: MANAGED_PREFIX + ".nativeModule",
     serializerManaged: MANAGED_PREFIX + ".serializer",
-    serializerNative: NATIVE_PREFIX + ".serializer",
+    serializerNative: BRIDGE_PREFIX + ".serializer",
 }
 
 export function managedName(name:string) {
@@ -35,8 +36,11 @@ export function managedName(name:string) {
 export function cApiName(name:string) {
     return C_API_PREFIX + '.' + name
 }
-export function nativeName(name:string) {
-    return NATIVE_PREFIX + '.' + name
+export function bridgeName(name:string) {
+    return BRIDGE_PREFIX + '.' + name
+}
+export function implName(name:string) {
+    return IMPL_PREFIX + '.' + name
 }
 
 function is(prefix:string, name:string) {
@@ -48,8 +52,8 @@ export function isManaged(name:string) {
 export function isCApi(name:string) {
     return is(C_API_PREFIX, name)
 }
-export function isNative(name:string) {
-    return is(NATIVE_PREFIX, name)
+export function isBridge(name:string) {
+    return is(BRIDGE_PREFIX, name)
 }
 
 ///////////////////////////////////////////////////////////
@@ -70,7 +74,7 @@ export class AdvancedGeneratorContext {
         return this.base.use({ node: method, role: roles.nativeModule })
     }
     useBridge(node:idl.IDLMethod) {
-        return this.base.use({ node, role: roles.native })
+        return this.base.use({ node, role: roles.bridge })
     }
 
     useNativeSerializer(node:idl.IDLNode) {

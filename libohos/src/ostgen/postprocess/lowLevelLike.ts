@@ -13,21 +13,21 @@
  * limitations under the License.
  */
 
-import { D, DD, IdentityTransformer, lw, Md, std, T, Ts, utils } from "../../ost/main";
+import { An, D, DD, E, IdentityTransformer, lw, Md, Op, std, T, Ts, utils } from "../../ost/main";
 import { throwError } from "../library/utils";
 import { generatorConfiguration, zipStrip } from "@idlizer/core";
 import { mergeStructs } from "./postprocess";
 import { Builders } from "../../ost/builders";
+import { cApiName, implName } from "../producers/common";
 
-export function postprocess(decls: lw.LWDeclaration[]): [lw.LWDeclaration[], lw.LWDeclaration[]] {
+export function postprocess(decls: lw.LWDeclaration[]): Map<string, lw.LWDeclaration[]> {
     decls = removeInternal(decls)
     decls = mergeStructs(decls)
     decls = introduceOptionalTypes(decls)
     decls = specializeGenerics(decls)
-    decls = makeApiStruct(decls)
-    let [capi, native] = aliasTypes(decls)
-    capi = makeForwardDeclarations(capi)
-    return [capi, native]
+    decls = makeApis(decls)
+    decls = makeForwardDeclarations(decls)
+    return aliasTypes(decls)
 }
 
 function removeInternal(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
@@ -158,6 +158,55 @@ function specializeGenerics(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     return new MakeMono(decls).go(decls)
 }
 
+function makeApis(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+    const apiStructName = cApiName('modifier.API')
+    const apiStruct = Builders.struct(apiStructName)
+        .field('version').type(Ts.prim.i32).$()
+    const modifiers = decls
+        .filter(it => it.name.startsWith('capi.modifier'))
+        .map(it => it as lw.StructureDeclaration)
+    const modifierImpls: lw.FunctionDeclaration[] = []
+    const apiImpls: lw.LWExpression[] = []
+    modifiers.forEach(decl => {
+        // modifier field in the API struct
+        const className = decl.name.split('.').pop()!.replace(/Modifier$/, '');
+        const modifierImplName = implName(decl.name + 'Impl');
+        apiStruct.field(className)
+            .funcType().returns(Ts.const(Ts.ptr(T.cc(decl.name)))).$().$()
+        // modifier implementation
+        const modifierImpl = Builders.function(modifierImplName)
+            .returns(Ts.const(Ts.ptr(T.cc(decl.name))))
+            .block()
+                .decl('instance', T.cc(decl.name)).static().value()
+                    .ctor().asStruct().args(
+                        decl.members.map(it => E.unary(Op.ref, E.v(`${className}_${it.name}Impl`)))).$().$().$()
+                .return().valueExpr(E.unary(Op.ref, E.v('instance'))).$().$().$()
+        modifierImpls.push(modifierImpl)
+        // modifier implementation pointer in the API implementation struct
+        apiImpls.push(E.unary(Op.ref, E.v(modifierImplName, [An.isType()])))
+    })
+    // API implementation function
+    const apiImpl = Builders.function(implName(`Get${generatorConfiguration().moduleName.toUpperCase()}APIImpl`))
+        .returns(Ts.const(Ts.ptr(T.cc(apiStructName))))
+        .param('version').type(Ts.prim.i32).$()
+        ///extern "C"
+        .block()
+            .decl('api', T.cc(apiStructName)).static().value()
+                .ctor().asStruct().args([E.c(1), ...apiImpls]).$().$().$()
+            .if()
+                .cond().binary(Op.ne).leftStr('version').right().access(E.v('api')).member('version').$().$().$().$()
+                .then().return().valueStr('nullptr').$().$().$()
+            .return().valueExpr(E.unary(Op.ref, E.v('api'))).$().$().$()
+    return [...decls, apiStruct.$(), ...modifierImpls, apiImpl]
+}
+
+function makeForwardDeclarations(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+    return decls
+        .filter(it => it.kind === lw.LWKind.StructureDeclaration)
+        .map(it => D.type(it.name, Ts.struct(T.cc(it.name))) as lw.LWDeclaration)
+        .concat(decls)
+}
+
 class TypeAliasing extends IdentityTransformer {
     private readonly ShortPrefix = generatorConfiguration().TypePrefix
     private readonly LongPrefix = this.ShortPrefix + generatorConfiguration().moduleName.toUpperCase() + '_'
@@ -252,39 +301,20 @@ class TypeAliasing extends IdentityTransformer {
             Array.from(seenNames.entries())
                 .filter(([_, names]) => names.length > 1)
                 .flatMap(([_, names]) => names))
-        return decls.reduce<[lw.LWDeclaration[], lw.LWDeclaration[]]>(([capi, native], decl) => {
-            if (decl.name.startsWith('capi.'))
-                capi.push(this.goDeclaration(decl))
+        const files: Map<string, lw.LWDeclaration[]> = new Map()
+        decls.forEach(decl => {
+            const file = decl.name.split('.').shift()!
+            const content = files.get(file)
+            const image = this.goDeclaration(decl)
+            if (!content)
+                files.set(file, [image])
             else
-                native.push(this.goDeclaration(decl))
-            return [capi, native]
-        }, [[], []])
+                content.push(image)
+        })
+        return files
     }
 }
 
-function makeApiStruct(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
-    const apiStructName = 'capi.modifier.API';
-    const modifiers = decls
-        .map((decl, i) => [decl, i] as [lw.LWDeclaration, number])
-        .filter(([decl, i]) => decl.name.startsWith('capi.modifier'))
-    const apiStruct = Builders.struct(apiStructName)
-        .field('version').type(Ts.prim.i32).$()
-    modifiers.forEach(([decl, i]) => {
-        apiStruct.field(decl.name.split('.').pop()!.replace(/Modifier$/, ''))
-            .funcType().returns(Ts.const(Ts.ptr(T.cc(decl.name)))).$().$()
-    })
-    const lastIndex = modifiers.at(-1)![1]
-    decls.splice(lastIndex + 1, 0, apiStruct.$())
-    return decls
-}
-
-function aliasTypes(decls: lw.LWDeclaration[]): [lw.LWDeclaration[], lw.LWDeclaration[]] {
+function aliasTypes(decls: lw.LWDeclaration[]): Map<string, lw.LWDeclaration[]> {
     return new TypeAliasing().go(decls)
-}
-
-function makeForwardDeclarations(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
-    return decls
-        .filter(it => it.kind === lw.LWKind.StructureDeclaration)
-        .map(it => D.type(it.name, Ts.struct(T.cc(it.name))) as lw.LWDeclaration)
-        .concat(decls)
 }

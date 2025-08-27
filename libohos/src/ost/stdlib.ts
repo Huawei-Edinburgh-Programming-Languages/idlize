@@ -121,6 +121,7 @@ const knownOperations = {
     eq: '==',
     gt: '>',
     ge: '>=',
+    ne: '!=',
 
     // unary
     neg: '-',

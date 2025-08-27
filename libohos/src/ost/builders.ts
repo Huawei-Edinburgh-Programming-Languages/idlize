@@ -137,14 +137,15 @@ class CallBuilder<P> {
 class ConstructorBuilder<P> {
     constructor(
         private _cont: (expr: ConstructorExpression) => P,
-        private _name: string
+        private _name?: string
     ) {}
     private _args: LWExpression[] = []
     private _annotations: Annotation[] = []
+    asStruct() { this._annotations.push(An.asStruct()); return this }
     args(args: LWExpression[]) { this._args.push(...args); return this }
     stack() { this._annotations.push(An.stackInstance()); return this }
     $(): P {
-        return this._cont(E.instance(this._name, this._args, [], this._annotations))
+        return this._cont(E.instance(this._name ?? 'CTOR_NAME', this._args, [], this._annotations))
     }
 }
 
@@ -169,7 +170,7 @@ class ExpressionBuilder<P> {
             return this
         })
     }
-    ctor(name: string): ConstructorBuilder<ExpressionBuilder<P>> {
+    ctor(name?: string): ConstructorBuilder<ExpressionBuilder<P>> {
         return new ConstructorBuilder(expr => {
             this._expr = expr
             return this
@@ -351,6 +352,12 @@ class StatementBuilder<P> {
             return this
         })
     }
+    return(type?: LWType): ReturnBuilder<StatementBuilder<P>> {
+        return new ReturnBuilder(stmt => {
+            this._stmt = stmt
+            return this
+        }, type)
+    }
     $(): P {
         check("Statement", this._stmt)
         return this._cont(this._stmt!)
@@ -461,7 +468,7 @@ class FunctionBuilder<P> {
     static() { this._modifiers.push(Md.static()); return this }
     returns(type: LWType) { this._returnType = type; return this }
     body(body: LWStatement) { this._body = body; return this }
-    parameters(params: {name: string, type: LWType}[]) { this._parameters.push(...params); return this }
+    parameters(params: FunctionDeclaration['parameters']) { this._parameters.push(...params); return this }
     param(name: string): ParamBuilder<FunctionBuilder<P>> {
         return new ParamBuilder((name, type) => {
             this._parameters.push({name, type})

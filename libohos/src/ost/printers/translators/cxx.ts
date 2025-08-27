@@ -311,7 +311,7 @@ export class CXXPrinter {
         break
       }
       case lw.LWKind.IfStatement: {
-        this.p.put('if', '(')
+        this.p.put('if', ' ', '(')
         this.printExpression(statement.condition)
         this.p.put(')', ' ')
         this.printStatement(statement.thenBody)

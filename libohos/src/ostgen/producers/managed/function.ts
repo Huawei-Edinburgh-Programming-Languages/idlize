@@ -14,7 +14,7 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { AdvancedGeneratorContext, cApiName, createSpecialProducer, managedName, nativeName, roles } from "../common";
+import { AdvancedGeneratorContext, cApiName, createSpecialProducer, managedName, bridgeName, roles, implName } from "../common";
 import { E, T } from "../../../ost/builder";
 import { Builders } from "../../../ost/builders";
 import { ArgConvertor } from "../components/argConvertor";
@@ -31,7 +31,7 @@ export const functionProducer = createSpecialProducer(
         implementationGenerator: () => [
           generateFunction(method, ctx),
           generateGlobalScopeFunction(method, ctx),
-          generateModifier(method, ctx),
+          ...generateModifiers(method, ctx),
           generateBridge(method, ctx),
           generateMacroCall(method, ctx),
         ]
@@ -77,13 +77,20 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
         .$().$()
 }
 
-function generateModifier(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
+function generateModifiers(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
   const returnType = ctx.useCApi(method.returnType).reference();
   const params: [string, LWType][] = method.parameters.map(it =>
     [it.name, Ts.const(Ts.ptr(ctx.useCApi(it.type).reference()))])
-  return Builders.struct(cApiName('modifier.GlobalScopeModifier'))
-    .field(method.name)
-      .funcType().parameters(params).returns(returnType).$().$().$()
+  return [
+    // C API modifier function
+    Builders.struct(cApiName('modifier.GlobalScopeModifier'))
+      .field(method.name)
+        .funcType().parameters(params).returns(returnType).$().$().$(),
+    // implementation declaration
+    Builders.function(implName('modifier.GlobalScope_' + method.name + 'Impl'))
+      .parameters(params.map(([name, type]) => ({ name, type })))
+      .returns(returnType).$()
+  ]
 }
 
 function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
@@ -94,7 +101,7 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
       .decl(it.name, ctx.useCApi(it.type).reference())
         .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$().$())
   const modulePrefix = generatorConfiguration().moduleName.toUpperCase();
-  return Builders.function(nativeName('modifier.impl_GlobalScope_' + method.name))
+  return Builders.function(bridgeName('modifier.impl_GlobalScope_' + method.name))
     .param('thisArray').type(Ts.prim.serializerBuffer).$()
     .param('thisLength').type(Ts.prim.i32).$()
     .returns(returnType)
@@ -124,5 +131,5 @@ function generateMacroCall(method: idl.IDLMethod, ctx: AdvancedGeneratorContext)
       E.v('GlobalScope_' + method.name),
       E.v(Ts.prim.serializerBuffer.name, [An.isType()]),
       E.v(Ts.prim.i32.name, [An.isType()])]).$()
-    .$decl(nativeName('koala.interop.macro' + method.name))
+    .$decl(bridgeName('koala.interop.macro.' + method.name))
 }
