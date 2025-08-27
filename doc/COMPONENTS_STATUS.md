@@ -532,7 +532,7 @@
 |`setResizable`| Function | Evstigneev Roman | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`setPrivacySensitive`| Function | Evstigneev Roman | done | pass | |
 |`setOrientation`| Function | Samarin Sergey | done | pass | |
-| `setEnhancedImageQuality` | Function |  |  |  |  |  |  |
+| `setEnhancedImageQuality` | Function | done |  |  |  |  |  |
 |*ImageAnimator*| *Component* | Pavelyev Ivan | done |  | |
 |`construct`| Function | Pavelyev Ivan | done | pass | |
 |`setImageAnimatorOptions`| Function | Pavelyev Ivan | done | pass | |
@@ -945,7 +945,7 @@
 |`setEditMenuOptions`|Function| Pavelyev Ivan | done |  |  |
 |`setEnablePreviewText`|Function| Evstigneev Roman | done |  |  |
 |`setEnableHapticFeedback`|Function|Evstigneev Roman| done |  | not supported by dayu200; need to test on mobile device |
-|`setAutoCapitalizationMode`| Function | | | | no such API in generation 125 |
+|`setAutoCapitalizationMode`| Function | Evstigneev Roman | in progress | | no such API in generation 125 |
 |`setHalfLeading`| Function | Kovalev Sergey | done |  | |
 |`setStopBackPress`| Function | Kovalev Sergey | done |  | |
 |`setOnWillChange`| Function | Kovalev Sergey| done | | |
@@ -1265,7 +1265,7 @@
 |`setEditMenuOptions`|Function| Pavelyev Ivan | done | not covered |  |
 |`setEnablePreviewText`|Function|Tuzhilkin Ivan| done | not covered |  |
 |`setEnableHapticFeedback`|Function|Tuzhilkin Ivan| done |  | not supported by dayu200; need to test on mobile device |
-|`setAutoCapitalizationMode`| Function | | | not covered | no such API in generation 125 |
+|`setAutoCapitalizationMode`| Function | Evstigneev Roman | in progress | not covered | no such API in generation 125 |
 |`setHalfLeading`| Function | Kovalev Sergey | done | not covered | |
 |`setEllipsisMode`| Function | Kovalev Sergey | done | not covered | |
 |`setStopBackPress`| Function | Kovalev Sergey | done | not covered | |
@@ -1353,7 +1353,7 @@
 |`setEditMenuOptions`| Function | Pavelyev Ivan| done|  |  |
 |`setEnablePreviewText`| Function | Spirin Andrey | done |  |  |
 |`setEnableHapticFeedback`| Function | Spirin Andrey | done |  | not supported by dayu200; need to test on mobile device |
-|`setAutoCapitalizationMode`| Function | | | | no such API in generation 125 |
+|`setAutoCapitalizationMode`| Function | Evstigneev Roman | in progress | | no such API in generation 125 |
 |`setHalfLeading`| Function | Kovalev Sergey | done |  | |
 |`setEllipsisMode`| Function |  Kovalev Sergey| done |  | |
 |`setStopBackPress`| Function | Kovalev Sergey | done |  | |
