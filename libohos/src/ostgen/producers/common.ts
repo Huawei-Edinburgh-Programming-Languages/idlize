@@ -14,7 +14,7 @@
  */
 
 import * as idl from "@idlizer/core/idl"
-import { createProducer, GeneratorContext, MakeSelectorPattern, MakeSelectorQuery, Producer, ProducerBox, ProducerDescription } from "../context"
+import { createProducer, GeneratorContext, MakeSelectorPattern, MakeSelectorQuery, Producer, ProducerBox, ProducerDescription } from "../engine/context"
 
 export const MANAGED_PREFIX = 'managed'
 export const C_API_PREFIX = 'capi'

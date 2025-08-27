@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { An, D, E, S, T, Ts } from "../../../ost/main";
-import { createProducer } from "../../context"
+import { An, D, E, S, T, Ts } from "../../../ost";
+import { createProducer } from "../../engine/context"
 import * as idl from "@idlizer/core/idl";
 import { managedName, roles } from "../common";
 

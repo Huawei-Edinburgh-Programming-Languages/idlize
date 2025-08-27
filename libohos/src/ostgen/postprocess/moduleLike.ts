@@ -14,9 +14,9 @@
  */
 
 import { Builders } from "../../ost/builders";
-import { D, E, IdentityTransformer, lw, std, T, utils } from "../../ost/main";
+import { D, E, IdentityTransformer, lw, std, T, utils } from "../../ost";
 import { ImportsCollector } from "../../peer-generation/ImportsCollector";
-import { mapName } from "../library/utils";
+import { mapName } from "../engine/utils";
 import { managedName } from "../producers/common";
 import { mergeStructs } from "./postprocess";
 

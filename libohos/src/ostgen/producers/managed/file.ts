@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { createProducer } from "../../context";
+import { createProducer } from "../../engine/context";
 import * as idl from "@idlizer/core/idl";
 import { roles } from "../common";
 

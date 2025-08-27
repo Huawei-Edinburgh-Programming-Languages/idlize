@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { D, lw } from "../../ost/main";
+import { D, lw } from "../../ost";
 
 export function mergeStructs(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     const index = new Map<string, (lw.ClassDeclaration | lw.StructureDeclaration)[]>()

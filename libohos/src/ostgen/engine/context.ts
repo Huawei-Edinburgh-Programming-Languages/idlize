@@ -15,7 +15,8 @@
 
 import { Language, NativeModuleType, PeerLibrary } from "@idlizer/core";
 import * as idl from "@idlizer/core/idl"
-import { lw } from "../ost/main";
+import { lw } from "../../ost";
+import { HistoryTracker } from "./history";
 
 export class IDLTypeResolver {
     readonly R = new PeerLibrary(Language.TS, new NativeModuleType('__NOT_USED__'), true)
@@ -154,6 +155,8 @@ export interface MakeSelectorPattern<N extends idl.IDLNode> {
     role?: string
 }
 
+export class SelectError extends Error {}
+
 export class MakeSelector {
     private readonly storage: ProducerBox<idl.IDLNode>[] = []
 
@@ -173,7 +176,7 @@ export class MakeSelector {
             return it.pattern.role === queryRole
         })
         if (!record) {
-            throw new Error(`Can not process "${idl.getFQName(query.node)}", ${idl.IDLKind[query.node.kind]}, ${query.role}`)
+            throw new SelectError(`Can not process "${idl.getFQName(query.node)}", ${idl.IDLKind[query.node.kind]}, ${query.role}`)
         }
         return record.producer
     }
@@ -183,12 +186,19 @@ export class MakeSelector {
     }
 }
 
+interface GeneratorContextQueueItem {
+    generator: TerminalProducerDescription['artifact']['implementationGenerator']
+    history: HistoryTracker
+}
+
 export class GeneratorContext {
     public resolver: IDLTypeResolver
 
     private storage = new Map<string, TerminalProducerDescription>()
-    private generatingQueue: TerminalProducerDescription['artifact']['implementationGenerator'][] = []
+    private generatingQueue: GeneratorContextQueueItem[] = []
+
     private renderContext = false
+    private historyContext = HistoryTracker.create('<root>')
 
     constructor(
         public library: idl.IDLFile[],
@@ -233,16 +243,29 @@ export class GeneratorContext {
         if (this.storage.has(key)) {
             return this.storage.get(key)!
         }
-        const producer = this.selector.select(query)
-        this.renderContext = false
-        const desc = producer(query.node, this, query)
-        this.renderContext = true
-        return this.resolveDescription(key, desc)
+        try {
+            const producer = this.selector.select(query)
+            this.renderContext = false
+            const desc = producer(query.node, this, query)
+            this.renderContext = true
+            return this.resolveDescription(key, desc, query.node)
+        } catch (ex) {
+            if (ex instanceof SelectError) {
+                console.error("Selector was not found!")
+                this.historyContext.follow((line) => {
+                    console.error(`  was working with "${line}"`)
+                })
+            }
+            throw ex
+        }
     }
-    private resolveDescription(key: string, desc: ProducerDescription): ProducerDescription {
+    private resolveDescription(key: string, desc: ProducerDescription, referenceNode:idl.IDLNode): ProducerDescription {
         if (isTerminal(desc)) {
             if (desc.artifact.implementationGenerator) {
-                this.generatingQueue.push(desc.artifact.implementationGenerator)
+                this.generatingQueue.push({
+                    generator: desc.artifact.implementationGenerator,
+                    history: this.historyContext.push(idl.getFQName(referenceNode))
+                })
             }
             this.storage.set(key, desc)
             return desc
@@ -259,7 +282,7 @@ export class GeneratorContext {
             return rec
         }
         if (isRecursive(desc)) {
-            return this.resolveDescription(key, desc.recursive())
+            return this.resolveDescription(key, desc.recursive(), referenceNode)
         }
         throw new Error("Unknown kind!")
     }
@@ -274,9 +297,10 @@ export class GeneratorContext {
         nodes.forEach(node => this.runUse({ node }))
         this.renderContext = false
         while (this.generatingQueue.length) {
-            const generator = this.generatingQueue.shift()!
+            const item = this.generatingQueue.shift()!
             this.renderContext = true
-            const decls = generator()
+            this.historyContext = item.history
+            const decls = item.generator?.() ?? []
             this.renderContext = false
             declarations.push(...decls)
         }

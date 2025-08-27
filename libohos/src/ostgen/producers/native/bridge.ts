@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { D, E, S, T, Ts } from "../../../ost/main";
+import { D, E, S, T, Ts } from "../../../ost";
 import * as idl from "@idlizer/core/idl"
 import { createSpecialProducer, bridgeName, roles } from "../common";
 import { ArgConvertor } from "../components/argConvertor";

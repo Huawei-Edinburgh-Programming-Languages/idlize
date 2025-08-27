@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import { D, T } from "../../../ost/main"
+import { D, T } from "../../../ost"
 import * as idl from "@idlizer/core/idl"
 import { cApiName, roles } from "../common"
-import { createProducer } from "../../context"
+import { createProducer } from "../../engine/context"
 
 export const enumProducer = createProducer(
   { is: idl.isEnum, role: roles.cApi },

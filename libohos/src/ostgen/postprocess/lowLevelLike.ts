@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { An, D, DD, E, IdentityTransformer, lw, Md, Op, std, T, Ts, utils } from "../../ost/main";
-import { throwError } from "../library/utils";
+import { An, D, DD, E, IdentityTransformer, lw, Md, Op, std, T, Ts, utils } from "../../ost";
+import { throwError } from "../engine/utils";
 import { generatorConfiguration, zipStrip } from "@idlizer/core";
 import { mergeStructs } from "./postprocess";
 import { Builders } from "../../ost/builders";

@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { lw, Ts } from "../../../ost/main";
-import { createProducer } from "../../context"
+import { lw, Ts } from "../../../ost";
+import { createProducer } from "../../engine/context"
 import * as idl from "@idlizer/core/idl";
 
 function selectType(type:idl.IDLPrimitiveType): lw.LWType {

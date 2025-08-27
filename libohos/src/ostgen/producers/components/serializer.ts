@@ -14,8 +14,8 @@
  */
 import * as idl from "@idlizer/core/idl"
 import { AdvancedGeneratorContext, managedName, bridgeName } from "../common";
-import { ProducerDescription } from "../../context";
-import { An, E, T, Ts } from "../../../ost/main";
+import { ProducerDescription } from "../../engine/context";
+import { An, E, T, Ts } from "../../../ost";
 import { ArgConvertor } from "./argConvertor";
 import { Builders } from "../../../ost/builders";
 import { LWType } from "../../../ost/lws";

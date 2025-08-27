@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { D, Md, T } from "../../../ost/main"
+import { D, Md, T } from "../../../ost"
 import * as idl from "@idlizer/core/idl"
 import { cApiName, createSpecialProducer, roles } from "../common"
 

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { D, E, lw, S, T } from "../../../ost/main";
+import { D, E, lw, S, T } from "../../../ost";
 import * as idl from "@idlizer/core/idl"
 import { ArgConvertor } from "./argConvertor";
 import { AdvancedGeneratorContext } from "../common";

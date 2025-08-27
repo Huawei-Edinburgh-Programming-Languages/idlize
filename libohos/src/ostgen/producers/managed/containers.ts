@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import { T } from "../../../ost/main";
-import { createProducer } from "../../context"
+import { T } from "../../../ost";
+import { createProducer } from "../../engine/context"
 import * as idl from "@idlizer/core/idl";
 import { createSpecialProducer } from "../common";
 

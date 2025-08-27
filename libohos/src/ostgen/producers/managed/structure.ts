@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { D, Md, T, Ts } from "../../../ost/main";
+import { D, Md, T, Ts } from "../../../ost";
 import * as idl from "@idlizer/core/idl"
 import { makePeerMethod } from "../components/peerMethod";
 import { createSpecialProducer, managedName, roles } from "../common";
