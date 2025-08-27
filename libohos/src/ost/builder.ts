@@ -67,11 +67,12 @@ export const E = {
 }
 
 export const S = {
-  declaration: (varName: string, varType: lw.LWType, mutable: boolean, expression?: lw.LWExpression): lw.DeclarationStatement => ({
+  declaration: (varName: string, varType: lw.LWType, mutable: boolean, expression?: lw.LWExpression, isStatic?: boolean): lw.DeclarationStatement => ({
     kind: lw.LWKind.DeclarationStatement,
     varName,
     varType,
     mutable,
+    static: isStatic ?? false,
     expression,
   }),
   block: (statements: lw.LWStatement[]): lw.CompoundStatement => ({

@@ -167,6 +167,7 @@ export interface DeclarationStatement {
   varName: string
   varType: LWType
   mutable: boolean
+  static: boolean
   expression?: LWExpression
 }
 export interface CompoundStatement {

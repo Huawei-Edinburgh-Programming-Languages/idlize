@@ -280,12 +280,14 @@ export class CXXPrinter {
         break
       }
       case lw.LWKind.DeclarationStatement: {
+        if (statement.static)
+          this.p.put('static', ' ')
         this.printDirectType(statement.varType, statement.varName)
         if (statement.expression) {
           if (statement.expression.kind === lw.LWKind.ConstructorExpression) {
             let closer: string | undefined
             if (utils.hasAnnotation(statement.expression, std.names.annotations.asStruct)) {
-              this.p.put(' ', '{')
+              this.p.put(' ', '=', ' ', '{')
               closer = '}'
             } else if (utils.hasAnnotation(statement.expression, std.names.annotations.stackInstance)) {
               this.p.put('(')

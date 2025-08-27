@@ -198,8 +198,10 @@ class ExpressionBuilder<P> {
 class DeclarationBuilder<P> {
     constructor(private _cont: (stmt: DeclarationStatement) => P, private _name: string, private _type: LWType) {}
     private _mutable: boolean = false
+    private _static: boolean = false
     private _expression?: LWExpression
     mutable() { this._mutable = true; return this }
+    static() { this._static = true; return this }
     valueExpr(expr: LWExpression) { this._expression = expr; return this }
     valueStr(str: string) { this._expression = E.c(str); return this }
     value(): ExpressionBuilder<DeclarationBuilder<P>> {
@@ -209,7 +211,7 @@ class DeclarationBuilder<P> {
         })
     }
     $(): P {
-        return this._cont(S.declaration(this._name, this._type, this._mutable, this._expression))
+        return this._cont(S.declaration(this._name, this._type, this._mutable, this._expression, this._static))
     }
 }
 

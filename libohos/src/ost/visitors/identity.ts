@@ -130,6 +130,7 @@ export class IdentityTransformer {
     return {
       kind: stmt.kind,
       mutable: stmt.mutable,
+      static: stmt.static,
       varName: stmt.varName,
       varType: this.goType(stmt.varType),
       expression: over(stmt.expression, e => this.goExpression(e))
