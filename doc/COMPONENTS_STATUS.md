@@ -292,9 +292,9 @@
 |`setBackgroundImage0`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setBackgroundImage1`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setBackgroundBlurStyle`| Function | Skroba Gleb | done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
-|`setBackgroundEffect1`| Function |  |  |  |  |  |  |
+|`setBackgroundEffect1`| Function | Evstigneev Roman, Samarin Sergey | testskipped |  |  |  |  |
 |`setForegroundBlurStyle`| Function | Evstigneev Roman | in progress | | |
-|`setOnClick1`| Function |  |  |  |  |  |  |
+|`setOnClick1`| Function | Skroba Gleb, Nikita Maksimov | done |  |  |  |  |
 |`setFocusScopeId`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setFocusScopePriority`| Function | Dmitry A Smirnov| done | pass | |
 |`setTransition1`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped, commented ViewAbstract static methods code |
@@ -519,7 +519,7 @@
 |`setInterpolation`| Function | Evstigneev Roman | done | pass | |
 |`setSourceSize`| Function | Evstigneev Roman | done | pass | |
 |`setSyncLoad`| Function | Evstigneev Roman | done | pass | |
-|`setColorFilter`| Function |  |  |  |  |  |  |
+|`setColorFilter`| Function | Evstingneev Roman | blocked |  |  |  | blocked by DrawColorFilter |
 |`setCopyOption`| Function | Evstigneev Roman | testskipped | pass |  tests blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IBEEFF (+) |
 |`setDraggable`| Function | Evstigneev Roman | done | pass |   |
 |`setPointLight`| Function | Evstigneev Roman | done | pass |    |
@@ -553,7 +553,7 @@
 |`construct`| Function | Politov Mikhail | done | pass | |
 |`setImageSpanOptions`| Function | Politov Mikhail | done | pass | |
 |`setVerticalAlign`| Function | Politov Mikhail | done | pass |  |
-|`setColorFilter`| Function |  |  |  |  |  |  |
+|`setColorFilter`| Function | Evstingneev Roman | blocked |  |  |  | blocked by DrawColorFilter |
 |`setObjectFit`| Function | Politov Mikhail | done | pass |  |
 |`setOnComplete`| Function | Politov Mikhail | done | pass |  |
 |`setOnError`| Function | Politov Mikhail | done |  |  |
@@ -2918,9 +2918,9 @@
 |`getIsInteractive`| Function | Morozov Sergey | done |  |  |
 |`setIsInteractive`| Function | Morozov Sergey | done |  |  |
 |`getCancelTransition`| Function | Morozov Sergey | done |  |  |
-|`setCancelTransition`| Function | Morozov Sergey |  |  |  |
+|`setCancelTransition`| Function | Morozov Sergey | testskipped |  |  |
 |`getUpdateTransition`| Function | Morozov Sergey | done |  |  |
-|`setUpdateTransition`| Function | Morozov Sergey |  |  |  |
+|`setUpdateTransition`| Function | Morozov Sergey | testskipped |  |  |
 |*PatternLockController*| *Class* |Dmitry A Smirnov| done |  |  |
 |`construct`| Function |Dmitry A Smirnov| done |  |  |
 |`reset`| Function |Dmitry A Smirnov| done |  |  |
@@ -3185,14 +3185,14 @@
 |`setTextSelection`| Function | Spirin Andrey | done |  |  |
 |`stopEditing`| Function |  Spirin Andrey | done |  |  |
 |*TextPickerDialog*| *Class* | Ekaterina Stepanova | done |  | |
-|`construct`| Function | Ekaterina Stepanova |  |  |  |
+|`construct`| Function | Ekaterina Stepanova | done |  |  |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |  |
 |`construct`| Function |Ekaterina Stepanova| done | pass |  |
 |`start`| Function |Ekaterina Stepanova| done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`pause`| Function |Ekaterina Stepanova| done |  |  |
 |`reset`| Function |Ekaterina Stepanova| done |  |  |
 |*TimePickerDialog*| *Class* | Ekaterina Stepanova | done |  | |
-|`construct`| Function | Ekaterina Stepanova |  |  |  |
+|`construct`| Function | Ekaterina Stepanova | done |  |  |
 |*UIExtensionProxy*| *Class* | Tuzhilkin Ivan | blocked IDL|  | |
 |`construct`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`send`| Function | Tuzhilkin Ivan | blocked |  | blocked Arkoala. Want processing |
@@ -3257,7 +3257,7 @@
 |`contentModifierTextTimer`| Function | | |
 |`contentModifierToggle`| Function | | |
 |*LazyForEachOps*| *Class* | managed side | done | | |
-|``Sync`| Function |  |  |  |
+|``Sync`| Function | managed side |  |  |
 |*SystemOps*| *Class* | managed side| managed side| | |
 |`StartFrame`| Function |managed side |managed side | | |
 |`EndFrame`| Function | managed side | managed side | | |
