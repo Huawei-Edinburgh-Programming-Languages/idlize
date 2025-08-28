@@ -61,7 +61,7 @@ build external:
     - npm run compile --prefix external/incremental/compat
     - npm run compile --prefix external/incremental/runtime
     - npm run compile --prefix external/ui2abc/fast-arktsc
-    - npm run compile --prefix external/ui2abc/memo-plugin
+    - npm run compile --prefix external/ui2abc/memo-plugin-ng
     - npm run build --prefix external/interop
     - npm run build --prefix external/incremental
     artifacts:
@@ -70,7 +70,7 @@ build external:
         - external/ui2abc/libarkts/build
         - external/ui2abc/annotate/lib
         - external/ui2abc/fast-arktsc/lib
-        - external/ui2abc/memo-plugin/lib
+        - external/ui2abc/memo-plugin-ng/lib
         - external/ui2abc/ui-plugins/lib
         - external/incremental/common/build/lib
         - external/incremental/compat/build
@@ -81,7 +81,7 @@ build external:
         - external/interop/build/lib
         - external/interop/build/interop.abc
         # need these symlinks for require in es2panda.js to work
-        - external/ui2abc/node_modules/@koalaui/memo-plugin
+        - external/ui2abc/node_modules/@koalaui/memo-plugin-ng
         - external/ui2abc/node_modules/@koalaui/ui-plugins
         expire_in: 1 day
 
