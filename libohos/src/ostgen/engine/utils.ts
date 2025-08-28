@@ -35,5 +35,13 @@ export function mapName(name: string): string {
   return name
       .replace(/^managed\./, '')
       .replace(/^native\./, '')
-      .replace(/^engine/, generatorConfiguration().moduleName + ".INTERNAL")
+      .replace(/^engine/, generatorConfiguration().moduleName + '.INTERNAL')
+}
+
+export function moduleName(suffix?: string): string {
+  return generatorConfiguration().moduleName.toUpperCase() + (suffix ?? '')
+}
+
+export function mangleName(className: string, methodName: string): string {
+  return `_${className}_${methodName}`
 }

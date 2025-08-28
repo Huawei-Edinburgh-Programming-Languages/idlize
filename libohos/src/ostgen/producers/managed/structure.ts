@@ -13,58 +13,95 @@
  * limitations under the License.
  */
 
-import { D, Md, T, Ts } from "../../../ost";
+import { D, E, Md, T, Ts } from "../../../ost";
 import * as idl from "@idlizer/core/idl"
 import { makePeerMethod } from "../components/peerMethod";
-import { createSpecialProducer, managedName, roles } from "../common";
+import { AdvancedGeneratorContext, createSpecialProducer, managedName, roles } from "../common";
 import { getSuperType, isMaterialized } from "@idlizer/core";
+import { mangleName, moduleName, ProducerDescription } from "../../engine";
+import { LWDeclaration } from "../../../ost/lws";
+import { Builders } from "../../../ost/builders";
 
 export const structureProducer = createSpecialProducer(
   { is: idl.isInterface, role: roles.managed },
   (node, ctx) => {
-    if (node.subkind === idl.IDLInterfaceSubkind.Tuple) {
-      return {
-        recursive: () => {///native
-          return {
-            artifact: {
-              reference: Ts.intersection(
-                node.properties.map(prop => ctx.useManaged(prop.type).reference()))
-            }
-          }
-        }
-      }
-    }
-
-    const generatedDeclName = managedName(idl.getFQName(node))
-
-    const implementationGenerator = isMaterialized(node, ctx.base.resolver.R)
-      ? undefined
-      : () => {
-        ctx.useCApi(node)
-        const superType = getSuperType(node, ctx.base.resolver.R)
-        return [D.class(generatedDeclName,
-          node.properties.map(prop => {
-            const modifiers = [
-              ...prop.isOptional ? [Md.optional()] : [],
-              ...prop.isReadonly ? [Md.readonly()] : [],
-              ...prop.isStatic ? [Md.static()] : [],
-            ]
-            return {
-              name: prop.name,
-              type: ctx.useManaged(prop.type).reference(),
-              modifiers,
-            }
-          }),
-          node.methods.map(method => makePeerMethod(method, ctx)), {
-          kind: idl.isClassSubkind(node) ? 'class' : 'interface',
-          base: superType ? ctx.useManaged(superType).reference() : undefined
-          })]
-      }
+    if (node.subkind === idl.IDLInterfaceSubkind.Tuple)
+      return makeTuple(node, ctx)
+    const declName = managedName(idl.getFQName(node))
+    const generator = isMaterialized(node, ctx.base.resolver.R)
+      ? makeMaterialized
+      : makeInterface
     return {
       artifact: {
-        reference: T.cc(generatedDeclName),
-        implementationGenerator
+        reference: T.cc(declName),
+        implementationGenerator: () => {
+          ctx.useCApi(node)
+          return generator(node, declName, ctx)
+        }
       }
     }
   }
 )
+
+function makeTuple(node: idl.IDLInterface, ctx: AdvancedGeneratorContext): ProducerDescription {
+  return {
+    recursive: () => {///native
+      return {
+        artifact: {
+          reference: Ts.intersection(
+            node.properties.map(prop => ctx.useManaged(prop.type).reference()))
+        }
+      }
+    }
+  }
+}
+
+function makeInterface(node: idl.IDLInterface, name: string, ctx: AdvancedGeneratorContext): LWDeclaration[] {
+  const superType = getSuperType(node, ctx.base.resolver.R)
+  return [D.class(name,
+    node.properties.map(prop => {
+      const modifiers = [
+        ...prop.isOptional ? [Md.optional()] : [],
+        ...prop.isReadonly ? [Md.readonly()] : [],
+        ...prop.isStatic ? [Md.static()] : [],
+      ]
+      return {
+        name: prop.name,
+        type: ctx.useManaged(prop.type).reference(),
+        modifiers,
+      }
+    }),
+    node.methods.map(method => makePeerMethod(method, ctx)), {
+    kind: idl.isClassSubkind(node) ? 'class' : 'interface',
+    base: superType ? ctx.useManaged(superType).reference() : undefined
+    })]
+}
+
+function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGeneratorContext): LWDeclaration[] {
+  const peerType = Ts.union([T.cc('Finalizable'), T.cc('undefined')])
+  const ptrType = T.cc('KPointer');
+  const thisType = ctx.useManaged(node).reference();
+  const nativeModule = E.v(moduleName('NativeModule'))
+  return [
+    Builders.class(name + 'Internal')
+      .method('fromPtr').static()
+        .returns(thisType)
+        .param('ptr').type(ptrType).$().block()
+          .return(thisType).ctor(name).args([E.v('ptr')]).$().$().$().$().$(),
+    Builders.class(name).implements(T.cc('MaterializedBase'))
+      .field('peer').type(peerType).$()
+      .method('constructor').param('peerPtr').type(ptrType).$().block()
+        .binary('=')
+          .left().access(E.v('this')).member('peer').$().$()
+          .right().ctor('Finalizable')
+            .arg('peerPtr').$()
+            .arg().call().receiverName(name).functionName('getFinalizer').$().$().$().$().$().$().$()
+      .method('getPeer').returns(peerType).block()
+        .return(peerType).access(E.v('this')).member('peer').$().$().$().$()
+      .method('construct').static().returns(ptrType).block()
+        .return(ptrType).call().function().access(nativeModule).member(mangleName(name, 'construct')).$().$().$().$().$().$()
+      .method('getFinalizer').static().returns(ptrType).block()
+        .return(ptrType).call().function().access(nativeModule).member(mangleName(name, 'getFinalizer')).$().$().$().$().$().$()
+      .$()
+  ]
+}

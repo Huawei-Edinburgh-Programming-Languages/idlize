@@ -21,6 +21,7 @@ import { ArgConvertor } from "../components/argConvertor";
 import { generatorConfiguration } from "@idlizer/core";
 import { An, Op, Ts } from "../../../ost/stdlib";
 import { LWType } from "../../../ost/lws";
+import { moduleName } from "../../engine";
 
 export const functionProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.managed },
@@ -60,7 +61,6 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
     const fieldWrites = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
     const returnType = ctx.useManaged(method.returnType).reference();
     const params = method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() }));
-    const nativeModuleName = generatorConfiguration().moduleName.toUpperCase() + 'NativeModule'
     return Builders.class(GLOBAL_SCOPE_NAME)
       .method(method.name)
         .static()
@@ -70,7 +70,7 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
           .decl(serializerName, T.c('SerializerBase'))
             .value().call().receiverName('SerializerBase').functionName('hold').$().$().$()
           .statements(fieldWrites)
-          .call().receiverName(nativeModuleName).functionName('_GlobalScope_' + method.name)
+          .call().receiverName(moduleName('NativeModule')).functionName('_GlobalScope_' + method.name)
             .arg().call().receiverName(serializerName).functionName('asBuffer').$().$()
             .arg().call().receiverName(serializerName).functionName('length').$().$().$()
           .call().receiverName(serializerName).functionName('release').$().$()
@@ -100,7 +100,6 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
     Builders.stmt()
       .decl(it.name, ctx.useCApi(it.type).reference())
         .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$().$())
-  const modulePrefix = generatorConfiguration().moduleName.toUpperCase();
   return Builders.func(bridgeName('modifier.impl_GlobalScope_' + method.name))
     .param('thisArray').type(Ts.prim.serializerBuffer).$()
     .param('thisLength').type(Ts.prim.i32).$()
@@ -115,8 +114,8 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
             .call().function().access()
               .object()
                 .call()
-                  .functionName(('Get' + generatorConfiguration().TypePrefix + modulePrefix + '_API'))
-                  .arg(modulePrefix + '_API_VERSION').$().$().$()
+                  .functionName(('Get' + generatorConfiguration().TypePrefix + moduleName('_API')))
+                  .arg(moduleName('_API_VERSION')).$().$().$()
               .member('GlobalScope')
               .ptr().$().$().$().$()
           .member(method.name)

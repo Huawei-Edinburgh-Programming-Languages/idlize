@@ -87,8 +87,8 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, useOst: b
         peerLibrary,
         [
             createCallbackKindPrinter(peerLibrary.language),
-            createMaterializedPrinter(false),
             ...spread(!useOst,
+                createMaterializedPrinter(false),
                 createInterfacePrinter(false, false),
                 printDataClasses,
                 printGlobal,

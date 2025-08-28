@@ -212,6 +212,9 @@ export function formFiles(knownPackages: Set<string>, declarations: lw.LWDeclara
 
 function defaultImports(): ImportsCollector {
     const imports = new ImportsCollector()
-    imports.addFeatures(['SerializerBase', 'DeserializerBase'], '@koalaui/interop')
+    imports.addFeatures([
+        'SerializerBase', 'DeserializerBase',
+        'Finalizable', 'KPointer', 'MaterializedBase'
+    ], '@koalaui/interop')
     return imports
 }

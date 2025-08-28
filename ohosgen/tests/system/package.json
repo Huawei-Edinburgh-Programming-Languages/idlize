@@ -20,7 +20,7 @@
         "compile:interop:native:arkts": "TARGET_VM=panda npm run compile:interop:native",
 
         "clean": "rm -rf ./${TEST_CASE}/build ./${TEST_CASE}/generated",
-        "generate:dts:arkts": "node ../../../dtsgen --dts2idl --input-dir ./${TEST_CASE}/dts --output-dir ./${TEST_CASE}/generated/idl && node ../.. --idl2peer --use-new-ohos --language=arkts --input-dir ./${TEST_CASE}/generated/idl",
+        "generate:dts:arkts": "node ../../../dtsgen --dts2idl --input-dir ./${TEST_CASE}/dts --output-dir ./${TEST_CASE}/generated/idl && node ../.. --idl2peer --use-new-ohos --use-ost --language=arkts --input-dir ./${TEST_CASE}/generated/idl",
         "generate:idl:arkts": "node ../.. --use-new-ohos --use-ost --language=arkts --idl2peer --input-dir ./${TEST_CASE}/idl",
         "generate:arkts": "npm run generate:${INPUT_TYPE}:arkts -- --options-file ./${TEST_CASE}/generation_config.json --output-dir ./${TEST_CASE}",
         "compile:arkts": "bash ./build-panda.sh ${TEST_CASE}",

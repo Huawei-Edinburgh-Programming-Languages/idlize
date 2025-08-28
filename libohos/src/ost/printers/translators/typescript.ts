@@ -400,14 +400,14 @@ export class TSPrinter {
             this.p.put('extends', ' ')
             this.printType(declaration.oop.base)
           }
-          if (declaration.oop.implementations && declaration.oop.implementations.length > 0) {
+          if (declaration.oop.implementations?.length) {
             this.p.put('implements', ' ')
             declaration.oop.implementations.forEach((iface, i) => {
-              if (i > 0) {
+              if (i > 0)
                 this.p.put(',', ' ')
-              }
               this.printType(iface)
             })
+            this.p.put(' ')
           }
         }
         this.scope.push('member')

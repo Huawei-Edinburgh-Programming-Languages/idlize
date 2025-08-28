@@ -144,6 +144,12 @@ class ConstructorBuilder<P> {
     asStruct() { this._annotations.push(An.asStruct()); return this }
     stack() { this._annotations.push(An.stackInstance()); return this }
     args(args: LWExpression[]) { this._args.push(...args); return this }
+    arg(value?: string): ArgBuilder<ConstructorBuilder<P>> {
+        return new ArgBuilder(arg => {
+            this._args.push(arg)
+            return this
+        }, value ? E.v(value) : undefined)
+    }
     $(): P {
         return this._cont(E.instance(this._name ?? 'CTOR_NAME', this._args, [], this._annotations))
     }
@@ -204,7 +210,7 @@ class DeclarationBuilder<P> {
     mutable() { this._mutable = true; return this }
     static() { this._static = true; return this }
     valueExpr(expr: LWExpression) { this._expression = expr; return this }
-    valueStr(str: string) { this._expression = E.c(str); return this }
+    valueStr(str: string | number) { this._expression = E.v(str.toString()); return this }
     value(): ExpressionBuilder<DeclarationBuilder<P>> {
         return new ExpressionBuilder(expr => {
             this._expression = expr
@@ -227,11 +233,29 @@ class ReturnBuilder<P> {
             return this
         })
     }
+    access(object?: LWExpression): AccessorBuilder<ReturnBuilder<P>> {
+        return new AccessorBuilder(expr => {
+            this._expr = expr
+            return this
+        }, object)
+    }
+    binary(op: string): BinaryBuilder<ReturnBuilder<P>> {
+        return new BinaryBuilder(expr => {
+            this._expr = expr
+            return this
+        }, op)
+    }
     call(): CallBuilder<ReturnBuilder<P>> {
         return new CallBuilder(expr => {
             this._expr = expr
             return this
         })
+    }
+    ctor(name?: string): ConstructorBuilder<ReturnBuilder<P>> {
+        return new ConstructorBuilder(expr => {
+            this._expr = expr
+            return this
+        }, name)
     }
     $(): P {
         if (this._expr) {
@@ -533,6 +557,14 @@ class ClassBuilder {///extend StructB
     constructor(private _name: string) {}
     private _fields: { name: string, type: LWType, modifiers?: Modifier[] }[] = []
     private _methods: FunctionDeclaration[] = []
+    private _oop: ClassDeclaration['oop'] = {
+        kind: 'class',
+        base: undefined,
+        implementations: []
+    }
+    extends(type: LWType) { this._oop!.base = type; return this }
+    implements(type: LWType) { this._oop!.implementations?.push(type); return this }
+    interface() { this._oop!.kind = 'interface'; return this }
     field(name: string): FieldBuilder<ClassBuilder> {
         return new FieldBuilder((name, type, modifiers) => {
             this._fields.push({name, type, modifiers})
@@ -547,7 +579,7 @@ class ClassBuilder {///extend StructB
     }
     $(): ClassDeclaration {
         check("Class", this._name)
-        return D.class(this._name!, this._fields, this._methods)
+        return D.class(this._name!, this._fields, this._methods, this._oop)
     }
 }
 
