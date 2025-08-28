@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { Language, NativeModuleType, PeerLibrary, throwException, toIDLFile } from "@idlizer/core";
+import { Language, NativeModuleType, PeerLibrary, throwException, parseIDLFile } from "@idlizer/core";
 import { createFile, createNamespace, forEachChild, getFileFor, getFQName, IDLEntry, IDLFile, isImport, isNamespace, isReferenceType, toIDLString } from "@idlizer/core/idl";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { ADDITIONAL_CONFIG_DIR, AppConfig, BASIC_CONFIG_PATH, BASIC_MODULES_CONFIG_PATH, OUT_DIR, SUMMARY_PATH } from "./shared";
@@ -42,7 +42,7 @@ export function solve(root: string, options:AppConfig) {
     const input = scan(resolve(root))
     const library = input.flatMap(source => {
         try {
-            return [toIDLFile(source)[0]]
+            return [parseIDLFile(source)]
         } catch (e) {
             console.error('skipped', source)
             return []

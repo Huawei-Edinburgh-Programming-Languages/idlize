@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { ConfigTypeInfer, D, Language, NativeModuleType, PeerLibrary, throwException, toIDLFile } from "@idlizer/core";
+import { ConfigTypeInfer, D, Language, NativeModuleType, PeerLibrary, throwException, parseIDLFile } from "@idlizer/core";
 import { createFile, createNamespace, forEachChild, getFileFor, getFQName, IDLEntry, IDLFile, isImport, isNamespace, isReferenceType, toIDLString } from "@idlizer/core/idl";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, basename, resolve, sep } from "node:path";
@@ -82,7 +82,7 @@ export function runScraper(root: string, configPath:string):ScraperResult {
     const input = scan(resolve(root))
     const library = input.flatMap(source => {
         try {
-            return [toIDLFile(source)[0]]
+            return [parseIDLFile(source)]
         } catch (e) {
             console.error('skipped', source)
             return []
