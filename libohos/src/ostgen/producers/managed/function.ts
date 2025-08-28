@@ -43,7 +43,7 @@ const GLOBAL_SCOPE_NAME = managedName('engine.GlobalScope')
 
 function generateFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
   const returnType = ctx.useManaged(method.returnType).reference()
-  return Builders.function(managedName(idl.getFQName(method)))
+  return Builders.func(managedName(idl.getFQName(method)))
     .parameters(method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
     .returns(returnType)
     .block()
@@ -87,7 +87,7 @@ function generateModifiers(method: idl.IDLMethod, ctx: AdvancedGeneratorContext)
       .field(method.name)
         .funcType().parameters(params).returns(returnType).$().$().$(),
     // implementation declaration
-    Builders.function(implName('modifier.GlobalScope_' + method.name + 'Impl'))
+    Builders.func(implName('modifier.GlobalScope_' + method.name + 'Impl'))
       .parameters(params.map(([name, type]) => ({ name, type })))
       .returns(returnType).$()
   ]
@@ -101,7 +101,7 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
       .decl(it.name, ctx.useCApi(it.type).reference())
         .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$().$())
   const modulePrefix = generatorConfiguration().moduleName.toUpperCase();
-  return Builders.function(bridgeName('modifier.impl_GlobalScope_' + method.name))
+  return Builders.func(bridgeName('modifier.impl_GlobalScope_' + method.name))
     .param('thisArray').type(Ts.prim.serializerBuffer).$()
     .param('thisLength').type(Ts.prim.i32).$()
     .returns(returnType)

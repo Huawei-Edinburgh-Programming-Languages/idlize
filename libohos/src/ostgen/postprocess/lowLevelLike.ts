@@ -174,7 +174,7 @@ function makeApis(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
         apiStruct.field(className)
             .funcType().returns(Ts.const(Ts.ptr(T.cc(decl.name)))).$().$()
         // modifier implementation
-        const modifierImpl = Builders.function(modifierImplName)
+        const modifierImpl = Builders.func(modifierImplName)
             .returns(Ts.const(Ts.ptr(T.cc(decl.name))))
             .block()
                 .decl('instance', T.cc(decl.name)).static().value()
@@ -186,7 +186,7 @@ function makeApis(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
         apiImpls.push(E.unary(Op.ref, E.v(modifierImplName, [An.isType()])))
     })
     // API implementation function
-    const apiImpl = Builders.function(implName(`Get${generatorConfiguration().moduleName.toUpperCase()}APIImpl`))
+    const apiImpl = Builders.func(implName(`Get${generatorConfiguration().moduleName.toUpperCase()}APIImpl`))
         .returns(Ts.const(Ts.ptr(T.cc(apiStructName))))
         .param('version').type(Ts.prim.i32).$()
         ///extern "C"

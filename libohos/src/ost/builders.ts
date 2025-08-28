@@ -61,7 +61,7 @@ class BinaryBuilder<P> {
     leftExpr(value: LWExpression) { this._lhs = value; return this }
     leftStr(str: string) { this._lhs = E.v(str); return this }
     rightExpr(value: LWExpression) { this._rhs = value; return this }
-    rightStr(str: string | number) { this._rhs = E.c(str); return this }
+    rightStr(str: string | number) { this._rhs = E.v(str.toString()); return this }
     left(): ExpressionBuilder<BinaryBuilder<P>> {
         return new ExpressionBuilder(expr => {
             this._lhs = expr
@@ -142,8 +142,8 @@ class ConstructorBuilder<P> {
     private _args: LWExpression[] = []
     private _annotations: Annotation[] = []
     asStruct() { this._annotations.push(An.asStruct()); return this }
-    args(args: LWExpression[]) { this._args.push(...args); return this }
     stack() { this._annotations.push(An.stackInstance()); return this }
+    args(args: LWExpression[]) { this._args.push(...args); return this }
     $(): P {
         return this._cont(E.instance(this._name ?? 'CTOR_NAME', this._args, [], this._annotations))
     }
@@ -280,7 +280,7 @@ class LoopBuilder<P> {
     private _cond?: LWExpression
     private _step?: LWStatement
     private _body?: LWStatement
-    condExpr(cond: LWExpression) { this._cond = cond; return this }
+    condition(cond: LWExpression) { this._cond = cond; return this }
     bodyStmt(body: LWStatement) { this._body = body; return this }
     init(): StatementBuilder<LoopBuilder<P>> {
         return new StatementBuilder(stmt => {
@@ -554,7 +554,7 @@ class ClassBuilder {///extend StructB
 export class Builders {
     static expr(): ExpressionBuilder<LWExpression> { return new ExpressionBuilder(id) }
     static stmt(): StatementBuilder<LWStatement> { return new StatementBuilder(id) }
-    static function(name: string): FunctionBuilder<FunctionDeclaration> { return new FunctionBuilder(id, name) }
+    static func(name: string): FunctionBuilder<FunctionDeclaration> { return new FunctionBuilder(id, name) }
     static struct(name: string): StructBuilder { return new StructBuilder(name) }
     static class(name: string): ClassBuilder { return new ClassBuilder(name) }
 }

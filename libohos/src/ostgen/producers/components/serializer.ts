@@ -70,7 +70,7 @@ function makeSerializerClass(native: boolean, node: idl.IDLInterface, type: LWTy
 
 function makeSerializerWrite(native: boolean, node: idl.IDLInterface, type: LWType, ctx: AdvancedGeneratorContext) {
   const conv = new ArgConvertor(ctx, E.v('serializer'), native)
-  return Builders.function(makeSerializerName(node, native) + '::write')
+  return Builders.func(makeSerializerName(node, native) + '::write')
     .param('serializer').type(Ts.ref(T.cc('SerializerBase'))).$()
     .param('value').type(type).$()
     .block().statements(node.properties.map(prop =>
@@ -79,7 +79,7 @@ function makeSerializerWrite(native: boolean, node: idl.IDLInterface, type: LWTy
 
 function makeSerializerRead(native: boolean, node: idl.IDLInterface, type: LWType, ctx: AdvancedGeneratorContext) {
   const conv = new ArgConvertor(ctx, E.v('deserializer'), native)
-  return Builders.function(makeSerializerName(node, native) + '::read')
+  return Builders.func(makeSerializerName(node, native) + '::read')
     .param('deserializer').type(Ts.ref(T.cc('DeserializerBase'))).$()
     .returns(type)
     .block()

@@ -72,7 +72,7 @@ export class ArgConvertor {
                     .loop()
                         .init().decl('i', Ts.prim.i32).mutable().valueStr('0').$().$()
                         .cond().binary(Op.lt).leftStr('i').right().access(accessor).member('length').$().$().$().$()
-                        .step().binary('=').leftStr('i').right().binary(Op.add).leftStr('i').rightStr('1').$().$().$().$()
+                        .step().binary('=').leftStr('i').right().binary(Op.add).leftStr('i').rightStr(1).$().$().$().$()
                         .bodyStmt(
                             this.write(
                                 Builders.expr().access(accessor).indexStr('i').$().$(),
@@ -144,7 +144,7 @@ export class ArgConvertor {
                             .rightExpr(call).$().$()]
                     : [ Builders.stmt().binary(Op.eq).leftStr('tmp').rightExpr(call).$().$()]
                 return Builders.stmt().if()
-                    .cond().binary(Op.eq).leftStr('selector').rightStr(i.toString()).$().$()
+                    .cond().binary(Op.eq).leftStr('selector').rightStr(i).$().$()
                     .then().statements(assignments).$().$().$()
             })
             return [ [selectorDecl, tmpDecl, ...ifs], E.v('tmp!')]
