@@ -16,11 +16,11 @@ interface VeryVeryLongValue6 {
 interface VeryVeryLongValue7 {
 };
 [Synthetic]
-callback Callback_ShortValue_Void = void (ShortValue value);
+callback CallbackShortValueVoid = void (ShortValue value);
 [Synthetic]
-callback Callback_VeryVeryLongValue1_Void = void (VeryVeryLongValue1 value);
+callback CallbackVeryVeryLongValue1Void = void (VeryVeryLongValue1 value);
 [Synthetic]
-callback Callback_Union_VeryVeryLongValue1_VeryVeryLongValue2_Void = void ((VeryVeryLongValue1 or VeryVeryLongValue2) value);
+callback CallbackUnionVeryVeryLongValue1VeryVeryLongValue2Void = void ((VeryVeryLongValue1 or VeryVeryLongValue2) value);
 [Synthetic]
 callback Type_Iface_foo3 = void ((VeryVeryLongValue1 or VeryVeryLongValue2 or VeryVeryLongValue3) value);
 [Synthetic]
@@ -46,9 +46,9 @@ interface Iface {
     attribute Type_Iface_getterSuggestor getterSuggestor;
     [Accessor=Setter]
     attribute Type_Iface_setterSuggestor setterSuggestor;
-    void foo6(Callback_ShortValue_Void cb);
-    void foo1(Callback_VeryVeryLongValue1_Void cb);
-    void foo2(Callback_Union_VeryVeryLongValue1_VeryVeryLongValue2_Void cb);
+    void foo6(CallbackShortValueVoid cb);
+    void foo1(CallbackVeryVeryLongValue1Void cb);
+    void foo2(CallbackUnionVeryVeryLongValue1VeryVeryLongValue2Void cb);
     void foo3(Type_Iface_foo3 cb);
     void foo4(Type_Iface_foo4 cb);
     void foo5(Type_Iface_foo5 cb);

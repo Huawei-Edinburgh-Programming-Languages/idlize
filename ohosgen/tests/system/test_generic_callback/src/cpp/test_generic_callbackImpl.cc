@@ -44,7 +44,7 @@ OH_Number Foo_getXImpl(OH_NativePointer thisPtr) {
 }
 
 void Foo_callCBImpl(OH_NativePointer thisPtr, const OH_Number* y,
-                    const TEST_GENERIC_CALLBACK_Callback_Number_Void* cb) {
+                    const TEST_GENERIC_CALLBACK_CallbackNumberVoid* cb) {
     std::cout << "Foo_callCBImpl(thisPtr, y, cb)"
               << "\n  y = " << DumpOHNumber(*y) << std::endl;
     OH_Number sum = addOHNumber(reinterpret_cast<FooObject*>(thisPtr)->value, *y);

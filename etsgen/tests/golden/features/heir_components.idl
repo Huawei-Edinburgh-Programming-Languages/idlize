@@ -6,7 +6,7 @@ interface ButtonAttribute: CommonMethod {
     attribute (String or undefined) label;
 };
 [Synthetic]
-callback Callback_Void = void ();
+callback CallbackVoid = void ();
 [ComponentInterface]
 interface ButtonInterface {
     [Annotations=memo, CallSignature]

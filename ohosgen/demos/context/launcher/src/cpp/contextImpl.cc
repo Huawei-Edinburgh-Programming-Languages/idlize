@@ -52,7 +52,7 @@ OH_APPLICATION_Context Context_createModuleContext1Impl(OH_NativePointer thisPtr
 OH_APPLICATION_ApplicationContext Context_getApplicationContextImpl(OH_NativePointer thisPtr) {
     return {};
 }
-void Context_getGroupDirImpl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const OH_String* dataGroupID, const APPLICATION_Callback_Opt_String_Opt_Array_String_Void* outputArgumentForReturningPromise) {
+void Context_getGroupDirImpl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const OH_String* dataGroupID, const APPLICATION_CallbackOptStringOptArrayStringVoid* outputArgumentForReturningPromise) {
 }
 OH_APPLICATION_Context Context_createDisplayContextImpl(OH_NativePointer thisPtr, const OH_Number* displayId) {
     return {};
@@ -120,19 +120,19 @@ OH_APPLICATION_ApplicationContextHandle ApplicationContext_constructImpl() {
 }
 void ApplicationContext_destructImpl(OH_APPLICATION_ApplicationContextHandle thiz) {
 }
-void ApplicationContext_offAbilityLifecycleImpl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const OH_Number* callbackId, const APPLICATION_Callback_Opt_Array_String_Void* outputArgumentForReturningPromise) {
+void ApplicationContext_offAbilityLifecycleImpl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const OH_Number* callbackId, const APPLICATION_CallbackOptArrayStringVoid* outputArgumentForReturningPromise) {
 }
-void ApplicationContext_offEnvironmentImpl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const OH_Number* callbackId, const APPLICATION_Callback_Opt_Array_String_Void* outputArgumentForReturningPromise) {
+void ApplicationContext_offEnvironmentImpl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const OH_Number* callbackId, const APPLICATION_CallbackOptArrayStringVoid* outputArgumentForReturningPromise) {
 }
-void ApplicationContext_killAllProcesses0Impl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const APPLICATION_Callback_Opt_Array_String_Void* outputArgumentForReturningPromise) {
+void ApplicationContext_killAllProcesses0Impl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const APPLICATION_CallbackOptArrayStringVoid* outputArgumentForReturningPromise) {
 }
-void ApplicationContext_killAllProcesses1Impl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, OH_Boolean clearPageStack, const APPLICATION_Callback_Opt_Array_String_Void* outputArgumentForReturningPromise) {
+void ApplicationContext_killAllProcesses1Impl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, OH_Boolean clearPageStack, const APPLICATION_CallbackOptArrayStringVoid* outputArgumentForReturningPromise) {
 }
-void ApplicationContext_killAllProcesses2Impl(OH_NativePointer thisPtr, const APPLICATION_AsyncCallback_Void* callback_) {
+void ApplicationContext_killAllProcesses2Impl(OH_NativePointer thisPtr, const APPLICATION_AsyncCallbackVoid* callback_) {
 }
 void ApplicationContext_setLanguageImpl(OH_NativePointer thisPtr, const OH_String* language) {
 }
-void ApplicationContext_clearUpApplicationDataImpl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const APPLICATION_Callback_Opt_Array_String_Void* outputArgumentForReturningPromise) {
+void ApplicationContext_clearUpApplicationDataImpl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const APPLICATION_CallbackOptArrayStringVoid* outputArgumentForReturningPromise) {
 }
 void ApplicationContext_setSupportedProcessCacheImpl(OH_NativePointer thisPtr, OH_Boolean isSupported) {
 }
@@ -149,5 +149,5 @@ void ApplicationContext_setFontSizeScaleImpl(OH_NativePointer thisPtr, const OH_
 OH_String ApplicationContext_getCurrentInstanceKeyImpl(OH_NativePointer thisPtr) {
     return {};
 }
-void ApplicationContext_getAllRunningInstanceKeysImpl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const APPLICATION_Callback_Opt_Array_String_Opt_Array_String_Void* outputArgumentForReturningPromise) {
+void ApplicationContext_getAllRunningInstanceKeysImpl(OH_APPLICATION_VMContext vmContext, OH_APPLICATION_AsyncWorkerPtr asyncWorker, OH_NativePointer thisPtr, const APPLICATION_CallbackOptArrayStringOptArrayStringVoid* outputArgumentForReturningPromise) {
 }

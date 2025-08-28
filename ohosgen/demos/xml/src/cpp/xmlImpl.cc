@@ -165,10 +165,10 @@ void xml_XmlPullParser_parseXmlImpl(OH_OHOS_XML_VMContext vmContext, OH_NativePo
 }
 class TestPromiseHandler {
 private:
-    OHOS_XML_Callback_Opt_Number_Opt_Array_String_Void callback;
+    OHOS_XML_CallbackOptNumberOptArrayStringVoid callback;
     int result = 0;
 public:
-    TestPromiseHandler(OHOS_XML_Callback_Opt_Number_Opt_Array_String_Void callback): callback(callback) {
+    TestPromiseHandler(OHOS_XML_CallbackOptNumberOptArrayStringVoid callback): callback(callback) {
         callback.resource.hold(callback.resource.resourceId);
     }
 
@@ -191,7 +191,7 @@ static void DoPromiseExecute(void* handler) {
 static void DoPromiseComplete(void* handler) {
     ((TestPromiseHandler*)handler)->Complete();
 }
-void GlobalScope_xml_returnPromiseImpl(OH_OHOS_XML_VMContext vmContext, OH_OHOS_XML_AsyncWorkerPtr asyncWorker, const OHOS_XML_Callback_Opt_Number_Opt_Array_String_Void* out) {
+void GlobalScope_xml_returnPromiseImpl(OH_OHOS_XML_VMContext vmContext, OH_OHOS_XML_AsyncWorkerPtr asyncWorker, const OHOS_XML_CallbackOptNumberOptArrayStringVoid* out) {
     auto work = asyncWorker->createWork(vmContext, new TestPromiseHandler(*out), DoPromiseExecute, DoPromiseComplete);
     work.queue(work.workId);
 }

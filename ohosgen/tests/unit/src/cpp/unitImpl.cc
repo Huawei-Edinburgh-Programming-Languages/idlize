@@ -211,7 +211,7 @@ OH_Number ForceCallbackClass_callListenerImpl(OH_NativePointer thisPtr)
     // onChange call
     OH_UNIT_CallbackResource resource = {.resourceId = 12, .hold = stub_hold, .release = stub_release};
 
-    UNIT_Callback_String_Void continuation = {
+    UNIT_CallbackStringVoid continuation = {
         .resource = resource,
         .call = forceCallbackOnChangeCallContinuation,
         .callSync = forceCallbackOnChangeCallSyncContinuation,
@@ -638,7 +638,7 @@ Array_String test_materialized_classes_MaterializedComplexArguments_method4Impl(
 Array_UtilityInterface test_materialized_classes_MaterializedComplexArguments_method5Impl(OH_NativePointer thisPtr, const Array_UtilityInterface* arrayInterfaces) {
     return reinterpret_cast<OH_UNIT_test_materialized_classes_MaterializedComplexArgumentsPeer*>(thisPtr)->method5(*arrayInterfaces);
 }
-void GlobalScope_test_any_testImpl(const OH_UNIT_test_any_WithAny* x, const UNIT_test_any_Callback_Any_Void* f) {
+void GlobalScope_test_any_testImpl(const OH_UNIT_test_any_WithAny* x, const UNIT_test_any_CallbackAnyVoid* f) {
     f->call(f->resource.resourceId, x->field);
 }
 // BigInt
@@ -1027,7 +1027,7 @@ void DTSCheckExternalLib_checkSubNSExternalTypeImpl(OH_NativePointer thisPtr, OH
 
 
 const char* ERROR_MSG = "(Test passed) Promise was rejected";
-void PromiseTester_waitImpl(OH_UNIT_VMContext vmContext, OH_UNIT_AsyncWorkerPtr asyncWorker, const OH_Number* ms, const UNIT_Callback_Opt_Array_String_Void* outputArgumentForReturningPromise) {
+void PromiseTester_waitImpl(OH_UNIT_VMContext vmContext, OH_UNIT_AsyncWorkerPtr asyncWorker, const OH_Number* ms, const UNIT_CallbackOptArrayStringVoid* outputArgumentForReturningPromise) {
     OH_String* errors = new OH_String[1];
     errors[0].length = strlen(ERROR_MSG);
     errors[0].chars = ERROR_MSG;
