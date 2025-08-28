@@ -412,6 +412,11 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
                 this.writeNamedOverloadsGroups(decl.methods, writer)
             }
         }, superInterface, clazz.generics?.map(sanitizeGenerics))
+        if (idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.DefaultExport)) {
+            writer.writeLines([
+                `export default ${decl.name}`
+            ])
+        }
     }
 
     protected writeNamedOverloadsGroups(methods: idl.IDLMethod[], writer: LanguageWriter): void {
@@ -530,6 +535,12 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             this.printTaggedMethods(clazz)
             this.printMethods(clazz)
         }, superClassName, interfaces.length === 0 ? undefined : interfaces, classTypeParameters)
+
+        if (idl.isClassSubkind(clazz.decl) && idl.hasExtAttribute(clazz.decl, idl.IDLExtendedAttributes.DefaultExport)) {
+            printer.writeLines([
+                `export default ${clazz.decl.name}`
+            ])
+        }
     }
 }
 
