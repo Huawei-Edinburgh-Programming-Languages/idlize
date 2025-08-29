@@ -221,8 +221,8 @@
 |`setMarkAnchor`| Function | Dmitry A Smirnov| done | pass | |
 |`setOffset`| Function | Skroba Gleb | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setEnabled`| Function | Roman Sedaikin | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`setAlignRules0`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`setAlignRules1`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setAlignRulesWithAlignRuleOptionTypedValue`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setAlignRulesWithLocalizedAlignRuleOptionsTypedValue`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setAspectRatio`| Function | Roman Sedaikin | done | pass | |
 |`setClickEffect`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code | |
 |`setOnDragStart`| Function | Skroba Gleb | done | failed | It needs DragEventAccessor implemented to complete Unit tests, but it is empty C-API now, commented ViewAbstract static methods code |
@@ -230,7 +230,6 @@
 |`setOnDragMove`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setOnDragLeave`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setOnDrop0`| Function |Lobah Mikhail | done | test blocked | runtime linker issue, commented ViewAbstract static methods code |
-|`setOnDrop1`| Function | Lobah Mikhail | in progress | failed | not implemented |
 |`setOnDragEnd`| Function | Lobah Mikhail | done | failed | won't work because of guozejun changes, commented ViewAbstract static methods code |
 |`setAllowDrop`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setDraggable`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
@@ -249,25 +248,23 @@
 |`setKey`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
 |`setId`| Function | Erokhin Ilya | done | failed | commented ViewAbstract static methods code |
 |`setGeometryTransition0`| Function | Lobah Mikhail | testskipped | test blocked | no method found test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG |
-|`setGeometryTransition1`| Function | Lobah Mikhail | testskipped | failed | OHOSUI-2375, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG, commented ViewAbstract static methods code |
 |`setStateStyles`| Function | managed side | managed side | test blocked | managed side https://gitee.com/rri_opensource/koala_projects/issues/IBOSCF |
 |`setRestoreId`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setSphericalEffect`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
 |`setLightUpEffect`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
 |`setPixelStretchEffect`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
-|`setAccessibilityGroup0`| Function |Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
-|`setAccessibilityGroup1`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
-|`setAccessibilityText0`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
-|`setAccessibilityText1`| Function |Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`setAccessibilityGroupWithValue`| Function |Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`setAccessibilityTextOfStringType`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
 |`setAccessibilityNextFocusId`| Function | Lobah Mikhail| done| test blocked | Not exists on FB, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code |
 |`setAccessibilityDefaultFocus`| Function | Lobah Mikhail| blocked IDL | test blocked IDL | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00, commented ViewAbstractModelNG static methods code |
 |`setAccessibilityUseSamePage`| Function | Lobah Mikhail| done| test blocked | Not exists on FB, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code |
 |`setAccessibilityScrollTriggerable`| Function | Tuzhilkin Ivan | done | test blocked | WRONG_GENERATION: parameter should be Opt, need cherry-pick to feature_branch, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code |
+|`setAccessibilityTextOfResourceType`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
 |`setAccessibilityRole`| Function | Lobah Mikhail| done| test blocked | Not exists on FB, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code |
 |`setOnAccessibilityFocus`| Function | Evstigneev Roman | done | test blocked | feature: API not present, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code |
 |`setAccessibilityTextHint`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
-|`setAccessibilityDescription0`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
-|`setAccessibilityDescription1`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`setAccessibilityDescriptionOfStringType`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`setAccessibilityDescriptionOfResourceType`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
 |`setAccessibilityLevel`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
 |`setAccessibilityVirtualNode`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
 |`setAccessibilityChecked`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
@@ -280,7 +277,6 @@
 |`setBackgroundBrightness`| Function | Skroba Gleb | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setOnGestureJudgeBegin`| Function | Skroba Gleb | done |  | UT by Vadim Voronov  |
 |`setOnGestureRecognizerJudgeBegin0`| Function | Skroba Gleb | done | failed | runtime linker issue |
-|`setOnGestureRecognizerJudgeBegin1`| Function | Skroba Gleb | done | test blocked | test blocked by `id` interface |
 |`setShouldBuiltInRecognizerParallelWith`| Function | Skroba Gleb | done | test blocked | test blocked by `id` interface |
 |`setMonopolizeEvents`| Function | Erokhin Ilya | done | pass | UT by Vadim Voronov |
 |`setOnTouchIntercept`| Function | Andrey Khudenkikh | done | pass | EVENT |
@@ -314,6 +310,7 @@
 |`setOverlay`| Function | Lobah Mikhail | blocked IDL | failed | https://gitee.com/nikolay-igotti/idlize/issues/IBUXWQ Correct generation of the 'Ark_ComponentContent' class without stubs is required, commented ViewAbstract static methods code |
 |`setBlendMode`| Function | Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setAdvancedBlendMode`| Function | Erokhin Ilya |in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setGeometryTransition1`| Function | Lobah Mikhail | testskipped | failed | to be removed? OHOSUI-2375, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG, commented ViewAbstract static methods code |
 |`setBindTips`| Function | Tuzhilkin Ivan | in progress | | only for generation > 125|
 |`setBindPopup`| Function | Erokhin Ilya | done | test blocked | fixes of issues were provided by our team, https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL2K, https://gitee.com/openharmony/arkui_ace_engine/issues/IBY31B, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setBindMenu0`| Function | Erokhin Ilya | blocked IDL | test blocked | SymbolGlyphModifier https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG  & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
@@ -326,6 +323,8 @@
 |`setOnVisibleAreaChange`| Function | Erokhin Ilya | done | failed | commented ViewAbstract static methods code |
 |`setOnVisibleAreaApproximateChange`| Function | Tuzhilkin Ivan | done | failed | need cherry-pick to feature_branch, commented ViewAbstract static methods code |
 |`setKeyboardShortcut`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`setAccessibilityGroupWithConfig`| Function | Lobah Mikhail | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code |
+|`setOnGestureRecognizerJudgeBegin1`| Function | Skroba Gleb | done | test blocked | test blocked by `id` interface |
 |*CommonShapeMethod*|*Component*|Skroba Gleb| done |  |  |
 |`construct`| Function |Skroba Gleb| done |  | empty implementation, functional is supported by managed side |
 |`setStroke`|Function| Skroba Gleb | done | pass |  |
@@ -457,10 +456,12 @@
 |`setRowsTemplate`|Function| Erokhin Ilya | done | pass |  |
 |`setColumnsGap`|Function| Erokhin Ilya | done | pass |  |
 |`setRowsGap`|Function| Erokhin Ilya | done | pass |  |
+|`setScrollBarWidth`|Function||||
+|`setScrollBarColor`|Function||||
+|`setScrollBar`|Function||||
 |`setOnScrollBarUpdate`|Function| Skroba Gleb | done |  | |
 |`setOnScrollIndex`|Function| Erokhin Ilya | done |  |  |
 |`setCachedCount0`| Function |Erokhin Ilya | done | test blocked |  |
-|`setCachedCount1`|Function| Erokhin Ilya | done | test blocked |  |
 |`setEditMode`|Function| Erokhin Ilya | done | pass |  |
 |`setMultiSelectable`|Function| Erokhin Ilya | done | pass |  |
 |`setMaxCount`|Function| Erokhin Ilya | done | pass |  |
@@ -473,10 +474,15 @@
 |`setOnItemDragMove`|Function| Erokhin Ilya | done |  |  |
 |`setOnItemDragLeave`|Function| Erokhin Ilya | done |  |  |
 |`setOnItemDrop`|Function| Erokhin Ilya | done |  |  |
+|`setNestedScroll`|Function||||
+|`setEnableScrollInteraction`|Function||||
+|`setFriction`|Function||||
 |`setAlignItems`| Function | Erokhin Ilya | done | pass |  |
 |`setOnScrollFrameBegin`|Function| Skroba Gleb | done |  |   |
 |`setOnWillScroll`| Function | wangtao | done | | |
-|`setOnDidScroll`| Function | wangtao | done | | |
+|`setOnDidScroll`|Function|wangtao|done||
+|`setCachedCount1`|Function| Erokhin Ilya | done | test blocked |  |
+|`setEdgeEffect`|Function||||
 |*GridCol*| *Component* | Lobah Mikhail| done |  |  |
 |`construct`| Function |Lobah Mikhail| done | pass |  |
 |`setGridColOptions`| Function |Lobah Mikhail| done | pass |  |
@@ -531,8 +537,8 @@
 |`setAnalyzerConfig`| Function | Evstigneev Roman | blocked AceEngine | test blocked | methods is not implemented, https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (+) |
 |`setResizable`| Function | Evstigneev Roman | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`setPrivacySensitive`| Function | Evstigneev Roman | done | pass | |
+|`setEnhancedImageQuality` | Function | done |  |  |  |  |  |
 |`setOrientation`| Function | Samarin Sergey | done | pass | |
-| `setEnhancedImageQuality` | Function | done |  |  |  |  |  |
 |*ImageAnimator*| *Component* | Pavelyev Ivan | done |  | |
 |`construct`| Function | Pavelyev Ivan | done | pass | |
 |`setImageAnimatorOptions`| Function | Pavelyev Ivan | done | pass | |
@@ -588,7 +594,6 @@
 |`setDivider`|Function|Morozov Sergey| done | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setMultiSelectable`|Function|Morozov Sergey| done | in progress |  |
 |`setCachedCount0`|Function|Morozov Sergey| done | in progress |  |
-|`setCachedCount1`| Function |Morozov Sergey| done | in progress |  |
 |`setChainAnimation`|Function|Morozov Sergey| done | in progress |  |
 |`setChainAnimationOptions`|Function|Morozov Sergey| done | in progress |  |
 |`setSticky`|Function|Morozov Sergey| done | in progress |  |
@@ -608,6 +613,7 @@
 |`setOnWillScroll`| Function | wangtao | done | | |
 |`setOnDidScroll`| Function | wangtao | done | | |
 |`setLanes`|Function|Morozov Sergey| done | in progress |  |
+|`setCachedCount1`| Function |Morozov Sergey| done | in progress |  |
 |*ListItem*|*Component*|Morozov Sergey| done | Evstigneev Roman, test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`construct`| Function |Morozov Sergey| done | in progress |  |
 |`setListItemOptions`| Function | Morozov Sergey| done |  | deprecated for SetListItemOptions1Impl |
@@ -701,8 +707,7 @@
 |`setEnableStatusBar`| Function |managed side |managed side |test blocked | |
 |*Navigation*| *Component* | | | | |
 |`construct`| Function | | | | |
-|`setNavigationOptions0`| Function | | | | |
-|`setNavigationOptions1`| Function | | | | |
+|`setNavigationOptions`| Function | | | | |
 |`setNavBarWidth`| Function | | | | |
 |`setNavBarPosition`| Function | | | | |
 |`setNavBarWidthRange`| Function | | | | |
@@ -738,7 +743,7 @@
 |*Path*| *Component* | Skroba Gleb | done |  |  |
 |`construct`| Function |Skroba Gleb | done |  |  |
 |`setPathOptions`| Function | Skroba Gleb | done | pass |  |
-|`commands`| Function | Skroba Gleb | done | pass |  |
+|`setCommands`| Function | Skroba Gleb | done | pass |  |
 |*PatternLock*| *Component* | Dmitry A Smirnov| in progress |  |  |
 |`construct`| Function | Dmitry A Smirnov| done | pass |  |
 |`setPatternLockOptions`| Function | Dmitry A Smirnov| done | pass |  |
@@ -822,8 +827,7 @@
 |`setRemoteWindowOptions`| Function | Spirin Andrey | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+) |
 |*RichEditor*| *Component* | Dudkin Sergey| testskipped | Alexander Porodin |  |
 |`construct`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
-|`setRichEditorOptions0`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
-|`setRichEditorOptions1`| Function | Dudkin Sergey| done |  |  |
+|`setRichEditorOptions`| Function | Dudkin Sergey| done |  |  |
 |`setOnReady`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
 |`setOnSelect`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import  |
 |`setOnSelectionChange`| Function | Dudkin Sergey| done | test blocked | Compilation issue on RichEditor import |
@@ -983,6 +987,7 @@
 |`setDividerStyle`| Function | Evstigneev Roman, Samarin Sergey | testskipped | | |
 |`setAvoidance`| Function | Evstigneev Roman, Samarin Sergey | testskipped | | |
 |`setMenuOutline`| Function | Evstigneev Roman, Samarin Sergey | testskipped | | |
+|`setBackgroundColor`|Function||||
 |`setMenuAlign` | Function | Samarin Sergey | done | test blocked |  |
 |*Shape*|*Component*|Dudkin Sergey| in progress |  |  |
 |`construct`| Function |Samarin Sergey| testskipped | test blocked | method Shape() not found demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -1007,8 +1012,7 @@
 |`setControlButton`| Function |Dmitry A Smirnov| done |  | need submit to FB |
 |`setShowControlButton`| Function |Dmitry A Smirnov| done | pass |  |
 |`setOnChange`| Function |Dmitry A Smirnov| done |  |  |
-|`setSideBarWidth0`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2169 |
-|`setSideBarWidth1`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2169 |
+|`setSideBarWidth`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2169 |
 |`setMinSideBarWidth0`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2169 |
 |`setMinSideBarWidth1`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2169 |
 |`setMaxSideBarWidth0`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2169 |
@@ -1017,7 +1021,7 @@
 |`setSideBarPosition`| Function |Dmitry A Smirnov| done | pass |  |
 |`setDivider`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2170 |
 |`setMinContentWidth`| Function |Dmitry A Smirnov| done | failed | OHOSUI-2170 |
-|*Slider*| *Component* |Morozov Sergey | blocked IDL |  |  |
+|*Slider*| *Component* |Morozov Sergey | done |  |  |
 |`construct`| Function |Morozov Sergey | done | pass |  |
 |`setSliderOptions`| Function |Morozov Sergey | done | pass |  |
 |`setBlockColor`| Function |Morozov Sergey | done | pass |  |
@@ -1052,8 +1056,10 @@
 |`setFontColor`| Function |Politov Mikhail | done | pass |  |
 |`setFontSize`| Function |Politov Mikhail | done | Olga Daryina |  |
 |`setFontStyle`| Function |Politov Mikhail | done | pass |  |
+|`setFontWeight`|Function||||
 |`setFontFamily`| Function |Politov Mikhail | done | Olga Daryina |  |
 |`setDecoration`| Function | Politov Mikhail | done | pass |  |
+|`setLetterSpacing`|Function||||
 |`setTextCase`| Function | Politov Mikhail | done | pass |  |
 |`setLineHeight`| Function | Politov Mikhail | done | pass |  |
 |`setTextShadow`| Function | Politov Mikhail | testskipped | Olga Daryina | test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z |
@@ -1414,6 +1420,9 @@
 |`setSelectedColor`| Function | Morozov Sergey| done | pass |  |
 |`setSwitchPointColor`| Function | Morozov Sergey| done | pass |  |
 |`setSwitchStyle`| Function | Morozov Sergey| done | pass |  |
+|*ToolBarItem*|*Component*||||
+|`construct`|Function||||
+|`setToolBarItemOptions`|Function||||
 |*UIExtensionComponent*| *Component* | Tuzhilkin Ivan | blocked IDL |  | |
 |`construct`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`setUIExtensionComponentOptions`| Function | Tuzhilkin Ivan |  |  | |
@@ -1442,7 +1451,6 @@
 |`setOnStop`| Function | Erokhin Ilya | done | pass |  |
 |`setEnableAnalyzer`| Function | Erokhin Ilya | done | pass |  |
 |`setAnalyzerConfig`| Function | Erokhin Ilya | blocked AceEngine |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
-|`setSurfaceBackgroundColor`| Function | Kovalev Sergey | done | pass | no effect, like arkui |
 |`setEnableShortcutKey`| Function | Kovalev Sergey | done | pass | |
 |*WaterFlow*| *Component* | Kovalev Sergey | done |  |  |
 |`construct`| Function | Kovalev Sergey | done | pass | |
@@ -1459,6 +1467,127 @@
 |`setOnScrollIndex`| Function | Kovalev Sergey | done | | |
 |`setOnWillScroll`| Function | wangtao | done | | |
 |`setOnDidScroll`| Function | wangtao | done | | |
+|*Web*|*Component*|out of scope|out of scope|
+|`construct`|Function|out of scope|out of scope|
+|`setWebOptions`|Function|out of scope|out of scope|
+|`setJavaScriptAccess`|Function|out of scope|out of scope|
+|`setFileAccess`|Function|out of scope|out of scope|
+|`setOnlineImageAccess`|Function|out of scope|out of scope|
+|`setDomStorageAccess`|Function|out of scope|out of scope|
+|`setImageAccess`|Function|out of scope|out of scope|
+|`setMixedMode`|Function|out of scope|out of scope|
+|`setZoomAccess`|Function|out of scope|out of scope|
+|`setGeolocationAccess`|Function|out of scope|out of scope|
+|`setJavaScriptProxy`|Function|out of scope|out of scope|
+|`setCacheMode`|Function|out of scope|out of scope|
+|`setDarkMode`|Function|out of scope|out of scope|
+|`setForceDarkAccess`|Function|out of scope|out of scope|
+|`setMediaOptions`|Function|out of scope|out of scope|
+|`setOverviewModeAccess`|Function|out of scope|out of scope|
+|`setOverScrollMode`|Function|out of scope|out of scope|
+|`setBlurOnKeyboardHideMode`|Function|out of scope|out of scope|
+|`setTextZoomRatio`|Function|out of scope|out of scope|
+|`setDatabaseAccess`|Function|out of scope|out of scope|
+|`setInitialScale`|Function|out of scope|out of scope|
+|`setMetaViewport`|Function|out of scope|out of scope|
+|`setOnPageEnd`|Function|out of scope|out of scope|
+|`setOnPageBegin`|Function|out of scope|out of scope|
+|`setOnProgressChange`|Function|out of scope|out of scope|
+|`setOnTitleReceive`|Function|out of scope|out of scope|
+|`setOnGeolocationHide`|Function|out of scope|out of scope|
+|`setOnGeolocationShow`|Function|out of scope|out of scope|
+|`setOnRequestSelected`|Function|out of scope|out of scope|
+|`setOnAlert`|Function|out of scope|out of scope|
+|`setOnBeforeUnload`|Function|out of scope|out of scope|
+|`setOnConfirm`|Function|out of scope|out of scope|
+|`setOnPrompt`|Function|out of scope|out of scope|
+|`setOnConsole`|Function|out of scope|out of scope|
+|`setOnErrorReceive`|Function|out of scope|out of scope|
+|`setOnHttpErrorReceive`|Function|out of scope|out of scope|
+|`setOnDownloadStart`|Function|out of scope|out of scope|
+|`setOnRefreshAccessedHistory`|Function|out of scope|out of scope|
+|`setOnRenderExited`|Function|out of scope|out of scope|
+|`setOnShowFileSelector`|Function|out of scope|out of scope|
+|`setOnResourceLoad`|Function|out of scope|out of scope|
+|`setOnFullScreenExit`|Function|out of scope|out of scope|
+|`setOnFullScreenEnter`|Function|out of scope|out of scope|
+|`setOnScaleChange`|Function|out of scope|out of scope|
+|`setOnHttpAuthRequest`|Function|out of scope|out of scope|
+|`setOnInterceptRequest`|Function|out of scope|out of scope|
+|`setOnPermissionRequest`|Function|out of scope|out of scope|
+|`setOnScreenCaptureRequest`|Function|out of scope|out of scope|
+|`setOnContextMenuShow`|Function|out of scope|out of scope|
+|`setOnContextMenuHide`|Function|out of scope|out of scope|
+|`setMediaPlayGestureAccess`|Function|out of scope|out of scope|
+|`setOnSearchResultReceive`|Function|out of scope|out of scope|
+|`setOnScroll`|Function|out of scope|out of scope|
+|`setOnSslErrorEventReceive`|Function|out of scope|out of scope|
+|`setOnSslErrorEvent`|Function|out of scope|out of scope|
+|`setOnClientAuthenticationRequest`|Function|out of scope|out of scope|
+|`setOnWindowNew`|Function|out of scope|out of scope|
+|`setOnWindowExit`|Function|out of scope|out of scope|
+|`setMultiWindowAccess`|Function|out of scope|out of scope|
+|`setOnInterceptKeyEvent`|Function|out of scope|out of scope|
+|`setWebStandardFont`|Function|out of scope|out of scope|
+|`setWebSerifFont`|Function|out of scope|out of scope|
+|`setWebSansSerifFont`|Function|out of scope|out of scope|
+|`setWebFixedFont`|Function|out of scope|out of scope|
+|`setWebFantasyFont`|Function|out of scope|out of scope|
+|`setWebCursiveFont`|Function|out of scope|out of scope|
+|`setDefaultFixedFontSize`|Function|out of scope|out of scope|
+|`setDefaultFontSize`|Function|out of scope|out of scope|
+|`setMinFontSize`|Function|out of scope|out of scope|
+|`setMinLogicalFontSize`|Function|out of scope|out of scope|
+|`setDefaultTextEncodingFormat`|Function|out of scope|out of scope|
+|`setForceDisplayScrollBar`|Function|out of scope|out of scope|
+|`setBlockNetwork`|Function|out of scope|out of scope|
+|`setHorizontalScrollBarAccess`|Function|out of scope|out of scope|
+|`setVerticalScrollBarAccess`|Function|out of scope|out of scope|
+|`setOnTouchIconUrlReceived`|Function|out of scope|out of scope|
+|`setOnFaviconReceived`|Function|out of scope|out of scope|
+|`setOnPageVisible`|Function|out of scope|out of scope|
+|`setOnDataResubmitted`|Function|out of scope|out of scope|
+|`setPinchSmooth`|Function|out of scope|out of scope|
+|`setAllowWindowOpenMethod`|Function|out of scope|out of scope|
+|`setOnAudioStateChanged`|Function|out of scope|out of scope|
+|`setOnFirstContentfulPaint`|Function|out of scope|out of scope|
+|`setOnFirstMeaningfulPaint`|Function|out of scope|out of scope|
+|`setOnLargestContentfulPaint`|Function|out of scope|out of scope|
+|`setOnLoadIntercept`|Function|out of scope|out of scope|
+|`setOnControllerAttached`|Function|out of scope|out of scope|
+|`setOnOverScroll`|Function|out of scope|out of scope|
+|`setOnSafeBrowsingCheckResult`|Function|out of scope|out of scope|
+|`setOnNavigationEntryCommitted`|Function|out of scope|out of scope|
+|`setOnIntelligentTrackingPreventionResult`|Function|out of scope|out of scope|
+|`setJavaScriptOnDocumentStart`|Function|out of scope|out of scope|
+|`setJavaScriptOnDocumentEnd`|Function|out of scope|out of scope|
+|`setLayoutMode`|Function|out of scope|out of scope|
+|`setNestedScroll`|Function|out of scope|out of scope|
+|`setEnableNativeEmbedMode`|Function|out of scope|out of scope|
+|`setOnNativeEmbedLifecycleChange`|Function|out of scope|out of scope|
+|`setOnNativeEmbedVisibilityChange`|Function|out of scope|out of scope|
+|`setOnNativeEmbedGestureEvent`|Function|out of scope|out of scope|
+|`setCopyOptions`|Function|out of scope|out of scope|
+|`setOnOverrideUrlLoading`|Function|out of scope|out of scope|
+|`setTextAutosizing`|Function|out of scope|out of scope|
+|`setEnableNativeMediaPlayer`|Function|out of scope|out of scope|
+|`setOnRenderProcessNotResponding`|Function|out of scope|out of scope|
+|`setOnRenderProcessResponding`|Function|out of scope|out of scope|
+|`setOnViewportFitChanged`|Function|out of scope|out of scope|
+|`setOnInterceptKeyboardAttach`|Function|out of scope|out of scope|
+|`setOnAdsBlocked`|Function|out of scope|out of scope|
+|`setKeyboardAvoidMode`|Function|out of scope|out of scope|
+|`setEditMenuOptions`|Function|out of scope|out of scope|
+|`setEnableHapticFeedback`|Function|out of scope|out of scope|
+|`setOptimizeParserBudget`|Function|out of scope|out of scope|
+|`setEnableFollowSystemFontWeight`|Function|out of scope|out of scope|
+|`setEnableWebAVSession`|Function|out of scope|out of scope|
+|`setRunJavaScriptOnDocumentStart`|Function|out of scope|out of scope|
+|`setRunJavaScriptOnDocumentEnd`|Function|out of scope|out of scope|
+|`setRunJavaScriptOnHeadEnd`|Function|out of scope|out of scope|
+|`setNativeEmbedOptions`|Function|out of scope|out of scope|
+|`setRegisterNativeEmbedRule`|Function|out of scope|out of scope|
+|`setBindSelectionMenu`|Function|out of scope|out of scope|
 |*WindowScene*| *Component* | Dudkin Sergey | done |  | |
 |`construct`| Function |Dudkin Sergey | done |  | |
 |`setWindowSceneOptions`| Function | Dudkin Sergey | done |  | |
@@ -1468,53 +1597,261 @@
 |`setWithThemeOptions`| Function | | |
 |*XComponent*| *Component* | Tuzhilkin Ivan | blocked IDL |  | |
 |`construct`| Function |Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`setXComponentOptions0`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+), demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`setXComponentOptions1`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+), demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`setXComponentOptions2`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+), demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`setXComponentOptions`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+), demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setOnLoad`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IB7RSS (+), demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`setOnDestroy`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setEnableAnalyzer`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setEnableSecure`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setHdrBrightness`| Function | Tuzhilkin Ivan | testskipped | test blocked | supported only on UPSTREAM now, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
-|`setEnableTransparentLayer`| Function | Tuzhilkin Ivan | testskipped | test blocked | supported only on UPSTREAM now, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |*Root*| *Component* | Tuzhilkin Ivan | testskipped | | implementation is created early by Nikolay Pisanov |
 |`construct`| Function | Tuzhilkin Ivan | testskipped | | implementation is created early by Nikolay Pisanov |
 |*ComponentRoot*| *Component* | Tuzhilkin Ivan | testskipped | | implementation is created early by Nikolay Pisanov |
 |`construct`| Function |Tuzhilkin Ivan | testskipped | | implementation is created early by Nikolay Pisanov |
+|*CustomBuilderRoot*|*Component*||||
+|`construct`|Function||||
 |*CustomLayoutRoot*| *Component* | Erokhin Ilya | in progress | | |
 |`construct`| Function | Erokhin Ilya | in progress | | |
 |`setSubscribeOnMeasureSize`| Function | Erokhin Ilya | in progress | | |
 |`setSubscribeOnPlaceChildren`| Function | Erokhin Ilya | in progress | | |
-|*Context*| *Class* | | | | |
-|`construct`| Function | | | | |
-|`createBundleContext`| Function | | | | |
-|`createModuleContext0`| Function | | | | |
-|`createModuleContext1`| Function | | | | |
-|`getGroupDir0`| Function | | | | |
-|`getGroupDir1`| Function | | | | |
-|`getCacheDir`| Function | | | | |
-|`setCacheDir`| Function | | | | |
-|`getTempDir`| Function | | | | |
-|`setTempDir`| Function | | | | |
-|`getFilesDir`| Function | | | | |
-|`setFilesDir`| Function | | | | |
-|`getDatabaseDir`| Function | | | | |
-|`setDatabaseDir`| Function | | | | |
-|`getPreferencesDir`| Function | | | | |
-|`setPreferencesDir`| Function | | | | |
-|`getBundleCodeDir`| Function | | | | |
-|`setBundleCodeDir`| Function | | | | |
-|`getDistributedFilesDir`| Function | | | | |
-|`setDistributedFilesDir`| Function | | | | |
-|`getResourceDir`| Function | | | | |
-|`setResourceDir`| Function | | | | |
-|`getCloudFileDir`| Function | | | | |
-|`setCloudFileDir`| Function | | | | |
+|*AnimatorOptions*|*Class*||||
+|`construct`      |Function|||| 
+|`getDuration`    |Property|||| 
+|`setDuration`    |Property|||| 
+|`getEasing`      |Property|||| 
+|`setEasing`      |Property|||| 
+|`getDelay`       |Property|||| 
+|`setDelay`       |Property|||| 
+|`getFill`        |Property|||| 
+|`setFill`        |Property|||| 
+|`getDirection`   |Property|||| 
+|`setDirection`   |Property|||| 
+|`getIterations`  |Property|||| 
+|`setIterations`  |Property|||| 
+|`getBegin`       |Property|||| 
+|`setBegin`       |Property|||| 
+|`getEnd`         |Property|||| 
+|`setEnd`         |Property||||
+|*SimpleAnimatorOptions*|*Class*||||
+|`construct`|Function||||
+|`duration`|Function||||
+|`easing`|Function||||
+|`delay`|Function||||
+|`fill`|Function||||
+|`direction`|Function||||
+|`iterations`|Function||||
+|*AnimatorResult*|*Class*||||
+|`construct`      |Function||||
+|`reset`          |Function||||
+|`play`           |Function||||
+|`finish`         |Function||||
+|`pause`          |Function||||
+|`cancel`         |Function||||
+|`reverse`        |Function||||
+|`setExpectedFrameRateRange`|Function||||
+|`getOnFrame`     |Property||||
+|`setOnFrame`     |Property||||
+|`getOnFinish`    |Property||||
+|`setOnFinish`    |Property||||
+|`getOnCancel`    |Property||||
+|`setOnCancel`    |Property||||
+|`getOnRepeat`    |Property||||
+|`setOnRepeat`    |Property||||
+|*Ability*|*Class*||||
+|`construct`|Function||||
+|`onConfigurationUpdate`|Function||||
+|`onMemoryLevel`|Function||||
+|*AbilityLifecycleCallback*|*Class*||||
+|`construct`              |Function||||
+|`onAbilityCreate`        |Function||||
+|`onWindowStageCreate`    |Function||||
+|`onWindowStageDestroy`   |Function||||
+|`onAbilityDestroy`       |Function||||
+|`onAbilityForeground`    |Function||||
+|`onAbilityBackground`    |Function||||
+|*ApplicationStateChangeCallback*|*Class*||||
+|`construct`              |Function||||
+|`onApplicationForeground`|Function||||
+|`onApplicationBackground`|Function||||
+|*AtomicServiceOptions*|*Class*||||
+|`construct`             |Function||||
+|`getFlags`              |Property||||
+|`setFlags`              |Property||||
+|`getParameters`         |Property||||
+|`setParameters`         |Property||||
+|*Configuration*|*Class*||||
+|`construct`             |Function||||
+|`getLanguage`           |Property||||
+|`setLanguage`           |Property||||
+|`getColorMode`          |Property||||
+|`setColorMode`          |Property||||
+|`getDirection`          |Property||||
+|`setDirection`          |Property||||
+|`getScreenDensity`      |Property||||
+|`setScreenDensity`      |Property||||
+|`getDisplayId`          |Property||||
+|`setDisplayId`          |Property||||
+|`getHasPointerDevice`   |Property||||
+|`setHasPointerDevice`   |Property||||
+|`getFontSizeScale`      |Property||||
+|`setFontSizeScale`      |Property||||
+|`getFontWeightScale`    |Property||||
+|`setFontWeightScale`    |Property||||
+|`getMcc`                |Property||||
+|`setMcc`                |Property||||
+|`getMnc`                |Property||||
+|`setMnc`                |Property||||
+|*EnvironmentCallback*|*Class*||||
+|`construct`             |Function||||
+|`onConfigurationUpdated`|Function||||
+|`onMemoryLevel`         |Function||||
+|*InteropAbilityLifecycleCallback*|*Class*||||
+|`construct`                     |Function||||
+|`getOnAbilityCreate`            |Property||||
+|`setOnAbilityCreate`            |Property||||
+|`getOnWindowStageCreate`        |Property||||
+|`setOnWindowStageCreate`        |Property||||
+|`getOnWindowStageDestroy`       |Property||||
+|`setOnWindowStageDestroy`       |Property||||
+|`getOnAbilityDestroy`           |Property||||
+|`setOnAbilityDestroy`           |Property||||
+|`getOnAbilityForeground`        |Property||||
+|`setOnAbilityForeground`        |Property||||
+|`getOnAbilityBackground`        |Property||||
+|`setOnAbilityBackground`        |Property||||
+|*OpenLinkOptions*|*Class*||||
+|`construct`             |Function||||
+|`getAppLinkingOnly`     |Property||||
+|`setAppLinkingOnly`     |Property||||
+|`getParameters`         |Property||||
+|`setParameters`         |Property||||
+|*StartOptions*|*Class*||||
+|`construct`             |Function||||
+|`getWindowMode`         |Property||||
+|`setWindowMode`         |Property||||
+|`getDisplayId`          |Property||||
+|`setDisplayId`          |Property||||
+|`getWithAnimation`      |Property||||
+|`setWithAnimation`      |Property||||
+|`getWindowLeft`         |Property||||
+|`setWindowLeft`         |Property||||
+|`getWindowTop`          |Property||||
+|`setWindowTop`          |Property||||
+|`getWindowWidth`        |Property||||
+|`setWindowWidth`        |Property||||
+|`getWindowHeight`       |Property||||
+|`setWindowHeight`       |Property||||
+|`getWindowFocused`      |Property||||
+|`setWindowFocused`      |Property||||
+|`getProcessMode`        |Property||||
+|`setProcessMode`        |Property||||
+|`getStartupVisibility`  |Property||||
+|`setStartupVisibility`  |Property||||
+|`getStartWindowIcon`    |Property||||
+|`setStartWindowIcon`    |Property||||
+|`getStartWindowBackgroundColor`|Property||||
+|`setStartWindowBackgroundColor`|Property||||
+|`getSupportWindowModes` |Property||||
+|`setSupportWindowModes` |Property||||
+|`getMinWindowWidth`     |Property||||
+|`setMinWindowWidth`     |Property||||
+|`getMinWindowHeight`    |Property||||
+|`setMinWindowHeight`    |Property||||
+|`getMaxWindowWidth`     |Property||||
+|`setMaxWindowWidth`     |Property||||
+|`getMaxWindowHeight`    |Property||||
+|`setMaxWindowHeight`    |Property||||
+|*Caller*|*Class*||||
+|`construct`             |Function||||
+|`call`                  |Function||||
+|`callWithResult`        |Function||||
+|`release`               |Function||||
+|`onRelease0`            |Function||||
+|`onRemoteStateChange`   |Function||||
+|`onRelease1`            |Function||||
+|`offRelease0`           |Function||||
+|`offRelease1`           |Function||||
+|*Callee*|*Class*||||
+|`construct`             |Function||||
+|`on`                    |Function||||
+|`off`                   |Function||||
+|*UIAbility*|*Class*||||
+|`construct`             |Function||||
+|`onCreate`              |Function||||
+|`onWindowStageCreate`   |Function||||
+|`onWindowStageWillDestroy`|Function||||
+|`onWindowStageDestroy`  |Function||||
+|`onWindowStageRestore`  |Function||||
+|`onDestroy`             |Function||||
+|`onDestroyAsync`        |Function||||
+|`onForeground`          |Function||||
+|`onWillForeground`      |Function||||
+|`onDidForeground`       |Function||||
+|`onBackground`          |Function||||
+|`onWillBackground`      |Function||||
+|`onDidBackground`       |Function||||
+|`onNewWant`             |Function||||
+|`onDump`                |Function||||
+|`onSaveState`           |Function||||
+|`onSaveStateAsync`      |Function||||
+|`onShare`               |Function||||
+|`onPrepareToTerminate`  |Function||||
+|`onPrepareToTerminateAsync`|Function||||
+|`onBackPressed`         |Function||||
+|`getContext`            |Property||||
+|`setContext`            |Property||||
+|`getLaunchWant`         |Property||||
+|`setLaunchWant`         |Property||||
+|`getLastRequestWant`    |Property||||
+|`setLastRequestWant`    |Property||||
+|`getCallee`             |Property||||
+|`setCallee`             |Property||||
+|*Want*|*Class*||||
+|`construct`             |Function||||
+|`getBundleName`         |Property||||
+|`setBundleName`         |Property||||
+|`getAbilityName`        |Property||||
+|`setAbilityName`        |Property||||
+|`getDeviceId`           |Property||||
+|`setDeviceId`           |Property||||
+|`getUri`                |Property||||
+|`setUri`                |Property||||
+|`getType`               |Property||||
+|`setType`               |Property||||
+|`getFlags`              |Property||||
+|`setFlags`              |Property||||
+|`getAction`             |Property||||
+|`setAction`             |Property||||
+|`getParameters`         |Property||||
+|`setParameters`         |Property||||
+|`getEntities`           |Property||||
+|`setEntities`           |Property||||
+|`getModuleName`         |Property||||
+|`setModuleName`         |Property||||
+|`getFds`                |Property||||
+|*DragAction*|*Class*||||
+|`construct`             |Function||||
+|`startDrag`             |Function||||
+|`onStatusChange`        |Function||||
+|`offStatusChange`       |Function||||
+|*DragPreview*|*Class*||||
+|`construct`             |Function||||
+|`setForegroundColor`    |Function||||
+|`animate`               |Function||||
 |*DrawableDescriptor*| *Class* | Evstigneev Roman | done | | need cherry-pick to FB |
 |`construct`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
-|`getPixelMap`| Function | Evstigneev Roman | done | | need cherry-pick to FB |f
+|`getPixelMap`| Function | Evstigneev Roman | done | | need cherry-pick to FB |
+|*ComponentObserver*|*Class*||||
+|`construct`|Function||||
+|`onLayoutLayout`|Function||||
+|`offLayoutLayout`|Function||||
+|`onDrawDraw`|Function||||
+|`offDrawDraw`|Function||||
+|`onDrawChildrenDrawChildren`|Function||||
+|`offDrawChildrenDrawChildren`|Function||||
 |*RouterPageInfo*| *Class* | | |
 |`construct`| Function | | |
+|`getContext`|Property||||
+|`setContext`|Property||||
 |`getIndex`| Function | | |
 |`setIndex`| Function | | |
 |`getName`| Function | | |
@@ -1525,425 +1862,377 @@
 |`setState`| Function | | |
 |`getPageId`| Function | | |
 |`setPageId`| Function | | |
-|*DensityInfo*| *Class* | | |
-|`construct`| Function | | |
-|`getContext`| Function | | |
-|`setContext`| Function | | |
-|`getDensity`| Function | | |
-|`setDensity`| Function | | |
-|*CircleShape*| *Class* |Dudkin Sergey |done | out of scope | |
-|`construct`| Function |Dudkin Sergey | done | out of scope| |
-|`offset`| Function |Dudkin Sergey | done | out of scope | |
-|`fill`| Function | Dudkin Sergey | done | out of scope | |
-|`position`| Function |Dudkin Sergey | done | out of scope | |
-|`width`| Function |Dudkin Sergey | done | out of scope | |
-|`height`| Function |Dudkin Sergey | done | out of scope | |
-|`size`| Function |Dudkin Sergey | done | out of scope | |
-|*EllipseShape*| *Class* | Erokhin Ilya | done | | |
-|`construct`| Function | Erokhin Ilya | done | | |
-|`offset`| Function | Erokhin Ilya | done | | |
-|`fill`| Function | Erokhin Ilya | done | | |
-|`position`| Function | Erokhin Ilya | done | | |
-|`width`| Function | Erokhin Ilya | done | | |
-|`height`| Function | Erokhin Ilya | done | | |
-|`size`| Function | Erokhin Ilya | done | | |
-|*PathShape*| *Class* | Lobah Mikhail | done| | |
-|`construct`| Function |Lobah Mikhail | done| | |
-|`offset`| Function | Lobah Mikhail| done| | |
-|`fill`| Function | Lobah Mikhail | done| | |
-|`position`| Function | Lobah Mikhail| done| | |
-|`commands`| Function | Lobah Mikhail| done| | |
+|*CommonShapeMethod_Ohos_Arkui_Shape_PathShape*|*Class*||||
+|`construct`|Function||||
+|`offset`|Function||||
+|`fill`|Function||||
+|`position`|Function||||
+|*BaseShape*| *Class* | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`construct`| Function |Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`width`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`height`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`size`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |*RectShape*| *Class* | Samarin Sergey | done | | |
 |`construct`| Function | Samarin Sergey | done | | |
-|`offset`| Function | Samarin Sergey | done | | |
-|`fill`| Function | Samarin Sergey | done | | |
-|`position`| Function | Samarin Sergey | done | | |
-|`width`| Function | Samarin Sergey | done | | |
-|`height`| Function | Samarin Sergey | done | | |
-|`size`| Function | Samarin Sergey | done | | |
 |`radiusWidth`| Function | Samarin Sergey | done | | |
 |`radiusHeight`| Function | Samarin Sergey | done | | |
 |`radius`| Function | Samarin Sergey | done | | |
-|*ThemeControl*| *Class* | | | | |
-|`construct`| Function | | | | |
-|`setDefaultTheme`| Function | | | | |
+|*CircleShape*| *Class* |Dudkin Sergey |done | out of scope | |
+|`construct`| Function |Dudkin Sergey | done | out of scope| |
+|*EllipseShape*| *Class* | Erokhin Ilya | done | | |
+|`construct`| Function | Erokhin Ilya | done | | |
+|*PathShape*| *Class* | Lobah Mikhail | done| | |
+|`construct`| Function |Lobah Mikhail | done| | |
+|`commands`| Function | Lobah Mikhail| done| | |
+|*Font*                |*Class*||||
+|`construct`           |Function||||
+|`registerFont`        |Function||||
+|`getSystemFontList`   |Function||||
+|`getFontByName`       |Function||||
+|*MediaQuery*          |*Class*||||
+|`construct`           |Function||||
+|`matchMediaSync`      |Function||||
+|*UIInspector*         |*Class*||||
+|`construct`           |Function||||
+|`createComponentObserver`|Function||||
+|*Router*              |*Class*||||
+|`construct`           |Function||||
+|`pushUrl0`            |Function||||
+|`pushUrl1`            |Function||||
+|`pushUrl2`            |Function||||
+|`pushUrl3`            |Function||||
+|`replaceUrl0`         |Function||||
+|`replaceUrl1`         |Function||||
+|`replaceUrl2`         |Function||||
+|`replaceUrl3`         |Function||||
+|`back0`               |Function||||
+|`back1`               |Function||||
+|`clear`               |Function||||
+|`getLength`           |Function||||
+|`getState`            |Function||||
+|`getStateByIndex`     |Function||||
+|`getStateByUrl`       |Function||||
+|`showAlertBeforeBackPage`|Function||||
+|`hideAlertBeforeBackPage`|Function||||
+|`getParams`           |Function||||
+|`pushNamedRoute0`     |Function||||
+|`pushNamedRoute1`     |Function||||
+|`pushNamedRoute2`     |Function||||
+|`pushNamedRoute3`     |Function||||
+|`replaceNamedRoute0`  |Function||||
+|`replaceNamedRoute1`  |Function||||
+|`replaceNamedRoute2`  |Function||||
+|`replaceNamedRoute3`  |Function||||
+|*TargetInfo*          |*Class*||||
+|`construct`           |Function||||
+|`getId`               |Property||||
+|`setId`               |Property||||
+|`getComponentId`      |Property||||
+|`setComponentId`      |Property||||
 |*PromptAction*| *Class* | | |
 |`construct`| Function | | |
+|`showToast`                         |Function||||
+|`openToast`                         |Function||||
+|`closeToast`                        |Function||||
+|`showDialog0`                       |Function||||
+|`showDialog1`                       |Function||||
+|`showActionMenu0`                   |Function||||
+|`showActionMenu1`                   |Function||||
+|`openCustomDialog0`                 |Function||||
+|`openCustomDialogWithController`    |Function||||
+|`updateCustomDialog`                |Function||||
+|`closeCustomDialog0`                |Function||||
+|`openCustomDialog1`                 |Function||||
+|`presentCustomDialog`               |Function||||
+|`closeCustomDialog1`                |Function||||
+|`getTopOrder`                       |Function||||
+|`getBottomOrder`                    |Function||||
 |`openPopup`| Function | | |
 |`upatePopup`| Function | | |
 |`closePopup`| Function | | |
 |`openMenu`| Function | | |
 |`updateMenu`| Function | | |
 |`closeMenu`| Function | | |
+|*PageInfo*|*Class*||||
+|`construct`                |Function||||
+|`getRouterPageInfo`        |Property||||
+|`setRouterPageInfo`        |Property||||
+|`getNavDestinationInfo`    |Property||||
+|`setNavDestinationInfo`    |Property||||
+|*OverlayManagerOptions*|*Class*||||
+|`construct`                    |Function||||
+|`getRenderRootOverlay`         |Property||||
+|`setRenderRootOverlay`         |Property||||
+|`getEnableBackPressedEvent`    |Property||||
+|`setEnableBackPressedEvent`    |Property||||
+|*GestureTriggerInfo*|*Class*||||
+|`construct`              |Function||||
+|`getEvent`               |Property||||
+|`setEvent`               |Property||||
+|`getCurrent`             |Property||||
+|`setCurrent`             |Property||||
+|`getCurrentPhase`        |Property||||
+|`setCurrentPhase`        |Property||||
+|`getNode`                |Property||||
+|`setNode`                |Property||||
+|*GestureObserverConfigs*|*Class*||||
+|`construct`              |Function||||
+|`getActionPhases`        |Property||||
+|`setActionPhases`        |Property||||
+|*UIObserver*|*Class*||||
+|`construct`                        |Function||||
+|`onNavDestinationUpdate0`          |Function||||
+|`offNavDestinationUpdate0`         |Function||||
+|`onNavDestinationUpdate1`          |Function||||
+|`offNavDestinationUpdate1`         |Function||||
+|`onScrollEvent0`                   |Function||||
+|`offScrollEvent0`                  |Function||||
+|`onScrollEvent1`                   |Function||||
+|`offScrollEvent1`                  |Function||||
+|`onRouterPageUpdate`               |Function||||
+|`offRouterPageUpdate`              |Function||||
+|`onDensityUpdate`                  |Function||||
+|`offDensityUpdate`                 |Function||||
+|`onWillDraw`                       |Function||||
+|`offWillDraw`                      |Function||||
+|`onDidLayout`                      |Function||||
+|`offDidLayout`                     |Function||||
+|`onNavDestinationSwitch0`          |Function||||
+|`offNavDestinationSwitch0`         |Function||||
+|`onNavDestinationSwitch1`          |Function||||
+|`offNavDestinationSwitch1`         |Function||||
+|`onWillClick0`                     |Function||||
+|`offWillClick0`                    |Function||||
+|`onDidClick0`                      |Function||||
+|`offDidClick0`                     |Function||||
+|`onWillClick1`                     |Function||||
+|`offWillClick1`                    |Function||||
+|`onDidClick1`                      |Function||||
+|`offDidClick1`                     |Function||||
+|`onBeforePanStart`                 |Function||||
+|`offBeforePanStart`                |Function||||
+|`onBeforePanEnd`                   |Function||||
+|`offBeforePanEnd`                  |Function||||
+|`onAfterPanStart`                  |Function||||
+|`offAfterPanStart`                 |Function||||
+|`onAfterPanEnd`                    |Function||||
+|`offAfterPanEnd`                   |Function||||
+|`onNodeRenderState`                |Function||||
+|`offNodeRenderState`               |Function||||
+|`onTabContentUpdate0`              |Function||||
+|`offTabContentUpdate0`             |Function||||
+|`onTabContentUpdate1`              |Function||||
+|`offTabContentUpdate1`             |Function||||
+|`addGlobalGestureListener`         |Function||||
+|`removeGlobalGestureListener`      |Function||||
+|*ComponentUtils*|*Class*||||
+|`construct`       |Function||||
+|`getRectangleById`|Function||||
+|*OverlayManager*|*Class*||||
+|`construct`                    |Function||||
+|`addComponentContent`         |Function||||
+|`addComponentContentWithOrder`|Function||||
+|`removeComponentContent`       |Function||||
+|`showComponentContent`         |Function||||
+|`hideComponentContent`         |Function||||
+|`showAllComponentContents`     |Function||||
+|`hideAllComponentContents`     |Function||||
+|*DynamicSyncScene*|*Class*||||
+|`construct`       |Function||||
+|`setFrameRateRange`|Function||||
+|`getFrameRateRange`|Function||||
+|*DragController*|*Class*||||
+|`construct`                       |Function||||
+|`executeDrag0`                    |Function||||
+|`executeDrag1`                    |Function||||
+|`createDragAction`                |Function||||
+|`getDragPreview`                  |Function||||
+|`setDragEventStrictReportingEnabled`|Function||||
+|`notifyDragStartRequest`          |Function||||
+|`cancelDataLoading`               |Function||||
+|`enableDropDisallowedBadge`       |Function||||
+|*MeasureUtils*|*Class*||||
+|`construct`   |Function||||
+|`measureText` |Function||||
+|`measureTextSize`|Function||||
+|*FocusController*|*Class*|Lobah Mikhail|done||
+|`construct`       |Function||||
+|`clearFocus`      |Function||||
+|`requestFocus`    |Function|Lobah Mikhail|done||
+|`activate`        |Function||||
+|`isActive`        |Function||||
+|`setAutoFocusTransfer`|Function||||
+|`setKeyProcessingMode`|Function||||
+|*CursorController*|*Class*||||
+|`construct`       |Function||||
+|`restoreDefault`  |Function||||
+|`setCursor`       |Function||||
+|*ContextMenuController*|*Class*||||
+|`construct`           |Function||||
+|`close`               |Function||||
+|*FrameCallback*|*Class*||||
+|`construct`     |Function||||
+|`onFrame`       |Function||||
+|`onIdle`        |Function||||
+|*ComponentSnapshot*|*Class*||||
+|`construct`               |Function||||
+|`get0`                    |Function||||
+|`get1`                    |Function||||
+|`createFromBuilder0`      |Function||||
+|`createFromBuilder1`      |Function||||
+|`getSync`                 |Function||||
+|`getWithUniqueId`         |Function||||
+|`getSyncWithUniqueId`     |Function||||
+|`createFromComponent`     |Function||||
+|`getWithRange`            |Function||||
 |*UIContext*| *Class* | | | | |
-|`construct`| Function | | | | |
-|`getFont`| Function | | | | |
-|`getFilteredInspectorTree`| Function | | | | |
-|`getFilteredInspectorTreeById`| Function | | | | |
-|`animateTo`| Function | | | | |
-|`showTextPickerDialog`| Function | | | | |
-|`runScopedTask`| Function | | | | |
-|`animateToImmediately`| Function | | | | |
-|`getFrameNodeById`| Function | | | | |
-|`getAttachedFrameNodeById`| Function | | | | |
-|`getFrameNodeByUniqueId`| Function | | | | |
-|`vp2px`| Function | | | | |
-|`px2vp`| Function | | | | |
-|`fp2px`| Function | | | | |
-|`px2fp`| Function | | | | |
-|`lpx2px`| Function | | | | |
-|`px2lpx`| Function | | | | |
-|`getHostContext`| Function | | | | |
-|`setDynamicDimming`| Function | | | | |
-|`getWindowName`| Function | | | | |
-|`getWindowWidthBreakpoint`| Function | | |
-|`getWindowHeightBreakpoint`| Function | | |
-|`openBindSheet`| Function | | | | |
-|`updateBindSheet`| Function | | | | |
-|`closeBindSheet`| Function | | | | |
-|`clearResourceCache`| Function | | | | |
-|`isFollowingSystemFontScale`| Function | | | | |
-|`getMaxFontScale`| Function | | | | |
+|`construct`                         |Function||||
+|`getFont`                           |Function||||
+|`isAvailable`                       |Function||||
+|`getMediaQuery`                     |Function||||
+|`getUIInspector`                    |Function||||
+|`getFilteredInspectorTree`          |Function||||
+|`getFilteredInspectorTreeById`      |Function||||
+|`getRouter`                         |Function||||
+|`getPromptAction`                   |Function||||
+|`getComponentUtils`                 |Function||||
+|`getUIObserver`                     |Function||||
+|`getOverlayManager`                 |Function||||
+|`setOverlayManagerOptions`          |Function||||
+|`getOverlayManagerOptions`          |Function||||
+|`createAnimator`                    |Function||||
+|`animateTo`                         |Function||||
+|`showAlertDialog`                   |Function||||
+|`showActionSheet`                   |Function||||
+|`showDatePickerDialog`              |Function||||
+|`showTimePickerDialog`              |Function||||
+|`showTextPickerDialog`              |Function||||
+|`runScopedTask`                     |Function||||
+|`setKeyboardAvoidMode`              |Function||||
+|`getKeyboardAvoidMode`              |Function||||
+|`setPixelRoundMode`                 |Function||||
+|`getPixelRoundMode`                 |Function||||
+|`dispatchKeyEvent`                  |Function||||
+|`getAtomicServiceBar`               |Function||||
+|`getDragController`                 |Function||||
+|`getMeasureUtils`                   |Function||||
+|`keyframeAnimateTo`                 |Function||||
+|`getFocusController`                |Function||||
+|`animateToImmediately`              |Function||||
+|`getFrameNodeById`                  |Function||||
+|`getAttachedFrameNodeById`          |Function||||
+|`getFrameNodeByUniqueId`            |Function||||
+|`getPageInfoByUniqueId`             |Function||||
+|`getNavigationInfoByUniqueId`       |Function||||
+|`setDynamicDimming`                 |Function||||
+|`getCursorController`               |Function||||
+|`getContextMenuController`          |Function||||
+|`getComponentSnapshot`              |Function||||
+|`vp2px`                             |Function||||
+|`px2vp`                             |Function||||
+|`fp2px`                             |Function||||
+|`px2fp`                             |Function||||
+|`lpx2px`                            |Function||||
+|`px2lpx`                            |Function||||
+|`getSharedLocalStorage`             |Function||||
+|`getHostContext`                    |Function||||
+|`getWindowName`                     |Function||||
+|`getWindowWidthBreakpoint`          |Function||||
+|`getWindowHeightBreakpoint`         |Function||||
+|`openBindSheet`                     |Function||||
+|`updateBindSheet`                   |Function||||
+|`closeBindSheet`                    |Function||||
+|`postFrameCallback`                 |Function||||
+|`postDelayedFrameCallback`          |Function||||
+|`requireDynamicSyncScene`           |Function||||
+|`clearResourceCache`                |Function||||
+|`isFollowingSystemFontScale`        |Function||||
+|`getMaxFontScale`                   |Function||||
+|`bindTabsToScrollable`              |Function||||
+|`unbindTabsFromScrollable`          |Function||||
+|`bindTabsToNestedScrollable`        |Function||||
+|`unbindTabsFromNestedScrollable`    |Function||||
+|`enableSwipeBack`                   |Function||||
+|`openBindContentCover`              |Function||||
+|`freezeUINode0`                     |Function||||
+|`freezeUINode1`                     |Function||||
+|`getTextMenuController`             |Function||||
+|`createUIContextWithoutWindow`      |Function||||
+|`destroyUIContextWithoutWindow`     |Function||||
+|`setUIStates`                       |Function||||
+|`getFocusedUIContext`               |Function||||
 |*TextMenuController*| *Class* | | |
 |`construct`| Function | | |
 |`setMenuOptions`| Function | | |
+|`disableSystemServiceMenuItems`|Function||||
+|*ContentCoverController*|*Class*||||
+|`construct`              |Function||||
+|`update`                 |Function||||
+|`close`                  |Function||||
+|*BusinessError*|*Class*||||
+|`construct0`       |Function||||
+|`construct1`       |Function||||
+|`construct2`       |Function||||
+|`getCode`          |Property||||
+|`setCode`          |Property||||
+|`getData`          |Property||||
+|`setData`          |Property||||
 |*ICurve*| *Class* | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`construct`| Function |Erokhin Ilya | done |  |  |
 |`interpolate`| Function | Erokhin Ilya | done |  |  |
 |*UnifiedData*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
-|`construct`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY|
-|`hasType`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
-|`getTypes`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
-|*RoundRect*| *Class* | | |
-|`construct`| Function | | |
-|`setCorner`| Function | | |
-|`getCorner`| Function | | |
-|`offset`| Function | | |
-|*Path*| *Class* | | |
-|`construct0`| Function | | |
-|`construct1`| Function | | |
-|`moveTo`| Function | | |
-|`lineTo`| Function | | |
-|`arcTo`| Function | | |
-|`quadTo`| Function | | |
-|`conicTo`| Function | | |
-|`cubicTo`| Function | | |
-|`rMoveTo`| Function | | |
-|`rLineTo`| Function | | |
-|`rQuadTo`| Function | | |
-|`rConicTo`| Function | | |
-|`rCubicTo`| Function | | |
-|`addPolygon`| Function | | |
-|`op`| Function | | |
-|`addArc`| Function | | |
-|`addCircle`| Function | | |
-|`addOval`| Function | | |
-|`addRect`| Function | | |
-|`addRoundRect`| Function | | |
-|`addPath`| Function | | |
-|`transform`| Function | | |
-|`contains`| Function | | |
-|`setFillType`| Function | | |
-|`getBounds`| Function | | |
-|`close`| Function | | |
-|`offset`| Function | | |
-|`reset`| Function | | |
-|`getLength`| Function | | |
-|`getPositionAndTangent`| Function | | |
-|`isClosed`| Function | | |
-|`getMatrix`| Function | | |
-|`buildFromSvgString`| Function | | |
+|`construct0`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY|
+|`construct1`| Function | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY|
+|`addRecord`|Function||||
+|`getRecords`|Function||||
+|*Summary*|*Class*||||
+|`construct`|Function||||
+|`getSummary`|Property||||
+|`setSummary`|Property||||
+|`getTotalSize`|Property||||
+|`setTotalSize`|Property||||
+|*UnifiedRecord*|*Class*||||
+|`construct0`       |Function||||
+|`construct1`       |Function||||
+|`getType`          |Function||||
+|`getValue`         |Function||||
+|*ColorSpaceManager*|*Class*||||
+|`construct`           |Function||||
+|`getColorSpaceName`   |Function||||
+|`getWhitePoint`       |Function||||
+|`getGamma`            |Function||||
 |*SamplingOptions*| *Class* | | |
 | `construct0` | Function |  |  |  |  |  |  |
 | `construct1` | Function |  |  |  |  |  |  |
 |*Canvas*| *Class* |Vadim Voronov | blocked AceEngine |  |
-|`construct`| Function | | |
-|`drawRect0`| Function | | |
-|`drawRect1`| Function | | |
-|`drawRoundRect`| Function | | |
-|`drawNestedRoundRect`| Function | | |
-|`drawBackground`| Function | | |
-|`drawShadow0`| Function | | |
-|`drawShadow1`| Function | | |
-|`drawCircle`| Function | | |
-|`drawImage`| Function | | |
-|`drawImageRect`| Function | | |
-|`drawImageRectWithSrc`| Function | | |
-|`drawColor0`| Function | | |
-|`drawColor1`| Function | | |
-|`drawColor2`| Function | | |
-|`drawOval`| Function | | |
-|`drawArc`| Function | | |
-|`drawPoint`| Function | | |
-|`drawPoints`| Function | | |
-|`drawPath`| Function | | |
-|`drawLine`| Function | | |
-|`drawSingleCharacter`| Function | | |
-|`drawTextBlob`| Function | | |
-|`drawPixelMapMesh`| Function | | |
-|`drawRegion`| Function | | |
-|`attachPen`| Function | | |
-|`attachBrush`| Function | | |
-|`detachPen`| Function | | |
-|`detachBrush`| Function | | |
-|`save`| Function | | |
-|`saveLayer`| Function | | |
-|`clear0`| Function | | |
-|`clear1`| Function | | |
-|`restore`| Function | | |
-|`restoreToCount`| Function | | |
-|`getSaveCount`| Function | | |
-|`getWidth`| Function | | |
-|`getHeight`| Function | | |
-|`getLocalClipBounds`| Function | | |
-|`getTotalMatrix`| Function | | |
-|`scale`| Function | | |
-|`skew`| Function | | |
-|`rotate`| Function | | |
-|`translate`| Function | | |
-|`clipPath`| Function | | |
-|`clipRect`| Function | | |
-|`concatMatrix`| Function | | |
-|`clipRegion`| Function | | |
-|`clipRoundRect`| Function | | |
-|`isClipEmpty`| Function | | |
-|`setMatrix`| Function | | |
-|`resetMatrix`| Function | | |
-|*TextBlob*| *Class* | | |
-|`construct`| Function | | |
-|`makeFromString`| Function | | |
-|`makeFromPosText`| Function | | |
-|`makeFromRunBuffer`| Function | | |
-|`bounds`| Function | | |
-|`uniqueID`| Function | | |
-|*Typeface*| *Class* | | |
-|`construct`| Function | | |
-|`getFamilyName`| Function | | |
-|`makeFromFile`| Function | | |
-|*Font*| *Class* | | |
-|`construct`| Function | | |
-|`enableSubpixel`| Function | | |
-|`enableEmbolden`| Function | | |
-|`enableLinearMetrics`| Function | | |
-|`setSize`| Function | | |
-|`getSize`| Function | | |
-|`setTypeface`| Function | | |
-|`getTypeface`| Function | | |
-|`getMetrics`| Function | | |
-|`measureSingleCharacter`| Function | | |
-|`measureText`| Function | | |
-|`setScaleX`| Function | | |
-|`setSkewX`| Function | | |
-|`setEdging`| Function | | |
-|`setHinting`| Function | | |
-|`countText`| Function | | |
-|`setBaselineSnap`| Function | | |
-|`isBaselineSnap`| Function | | |
-|`setEmbeddedBitmaps`| Function | | |
-|`isEmbeddedBitmaps`| Function | | |
-|`setForceAutoHinting`| Function | | |
-|`isForceAutoHinting`| Function | | |
-|`getWidths`| Function | | |
-|`textToGlyphs`| Function | | |
-|`isSubpixel`| Function | | |
-|`isLinearMetrics`| Function | | |
-|`getSkewX`| Function | | |
-|`isEmbolden`| Function | | |
-|`getScaleX`| Function | | |
-|`getHinting`| Function | | |
-|`getEdging`| Function | | |
-|`createPathForGlyph`| Function | | |
-|`getBounds`| Function | | |
-|`getTextPath`| Function | | |
+|`construct`         |Function||||
+|`drawRect0`         |Function||||
+|`drawRect1`         |Function||||
+|`drawImageRect`     |Function||||
+|`drawPixelMapMesh`  |Function||||
+|`attachBrush`       |Function||||
+|`detachBrush`       |Function||||
+|`saveLayer`         |Function||||
+|`restore`           |Function||||
+|`rotate`            |Function||||
 |*Lattice*| *Class* |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`construct`| Function |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
 |`createImageLattice`| Function |Evstigneev Roman | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
-|*MaskFilter*| *Class* | | |
-|`construct`| Function | | |
-|`createBlurMaskFilter`| Function | | |
-|*PathEffect*| *Class* | | |
-|`construct`| Function | | |
-|`createDashPathEffect`| Function | | |
-|`createCornerPathEffect`| Function | | |
-|*ShaderEffect*| *Class* | | |
-|`construct`| Function | | |
-|`createColorShader`| Function | | |
-|`createLinearGradient`| Function | | |
-|`createRadialGradient`| Function | | |
-|`createSweepGradient`| Function | | |
-|`createConicalGradient`| Function | | |
-|*ShadowLayer*| *Class* | | |
-|`construct`| Function | | |
-|`create0`| Function | | |
-|`create1`| Function | | |
 |*ColorFilter*| *Class* | Evstigneev Roman | done |
 |`construct`| Function | Evstigneev Roman | in progress |
-|`createBlendModeColorFilter0`| Function | Evstigneev Roman | in progress |
-|`createBlendModeColorFilter1`| Function | Evstigneev Roman | in progress |
-|`createComposeColorFilter`| Function | Evstigneev Roman | in progress |
-|`createLinearToSRGBGamma`| Function | Evstigneev Roman | in progress |
-|`createSRGBGammaToLinear`| Function | Evstigneev Roman | in progress |
-|`createLumaColorFilter`| Function | Evstigneev Roman | in progress |
-|`createMatrixColorFilter`| Function | Evstigneev Roman | in progress |
-|*ImageFilter*| *Class* | | |
-|`construct`| Function | | |
-|`createBlurImageFilter`| Function | | |
-|`createFromColorFilter`| Function | | |
-|*Pen*| *Class* | | |
-|`construct0`| Function | | |
-|`construct1`| Function | | |
-|`setMiterLimit`| Function | | |
-|`getMiterLimit`| Function | | |
-|`setShaderEffect`| Function | | |
-|`setColor0`| Function | | |
-|`setColor1`| Function | | |
-|`setColor2`| Function | | |
-|`getColor`| Function | | |
-|`getHexColor`| Function | | |
-|`setStrokeWidth`| Function | | |
-|`getWidth`| Function | | |
-|`setAntiAlias`| Function | | |
-|`isAntiAlias`| Function | | |
-|`setAlpha`| Function | | |
-|`getAlpha`| Function | | |
-|`setColorFilter`| Function | | |
-|`getColorFilter`| Function | | |
-|`setImageFilter`| Function | | |
-|`setMaskFilter`| Function | | |
-|`setPathEffect`| Function | | |
-|`setShadowLayer`| Function | | |
-|`setBlendMode`| Function | | |
-|`setDither`| Function | | |
-|`setJoinStyle`| Function | | |
-|`getJoinStyle`| Function | | |
-|`setCapStyle`| Function | | |
-|`getCapStyle`| Function | | |
-|`reset`| Function | | |
-|`getFillPath`| Function | | |
+|`createBlendModeColorFilter`| Function | Evstigneev Roman | in progress |
 |*Brush*| *Class* | | |
 |`construct0`| Function | | |
 |`construct1`| Function | | |
-|`setColor0`| Function | | |
-|`setColor1`| Function | | |
-|`setColor2`| Function | | |
-|`getColor`| Function | | |
-|`getHexColor`| Function | | |
-|`setAntiAlias`| Function | | |
-|`isAntiAlias`| Function | | |
-|`setAlpha`| Function | | |
-|`getAlpha`| Function | | |
-|`setColorFilter`| Function | | |
-|`getColorFilter`| Function | | |
-|`setImageFilter`| Function | | |
-|`setMaskFilter`| Function | | |
-|`setShadowLayer`| Function | | |
-|`setShaderEffect`| Function | | |
 |`setBlendMode`| Function | | |
 |`reset`| Function | | |
-|*Matrix*| *Class* | | |
-|`construct`| Function | | |
-|`setRotation`| Function | | |
-|`setScale`| Function | | |
-|`setTranslation`| Function | | |
-|`setMatrix`| Function | | |
-|`preConcat`| Function | | |
-|`isEqual`| Function | | |
-|`invert`| Function | | |
-|`isIdentity`| Function | | |
-|`getValue`| Function | | |
-|`postRotate`| Function | | |
-|`postScale`| Function | | |
-|`postTranslate`| Function | | |
-|`preRotate`| Function | | |
-|`preScale`| Function | | |
-|`preTranslate`| Function | | |
-|`reset`| Function | | |
-|`mapPoints`| Function | | |
-|`getAll`| Function | | |
-|`mapRect`| Function | | |
-|`setRectToRect`| Function | | |
-|`setPolyToPoly`| Function | | |
-|*Region*| *Class* | | |
-|`construct`| Function | | |
-|`isPointContained`| Function | | |
-|`isRegionContained`| Function | | |
-|`op`| Function | | |
-|`quickReject`| Function | | |
-|`setPath`| Function | | |
-|`setRect`| Function | | |
-|*FontCollection*| *Class* | | |
-|`construct`| Function | | |
-|`getGlobalInstance`| Function | | |
-|`loadFontSync`| Function | | |
-|`loadFont`| Function | | |
-|`clearCaches`| Function | | |
-|*Paragraph*| *Class* | | |
-|`construct`| Function | | |
-|`layoutSync`| Function | | |
-|`layout`| Function | | |
-|`paint`| Function | | |
-|`paintOnPath`| Function | | |
-|`getMaxWidth`| Function | | |
-|`getHeight`| Function | | |
-|`getLongestLine`| Function | | |
-|`getLongestLineWithIndent`| Function | | |
-|`getMinIntrinsicWidth`| Function | | |
-|`getMaxIntrinsicWidth`| Function | | |
-|`getAlphabeticBaseline`| Function | | |
-|`getIdeographicBaseline`| Function | | |
-|`getRectsForRange`| Function | | |
-|`getRectsForPlaceholders`| Function | | |
-|`getGlyphPositionAtCoordinate`| Function | | |
-|`getWordBoundary`| Function | | |
-|`getLineCount`| Function | | |
-|`getLineHeight`| Function | | |
-|`getLineWidth`| Function | | |
-|`didExceedMaxLines`| Function | | |
-|`getTextLines`| Function | | |
-|`getActualTextRange`| Function | | |
-|`getLineMetrics0`| Function | | |
-|`getLineMetrics1`| Function | | |
-|*LineTypeset*| *Class* | | |
-|`construct`| Function | | |
-|`getLineBreak`| Function | | |
-|`createLine`| Function | | |
-|*ParagraphBuilder*| *Class* | | |
-|`construct`| Function | | |
-|`pushStyle`| Function | | |
-|`popStyle`| Function | | |
-|`addText`| Function | | |
-|`addPlaceholder`| Function | | |
-|`build`| Function | | |
-|`buildLineTypeset`| Function | | |
-|`addSymbol`| Function | | |
-|*TextLine*| *Class* | | |
-|`construct`| Function | | |
-|`getGlyphCount`| Function | | |
-|`getTextRange`| Function | | |
-|`getGlyphRuns`| Function | | |
-|`paint`| Function | | |
-|`createTruncatedLine`| Function | | |
-|`getTypographicBounds`| Function | | |
-|`getImageBounds`| Function | | |
-|`getTrailingSpaceWidth`| Function | | |
-|`getStringIndexForPosition`| Function | | |
-|`getOffsetForStringIndex`| Function | | |
-|`enumerateCaretOffsets`| Function | | |
-|`getAlignmentOffset`| Function | | |
-|*Run*| *Class* | | |
-|`construct`| Function | | |
-|`getGlyphCount`| Function | | |
-|`getGlyphs0`| Function | | |
-|`getGlyphs1`| Function | | |
-|`getPositions0`| Function | | |
-|`getPositions1`| Function | | |
-|`getOffsets`| Function | | |
-|`getFont`| Function | | |
-|`paint`| Function | | |
-|`getStringIndices`| Function | | |
-|`getStringRange`| Function | | |
-|`getTypographicBounds`| Function | | |
-|`getImageBounds`| Function | | |
+|*Filter*|*Class*||||
+|`construct`|Function||||
+|`pixelStretch`|Function||||
+|`blur`|Function||||
+|`waterRipple`|Function||||
+|`flyInFlyOutEffect`|Function||||
+|`distort`|Function||||
 |*VisualEffect*| *Class* |  |  |
 |`construct`| Function | | |
 |`backgroundColorBlender`| Function |  | | | napi, https://gitee.com/rri_opensource/koala_projects/issues/IC36Y3 |
@@ -1958,21 +2247,793 @@
 |`rotate`| Function | Samarin Sergey | done | failed | to submit internal issue |
 |`transformPoint`| Function | Samarin Sergey | done | | |
 |`setPolyToPoly`| Function | Samarin Sergey | testskipped | | |
+|*MediaQueryListener*|*Class*||||
+|`construct`|Function||||
+|`onChange`|Function||||
+|`offChange`|Function||||
+|`getMatches`|Function||||
+|`getMedia`|Function||||
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
 |`construct`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
+|`readPixelsToBuffer0`          |Function||||
+|`readPixelsToBuffer1`          |Function||||
 |`readPixelsToBufferSync`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
-|`writeBufferToPixels`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
+|`readPixels0`                  |Function||||
+|`readPixels1`                  |Function||||
+|`readPixelsSync`               |Function||||
+|`writePixels0`                 |Function||||
+|`writePixels1`                 |Function||||
+|`writePixelsSync`              |Function||||
+|`writeBufferToPixels0`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
+|`writeBufferToPixels1`         |Function||||
+|`writeBufferToPixelsSync`      |Function||||
+|`toSdr`                        |Function||||
+|`getImageInfo0`                |Function||||
+|`getImageInfo1`                |Function||||
+|`getImageInfoSync`             |Function||||
+|`getBytesNumberPerRow`         |Function||||
+|`getPixelBytesNumber`          |Function||||
+|`getDensity`                   |Function||||
+|`opacity0`                     |Function||||
+|`opacity1`                     |Function||||
+|`opacitySync`                  |Function||||
+|`createAlphaPixelmap0`         |Function||||
+|`createAlphaPixelmap1`         |Function||||
+|`createAlphaPixelmapSync`      |Function||||
+|`scale0`                       |Function||||
+|`scale1`                       |Function||||
+|`scaleSync0`                   |Function||||
+|`scale2`                       |Function||||
+|`scaleSync1`                   |Function||||
+|`createScaledPixelMap`         |Function||||
+|`createScaledPixelMapSync`     |Function||||
+|`translate0`                   |Function||||
+|`translate1`                   |Function||||
+|`translateSync`                |Function||||
+|`rotate0`                      |Function||||
+|`rotate1`                      |Function||||
+|`rotateSync`                   |Function||||
+|`flip0`                        |Function||||
+|`flip1`                        |Function||||
+|`flipSync`                     |Function||||
+|`crop0`                        |Function||||
+|`crop1`                        |Function||||
+|`cropSync`                     |Function||||
+|`getColorSpace`                |Function||||
+|`marshalling`                  |Function||||
+|`unmarshalling`                |Function||||
+|`setColorSpace`                |Function||||
+|`applyColorSpace0`             |Function||||
+|`applyColorSpace1`             |Function||||
+|`convertPixelFormat`           |Function||||
+|`release0`                     |Function||||
+|`release1`                     |Function||||
+|`setMemoryNameSync`            |Function||||
 |`getIsEditable`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
 |`getIsStrideAlignment`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
+|*PrintDocumentAdapter*|*Class*||||
+|`construct`|Function||||
+|`onStartLayoutWrite`|Function||||
+|`onJobStateChanged`|Function||||
 |*LevelOrder*| *Class* | | |
 |`construct`| Function | | |
 |`clamp`| Function | | |
 |`getOrder`| Function | | |
-|*DismissDialogAction*| *Class* | | |
-|`construct`| Function | | |
-|`dismiss`| Function | | |
-|`getReason`| Function | | |
-|`setReason`| Function | | |
+|*CommonController*|*Class*||||
+|`construct`       |Function||||
+|`close`           |Function||||
+|*DialogController*|*Class*||||
+|`construct`      |Function||||
+|*Configuration*|*Class*||||
+|`construct`     |Function||||
+|`getDirection`  |Property||||
+|`setDirection`  |Property||||
+|`getLocale`     |Property||||
+|`setLocale`     |Property||||
+|`getDeviceType` |Property||||
+|`setDeviceType` |Property||||
+|`getScreenDensity`|Property||||
+|`setScreenDensity`|Property||||
+|`getColorMode`  |Property||||
+|`setColorMode`  |Property||||
+|`getMcc`        |Property||||
+|`setMcc`        |Property||||
+|`getMnc`        |Property||||
+|`setMnc`        |Property||||
+|*DeviceCapability*|*Class*||||
+|`construct`       |Function||||
+|`getScreenDensity`  |Property||||
+|`setScreenDensity`  |Property||||
+|`getDeviceType`   |Property||||
+|`setDeviceType`   |Property||||
+|*ResourceManager*|*Class*||||
+|`construct`       |Function||||
+|`getDeviceCapability0`|Function||||
+|`getDeviceCapability1`|Function||||
+|`getConfiguration0`  |Function||||
+|`getConfiguration1`  |Function||||
+|`getStringByName0`   |Function||||
+|`getStringByName1`   |Function||||
+|`getStringArrayByName0`|Function||||
+|`getStringArrayByName1`|Function||||
+|`getMediaByName0`    |Function||||
+|`getMediaByName1`    |Function||||
+|`getMediaByName2`    |Function||||
+|`getMediaByName3`    |Function||||
+|`getMediaBase64ByName0`|Function||||
+|`getMediaBase64ByName1`|Function||||
+|`getMediaBase64ByName2`|Function||||
+|`getMediaBase64ByName3`|Function||||
+|`getStringSync0`   |Function||||
+|`getStringSync1`   |Function||||
+|`getStringByNameSync0`|Function||||
+|`getStringByNameSync1`|Function||||
+|`getBoolean`       |Function||||
+|`getBooleanByName`  |Function||||
+|`getInt`           |Function||||
+|`getDouble`        |Function||||
+|`getIntByName`     |Function||||
+|`getDoubleByName`  |Function||||
+|`getStringValue0`  |Function||||
+|`getStringValue1`  |Function||||
+|`getStringArrayValue0`|Function||||
+|`getStringArrayValue1`|Function||||
+|`getIntPluralStringValueSync`|Function||||
+|`getIntPluralStringByNameSync`|Function||||
+|`getDoublePluralStringValueSync`|Function||||
+|`getDoublePluralStringByNameSync`|Function||||
+|`getMediaContent0` |Function||||
+|`getMediaContent1` |Function||||
+|`getMediaContent2` |Function||||
+|`getMediaContent3` |Function||||
+|`getMediaContentBase640`|Function||||
+|`getMediaContentBase641`|Function||||
+|`getMediaContentBase642`|Function||||
+|`getMediaContentBase643`|Function||||
+|`getRawFileContent0` |Function||||
+|`getRawFileContent1` |Function||||
+|`getRawFd0`        |Function||||
+|`getRawFd1`        |Function||||
+|`closeRawFd0`      |Function||||
+|`closeRawFd1`      |Function||||
+|`getDrawableDescriptor`|Function||||
+|`getDrawableDescriptorByName`|Function||||
+|`getRawFileList0`  |Function||||
+|`getRawFileList1`  |Function||||
+|`getColor0`        |Function||||
+|`getColor1`        |Function||||
+|`getColorByName0`  |Function||||
+|`getColorByName1`  |Function||||
+|`getColorSync`     |Function||||
+|`getColorByNameSync`|Function||||
+|`addResource`      |Function||||
+|`removeResource`   |Function||||
+|`getRawFdSync`     |Function||||
+|`closeRawFdSync`   |Function||||
+|`getRawFileListSync`|Function||||
+|`getRawFileContentSync`|Function||||
+|`getMediaContentSync`|Function||||
+|`getMediaContentBase64Sync`|Function||||
+|`getStringArrayValueSync`|Function||||
+|`getMediaByNameSync`|Function||||
+|`getMediaBase64ByNameSync`|Function||||
+|`getStringArrayByNameSync`|Function||||
+|`getConfigurationSync`|Function||||
+|`getDeviceCapabilitySync`|Function||||
+|`getLocales`       |Function||||
+|`getSymbol`        |Function||||
+|`getSymbolByName`  |Function||||
+|`isRawDir`         |Function||||
+|`getOverrideResourceManager`|Function||||
+|`getOverrideConfiguration`|Function||||
+|`updateOverrideConfiguration`|Function||||
+|*MessageSequence*|*Class*||||
+|`construct`      |Function||||
+|`create`         |Function||||
+|`reclaim`        |Function||||
+|`writeRemoteObject`|Function||||
+|`readRemoteObject`|Function||||
+|`writeInterfaceToken`|Function||||
+|`readInterfaceToken`|Function||||
+|`getCapacity`    |Function||||
+|`setCapacity`    |Function||||
+|`writeNoException`|Function||||
+|`readException`  |Function||||
+|`writeInt`       |Function||||
+|`writeLong`      |Function||||
+|`writeBoolean`   |Function||||
+|`writeString`    |Function||||
+|`writeParcelable`|Function||||
+|`writeByteArray` |Function||||
+|`writeIntArray`  |Function||||
+|`writeDoubleArray`|Function||||
+|`writeBooleanArray`|Function||||
+|`writeStringArray`|Function||||
+|`writeParcelableArray`|Function||||
+|`readInt`        |Function||||
+|`readLong`       |Function||||
+|`readBoolean`    |Function||||
+|`readString`     |Function||||
+|`readParcelable` |Function||||
+|`readIntArray0`  |Function||||
+|`readIntArray1`  |Function||||
+|`readDoubleArray0`|Function||||
+|`readDoubleArray1`|Function||||
+|`readBooleanArray0`|Function||||
+|`readBooleanArray1`|Function||||
+|`readStringArray0`|Function||||
+|`readStringArray1`|Function||||
+|`readParcelableArray`|Function||||
+|`closeFileDescriptor`|Function||||
+|`writeFileDescriptor`|Function||||
+|`readFileDescriptor`|Function||||
+|`writeAshmem`    |Function||||
+|`readAshmem`     |Function||||
+|`writeRawDataBuffer`|Function||||
+|`readRawDataBuffer`|Function||||
+|*Parcelable*|*Class*||||
+|`construct` |Function||||
+|`marshalling`|Function||||
+|`unmarshalling`|Function||||
+|*IRemoteObject*|*Class*||||
+|`construct`   |Function||||
+|`sendMessageRequest0`|Function||||
+|`sendMessageRequest1`|Function||||
+|`registerDeathRecipient`|Function||||
+|`unregisterDeathRecipient`|Function||||
+|`getDescriptor`|Function||||
+|`isObjectDead`|Function||||
+|*DeathRecipient*|*Class*||||
+|`construct`     |Function||||
+|`onRemoteDied`  |Function||||
+|*MessageOption*|*Class*||||
+|`construct0`    |Function||||
+|`construct1`    |Function||||
+|`isAsync`       |Function||||
+|`setAsync`      |Function||||
+|`getTF_SYNC`    |Property||||
+|`setTF_SYNC`    |Property||||
+|`getTF_ASYNC`   |Property||||
+|`setTF_ASYNC`   |Property||||
+|`getTF_WAIT_TIME`|Property||||
+|`setTF_WAIT_TIME`|Property||||
+|*Ashmem*|*Class*||||
+|`construct`     |Function||||
+|`create0`       |Function||||
+|`create1`       |Function||||
+|`getAshmemSize` |Function||||
+|`mapReadWriteAshmem`|Function||||
+|*X509Cert*|*Class*||||
+|`construct`        |Function||||
+|`verify0`          |Function||||
+|`verify1`          |Function||||
+|`getEncoded0`      |Function||||
+|`getEncoded1`      |Function||||
+|`getPublicKey`     |Function||||
+|`checkValidityWithDate`|Function||||
+|`getVersion`       |Function||||
+|`getCertSerialNumber`|Function||||
+|`getIssuerName0`   |Function||||
+|`getIssuerName1`   |Function||||
+|`getSubjectName`   |Function||||
+|`getNotBeforeTime` |Function||||
+|`getNotAfterTime`  |Function||||
+|`getSignature`     |Function||||
+|`getSignatureAlgName`|Function||||
+|`getSignatureAlgOid`|Function||||
+|`getSignatureAlgParams`|Function||||
+|`getKeyUsage`      |Function||||
+|`getExtKeyUsage`   |Function||||
+|`getBasicConstraints`|Function||||
+|`getSubjectAltNames`|Function||||
+|`getIssuerAltNames`|Function||||
+|`getItem`          |Function||||
+|`match`            |Function||||
+|`getCRLDistributionPoint`|Function||||
+|`getIssuerX500DistinguishedName`|Function||||
+|`getSubjectX500DistinguishedName`|Function||||
+|`toString0`        |Function||||
+|`toString1`        |Function||||
+|`hashCode`         |Function||||
+|`getExtensionsObject`|Function||||
+|*CertExtension*|*Class*||||
+|`construct`      |Function||||
+|`getEncoded`     |Function||||
+|`getOidList`     |Function||||
+|`getEntry`       |Function||||
+|`checkCA`        |Function||||
+|`hasUnsupportedCriticalExtension`|Function||||
+|*X500DistinguishedName*|*Class*||||
+|`construct`             |Function||||
+|`getName0`              |Function||||
+|`getName1`              |Function||||
+|`getName2`              |Function||||
+|`getEncoded`            |Function||||
+|*Key*|*Class*||||
+|`construct` |Function||||
+|`getEncoded`|Function||||
+|`getFormat` |Property||||
+|`getAlgName`|Property||||
+|*PubKey*|*Class*||||
+|`construct`     |Function||||
+|`getAsyKeySpec`  |Function||||
+|`getEncodedDer` |Function||||
+|`getEncodedPem` |Function||||
+|*PdfData*|*Class*||||
+|`construct`      |Function||||
+|`pdfArrayBuffer` |Function||||
+|*WebMessageExt*|*Class*||||
+|`construct`       |Function||||
+|`getType`         |Function||||
+|`getString`       |Function||||
+|`getNumber`       |Function||||
+|`getBoolean`      |Function||||
+|`getArrayBuffer`  |Function||||
+|`getArray`        |Function||||
+|`getError`        |Function||||
+|`setType`         |Function||||
+|`setString`       |Function||||
+|`setNumber`       |Function||||
+|`setBoolean`      |Function||||
+|`setArrayBuffer`  |Function||||
+|`setArray`        |Function||||
+|`setError`        |Function||||
+|*WebMessagePort*|*Class*||||
+|`construct`             |Function||||
+|`close`                 |Function||||
+|`postMessageEvent`      |Function||||
+|`onMessageEvent`        |Function||||
+|`postMessageEventExt`   |Function||||
+|`onMessageEventExt`     |Function||||
+|`getIsExtentionType`    |Property||||
+|`setIsExtentionType`    |Property||||
+|*BackForwardList*|*Class*||||
+|`construct`        |Function||||
+|`getItemAtIndex`   |Function||||
+|`getCurrentIndex`  |Property||||
+|`setCurrentIndex`  |Property||||
+|`getSize`         |Property||||
+|`setSize`          |Property||||
+|*JsMessageExt*|*Class*||||
+|`construct`    |Function||||
+|`getType`      |Function||||
+|`getString`    |Function||||
+|`getNumber`    |Function||||
+|`getBoolean`   |Function||||
+|`getArrayBuffer`|Function||||
+|`getArray`     |Function||||
+|*WebviewController*|*Class*||||
+|`construct`                         |Function||||
+|`initializeWebEngine`               |Function||||
+|`setHttpDns`                        |Function||||
+|`setWebDebuggingAccess0`            |Function||||
+|`enableSafeBrowsing`                |Function||||
+|`isSafeBrowsingEnabled`             |Function||||
+|`accessForward`                     |Function||||
+|`accessBackward`                    |Function||||
+|`accessStep`                        |Function||||
+|`forward`                           |Function||||
+|`backward`                          |Function||||
+|`clearHistory`                      |Function||||
+|`onActive`                          |Function||||
+|`onInactive`                        |Function||||
+|`refresh`                           |Function||||
+|`loadData`                          |Function||||
+|`loadUrl`                           |Function||||
+|`storeWebArchive0`                  |Function||||
+|`storeWebArchive1`                  |Function||||
+|`zoom`                              |Function||||
+|`zoomIn`                            |Function||||
+|`zoomOut`                           |Function||||
+|`getWebId`                          |Function||||
+|`getUserAgent`                      |Function||||
+|`getTitle`                          |Function||||
+|`getPageHeight`                     |Function||||
+|`backOrForward`                     |Function||||
+|`requestFocus`                      |Function||||
+|`createWebMessagePorts`             |Function||||
+|`postMessage`                       |Function||||
+|`stop`                              |Function||||
+|`registerJavaScriptProxy`           |Function||||
+|`deleteJavaScriptRegister`          |Function||||
+|`searchAllAsync`                    |Function||||
+|`clearMatches`                      |Function||||
+|`searchNext`                        |Function||||
+|`clearSslCache`                     |Function||||
+|`clearClientAuthenticationCache`    |Function||||
+|`runJavaScript0`                    |Function||||
+|`runJavaScript1`                    |Function||||
+|`runJavaScriptExt0`                 |Function||||
+|`runJavaScriptExt1`                 |Function||||
+|`createPdf0`                        |Function||||
+|`createPdf1`                        |Function||||
+|`getUrl`                            |Function||||
+|`pageUp`                            |Function||||
+|`pageDown`                          |Function||||
+|`getOriginalUrl`                    |Function||||
+|`getFavicon`                        |Function||||
+|`setNetworkAvailable`               |Function||||
+|`hasImage0`                         |Function||||
+|`hasImage1`                         |Function||||
+|`getBackForwardEntries`             |Function||||
+|`removeCache`                       |Function||||
+|`removeAllCache`                    |Function||||
+|`scrollTo`                          |Function||||
+|`scrollBy`                          |Function||||
+|`slideScroll`                       |Function||||
+|`serializeWebState`                 |Function||||
+|`restoreWebState`                   |Function||||
+|`customizeSchemes`                  |Function||||
+|`getCertificate0`                   |Function||||
+|`getCertificate1`                   |Function||||
+|`setAudioMuted`                     |Function||||
+|`prefetchPage`                      |Function||||
+|`prepareForPageLoad`                |Function||||
+|`setCustomUserAgent`                |Function||||
+|`getCustomUserAgent`                |Function||||
+|`setConnectionTimeout`              |Function||||
+|`setDownloadDelegate`               |Function||||
+|`startDownload`                     |Function||||
+|`postUrl`                           |Function||||
+|`createWebPrintDocumentAdapter`     |Function||||
+|`getSecurityLevel`                  |Function||||
+|`isIncognitoMode`                   |Function||||
+|`setScrollable`                     |Function||||
+|`getScrollable`                     |Property||||
+|`setPrintBackground`                |Function||||
+|`getPrintBackground`                |Property||||
+|`getLastJavascriptProxyCallingFrameUrl`|Function||||
+|`startCamera`                       |Function||||
+|`stopCamera`                        |Function||||
+|`closeCamera`                       |Function||||
+|`pauseAllTimers`                    |Function||||
+|`resumeAllTimers`                   |Function||||
+|`stopAllMedia`                      |Function||||
+|`resumeAllMedia`                    |Function||||
+|`pauseAllMedia`                     |Function||||
+|`closeAllMediaPresentations`        |Function||||
+|`getMediaPlaybackState`             |Function||||
+|`setWebSchemeHandler`               |Function||||
+|`clearWebSchemeHandler`             |Function||||
+|`setServiceWorkerWebSchemeHandler`  |Function||||
+|`clearServiceWorkerWebSchemeHandler`|Function||||
+|`enableIntelligentTrackingPrevention`|Function||||
+|`isIntelligentTrackingPreventionEnabled`|Function||||
+|`addIntelligentTrackingPreventionBypassingList`|Function||||
+|`removeIntelligentTrackingPreventionBypassingList`|Function||||
+|`clearIntelligentTrackingPreventionBypassingList`|Function||||
+|`getDefaultUserAgent`              |Function||||
+|`onCreateNativeMediaPlayer`         |Function||||
+|`enableWholeWebPageDrawing`         |Function||||
+|`webPageSnapshot`                   |Function||||
+|`prefetchResource`                  |Function||||
+|`clearPrefetchedResource`           |Function||||
+|`setRenderProcessMode`              |Function||||
+|`getRenderProcessMode`              |Function||||
+|`terminateRenderProcess`            |Function||||
+|`precompileJavaScript`              |Function||||
+|`setHostIP`                         |Function||||
+|`clearHostIP`                       |Function||||
+|`warmupServiceWorker`               |Function||||
+|`injectOfflineResources`            |Function||||
+|`enableAdsBlock`                    |Function||||
+|`isAdsBlockEnabled`                 |Function||||
+|`isAdsBlockEnabledForCurPage`       |Function||||
+|`getSurfaceId`                      |Function||||
+|`setUrlTrustList`                   |Function||||
+|`setPathAllowingUniversalAccess`    |Function||||
+|`trimMemoryByPressureLevel`         |Function||||
+|`enableBackForwardCache`            |Function||||
+|`setBackForwardCacheOptions`        |Function||||
+|`getScrollOffset`                   |Function||||
+|`scrollByWithResult`                |Function||||
+|`getLastHitTest`                    |Function||||
+|`setWebDebuggingAccess1`            |Function||||
+|*WebDownloadItem*          |*Class*||||
+|`construct`               |Function||||
+|`getGuid`                 |Function||||
+|`getCurrentSpeed`         |Function||||
+|`getPercentComplete`      |Function||||
+|`getTotalBytes`           |Function||||
+|`getState`                |Function||||
+|`getLastErrorCode`        |Function||||
+|`getMethod`               |Function||||
+|`getMimeType`             |Function||||
+|`getUrl`                  |Function||||
+|`getSuggestedFileName`    |Function||||
+|`start`                   |Function||||
+|`cancel`                  |Function||||
+|`pause`                   |Function||||
+|`resume`                  |Function||||
+|`getReceivedBytes`        |Function||||
+|`getFullPath`             |Function||||
+|`serialize`               |Function||||
+|`deserialize`             |Function||||
+|*WebDownloadDelegate*      |*Class*||||
+|`construct`               |Function||||
+|`onBeforeDownload`        |Function||||
+|`onDownloadUpdated`       |Function||||
+|`onDownloadFinish`        |Function||||
+|`onDownloadFailed`        |Function||||
+|*WebHttpBodyStream*        |*Class*||||
+|`construct`               |Function||||
+|`initialize`              |Function||||
+|`read`                    |Function||||
+|`getSize`                  |Function||||
+|`getPosition`             |Function||||
+|`isChunked`               |Function||||
+|`isEof`                   |Function||||
+|`isInMemory`              |Function||||
+|*WebSchemeHandlerRequest*  |*Class*||||
+|`construct`               |Function||||
+|`getHeader`               |Function||||
+|`getRequestUrl`           |Function||||
+|`getRequestMethod`        |Function||||
+|`getReferrer`             |Function||||
+|`isMainFrame`             |Function||||
+|`hasGesture`              |Function||||
+|`getHttpBodyStream`       |Function||||
+|`getRequestResourceType`  |Function||||
+|`getFrameUrl`             |Function||||
+|*WebSchemeHandlerResponse*|*Class*||||
+|`construct`               |Function||||
+|`setUrl`                  |Function||||
+|`getUrl`                  |Function||||
+|`setNetErrorCode`         |Function||||
+|`getNetErrorCode`         |Function||||
+|`setStatus`               |Function||||
+|`getStatus`               |Function||||
+|`setStatusText`           |Function||||
+|`getStatusText`           |Function||||
+|`setMimeType`             |Function||||
+|`getMimeType`             |Function||||
+|`setEncoding`             |Function||||
+|`getEncoding`             |Function||||
+|`setHeaderByName`         |Function||||
+|`getHeaderByName`         |Function||||
+|*WebResourceHandler*      |*Class*||||
+|`construct`               |Function||||
+|`didReceiveResponse`      |Function||||
+|`didReceiveResponseBody`  |Function||||
+|`didFinish`               |Function||||
+|`didFail`                 |Function||||
+|*WebSchemeHandler*        |*Class*||||
+|`construct`               |Function||||
+|`onRequestStart`          |Function||||
+|`onRequestStop`           |Function||||
+|*NativeMediaPlayerHandler*|*Class*||||
+|`construct`               |Function||||
+|`handleStatusChanged`     |Function||||
+|`handleVolumeChanged`     |Function||||
+|`handleMutedChanged`      |Function||||
+|`handlePlaybackRateChanged`|Function||||
+|`handleDurationChanged`   |Function||||
+|`handleTimeUpdate`        |Function||||
+|`handleBufferedEndTimeChanged`|Function||||
+|`handleEnded`             |Function||||
+|`handleNetworkStateChanged`|Function||||
+|`handleReadyStateChanged` |Function||||
+|`handleFullscreenChanged` |Function||||
+|`handleSeeking`           |Function||||
+|`handleSeekFinished`      |Function||||
+|`handleError`             |Function||||
+|`handleVideoSizeChanged`  |Function||||
+|*NativeMediaPlayerBridge*  |*Class*||||
+|`construct`               |Function||||
+|`updateRect`              |Function||||
+|`play`                    |Function||||
+|`pause`                   |Function||||
+|`seek`                    |Function||||
+|`setVolume`               |Function||||
+|`setMuted`                |Function||||
+|`setPlaybackRate`         |Function||||
+|`release`                 |Function||||
+|`enterFullscreen`         |Function||||
+|`exitFullscreen`          |Function||||
+|`getResumePlayer`|Property||||
+|`setResumePlayer`|Property||||
+|`getSuspendPlayer`|Property||||
+|`setSuspendPlayer`|Property||||
+|*MediaSourceInfo*         |*Class*||||
+|`construct`               |Function||||
+|`getType`                 |Property||||
+|`setType`                 |Property||||
+|`getSource`               |Property||||
+|`setSource`               |Property||||
+|`getFormat`               |Property||||
+|`setFormat`               |Property||||
+|*NativeMediaPlayerSurfaceInfo*|*Class*||||
+|`construct`               |Function||||
+|`getId`                   |Property||||
+|`setId`                   |Property||||
+|`getRect`                 |Property||||
+|`setRect`                 |Property||||
+|*BackForwardCacheSupportedFeatures*|*Class*||||
+|`construct`                        |Function||||
+|`getNativeEmbed`                   |Property||||
+|`setNativeEmbed`                   |Property||||
+|`getMediaTakeOver`                 |Property||||
+|`setMediaTakeOver`                 |Property||||
+|*BackForwardCacheOptions*          |*Class*||||
+|`construct`                        |Function||||
+|`getSize`                          |Property||||
+|`setSize`                          |Property||||
+|`getTimeToLive`                    |Property||||
+|`setTimeToLive`                    |Property||||
+|*Window*                           |*Class*||||
+|`construct`                        |Function||||
+|`hideWithAnimation0`               |Function||||
+|`hideWithAnimation1`               |Function||||
+|`showWindow0`                      |Function||||
+|`showWindow1`                      |Function||||
+|`showWithAnimation0`               |Function||||
+|`showWithAnimation1`               |Function||||
+|`destroyWindow0`                   |Function||||
+|`destroyWindow1`                   |Function||||
+|`moveWindowTo0`                    |Function||||
+|`moveWindowTo1`                    |Function||||
+|`resize0`                          |Function||||
+|`resize1`                          |Function||||
+|`getGlobalRect`                    |Function||||
+|`getWindowProperties`              |Function||||
+|`getWindowAvoidArea`               |Function||||
+|`setWindowLayoutFullScreen`        |Function||||
+|`setWindowSystemBarEnable`         |Function||||
+|`setSpecificSystemBarEnabled`      |Function||||
+|`setWindowSystemBarProperties`     |Function||||
+|`setPreferredOrientation0`         |Function||||
+|`setPreferredOrientation1`         |Function||||
+|`loadContent0`                     |Function||||
+|`loadContent1`                     |Function||||
+|`getUIContext`                     |Function||||
+|`setUIContent0`                    |Function||||
+|`setUIContent1`                    |Function||||
+|`isWindowShowing`                  |Function||||
+|`onWindowSizeChange`               |Function||||
+|`offWindowSizeChange`              |Function||||
+|`onAvoidAreaChange`                |Function||||
+|`offAvoidAreaChange`               |Function||||
+|`onKeyboardHeightChange`           |Function||||
+|`offKeyboardHeightChange`          |Function||||
+|`onKeyboardDidShow`                |Function||||
+|`offKeyboardDidShow`               |Function||||
+|`onKeyboardDidHide`                |Function||||
+|`offKeyboardDidHide`               |Function||||
+|`onTouchOutside`                   |Function||||
+|`offTouchOutside`                  |Function||||
+|`onDisplayIdChange`                |Function||||
+|`offDisplayIdChange`               |Function||||
+|`onWindowVisibilityChange`         |Function||||
+|`offWindowVisibilityChange`        |Function||||
+|`onSystemDensityChange`            |Function||||
+|`offSystemDensityChange`           |Function||||
+|`onNoInteractionDetected`          |Function||||
+|`offNoInteractionDetected`         |Function||||
+|`onScreenshot`                     |Function||||
+|`offScreenshot`                    |Function||||
+|`onDialogTargetTouch`              |Function||||
+|`offDialogTargetTouch`             |Function||||
+|`onWindowEvent`                    |Function||||
+|`offWindowEvent`                   |Function||||
+|`onWindowStatusChange`             |Function||||
+|`offWindowStatusChange`            |Function||||
+|`onSubWindowClose`                 |Function||||
+|`offSubWindowClose`                |Function||||
+|`onWindowWillClose`                |Function||||
+|`offWindowWillClose`               |Function||||
+|`onWindowHighlightChange`          |Function||||
+|`offWindowHighlightChange`         |Function||||
+|`isWindowSupportWideGamut0`        |Function||||
+|`isWindowSupportWideGamut1`        |Function||||
+|`setWindowColorSpace0`             |Function||||
+|`setWindowColorSpace1`             |Function||||
+|`setWindowBackgroundColor`         |Function||||
+|`setWindowFocusable0`              |Function||||
+|`setWindowFocusable1`              |Function||||
+|`setWindowKeepScreenOn0`           |Function||||
+|`setWindowKeepScreenOn1`           |Function||||
+|`setWindowPrivacyMode0`            |Function||||
+|`setWindowPrivacyMode1`            |Function||||
+|`setWindowTouchable0`              |Function||||
+|`setWindowTouchable1`              |Function||||
+|`snapshot0`                        |Function||||
+|`snapshot1`                        |Function||||
+|`opacity`                          |Function||||
+|`scale`                            |Function||||
+|`rotate`                           |Function||||
+|`translate`                        |Function||||
+|`setShadow`                        |Function||||
+|`setWaterMarkFlag0`                |Function||||
+|`setWaterMarkFlag1`                |Function||||
+|`minimize0`                        |Function||||
+|`minimize1`                        |Function||||
+|`maximize`                         |Function||||
+|`hideNonSystemFloatingWindows0`    |Function||||
+|`hideNonSystemFloatingWindows1`    |Function||||
+|`keepKeyboardOnFocus`              |Function||||
+|`recover`                          |Function||||
+|`setWindowDecorVisible`            |Function||||
+|`setWindowDecorHeight`             |Function||||
+|`getWindowDecorHeight`             |Function||||
+|`setDecorButtonStyle`              |Function||||
+|`setWindowTitleButtonVisible`      |Function||||
+|`startMoving0`                     |Function||||
+|`startMoving1`                     |Function||||
+|`onWindowTitleButtonRectChange`    |Function||||
+|`offWindowTitleButtonRectChange`   |Function||||
+|`onWindowRectChange`               |Function||||
+|`offWindowRectChange`              |Function||||
+|`setImmersiveModeEnabledState`     |Function||||
+|`getWindowStatus`                  |Function||||
+|*WindowStage*                      |*Class*||||
+|`construct`                        |Function||||
+|`getMainWindow0`                   |Function||||
+|`getMainWindow1`                   |Function||||
+|`getMainWindowSync`                |Function||||
+|`createSubWindow0`                 |Function||||
+|`createSubWindow1`                 |Function||||
+|`loadContent0`                     |Function||||
+|`loadContent1`                     |Function||||
+|`loadContent2`                     |Function||||
+|`loadContentByName0`               |Function||||
+|`loadContentByName1`               |Function||||
+|`loadContentByName2`               |Function||||
+|`onWindowStageEvent`               |Function||||
+|`offWindowStageEvent`              |Function||||
+|`onWindowStageClose`               |Function||||
+|`offWindowStageClose`              |Function||||
+|`disableWindowDecor`               |Function||||
+|`setShowOnLockScreen`              |Function||||
+|*AbilityInfo*                      |*Class*||||
+|`construct`                        |Function||||
+|`getBundleName`                    |Property||||
+|`getModuleName`                    |Property||||
+|`getName`                          |Property||||
+|`getLabel`                         |Property||||
+|`getLabelId`                       |Property||||
+|`getDescription`                   |Property||||
+|`getDescriptionId`                 |Property||||
+|`getIcon`                          |Property||||
+|`getIconId`                        |Property||||
+|`getProcess`                       |Property||||
+|`getExported`                      |Property||||
+|`getOrientation`                   |Property||||
+|`getLaunchType`                    |Property||||
+|`getPermissions`                   |Property||||
+|`getDeviceTypes`                   |Property||||
+|`getApplicationInfo`               |Property||||
+|`getMetadata`                      |Property||||
+|`getEnabled`                       |Property||||
+|`getSupportWindowModes`            |Property||||
+|`getWindowSize`                    |Property||||
+|`getExcludeFromDock`               |Property||||
+|`getSkills`                        |Property||||
+|`getAppIndex`                      |Property||||
+|`getOrientationId`                 |Property||||
+|*WindowSize*|*Class*||||
+|`construct`   |Function||||
+|`getMaxWindowRatio`|Property||||
+|`getMinWindowRatio`|Property||||
+|`getMaxWindowWidth`|Property||||
+|`getMinWindowWidth`|Property||||
+|`getMaxWindowHeight`|Property||||
+|`getMinWindowHeight`|Property||||
+|*AbilityResult*|*Class*||||
+|`construct`    |Function||||
+|`getResultCode`|Property||||
+|`setResultCode`|Property||||
+|`getWant`      |Property||||
+|`setWant`      |Property||||
+|*AbilityStartCallback*|*Class*||||
+|`construct`           |Function||||
+|`onError`             |Function||||
+|`getOnResult`         |Property||||
+|`setOnResult`         |Property||||
+|*DismissDialogAction*|*Class*||||
+|`construct`         |Function||||
+|`dismiss`           |Function||||
+|`getReason`         |Property||||
+|`setReason`         |Property||||
 |*SpringProp*| *Class* |managed side | managed side| | |
 |`construct`| Function |managed side |managed side | | |
 |*SpringMotion*| *Class* |managed side |managed side | | |
@@ -1981,215 +3042,80 @@
 |`construct`| Function |managed side |managed side | | |
 |*ScrollMotion*| *Class* |managed side | managed side| | |
 |`construct`| Function |managed side | managed side| | |
-|*BaseContext*| *Class* | | | | |
-|`construct`| Function | | | | |
-|*Context*| *Class* | | | | |
-|`construct`| Function | | | | |
-|*TapGestureInterface*| *Class* | Dudkin Sergey | done | | wait new generation for feature_branch, to merge CTOR impl |
-|`construct`| Function | Dudkin Sergey | done | | |
-|`onAction`| Function | Dudkin Sergey | done | | |
-|*LongPressGestureInterface*| *Class* | Morozov Sergey | done | | wait new generation for feature_branch, to merge CTOR impl |
-|`construct`| Function | Morozov Sergey | done | | |
-|`onAction`| Function | Morozov Sergey | done | | |
-|`onActionEnd`| Function | Morozov Sergey | done | | |
-|`onActionCancel0`| Function | Morozov Sergey | done | | |
-|`onActionCancel1`| Function | Morozov Sergey | done | | |
-|*PanGestureInterface*| *Class* | Morozov Sergey | done | | wait new generation for feature_branch, to merge CTOR impl |
-|`construct`| Function | Morozov Sergey | done | | |
-|`onActionStart`| Function | Morozov Sergey | done | | |
-|`onActionUpdate`| Function | Morozov Sergey | done | | |
-|`onActionEnd`| Function | Morozov Sergey | done | | |
-|`onActionCancel0`| Function | Morozov Sergey | done | | |
-|`onActionCancel1`| Function | Morozov Sergey | done | | |
-|*PinchGestureInterface*| *Class* | Tuzhilkin Ivan | done | | wait new generation for feature_branch, to merge CTOR impl |
-|`construct`| Function | Tuzhilkin Ivan | done | | |
-|`onActionStart`| Function | Tuzhilkin Ivan | done | | |
-|`onActionUpdate`| Function | Tuzhilkin Ivan | done | | |
-|`onActionEnd`| Function | Tuzhilkin Ivan | done | | |
-|`onActionCancel0`| Function | Tuzhilkin Ivan | done | | |
-|`onActionCancel1`| Function | Tuzhilkin Ivan | done | | |
-|*GestureGroupInterface*| *Class* | Tuzhilkin Ivan | done | | wait new generation for feature_branch, to merge CTOR impl |
-|`construct`| Function |Tuzhilkin Ivan | done | | |
-|`onCancel`| Function | Tuzhilkin Ivan | done | | |
-|*LayoutChild*| *Class* | | | | |
-|`construct`| Function | | | | |
-|`measure`| Function | | | | |
-|`getName`| Function | | | | |
-|`setName`| Function | | | | |
-|`getId`| Function | | | | |
-|`setId`| Function | | | | |
-|`getPosition`| Function | | | | |
-|`position`| Function | | | | |
-|*WebCookie*| *Class* | Erokhin Ilya | done |  | |
-|`construct`| Function |Erokhin Ilya | done |  |  |
-|`setCookie`| Function | Erokhin Ilya | done |  |deprecated |
-|`saveCookie`| Function | Erokhin Ilya | done |  |deprecated |
-|*ComponentContent*| *Class* | | | | |
-|`construct`| Function | | | | |
-|`update`| Function | | | | |
-|`reuse`| Function | | | | |
-|`recycle`| Function | | | | |
-|`dispose`| Function | | | | |
-|`updateConfiguration`| Function | | | | |
-|*FrameNode*| *Class* | Tuzhilkin Ivan | done |  | |
-|`construct`| Function | Tuzhilkin Ivan | in progress |  | |
-|`isModifiable`| Function | Tuzhilkin Ivan | done |  | |
-|`appendChild`| Function | Tuzhilkin Ivan | done |  | |
-|`insertChildAfter`| Function | Tuzhilkin Ivan | done |  | |
-|`removeChild`| Function | Tuzhilkin Ivan | done |  | |
-|`clearChildren`| Function | Tuzhilkin Ivan | done |  | |
-|`getChild`| Function | Tuzhilkin Ivan | done |  | |
-|`getFirstChild`| Function | Tuzhilkin Ivan | done |  | |
-|`getNextSibling`| Function | Tuzhilkin Ivan | done |  | |
-|`getPreviousSibling`| Function | Tuzhilkin Ivan | done |  | |
-|`getParent`| Function | Tuzhilkin Ivan | done |  | |
-|`getChildrenCount`| Function | Tuzhilkin Ivan | done |  | |
-|`dispose`| Function | Tuzhilkin Ivan | done |  | |
-|`getId`| Function | wangtao | done | | |
-|`getUniqueId`| Function | wangtao | done | | |
-|`getNodeType`| Function | wangtao | done | | |
-|`getOpacity`| Function | Morozov Sergey | done | | |
-|`isVisible`| Function | wangtao | done | | |
-|`isClipToFrame`| Function | wangtao | done | | |
-|`isAttached`| Function | wangtao | done | | |
-|`getInspectorInfo`| Function | wangtao | done | | |
-|`invalidate`| Function | wangtao | done | |
-|`disposeTree`| Function | wangtao | done | |
-|`setCrossLanguageOptions`| Function | wangtao | done | |
-|`getCrossLanguageOptions`| Function | wangtao | done | |
-|`setMeasuredSize`| Function | wangtao | done | |
-|`setLayoutPosition`| Function | wangtao | done | |
-|`measure`| Function | wangtao | done  | |
-|`layout`| Function | wangtao | done | |
-|`setNeedsLayout`| Function | wangtao | done | |
-|`getPositionToWindowWithTransform`| Function | Morozov Sergey | done | | |
-|`getFrameNodeByKey`| Function | wangtao | done | | | |
-|`getIdByFrameNode`| Function | wangtao | done | | |
-|`moveTo`| Function | wangtao | done | | |
-|`getFirstChildIndexWithoutExpand`| Function | wangtao | done | | |
-|`getLastChildIndexWithoutExpand`| Function | wangtao | done | | |
-|`getAttachedFrameNodeById`| Function | wangtao | done | | |
-|`getFrameNodeById`| Function | wangtao | done | | |
-|`getFrameNodeByUniqueId`| Function | wangtao | done | | |
-|`reuse`| Function | wangtao | done | | |
-|`recycle`| Function | wangtao | done | | |
-|`getFrameNodePtr`| Function | wangtao | done | | |
-|`createTypedFrameNode`| Function | wangtao | done | | |
-|*DrawContext*| *Class* | | | | |
-|`construct`| Function | Samarin Sergey | in progress | | |
-|`size`| Function | Samarin Sergey | in progress | | |
-|`sizeInPixel`| Function | Samarin Sergey | in progress | | |
-|`setCanvas`| Function | Samarin Sergey | in progress | | |
-|*LengthMetrics*| *Class* | Evstigneev Roman | done | | |
-|`construct`| Function |Evstigneev Roman | done | | |
-|`px`| Function | Evstigneev Roman | done | | |
-|`vp`| Function | Samarin Sergey | done | | |
-|`fp`| Function | Samarin Sergey | done | | |
-|`percent`| Function | Samarin Sergey | done | | |
-|`lpx`| Function | Samarin Sergey | done | | |
-|`resource`| Function | Evstigneev Roman | done | | |
-|`getUnit`| Function | Samarin Sergey | done | | |
-|`setUnit`| Function | Samarin Sergey | done | | |
-|`getValue`| Function | Samarin Sergey | done | | |
-|`setValue`| Function | Samarin Sergey | done | | |
-|*ColorMetrics*| *Class* | Lobah Mikhail| done| | |
-|`construct`| Function | Lobah Mikhail| done| | |
-|`numeric`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`rgba`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`resourceColor`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`blendColor`| Function | Lobah Mikhail| done| | |
-|`color`| Function | Lobah Mikhail| done| | |
-|`red`| Function | Lobah Mikhail| done| | |
-|`green`| Function | Lobah Mikhail| done| | |
-|`blue`| Function | Lobah Mikhail| done| | |
-|`apha`| Function | Lobah Mikhail| done| | |
-|*ShapeMask*| *Class* | Vadim Voronov | done | | |
-|`construct`| Function |  Vadim Voronov | done | |   |
-|`setRectShape`| Function | Vadim Voronov | done | | |
-|`setRoundRectShape`| Function | Vadim Voronov | done | | |
-|`setCircleShape`| Function | Vadim Voronov | done | | |
-|`setOvalShape`| Function | Vadim Voronov | done | | |
-|`setCommandPath`| Function | Vadim Voronov | done | | |
-|`getFillColor`| Function | Vadim Voronov | done | | |
-|`setFillColor`| Function | Vadim Voronov | done | | |
-|`getStrokeColor`| Function | Vadim Voronov | done | | |
-|`setStrokeColor`| Function | Vadim Voronov | done | | |
-|`getStrokeWidth`| Function | Vadim Voronov | done | | |
-|`setStrokeWidth`| Function | Vadim Voronov | done | | |
-|*ShapeClip*| *Class* | Andrey Khudenkikh | done | | |
-|`construct`| Function | Andrey Khudenkikh | done | | |
-|`setRectShape`| Function | Andrey Khudenkikh | done | | |
-|`setRoundRectShape`| Function | Andrey Khudenkikh | done | | |
-|`setCircleShape`| Function | Andrey Khudenkikh | done | | |
-|`setOvalShape`| Function | Andrey Khudenkikh | done | | |
-|`setCommandPath`| Function | Andrey Khudenkikh | done | | |
-|*NodeContent*| *Class* | | | | |
-|`construct`| Function | | | | |
-|`addFrameNode`| Function | | | | |
-|`removeFrameNode`| Function | | | | |
-|*RenderNode*| *Class* | Morozov Sergey | in progress | | done on Upstream |
-|`construct`| Function | Morozov Sergey | done | | done on Upstream |
-|`appendChild`| Function | Morozov Sergey | done | | done on Upstream |
-|`insertChildAfter`| Function | Morozov Sergey | done | | done on Upstream |
-|`removeChild`| Function | Morozov Sergey | done | | done on Upstream |
-|`clearChildren`| Function | Morozov Sergey | done | | done on Upstream |
-|`getChild`| Function | Morozov Sergey | done | | done on Upstream |
-|`getFirstChild`| Function | Morozov Sergey | done | | done on Upstream |
-|`getNextSibling`| Function | Morozov Sergey | done | | done on Upstream |
-|`getPreviousSibling`| Function | Morozov Sergey | done | | done on Upstream |
-|`draw`| Function | managed side | managed side | | |
-|`invalidate`| Function | Morozov Sergey | testskipped | | done on Upstream |
-|`dispose`| Function | Morozov Sergey | done | | done on Upstream |
-|`getBackgroundColor`| Function | Morozov Sergey | done | | done on Upstream |
-|`setBackgroundColor`| Function | Morozov Sergey | done | | done on Upstream |
-|`getClipToFrame`| Function | Morozov Sergey | done | | done on Upstream |
-|`setClipToFrame`| Function | Morozov Sergey | done | | done on Upstream |
-|`getOpacity`| Function | Morozov Sergey | done | | done on Upstream |
-|`setOpacity`| Function | Morozov Sergey | done | | done on Upstream |
-|`getSize`| Function | Morozov Sergey | done | | done on Upstream |
-|`setSize`| Function | Morozov Sergey | done | | done on Upstream |
-|`getPosition`| Function | Morozov Sergey | done | | done on Upstream |
-|`setPosition`| Function | Morozov Sergey | done | | done on Upstream |
-|`getFrame`| Function | Morozov Sergey | done | | done on Upstream |
-|`setFrame`| Function | Morozov Sergey | done | | done on Upstream |
-|`getPivot`| Function | Morozov Sergey | done | | done on Upstream |
-|`setPivot`| Function | Morozov Sergey | done | | done on Upstream |
-|`getScale`| Function | Morozov Sergey | done | | done on Upstream |
-|`setScale`| Function | Morozov Sergey | done | | done on Upstream |
-|`getTranslation`| Function | Morozov Sergey | done | | done on Upstream |
-|`setTranslation`| Function | Morozov Sergey | done | | done on Upstream |
-|`getRotation`| Function | Morozov Sergey | done | | done on Upstream |
-|`setRotation`| Function | Morozov Sergey | done | | done on Upstream |
-|`getTransform`| Function | Morozov Sergey | done | | done on Upstream |
-|`setTransform`| Function | Morozov Sergey | done | | done on Upstream |
-|`getShadowColor`| Function | Morozov Sergey | done | | done on Upstream |
-|`setShadowColor`| Function | Morozov Sergey | done | | done on Upstream |
-|`getShadowOffset`| Function | Morozov Sergey | done | | done on Upstream 
-|`setShadowOffset`| Function | Morozov Sergey | done | | done on Upstream |
-|`getLabel`| Function | Morozov Sergey | done | | done on Upstream |
-|`setLabel`| Function | Morozov Sergey | done | | done on Upstream |
-|`getShadowAlpha`| Function | Morozov Sergey | done | | done on Upstream |
-|`setShadowAlpha`| Function | Morozov Sergey | done | | done on Upstream |
-|`getShadowElevation`| Function | Morozov Sergey | done | | done on Upstream |
-|`setShadowElevation`| Function | Morozov Sergey | done | | done on Upstream |
-|`getShadowRadius`| Function | Morozov Sergey | done | | done on Upstream |
-|`setShadowRadius`| Function | Morozov Sergey | done | | done on Upstream |
-|`getBorderStyle`| Function | Morozov Sergey | done | | done on Upstream |
-|`setBorderStyle`| Function | Morozov Sergey | done | | done on Upstream |
-|`getBorderWidth`| Function | Morozov Sergey | done | | done on Upstream |
-|`setBorderWidth`| Function | Morozov Sergey | done | | done on Upstream |
-|`getBorderColor`| Function | Morozov Sergey | done | | done on Upstream |
-|`setBorderColor`| Function | Morozov Sergey | done | | done on Upstream |
-|`getBorderRadius`| Function | Morozov Sergey | done | | done on Upstream |
-|`setBorderRadius`| Function | Morozov Sergey | done | | done on Upstream |
-|`getShapeMask`| Function | Morozov Sergey | done | | done on Upstream |
-|`setShapeMask`| Function | Morozov Sergey | done | | done on Upstream |
-|`getShapeClip`| Function | Morozov Sergey | done | | done on Upstream |
-|`setShapeClip`| Function | Morozov Sergey | done | | done on Upstream |
-|`getMarkNodeGroup`| Function | Morozov Sergey | done | | done on Upstream |
-|`setMarkNodeGroup`| Function | Morozov Sergey | done | | done on Upstream |
-|`getLengthMetricsUnit`| Function | Morozov Sergey | done | | done on Upstream |
-|`setLengthMetricsUnit`| Function | Morozov Sergey | done | | done on Upstream |
+|*ApplicationContext*|*Class*||||
+|`construct`         |Function||||
+|`onAbilityLifecycle`|Function||||
+|`onInteropAbilityLifecycle`|Function||||
+|`offAbilityLifecycle0`|Function||||
+|`offAbilityLifecycle1`|Function||||
+|`offInteropAbilityLifecycle`|Function||||
+|`onEnvironment`     |Function||||
+|`offEnvironment0`   |Function||||
+|`offEnvironment1`   |Function||||
+|`onApplicationStateChange`|Function||||
+|`offApplicationStateChange`|Function||||
+|`getRunningProcessInformation0`|Function||||
+|`getRunningProcessInformation1`|Function||||
+|`killAllProcesses0`|Function||||
+|`killAllProcesses1`|Function||||
+|`killAllProcesses2`|Function||||
+|`setColorMode`      |Function||||
+|`setLanguage`       |Function||||
+|`clearUpApplicationData0`|Function||||
+|`clearUpApplicationData1`|Function||||
+|`restartApp`        |Function||||
+|`preloadUIExtensionAbility`|Function||||
+|`setSupportedProcessCache`|Function||||
+|`setFont`           |Function||||
+|`getCurrentAppCloneIndex`|Function||||
+|`setFontSizeScale`  |Function||||
+|`getCurrentInstanceKey`|Function||||
+|`getAllRunningInstanceKeys`|Function||||
+|*ApplicationInfo*|*Class*||||
+|`construct`       |Function||||
+|`getName`         |Property||||
+|`getDescription`  |Property||||
+|`getDescriptionId`|Property||||
+|`getEnabled`      |Property||||
+|`getLabel`        |Property||||
+|`getLabelId`      |Property||||
+|`getIcon`         |Property||||
+|`getIconId`       |Property||||
+|`getProcess`      |Property||||
+|`getPermissions`  |Property||||
+|`getCodePath`     |Property||||
+|`getMetadataArray`|Property||||
+|`getRemovable`    |Property||||
+|`getAccessTokenId`|Property||||
+|`getUid`          |Property||||
+|`getIconResource` |Property||||
+|`getLabelResource`|Property||||
+|`getDescriptionResource`|Property||||
+|`getAppDistributionType`|Property||||
+|`getAppProvisionType`|Property||||
+|`getSystemApp`    |Property||||
+|`getBundleType`   |Property||||
+|`getDebug`        |Property||||
+|`getDataUnclearable`|Property||||
+|`getNativeLibraryPath`|Property||||
+|`getMultiAppMode` |Property||||
+|`getAppIndex`     |Property||||
+|`getInstallSource`|Property||||
+|`getReleaseType`  |Property||||
+|`getCloudFileSyncEnabled`|Property||||
+|`getFlags`        |Property||||
+|*ModuleMetadata*|*Class*||||
+|`construct`      |Function||||
+|`getModuleName`  |Property||||
+|`getMetadata`    |Property||||
+|*MultiAppMode*|*Class*||||
+|`construct`     |Function||||
+|`getMultiAppModeType`|Property||||
+|`getMaxCount`   |Property||||
+|*BaseContext*|*Class*||||
+|`construct`   |Function||||
+|`getStageMode`|Property||||
+|`setStageMode`|Property||||
 |*CalendarPickerDialog*| *Class* | Ekaterina Stepanova | testskipped |  | |
 |`construct`| Function | | | | |
 |`show`| Function | Ekaterina Stepanova | testskipped |  | UT in progress, Skroba Gleb |
@@ -2596,7 +3522,7 @@
 |`enableBreathingAnimation`| Function | Maksimov Nikita | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*Layoutable*| *Class* | Samarin Sergey | in progress | | |
 |`construct`| Function | Samarin Sergey | in progress | | |
-|`measure`| Function | Samarin Sergey | in progress | | |
+|`layout`|Function||||
 |`getMargin`| Function | Samarin Sergey | in progress | | |
 |`getPadding`| Function | Samarin Sergey | in progress | | |
 |`getBorderWidth`| Function | Samarin Sergey | in progress | | |
@@ -2645,42 +3571,185 @@
 |`setOnMouse`| Function |  Andrey Khudenkikh| done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |`setOnSizeChange`| Function | Andrey Khudenkikh | done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |`setOnVisibleAreaApproximateChange`| Function | Andrey Khudenkikh | testskipped | test blocked | Compilation error: Cannot find type 'BuilderNode' |
-|*GestureModifier*| *Class* | Tuzhilkin Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
-|`construct`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
-|`applyGesture`| Function | Tuzhilkin Ivan | blocked IDL |  |  https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
-|*PageLifeCycle*| *Class* | | |
-|`construct`| Function | | |
-|`onPageShow`| Function | | |
-|`onPageHide`| Function | | |
-|`onBackPress`| Function | | |
-|`pageTransition`| Function | | |
-|`onNewParam`| Function | | |
-|*LayoutCallback*| *Class* | | |
-|`construct`| Function | | |
-|`onPlaceChildren`| Function | | |
-|`onMeasureSize`| Function | | |
+|*ComponentContentBase*|*Class*||||
+|`construct`            |Function||||
+|*ConnectOptions*       |*Class*||||
+|`construct`           |Function||||
+|`getOnConnect`        |Property||||
+|`setOnConnect`        |Property||||
+|`getOnDisconnect`     |Property||||
+|`setOnDisconnect`     |Property||||
+|`getOnFailed`         |Property||||
+|`setOnFailed`         |Property||||
+|*Content*             |*Class*||||
+|`construct`           |Function||||
+|*Context*            |*Class*||||
+|`construct`          |Function||||
+|`getApplicationContext`|Function||||
+|`getGroupDir0`       |Function||||
+|`getGroupDir1`       |Function||||
+|`createModuleResourceManager`|Function||||
+|`createAreaModeContext`|Function||||
+|`createDisplayContext`|Function||||
+|`getResourceManager`  |Property||||
+|`setResourceManager`  |Property||||
+|`getApplicationInfo`  |Property||||
+|`setApplicationInfo`  |Property||||
+|`getCacheDir`         |Property||||
+|`setCacheDir`         |Property||||
+|`getTempDir`          |Property||||
+|`setTempDir`          |Property||||
+|`getFilesDir`         |Property||||
+|`setFilesDir`         |Property||||
+|`getDatabaseDir`      |Property||||
+|`setDatabaseDir`      |Property||||
+|`getPreferencesDir`   |Property||||
+|`setPreferencesDir`   |Property||||
+|`getBundleCodeDir`    |Property||||
+|`setBundleCodeDir`    |Property||||
+|`getDistributedFilesDir`|Property||||
+|`setDistributedFilesDir`|Property||||
+|`getResourceDir`      |Property||||
+|`setResourceDir`      |Property||||
+|`getCloudFileDir`     |Property||||
+|`setCloudFileDir`     |Property||||
+|`getEventHub`         |Property||||
+|`setEventHub`         |Property||||
+|`getArea`             |Property||||
+|`setArea`             |Property||||
+|`getProcessName`      |Property||||
+|`setProcessName`      |Property||||
 |*CustomDialogController*| *Class* | Maksimov Nikita | in progress |  | |
 |`construct`| Function |Maksimov Nikita | in progress |  |  |
 |`open`| Function | Maksimov Nikita | testskipped |  |  |
 |`close`| Function | Maksimov Nikita | testskipped |  |   |
+|`getExternalOptions`|Function||||
 |*LinearGradient*| *Class* | Morozov Sergey | done | | |
 |`construct`| Function | Morozov Sergey | done | | |
 |*DatePickerDialog*| *Class* | Ekaterina Stepanova | testskipped |  | |
 |`construct`| Function | Ekaterina Stepanova | testskipped |  | UT in progress, Skroba Gleb |
-|*LifeCycle*| *Class* | | |
-|`construct`| Function | | |
-|`aboutToAppear`| Function | | |
-|`aboutToDisappear`| Function | | |
-|`onDidBuild`| Function | | |
-|`build`| Function | | |
-|*ExtendableComponent*| *Class* | | |
-|`construct`| Function | | |
-|`getUIContext`| Function | | |
-|`getUniqueId`| Function | | |
-|`queryNavDestinationInfo0`| Function | | |
-|`queryNavDestinationInfo1`| Function | | |
-|`queryNavigationInfo`| Function | | |
-|`queryRouterPageInfo`| Function | | |
+|*ElementName*            |*Class*||||
+|`construct`              |Function||||
+|`getDeviceId`            |Property||||
+|`setDeviceId`            |Property||||
+|`getBundleName`          |Property||||
+|`setBundleName`          |Property||||
+|`getModuleName`          |Property||||
+|`setModuleName`          |Property||||
+|`getAbilityName`         |Property||||
+|`setAbilityName`         |Property||||
+|`getUri`                 |Property||||
+|`setUri`                 |Property||||
+|`getShortName`           |Property||||
+|`setShortName`           |Property||||
+|*EventHub*              |*Class*||||
+|`construct`             |Function||||
+|`on`                    |Function||||
+|`off`                   |Function||||
+|`emit`                  |Function||||
+|*LifeCycle*             |*Class*||||
+|`construct`             |Function||||
+|`aboutToAppear`         |Function||||
+|`aboutToDisappear`      |Function||||
+|`onDidBuild`            |Function||||
+|`build`                 |Function||||
+|*ExtendableComponent*   |*Class*||||
+|`construct`             |Function||||
+|`getUIContext`          |Function||||
+|`getUniqueId`           |Function||||
+|`queryNavDestinationInfo0`|Function||||
+|`queryNavDestinationInfo1`|Function||||
+|`queryNavigationInfo`   |Function||||
+|`queryRouterPageInfo`   |Function||||
+|*ExtensionAbilityInfo*  |*Class*||||
+|`construct`             |Function||||
+|`getBundleName`         |Property||||
+|`getModuleName`         |Property||||
+|`getName`               |Property||||
+|`getLabelId`            |Property||||
+|`getDescriptionId`      |Property||||
+|`getIconId`             |Property||||
+|`getExported`           |Property||||
+|`getExtensionAbilityType`|Property||||
+|`getExtensionAbilityTypeName`|Property||||
+|`getPermissions`        |Property||||
+|`getApplicationInfo`    |Property||||
+|`getMetadata`           |Property||||
+|`getEnabled`            |Property||||
+|`getReadPermission`     |Property||||
+|`getWritePermission`    |Property||||
+|`getSkills`             |Property||||
+|`getAppIndex`           |Property||||
+|*ExtensionContext*      |*Class*||||
+|`construct`             |Function||||
+|`getCurrentHapModuleInfo`|Property||||
+|`setCurrentHapModuleInfo`|Property||||
+|`getConfig`             |Property||||
+|`setConfig`             |Property||||
+|`getExtensionAbilityInfo`|Property||||
+|`setExtensionAbilityInfo`|Property||||
+|*FrameNode*| *Class* | Tuzhilkin Ivan | done |  | |
+|`construct`| Function | Tuzhilkin Ivan | in progress |  | |
+|`getRenderNode`|Function||||
+|`isModifiable`| Function | Tuzhilkin Ivan | done |  | |
+|`appendChild`| Function | Tuzhilkin Ivan | done |  | |
+|`insertChildAfter`| Function | Tuzhilkin Ivan | done |  | |
+|`removeChild`| Function | Tuzhilkin Ivan | done |  | |
+|`clearChildren`| Function | Tuzhilkin Ivan | done |  | |
+|`getChild`| Function | Tuzhilkin Ivan | done |  | |
+|`getFirstChildIndexWithoutExpand`| Function | wangtao | done | | |
+|`getLastChildIndexWithoutExpand`| Function | wangtao | done | | |
+|`getFirstChild`| Function | Tuzhilkin Ivan | done |  | |
+|`getNextSibling`| Function | Tuzhilkin Ivan | done |  | |
+|`getPreviousSibling`| Function | Tuzhilkin Ivan | done |  | |
+|`getParent`| Function | Tuzhilkin Ivan | done |  | |
+|`getChildrenCount`| Function | Tuzhilkin Ivan | done |  | |
+|`moveTo`| Function | wangtao | done | | |
+|`dispose`| Function | Tuzhilkin Ivan | done |  | |
+|`getPositionToWindow`|Function||||
+|`isDisposed`|Function||||
+|`getPositionToParent`|Function||||
+|`getMeasuredSize`|Function||||
+|`getLayoutPosition`|Function||||
+|`getUserConfigBorderWidth`|Function||||
+|`getUserConfigPadding`|Function||||
+|`getUserConfigMargin`|Function||||
+|`getUserConfigSize`|Function||||
+|`getId`| Function | wangtao | done | | |
+|`getUniqueId`| Function | wangtao | done | | |
+|`getNodeType`| Function | wangtao | done | | |
+|`getOpacity`| Function | Morozov Sergey | done | | |
+|`isVisible`| Function | wangtao | done | | |
+|`isClipToFrame`| Function | wangtao | done | | |
+|`isAttached`| Function | wangtao | done | | |
+|`getInspectorInfo`| Function | wangtao | done | | |
+|`getCustomProperty`|Function||||
+|`onMeasure`|Function||||
+|`onLayout`|Function||||
+|`setMeasuredSize`| Function | wangtao | done | |
+|`setLayoutPosition`| Function | wangtao | done | |
+|`measure`| Function | wangtao | done  | |
+|`layout`| Function | wangtao | done | |
+|`setNeedsLayout`| Function | wangtao | done | |
+|`invalidate`| Function | wangtao | done | |
+|`getPositionToScreen`|Function||||
+|`getGlobalPositionOnDisplay`|Function||||
+|`getPositionToWindowWithTransform`| Function | Morozov Sergey | done | | |
+|`getPositionToParentWithTransform`|Function||||
+|`getPositionToScreenWithTransform`|Function||||
+|`disposeTree`| Function | wangtao | done | |
+|`addComponentContent`|Function||||
+|`setCrossLanguageOptions`| Function | wangtao | done | |
+|`getCrossLanguageOptions`| Function | wangtao | done | |
+|`recycle`| Function | wangtao | done | | |
+|`reuse`| Function | wangtao | done | | |
+|`isTransferred`|Function||||
+|`getCommonEvent`|Property||||
+|`setCommonEvent`|Property||||
+|`getGestureEvent`|Property||||
+|`setGestureEvent`|Property||||
+|`getCommonAttribute`|Property||||
+|`setCommonAttribute`|Property||||
 |*BaseGestureEvent*| *Class* | Maksimov Nikita | done |  | |
 |`construct`| Function |Maksimov Nikita | done |  | |
 |`getFingerList`| Function | Kovalev Sergey | done | | |
@@ -2706,7 +3775,7 @@
 |*PinchGestureEvent*| *Class* | Vadim Voronov | done | | |
 |`construct`| Function |Vadim Voronov | done | | |
 |`getScale`| Function | Vadim Voronov | done | | |
-|`scale`| Function | Vadim Voronov | done | | |
+|`setScale`| Function | Vadim Voronov | done | | |
 |`getPinchCenterX`| Function | Vadim Voronov | done | | |
 |`setPinchCenterX`| Function | Vadim Voronov | done | | |
 |`getPinchCenterY`| Function | Vadim Voronov | done | | |
@@ -2736,7 +3805,7 @@
 |`getSpeed`| Function | Samarin Sergey | done|  | |
 |`setSpeed`| Function | Samarin Sergey | done |  | |
 |`getScale`| Function | Samarin Sergey | done |  | |
-|`scale`| Function | Samarin Sergey | done |  | |
+|`setScale`| Function | Samarin Sergey | done |  | |
 |`getPinchCenterX`| Function | Samarin Sergey | done |  | |
 |`setPinchCenterX`| Function | Samarin Sergey | done |  | |
 |`getPinchCenterY`| Function | Samarin Sergey | done |  | |
@@ -2769,6 +3838,10 @@
 |`onActionUpdate`| Function | | | | |
 |`onActionEnd`| Function | | | | |
 |`onActionCancel`| Function | | | | |
+|*GestureGroup*|*Class*||||
+|`construct`|Function||||
+|$_instantiate|Function||||
+|`onCancel`|Function||||
 |*ScrollableTargetInfo*| *Class* | Maksimov Nikita | done |  | |
 |`construct`| Function |Maksimov Nikita | done |  | |
 |`isBegin`| Function | Maksimov Nikita | done |  | |
@@ -2808,6 +3881,104 @@
 |*PanRecognizer*| *Class* | Politov Mikhail | done |  | done on upstream |
 |`construct`| Function |Politov Mikhail | done |  | done on upstream |
 |`getPanGestureOptions`| Function | Politov Mikhail | done |  | done on upstream |
+|*DrawContext*| *Class* | | | | |
+|`construct`| Function | Samarin Sergey | in progress | | |
+|`getSize`| Function | Samarin Sergey | in progress | | |
+|`setSize`| Function | Samarin Sergey | in progress | | |
+|`getSizeInPixel`| Function | Samarin Sergey | in progress | | |
+|`setSizeInPixel`| Function | Samarin Sergey | in progress | | |
+|`getCanvas`| Function | Samarin Sergey | in progress | | |
+|`setCanvas`| Function | Samarin Sergey | in progress | | |
+|*LengthMetrics*| *Class* | Evstigneev Roman | done | | |
+|`construct`| Function |Evstigneev Roman | done | | |
+|`px`| Function | Evstigneev Roman | done | | |
+|`vp`| Function | Samarin Sergey | done | | |
+|`fp`| Function | Samarin Sergey | done | | |
+|`percent`| Function | Samarin Sergey | done | | |
+|`lpx`| Function | Samarin Sergey | done | | |
+|`resource`| Function | Evstigneev Roman | done | | |
+|`getUnit`| Function | Samarin Sergey | done | | |
+|`setUnit`| Function | Samarin Sergey | done | | |
+|`getValue`| Function | Samarin Sergey | done | | |
+|`setValue`| Function | Samarin Sergey | done | | |
+|*ColorMetrics*| *Class* | Lobah Mikhail| done| | |
+|`construct`| Function | Lobah Mikhail| done| | |
+|`numeric`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`rgba`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`resourceColor`| Function | Lobah Mikhail| done| test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
+|`blendColor`| Function | Lobah Mikhail| done| | |
+|`getColor`| Function | Lobah Mikhail| done| | |
+|`setColor`| Function | Lobah Mikhail| done| | |
+|`getRed`| Function | Lobah Mikhail| done| | |
+|`setRed`| Function | Lobah Mikhail| done| | |
+|`getGreen`| Function | Lobah Mikhail| done| | |
+|`setGreen`| Function | Lobah Mikhail| done| | |
+|`getBlue`| Function | Lobah Mikhail| done| | |
+|`setBlue`| Function | Lobah Mikhail| done| | |
+|`getAlpha`| Function | Lobah Mikhail| done| | |
+|`setAlpha`| Function | Lobah Mikhail| done| | |
+|*ShapeMask*| *Class* | Vadim Voronov | done | | |
+|`construct`| Function |  Vadim Voronov | done | |   |
+|`setRectShape`| Function | Vadim Voronov | done | | |
+|`setRoundRectShape`| Function | Vadim Voronov | done | | |
+|`setCircleShape`| Function | Vadim Voronov | done | | |
+|`setOvalShape`| Function | Vadim Voronov | done | | |
+|`setCommandPath`| Function | Vadim Voronov | done | | |
+|`getFillColor`| Function | Vadim Voronov | done | | |
+|`setFillColor`| Function | Vadim Voronov | done | | |
+|`getStrokeColor`| Function | Vadim Voronov | done | | |
+|`setStrokeColor`| Function | Vadim Voronov | done | | |
+|`getStrokeWidth`| Function | Vadim Voronov | done | | |
+|`setStrokeWidth`| Function | Vadim Voronov | done | | |
+|*ShapeClip*| *Class* | Andrey Khudenkikh | done | | |
+|`construct`| Function | Andrey Khudenkikh | done | | |
+|`setRectShape`| Function | Andrey Khudenkikh | done | | |
+|`setRoundRectShape`| Function | Andrey Khudenkikh | done | | |
+|`setCircleShape`| Function | Andrey Khudenkikh | done | | |
+|`setOvalShape`| Function | Andrey Khudenkikh | done | | |
+|`setCommandPath`| Function | Andrey Khudenkikh | done | | |
+|*HapModuleInfo*|*Class*||||
+|`construct`      |Function||||
+|`getName`        |Property||||
+|`getIcon`        |Property||||
+|`getIconId`      |Property||||
+|`getLabel`       |Property||||
+|`getLabelId`     |Property||||
+|`getDescription` |Property||||
+|`getDescriptionId`|Property||||
+|`getMainElementName`|Property||||
+|`getAbilitiesInfo`|Property||||
+|`getExtensionAbilitiesInfo`|Property||||
+|`getMetadata`    |Property||||
+|`getDeviceTypes` |Property||||
+|`getInstallationFree`|Property||||
+|`getHashValue`   |Property||||
+|`getType`        |Property||||
+|`getDependencies`|Property||||
+|`getPreloads`    |Property||||
+|`getFileContextMenuConfig`|Property||||
+|`getRouterMap`   |Property||||
+|`getNativeLibraryPath`|Property||||
+|`getCodePath`    |Property||||
+|*Dependency*|*Class*||||
+|`construct`   |Function||||
+|`getModuleName`|Property||||
+|`getBundleName`|Property||||
+|`getVersionCode`|Property||||
+|*PreloadItem*|*Class*||||
+|`construct`    |Function||||
+|`getModuleName`|Property||||
+|*RouterItem*|*Class*||||
+|`construct`   |Function||||
+|`getName`      |Property||||
+|`getPageSourceFile`|Property||||
+|`getBuildFunction`|Property||||
+|`getCustomData`|Property||||
+|`getData`      |Property||||
+|*DataItem*|*Class*||||
+|`construct` |Function||||
+|`getKey`     |Property||||
+|`getValue`   |Property||||
 |*ColorContent*| *Class* | | | | |
 |`construct`| Function | | | | |
 |`getORIGIN`| Function | | | | |
@@ -2851,6 +4022,15 @@
 |`setTranslateX`| Function | Vadim Voronov | done |  | |
 |`getTranslateY`| Function | Vadim Voronov | done |  | |
 |`setTranslateY`| Function | Vadim Voronov | done |  | |
+|*Metadata*|*Class*||||
+|`construct`|Function||||
+|`getName`|Property||||
+|`setName`|Property||||
+|`getValue`|Property||||
+|`setValue`|Property||||
+|`getResource`|Property||||
+|`setResource`|Property||||
+|`getValueId`|Property||||
 |*NavDestinationContext*| *Class* | managed side | managed side |  |  |
 |`construct`| Function | managed side | managed side |  |  |
 |`getConfigInRouteMap`| Function | managed side | managed side |  |  |
@@ -2921,10 +4101,111 @@
 |`setCancelTransition`| Function | Morozov Sergey | testskipped |  |  |
 |`getUpdateTransition`| Function | Morozov Sergey | done |  |  |
 |`setUpdateTransition`| Function | Morozov Sergey | testskipped |  |  |
+|*NodeController*|*Class*||||
+|`construct`|Function||||
+|`makeNode`|Function||||
+|`aboutToResize`|Function||||
+|`aboutToAppear`|Function||||
+|`aboutToDisappear`|Function||||
+|`rebuild`|Function||||
+|`onTouchEvent`|Function||||
+|`onAttach`|Function||||
+|`onDetach`|Function||||
+|`onWillBind`|Function||||
+|`onWillUnbind`|Function||||
+|`onBind`|Function||||
+|`onUnbind`|Function||||
 |*PatternLockController*| *Class* |Dmitry A Smirnov| done |  |  |
 |`construct`| Function |Dmitry A Smirnov| done |  |  |
 |`reset`| Function |Dmitry A Smirnov| done |  |  |
 |`setChallengeResult`| Function |Dmitry A Smirnov| done |  |  |
+|*ProcessInformation*|*Class*||||
+|`construct`         |Function||||
+|`getPid`            |Property||||
+|`setPid`            |Property||||
+|`getUid`            |Property||||
+|`setUid`            |Property||||
+|`getProcessName`    |Property||||
+|`setProcessName`    |Property||||
+|`getBundleNames`    |Property||||
+|`setBundleNames`    |Property||||
+|`getState`          |Property||||
+|`setState`          |Property||||
+|`getBundleType`     |Property||||
+|`setBundleType`     |Property||||
+|`getAppCloneIndex`  |Property||||
+|`setAppCloneIndex`  |Property||||
+|*RawFileDescriptor*|*Class*||||
+|`construct`        |Function||||
+|`getFd`            |Property||||
+|`setFd`            |Property||||
+|`getOffset`        |Property||||
+|`setOffset`        |Property||||
+|`getLength`        |Property||||
+|`setLength`        |Property||||
+|*RenderNode*| *Class* | Morozov Sergey | in progress | | done on Upstream |
+|`construct`| Function | Morozov Sergey | done | | done on Upstream |
+|`appendChild`| Function | Morozov Sergey | done | | done on Upstream |
+|`insertChildAfter`| Function | Morozov Sergey | done | | done on Upstream |
+|`removeChild`| Function | Morozov Sergey | done | | done on Upstream |
+|`clearChildren`| Function | Morozov Sergey | done | | done on Upstream |
+|`getChild`| Function | Morozov Sergey | done | | done on Upstream |
+|`getFirstChild`| Function | Morozov Sergey | done | | done on Upstream |
+|`getNextSibling`| Function | Morozov Sergey | done | | done on Upstream |
+|`getPreviousSibling`| Function | Morozov Sergey | done | | done on Upstream |
+|`draw`| Function | managed side | managed side | | |
+|`invalidate`| Function | Morozov Sergey | testskipped | | done on Upstream |
+|`dispose`| Function | Morozov Sergey | done | | done on Upstream |
+|`getBackgroundColor`| Function | Morozov Sergey | done | | done on Upstream |
+|`setBackgroundColor`| Function | Morozov Sergey | done | | done on Upstream |
+|`getClipToFrame`| Function | Morozov Sergey | done | | done on Upstream |
+|`setClipToFrame`| Function | Morozov Sergey | done | | done on Upstream |
+|`getOpacity`| Function | Morozov Sergey | done | | done on Upstream |
+|`setOpacity`| Function | Morozov Sergey | done | | done on Upstream |
+|`getSize`| Function | Morozov Sergey | done | | done on Upstream |
+|`setSize`| Function | Morozov Sergey | done | | done on Upstream |
+|`getPosition`| Function | Morozov Sergey | done | | done on Upstream |
+|`setPosition`| Function | Morozov Sergey | done | | done on Upstream |
+|`getFrame`| Function | Morozov Sergey | done | | done on Upstream |
+|`setFrame`| Function | Morozov Sergey | done | | done on Upstream |
+|`getPivot`| Function | Morozov Sergey | done | | done on Upstream |
+|`setPivot`| Function | Morozov Sergey | done | | done on Upstream |
+|`getScale`| Function | Morozov Sergey | done | | done on Upstream |
+|`setScale`| Function | Morozov Sergey | done | | done on Upstream |
+|`getTranslation`| Function | Morozov Sergey | done | | done on Upstream |
+|`setTranslation`| Function | Morozov Sergey | done | | done on Upstream |
+|`getRotation`| Function | Morozov Sergey | done | | done on Upstream |
+|`setRotation`| Function | Morozov Sergey | done | | done on Upstream |
+|`getTransform`| Function | Morozov Sergey | done | | done on Upstream |
+|`setTransform`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShadowColor`| Function | Morozov Sergey | done | | done on Upstream |
+|`setShadowColor`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShadowOffset`| Function | Morozov Sergey | done | | done on Upstream 
+|`setShadowOffset`| Function | Morozov Sergey | done | | done on Upstream |
+|`getLabel`| Function | Morozov Sergey | done | | done on Upstream |
+|`setLabel`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShadowAlpha`| Function | Morozov Sergey | done | | done on Upstream |
+|`setShadowAlpha`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShadowElevation`| Function | Morozov Sergey | done | | done on Upstream |
+|`setShadowElevation`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShadowRadius`| Function | Morozov Sergey | done | | done on Upstream |
+|`setShadowRadius`| Function | Morozov Sergey | done | | done on Upstream |
+|`getBorderStyle`| Function | Morozov Sergey | done | | done on Upstream |
+|`setBorderStyle`| Function | Morozov Sergey | done | | done on Upstream |
+|`getBorderWidth`| Function | Morozov Sergey | done | | done on Upstream |
+|`setBorderWidth`| Function | Morozov Sergey | done | | done on Upstream |
+|`getBorderColor`| Function | Morozov Sergey | done | | done on Upstream |
+|`setBorderColor`| Function | Morozov Sergey | done | | done on Upstream |
+|`getBorderRadius`| Function | Morozov Sergey | done | | done on Upstream |
+|`setBorderRadius`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShapeMask`| Function | Morozov Sergey | done | | done on Upstream |
+|`setShapeMask`| Function | Morozov Sergey | done | | done on Upstream |
+|`getShapeClip`| Function | Morozov Sergey | done | | done on Upstream |
+|`setShapeClip`| Function | Morozov Sergey | done | | done on Upstream |
+|`getMarkNodeGroup`| Function | Morozov Sergey | done | | done on Upstream |
+|`setMarkNodeGroup`| Function | Morozov Sergey | done | | done on Upstream |
+|`getLengthMetricsUnit`| Function | Morozov Sergey | done | | done on Upstream |
+|`setLengthMetricsUnit`| Function | Morozov Sergey | done | | done on Upstream |
 |*RichEditorBaseController*| *Class*|Dudkin Sergey| done|  | |
 |`construct`| Function|Dudkin Sergey| done |  | |
 |`getCaretOffset`| Function|Dudkin Sergey| done |  | |
@@ -2975,6 +4256,24 @@
 |`caretPosition`| Function |Evstigneev Roman | done |  |  |
 |`stopEditing`| Function |Evstigneev Roman | done |  |  |
 |`setTextSelection`| Function |Evstigneev Roman | done |  |  |
+|*Skill*|*Class*||||
+|`construct`      |Function||||
+|`getActions`     |Property||||
+|`getEntities`    |Property||||
+|`getUris`        |Property||||
+|`getDomainVerify`|Property||||
+|*SkillUri*|*Class*||||
+|`construct`   |Function||||
+|`getScheme`   |Property||||
+|`getHost`     |Property||||
+|`getPort`     |Property||||
+|`getPath`     |Property||||
+|`getPathStartWith`|Property||||
+|`getPathRegex`|Property||||
+|`getType`     |Property||||
+|`getUtd`      |Property||||
+|`getMaxFileSupported`|Property||||
+|`getLinkFeature`|Property||||
 |*StyledString*| *Class* | Pavelyev Ivan | blocked IDL |  |  |
 |`construct`| Function | Pavelyev Ivan | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N |
 |`getString`| Function | Pavelyev Ivan | done |  | |
@@ -3107,6 +4406,10 @@
 |`construct`| Function |Andrey Khudenkikh | done | | |
 |`getScope`| Function | Andrey Khudenkikh | done | | |
 |`setScope`| Function | Andrey Khudenkikh | done | | |
+|*PulseSymbolEffect*|*Class*||||
+|`construct`|Function||||
+|*SymbolGlyphModifier*|*Class*||||
+|`construct`|Function||||
 |*TabBarSymbol*| *Class* | | |
 |`construct`| Function | | |
 |`getNormal`| Function | | |
@@ -3184,6 +4487,8 @@
 |`caretPosition`| Function | Spirin Andrey | done |  |  |
 |`setTextSelection`| Function | Spirin Andrey | done |  |  |
 |`stopEditing`| Function |  Spirin Andrey | done |  |  |
+|*TextModifier*|*Class*||||
+|`construct`|Function||||
 |*TextPickerDialog*| *Class* | Ekaterina Stepanova | done |  | |
 |`construct`| Function | Ekaterina Stepanova | done |  |  |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |  |
@@ -3193,14 +4498,70 @@
 |`reset`| Function |Ekaterina Stepanova| done |  |  |
 |*TimePickerDialog*| *Class* | Ekaterina Stepanova | done |  | |
 |`construct`| Function | Ekaterina Stepanova | done |  |  |
+|*UIAbilityContext*|*Class*||||
+|`construct`                              |Function||||
+|`startAbility0`                          |Function||||
+|`startAbility1`                          |Function||||
+|`startAbility2`                          |Function||||
+|`openLink`                               |Function||||
+|`startAbilityByCall`                     |Function||||
+|`startAbilityForResult0`                 |Function||||
+|`startAbilityForResult1`                 |Function||||
+|`startAbilityForResult2`                 |Function||||
+|`startServiceExtensionAbility0`          |Function||||
+|`startServiceExtensionAbility1`          |Function||||
+|`startServiceExtensionAbilityWithAccount0`|Function||||
+|`startServiceExtensionAbilityWithAccount1`|Function||||
+|`stopServiceExtensionAbility0`           |Function||||
+|`stopServiceExtensionAbility1`           |Function||||
+|`stopServiceExtensionAbilityWithAccount0`|Function||||
+|`stopServiceExtensionAbilityWithAccount1`|Function||||
+|`terminateSelf0`                         |Function||||
+|`terminateSelf1`                         |Function||||
+|`terminateSelfWithResult0`               |Function||||
+|`terminateSelfWithResult1`               |Function||||
+|`connectServiceExtensionAbility`         |Function||||
+|`connectServiceExtensionAbilityWithAccount`|Function||||
+|`disconnectServiceExtensionAbility0`     |Function||||
+|`disconnectServiceExtensionAbility1`     |Function||||
+|`setMissionLabel0`                       |Function||||
+|`setMissionLabel1`                       |Function||||
+|`setMissionIcon0`                        |Function||||
+|`setMissionIcon1`                        |Function||||
+|`restoreWindowStage`                     |Function||||
+|`isTerminating`                          |Function||||
+|`reportDrawnCompleted`                   |Function||||
+|`startAbilityByType0`                    |Function||||
+|`startAbilityByType1`                    |Function||||
+|`requestModalUIExtension0`               |Function||||
+|`requestModalUIExtension1`               |Function||||
+|`openAtomicService`                      |Function||||
+|`moveAbilityToBackground`                |Function||||
+|`showAbility`                            |Function||||
+|`hideAbility`                            |Function||||
+|`setAbilityInstanceInfo`                 |Function||||
+|`revokeDelegator`                        |Function||||
+|`setColorMode`                           |Function||||
+|`startAppServiceExtensionAbility`        |Function||||
+|`stopAppServiceExtensionAbility`         |Function||||
+|`connectAppServiceExtensionAbility`      |Function||||
+|`disconnectAppServiceExtensionAbility`   |Function||||
+|`getAbilityInfo`                         |Property||||
+|`setAbilityInfo`                         |Property||||
+|`getCurrentHapModuleInfo`                |Property||||
+|`setCurrentHapModuleInfo`                |Property||||
+|`getConfig`                              |Property||||
+|`setConfig`                              |Property||||
+|`getWindowStage`                         |Property||||
+|`setWindowStage`                         |Property||||
 |*UIExtensionProxy*| *Class* | Tuzhilkin Ivan | blocked IDL|  | |
 |`construct`| Function | Tuzhilkin Ivan | testskipped |  | |
 |`send`| Function | Tuzhilkin Ivan | blocked |  | blocked Arkoala. Want processing |
 |`sendSync`| Function | Tuzhilkin Ivan | blocked |  | blocked Arkoala. Want processing |
-|`onAsyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`onSyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`offAsyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
-|`offSyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
+|`onAsyncReceiverRegisterAsyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
+|`onSyncReceiverRegisterSyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
+|`offAsyncReceiverRegisterAsyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
+|`offSyncReceiverRegisterSyncReceiverRegister`| Function | Tuzhilkin Ivan | testskipped |  | |
 |*ColorFilter*| *Class* | Evstigneev Roman | done | |  |
 |`construct`| Function |Evstigneev Roman | in progress| test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*VideoController*| *Class* | Erokhin Ilya | done |  |  |
@@ -3208,10 +4569,10 @@
 |`start`| Function | Erokhin Ilya | done |  |  |
 |`pause`| Function | Erokhin Ilya | done |  |  |
 |`stop`| Function | Erokhin Ilya | done |  |  |
-|`setCurrentTime0`| Function | Erokhin Ilya | done |  |  |
-|`setCurrentTime1`| Function |Erokhin Ilya | done |  |  |
 |`requestFullscreen`| Function | Erokhin Ilya | done |  |  |
 |`exitFullscreen`| Function | Erokhin Ilya | done |  |  |
+|`setCurrentTimeDefault`|Function||||
+|`setCurrentTimeWithMode`|Function||||
 |`reset`| Function | Erokhin Ilya | done |  |  |
 |*WaterFlowSections*| *Class* | Kovalev Sergey | done |  | |
 |`construct`| Function |Kovalev Sergey | done |  | |
@@ -3220,10 +4581,133 @@
 |`update`| Function | Kovalev Sergey | done |  | |
 |`values`| Function | Kovalev Sergey | done |  |  |
 |`length`| Function | Kovalev Sergey | done |  | |
+|*WebKeyboardController*|*Class*||||
+|`construct`          |Function||||
+|`insertText`         |Function||||
+|`deleteForward`      |Function||||
+|`deleteBackward`     |Function||||
+|`sendFunctionKey`    |Function||||
+|`close`              |Function||||
+|*FullScreenExitHandler*|*Class*||||
+|`construct`           |Function||||
+|`exitFullScreen`      |Function||||
+|*FileSelectorParam*|*Class*||||
+|`construct`          |Function||||
+|`getTitle`           |Function||||
+|`getMode`            |Function||||
+|`getAcceptType`      |Function||||
+|`isCapture`          |Function||||
+|`getMimeTypes`       |Function||||
+|*JsResult*|*Class*||||
+|`construct`        |Function||||
+|`handleCancel`     |Function||||
+|`handleConfirm`    |Function||||
+|`handlePromptConfirm`|Function||||
+|*FileSelectorResult*|*Class*||||
+|`construct`         |Function||||
+|`handleFileList`    |Function||||
+|*HttpAuthHandler*|*Class*||||
+|`construct`       |Function||||
+|`confirm`         |Function||||
+|`cancel`          |Function||||
+|`isHttpAuthInfoSaved`|Function||||
+|*SslErrorHandler*|*Class*||||
+|`construct`      |Function||||
+|`handleConfirm`  |Function||||
+|`handleCancel`   |Function||||
+|*ClientAuthenticationHandler*|*Class*||||
+|`construct`                 |Function||||
+|`confirm0`                  |Function||||
+|`confirm1`                  |Function||||
+|`cancel`                    |Function||||
+|`ignore`                    |Function||||
+|*PermissionRequest*|*Class*||||
+|`construct`        |Function||||
+|`deny`             |Function||||
+|`getOrigin`        |Function||||
+|`getAccessibleResource`|Function||||
+|`grant`            |Function||||
+|*ScreenCaptureHandler*|*Class*||||
+|`construct`           |Function||||
+|`getOrigin`          |Function||||
+|`grant`              |Function||||
+|`deny`               |Function||||
+|*DataResubmissionHandler*|*Class*||||
+|`construct`            |Function||||
+|`resend`               |Function||||
+|`cancel`               |Function||||
+|*ControllerHandler*|*Class*||||
+|`construct`         |Function||||
+|`setWebController`  |Function||||
+|*WebContextMenuParam*|*Class*||||
+|`construct`          |Function||||
+|`x`                  |Function||||
+|`y`                  |Function||||
+|`getLinkUrl`         |Function||||
+|`getUnfilteredLinkUrl`|Function||||
+|`getSourceUrl`       |Function||||
+|`existsImageContents`|Function||||
+|`getMediaType`       |Function||||
+|`getSelectionText`   |Function||||
+|`getSourceType`      |Function||||
+|`getInputFieldType`  |Function||||
+|`isEditable`         |Function||||
+|`getEditStateFlags`  |Function||||
+|`getPreviewWidth`    |Function||||
+|`getPreviewHeight`   |Function||||
+|*WebContextMenuResult*|*Class*||||
+|`construct`           |Function||||
+|`closeContextMenu`    |Function||||
+|`copyImage`          |Function||||
+|`copy`               |Function||||
+|`paste`              |Function||||
+|`cut`                |Function||||
+|`selectAll`          |Function||||
+|*ConsoleMessage*|*Class*||||
+|`construct`      |Function||||
+|`getMessage`     |Function||||
+|`getSourceId`    |Function||||
+|`getLineNumber`  |Function||||
+|`getMessageLevel`|Function||||
+|*WebResourceRequest*|*Class*||||
+|`construct`          |Function||||
+|`getRequestHeader`   |Function||||
+|`getRequestUrl`      |Function||||
+|`isRequestGesture`   |Function||||
+|`isMainFrame`        |Function||||
+|`isRedirect`         |Function||||
+|`getRequestMethod`   |Function||||
+|*WebResourceResponse*|*Class*||||
+|`construct`           |Function||||
+|`getResponseData`    |Function||||
+|`getResponseDataEx`  |Function||||
+|`getResponseEncoding`|Function||||
+|`getResponseMimeType`|Function||||
+|`getReasonMessage`   |Function||||
+|`getResponseHeader`  |Function||||
+|`getResponseCode`    |Function||||
+|`setResponseData`    |Function||||
+|`setResponseEncoding`|Function||||
+|`setResponseMimeType`|Function||||
+|`setReasonMessage`   |Function||||
+|`setResponseHeader`  |Function||||
+|`setResponseCode`    |Function||||
+|`setResponseIsReady` |Function||||
+|`getResponseIsReady`|Function||||
+|*WebResourceError*|*Class*||||
+|`construct`        |Function||||
+|`getErrorInfo`     |Function||||
+|`getErrorCode`     |Function||||
+|*JsGeolocation*|*Class*||||
+|`construct`      |Function||||
+|`invoke`         |Function||||
+|*EventResult*|*Class*||||
+|`construct`   |Function||||
+|`setGestureEventResult0`|Function||||
+|`setGestureEventResult1`|Function||||
 |*XComponentController*| *Class* | Tuzhilkin Ivan | blocked IDL |  | |
 |`construct`| Function |Tuzhilkin Ivan | testskipped | pass | |
 |`getXComponentSurfaceId`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`getXComponentContext`| Function | Tuzhilkin Ivan | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAYQZF +, demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA  |
 |`setXComponentSurfaceRect`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`getXComponentSurfaceRect`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setXComponentSurfaceRotation`| Function | Tuzhilkin Ivan | testskipped | test blocked | demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -3242,22 +4726,48 @@
 |`CloseImplicitAnimation`| Function | Lobah Mikhail| in progress| | |
 |`StartDoubleAnimation`| Function | Lobah Mikhail| in progress| | |
 |`AnimationTranslate`| Function | Lobah Mikhail| in progress| | |
+|*LayoutChild*|*Class*||||
+|`construct`|Function||||
+|`measure`|Function||||
+|`getName`|Property||||
+|`setName`|Property||||
+|`getId`|Property||||
+|`setId`|Property||||
+|`getPosition`|Property||||
+|`setPosition`|Property||||
+|*WebCookie*| *Class* | Erokhin Ilya | done |  | |
+|`construct`| Function |Erokhin Ilya | done |  |  |
+|`setCookie`| Function | Erokhin Ilya | done |  |deprecated |
+|`saveCookie`| Function | Erokhin Ilya | done |  |deprecated |
 |*ContentModifierHelper*| *Class* | | |
-|`contentModifierButton`| Function | | |
-|`contentModifierCheckBox`| Function | | |
-|`contentModifierDataPanel`| Function | | |
-|`contentModifierGauge`| Function | | |
-|`contentModifierLoadingProgress`| Function | | |
-|`contentModifierProgress`| Function | | |
-|`contentModifierRadio`| Function | | |
-|`contentModifierRating`| Function | | |
-|`contentModifierMenuItem`| Function | | |
-|`contentModifierSlider`| Function | | |
-|`contentModifierTextClock`| Function | | |
-|`contentModifierTextTimer`| Function | | |
-|`contentModifierToggle`| Function | | |
+|`contentModifierButton`              |Function||||
+|`resetContentModifierButton`         |Function||||
+|`contentModifierCheckBox`            |Function||||
+|`resetContentModifierCheckBox`       |Function||||
+|`contentModifierDataPanel`           |Function||||
+|`resetContentModifierDataPanel`      |Function||||
+|`contentModifierGauge`               |Function||||
+|`resetContentModifierGauge`          |Function||||
+|`contentModifierLoadingProgress`     |Function||||
+|`resetContentModifierLoadingProgress`|Function||||
+|`contentModifierProgress`            |Function||||
+|`resetContentModifierProgress`       |Function||||
+|`contentModifierRadio`               |Function||||
+|`resetContentModifierRadio`          |Function||||
+|`contentModifierRating`              |Function||||
+|`resetContentModifierRating`         |Function||||
+|`contentModifierMenuItem`            |Function||||
+|`resetContentModifierMenuItem`       |Function||||
+|`contentModifierSlider`              |Function||||
+|`resetContentModifierSlider`         |Function||||
+|`contentModifierTextClock`           |Function||||
+|`resetContentModifierTextClock`      |Function||||
+|`contentModifierTextTimer`           |Function||||
+|`resetContentModifierTextTimer`      |Function||||
+|`contentModifierToggle`              |Function||||
+|`resetContentModifierToggle`         |Function||||
 |*LazyForEachOps*| *Class* | managed side | done | | |
-|``Sync`| Function | managed side |  |  |
+|`Sync`| Function | managed side |  |  |
 |*SystemOps*| *Class* | managed side| managed side| | |
 |`StartFrame`| Function |managed side |managed side | | |
 |`EndFrame`| Function | managed side | managed side | | |
@@ -3267,8 +4777,6 @@
 |`resourceManagerReset`| Function | | |
 |`setFrameCallback`| Function | | |
 |`colorMetricsResourceColor`| Function | | |
-|*FocusController*| *Class* | Lobah Mikhail| done| | |
-|`requestFocus`| Function | Lobah Mikhail| done| pass | |
 |*Scene*| *Class* | | |
 |`construct`| Function | | |
 |`load`| Function | | |
@@ -3319,11 +4827,6 @@
 |`offset`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |`fill`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |`position`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|*BaseShape*| *Class* | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`construct`| Function |Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`width`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`height`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`size`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |*GlobalScope_ohos_font*| *Class* | Pavelyev Ivan | done | | |
 |`registerFont`| Function | Pavelyev Ivan | done | | |
 |`getSystemFontList`| Function | Pavelyev Ivan | done | | |
@@ -3350,6 +4853,19 @@
 |`popToName`| Function | | |
 |*SearchOps*| *Class* | | |
 |`registerSearchValueCallback`| Function | | |
+|*PersistentStorageBackend*|*Class*||||
+|`get`                     |Function||||
+|`has`                     |Function||||
+|`remove`                  |Function||||
+|`set`                     |Function||||
+|`clear`                   |Function||||
+|*EnvironmentBackend*     |*Class*||||
+|`isAccessibilityEnabled`  |Function||||
+|`getColorMode`            |Function||||
+|`getFontScale`            |Function||||
+|`getFontWeightScale`      |Function||||
+|`getLayoutDirection`      |Function||||
+|`getLanguageCode`         |Function||||
 |*EventEmulator*| *Class* | Dmitry A Smirnov | managed side | | |
 |`emitClickEvent`| Function | managed side | managed side | | |
 |`emitTextInputEvent`| Function | managed side | managed side | | |
