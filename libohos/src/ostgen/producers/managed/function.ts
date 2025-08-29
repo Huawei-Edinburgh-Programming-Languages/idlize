@@ -98,9 +98,9 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
   const convertor = new ArgConvertor(ctx, E.v('deserializer'), true)
   const returnType = ctx.useCApi(method.returnType).reference();
   const argReads = method.parameters.map(it =>
-    Builders.stmt()
+    Builders
       .decl(it.name, ctx.useCApi(it.type).reference())
-        .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$().$())
+        .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$())
   return Builders.func(bridgeName('modifier.impl_GlobalScope_' + method.name))
     .param('thisArray').type(Ts.prim.serializerBuffer).$()
     .param('thisLength').type(Ts.prim.i32).$()

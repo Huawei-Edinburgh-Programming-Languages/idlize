@@ -99,10 +99,9 @@ function makeSerializerRead(native: boolean, node: idl.IDLInterface, type: LWTyp
     return block
       .decl('value', type).valueStr('{}').$()
       .statements(node.properties.map(prop =>
-        Builders.stmt()
-          .binary('=')
-            .left().access(E.v('value')).member(prop.name).$().$()
-            .rightExpr(conv.read(E.v(prop.name), prop.type)[1]).$().$()))
+        Builders.stmt().binary('=')
+          .left().access(E.v('value')).member(prop.name).$().$()
+          .rightExpr(conv.read(E.v(prop.name), prop.type)[1]).$().$()))
       .return(type).valueStr('value').$().$().$()
   }
 }

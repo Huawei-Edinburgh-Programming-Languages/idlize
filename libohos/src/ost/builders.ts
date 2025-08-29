@@ -593,4 +593,15 @@ export class Builders {
     static func(name: string): FunctionBuilder<FunctionDeclaration> { return new FunctionBuilder(id, name) }
     static struct(name: string): StructBuilder { return new StructBuilder(name) }
     static class(name: string): ClassBuilder { return new ClassBuilder(name) }
+
+    static access(object?: LWExpression): AccessorBuilder<AccessorExpression> { return new AccessorBuilder(id, object) }
+    static binary(op: string): BinaryBuilder<BinaryExpression> { return new BinaryBuilder(id, op) }
+    static call(): CallBuilder<CallExpression> { return new CallBuilder(id) }
+    static ctor(name?: string): ConstructorBuilder<ConstructorExpression> { return new ConstructorBuilder(id, name) }
+
+    static block(): BlockBuilder<LWStatement> { return new BlockBuilder(S.block) }
+    static decl(name: string, type: LWType): DeclarationBuilder<DeclarationStatement> { return new DeclarationBuilder(id, name, type) }
+    static if(): IfBuilder<IfStatement> { return new IfBuilder(id) }
+    static loop(): LoopBuilder<LoopStatement> { return new LoopBuilder(id) }
+    static return(type?: LWType): ReturnBuilder<LWStatement> { return new ReturnBuilder(id, type) }
 }
