@@ -224,6 +224,7 @@ class TypeAliasing extends IdentityTransformer {
             case std.names.types.i32: return p('Int32')
             case std.names.types.i64: return p('Int64')
             case std.names.types.number: return p('Number')
+            case std.names.types.nativePointer: return p('NativePointer')
             case std.names.types.serializerBuffer: return 'KSerializerBuffer'
             case std.names.types.string: return p('String')
             case std.names.types.u8: return p('Int8')

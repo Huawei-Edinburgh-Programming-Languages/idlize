@@ -14,11 +14,12 @@
  */
 
 import { Builders } from "../../ost/builders";
-import { D, E, IdentityTransformer, lw, std, T, utils } from "../../ost";
+import { D, IdentityTransformer, lw, std, T, utils } from "../../ost";
 import { ImportsCollector } from "../../peer-generation/ImportsCollector";
 import { mapName } from "../engine/utils";
 import { managedName } from "../producers/common";
 import { mergeStructs } from "./postprocess";
+import { generatorConfiguration } from "@idlizer/core";
 
 export function postprocess(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     decls = mergeNamespaces(decls)
@@ -98,45 +99,53 @@ class RefSearcher extends IdentityTransformer {
         return name.split('.').at(0)!
     }
 
-    goConstType(type: lw.ConstType): lw.LWType {
-        if (!type.name.startsWith('@')) {
-            const record = this.registry.get(type.name)
-            if (record) {
-                let val = type.name
-                if (val.startsWith(record)) {
-                    val = val.substring(record.length)
-                    while (val.startsWith('.')) {
-                        val = val.substring(1)
-                    }
-                }
-                if (record === this.fileName)
-                    return T.c(this.trimNs(val))
-                const baseName = this.getBase(val);
-                const source = mapName(record)
-                const conflictingNames = this.seenNames.get(baseName)
-                if (conflictingNames) {
-                    const alias = source + '_' + baseName
-                    if (!conflictingNames.includes(source)) {
-                        conflictingNames.push(source)
-                        this.imports.addFeature(baseName, source, alias)
-                    }
-                    return T.c(this.trimNs(conflictingNames[0] === source ? val : alias))
-                } else {
-                    this.seenNames.set(baseName, [source])
-                    this.imports.addFeature(baseName, source)
-                    return T.c(this.trimNs(val))
+    private goTypeName(name: string): string {
+        if (name.startsWith('@'))
+            throw new Error('Unhandled builtin type: ' + name)
+        const record = this.registry.get(name)
+        if (record) {
+            let val = name
+            if (val.startsWith(record)) {
+                val = val.substring(record.length)
+                while (val.startsWith('.')) {
+                    val = val.substring(1)
                 }
             }
-            return T.c(this.trimNs(type.name))
+            if (record === this.fileName)
+                return this.trimNs(val)
+            const baseName = this.getBase(val);
+            const source = mapName(record)
+            const conflictingNames = this.seenNames.get(baseName)
+            if (conflictingNames) {
+                const alias = source + '_' + baseName
+                if (!conflictingNames.includes(source)) {
+                    conflictingNames.push(source)
+                    this.imports.addFeature(baseName, source, alias)
+                }
+                return this.trimNs(conflictingNames[0] === source ? val : alias)
+            } else {
+                this.seenNames.set(baseName, [source])
+                this.imports.addFeature(baseName, source)
+                return this.trimNs(val)
+            }
         }
-        return super.goConstType(type)
+        return this.trimNs(name)
     }
-    goVariableExpression(expr: lw.VariableExpression): lw.VariableExpression {
-        if (utils.hasAnnotation(expr, std.names.annotations.isType)) {
-            const r = this.goConstType(T.cc(expr.name)) as lw.ConstType
-            return E.v(r.name, expr.annotations)
-        }
-        return super.goVariableExpression(expr)
+    override goConstType(type: lw.ConstType): lw.LWType {
+        return type.name.startsWith('@')
+            ? super.goConstType(type)
+            : T.c(this.goTypeName(type.name))
+    }
+    override goConstructorExpression(expr: lw.ConstructorExpression): lw.ConstructorExpression {
+        expr = super.goConstructorExpression(expr)
+        expr.name = this.goTypeName(expr.name)
+        return expr
+    }
+    override goVariableExpression(expr: lw.VariableExpression): lw.VariableExpression {
+        expr = super.goVariableExpression(expr)
+        if (utils.hasAnnotation(expr, std.names.annotations.isType))
+            expr.name = this.goTypeName(expr.name)
+        return expr
     }
     go(): lw.LWDeclaration[] {
         return this.decls.map(it => this.goDeclaration(it))
@@ -214,7 +223,8 @@ function defaultImports(): ImportsCollector {
     const imports = new ImportsCollector()
     imports.addFeatures([
         'SerializerBase', 'DeserializerBase',
-        'Finalizable', 'KPointer', 'MaterializedBase'
+        'MaterializedBase', 'Finalizable', 'KPointer', 'toPeerPtr'
     ], '@koalaui/interop')
+    imports.addFeature('NativeModule', `./${generatorConfiguration().moduleName}.INTERNAL`)
     return imports
 }

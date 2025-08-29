@@ -50,7 +50,9 @@ export class ConvertTSTypes extends IdentityTransformer {
       case std.names.types.i32: return T.cc('int')
       case std.names.types.i64: return T.cc('long')
       case std.names.types.object: return T.cc('object')
+      case std.names.types.nativePointer: return T.cc('KPointer')
       case std.names.types.number: return T.cc('number')
+      case std.names.types.serializerBuffer: return T.cc('KSerializerBuffer')
       case std.names.types.string: return T.cc('string')
       case std.names.types.u8: return T.cc('byte')
       case std.names.types.u32: return T.cc('int')
@@ -284,7 +286,7 @@ export class TSPrinter {
         if (statement.mutable) {
           specifier = 'let'
         }
-        this.p.put(specifier, ' ', statement.varName, ':')
+        this.p.put(specifier, ' ', statement.varName, ':', ' ')
         this.printType(statement.varType)
         if (statement.expression) {
           this.p.put(' ', '=', ' ')
@@ -449,7 +451,8 @@ export class TSPrinter {
       case lw.LWKind.FunctionDeclaration: {
         declaration.modifiers.forEach(mod => {
           switch (mod.name) {
-            case 'static': { this.p.put('static'); break }
+            case std.names.modifiers.native:
+            case std.names.modifiers.static: this.p.put(mod.name); break
           }
           this.p.put(' ')
         })
@@ -477,8 +480,10 @@ export class TSPrinter {
           this.p.put(':', ' ')
           this.printType(declaration.returnType)
         }
-        this.p.put(' ')
-        this.printStatement(declaration.body!)
+        if (declaration.body) {
+          this.p.put(' ')
+          this.printStatement(declaration.body)
+        }
         break
       }
     }

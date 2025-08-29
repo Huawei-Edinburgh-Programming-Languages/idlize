@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import { D, E, Md, T, Ts } from "../../../ost";
+import { An, D, E, Md, std, T, Ts } from "../../../ost";
 import * as idl from "@idlizer/core/idl"
 import { makePeerMethod } from "../components/peerMethod";
-import { AdvancedGeneratorContext, createSpecialProducer, managedName, roles } from "../common";
+import { AdvancedGeneratorContext, createSpecialProducer, managedName, NATIVE_MODULE_CLASS, roles } from "../common";
 import { getSuperType, isMaterialized } from "@idlizer/core";
 import { mangleName, moduleName, ProducerDescription } from "../../engine";
 import { LWDeclaration } from "../../../ost/lws";
@@ -79,29 +79,28 @@ function makeInterface(node: idl.IDLInterface, name: string, ctx: AdvancedGenera
 
 function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGeneratorContext): LWDeclaration[] {
   const peerType = Ts.union([T.cc('Finalizable'), T.cc('undefined')])
-  const ptrType = T.cc('KPointer');
   const thisType = ctx.useManaged(node).reference();
-  const nativeModule = E.v(moduleName('NativeModule'))
+  const nativeModule = E.v(NATIVE_MODULE_CLASS)
   return [
     Builders.class(name + 'Internal')
       .method('fromPtr').static()
         .returns(thisType)
-        .param('ptr').type(ptrType).$().block()
+        .param('ptr').type(Ts.prim.pointer).$().block()
           .return(thisType).ctor(name).args([E.v('ptr')]).$().$().$().$().$(),
     Builders.class(name).implements(T.cc('MaterializedBase'))
       .field('peer').type(peerType).$()
-      .method('constructor').param('peerPtr').type(ptrType).$().block()
+      .ctor().param('peerPtr').type(Ts.prim.pointer).$().block()
         .binary('=')
           .left().access(E.v('this')).member('peer').$().$()
           .right().ctor('Finalizable')
             .arg('peerPtr').$()
-            .arg().call().receiverName(name).functionName('getFinalizer').$().$().$().$().$().$().$()
+            .arg().call().receiverExpr(E.v(name, [An.isType()])).functionName('getFinalizer').$().$().$().$().$().$().$()
       .method('getPeer').returns(peerType).block()
         .return(peerType).access(E.v('this')).member('peer').$().$().$().$()
-      .method('construct').static().returns(ptrType).block()
-        .return(ptrType).call().function().access(nativeModule).member(mangleName(name, 'construct')).$().$().$().$().$().$()
-      .method('getFinalizer').static().returns(ptrType).block()
-        .return(ptrType).call().function().access(nativeModule).member(mangleName(name, 'getFinalizer')).$().$().$().$().$().$()
+      // .method('construct').static().returns(ptrType).block()
+      //   .return(ptrType).call().function().access(nativeModule).member(mangleName(name, 'construct')).$().$().$().$().$().$()
+      .method('getFinalizer').static().returns(Ts.prim.pointer).block()
+        .return(Ts.prim.pointer).call().function().access(nativeModule).member(mangleName(name, 'getFinalizer')).$().$().$().$().$().$()
       .$()
   ]
 }

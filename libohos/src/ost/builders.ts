@@ -15,7 +15,7 @@
 
 import { D, DD, E, S, T } from "./builder"
 import { AccessorExpression, Annotation, BinaryExpression, CallExpression, ClassDeclaration, ConstructorExpression, ConstType, DeclarationStatement, ExpressionStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWKind, LWStatement, LWType, Modifier, StatementDeclaration, StructureDeclaration } from "./lws"
-import { An, Md, Ts } from "./stdlib";
+import { An, Md, std, Ts } from "./stdlib";
 
 const id = <T>(it: T) => it
 
@@ -489,6 +489,7 @@ class FunctionBuilder<P> {
     private _parameters: { name: string, type: LWType }[] = []
     private _returnType?: LWType
     private _body?: LWStatement
+    native() { this._modifiers.push(Md.native()); return this }
     static() { this._modifiers.push(Md.static()); return this }
     returns(type: LWType) { this._returnType = type; return this }
     body(body: LWStatement) { this._body = body; return this }
@@ -576,6 +577,9 @@ class ClassBuilder {///extend StructB
             this._methods.push(func)
             return this
         }, name)
+    }
+    ctor(): FunctionBuilder<ClassBuilder> {
+        return this.method(std.names.members.ctor)
     }
     $(): ClassDeclaration {
         check("Class", this._name)

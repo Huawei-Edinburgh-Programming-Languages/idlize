@@ -13,24 +13,27 @@
  * limitations under the License.
  */
 
-import { An, D, E, S, T, Ts } from "../../../ost";
-import { createProducer } from "../../engine/context"
 import * as idl from "@idlizer/core/idl";
-import { managedName, roles } from "../common";
+import { An, E, Ts } from "../../../ost";
+import { createSpecialProducer, NATIVE_MODULE_CLASS, roles } from "../common";
+import { fqName } from "../../engine";
+import { Builders } from "../../../ost/builders";
 
-const NATIVE_MODULE_NAME = managedName('engine.NativeModule')
-
-export const nativeModuleProducer = createProducer(
+export const nativeModuleProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.nativeModule },
-  method => {
-    const methodName = idl.getFQName(method).split('.').join('_')
+  (method, ctx) => {
+    const methodName = fqName(method)
     return {
       artifact: {
-        reference: E.get(E.v(NATIVE_MODULE_NAME, [An.isType()]), methodName),
-        implementationGenerator: () =>
-          [D.class(NATIVE_MODULE_NAME, [], [
-            D.func(methodName, [{ name: 'buffer', type: T.c('SerializerBase') }], Ts.prim.void, S.block([]))
-          ])]
+        reference: E.get(E.v(NATIVE_MODULE_CLASS, [An.isType()]), methodName),
+        implementationGenerator: () => [
+          Builders.class(NATIVE_MODULE_CLASS)
+            .method(methodName)
+              .native().static()
+              .param('buffer').typeStr('SerializerBase').$()
+              .param('length').type(Ts.prim.i32).$()
+              .returns(ctx.useManaged(method.returnType).reference()).$().$()
+          ]
       }
     }
   }

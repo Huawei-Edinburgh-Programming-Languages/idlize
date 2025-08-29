@@ -13,9 +13,10 @@
  * limitations under the License.
  */
 
+import * as idl from "@idlizer/core/idl"
+import { generatorConfiguration } from "@idlizer/core"
 import { readdirSync, statSync } from "node:fs"
 import { join } from "node:path"
-import { generatorConfiguration } from "@idlizer/core"
 
 export function throwError(msg:string): never {
     throw new Error(msg)
@@ -43,5 +44,13 @@ export function moduleName(suffix?: string): string {
 }
 
 export function mangleName(className: string, methodName: string): string {
-  return `_${className}_${methodName}`
+  // TODO: what if short class name is not unique? We need to somehow embed class fqname
+  // into the mangled method name so that it is handled just like type fqnames:
+  //    dogs.Bob.bark -> dogs_Bob_bark
+  //    cats.Bob.meow -> cats_Bob_meow
+  return `_${className.split('.').pop()}_${methodName}`
+}
+
+export function fqName(method: idl.IDLMethod): string {
+  return idl.getFQName(method).split('.').join('_')
 }

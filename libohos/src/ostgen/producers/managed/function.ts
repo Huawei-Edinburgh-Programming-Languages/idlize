@@ -14,14 +14,14 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { AdvancedGeneratorContext, cApiName, createSpecialProducer, managedName, bridgeName, roles, implName } from "../common";
+import { AdvancedGeneratorContext, cApiName, createSpecialProducer, managedName, bridgeName, roles, implName, NATIVE_MODULE_CLASS } from "../common";
 import { E, T } from "../../../ost/builder";
 import { Builders } from "../../../ost/builders";
 import { ArgConvertor } from "../components/argConvertor";
 import { generatorConfiguration } from "@idlizer/core";
 import { An, Op, Ts } from "../../../ost/stdlib";
 import { LWType } from "../../../ost/lws";
-import { moduleName } from "../../engine";
+import { fqName as nativeModuleMethodName, moduleName } from "../../engine";
 
 export const functionProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.managed },
@@ -70,11 +70,12 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
           .decl(serializerName, T.c('SerializerBase'))
             .value().call().receiverName('SerializerBase').functionName('hold').$().$().$()
           .statements(fieldWrites)
-          .call().receiverName(moduleName('NativeModule')).functionName('_GlobalScope_' + method.name)
-            .arg().call().receiverName(serializerName).functionName('asBuffer').$().$()
-            .arg().call().receiverName(serializerName).functionName('length').$().$().$()
-          .call().receiverName(serializerName).functionName('release').$().$()
-        .$().$()
+          .decl('result', returnType).value()
+            .call().receiverName(NATIVE_MODULE_CLASS).functionName(nativeModuleMethodName(method))
+              .arg().call().receiverName(serializerName).functionName('asBuffer').$().$()
+              .arg().call().receiverName(serializerName).functionName('length').$().$().$().$().$()
+          .call().receiverName(serializerName).functionName('release').$()
+          .return(returnType).valueStr('result').$().$().$().$()
 }
 
 function generateModifiers(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {

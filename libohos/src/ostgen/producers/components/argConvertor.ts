@@ -14,10 +14,10 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { E, lw, Op, S, std, T, Ts } from "../../../ost";
+import { An, E, lw, Op, S, std, T, Ts } from "../../../ost";
 import { AdvancedGeneratorContext, bridgeName } from "../common";
 import { Builders } from "../../../ost/builders";
-import { IfStatement } from "../../../ost/lws";
+import { ConstType, IfStatement, LWExpression, LWKind, LWType } from "../../../ost/lws";
 
 function selectPrimitiveTypeName(type: idl.IDLPrimitiveType): string {
     switch (type) {
@@ -186,4 +186,21 @@ export class ArgConvertor {
 
 }
 
-export function makeArgConvert() {}
+export function materializedToPtr(value: string, native: boolean): LWExpression {
+    return native
+        ? E.v(value)
+        : Builders.expr().call().functionName('toPeerPtr').arg(value).$().$().$()
+}
+
+export function ptrToMaterialized(value: string, type: LWType, native: boolean): LWExpression {
+    return native
+        ? {
+            kind: LWKind.CastExpression,
+            expression: E.v(value),
+            type,
+            annotations: [An.staticMethod()]
+        }
+        : Builders.expr().call()
+            .receiverName((type as ConstType).name + 'Internal')
+            .functionName('fromPtr').arg(value).$().$().$()
+}

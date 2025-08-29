@@ -232,7 +232,7 @@ export class IdentityTransformer {
   goAccessorExpression(expr:lw.AccessorExpression): lw.AccessorExpression {
     return {
       kind: expr.kind,
-      accessor: expr.accessor,
+      accessor: typeof expr.accessor === 'string' ? expr.accessor : this.goExpression(expr.accessor),
       base: this.goExpression(expr.base),
       annotations: expr.annotations,
     }

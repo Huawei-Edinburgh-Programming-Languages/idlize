@@ -26,6 +26,7 @@ const knownAnnotations = {
 }
 
 const knownModifiers = {
+    native: 'native',
     optional: 'optional',
     readonly: 'readonly',
     static: 'static',
@@ -65,6 +66,7 @@ const specialTypeNames = {
     i32: '@LW.Int32',
     i64: '@LW.Int64',
     object: '@LW.Object',
+    nativePointer: '@LW.NativePointer',
     number: '@LW.Number',
     serializerBuffer: '@LW.SerializerBuffer',
     string: '@LW.String',
@@ -94,6 +96,7 @@ export const An = {
 }
 
 export const Md = {
+    native: (): Modifier => ({ kind: DecoratorKind.Modifier, name: knownModifiers.native }),
     optional: (): Modifier => ({ kind: DecoratorKind.Modifier, name: knownModifiers.optional }),
     readonly: (): Modifier => ({ kind: DecoratorKind.Modifier, name: knownModifiers.readonly }),
     static: (): Modifier => ({ kind: DecoratorKind.Modifier, name: knownModifiers.static }),
@@ -141,7 +144,7 @@ const primitiveTypes = {
     i8: T.cc(specialTypeNames.i8),
     i32: T.cc(specialTypeNames.i32),
     i64: T.cc(specialTypeNames.i64),
-    pointer: T.cc(specialTypeNames.pointer),
+    pointer: T.cc(specialTypeNames.nativePointer),
     tag: T.cc(specialTypeNames.tag),
     object: T.cc(specialTypeNames.object),
     number: T.cc(specialTypeNames.number),
