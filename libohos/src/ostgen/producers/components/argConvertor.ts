@@ -201,6 +201,6 @@ export function ptrToMaterialized(value: string, type: LWType, native: boolean):
             annotations: [An.staticMethod()]
         }
         : Builders.call()
-            .receiverName((type as ConstType).name + 'Internal')
+            .receiverExpr(E.v((type as ConstType).name + 'Internal', [An.isType()]))
             .functionName('fromPtr').arg(value).$().$()
 }

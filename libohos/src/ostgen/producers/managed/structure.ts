@@ -80,7 +80,7 @@ function makeInterface(node: idl.IDLInterface, name: string, ctx: AdvancedGenera
 function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGeneratorContext): LWDeclaration[] {
   const peerType = Ts.union([T.cc('Finalizable'), T.cc('undefined')])
   const thisType = ctx.useManaged(node).reference();
-  const nativeModule = E.v(NATIVE_MODULE_CLASS)
+  const nativeModule = E.v(NATIVE_MODULE_CLASS, [An.isType()])
   return [
     Builders.class(name + 'Internal')
       .method('fromPtr').static()
@@ -99,8 +99,11 @@ function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGen
         .return(peerType).access(E.v('this')).member('peer').$().$().$().$()
       // .method('construct').static().returns(ptrType).block()
       //   .return(ptrType).call().function().access(nativeModule).member(mangleName(name, 'construct')).$().$().$().$().$().$()
-      .method('getFinalizer').static().returns(Ts.prim.pointer).block()
-        .return(Ts.prim.pointer).call().function().access(nativeModule).member(mangleName(name, 'getFinalizer')).$().$().$().$().$().$()
+      // .method('getFinalizer').static().returns(Ts.prim.pointer).block()
+      //   .return(Ts.prim.pointer)
+      //     .call().receiverExpr(nativeModule).functionName(mangleName(name, 'getFinalizer')).$().$().$().$()
+      ///methods.foreach(useNativeModule)
+      ///useNativeModule(getFinalizer)
       .$()
   ]
 }

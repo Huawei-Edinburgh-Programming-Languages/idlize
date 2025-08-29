@@ -507,11 +507,10 @@ export class CXXPrinter {
 }
 
 export function processNPrintCXX(decls: lw.LWDeclaration[]) {
-  return decls
-    .map(it => {
-      const printer = new CXXPrinter()
-      printer.printDeclaration(it)
-      return printer.render()
-    })
-    .join('\n')
+  return decls.map(it => {
+    const printer = new CXXPrinter()
+    printer.printDeclaration(it)
+    return printer.render()
+  })
+  .join('\n\n')
 }

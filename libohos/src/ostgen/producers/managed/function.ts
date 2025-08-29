@@ -15,7 +15,7 @@
 
 import * as idl from "@idlizer/core/idl";
 import { AdvancedGeneratorContext, cApiName, createSpecialProducer, managedName, bridgeName, roles, implName, NATIVE_MODULE_CLASS } from "../common";
-import { E, T } from "../../../ost/builder";
+import { E, S, T } from "../../../ost/builder";
 import { Builders } from "../../../ost/builders";
 import { ArgConvertor } from "../components/argConvertor";
 import { generatorConfiguration } from "@idlizer/core";
@@ -57,25 +57,33 @@ function generateFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) 
 function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
     ctx.useManagedNativeModule(method)
     const serializerName = 'thisSerializer'
-    const convertor = new ArgConvertor(ctx, E.v(serializerName), false)
-    const fieldWrites = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
     const returnType = ctx.useManaged(method.returnType).reference();
     const params = method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() }));
+    const convertor = new ArgConvertor(ctx, E.v(serializerName), false)
+    const fieldWrites = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
+    const nativeModuleCall = Builders.call()
+      .receiverExpr(E.v(NATIVE_MODULE_CLASS, [An.isType()]))
+      .functionName(nativeModuleMethodName(method))
+      .arg().call().receiverName(serializerName).functionName('asBuffer').$().$()
+      .arg().call().receiverName(serializerName).functionName('length').$().$().$()
+    const releaseCall = Builders.stmt().call().receiverName(serializerName).functionName('release').$().$()
+    const statements = [
+      Builders.decl(serializerName, T.c('SerializerBase'))
+        .value().call().receiverName('SerializerBase').functionName('hold').$().$().$(),
+      ...fieldWrites]
+    if (method.returnType !== idl.IDLVoidType) {
+      statements.push(
+        Builders.decl('result', returnType).valueExpr(nativeModuleCall).$(),
+        releaseCall,
+        Builders.return(returnType).valueStr('result').$())
+    } else {
+      statements.push(S.e(nativeModuleCall), releaseCall)
+    }
     return Builders.class(GLOBAL_SCOPE_NAME)
-      .method(method.name)
-        .static()
+      .method(method.name).static()
         .parameters(params)
         .returns(returnType)
-        .block()
-          .decl(serializerName, T.c('SerializerBase'))
-            .value().call().receiverName('SerializerBase').functionName('hold').$().$().$()
-          .statements(fieldWrites)
-          .decl('result', returnType).value()
-            .call().receiverName(NATIVE_MODULE_CLASS).functionName(nativeModuleMethodName(method))
-              .arg().call().receiverName(serializerName).functionName('asBuffer').$().$()
-              .arg().call().receiverName(serializerName).functionName('length').$().$().$().$().$()
-          .call().receiverName(serializerName).functionName('release').$()
-          .return(returnType).valueStr('result').$().$().$().$()
+        .block().statements(statements).$().$().$()
 }
 
 function generateModifiers(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
