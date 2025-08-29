@@ -504,10 +504,6 @@ export class CXXPrinter {
         })
         break
       }
-      case lw.LWKind.StatementDeclaration: {
-        this.printStatement(declaration.statement)
-        break
-      }
     }
   }
 

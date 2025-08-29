@@ -14,7 +14,7 @@
  */
 
 import { D, DD, E, S, T } from "./builder"
-import { AccessorExpression, Hint, BinaryExpression, CallExpression, ClassDeclaration, ConstructorExpression, ConstType, DeclarationStatement, ExpressionStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWKind, LWStatement, LWType, Modifier, StatementDeclaration, StructureDeclaration, Annotation, SimpleAnnotation, DecoratorKind, MacroCall } from "./lws"
+import { AccessorExpression, Hint, BinaryExpression, CallExpression, ClassDeclaration, ConstructorExpression, ConstType, DeclarationStatement, ExpressionStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWKind, LWStatement, LWType, Modifier, StructureDeclaration, Annotation, SimpleAnnotation, DecoratorKind, MacroCall } from "./lws"
 import { An, Md, std, Ts } from "./stdlib";
 
 const id = <T>(it: T) => it
@@ -385,15 +385,6 @@ class StatementBuilder<P> {
     $(): P {
         check("Statement", this._stmt)
         return this._cont(this._stmt!)
-    }
-    $decl(name: string): StatementDeclaration {
-        check("Statement", this._stmt)
-        return {
-            kind: LWKind.StatementDeclaration,
-            name,
-            generics: [],
-            statement: this._stmt!
-        }
     }
 }
 

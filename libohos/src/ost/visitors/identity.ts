@@ -106,14 +106,6 @@ export class IdentityTransformer {
       body: decl.body ? this.goStatement(decl.body) : undefined
     }
   }
-  goStatementDeclaration(decl:lw.StatementDeclaration): lw.StatementDeclaration {
-    return {
-      kind: decl.kind,
-      generics: decl.generics,
-      name: decl.name,
-      statement: this.goStatement(decl.statement)
-    }
-  }
   goDeclaration(decl:lw.LWDeclaration): lw.LWDeclaration {
     switch (decl.kind) {
       case lw.LWKind.UnionDeclaration: return this.goUnionDeclaration(decl)
@@ -123,7 +115,6 @@ export class IdentityTransformer {
       case lw.LWKind.NamespaceDeclaration: return this.goNamespaceDeclaration(decl)
       case lw.LWKind.TypedefDeclaration: return this.goTypedefDeclaration(decl)
       case lw.LWKind.FunctionDeclaration: return this.goFunctionDeclaration(decl)
-      case lw.LWKind.StatementDeclaration: return this.goStatementDeclaration(decl)
     }
   }
 
