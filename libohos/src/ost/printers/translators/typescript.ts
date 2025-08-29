@@ -205,13 +205,13 @@ export class TSPrinter {
         break
       }
       case lw.LWKind.ConstructorExpression: {
-        if (utils.hasAnnotation(expression, std.names.annotations.asStruct)) {
+        if (utils.hasHint(expression, std.names.hints.asStruct)) {
           this.p.put('{')
           expression.args.forEach((arg, i) => {
             if (i > 0) {
               this.p.put(',', ' ')
             }
-            const filedName = utils.getAnnotation(arg, std.names.annotations.named)
+            const filedName = utils.getHint(arg, std.names.hints.named)
             if (!filedName) {
               throw new Error("!!!")
             }

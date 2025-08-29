@@ -55,11 +55,12 @@ export interface GenericDescriptor {
 
 export enum DecoratorKind {
   Annotation = "Annotation",
-  Modifier = "Modifier"
+  Hint = "Hint",
+  Modifier = "Modifier",
 }
 
-export interface Annotation {
-  kind: DecoratorKind.Annotation,
+export interface Hint {
+  kind: DecoratorKind.Hint,
   name: string
   value?: string
 }
@@ -206,56 +207,56 @@ export type LWStatement =
 export interface VariableExpression {
   kind: LWKind.VariableExpression
   name: string
-  annotations: Annotation[]
+  hints: Hint[]
 }
 export interface ConstantExpression {
   kind: LWKind.ConstantExpression
   value: string
-  annotations: Annotation[]
+  hints: Hint[]
 }
 export interface StringExpression {
   kind: LWKind.StringExpression
   value: string
-  annotations: Annotation[]
+  hints: Hint[]
 }
 export interface UnaryExpression {
   kind: LWKind.UnaryExpression
   expression: LWExpression
   op: string
-  annotations: Annotation[]
+  hints: Hint[]
 }
 export interface BinaryExpression {
   kind: LWKind.BinaryExpression
   left: LWExpression
   op: string
   right: LWExpression
-  annotations: Annotation[]
+  hints: Hint[]
 }
 export interface CallExpression {
   kind: LWKind.CallExpression
   callee: LWExpression
   args: LWExpression[]
   typeArgs?: LWType[]
-  annotations: Annotation[]
+  hints: Hint[]
 }
 export interface AccessorExpression {
   kind: LWKind.AccessorExpression
   base: LWExpression
   accessor: string | LWExpression
-  annotations: Annotation[]
+  hints: Hint[]
 }
 export interface ConstructorExpression {
   kind: LWKind.ConstructorExpression
   name: string
   args: LWExpression[]
   typeArgs?: LWType[]
-  annotations: Annotation[]
+  hints: Hint[]
 }
 export interface CastExpression {
   kind: LWKind.CastExpression
   expression: LWExpression
   type: LWType
-  annotations: Annotation[]
+  hints: Hint[]
 }
 export type LWExpression =
     VariableExpression

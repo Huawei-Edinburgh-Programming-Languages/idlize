@@ -16,53 +16,53 @@
 import * as lw from './lws'
 
 export const E = {
-  v: (name: string, annotations: lw.Annotation[] = []): lw.VariableExpression => ({
+  v: (name: string, hints: lw.Hint[] = []): lw.VariableExpression => ({
     kind: lw.LWKind.VariableExpression,
     name,
-    annotations,
+    hints,
   }),
-  c: (value: string | number, annotations: lw.Annotation[] = []): lw.ConstantExpression => ({
+  c: (value: string | number, hints: lw.Hint[] = []): lw.ConstantExpression => ({
     kind: lw.LWKind.ConstantExpression,
     value: value.toString(),
-    annotations,
+    hints,
   }),
-  s: (value: string, annotations: lw.Annotation[] = []): lw.StringExpression => ({
+  s: (value: string, hints: lw.Hint[] = []): lw.StringExpression => ({
     kind: lw.LWKind.StringExpression,
     value,
-    annotations,
+    hints,
   }),
-  unary: (op: string, expression: lw.LWExpression, annotations: lw.Annotation[] = []): lw.UnaryExpression => ({
+  unary: (op: string, expression: lw.LWExpression, hints: lw.Hint[] = []): lw.UnaryExpression => ({
     kind: lw.LWKind.UnaryExpression,
     expression,
     op,
-    annotations,
+    hints,
   }),
-  bin: (op: string, left: lw.LWExpression, right: lw.LWExpression, annotations: lw.Annotation[] = []): lw.BinaryExpression => ({
+  bin: (op: string, left: lw.LWExpression, right: lw.LWExpression, hints: lw.Hint[] = []): lw.BinaryExpression => ({
     kind: lw.LWKind.BinaryExpression,
     op,
     left,
     right,
-    annotations,
+    hints,
   }),
-  call: (callee: lw.LWExpression, args: lw.LWExpression[], typeArgs?: lw.LWType[], annotations: lw.Annotation[] = []): lw.CallExpression => ({
+  call: (callee: lw.LWExpression, args: lw.LWExpression[], typeArgs?: lw.LWType[], hints: lw.Hint[] = []): lw.CallExpression => ({
     kind: lw.LWKind.CallExpression,
     args,
     callee,
     typeArgs,
-    annotations,
+    hints,
   }),
-  get: (base: lw.LWExpression, accessor: string | lw.LWExpression, annotations: lw.Annotation[] = []): lw.AccessorExpression => ({
+  get: (base: lw.LWExpression, accessor: string | lw.LWExpression, hints: lw.Hint[] = []): lw.AccessorExpression => ({
     kind: lw.LWKind.AccessorExpression,
     base,
     accessor,
-    annotations,
+    hints,
   }),
-  instance: (name: string, args: lw.LWExpression[], typeArgs?: lw.LWType[], annotations: lw.Annotation[] = []): lw.ConstructorExpression => ({
+  instance: (name: string, args: lw.LWExpression[], typeArgs?: lw.LWType[], hints: lw.Hint[] = []): lw.ConstructorExpression => ({
     kind: lw.LWKind.ConstructorExpression,
     args,
     name,
     typeArgs,
-    annotations,
+    hints,
   }),
 }
 
@@ -188,10 +188,10 @@ export const DD = ({ generics = [], modifiers = [] }: DDOptions) => ({
 export const D = DD({})
 
 export const utils = {
-  hasAnnotation(node: lw.LWExpression, annotation: string) {
-    return node.annotations.find(x => x.name === annotation)
+  hasHint(node: lw.LWExpression, hint: string) {
+    return node.hints.find(x => x.name === hint)
   },
-  getAnnotation(node: lw.LWExpression, annotation: string) {
-    return node.annotations.find(x => x.name === annotation)?.value
+  getHint(node: lw.LWExpression, hint: string) {
+    return node.hints.find(x => x.name === hint)?.value
   }
 }

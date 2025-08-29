@@ -186,21 +186,21 @@ export class IdentityTransformer {
     return {
       kind: expr.kind,
       name: expr.name,
-      annotations: expr.annotations,
+      hints: expr.hints,
     }
   }
   goConstantExpression(expr:lw.ConstantExpression): lw.ConstantExpression {
     return {
       kind: expr.kind,
       value: expr.value,
-      annotations: expr.annotations,
+      hints: expr.hints,
     }
   }
   goStringExpression(expr:lw.StringExpression): lw.StringExpression {
     return {
       kind: expr.kind,
       value: expr.value,
-      annotations: expr.annotations,
+      hints: expr.hints,
     }
   }
   goUnaryExpression(expr:lw.UnaryExpression): lw.UnaryExpression {
@@ -208,7 +208,7 @@ export class IdentityTransformer {
       kind: expr.kind,
       op: expr.op,
       expression: this.goExpression(expr.expression),
-      annotations: expr.annotations,
+      hints: expr.hints,
     }
   }
   goBinaryExpression(expr:lw.BinaryExpression): lw.BinaryExpression {
@@ -217,7 +217,7 @@ export class IdentityTransformer {
       op: expr.op,
       left: this.goExpression(expr.left),
       right: this.goExpression(expr.right),
-      annotations: expr.annotations,
+      hints: expr.hints,
     }
   }
   goCallExpression(expr:lw.CallExpression): lw.CallExpression {
@@ -226,7 +226,7 @@ export class IdentityTransformer {
       callee: this.goExpression(expr.callee),
       args: expr.args.map(a => this.goExpression(a)),
       typeArgs: expr.typeArgs?.map(t => this.goType(t)),
-      annotations: expr.annotations,
+      hints: expr.hints,
     }
   }
   goAccessorExpression(expr:lw.AccessorExpression): lw.AccessorExpression {
@@ -234,7 +234,7 @@ export class IdentityTransformer {
       kind: expr.kind,
       accessor: typeof expr.accessor === 'string' ? expr.accessor : this.goExpression(expr.accessor),
       base: this.goExpression(expr.base),
-      annotations: expr.annotations,
+      hints: expr.hints,
     }
   }
   goConstructorExpression(expr:lw.ConstructorExpression): lw.ConstructorExpression {
@@ -243,7 +243,7 @@ export class IdentityTransformer {
       name: expr.name,
       args: expr.args.map(a => this.goExpression(a)),
       typeArgs: expr.typeArgs?.map(t => this.goType(t)),
-      annotations: expr.annotations,
+      hints: expr.hints,
     }
   }
   goCastExpression(expr:lw.CastExpression): lw.CastExpression {
@@ -251,7 +251,7 @@ export class IdentityTransformer {
       kind: expr.kind,
       expression: this.goExpression(expr.expression),
       type: this.goType(expr.type),
-      annotations: expr.annotations,
+      hints: expr.hints,
     }
   }
   goExpression(expr:lw.LWExpression): lw.LWExpression {

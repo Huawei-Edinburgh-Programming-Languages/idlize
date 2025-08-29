@@ -198,7 +198,7 @@ export function ptrToMaterialized(value: string, type: LWType, native: boolean):
             kind: LWKind.CastExpression,
             expression: E.v(value),
             type,
-            annotations: [An.staticMethod()]
+            hints: [An.staticMethod()]
         }
         : Builders.call()
             .receiverExpr(E.v((type as ConstType).name + 'Internal', [An.isType()]))

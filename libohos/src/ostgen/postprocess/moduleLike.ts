@@ -143,7 +143,7 @@ class RefSearcher extends IdentityTransformer {
     }
     override goVariableExpression(expr: lw.VariableExpression): lw.VariableExpression {
         expr = super.goVariableExpression(expr)
-        if (utils.hasAnnotation(expr, std.names.annotations.isType))
+        if (utils.hasHint(expr, std.names.hints.isType))
             expr.name = this.goTypeName(expr.name)
         return expr
     }

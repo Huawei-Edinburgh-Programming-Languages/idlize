@@ -14,7 +14,7 @@
  */
 
 import { D, DD, E, S, T } from "./builder"
-import { AccessorExpression, Annotation, BinaryExpression, CallExpression, ClassDeclaration, ConstructorExpression, ConstType, DeclarationStatement, ExpressionStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWKind, LWStatement, LWType, Modifier, StatementDeclaration, StructureDeclaration } from "./lws"
+import { AccessorExpression, Hint, BinaryExpression, CallExpression, ClassDeclaration, ConstructorExpression, ConstType, DeclarationStatement, ExpressionStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWKind, LWStatement, LWType, Modifier, StatementDeclaration, StructureDeclaration } from "./lws"
 import { An, Md, std, Ts } from "./stdlib";
 
 const id = <T>(it: T) => it
@@ -30,9 +30,9 @@ class AccessorBuilder<P> {
         private _object?: LWExpression
     ) {}
     private _accessor?: string | LWExpression
-    private _annotations: Annotation[] = []
-    ptr() { this._object?.annotations.push(An.ptrVal()); return this }
-    static() { this._annotations.push(An.staticMethod()); return this }
+    private _hints: Hint[] = []
+    ptr() { this._object?.hints.push(An.ptrVal()); return this }
+    static() { this._hints.push(An.staticMethod()); return this }
     member(name: string) { this._accessor = name; return this }
     indexExpr(expr: LWExpression) { this._accessor = expr; return this }
     indexStr(str: string) { this._accessor = E.v(str); return this }
@@ -50,7 +50,7 @@ class AccessorBuilder<P> {
     }
     $(): P {
         check("Accessor", this._object, this._accessor)
-        return this._cont(E.get(this._object!, this._accessor!, this._annotations))
+        return this._cont(E.get(this._object!, this._accessor!, this._hints))
     }
 }
 
@@ -109,7 +109,7 @@ class CallBuilder<P> {
     private _receiver?: LWExpression
     private _function?: string
     private _args: LWExpression[] = []
-    receiverName(name: string, annotations?: Annotation[]) { this._receiver = E.v(name, annotations); return this }
+    receiverName(name: string, hints?: Hint[]) { this._receiver = E.v(name, hints); return this }
     receiverExpr(object: LWExpression) { this._receiver = object; return this }
     functionName(name: string) { this._function = name; return this }
     args(args: LWExpression[]) { this._args.push(...args); return this }
@@ -140,9 +140,9 @@ class ConstructorBuilder<P> {
         private _name?: string
     ) {}
     private _args: LWExpression[] = []
-    private _annotations: Annotation[] = []
-    asStruct() { this._annotations.push(An.asStruct()); return this }
-    stack() { this._annotations.push(An.stackInstance()); return this }
+    private _hints: Hint[] = []
+    asStruct() { this._hints.push(An.asStruct()); return this }
+    stack() { this._hints.push(An.stackInstance()); return this }
     args(args: LWExpression[]) { this._args.push(...args); return this }
     arg(value?: string): ArgBuilder<ConstructorBuilder<P>> {
         return new ArgBuilder(arg => {
@@ -151,7 +151,7 @@ class ConstructorBuilder<P> {
         }, value ? E.v(value) : undefined)
     }
     $(): P {
-        return this._cont(E.instance(this._name ?? 'CTOR_NAME', this._args, [], this._annotations))
+        return this._cont(E.instance(this._name ?? 'CTOR_NAME', this._args, [], this._hints))
     }
 }
 
@@ -187,7 +187,7 @@ class ExpressionBuilder<P> {
             kind: LWKind.CastExpression,
             expression: this._expr!,
             type,
-            annotations: []
+            hints: []
         }
         return this
     }

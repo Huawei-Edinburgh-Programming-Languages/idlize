@@ -14,9 +14,9 @@
  */
 
 import { E, T } from "./builder"
-import { Annotation, ConstType, DecoratorKind, LWType, Modifier } from "./lws"
+import { Hint, DecoratorKind, LWType, Modifier } from "./lws"
 
-const knownAnnotations = {
+const knownHints = {
     ptrVal: 'ptrVal',
     asStruct: 'asStruct',
     isType: 'isType',
@@ -81,18 +81,18 @@ export const std = {
         members: specialMemberNames,
         vars: specialVariables,
         types: specialTypeNames,
-        annotations: knownAnnotations,
+        hints: knownHints,
         modifiers: knownModifiers,
     }
 }
 
 export const An = {
-    ptrVal: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.ptrVal }),
-    asStruct: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.asStruct }),
-    isType: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.isType }),
-    named: (name:string): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.named, value: name }),
-    staticMethod: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.staticMethod }),
-    stackInstance: (): Annotation => ({ kind: DecoratorKind.Annotation, name: knownAnnotations.stackInstance })
+    ptrVal: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.ptrVal }),
+    asStruct: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.asStruct }),
+    isType: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.isType }),
+    named: (name:string): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.named, value: name }),
+    staticMethod: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.staticMethod }),
+    stackInstance: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.stackInstance })
 }
 
 export const Md = {
@@ -103,7 +103,7 @@ export const Md = {
 }
 
 export const Vs = {
-    self: E.v(specialVariables.self, [{ kind: DecoratorKind.Annotation, name: knownAnnotations.ptrVal }]),
+    self: E.v(specialVariables.self, [{ kind: DecoratorKind.Hint, name: knownHints.ptrVal }]),
     base: E.v(specialVariables.base),
     null: E.v(specialVariables.null),
     undef: E.v(specialVariables.undef),

@@ -280,7 +280,7 @@ class TypeAliasing extends IdentityTransformer {
     }
     override goVariableExpression(expr: lw.VariableExpression): lw.VariableExpression {
         expr = super.goVariableExpression(expr)
-        expr.name = utils.hasAnnotation(expr, std.names.annotations.isType)
+        expr.name = utils.hasHint(expr, std.names.hints.isType)
             ? this.goTypeName(expr.name)
             : expr.name
         return expr

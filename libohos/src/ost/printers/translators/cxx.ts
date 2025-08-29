@@ -153,9 +153,9 @@ export class CXXPrinter {
       case lw.LWKind.AccessorExpression: {
         this.printExpression(expression.base)
         if (typeof expression.accessor === 'string') {
-          if (utils.hasAnnotation(expression, std.names.annotations.staticMethod)) {
+          if (utils.hasHint(expression, std.names.hints.staticMethod)) {
             this.p.put('::')
-          } else if (utils.hasAnnotation(expression.base, std.names.annotations.ptrVal)) {
+          } else if (utils.hasHint(expression.base, std.names.hints.ptrVal)) {
             this.p.put('->')
           } else {
             this.p.put('.')
@@ -203,7 +203,7 @@ export class CXXPrinter {
         break
       }
       case lw.LWKind.ConstructorExpression: {
-        if (utils.hasAnnotation(expression, std.names.annotations.asStruct)) {
+        if (utils.hasHint(expression, std.names.hints.asStruct)) {
           this.p.put('(', expression.name, ')')
           this.p.put('{')
           expression.args.forEach((arg, i) => {
@@ -237,7 +237,7 @@ export class CXXPrinter {
         break
       }
       case lw.LWKind.CastExpression: {
-        const cast = utils.hasAnnotation(expression, std.names.annotations.staticMethod)
+        const cast = utils.hasHint(expression, std.names.hints.staticMethod)
           ? 'static_cast' : 'reinterpret_cast'
         this.p.put(cast, '<')
         this.printAbstractType(expression.type)
@@ -286,10 +286,10 @@ export class CXXPrinter {
         if (statement.expression) {
           if (statement.expression.kind === lw.LWKind.ConstructorExpression) {
             let closer: string | undefined
-            if (utils.hasAnnotation(statement.expression, std.names.annotations.asStruct)) {
+            if (utils.hasHint(statement.expression, std.names.hints.asStruct)) {
               this.p.put(' ', '=', ' ', '{')
               closer = '}'
-            } else if (utils.hasAnnotation(statement.expression, std.names.annotations.stackInstance)) {
+            } else if (utils.hasHint(statement.expression, std.names.hints.stackInstance)) {
               this.p.put('(')
               closer = ')'
             }

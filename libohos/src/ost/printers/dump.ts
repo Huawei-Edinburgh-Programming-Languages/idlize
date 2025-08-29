@@ -57,16 +57,16 @@ export class DumpPrinter {
     }
   }
 
-  private maybePrintAnnotations(expr: lw.LWExpression, wrap: boolean) {
-    if (expr.annotations.length > 0) {
+  private maybePrintHints(expr: lw.LWExpression, wrap: boolean) {
+    if (expr.hints.length > 0) {
       this.p.put('[')
-      expr.annotations.forEach((ann, i) => {
+      expr.hints.forEach((hint, i) => {
         if (i > 0) {
           this.p.put(',', ' ')
         }
-        this.p.put(ann.name)
-        if (ann.value) {
-          this.p.put('(', ann.value, ')')
+        this.p.put(hint.name)
+        if (hint.value) {
+          this.p.put('(', hint.value, ')')
         }
       })
       this.p.put(']')
@@ -78,7 +78,7 @@ export class DumpPrinter {
     }
   }
   printExpression(expression: lw.LWExpression) {
-    this.maybePrintAnnotations(
+    this.maybePrintHints(
       expression,
       [
         lw.LWKind.BinaryExpression,
