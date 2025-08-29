@@ -27,7 +27,8 @@
     "ignoreGenerics": [
         "arkui.component.common.AttributeModifier",
         "arkui.component.common.ContentModifier",
-        "arkui.component.ContentModifier"
+        "arkui.component.ContentModifier",
+        "arkui.component.builder.CustomBuilderT"
     ],
     "forceMaterialized": [
         "arkui.component.gesture.extra.TapGestureInterface",
