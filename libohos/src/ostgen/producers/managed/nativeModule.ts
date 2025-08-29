@@ -29,7 +29,7 @@ export const nativeModuleProducer = createSpecialProducer(
         implementationGenerator: () => [
           Builders.class(NATIVE_MODULE_CLASS)
             .method(methodName)
-              .native().static()
+              .native().static().annotation('ani.unsafe.Direct')
               .param('buffer').typeStr('SerializerBase').$()
               .param('length').type(Ts.prim.i32).$()
               .returns(ctx.useManaged(method.returnType).reference()).$().$()

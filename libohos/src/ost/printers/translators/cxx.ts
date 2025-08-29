@@ -488,6 +488,20 @@ export class CXXPrinter {
         } else {
           this.p.put(';')
         }
+        declaration.annotations.forEach(ann => {
+          if (ann.kind === lw.DecoratorKind.MacroCall) {
+            this.p.newline()
+            this.p.put(ann.name, '(')
+            ann.args.forEach((arg, i) => {
+              if (i > 0) {
+                this.p.put(',', ' ')
+              }
+              if (typeof arg === 'string') this.p.put(arg)
+              else this.printAbstractType(arg)
+            })
+            this.p.put(')')
+          }
+        })
         break
       }
       case lw.LWKind.StatementDeclaration: {

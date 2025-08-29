@@ -449,6 +449,12 @@ export class TSPrinter {
         break
       }
       case lw.LWKind.FunctionDeclaration: {
+        declaration.annotations.forEach(ann => {
+          if (ann.kind === lw.DecoratorKind.SimpleAnnotation) {
+            this.p.put('@', ann.name)
+            this.p.newline()
+          }
+        })
         declaration.modifiers.forEach(mod => {
           switch (mod.name) {
             case std.names.modifiers.native:

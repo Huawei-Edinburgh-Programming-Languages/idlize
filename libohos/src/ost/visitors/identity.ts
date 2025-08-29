@@ -96,6 +96,7 @@ export class IdentityTransformer {
       kind: decl.kind,
       generics: decl.generics,
       modifiers: decl.modifiers,
+      annotations: decl.annotations.map(ann => this.goAnnotation(ann)),
       name: decl.name,
       parameters: decl.parameters.map(p => ({
         name: p.name,
@@ -296,6 +297,16 @@ export class IdentityTransformer {
       case lw.LWKind.ConstType: return this.goConstType(type)
       case lw.LWKind.AppType: return this.goAppType(type)
       case lw.LWKind.FuncType: return this.goFuncType(type)
+    }
+  }
+  goAnnotation(annotation:lw.Annotation): lw.Annotation {
+    switch (annotation.kind) {
+      case lw.DecoratorKind.SimpleAnnotation: return annotation
+      case lw.DecoratorKind.MacroCall: return {
+        kind: annotation.kind,
+        name: annotation.name,
+        args: annotation.args.map(arg => typeof arg === 'string' ? arg : this.goType(arg))
+      }
     }
   }
 }

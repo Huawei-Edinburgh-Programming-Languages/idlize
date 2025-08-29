@@ -34,7 +34,6 @@ export const functionProducer = createSpecialProducer(
           generateGlobalScopeFunction(method, ctx),
           ...generateModifiers(method, ctx),
           generateBridge(method, ctx),
-          generateMacroCall(method, ctx),
         ]
       }
     }
@@ -129,15 +128,10 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
               .ptr().$().$().$().$()
           .member(method.name)
           .ptr().$().$()
-        .args(method.parameters.map(it => E.unary(Op.ref, E.v(it.name)))).$().$().$().$()
-}
-
-function generateMacroCall(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
-  return Builders.stmt().call()
-    .functionName('KOALA_INTEROP_DIRECT_V2')
-    .args([
-      E.v('GlobalScope_' + method.name),
-      E.v(Ts.prim.serializerBuffer.name, [An.isType()]),
-      E.v(Ts.prim.i32.name, [An.isType()])]).$()
-    .$decl(bridgeName('koala.interop.macro.' + method.name))
+        .args(method.parameters.map(it => E.unary(Op.ref, E.v(it.name)))).$().$().$()
+    .macro('KOALA_INTEROP_DIRECT_V2',
+      'GlobalScope_' + method.name,
+      Ts.prim.serializerBuffer,
+      Ts.prim.i32)
+    .$()
 }

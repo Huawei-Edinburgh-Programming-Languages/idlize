@@ -54,9 +54,11 @@ export interface GenericDescriptor {
 ////////////////////////////////////////////////////////
 
 export enum DecoratorKind {
-  Annotation = "Annotation",
   Hint = "Hint",
   Modifier = "Modifier",
+
+  SimpleAnnotation = "Annotation",
+  MacroCall = "MacroCall",
 }
 
 export interface Hint {
@@ -69,6 +71,20 @@ export interface Modifier {
   name: string
   value?: string
 }
+
+export interface SimpleAnnotation {
+  kind: DecoratorKind.SimpleAnnotation,
+  name: string
+  value?: string
+}
+export interface MacroCall {
+  kind: DecoratorKind.MacroCall,
+  name: string
+  args: (string | LWType)[]
+}
+export type Annotation =
+    SimpleAnnotation
+  | MacroCall
 
 ////////////////////////////////////////////////////////
 
@@ -137,6 +153,7 @@ export interface FunctionDeclaration {
   kind: LWKind.FunctionDeclaration
   generics: GenericDescriptor[]
   modifiers: Modifier[]
+  annotations: Annotation[]
   name: string
   parameters: {
     name: string

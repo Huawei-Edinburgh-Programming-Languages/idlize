@@ -175,10 +175,11 @@ export const DD = ({ generics = [], modifiers = [] }: DDOptions) => ({
     name,
     type,
   }),
-  func: (name: string, parameters: lw.FunctionDeclaration['parameters'], returnType: lw.LWType, body?: lw.LWStatement): lw.FunctionDeclaration => ({
+  func: (name: string, parameters: lw.FunctionDeclaration['parameters'], returnType: lw.LWType, body?: lw.LWStatement, annotations: lw.Annotation[] = []): lw.FunctionDeclaration => ({
     kind: lw.LWKind.FunctionDeclaration,
     generics,
     modifiers,
+    annotations,
     name,
     parameters,
     returnType,

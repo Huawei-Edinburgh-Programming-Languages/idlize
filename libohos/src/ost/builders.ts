@@ -14,7 +14,7 @@
  */
 
 import { D, DD, E, S, T } from "./builder"
-import { AccessorExpression, Hint, BinaryExpression, CallExpression, ClassDeclaration, ConstructorExpression, ConstType, DeclarationStatement, ExpressionStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWKind, LWStatement, LWType, Modifier, StatementDeclaration, StructureDeclaration } from "./lws"
+import { AccessorExpression, Hint, BinaryExpression, CallExpression, ClassDeclaration, ConstructorExpression, ConstType, DeclarationStatement, ExpressionStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWKind, LWStatement, LWType, Modifier, StatementDeclaration, StructureDeclaration, Annotation, SimpleAnnotation, DecoratorKind, MacroCall } from "./lws"
 import { An, Md, std, Ts } from "./stdlib";
 
 const id = <T>(it: T) => it
@@ -489,6 +489,7 @@ class FunctionBuilder<P> {
     private _parameters: { name: string, type: LWType }[] = []
     private _returnType?: LWType
     private _body?: LWStatement
+    private _annotations: Annotation[] = []
     native() { this._modifiers.push(Md.native()); return this }
     static() { this._modifiers.push(Md.static()); return this }
     returns(type: LWType) { this._returnType = type; return this }
@@ -506,12 +507,29 @@ class FunctionBuilder<P> {
             return this
         })
     }
+    annotation(name: string) {
+        const annotation: SimpleAnnotation = {
+            kind: DecoratorKind.SimpleAnnotation,
+            name,
+        }
+        this._annotations.push(annotation)
+        return this
+    }
+    macro(name: string, ...args: (string | LWType)[]) {
+        const annotation: MacroCall = {
+            kind: DecoratorKind.MacroCall,
+            name,
+            args,
+        }
+        this._annotations.push(annotation)
+        return this
+    }
     $(): P {
         return this._cont(
             DD({generics: [], modifiers: this._modifiers})
                 .func(this._name!, this._parameters,
                     this._returnType ?? Ts.prim.void,
-                    this._body))
+                    this._body, this._annotations))
     }
 }
 
