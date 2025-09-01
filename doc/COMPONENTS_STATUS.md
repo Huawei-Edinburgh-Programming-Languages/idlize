@@ -534,8 +534,8 @@
 |`setOnError`| Function | Evstigneev Roman | done | pass | |
 |`setOnFinish`| Function | Evstigneev Roman | done | failed | same in ArkUI, https://gitee.com/openharmony/arkui_ace_engine/issues/ICG623 |
 |`setEnableAnalyzer`| Function | Evstigneev Roman | done | pass | |
-|`setAnalyzerConfig`| Function | Evstigneev Roman | blocked AceEngine | test blocked | methods is not implemented, https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (+) |
-|`setResizable`| Function | Evstigneev Roman | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY |
+|`setAnalyzerConfig`| Function | Evstigneev Roman | blocked AceEngine | test blocked | methods is not implemented, https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (actual on the 01.09.2025) |
+|`setResizable`| Function | Evstigneev Roman | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY, blocked by DrawingLattice |
 |`setPrivacySensitive`| Function | Evstigneev Roman | done | pass | |
 |`setEnhancedImageQuality` | Function | done |  |  |  |  |  |
 |`setOrientation`| Function | Samarin Sergey | done | pass | |
