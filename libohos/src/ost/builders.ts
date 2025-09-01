@@ -15,7 +15,7 @@
 
 import { D, DD, E, S, T } from "./builder"
 import { AccessorExpression, Hint, BinaryExpression, CallExpression, ClassDeclaration, ConstructorExpression, ConstType, DeclarationStatement, ExpressionStatement, FunctionDeclaration, FuncType, IfStatement, LoopStatement, LWExpression, LWKind, LWStatement, LWType, Modifier, StructureDeclaration, Annotation, SimpleAnnotation, DecoratorKind, MacroCall } from "./lws"
-import { An, Md, std, Ts } from "./stdlib";
+import { Hs, Md, std, Ts } from "./stdlib";
 
 const id = <T>(it: T) => it
 
@@ -31,9 +31,9 @@ class AccessorBuilder<P> {
     ) {}
     private _accessor?: string | LWExpression
     private _hints: Hint[] = []
-    ptr() { this._object?.hints.push(An.ptrVal()); return this }
-    static() { this._hints.push(An.staticMethod()); return this }
-    excl() { this._hints.push(An.excl()); return this }
+    ptr() { this._object?.hints.push(Hs.ptrVal()); return this }
+    static() { this._hints.push(Hs.staticMethod()); return this }
+    excl() { this._hints.push(Hs.excl()); return this }
     member(name: string) { this._accessor = name; return this }
     indexExpr(expr: LWExpression) { this._accessor = expr; return this }
     indexStr(str: string) { this._accessor = E.v(str); return this }
@@ -142,8 +142,8 @@ class ConstructorBuilder<P> {
     ) {}
     private _args: LWExpression[] = []
     private _hints: Hint[] = []
-    asStruct() { this._hints.push(An.asStruct()); return this }
-    stack() { this._hints.push(An.stackInstance()); return this }
+    asStruct() { this._hints.push(Hs.asStruct()); return this }
+    stack() { this._hints.push(Hs.stackInstance()); return this }
     args(args: LWExpression[]) { this._args.push(...args); return this }
     arg(value?: string): ArgBuilder<ConstructorBuilder<P>> {
         return new ArgBuilder(arg => {

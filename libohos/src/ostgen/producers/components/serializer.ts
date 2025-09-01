@@ -15,7 +15,7 @@
 import * as idl from "@idlizer/core/idl"
 import { AdvancedGeneratorContext, managedName, bridgeName } from "../common";
 import { ProducerDescription } from "../../engine/context";
-import { An, E, T, Ts } from "../../../ost";
+import { Hs, E, T, Ts } from "../../../ost";
 import { ArgConvertor, materializedToPtr, ptrToMaterialized } from "./argConvertor";
 import { Builders } from "../../../ost/builders";
 import { LWType } from "../../../ost/lws";
@@ -39,7 +39,7 @@ export function makeSerializer(
 ): ProducerDescription {
   return {
     artifact: {
-      reference: E.v(makeSerializerName(node, native), [An.isType()]),
+      reference: E.v(makeSerializerName(node, native), [Hs.isType()]),
       implementationGenerator: () => {
         const valueType = (native ? ctx.useCApi(node) : ctx.useManaged(node)).reference()
         const clazz = makeSerializerClass(native, node, valueType)

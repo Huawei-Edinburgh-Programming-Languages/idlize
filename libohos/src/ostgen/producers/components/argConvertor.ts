@@ -14,7 +14,7 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { An, E, lw, Op, S, std, T, Ts } from "../../../ost";
+import { Hs, E, lw, Op, S, std, T, Ts } from "../../../ost";
 import { AdvancedGeneratorContext, bridgeName } from "../common";
 import { Builders } from "../../../ost/builders";
 import { ConstType, IfStatement, LWExpression, LWKind, LWType } from "../../../ost/lws";
@@ -198,9 +198,9 @@ export function ptrToMaterialized(value: string, type: LWType, native: boolean):
             kind: LWKind.CastExpression,
             expression: E.v(value),
             type,
-            hints: [An.staticMethod()]
+            hints: [Hs.staticMethod()]
         }
         : Builders.call()
-            .receiverExpr(E.v((type as ConstType).name + 'Internal', [An.isType()]))
+            .receiverExpr(E.v((type as ConstType).name + 'Internal', [Hs.isType()]))
             .functionName('fromPtr').arg(value).$().$()
 }

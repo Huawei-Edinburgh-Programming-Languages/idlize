@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { An, D, DD, E, IdentityTransformer, lw, Md, Op, std, T, Ts, utils } from "../../ost";
+import { Hs, D, DD, E, IdentityTransformer, lw, Md, Op, std, T, Ts, utils } from "../../ost";
 import { throwError } from "../engine/utils";
 import { generatorConfiguration, zipStrip } from "@idlizer/core";
 import { mergeStructs } from "./postprocess";
@@ -183,7 +183,7 @@ function makeApis(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
                 .return().valueExpr(E.unary(Op.ref, E.v('instance'))).$().$().$()
         modifierImpls.push(modifierImpl)
         // modifier implementation pointer in the API implementation struct
-        apiImpls.push(E.unary(Op.ref, E.v(modifierImplName, [An.isType()])))
+        apiImpls.push(E.unary(Op.ref, E.v(modifierImplName, [Hs.isType()])))
     })
     // API implementation function
     const apiImpl = Builders.func(implName(`Get${generatorConfiguration().moduleName.toUpperCase()}APIImpl`))

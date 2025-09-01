@@ -87,7 +87,7 @@ export const std = {
     }
 }
 
-export const An = {
+export const Hs = {
     ptrVal: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.ptrVal }),
     asStruct: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.asStruct }),
     isType: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.isType }),

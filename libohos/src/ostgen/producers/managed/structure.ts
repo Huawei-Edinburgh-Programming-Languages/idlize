@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { An, D, E, Md, std, T, Ts } from "../../../ost";
+import { Hs, D, E, Md, std, T, Ts } from "../../../ost";
 import * as idl from "@idlizer/core/idl"
 import { makePeerMethod } from "../components/peerMethod";
 import { AdvancedGeneratorContext, createSpecialProducer, managedName, NATIVE_MODULE_CLASS, roles } from "../common";
@@ -80,7 +80,7 @@ function makeInterface(node: idl.IDLInterface, name: string, ctx: AdvancedGenera
 function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGeneratorContext): LWDeclaration[] {
   const peerType = Ts.union([T.cc('Finalizable'), T.cc('undefined')])
   const thisType = ctx.useManaged(node).reference();
-  const nativeModule = E.v(NATIVE_MODULE_CLASS, [An.isType()])
+  const nativeModule = E.v(NATIVE_MODULE_CLASS, [Hs.isType()])
   const intClass = Builders.class(name + 'Internal')
     .method('fromPtr').static()
       .returns(thisType)
@@ -99,7 +99,7 @@ function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGen
         .left().access(E.v('this')).member('peer').$().$()
         .right().ctor('Finalizable')
           .arg('peerPtr').$()
-          .arg().call().receiverExpr(E.v(name, [An.isType()])).functionName('getFinalizer').$().$().$().$().$().$().$()
+          .arg().call().receiverExpr(E.v(name, [Hs.isType()])).functionName('getFinalizer').$().$().$().$().$().$().$()
 
   // getFinalizer
   const getFinalizer = 'getFinalizer';
@@ -115,7 +115,7 @@ function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGen
     matClass.ctor().parameters(ctor.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
       .block()
         .call().receiverName('this').functionName('setPeer').arg()
-          .call().function().access(E.v(NATIVE_MODULE_CLASS, [An.isType()])).member(mangleName(name, 'construct')).$().$()
+          .call().function().access(E.v(NATIVE_MODULE_CLASS, [Hs.isType()])).member(mangleName(name, 'construct')).$().$()
             .args(ctor.parameters.map(it => E.v(it.name))).$().$().$().$().$()
     nativeModuleClass.method(mangleName(name, 'construct'))
       .native().static().annotation('ani.unsafe.Direct')

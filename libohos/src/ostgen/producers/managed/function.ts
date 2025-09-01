@@ -19,7 +19,7 @@ import { E, S, T } from "../../../ost/builder";
 import { Builders } from "../../../ost/builders";
 import { ArgConvertor } from "../components/argConvertor";
 import { generatorConfiguration } from "@idlizer/core";
-import { An, Op, Ts } from "../../../ost/stdlib";
+import { Hs, Op, Ts } from "../../../ost/stdlib";
 import { LWType } from "../../../ost/lws";
 import { fqName as nativeModuleMethodName, moduleName } from "../../engine";
 
@@ -48,7 +48,7 @@ function generateFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) 
     .returns(returnType)
     .block()
       .return(returnType)
-        .call().receiverName(GLOBAL_SCOPE_NAME, [An.isType()]).functionName(method.name)
+        .call().receiverName(GLOBAL_SCOPE_NAME, [Hs.isType()]).functionName(method.name)
         .args(method.parameters.map(it => E.v(it.name))).$()
     .$().$().$()
 }
@@ -61,7 +61,7 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
     const convertor = new ArgConvertor(ctx, E.v(serializerName), false)
     const fieldWrites = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
     const nativeModuleCall = Builders.call()
-      .receiverExpr(E.v(NATIVE_MODULE_CLASS, [An.isType()]))
+      .receiverExpr(E.v(NATIVE_MODULE_CLASS, [Hs.isType()]))
       .functionName(nativeModuleMethodName(method))
       .arg().call().receiverName(serializerName).functionName('asBuffer').$().$()
       .arg().call().receiverName(serializerName).functionName('length').$().$().$()

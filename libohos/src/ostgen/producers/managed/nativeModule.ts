@@ -14,7 +14,7 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { An, E, Ts } from "../../../ost";
+import { Hs, E, Ts } from "../../../ost";
 import { createSpecialProducer, NATIVE_MODULE_CLASS, roles } from "../common";
 import { fqName } from "../../engine";
 import { Builders } from "../../../ost/builders";
@@ -25,7 +25,7 @@ export const nativeModuleProducer = createSpecialProducer(
     const methodName = fqName(method)
     return {
       artifact: {
-        reference: E.get(E.v(NATIVE_MODULE_CLASS, [An.isType()]), methodName),
+        reference: E.get(E.v(NATIVE_MODULE_CLASS, [Hs.isType()]), methodName),
         implementationGenerator: () => [
           Builders.class(NATIVE_MODULE_CLASS)
             .method(methodName)
