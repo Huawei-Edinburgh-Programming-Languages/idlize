@@ -288,9 +288,9 @@
 |`setBackgroundImage0`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setBackgroundImage1`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setBackgroundBlurStyle`| Function | Skroba Gleb | done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
-|`setBackgroundEffect1`| Function | Evstigneev Roman, Samarin Sergey | testskipped |  |  |  |  |
+|`setBackgroundEffect1`| Function | Evstigneev Roman | testskipped |  |  |  |  |
 |`setForegroundBlurStyle`| Function | Evstigneev Roman | in progress | | |
-|`setOnClick1`| Function | Skroba Gleb, Nikita Maksimov | done |  |  |  |  |
+|`setOnClick1`| Function | Skroba Gleb | done |  |  |  |  |
 |`setFocusScopeId`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setFocusScopePriority`| Function | Dmitry A Smirnov| done | pass | |
 |`setTransition1`| Function |Dmitry A Smirnov| done | test blocked | test is blocked due to ArkTS 1.2 Compilation Issue, transition(Ark_TransitionOptions) - deprecated, this case tesskipped, commented ViewAbstract static methods code |
@@ -537,7 +537,7 @@
 |`setAnalyzerConfig`| Function | Evstigneev Roman | blocked AceEngine | test blocked | methods is not implemented, https://gitee.com/openharmony/arkui_ace_engine/issues/IB0Y51 (actual on the 01.09.2025) |
 |`setResizable`| Function | Evstigneev Roman | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBDHFY, blocked by DrawingLattice |
 |`setPrivacySensitive`| Function | Evstigneev Roman | done | pass | |
-|`setEnhancedImageQuality` | Function | done |  |  |  |  |  |
+|`setEnhancedImageQuality` | Function | Erokhin Ilya | done |  |  |  |  |
 |`setOrientation`| Function | Samarin Sergey | done | pass | |
 |*ImageAnimator*| *Component* | Pavelyev Ivan | done |  | |
 |`construct`| Function | Pavelyev Ivan | done | pass | |
@@ -984,9 +984,9 @@
 |`setArrowModifier`| Function | managed side | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
 |`setOptionTextModifier`| Function | managed side | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
 |`setSelectedOptionTextModifier`| Function | managed side | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
-|`setDividerStyle`| Function | Evstigneev Roman, Samarin Sergey | testskipped | | |
-|`setAvoidance`| Function | Evstigneev Roman, Samarin Sergey | testskipped | | |
-|`setMenuOutline`| Function | Evstigneev Roman, Samarin Sergey | testskipped | | |
+|`setDividerStyle`| Function | Evstigneev Roman | testskipped | | |
+|`setAvoidance`| Function | Evstigneev Roman | testskipped | | |
+|`setMenuOutline`| Function | Evstigneev Roman | testskipped | | |
 |`setBackgroundColor`|Function||||
 |`setMenuAlign` | Function | Samarin Sergey | done | test blocked |  |
 |*Shape*|*Component*|Dudkin Sergey| in progress |  |  |
@@ -1867,11 +1867,11 @@
 |`offset`|Function||||
 |`fill`|Function||||
 |`position`|Function||||
-|*BaseShape*| *Class* | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`construct`| Function |Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`width`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`height`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`size`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|*BaseShape*| *Class* | Tuzhilkin Ivan | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`construct`| Function |Tuzhilkin Ivan | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`width`| Function | Tuzhilkin Ivan | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`height`| Function | Tuzhilkin Ivan | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`size`| Function | Tuzhilkin Ivan | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |*RectShape*| *Class* | Samarin Sergey | done | | |
 |`construct`| Function | Samarin Sergey | done | | |
 |`radiusWidth`| Function | Samarin Sergey | done | | |
@@ -4822,11 +4822,11 @@
 |`begin`| Function | Vadim Voronov | done | | |
 |`end`| Function | Vadim Voronov | done | | |
 |`recordInputEventTime`| Function | Vadim Voronov | done | |  |
-|*CommonShape*| *Class* | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`construct`| Function |Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`offset`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`fill`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
-|`position`| Function | Tuzhilkin Ivan, Vadim Voronov | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|*CommonShape*| *Class* | Tuzhilkin Ivan | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`construct`| Function |Tuzhilkin Ivan | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`offset`| Function | Tuzhilkin Ivan | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`fill`| Function | Tuzhilkin Ivan | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
+|`position`| Function | Tuzhilkin Ivan | in progress | | Empty implementation is acceptable now. Can be reworked/deleted in future generated |
 |*GlobalScope_ohos_font*| *Class* | Pavelyev Ivan | done | | |
 |`registerFont`| Function | Pavelyev Ivan | done | | |
 |`getSystemFontList`| Function | Pavelyev Ivan | done | | |
