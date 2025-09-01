@@ -525,7 +525,7 @@
 |`setInterpolation`| Function | Evstigneev Roman | done | pass | |
 |`setSourceSize`| Function | Evstigneev Roman | done | pass | |
 |`setSyncLoad`| Function | Evstigneev Roman | done | pass | |
-|`setColorFilter`| Function | Evstingneev Roman | blocked |  |  |  | blocked by DrawColorFilter |
+|`setColorFilter`| Function | Evstigneev Roman | blocked |  |  |  | blocked by DrawColorFilter |
 |`setCopyOption`| Function | Evstigneev Roman | testskipped | pass |  tests blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IBEEFF (+) |
 |`setDraggable`| Function | Evstigneev Roman | done | pass |   |
 |`setPointLight`| Function | Evstigneev Roman | done | pass |    |
@@ -559,7 +559,7 @@
 |`construct`| Function | Politov Mikhail | done | pass | |
 |`setImageSpanOptions`| Function | Politov Mikhail | done | pass | |
 |`setVerticalAlign`| Function | Politov Mikhail | done | pass |  |
-|`setColorFilter`| Function | Evstingneev Roman | blocked |  |  |  | blocked by DrawColorFilter |
+|`setColorFilter`| Function | Evstigneev Roman | blocked |  |  |  | blocked by DrawColorFilter |
 |`setObjectFit`| Function | Politov Mikhail | done | pass |  |
 |`setOnComplete`| Function | Politov Mikhail | done | pass |  |
 |`setOnError`| Function | Politov Mikhail | done |  |  |
