@@ -81,29 +81,65 @@ function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGen
   const peerType = Ts.union([T.cc('Finalizable'), T.cc('undefined')])
   const thisType = ctx.useManaged(node).reference();
   const nativeModule = E.v(NATIVE_MODULE_CLASS, [An.isType()])
-  return [
-    Builders.class(name + 'Internal')
-      .method('fromPtr').static()
-        .returns(thisType)
-        .param('ptr').type(Ts.prim.pointer).$().block()
-          .return(thisType).ctor(name).args([E.v('ptr')]).$().$().$().$().$(),
-    Builders.class(name).implements(T.cc('MaterializedBase'))
-      .field('peer').type(peerType).$()
-      .ctor().param('peerPtr').type(Ts.prim.pointer).$().block()
-        .binary('=')
-          .left().access(E.v('this')).member('peer').$().$()
-          .right().ctor('Finalizable')
-            .arg('peerPtr').$()
-            .arg().call().receiverExpr(E.v(name, [An.isType()])).functionName('getFinalizer').$().$().$().$().$().$().$()
-      .method('getPeer').returns(peerType).block()
-        .return(peerType).access(E.v('this')).member('peer').$().$().$().$()
-      // .method('construct').static().returns(ptrType).block()
-      //   .return(ptrType).call().function().access(nativeModule).member(mangleName(name, 'construct')).$().$().$().$().$().$()
-      // .method('getFinalizer').static().returns(Ts.prim.pointer).block()
-      //   .return(Ts.prim.pointer)
-      //     .call().receiverExpr(nativeModule).functionName(mangleName(name, 'getFinalizer')).$().$().$().$()
-      ///methods.foreach(useNativeModule)
-      ///useNativeModule(getFinalizer)
-      .$()
-  ]
+  const intClass = Builders.class(name + 'Internal')
+    .method('fromPtr').static()
+      .returns(thisType)
+      .param('ptr').type(Ts.prim.pointer).$().block()
+        .return(thisType).ctor(name).args([E.v('ptr')]).$().$().$().$()
+  const matClass = Builders.class(name).implements(T.cc('MaterializedBase'))
+  const nativeModuleClass = Builders.class(NATIVE_MODULE_CLASS)
+
+  // peer
+  matClass
+    .field('peer').type(peerType).$()
+    .method('getPeer').returns(peerType).block()
+      .return(peerType).access(E.v('this')).member('peer').$().$().$().$()
+    .method('setPeer').param('peerPtr').type(Ts.prim.pointer).$().block()
+      .binary('=')
+        .left().access(E.v('this')).member('peer').$().$()
+        .right().ctor('Finalizable')
+          .arg('peerPtr').$()
+          .arg().call().receiverExpr(E.v(name, [An.isType()])).functionName('getFinalizer').$().$().$().$().$().$().$()
+
+  // getFinalizer
+  const getFinalizer = 'getFinalizer';
+  matClass.method(getFinalizer).static()
+    .returns(Ts.prim.pointer).block()
+      .return(Ts.prim.pointer).call().function().access(nativeModule).member(mangleName(name, getFinalizer)).$().$().$().$().$().$()
+  nativeModuleClass.method(mangleName(name, getFinalizer))
+    .native().static().annotation('ani.unsafe.Direct')
+    .returns(Ts.prim.pointer).$()
+
+  // constructors
+  node.constructors.forEach(ctor => {
+    matClass.ctor().parameters(ctor.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
+      .block()
+        .call().receiverName('this').functionName('setPeer').arg()
+          .call().function().access(E.v(NATIVE_MODULE_CLASS, [An.isType()])).member(mangleName(name, 'construct')).$().$()
+            .args(ctor.parameters.map(it => E.v(it.name))).$().$().$().$().$()
+    nativeModuleClass.method(mangleName(name, 'construct'))
+      .native().static().annotation('ani.unsafe.Direct')
+      .parameters(ctor.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
+      .returns(Ts.prim.pointer).$()
+  })
+
+  // methods
+  node.methods.forEach(method => {
+    // ctx.useManagedNativeModule(method)
+    const returnType = ctx.useManaged(method.returnType).reference();
+    matClass.method(method.name)
+      .parameters(method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
+      .returns(returnType).block()
+        .return(returnType).call()
+          .function().access(nativeModule).member(mangleName(name, method.name)).$().$()
+          .arg().access().object().access(E.v('this')).member('peer').excl().$().$().member('ptr').$().$()
+          .args(method.parameters.map(it => E.v(it.name)))
+          .$().$().$().$().$()
+    nativeModuleClass.method(mangleName(name, method.name))
+      .native().static().annotation('ani.unsafe.Direct')
+      .param('ptr').type(Ts.prim.pointer).$()
+      .parameters(method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
+      .returns(returnType).$()
+  })
+  return [intClass.$(), matClass.$(), nativeModuleClass.$()]
 }

@@ -23,6 +23,7 @@ const knownHints = {
     named: 'named',
     staticMethod: 'staticMethod',
     stackInstance: 'stackInstance',
+    excl: 'excl',
 }
 
 const knownModifiers = {
@@ -92,7 +93,8 @@ export const An = {
     isType: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.isType }),
     named: (name:string): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.named, value: name }),
     staticMethod: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.staticMethod }),
-    stackInstance: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.stackInstance })
+    stackInstance: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.stackInstance }),
+    excl: (): Hint => ({ kind: DecoratorKind.Hint, name: knownHints.excl }),
 }
 
 export const Md = {

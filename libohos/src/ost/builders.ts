@@ -33,6 +33,7 @@ class AccessorBuilder<P> {
     private _hints: Hint[] = []
     ptr() { this._object?.hints.push(An.ptrVal()); return this }
     static() { this._hints.push(An.staticMethod()); return this }
+    excl() { this._hints.push(An.excl()); return this }
     member(name: string) { this._accessor = name; return this }
     indexExpr(expr: LWExpression) { this._accessor = expr; return this }
     indexStr(str: string) { this._accessor = E.v(str); return this }

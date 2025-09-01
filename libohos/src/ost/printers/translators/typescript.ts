@@ -180,6 +180,9 @@ export class TSPrinter {
           this.printExpression(expression.accessor)
           this.p.put(']')
         }
+        if (utils.hasHint(expression, std.names.hints.excl)) {
+          this.p.put('!')
+        }
         break
       }
       case lw.LWKind.CallExpression: {
