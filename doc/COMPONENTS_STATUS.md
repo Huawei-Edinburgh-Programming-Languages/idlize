@@ -3619,8 +3619,8 @@
 |`setArea`             |Property||||
 |`getProcessName`      |Property||||
 |`setProcessName`      |Property||||
-|*CustomDialogController*| *Class* | Maksimov Nikita | in progress |  | |
-|`construct`| Function |Maksimov Nikita | in progress |  |  |
+|*CustomDialogController*| *Class* | Maksimov Nikita | testskipped |  | |
+|`construct`| Function | Maksimov Nikita | testskipped |  | finished by HQ |
 |`open`| Function | Maksimov Nikita | testskipped |  |  |
 |`close`| Function | Maksimov Nikita | testskipped |  |   |
 |`getExternalOptions`|Function||||
