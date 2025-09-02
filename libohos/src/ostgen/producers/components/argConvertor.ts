@@ -143,10 +143,12 @@ export class ArgConvertor {
         }
         if (idl.isContainerType(type)) {
             if (idl.IDLContainerUtils.isSequence(type)) {
-                const elemType = (this.native ? this.ctx.useCApi : this.ctx.useManaged)(type.elementType[0]).reference()
+                const elemType = this.native
+                    ? this.ctx.useCApi(type.elementType[0])
+                    : this.ctx.useManaged(type.elementType[0])
                 const lengthDecl = Builders.decl('length', Ts.prim.i32).value()
                     .call().receiverExpr(this.sName).functionName('readInt32').$().$().$()
-                const bufferDecl = Builders.decl('buffer', T.c('idlize.Array', elemType)).value()///std name?
+                const bufferDecl = Builders.decl('buffer', T.c('idlize.Array', elemType.reference())).value()///std name?
                     .ctor().args([E.v('length')]).$().$().$()///pass type to ctor
                 const loop = Builders.loop()
                     .init().decl('i', Ts.prim.i32).valueStr(0).$().$()

@@ -126,7 +126,8 @@ function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGen
 
   // methods
   node.methods.forEach(method => {
-    // ctx.useManagedNativeModule(method)
+    ctx.useBridge(method)
+    ctx.useManagedNativeModule(method)
     const returnType = ctx.useManaged(method.returnType).reference();
     matClass.method(method.name)
       .parameters(method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
@@ -136,11 +137,6 @@ function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGen
           .arg().access().object().access(E.v('this')).member('peer').excl().$().$().member('ptr').$().$()
           .args(method.parameters.map(it => E.v(it.name)))
           .$().$().$().$().$()
-    nativeModuleClass.method(mangleName(name, method.name))
-      .native().static().annotation('ani.unsafe.Direct')
-      .param('ptr').type(Ts.prim.pointer).$()
-      .parameters(method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
-      .returns(returnType).$()
   })
   return [intClass.$(), matClass.$(), nativeModuleClass.$()]
 }

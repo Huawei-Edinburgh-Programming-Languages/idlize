@@ -59,12 +59,11 @@ export function printOstFiles(peerLibrary: PeerLibrary): [Map<string, OutputFile
 function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
     const selector = new MakeSelector()
 
-    selector.register(producers.native.serializerProducer)
-    selector.register(producers.managed.serializerProducer)
-
     selector.register(producers.native.enumProducer)
     selector.register(producers.native.unionProducer)
     selector.register(producers.native.structureProducer)
+    selector.register(producers.native.bridgeProducer)
+    selector.register(producers.native.serializerProducer)
 
     selector.register(producers.managed.fileProducer)
     selector.register(producers.managed.referenceProducer)
@@ -77,6 +76,7 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
     selector.register(producers.managed.containerProducer)
     selector.register(producers.managed.typedefProducer)
     selector.register(producers.managed.nativeModuleProducer)
+    selector.register(producers.managed.serializerProducer)
 
     /// fallback producers
     selector.register(createProducer(

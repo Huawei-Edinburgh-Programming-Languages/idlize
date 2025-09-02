@@ -52,8 +52,11 @@ export function mangleName(className: string, methodName: string): string {
   return `_${className.split('.').pop()}_${methodName}`
 }
 
-export function fqName(method: idl.IDLMethod, prefix?: string, postfix?: string): string {
-  return (prefix ?? '') + idl.getFQName(method).split('.').join('_') + (postfix ?? '')
+export function fqName(node: idl.IDLMethod | idl.IDLInterface, prefix?: string, postfix?: string): string {
+  const fqn = idl.isMethod(node) && node.parent && idl.isInterface(node.parent)
+    ? idl.getFQName(node.parent) + '_' + node.name
+    : idl.getFQName(node)
+  return (prefix ?? '') + fqn.split('.').join('_') + (postfix ?? '')
 }
 
 export function nativeModuleName(): string {
