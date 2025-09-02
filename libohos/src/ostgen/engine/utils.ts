@@ -52,8 +52,8 @@ export function mangleName(className: string, methodName: string): string {
   return `_${className.split('.').pop()}_${methodName}`
 }
 
-export function fqName(method: idl.IDLMethod): string {
-  return idl.getFQName(method).split('.').join('_')
+export function fqName(method: idl.IDLMethod, prefix?: string, postfix?: string): string {
+  return (prefix ?? '') + idl.getFQName(method).split('.').join('_') + (postfix ?? '')
 }
 
 export function nativeModuleName(): string {

@@ -62,7 +62,7 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
     const fieldWrites = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
     const nativeModuleCall = Builders.call()
       .receiverExpr(E.v(nativeModuleName(), [Hs.isType()]))
-      .functionName('_' + fqName(method))
+      .functionName(fqName(method, '_'))
       .arg().call().receiverName(serializerName).functionName('asBuffer').$().$()
       .arg().call().receiverName(serializerName).functionName('length').$().$().$()
     const releaseCall = Builders.stmt().call().receiverName(serializerName).functionName('release').$().$()
@@ -92,10 +92,10 @@ function generateModifiers(method: idl.IDLMethod, ctx: AdvancedGeneratorContext)
   return [
     // C API modifier function
     Builders.struct(cApiName('modifier.GlobalScopeModifier'))
-      .field(method.name)
+      .field(fqName(method))
         .funcType().parameters(params).returns(returnType).$().$().$(),
     // implementation declaration
-    Builders.func(implName('modifier.GlobalScope_' + method.name + 'Impl'))
+    Builders.func(implName(fqName(method, 'modifier.GlobalScope_', 'Impl')))
       .parameters(params.map(([name, type]) => ({ name, type })))
       .returns(returnType).$()
   ]
@@ -133,7 +133,7 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
                   .arg(moduleName('_API_VERSION')).$().$().$()
               .member('GlobalScope')
               .ptr().$().$().$().$()
-          .member(method.name)
+          .member(fqName(method))
           .ptr().$().$()
         .args(method.parameters.map(it => E.unary(Op.ref, E.v(it.name)))).$().$().$()
     .macro(`KOALA_INTEROP_DIRECT_${v}2`, ...macroParams, Ts.prim.serializerBuffer, Ts.prim.i32)

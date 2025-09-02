@@ -22,7 +22,7 @@ import { Builders } from "../../../ost/builders";
 export const nativeModuleProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.nativeModule },
   (method, ctx) => {
-    const methodName = '_' + fqName(method)
+    const methodName = fqName(method, '_')
     const className = nativeModuleName();
     return {
       artifact: {
