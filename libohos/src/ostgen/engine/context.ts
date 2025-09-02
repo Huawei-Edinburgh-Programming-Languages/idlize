@@ -13,21 +13,16 @@
  * limitations under the License.
  */
 
-import { Language, NativeModuleType, PeerLibrary } from "@idlizer/core";
+import { PeerLibrary } from "@idlizer/core";
 import * as idl from "@idlizer/core/idl"
 import { lw } from "../../ost";
 import { HistoryTracker } from "./history";
 
 export class IDLTypeResolver {
-    readonly R = new PeerLibrary(Language.TS, new NativeModuleType('__NOT_USED__'), true)
-    constructor(library: idl.IDLFile[]) {
-        library.forEach(file => {
-            this.R.files.push(file)
-        })
-    }
+    constructor(private resolver: PeerLibrary) {}
 
     toDeclaration(ref: idl.IDLReferenceType) {
-        return this.R.resolveTypeReference(ref)
+        return this.resolver.resolveTypeReference(ref)
     }
 }
 
@@ -201,7 +196,7 @@ export class GeneratorContext {
     private historyContext = HistoryTracker.create('<root>')
 
     constructor(
-        public library: idl.IDLFile[],
+        public library: PeerLibrary,
         private selector: MakeSelector,
     ) {
         this.resolver = new IDLTypeResolver(library)

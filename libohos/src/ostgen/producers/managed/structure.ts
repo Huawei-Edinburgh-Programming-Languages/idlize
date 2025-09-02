@@ -28,7 +28,7 @@ export const structureProducer = createSpecialProducer(
     if (node.subkind === idl.IDLInterfaceSubkind.Tuple)
       return makeTuple(node, ctx)
     const declName = managedName(idl.getFQName(node))
-    const generator = isMaterialized(node, ctx.base.resolver.R)
+    const generator = isMaterialized(node, ctx.base.library)
       ? makeMaterialized
       : makeInterface
     return {
@@ -57,7 +57,7 @@ function makeTuple(node: idl.IDLInterface, ctx: AdvancedGeneratorContext): Produ
 }
 
 function makeInterface(node: idl.IDLInterface, name: string, ctx: AdvancedGeneratorContext): LWDeclaration[] {
-  const superType = getSuperType(node, ctx.base.resolver.R)
+  const superType = getSuperType(node, ctx.base.library)
   return [D.class(name,
     node.properties.map(prop => {
       const modifiers = [

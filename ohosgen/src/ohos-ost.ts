@@ -85,7 +85,7 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
             return { artifact: { reference: T.cc("///managed.constant.fallback")}}
         }))
 
-    const ctx = new GeneratorContext(peerLibrary.files, selector)
+    const ctx = new GeneratorContext(peerLibrary, selector)
     return ctx.generate(peerLibrary.files)
 }
 

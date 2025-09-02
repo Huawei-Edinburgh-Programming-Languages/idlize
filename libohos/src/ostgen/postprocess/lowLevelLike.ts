@@ -201,10 +201,17 @@ function makeApis(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
 }
 
 function makeForwardDeclarations(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
-    return decls
-        .filter(it => it.kind === lw.LWKind.StructureDeclaration)
-        .map(it => D.type(it.name, Ts.struct(T.cc(it.name))) as lw.LWDeclaration)
-        .concat(decls)
+    const [forward, typedefs, structs] = decls.reduce<[lw.LWDeclaration[], lw.LWDeclaration[], lw.LWDeclaration[]]>(
+        ([fwd, tdef, str], decl) => {
+            if (decl.kind == lw.LWKind.StructureDeclaration) {
+                str.push(decl)
+                fwd.push(D.type(decl.name, Ts.struct(T.cc(decl.name))))
+            } else {
+                tdef.push(decl)
+            }
+            return [fwd, tdef, str]
+        }, [[], [], []])
+    return [...forward, ...typedefs, ...structs]
 }
 
 class TypeAliasing extends IdentityTransformer {

@@ -74,7 +74,7 @@ function makeSerializerWrite(native: boolean, node: idl.IDLInterface, type: LWTy
     .param('serializer').type(Ts.ref(T.cc('SerializerBase'))).$()
     .param('value').type(type).$()
     .block()
-  if (isMaterialized(node, ctx.base.resolver.R)) {
+  if (isMaterialized(node, ctx.base.library)) {
     return block.call().receiverName('serializer').functionName('writePointer')
       .args([materializedToPtr('value', native)]).$().$().$()
   } else {
@@ -89,7 +89,7 @@ function makeSerializerRead(native: boolean, node: idl.IDLInterface, type: LWTyp
     .param('deserializer').type(Ts.ref(T.cc('DeserializerBase'))).$()
     .returns(type)
     .block()
-  if (isMaterialized(node, ctx.base.resolver.R)) {
+  if (isMaterialized(node, ctx.base.library)) {
     return block
       .decl('ptr', Ts.prim.pointer).value()
         .call().receiverName('deserializer').functionName('readPointer').$().$().$()

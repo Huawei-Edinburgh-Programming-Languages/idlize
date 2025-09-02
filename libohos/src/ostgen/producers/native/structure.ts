@@ -13,9 +13,11 @@
  * limitations under the License.
  */
 
-import { D, Md, T } from "../../../ost"
+import { D, Md, T, Ts } from "../../../ost"
 import * as idl from "@idlizer/core/idl"
-import { cApiName, createSpecialProducer, roles } from "../common"
+import { AdvancedGeneratorContext, cApiName, createSpecialProducer, roles } from "../common"
+import { LWDeclaration } from "../../../ost/lws"
+import { isMaterialized } from "@idlizer/core"
 
 export const structureProducer = createSpecialProducer(
   { is: idl.isInterface, role: roles.cApi },
@@ -24,21 +26,30 @@ export const structureProducer = createSpecialProducer(
     return {
       artifact: {
         reference: T.cc(name),
-        implementationGenerator: () => {
-          return [D.struct(name, node.properties.map(prop => {
-            const modifiers = [
-              ...prop.isOptional ? [Md.optional()] : [],
-              ...prop.isReadonly ? [Md.readonly()] : [],
-              ...prop.isStatic ? [Md.static()] : [],
-            ]
-            return {
-              name: prop.name,
-              type: ctx.useCApi(prop.type).reference(),
-              modifiers,
-            }
-          }))]
-        },
+        implementationGenerator: () => [
+          isMaterialized(node, ctx.base.library)
+            ? makeMaterialized(name)
+            : makeInterface(node, name, ctx)]
       }
     }
   }
 )
+
+function makeInterface(node: idl.IDLInterface, name: string, ctx: AdvancedGeneratorContext): LWDeclaration {
+  return D.struct(name, node.properties.map(prop => {
+    const modifiers = [
+      ...prop.isOptional ? [Md.optional()] : [],
+      ...prop.isReadonly ? [Md.readonly()] : [],
+      ...prop.isStatic ? [Md.static()] : [],
+    ]
+    return {
+      name: prop.name,
+      type: ctx.useCApi(prop.type).reference(),
+      modifiers,
+    }
+  }))
+}
+
+function makeMaterialized(name: string): LWDeclaration {
+  return D.type(name, Ts.ptr(Ts.prim.void))
+}
