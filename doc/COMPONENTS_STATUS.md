@@ -530,7 +530,7 @@
 |`setDraggable`| Function | Evstigneev Roman | done | pass |   |
 |`setPointLight`| Function | Evstigneev Roman | done | pass |    |
 |`setEdgeAntialiasing`| Function | Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`setOnComplete`| Function | Evstigneev Roman | done | failed | OHOSUI-2409 |
+|`setOnComplete`| Function | Evstigneev Roman | done | pass |    |
 |`setOnError`| Function | Evstigneev Roman | done | pass | |
 |`setOnFinish`| Function | Evstigneev Roman | done | failed | same in ArkUI, https://gitee.com/openharmony/arkui_ace_engine/issues/ICG623 |
 |`setEnableAnalyzer`| Function | Evstigneev Roman | done | pass | |
