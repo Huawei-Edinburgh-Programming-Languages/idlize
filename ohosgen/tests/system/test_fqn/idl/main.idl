@@ -2,13 +2,13 @@ package main;
 
 import deps.Size as IntSize;
 
-//interface Size {
-//    attribute number numHeight;
-//    attribute number numWidth;
-//};
+interface Size {
+    attribute number numHeight;
+    attribute number numWidth;
+};
 
 interface Sizes {
-//    attribute Size numSize;
+    attribute Size numSize;
     attribute IntSize intSize;
     attribute deps.fp.Size floatSize;
 

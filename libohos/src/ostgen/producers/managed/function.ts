@@ -88,7 +88,7 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
 function generateModifiers(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
   const returnType = ctx.useCApi(method.returnType).reference();
   const params: [string, LWType][] = method.parameters.map(it =>
-    [it.name, Ts.const(Ts.ptr(ctx.useCApi(it.type).reference()))])
+    [it.name, Ts.ptr(ctx.useCApi(it.type).reference())])
   return [
     // C API modifier function
     Builders.struct(cApiName('modifier.GlobalScopeModifier'))
@@ -109,6 +109,12 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
     Builders
       .decl(it.name, ctx.useCApi(it.type).reference())
         .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$())
+  const macroParams = [name]
+  let v = 'V'
+  if (method.returnType !== idl.IDLVoidType) {
+    v = ''
+    macroParams.push('KInteropNumber')///
+  }
   return Builders.func(bridgeName('modifier.impl_' + name))
     .param('thisArray').type(Ts.prim.serializerBuffer).$()
     .param('thisLength').type(Ts.prim.i32).$()
@@ -130,9 +136,6 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
           .member(method.name)
           .ptr().$().$()
         .args(method.parameters.map(it => E.unary(Op.ref, E.v(it.name)))).$().$().$()
-    .macro(`KOALA_INTEROP_DIRECT_${method.returnType === idl.IDLVoidType ? 'V' : ''}2`,
-      name,
-      Ts.prim.serializerBuffer,
-      Ts.prim.i32)
+    .macro(`KOALA_INTEROP_DIRECT_${v}2`, ...macroParams, Ts.prim.serializerBuffer, Ts.prim.i32)
     .$()
 }

@@ -62,9 +62,9 @@ void FooInt_setValueImpl(OH_TEST_MODULES_SIMPLE_FooInt thisPtr, const OH_Number*
     obj->value = *value;
 }
 
-OH_Number GlobalScope_bar_getIntWithFooImpl(OH_TEST_MODULES_SIMPLE_FooInt foo) {
+OH_Number GlobalScope_getIntWithFooImpl(OH_TEST_MODULES_SIMPLE_FooInt* foo) {
     std::cout << "GlobalScope_bar_getIntWithFooImpl(foo)" << std::endl;
-    MyFooInt* obj = reinterpret_cast<MyFooInt*>(foo);
+    MyFooInt* obj = reinterpret_cast<MyFooInt*>(*foo);
     std::cout << "foo->value = " << DumpOHNumber(obj->value) << std::endl;
     return obj->value;
 }
