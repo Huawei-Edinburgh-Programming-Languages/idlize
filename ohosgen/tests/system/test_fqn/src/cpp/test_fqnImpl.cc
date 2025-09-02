@@ -2,7 +2,7 @@
 #include "oh_common.h"
 #include <iostream>
 
-void GlobalScope_main_resizeImpl(OH_TEST_FQN_Sizes* arg) {
+void main_resizeImpl(OH_TEST_FQN_Sizes* arg) {
     std::cout << "resize(numSize=" << DumpOHNumber(arg->numSize.numWidth) << "x" << DumpOHNumber(arg->numSize.numHeight)
               << ", intSize=" << arg->intSize.intWidth << "x" << arg->intSize.intHeight
               << ", floatSize=" << arg->floatSize.floatWidth << "x" << arg->floatSize.floatHeight

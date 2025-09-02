@@ -48,7 +48,7 @@ function generateFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) 
     .returns(returnType)
     .block()
       .return(returnType)
-        .call().receiverName(GLOBAL_SCOPE_NAME, [Hs.isType()]).functionName(method.name)
+        .call().receiverName(GLOBAL_SCOPE_NAME, [Hs.isType()]).functionName(fqName(method))
         .args(method.parameters.map(it => E.v(it.name))).$()
     .$().$().$()
 }
@@ -79,7 +79,7 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
       statements.push(S.e(nativeModuleCall), releaseCall)
     }
     return Builders.class(GLOBAL_SCOPE_NAME)
-      .method(method.name).static()
+      .method(fqName(method)).static()
         .parameters(params)
         .returns(returnType)
         .block().statements(statements).$().$().$()
@@ -95,27 +95,26 @@ function generateModifiers(method: idl.IDLMethod, ctx: AdvancedGeneratorContext)
       .field(fqName(method))
         .funcType().parameters(params).returns(returnType).$().$().$(),
     // implementation declaration
-    Builders.func(implName(fqName(method, 'modifier.GlobalScope_', 'Impl')))
+    Builders.func(implName(fqName(method, 'modifier.', 'Impl')))
       .parameters(params.map(([name, type]) => ({ name, type })))
       .returns(returnType).$()
   ]
 }
 
 function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
-  const name = fqName(method)
   const returnType = ctx.useCApi(method.returnType).reference();
   const convertor = new ArgConvertor(ctx, E.v('deserializer'), true)
   const argReads = method.parameters.map(it =>
     Builders
       .decl(it.name, ctx.useCApi(it.type).reference())
         .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$())
-  const macroParams = [name]
+  const macroParams = [fqName(method)]
   let v = 'V'
   if (method.returnType !== idl.IDLVoidType) {
     v = ''
     macroParams.push('KInteropNumber')///
   }
-  return Builders.func(bridgeName('modifier.impl_' + name))
+  return Builders.func(bridgeName(fqName(method, 'modifier.impl_')))
     .param('thisArray').type(Ts.prim.serializerBuffer).$()
     .param('thisLength').type(Ts.prim.i32).$()
     .returns(returnType)

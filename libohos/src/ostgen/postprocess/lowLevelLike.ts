@@ -179,7 +179,7 @@ function makeApis(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
             .block()
                 .decl('instance', T.cc(decl.name)).static().value()
                     .ctor().asStruct().args(
-                        decl.members.map(it => E.unary(Op.ref, E.v(`${className}_${it.name}Impl`)))).$().$().$()
+                        decl.members.map(it => E.unary(Op.ref, E.v(it.name + 'Impl')))).$().$().$()
                 .return().valueExpr(E.unary(Op.ref, E.v('instance'))).$().$().$()
         modifierImpls.push(modifierImpl)
         // modifier implementation pointer in the API implementation struct
