@@ -519,7 +519,7 @@ class FunctionBuilder<P> {
     $(): P {
         return this._cont(
             DD({generics: [], modifiers: this._modifiers})
-                .func(this._name!, this._parameters,
+                .func(this._name, this._parameters,
                     this._returnType ?? Ts.prim.void,
                     this._body, this._annotations))
     }

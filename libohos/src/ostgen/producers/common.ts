@@ -14,14 +14,12 @@
  */
 
 import * as idl from "@idlizer/core/idl"
-import { createProducer, GeneratorContext, MakeSelectorPattern, MakeSelectorQuery, Producer, ProducerBox, ProducerDescription } from "../engine/context"
+import { createProducer, GeneratorContext, MakeSelectorPattern, MakeSelectorQuery, ProducerBox, ProducerDescription } from "../engine/context"
 
 export const MANAGED_PREFIX = 'managed'
 export const C_API_PREFIX = 'capi'
 export const BRIDGE_PREFIX = 'bridge'
 export const IMPL_PREFIX = 'impl'
-
-export const NATIVE_MODULE_CLASS = managedName('engine.NativeModule')
 
 export const roles = {
     managed: MANAGED_PREFIX,

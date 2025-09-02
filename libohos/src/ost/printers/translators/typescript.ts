@@ -465,29 +465,31 @@ export class TSPrinter {
           }
           this.p.put(' ')
         })
-        if (this.scope.at(-1) !== 'member') {
-          this.p.put('export', ' ', 'function', ' ')
-        }
-        const isCtor = std.names.members.ctor === declaration.name
-        if (isCtor) {
-          this.p.put('constructor')
-        } else {
-          this.p.put(declaration.name)
-        }
-        this.printGenerics(declaration.generics)
-        this.p.put('(')
-        declaration.parameters.forEach((param, i) => {
-          if (i > 0) {
-            this.p.put(',', ' ')
+        if (declaration.name) {
+          if (this.scope.at(-1) !== 'member') {
+            this.p.put('export', ' ', 'function', ' ')
           }
-          this.p.put(param.name)
-          this.p.put(':', ' ')
-          this.printType(param.type)
-        })
-        this.p.put(')')
-        if (!isCtor) {
-          this.p.put(':', ' ')
-          this.printType(declaration.returnType)
+          const isCtor = std.names.members.ctor === declaration.name
+          if (isCtor) {
+            this.p.put('constructor')
+          } else {
+            this.p.put(declaration.name)
+          }
+          this.printGenerics(declaration.generics)
+          this.p.put('(')
+          declaration.parameters.forEach((param, i) => {
+            if (i > 0) {
+              this.p.put(',', ' ')
+            }
+            this.p.put(param.name)
+            this.p.put(':', ' ')
+            this.printType(param.type)
+          })
+          this.p.put(')')
+          if (!isCtor) {
+            this.p.put(':', ' ')
+            this.printType(declaration.returnType)
+          }
         }
         if (declaration.body) {
           this.p.put(' ')

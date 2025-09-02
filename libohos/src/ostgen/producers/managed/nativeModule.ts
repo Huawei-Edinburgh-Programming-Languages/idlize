@@ -15,19 +15,20 @@
 
 import * as idl from "@idlizer/core/idl";
 import { Hs, E, Ts } from "../../../ost";
-import { createSpecialProducer, NATIVE_MODULE_CLASS, roles } from "../common";
-import { fqName } from "../../engine";
+import { createSpecialProducer, roles } from "../common";
+import { fqName, nativeModuleName } from "../../engine";
 import { Builders } from "../../../ost/builders";
 
 export const nativeModuleProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.nativeModule },
   (method, ctx) => {
-    const methodName = fqName(method)
+    const methodName = '_' + fqName(method)
+    const className = nativeModuleName();
     return {
       artifact: {
-        reference: E.get(E.v(NATIVE_MODULE_CLASS, [Hs.isType()]), methodName),
+        reference: E.get(E.v(className, [Hs.isType()]), methodName),
         implementationGenerator: () => [
-          Builders.class(NATIVE_MODULE_CLASS)
+          Builders.class(className)
             .method(methodName)
               .native().static().annotation('ani.unsafe.Direct')
               .param('buffer').type(Ts.prim.serializerBuffer).$()

@@ -95,7 +95,7 @@ export function generateOhos(outDir: string, peerLibrary: PeerLibrary, useOst: b
                 createSerializerPrinter(peerLibrary.language, "")),
             printCallbackChecker,
             createDeserializeAndCallPrinter(peerLibrary.name, peerLibrary.language),
-            createGeneratedNativeModulePrinter(NativeModule.Generated),
+            ...spread(!useOst, createGeneratedNativeModulePrinter(NativeModule.Generated)),
             ...spread(!useOst && peerLibrary.language === Language.ARKTS, printArkTSTypeChecker),
         ]
     )

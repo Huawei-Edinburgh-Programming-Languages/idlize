@@ -16,9 +16,9 @@
 import { Hs, D, E, Md, std, T, Ts } from "../../../ost";
 import * as idl from "@idlizer/core/idl"
 import { makePeerMethod } from "../components/peerMethod";
-import { AdvancedGeneratorContext, createSpecialProducer, managedName, NATIVE_MODULE_CLASS, roles } from "../common";
+import { AdvancedGeneratorContext, createSpecialProducer, managedName, roles } from "../common";
 import { getSuperType, isMaterialized } from "@idlizer/core";
-import { mangleName, moduleName, ProducerDescription } from "../../engine";
+import { mangleName, moduleName, nativeModuleName, ProducerDescription } from "../../engine";
 import { LWDeclaration } from "../../../ost/lws";
 import { Builders } from "../../../ost/builders";
 
@@ -78,16 +78,17 @@ function makeInterface(node: idl.IDLInterface, name: string, ctx: AdvancedGenera
 }
 
 function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGeneratorContext): LWDeclaration[] {
+  const nativeModuleClassName = nativeModuleName();
   const peerType = Ts.union([T.cc('Finalizable'), T.cc('undefined')])
   const thisType = ctx.useManaged(node).reference();
-  const nativeModule = E.v(NATIVE_MODULE_CLASS, [Hs.isType()])
+  const nativeModule = E.v(nativeModuleClassName, [Hs.isType()])
   const intClass = Builders.class(name + 'Internal')
     .method('fromPtr').static()
       .returns(thisType)
       .param('ptr').type(Ts.prim.pointer).$().block()
         .return(thisType).ctor(name).args([E.v('ptr')]).$().$().$().$()
   const matClass = Builders.class(name).implements(T.cc('MaterializedBase'))
-  const nativeModuleClass = Builders.class(NATIVE_MODULE_CLASS)
+  const nativeModuleClass = Builders.class(nativeModuleClassName)
 
   // peer
   matClass
@@ -115,7 +116,7 @@ function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGen
     matClass.ctor().parameters(ctor.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
       .block()
         .call().receiverName('this').functionName('setPeer').arg()
-          .call().function().access(E.v(NATIVE_MODULE_CLASS, [Hs.isType()])).member(mangleName(name, 'construct')).$().$()
+          .call().function().access(nativeModule).member(mangleName(name, 'construct')).$().$()
             .args(ctor.parameters.map(it => E.v(it.name))).$().$().$().$().$()
     nativeModuleClass.method(mangleName(name, 'construct'))
       .native().static().annotation('ani.unsafe.Direct')

@@ -17,6 +17,7 @@ import * as idl from "@idlizer/core/idl"
 import { generatorConfiguration } from "@idlizer/core"
 import { readdirSync, statSync } from "node:fs"
 import { join } from "node:path"
+import { managedName } from "../producers/common"
 
 export function throwError(msg:string): never {
     throw new Error(msg)
@@ -32,7 +33,7 @@ export function mkName(...chunks:string[]): string {
   return chunks.join('.')
 }
 
-export function mapName(name: string): string {
+export function mapFileName(name: string): string {
   return name
       .replace(/^managed\./, '')
       .replace(/^native\./, '')
@@ -53,4 +54,8 @@ export function mangleName(className: string, methodName: string): string {
 
 export function fqName(method: idl.IDLMethod): string {
   return idl.getFQName(method).split('.').join('_')
+}
+
+export function nativeModuleName(): string {
+  return managedName('engine.' + moduleName('NativeModule'))///substitute name @type aliasing step?
 }

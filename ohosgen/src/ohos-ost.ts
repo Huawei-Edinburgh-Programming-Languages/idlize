@@ -33,7 +33,7 @@ import {
     roles,
     processNPrintTS,
     createProducer,
-    mapName,
+    mapFileName,
     TargetFile,
     readLangTemplate,
     getInteropRootPath,
@@ -109,7 +109,7 @@ function dumpTsLike(decls: LWDeclaration[], language: Language, packages: Set<st
     const result: Map<string, OutputFile> = new Map()
     const printer = language === Language.ARKTS ? processNPrintArkTS : processNPrintTS
     files.forEach((content, fileName) => {
-        const mappedName = mapName(fileName)
+        const mappedName = mapFileName(fileName)
         if (!mappedName)
             return
         const printed = content.body.map(it => printer(it, fileName, packages))

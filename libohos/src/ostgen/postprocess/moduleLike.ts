@@ -16,7 +16,7 @@
 import { Builders } from "../../ost/builders";
 import { D, IdentityTransformer, lw, std, T, utils } from "../../ost";
 import { ImportsCollector } from "../../peer-generation/ImportsCollector";
-import { mapName } from "../engine/utils";
+import { mapFileName, moduleName, nativeModuleName } from "../engine/utils";
 import { managedName } from "../producers/common";
 import { mergeStructs } from "./postprocess";
 import { generatorConfiguration } from "@idlizer/core";
@@ -25,12 +25,22 @@ export function postprocess(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     decls = mergeNamespaces(decls)
     decls = mergeStructs(decls)
     decls = introduceTypeChecker(decls)
+    decls = loadNativeModule(decls)
     return decls
 }
 
 function introduceTypeChecker(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
     ///arkts only
     return decls.concat(Builders.class(managedName('engine.TypeChecker')).$())
+}
+
+function loadNativeModule(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
+    const name = nativeModuleName();
+    const nativeModule = decls.find(it => it.name == name) as lw.ClassDeclaration
+    nativeModule.methods.unshift(
+        Builders.func('').static().block()
+            .call().functionName('loadNativeModuleLibrary').arg(`"${moduleName('NativeModule')}"`).$().$().$().$())
+    return decls
 }
 
 function mergeNamespaces(decls: lw.LWDeclaration[]): lw.LWDeclaration[] {
@@ -114,7 +124,7 @@ class RefSearcher extends IdentityTransformer {
             if (record === this.fileName)
                 return this.trimNs(val)
             const baseName = this.getBase(val);
-            const source = mapName(record)
+            const source = mapFileName(record)
             const conflictingNames = this.seenNames.get(baseName)
             if (conflictingNames) {
                 const alias = source + '_' + baseName
@@ -223,8 +233,8 @@ function defaultImports(): ImportsCollector {
     const imports = new ImportsCollector()
     imports.addFeatures([
         'SerializerBase', 'DeserializerBase',
-        'MaterializedBase', 'Finalizable', 'KPointer', 'toPeerPtr'
+        'MaterializedBase', 'Finalizable', 'KPointer', 'toPeerPtr',
+        'loadNativeModuleLibrary',
     ], '@koalaui/interop')
-    imports.addFeature('NativeModule', `./${generatorConfiguration().moduleName}.INTERNAL`)
     return imports
 }

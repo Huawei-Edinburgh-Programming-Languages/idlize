@@ -14,14 +14,14 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { AdvancedGeneratorContext, cApiName, createSpecialProducer, managedName, bridgeName, roles, implName, NATIVE_MODULE_CLASS } from "../common";
+import { AdvancedGeneratorContext, cApiName, createSpecialProducer, managedName, bridgeName, roles, implName } from "../common";
 import { E, S, T } from "../../../ost/builder";
 import { Builders } from "../../../ost/builders";
 import { ArgConvertor } from "../components/argConvertor";
 import { generatorConfiguration } from "@idlizer/core";
 import { Hs, Op, Ts } from "../../../ost/stdlib";
 import { LWType } from "../../../ost/lws";
-import { fqName as nativeModuleMethodName, moduleName } from "../../engine";
+import { fqName, moduleName, nativeModuleName } from "../../engine";
 
 export const functionProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.managed },
@@ -61,8 +61,8 @@ function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGenerat
     const convertor = new ArgConvertor(ctx, E.v(serializerName), false)
     const fieldWrites = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
     const nativeModuleCall = Builders.call()
-      .receiverExpr(E.v(NATIVE_MODULE_CLASS, [Hs.isType()]))
-      .functionName(nativeModuleMethodName(method))
+      .receiverExpr(E.v(nativeModuleName(), [Hs.isType()]))
+      .functionName('_' + fqName(method))
       .arg().call().receiverName(serializerName).functionName('asBuffer').$().$()
       .arg().call().receiverName(serializerName).functionName('length').$().$().$()
     const releaseCall = Builders.stmt().call().receiverName(serializerName).functionName('release').$().$()
@@ -102,13 +102,14 @@ function generateModifiers(method: idl.IDLMethod, ctx: AdvancedGeneratorContext)
 }
 
 function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
-  const convertor = new ArgConvertor(ctx, E.v('deserializer'), true)
+  const name = fqName(method)
   const returnType = ctx.useCApi(method.returnType).reference();
+  const convertor = new ArgConvertor(ctx, E.v('deserializer'), true)
   const argReads = method.parameters.map(it =>
     Builders
       .decl(it.name, ctx.useCApi(it.type).reference())
         .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$())
-  return Builders.func(bridgeName('modifier.impl_GlobalScope_' + method.name))
+  return Builders.func(bridgeName('modifier.impl_' + name))
     .param('thisArray').type(Ts.prim.serializerBuffer).$()
     .param('thisLength').type(Ts.prim.i32).$()
     .returns(returnType)
@@ -129,8 +130,8 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
           .member(method.name)
           .ptr().$().$()
         .args(method.parameters.map(it => E.unary(Op.ref, E.v(it.name)))).$().$().$()
-    .macro('KOALA_INTEROP_DIRECT_V2',
-      'GlobalScope_' + method.name,
+    .macro(`KOALA_INTEROP_DIRECT_${method.returnType === idl.IDLVoidType ? 'V' : ''}2`,
+      name,
       Ts.prim.serializerBuffer,
       Ts.prim.i32)
     .$()
