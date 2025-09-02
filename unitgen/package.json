@@ -1,0 +1,22 @@
+{
+  "name": "sandbox-ws",
+  "version": "1.0.0",
+  "private": true,
+  "main": "build/lib/main.js",
+  "scripts": {
+    "compile": "npm run -C ../core compile && npm run -C ../libohos compile && npm run compile:self",
+    "compile:self": "rollup -c"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "rollup": "^4.44.1",
+    "typescript": "^5.8.3",
+    "@idlizer/core": "2.1.7+devel",
+    "@idlizer/libohos": "2.1.7+devel"
+  }
+}
