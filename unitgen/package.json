@@ -2,10 +2,11 @@
   "name": "sandbox-ws",
   "version": "1.0.0",
   "private": true,
-  "main": "build/lib/main.js",
+  "main": "lib/main.js",
   "scripts": {
     "compile": "npm run -C ../core compile && npm run -C ../libohos compile && npm run compile:self",
-    "compile:self": "rollup -c"
+    "compile:self": "rollup -c",
+    "go": "npm run compile && node . ../etsgen/out ../interfaces/interfaces/arkui-extra"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "rollup": "^4.44.1",
     "typescript": "^5.8.3",
     "@idlizer/core": "2.1.7+devel",
-    "@idlizer/libohos": "2.1.7+devel"
+    "@idlizer/libohos": "2.1.7+devel",
+    "@types/node": "^18.0.0"
   }
 }

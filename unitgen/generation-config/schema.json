@@ -1,0 +1,435 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/configSchema",
+    "definitions": {
+        "configSchema": {
+            "additionalProperties": false,
+            "properties": {
+                "TypePrefix": {
+                    "type": "string"
+                },
+                "LibraryPrefix": {
+                    "type": "string"
+                },
+                "OptionalPrefix": {
+                    "type": "string"
+                },
+                "rootComponents": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "standaloneComponents": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "parameterized": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ignoreMaterialized": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ignoreGenerics": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "builderClasses": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "forceMaterialized": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "forceCallback": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "forceResource": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "forceContext": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "hooks": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "hookName": {
+                                    "type": "string"
+                                },
+                                "replaceImplementation": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "required": [
+                                "hookName",
+                                "replaceImplementation"
+                            ],
+                            "type": "object"
+                        }
+                    }
+                },
+                "moduleName": {
+                    "type": "string"
+                },
+                "modules": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "additionalProperties": false,
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "external": {
+                                "type": "boolean"
+                            },
+                            "packages": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "useFoldersLayout": {
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "packages"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "libraryNameMapping": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "globalPackages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "GenerateUnused": {
+                    "type": "boolean"
+                },
+                "ApiKind": {
+                    "type": "number"
+                },
+                "ApiVersion": {
+                    "type": "number"
+                },
+                "dumpSerialized": {
+                    "type": "boolean"
+                },
+                "boundProperties": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "currentModulePackagesPaths": {
+                    "type": "array",
+                    "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                            "package": {
+                                "type": "string"
+                            },
+                            "path": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "package",
+                            "path"
+                        ],
+                        "type": "object"
+                    }
+                },
+                "currentModuleExportedPackages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "cppPrefix": {
+                    "type": "string"
+                },
+                "components": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "ignoreComponents": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "ignorePeerMethod": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "ignoreTypeParameters": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "invalidAttributes": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "customNodeTypes": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "ignoreEntry": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "ignoreEntryJava": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "custom": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "handWritten": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "replaceThrowErrorReturn": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "ignoreComponents",
+                        "ignorePeerMethod",
+                        "ignoreTypeParameters",
+                        "invalidAttributes",
+                        "customNodeTypes",
+                        "ignoreEntry",
+                        "ignoreEntryJava",
+                        "custom",
+                        "handWritten",
+                        "replaceThrowErrorReturn"
+                    ],
+                    "type": "object"
+                },
+                "dummy": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "ignoreMethods": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "required": [
+                        "ignoreMethods"
+                    ],
+                    "type": "object"
+                },
+                "materialized": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "ignoreReturnTypes": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "ignoreReturnTypes"
+                    ],
+                    "type": "object"
+                },
+                "serializer": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "ignore": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "ignore"
+                    ],
+                    "type": "object"
+                },
+                "constants": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "patchMaterialized": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "IDLVisitor": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "DeletedDeclarations": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "DeletedMethods": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "StubbedDeclarations": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "NameReplacements": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                    "items": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "string"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "ForceDefaultExport": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        },
+                        "TypeReplacementsFilePath": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "DeletedDeclarations",
+                        "DeletedMethods",
+                        "StubbedDeclarations",
+                        "NameReplacements",
+                        "TypeReplacementsFilePath"
+                    ],
+                    "type": "object"
+                },
+                "$schema": {
+                    "type": "string",
+                    "description": "The schema to verify this document against."
+                }
+            },
+            "required": [
+                "TypePrefix",
+                "LibraryPrefix",
+                "OptionalPrefix",
+                "rootComponents",
+                "standaloneComponents",
+                "parameterized",
+                "ignoreMaterialized",
+                "ignoreGenerics",
+                "builderClasses",
+                "forceMaterialized",
+                "forceCallback",
+                "forceResource",
+                "forceContext",
+                "hooks",
+                "moduleName",
+                "modules",
+                "globalPackages",
+                "GenerateUnused",
+                "ApiKind",
+                "ApiVersion",
+                "dumpSerialized",
+                "boundProperties",
+                "cppPrefix",
+                "components",
+                "dummy",
+                "materialized",
+                "serializer",
+                "IDLVisitor"
+            ],
+            "type": "object"
+        }
+    }
+}

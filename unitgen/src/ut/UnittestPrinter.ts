@@ -28,14 +28,12 @@ import {
     capitalize,
     createEmptyReferenceResolver,
     createLanguageWriter,
-    groupBy,
-    printMethodDeclaration,
 } from '@idlizer/core'
 import { collectPeersForFile, cStyleCopyright, gniFile, makeFileNameFromClassName } from '@idlizer/libohos'
 import { AceTypes } from './AceTypes'
 import { TestValue } from './TestValue'
 import { TypeHelper } from './TypeHelper'
-import { LibaceInstall } from '../ArkoalaInstall'
+import { LibaceInstall } from './LibaceInstall'
 
 const CPP_FILE_LENGTH_LIMIT = 2000
 const ALL_UPPER = new RegExp('^[A-Z0-9_]+$')
