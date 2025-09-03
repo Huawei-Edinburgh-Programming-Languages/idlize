@@ -300,7 +300,6 @@
 |`setBlur`| Function | Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setLinearGradientBlur`| Function |Lobah Mikhail | done | failed | linearGradientBlur1 not implemented |
 |`setSystemBarEffect`| Function | Lobah Mikhail | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
-|`setUseEffect1`| Function | Evstigneev Roman | in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setBackdropBlur`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setSharedTransition`|Function|Skroba Gleb | done | test blocked | navigation between pages does not work to check transition, commented ViewAbstract static methods code |
 |`setChainMode`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
