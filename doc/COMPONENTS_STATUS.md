@@ -196,7 +196,7 @@
 |`setHueRotate`| Function |Lobah Mikhail | done | pass | |
 |`setUseShadowBatching`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
 |`setUseEffect0`| Function |Lobah Mikhail | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
-|`setUseEffect1`| Function | Evstigneev Roman | in progress | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`setUseEffect1`| Function | Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setRenderGroup`| Function |Lobah Mikhail | done  | failed | same as arkui, but looks like there is an issue in ace_engine, commented ViewAbstract static methods code |
 |`setFreeze`| Function | Lobah Mikhail | done | failed | method does not work https://gitee.com/openharmony/arkui_ace_engine/issues/IC851K, commented ViewAbstract static methods code |
 |`setTranslate`| Function | Erokhin Ilya | done | failed | commented ViewAbstract static methods code |
