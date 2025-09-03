@@ -69,9 +69,7 @@ import { arkoalaLayout, ArkTSComponentsLayout, ArkTsLayout } from "./ArkoalaLayo
 import { printETSDeclaration } from "./printers/StsComponentsPrinter"
 import { platform } from "node:os";
 
-const External = path.join(__dirname, "../../external")
-const ExternalStubs = path.join(External, "subset")
-const Subset = path.join(__dirname, "../external-subset")
+const SUBSET_PATH = path.join(__dirname, "../external-subset")
 
 export function generateLibaceFromIdl(config: {
     libaceDestination: string | undefined,
@@ -109,47 +107,36 @@ export function generateLibaceFromIdl(config: {
         fs.writeFileSync(libace.mesonBuild, mesonBuildFile(mesonBuild))
     }
 
-    copyToLibace(fs.existsSync(Subset) ? Subset : External, libace)
+    copyToLibace(SUBSET_PATH, libace)
+}
+
+function copyFiles(arkoala: ArkoalaInstall, files: string[], ...fromFallbacks: string[]) {
+    for (const file of files) {
+        let found = false
+        for (const from of fromFallbacks) {
+            const fromPath = path.join(from, file)
+            if (fs.existsSync(fromPath)) {
+                found = true
+                copyFile(fromPath, path.join(arkoala.root, file))
+                break
+            }
+        }
+        if (!found) {
+            throw new Error(`Template for file ${file} was not found in paths ${fromFallbacks.join(':')}`)
+        }
+    }
+    return
 }
 
 function copyArkoalaFiles(config: {
     onlyIntegrated: boolean | undefined
 }, arkoala: ArkoalaInstall) {
-    const subsetJson = path.join(fs.existsSync(Subset) ? Subset : ExternalStubs, 'subset.json')
-    const subsetData = JSON.parse(fs.readFileSync(subsetJson).toString())
-    if (!subsetData) throw new Error(`Cannot parse ${subsetJson}`)
-    const copyFiles = (files: string, ...fromFallbacks: string[]) => {
-        for (const file of files) {
-            let found = false
-            for (const from of fromFallbacks) {
-                const fromPath = path.join(from, file)
-                if (fs.existsSync(fromPath)) {
-                    found = true
-                    copyFile(fromPath, path.join(arkoala.root, file))
-                    break
-                }
-            }
-            if (!found) {
-                throw new Error(`Template for file ${file} was not found in paths ${fromFallbacks.join(':')}`)
-            }
-        }
-        return
-    }
-
+    const subsetData = JSON.parse(fs.readFileSync(path.join(SUBSET_PATH, 'subset.json'), 'utf-8'))
     if (config.onlyIntegrated) {
-        copyFiles(subsetData.generatedSubset, fs.existsSync(Subset) ? Subset : ExternalStubs)
+        copyFiles(arkoala, subsetData.generatedSubset, SUBSET_PATH)
         return
     }
-
-    if (fs.existsSync(Subset)) {
-        copyFiles(subsetData.subset, Subset)
-    } else {
-        copyFiles(subsetData.subset, ExternalStubs, External)
-    }
-}
-
-function removeSuffix(path: string, suffix: string): string {
-    return path.endsWith(suffix) ? path.slice(0, -suffix.length) : path;
+    copyFiles(arkoala, subsetData.subset, SUBSET_PATH)
 }
 
 export function generateArkoalaFromIdl(config: {
