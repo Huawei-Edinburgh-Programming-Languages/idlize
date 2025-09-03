@@ -39,7 +39,7 @@ void FooInt_destructImpl(OH_TEST_MODULES_SIMPLE_FooInt thiz) {
     delete reinterpret_cast<MyFooInt*>(thiz);
 }
 
-OH_Number FooInt_getIntImpl(OH_TEST_MODULES_SIMPLE_FooInt thisPtr, const OH_Number* offset) {
+OH_Number foo_FooInt_getIntImpl(OH_TEST_MODULES_SIMPLE_FooInt thisPtr, const OH_Number* offset) {
     auto* obj = reinterpret_cast<MyFooInt*>(thisPtr);
     std::cout << "FooInt_getIntImpl(thisPtr, offset)"
               << "\n  thisPtr->value = " << DumpOHNumber(obj->value)
@@ -62,7 +62,7 @@ void FooInt_setValueImpl(OH_TEST_MODULES_SIMPLE_FooInt thisPtr, const OH_Number*
     obj->value = *value;
 }
 
-OH_Number bar_bar_getIntWithFooImpl(OH_TEST_MODULES_SIMPLE_FooInt* foo) {
+OH_Number bar_bar_getIntWithFooImpl(const OH_TEST_MODULES_SIMPLE_FooInt* foo) {
     std::cout << "bar_bar_getIntWithFooImpl(foo)" << std::endl;
     MyFooInt* obj = reinterpret_cast<MyFooInt*>(*foo);
     std::cout << "foo->value = " << DumpOHNumber(obj->value) << std::endl;

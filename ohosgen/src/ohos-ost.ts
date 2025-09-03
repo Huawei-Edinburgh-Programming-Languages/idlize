@@ -62,6 +62,7 @@ function generateOstDeclarations(peerLibrary: PeerLibrary): LWDeclaration[] {
     selector.register(producers.native.enumProducer)
     selector.register(producers.native.unionProducer)
     selector.register(producers.native.structureProducer)
+    selector.register(producers.native.functionProducer)
     selector.register(producers.native.bridgeProducer)
     selector.register(producers.native.serializerProducer)
 

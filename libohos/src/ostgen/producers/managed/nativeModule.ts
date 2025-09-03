@@ -27,14 +27,19 @@ export const nativeModuleProducer = createSpecialProducer(
     return {
       artifact: {
         reference: E.get(E.v(className, [Hs.isType()]), methodName),
-        implementationGenerator: () => [
-          Builders.class(className)
+        implementationGenerator: () => {
+          ctx.useBridge(method)
+          const nativeModule = Builders.class(className)
             .method(methodName)
               .native().static().annotation('ani.unsafe.Direct')
               .param('buffer').type(Ts.prim.serializerBuffer).$()
               .param('length').type(Ts.prim.i32).$()
               .returns(ctx.useManaged(method.returnType).reference()).$().$()
-          ]
+          if (!method.isFree)
+            nativeModule.methods[0].parameters.unshift(
+              { name: 'ptr', type: Ts.prim.pointer })
+          return [nativeModule]
+        }
       }
     }
   }

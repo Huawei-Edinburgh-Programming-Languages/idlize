@@ -13,14 +13,15 @@
  * limitations under the License.
  */
 
-import { Hs, D, E, Md, std, T, Ts } from "../../../ost";
+import { Hs, D, E, Md, T, Ts } from "../../../ost";
 import * as idl from "@idlizer/core/idl"
 import { makePeerMethod } from "../components/peerMethod";
 import { AdvancedGeneratorContext, createSpecialProducer, managedName, roles } from "../common";
 import { getSuperType, isMaterialized } from "@idlizer/core";
-import { mangleName, moduleName, nativeModuleName, ProducerDescription } from "../../engine";
+import { mangleName, nativeModuleName, ProducerDescription } from "../../engine";
 import { LWDeclaration } from "../../../ost/lws";
 import { Builders } from "../../../ost/builders";
+import { generateFunction } from "./function";
 
 export const structureProducer = createSpecialProducer(
   { is: idl.isInterface, role: roles.managed },
@@ -35,6 +36,8 @@ export const structureProducer = createSpecialProducer(
       artifact: {
         reference: T.cc(declName),
         implementationGenerator: () => {
+          if (declName.startsWith('managed.idlize.'))///
+            return []
           ctx.useCApi(node)
           return generator(node, declName, ctx)
         }
@@ -125,18 +128,7 @@ function makeMaterialized(node: idl.IDLInterface, name: string, ctx: AdvancedGen
   })
 
   // methods
-  node.methods.forEach(method => {
-    ctx.useBridge(method)
-    ctx.useManagedNativeModule(method)
-    const returnType = ctx.useManaged(method.returnType).reference();
-    matClass.method(method.name)
-      .parameters(method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
-      .returns(returnType).block()
-        .return(returnType).call()
-          .function().access(nativeModule).member(mangleName(name, method.name)).$().$()
-          .arg().access().object().access(E.v('this')).member('peer').excl().$().$().member('ptr').$().$()
-          .args(method.parameters.map(it => E.v(it.name)))
-          .$().$().$().$().$()
-  })
-  return [intClass.$(), matClass.$(), nativeModuleClass.$()]
+  const mc = matClass.$()///lame
+  mc.methods.push(...node.methods.map(it => generateFunction(it, ctx)))
+  return [intClass.$(), mc, nativeModuleClass.$()]
 }

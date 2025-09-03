@@ -113,6 +113,7 @@ class CallBuilder<P> {
     receiverName(name: string, hints?: Hint[]) { this._receiver = E.v(name, hints); return this }
     receiverExpr(object: LWExpression) { this._receiver = object; return this }
     functionName(name: string) { this._function = name; return this }
+    functionExpr(expr: LWExpression) { this._callee = expr; return this }
     args(args: LWExpression[]) { this._args.push(...args); return this }
     function(): ExpressionBuilder<CallBuilder<P>> {
         return new ExpressionBuilder(expr => {

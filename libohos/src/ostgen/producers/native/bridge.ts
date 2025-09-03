@@ -14,14 +14,14 @@
  */
 
 import * as idl from "@idlizer/core/idl";
-import { AdvancedGeneratorContext, cApiName, createSpecialProducer, bridgeName, roles, implName } from "../common";
+import { AdvancedGeneratorContext, createSpecialProducer, bridgeName, roles, implName } from "../common";
 import { E, T } from "../../../ost/builder";
 import { Builders } from "../../../ost/builders";
 import { ArgConvertor } from "../components/argConvertor";
 import { generatorConfiguration } from "@idlizer/core";
 import { Op, Ts } from "../../../ost/stdlib";
-import { LWType } from "../../../ost/lws";
-import { fqName, moduleName } from "../../engine";
+import { fqName, modifierClassName, moduleName } from "../../engine";
+import { LWExpression, VariableExpression } from "../../../ost/lws";
 
 export const bridgeProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.bridge },
@@ -31,49 +31,40 @@ export const bridgeProducer = createSpecialProducer(
       artifact: {
         reference: E.v(declName),
         implementationGenerator: () => [
-          ...generateModifiers(method, ctx),
           generateBridge(method, ctx),
+          generateImpl(method, ctx)
         ]
       }
     }
   })
 
-function modifierClassName(method: idl.IDLMethod) {
-  return method.parent && idl.isInterface(method.parent) ? fqName(method.parent) : 'GlobalScope'
-}
-
-function generateModifiers(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
-  const returnType = ctx.useCApi(method.returnType).reference();
-  const params: [string, LWType][] = method.parameters.map(it =>
-    [it.name, Ts.ptr(ctx.useCApi(it.type).reference())])
-  return [
-    // C API modifier function
-    Builders.struct(cApiName(`modifier.${modifierClassName(method)}Modifier`))
-      .field(fqName(method))
-        .funcType().parameters(params).returns(returnType).$().$().$(),
-    // implementation declaration
-    Builders.func(implName(fqName(method, 'modifier.', 'Impl')))
-      .parameters(params.map(([name, type]) => ({ name, type })))
-      .returns(returnType).$()
-  ]
-}
-
 function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
+  const funcName = (ctx.useCApi(method).name() as VariableExpression).name
   const returnType = ctx.useCApi(method.returnType).reference();
+  const params = [
+    { name: 'thisArray', type: Ts.prim.serializerBuffer },
+    { name: 'thisLength', type: Ts.prim.i32 },
+  ]
   const convertor = new ArgConvertor(ctx, E.v('deserializer'), true)
   const argReads = method.parameters.map(it =>
     Builders
       .decl(it.name, ctx.useCApi(it.type).reference())
         .valueExpr(convertor.read(E.v(it.name), it.type)[1]).$())
-  const macroParams = [fqName(method)]
-  let v = 'V'
-  if (method.returnType !== idl.IDLVoidType) {
-    v = ''
-    macroParams.push('KInteropNumber')///
+  const callArgs: LWExpression[] = method.parameters.map(it => E.unary(Op.ref, E.v(it.name)));
+  const macroParams = [funcName]
+  let v = ''
+  switch (method.returnType) {
+    case idl.IDLVoidType: v = 'V'; break
+    case idl.IDLNumberType: macroParams.push('KInteropNumber'); break
+    case idl.IDLStringType: macroParams.push('KStringPtr'); break
+  }
+  if (!method.isFree) {
+    params.unshift({ name: 'thisPtr', type: Ts.prim.pointer })
+    callArgs.unshift(E.v('thisPtr'))
+    macroParams.push('OH_NativePointer')
   }
   return Builders.func(bridgeName(fqName(method, 'modifier.impl_')))
-    .param('thisArray').type(Ts.prim.serializerBuffer).$()
-    .param('thisLength').type(Ts.prim.i32).$()
+    .parameters(params)
     .returns(returnType)
     .block()
       .decl('deserializer', T.c('DeserializerBase')).value()
@@ -89,9 +80,23 @@ function generateBridge(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
                   .arg(moduleName('_API_VERSION')).$().$().$()
               .member(modifierClassName(method))
               .ptr().$().$().$().$()
-          .member(fqName(method))
+          .member(funcName)
           .ptr().$().$()
-        .args(method.parameters.map(it => E.unary(Op.ref, E.v(it.name)))).$().$().$()
-    .macro(`KOALA_INTEROP_DIRECT_${v}2`, ...macroParams, Ts.prim.serializerBuffer, Ts.prim.i32)
+        .args(callArgs).$().$().$()
+    .macro(`KOALA_INTEROP_DIRECT_${v}${macroParams.length}`,
+      ...macroParams, Ts.prim.serializerBuffer, Ts.prim.i32)
     .$()
+}
+
+function generateImpl(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
+  const returnType = ctx.useCApi(method.returnType).reference();
+  const params = method.parameters.map(it => ({
+    name: it.name,
+    type: Ts.const(Ts.ptr(ctx.useCApi(it.type).reference()))
+  }))
+  if (!method.isFree)
+    params.unshift({ name: 'thisPtr', type: Ts.prim.pointer })
+  return Builders.func(implName(fqName(method, 'modifier.', 'Impl')))
+    .returns(returnType)
+    .parameters(params).$()
 }

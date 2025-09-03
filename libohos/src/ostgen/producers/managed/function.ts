@@ -18,65 +18,50 @@ import { AdvancedGeneratorContext, createSpecialProducer, managedName, roles } f
 import { E, S, T } from "../../../ost/builder";
 import { Builders } from "../../../ost/builders";
 import { ArgConvertor } from "../components/argConvertor";
-import { Hs } from "../../../ost/stdlib";
-import { fqName, nativeModuleName } from "../../engine";
 
 export const functionProducer = createSpecialProducer(
   { is: idl.isMethod, role: roles.managed },
   (method, ctx) => {
     return {
       artifact: {
-        reference: E.v(method.name),
+        reference: E.v(managedName(idl.getFQName(method))),
         implementationGenerator: () => [
-          generateFunction(method, ctx),
-          generateGlobalScopeFunction(method, ctx)
+          generateFunction(method, ctx)
         ]
       }
     }
-  })
+  }
+)
 
-const GLOBAL_SCOPE_NAME = managedName('engine.GlobalScope')
-
-function generateFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
+export function generateFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
+  const funcName = method.isFree ? managedName(idl.getFQName(method)) : method.name
+  const serializerName = 'serializer'
   const returnType = ctx.useManaged(method.returnType).reference()
-  return Builders.func(managedName(idl.getFQName(method)))
+  const convertor = new ArgConvertor(ctx, E.v(serializerName), false)
+  const fieldWrites = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
+  const releaseCall = Builders.stmt().call().receiverName(serializerName).functionName('release').$().$()
+  const nativeModuleCall = Builders.call()
+    .functionExpr(ctx.useManagedNativeModule(method).name())
+    .arg().call().receiverName(serializerName).functionName('asBuffer').$().$()
+    .arg().call().receiverName(serializerName).functionName('length').$().$().$()
+  if (!method.isFree) {
+    nativeModuleCall.args.unshift(
+      Builders.access().object().access(E.v('this')).member('peer').excl().$().$().member('ptr').$())
+  }
+  const statements = [
+    Builders.decl(serializerName, T.c('SerializerBase'))
+      .value().call().receiverName('SerializerBase').functionName('hold').$().$().$(),
+    ...fieldWrites]
+  if (method.returnType !== idl.IDLVoidType) {
+    statements.push(
+      Builders.decl('result', returnType).valueExpr(nativeModuleCall).$(),
+      releaseCall,
+      Builders.return(returnType).valueStr('result').$())
+  } else {
+    statements.push(S.e(nativeModuleCall), releaseCall)
+  }
+  return Builders.func(funcName)
     .parameters(method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() })))
     .returns(returnType)
-    .block()
-      .return(returnType)
-        .call().receiverName(GLOBAL_SCOPE_NAME, [Hs.isType()]).functionName(fqName(method))
-        .args(method.parameters.map(it => E.v(it.name))).$()
-    .$().$().$()
-}
-
-function generateGlobalScopeFunction(method: idl.IDLMethod, ctx: AdvancedGeneratorContext) {
-    ctx.useManagedNativeModule(method)
-    const serializerName = 'thisSerializer'
-    const returnType = ctx.useManaged(method.returnType).reference();
-    const params = method.parameters.map(it => ({ name: it.name, type: ctx.useManaged(it.type).reference() }));
-    const convertor = new ArgConvertor(ctx, E.v(serializerName), false)
-    const fieldWrites = method.parameters.map(param => convertor.write(E.v(param.name), param.type))
-    const nativeModuleCall = Builders.call()
-      .receiverExpr(E.v(nativeModuleName(), [Hs.isType()]))
-      .functionName(fqName(method, '_'))
-      .arg().call().receiverName(serializerName).functionName('asBuffer').$().$()
-      .arg().call().receiverName(serializerName).functionName('length').$().$().$()
-    const releaseCall = Builders.stmt().call().receiverName(serializerName).functionName('release').$().$()
-    const statements = [
-      Builders.decl(serializerName, T.c('SerializerBase'))
-        .value().call().receiverName('SerializerBase').functionName('hold').$().$().$(),
-      ...fieldWrites]
-    if (method.returnType !== idl.IDLVoidType) {
-      statements.push(
-        Builders.decl('result', returnType).valueExpr(nativeModuleCall).$(),
-        releaseCall,
-        Builders.return(returnType).valueStr('result').$())
-    } else {
-      statements.push(S.e(nativeModuleCall), releaseCall)
-    }
-    return Builders.class(GLOBAL_SCOPE_NAME)
-      .method(fqName(method)).static()
-        .parameters(params)
-        .returns(returnType)
-        .block().statements(statements).$().$().$()
+    .block().statements(statements).$().$()
 }

@@ -62,3 +62,7 @@ export function fqName(node: idl.IDLMethod | idl.IDLInterface, prefix?: string, 
 export function nativeModuleName(): string {
   return managedName('engine.' + moduleName('NativeModule'))///substitute name @type aliasing step?
 }
+
+export function modifierClassName(method: idl.IDLMethod): string {
+  return method.parent && idl.isInterface(method.parent) ? fqName(method.parent) : 'GlobalScope'
+}
