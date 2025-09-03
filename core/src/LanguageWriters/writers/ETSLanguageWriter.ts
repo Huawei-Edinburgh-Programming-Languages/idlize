@@ -35,7 +35,6 @@ import {
     ArgConvertor,
     AggregateConvertor,
     ArrayConvertor,
-    CustomTypeConvertor,
     InterfaceConvertor,
     MaterializedClassConvertor,
     OptionConvertor,
@@ -282,8 +281,7 @@ export class ETSLanguageWriter extends TSLanguageWriter {
                                 duplicates: Set<string>): LanguageExpression {
         if (convertor instanceof AggregateConvertor
             || convertor instanceof InterfaceConvertor
-            || convertor instanceof MaterializedClassConvertor
-            || convertor instanceof CustomTypeConvertor) {
+            || convertor instanceof MaterializedClassConvertor) {
             return this.instanceOf(value, convertor.idlType)
         }
         return this.makeString(`${value} instanceof ${convertor.targetType(this)}`)

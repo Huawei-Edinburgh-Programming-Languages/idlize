@@ -14,7 +14,7 @@
  */
 
 import * as idl from '@idlizer/core/idl'
-import { ArgConvertor, CustomTypeConvertor, isMaterialized,
+import { ArgConvertor, isMaterialized,
     isImportAttr, IdlNameConvertor, Language, PeerLibrary,
     LanguageWriter,
     IndentedPrinter,
@@ -27,7 +27,8 @@ import { ArgConvertor, CustomTypeConvertor, isMaterialized,
     CJIDLTypeToForeignStringConvertor,
     isBuilderClass,
     TSTypeNameConvertor,
-    ETSTypeNameConvertor
+    ETSTypeNameConvertor,
+    ObjectConvertor
 } from "@idlizer/core";
 import { ArkoalaImportTypeConvertor, ArkoalaInterfaceConvertor, ArkoalaMaterializedClassConvertor } from './ArkoalaArgConvertors';
 import { ArkoalaJavaTypeNameConvertor, ArkoalaCJTypeNameConvertor } from './ArkoalaTypeNameConvertors';
@@ -66,7 +67,7 @@ export class ArkoalaPeerLibrary extends PeerLibrary {
     override declarationConvertor(param: string, type: idl.IDLReferenceType, declaration: idl.IDLEntry | undefined): ArgConvertor {
         switch (type.name) {
             case `AnimationRange`:
-                return new CustomTypeConvertor(param, "AnimationRange", false, "AnimationRange<number>")
+                return new ObjectConvertor(param, idl.IDLObjectType)
         }
         if (declaration) {
             if (isImportAttr(declaration))

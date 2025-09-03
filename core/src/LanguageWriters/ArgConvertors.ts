@@ -81,14 +81,12 @@ export function isDirectConvertedType(originalType: idl.IDLType|undefined, libra
         convertor = convertor.convertor
     }
     if (convertor instanceof ArrayConvertor ||
-        convertor instanceof CustomTypeConvertor ||
         convertor instanceof UnionConvertor ||
         convertor instanceof CallbackConvertor ||
         convertor instanceof MapConvertor ||
         convertor instanceof TupleConvertor ||
         convertor instanceof AggregateConvertor ||
-        convertor instanceof OptionConvertor ||
-        convertor instanceof ImportTypeConvertor) {
+        convertor instanceof OptionConvertor) {
         // try { console.log(`convertor is ${convertor.constructor.name} for ${JSON.stringify(originalType)}`) } catch (e) {}
         return false
     }
@@ -961,46 +959,6 @@ export class TypeAliasConvertor extends ProxyConvertor {
     }
 }
 
-export class CustomTypeConvertor extends BaseArgConvertor {
-    constructor(param: string,
-                public readonly customTypeName: string,
-                private readonly isGenericType: boolean,
-                tsType: string) {
-        super(idl.createReferenceType(tsType ?? "Object"), [RuntimeType.OBJECT], false, true, param)
-        warnCustomObject(`${customTypeName}: ${tsType}`)
-    }
-    convertorArg(param: string, writer: LanguageWriter): string {
-        throw new Error("Must never be used")
-    }
-    /** todo: check */
-    convertorSerialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
-        return printer.makeStatement(printer.makeMethodCall(
-            `${param}Serializer`,
-            `writeCustomObject`,
-            [printer.makeString(`"${this.customTypeName}"`), printer.makeCastCustomObject(value, this.isGenericType)]
-        ))
-    }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
-        const type = writer.language === Language.CPP
-            ? this.nativeType()
-            : this.idlType
-        return assigneer(writer.makeCast(
-            writer.makeMethodCall(`${deserializerName}`,
-                "readCustomObject",
-                [writer.makeString(`"${this.customTypeName}"`)]),
-            type, { optional: false }))
-    }
-    nativeType(): idl.IDLType {
-        return idl.IDLCustomObjectType
-    }
-    interopType(): idl.IDLType {
-        throw new Error("Must never be used")
-    }
-    isPointerType(): boolean {
-        return true
-    }
-}
-
 export class OptionConvertor extends BaseArgConvertor {
     private readonly typeConvertor: ArgConvertor
     // TODO: be smarter here, and for smth like Length|undefined or number|undefined pass without serializer.
@@ -1245,34 +1203,6 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
                 return this.discriminatorFromFields(value, writer, uniqueFields, it => it.name, it => it.isOptional)
             }
         }
-    }
-}
-
-export class ImportTypeConvertor extends BaseArgConvertor {
-    protected importedName: string
-    constructor(param: string, importedName: string) {
-        super(idl.IDLObjectType, [RuntimeType.OBJECT], false, true, param)
-        this.importedName = importedName
-        warnCustomObject(importedName, `imported`)
-    }
-    convertorArg(param: string, writer: LanguageWriter): string {
-        throw new Error("Must never be used")
-    }
-    convertorSerialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
-        return printer.makeStatement(printer.makeMethodCall(`${param}Serializer`, "writeCustomObject", [printer.makeString(`"${this.importedName}"`), printer.makeString(value)]))
-    }
-    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
-        return assigneer(writer.makeString(`${deserializerName}.readCustomObject("${this.importedName}")`))
-    }
-    nativeType(): idl.IDLType {
-        // treat ImportType as CustomObject
-        return idl.IDLCustomObjectType
-    }
-    interopType(): idl.IDLType {
-        throw new Error("Must never be used")
-    }
-    isPointerType(): boolean {
-        return true
     }
 }
 

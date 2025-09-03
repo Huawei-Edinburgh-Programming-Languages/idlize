@@ -17,6 +17,7 @@ import * as idl from '../../idl'
 import { generateSyntheticIdlNodeName } from '../../peer-generation/idl/common'
 import { isMaterialized } from '../../peer-generation/isMaterialized'
 import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
+import { reportError, terminateWithPanic } from '../../process'
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from '../nameConvertor'
 import { removePoints } from './CJConvertors'
 import { InteropReturnTypeConvertor } from './InteropConvertors'
@@ -87,7 +88,7 @@ export class KotlinTypeNameConvertor implements NodeConvertor<string>, IdlNameCo
         if (decl) {
             return removePoints(idl.getQualifiedName(decl, 'namespace.name'))
         }
-        return this.convert(idl.IDLCustomObjectType)
+        terminateWithPanic(reportError.fromNode(type))
     }
     convertTypeParameter(type: idl.IDLTypeParameterType): string {
         return type.name
@@ -96,8 +97,7 @@ export class KotlinTypeNameConvertor implements NodeConvertor<string>, IdlNameCo
         switch (type) {
             case idl.IDLFunctionType: return 'Function'
 
-            case idl.IDLUnknownType:
-            case idl.IDLCustomObjectType: return 'Any'
+            case idl.IDLUnknownType: return 'Any'
             case idl.IDLThisType: return 'this'
             case idl.IDLObjectType: return 'Object'
             case idl.IDLAnyType: return 'Any'
@@ -107,7 +107,6 @@ export class KotlinTypeNameConvertor implements NodeConvertor<string>, IdlNameCo
             case idl.IDLVoidType: return 'Unit'
             case idl.IDLBooleanType: return 'Boolean'
 
-            
             case idl.IDLI8Type: return 'Byte'
             case idl.IDLU8Type: return 'UByte'
             case idl.IDLI16Type: return 'Short'

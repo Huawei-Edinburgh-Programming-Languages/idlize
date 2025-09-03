@@ -78,7 +78,6 @@ export class ETSTypeNameConvertor extends TSTypeNameConvertor {
             case idl.IDLFunctionType: return 'Object'
 
             case idl.IDLBigintType: return 'long'
-            case idl.IDLCustomObjectType: return 'object'
         }
         return super.convertPrimitiveType(type)
     }

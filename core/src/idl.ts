@@ -668,7 +668,6 @@ export const IDLSerializerBuffer = createPrimitiveType('SerializerBuffer')
 
 // Stub for IdlPeerLibrary
 export const IDLFunctionType = createPrimitiveType('Function')
-export const IDLCustomObjectType = createPrimitiveType('CustomObject')
 export const IDLInteropReturnBufferType = createPrimitiveType('InteropReturnBuffer')
 
 export const IDLNullTypeName = "idlize.stdlib.Null"
@@ -1500,7 +1499,7 @@ export function clone<T extends IDLNode>(node:T): T {
     }
 }
 
-export function hasTypeParameters(entry:IDLEntry): boolean {
+export function hasTypeParameters(entry:IDLNode): boolean {
     let foundTypeParameter = false
     forEachChild(entry, n => {
         if (isTypeParameterType(n)) {

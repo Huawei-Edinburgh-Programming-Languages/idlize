@@ -36,22 +36,34 @@ export function collectDeclarationTargetsUncached(library: LibraryInterface, opt
                     for (const property of entry.properties) {
                         if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(property.name))
                             continue
+                        if (idl.hasTypeParameters(property.type))
+                            continue
                         orderer.addDep(library.toDeclaration(idl.maybeOptional(property.type, property.isOptional)))
                     }
                     for (const method of entry.methods) {
                         if (peerGeneratorConfiguration().components.ignorePeerMethod.includes(method.name))
+                            continue
+                        if (idl.hasTypeParameters(method))
                             continue
                         for (const parameter of method.parameters)
                             orderer.addDep(library.toDeclaration(idl.maybeOptional(parameter.type!, parameter.isOptional)))
                         orderer.addDep(library.toDeclaration(method.returnType))
                     }
                     for (const constructor of entry.constructors) {
-                        for (const parameter of constructor.parameters)
+                        for (const parameter of constructor.parameters) {
+                            if (idl.hasTypeParameters(parameter)) {
+                                continue
+                            }
                             orderer.addDep(library.toDeclaration(idl.maybeOptional(parameter.type!, parameter.isOptional)))
+                        }
                     }
                     for (const callable of entry.callables) {
-                        for (const parameter of callable.parameters)
+                        for (const parameter of callable.parameters) {
+                            if (idl.hasTypeParameters(parameter)) {
+                                continue
+                            }
                             orderer.addDep(library.toDeclaration(idl.maybeOptional(parameter.type!, parameter.isOptional)))
+                        }
                     }
                 } else if (generateUnused && !isInIdlize(entry) && !idl.hasTypeParameters(entry)) {
                     // TODO seems like we do not need this in CAPI, just useful for managed side
@@ -66,8 +78,12 @@ export function collectDeclarationTargetsUncached(library: LibraryInterface, opt
             else if (idl.isEnum(entry)) {
                 orderer.addDep(library.toDeclaration(entry))
             } else if (idl.isMethod(entry)) {
-                for (const parameter of entry.parameters)
+                if (idl.hasTypeParameters(entry)) {
+                    continue
+                }
+                for (const parameter of entry.parameters) {
                     orderer.addDep(library.toDeclaration(idl.maybeOptional(parameter.type!, parameter.isOptional)))
+                }
                 orderer.addDep(library.toDeclaration(entry.returnType))
             } else if (idl.isConstant(entry)) {
                 orderer.addDep(library.toDeclaration(entry.type))

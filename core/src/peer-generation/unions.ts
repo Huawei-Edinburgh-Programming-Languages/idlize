@@ -14,10 +14,10 @@
  */
 
 import { convertType, TypeConvertor } from "../LanguageWriters";
-import { IDLImport, IDLContainerType, IDLCustomObjectType, IDLOptionalType, IDLPrimitiveType, IDLReferenceType, IDLType, IDLTypeParameterType, IDLUndefinedType, IDLUnionType, isType, isUnionType } from '../idl'
+import { IDLImport, IDLContainerType, IDLOptionalType, IDLPrimitiveType, IDLReferenceType, IDLType, IDLTypeParameterType, IDLUndefinedType, IDLUnionType, isType, isUnionType } from '../idl'
 import { collapseTypes } from "./idl/common"
 import { LanguageExpression, LanguageWriter } from "../LanguageWriters/LanguageWriter";
-import { ArgConvertor, CustomTypeConvertor } from "../LanguageWriters/ArgConvertors";
+import { ArgConvertor } from "../LanguageWriters/ArgConvertors";
 import { RuntimeType } from "../LanguageWriters/common";
 import { LibraryInterface } from "../LibraryInterface";
 import { ReferenceResolver } from "./ReferenceResolver";
@@ -35,7 +35,7 @@ export class UnionFlattener implements TypeConvertor<IDLType[]> {
     }
     convertTypeReference(type: IDLReferenceType): IDLType[] {
         const decl = this.resolver.toDeclaration(type)
-        return isType(decl) && decl !== IDLCustomObjectType ? convertType(this, decl) : [type]
+        return isType(decl) ? convertType(this, decl) : [type]
     }
     convertOptional(type: IDLOptionalType): IDLType[] {
         return [type.type, IDLUndefinedType]

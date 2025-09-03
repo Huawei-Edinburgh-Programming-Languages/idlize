@@ -129,8 +129,8 @@ function fillClass(library: PeerLibrary, peer: PeerClass, clazz: idl.IDLInterfac
         peer.parentComponentName = parentComponent.name
     }
     const peerMethods = [
-        ...clazz.properties.map(it => processProperty(library, it, peer)),
-        ...clazz.methods.map(it => processMethodOrCallable(library, it, peer)),
+        ...clazz.properties.filter(it => !idl.hasTypeParameters(it)).map(it => processProperty(library, it, peer)),
+        ...clazz.methods.filter(it => !idl.hasTypeParameters(it)).map(it => processMethodOrCallable(library, it, peer)),
         ].filter(isDefined)
     peer.methods.push(...peerMethods)
 

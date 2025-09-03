@@ -14,3 +14,4 @@ interface KVMContext {};
 interface TypeChecker {};
 interface TSTypeChecker {};
 interface ArkTSTypeChecker {};
+interface Tags {};

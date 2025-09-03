@@ -91,6 +91,9 @@ function collectTypeCheckDeclarations(library: PeerLibrary): (idl.IDLInterface |
     const seenNames = new Set<string>()
     const res = new Array<idl.IDLInterface | idl.IDLEnum | idl.IDLContainerType>()
     const syntheticCollector = new TypeCheckSyntheticCollector(library, (entry) => {
+        if (idl.hasTypeParameters(entry)) {
+            return
+        }
         const name = idl.isContainerType(entry)
             ? library.getInteropName(entry)
             : idl.getFQName(entry)

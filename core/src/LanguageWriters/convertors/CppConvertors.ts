@@ -24,6 +24,7 @@ import { qualifiedName } from '../../peer-generation/idl/common'
 import { capitalize } from '../../util'
 import { isMaterialized } from '../../peer-generation/isMaterialized'
 import { isInIdlizeInternal } from '../../idlize'
+import { reportError, terminateWithPanic } from '../../process'
 
 export interface ConvertResult {
     text: string,
@@ -110,16 +111,16 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
         throw new Error(`Unmapped container type ${idl.DebugUtils.debugPrintType(type)}`)
     }
     convertImport(type: idl.IDLImport): ConvertResult {
-        console.warn("Imports are not implemented yet")
-        return this.make(idl.IDLCustomObjectType.name, idl.IDLCustomObjectType)
+        terminateWithPanic(reportError.fromNode(type, 'Import is not supported for native'))
     }
     convertTypeReferenceAsImport(type: idl.IDLReferenceType, _: string): ConvertResult {
         return this.convertTypeReference(type)
     }
     convertTypeReference(type: idl.IDLReferenceType): ConvertResult {
         const refName = type.name
+        // FIXME: What is parametrized ???
         if (generatorConfiguration().parameterized.includes(refName)) {
-            return this.make('CustomObject', idl.IDLCustomObjectType)
+            return this.make(idl.IDLObjectType.name, idl.IDLObjectType)
         }
         let decl = this.resolver.toDeclaration(type)
         if (idl.isCallback(decl)) {
@@ -137,7 +138,7 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
         return res
     }
     convertTypeParameter(type: idl.IDLTypeParameterType): ConvertResult {
-        return this.make('CustomObject', idl.IDLCustomObjectType)
+       terminateWithPanic(reportError.fromNode(type, 'ParameterType is not supported for native'))
     }
     convertPrimitiveType(type: idl.IDLPrimitiveType): ConvertResult {
         switch (type) {
@@ -158,7 +159,6 @@ export class GenericCppConvertor implements NodeConvertor<ConvertResult> {
             case idl.IDLBooleanType: return this.make(`Boolean`, type)
             case idl.IDLBigintType: return this.make(`Int64`, type) // TODO add arbitrary precision numeric type
             case idl.IDLPointerType: return this.make('NativePointer', type)
-            case idl.IDLCustomObjectType: return this.make('CustomObject', type)
             case idl.IDLUnknownType:
             case idl.IDLObjectType:
             case idl.IDLAnyType: return this.make(`Object`, type)
@@ -196,9 +196,7 @@ export class CppConvertor extends GenericCppConvertor implements IdlNameConverto
             return result.text
         }
         const typePrefix = conf.TypePrefix
-        // TODO remove this ugly hack for CustomObject's
-        const convertedToCustomObject = result.text === idl.IDLCustomObjectType.name
-        const libPrefix = this.isPrimitiveOrPrimitiveAlias(type) || convertedToCustomObject ? "" : conf.LibraryPrefix
+        const libPrefix = this.isPrimitiveOrPrimitiveAlias(type) ? "" : conf.LibraryPrefix
         return `${typePrefix}${libPrefix}${result.text}`
     }
 

@@ -16,7 +16,6 @@
 import * as idl from '@idlizer/core/idl'
 import {
     Language,
-    CustomTypeConvertor,
     InteropReturnTypeConvertor,
     PeerMethod,
     LanguageWriter,
@@ -160,7 +159,6 @@ export function writePeerMethod(library: PeerLibrary, printer: LanguageWriter, m
                     if ((idl.IDLContainerUtils.isSequence(returnType) || idl.IDLContainerUtils.isRecord(returnType)) && writer.language != Language.JAVA) {
                         result = makeDeserializedReturn(library, printer, returnType)
                     } else if (returnTypeConvertor.isReturnInteropBuffer(returnType)
-                        && !(library.typeConvertor(returnValName, returnType) instanceof CustomTypeConvertor)
                         && writer.language != Language.JAVA) {
                         result = makeDeserializedReturn(library, printer, returnType)
                     } else {

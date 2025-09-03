@@ -235,11 +235,13 @@ export class IdlPeerProcessor {
             "getFinalizer",
             new Method("getFinalizer", new NamedMethodSignature(idl.IDLPointerType, [], [], []), [MethodModifier.STATIC]))
         const mFields = propertiesFromInterface.concat(decl.properties)
+            .filter(it => !idl.hasTypeParameters(it))
             .map(it => this.makeMaterializedField(it))
         const mMethods = decl.methods
             // .concat(...methodsFromInterface) // TODO insert here methods from interfaces
             // TODO: Properly handle methods with return Promise<T> type
             .filter(it => it.name != PeerMethodSignature.GET_FINALIZER)
+            .filter(it => !idl.hasTypeParameters(it))
             .map(method => this.makeMaterializedMethod(decl, method, fullCName, implemenationParentName))
             .filter(it => !idl.isNamedNode(it.method.signature.returnType) || !peerGeneratorConfiguration().materialized.ignoreReturnTypes.includes(it.method.signature.returnType.name))
 

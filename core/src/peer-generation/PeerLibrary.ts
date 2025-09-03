@@ -22,8 +22,8 @@ import { createLanguageWriter, IdlNameConvertor } from '../LanguageWriters'
 import {
     BufferConvertor, CallbackConvertor, DateConvertor, MapConvertor, PointerConvertor, TupleConvertor, TypeAliasConvertor,
     AggregateConvertor, StringConvertor, ClassConvertor, ArrayConvertor, FunctionConvertor, OptionConvertor,
-    NumberConvertor, NumericConvertor, CustomTypeConvertor, UnionConvertor, MaterializedClassConvertor,
-    ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, VoidConvertor, ImportTypeConvertor, InterfaceConvertor, BigIntToU64Convertor,
+    NumberConvertor, NumericConvertor, UnionConvertor, MaterializedClassConvertor,
+    ArgConvertor, BooleanConvertor, EnumConvertor, UndefinedConvertor, VoidConvertor, InterfaceConvertor, BigIntToU64Convertor,
     ObjectConvertor,
     TransformOnSerializeConvertor,
 } from "../LanguageWriters/ArgConvertors"
@@ -46,6 +46,8 @@ import { generatorConfiguration } from '../config'
 import { KotlinTypeNameConvertor } from '../LanguageWriters/convertors/KotlinConvertors'
 import { NativeModuleType } from '../LanguageWriters/common'
 import { toIdlType } from '../from-idl/deserialize'
+import { reportError, terminateWithPanic } from '../process'
+import { inplaceFQN } from '../transformers/FqnTransformer'
 
 export interface GlobalScopeDeclarations {
     methods: idl.IDLMethod[]
@@ -168,10 +170,13 @@ export class PeerLibrary implements LibraryInterface {
             const promise = continuationType as idl.IDLContainerType
             if (!idl.isVoidType(promise.elementType[0])) {
                 const valueType = idl.createOptionalType(promise.elementType[0])
+                inplaceFQN(valueType, this)
                 continuationParameters.unshift(idl.createParameter("value", valueType, true))
             }
-        } else if (!idl.isVoidType(continuationType))
+        } else if (!idl.isVoidType(continuationType)) {
+            inplaceFQN(continuationType, this)
             continuationParameters.push(idl.createParameter('value', continuationType))
+        }
         return continuationParameters
     }
     createContinuationCallbackReference(continuationType: idl.IDLType): idl.IDLReferenceType {
@@ -390,8 +395,9 @@ export class PeerLibrary implements LibraryInterface {
                 return new ObjectConvertor(param, type)
             }
             const decl = this.resolveTypeReference(type)
-            if (decl && isImportAttr(decl) || !decl && isImportAttr(type))
-                return new ImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
+            if (!decl) {
+                terminateWithPanic(reportError.fromNode(type, 'Unresolved reference'))
+            }
             return this.declarationConvertor(param, type, decl)
         }
         if (idl.isUnionType(type)) {
@@ -403,11 +409,7 @@ export class PeerLibrary implements LibraryInterface {
             if (idl.IDLContainerUtils.isRecord(type))
                 return new MapConvertor(this, param, type, type.elementType[0], type.elementType[1])
         }
-        if (idl.isTypeParameterType(type)) {
-            // TODO: unlikely correct.
-            return new CustomTypeConvertor(param, this.targetNameConvertorInstance.convert(type), true, `<${type.name}>`)
-        }
-        throw new Error(`Cannot convert: ${type.kind}`)
+        terminateWithPanic(reportError.fromNode(type, 'Cannot convert'))
     }
 
     declarationConvertor(param: string, type: idl.IDLReferenceType, declaration: idl.IDLEntry | undefined): ArgConvertor {
@@ -418,20 +420,16 @@ export class PeerLibrary implements LibraryInterface {
         if (customConv)
             return customConv
         if (!declaration) {
-            return new CustomTypeConvertor(param, this.targetNameConvertorInstance.convert(type), false, this.targetNameConvertorInstance.convert(type)) // assume some predefined type
+            terminateWithPanic(reportError.fromNode(type, 'Unresolved reference'))
         }
 
         const declarationName = declaration.name!
-        if (isImportAttr(declaration)) {
-            return new ImportTypeConvertor(param, this.targetNameConvertorInstance.convert(type))
-        }
         if (idl.isImport(declaration)) {
             const target = this.resolveImport(declaration)
             if (target && idl.isEntry(target))
                 return this.declarationConvertor(param, type, target)
             else {
-                warn(`Unable to resolve Import ${declaration.clause.join(".")} as ${declaration.name}`)
-                return new CustomTypeConvertor(param, declaration.name, false, declaration.name)
+                terminateWithPanic(reportError.fromNode(declaration, `Unable to resolve Import ${declaration.clause.join(".")} as ${declaration.name}`))
             }
         }
         if (idl.hasExtAttribute(declaration, idl.IDLExtendedAttributes.TransformOnSerialize)) {
@@ -449,8 +447,7 @@ export class PeerLibrary implements LibraryInterface {
         }
         if (idl.isTypedef(declaration)) {
             if (isCyclicTypeDef(declaration)) {
-                warn(`Cyclic typedef: ${idl.DebugUtils.debugPrintType(type)}`)
-                return new CustomTypeConvertor(param, declaration.name, false, declaration.name)
+                terminateWithPanic(reportError.fromNode(declaration, `Cyclic typedef: ${idl.DebugUtils.debugPrintType(type)}`))
             }
             return new TypeAliasConvertor(this, param, declaration)
         }
@@ -471,7 +468,7 @@ export class PeerLibrary implements LibraryInterface {
                     return new TupleConvertor(this, param, type, declaration as idl.IDLInterface)
             }
         }
-        throw new Error(`Unknown decl ${declarationName} of kind ${declaration.kind}`)
+        terminateWithPanic(reportError.fromNode(declaration ?? type, `Unknown decl ${declarationName} of kind ${declaration.kind}`))
     }
 
     private customConvertor(param: string, typeName: string, type: idl.IDLReferenceType): ArgConvertor | undefined {
@@ -483,7 +480,7 @@ export class PeerLibrary implements LibraryInterface {
             case `Function`:
                 return new FunctionConvertor(this, param)
             case `Record`:
-                return new CustomTypeConvertor(param, "Record", false, "Record<string, string>")
+                return new ObjectConvertor(param, idl.IDLObjectType)
             case `Optional`:
                 throw new Error("Not expected to have reference type named Optional")
                 // return new OptionConvertor(this, param, type.typeArguments![0])
@@ -497,10 +494,10 @@ export class PeerLibrary implements LibraryInterface {
 
     toDeclaration(type: idl.IDLType | idl.IDLTypedef | idl.IDLCallback | idl.IDLEnum | idl.IDLInterface): idl.IDLEntry | idl.IDLType {
         switch (type) {
-            case idl.IDLAnyType: return ArkCustomObject
+            case idl.IDLAnyType: return idl.IDLObjectType
             case idl.IDLVoidType: return idl.IDLVoidType
             case idl.IDLUndefinedType: return idl.IDLUndefinedType
-            case idl.IDLUnknownType: return ArkCustomObject
+            case idl.IDLUnknownType: return idl.IDLObjectType
             // case idl.IDLObjectType: return ArkCustomObject
         }
         const typeName = idl.isNamedNode(type) ? type.name : undefined
@@ -514,7 +511,7 @@ export class PeerLibrary implements LibraryInterface {
                 return ArkDate
             }
             if (type.name === 'AnimationRange') {
-                return ArkCustomObject
+                return idl.IDLObjectType
             }
             if (type.name === 'Function') {
                 return ArkFunction
@@ -527,19 +524,18 @@ export class PeerLibrary implements LibraryInterface {
                 warn(`undeclared type ${idl.DebugUtils.debugPrintType(type)}`)
             }
             if (decl && idl.isTypedef(decl) && isCyclicTypeDef(decl)) {
-                warn(`Cyclic typedef: ${idl.DebugUtils.debugPrintType(type)}`)
-                return ArkCustomObject
+                terminateWithPanic(reportError.fromNode(decl, 'Cyclic typedefs!'))
             }
             if (decl && idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.TransformOnSerialize)) {
                 const type = toIdlType("", idl.getExtAttribute(decl, idl.IDLExtendedAttributes.TransformOnSerialize)!)
                 return this.toDeclaration(type)
             }
-            return !decl ? ArkCustomObject  // assume some builtin type
+            return !decl ? terminateWithPanic(reportError.fromNode(type, `Unresolved reference "${idl.DebugUtils.debugPrintType(type)}"`))  // assume some builtin type
                 : idl.isTypedef(decl) ? this.toDeclaration(decl.type)
                     : decl
         }
         if (isImportAttr(type)) {
-            return ArkCustomObject
+            return idl.IDLObjectType
         }
         return type
     }
@@ -558,7 +554,6 @@ export const ArkInt32 = idl.IDLI32Type
 export const ArkInt64 = idl.IDLI64Type
 export const ArkFunction = idl.IDLFunctionType
 export const ArkDate = idl.IDLDate
-export const ArkCustomObject = idl.IDLCustomObjectType
 
 export function cleanPrefix(name: string, prefix: string): string {
     return name.replace(prefix, "")

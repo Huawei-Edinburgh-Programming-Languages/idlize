@@ -31,6 +31,9 @@ import {
     PeerLibrary,
     inplaceNullsAsUndefined,
     inplaceTransformOnSerializeFromConfig,
+    outputDiagnosticResultsFormatted,
+    FatalGenerationException,
+    DiagnosticMessageGroup,
 } from "@idlizer/core"
 import {
     IDLEntry,
@@ -152,7 +155,7 @@ export function arkgen(argv:string[]) {
             idlFilename = path.resolve(idlFilename)
             const file = parseIDLFile(idlFilename)
             linearizeNamespaceMembers(file.entries).forEach(transformMethodsAsync2ReturnPromise)
-            idlLibrary.files.push(file)
+            idlLibrary.files.push(linkParentBack(file))
         })
         if (options.verifyIdl) {
             idlLibrary.files.forEach(file => {

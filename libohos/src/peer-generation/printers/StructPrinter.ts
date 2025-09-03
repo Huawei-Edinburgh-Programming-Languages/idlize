@@ -563,7 +563,7 @@ export function collectProperties(decl: idl.IDLInterface, library: LibraryInterf
         ? superPropsWithTypeArgs(decl, superDecl, collectProperties(superDecl, library)) : []
     return [
         ...superProps,
-        ...decl.properties,
+        ...decl.properties.filter(prop => !idl.hasTypeParameters(prop.type)),
         ...collectBuilderProperties(decl, library)
     ].filter(it => !it.isStatic && !idl.hasExtAttribute(it, idl.IDLExtendedAttributes.CommonMethod))
 }

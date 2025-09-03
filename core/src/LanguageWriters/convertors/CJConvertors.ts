@@ -17,6 +17,7 @@ import * as idl from '../../idl'
 import { CJKeywords } from '../../languageSpecificKeywords'
 import { generateSyntheticIdlNodeName } from '../../peer-generation/idl/common'
 import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
+import { reportError, terminateWithPanic } from '../../process'
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor } from '../nameConvertor'
 import { InteropArgConvertor } from './InteropConvertors'
 
@@ -93,7 +94,7 @@ export class CJTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
         let decl = this.resolver.resolveTypeReference(type)
         if (decl)
             return `${decl.name}${maybeTypeArguments}`
-        return this.convert(idl.IDLCustomObjectType)
+        terminateWithPanic(reportError.fromNode(type))
     }
     convertTypeReference(type: idl.IDLReferenceType): string {
         if (type.name === idl.IDLObjectType.name)
@@ -116,7 +117,7 @@ export class CJTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
         if (decl) {
             return idl.getNamespacesPathFor(decl).map(ns => ns.name).join().concat(name[name.length - 1].concat(maybeTypeArguments))
         }
-        return this.convert(idl.IDLCustomObjectType)
+        terminateWithPanic(reportError.fromNode(type))
     }
     convertTypeParameter(type: idl.IDLTypeParameterType): string {
         return type.name
@@ -149,8 +150,7 @@ export class CJTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
             case idl.IDLObjectType: return 'Any'
 
             case idl.IDLUnknownType:
-            case idl.IDLFunctionType:
-            case idl.IDLCustomObjectType: return 'Any'
+            case idl.IDLFunctionType: return 'Any'
         }
         throw new Error(`Unsupported IDL primitive ${idl.DebugUtils.debugPrintType(type)}`)
     }

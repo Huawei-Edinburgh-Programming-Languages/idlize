@@ -13,6 +13,15 @@
  * limitations under the License.
  */
 
+import { DiagnosticMessageGroup, FatalGenerationException, outputDiagnosticResultsFormatted } from "@idlizer/core";
 import { arkgen } from "./app";
 
-arkgen(process.argv.slice(2))
+try {
+    Error.stackTraceLimit = Infinity
+    arkgen(process.argv.slice(2))
+} catch (ex) {
+    if (ex instanceof FatalGenerationException) {
+        outputDiagnosticResultsFormatted(DiagnosticMessageGroup.collectedResults)
+    }
+    throw ex
+}

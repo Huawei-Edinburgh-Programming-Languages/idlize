@@ -15,7 +15,8 @@
 
 import * as idl from "@idlizer/core/idl"
 import {
-    Language, LanguageExpression, LanguageWriter, InterfaceConvertor, ImportTypeConvertor, MaterializedClassConvertor,
+    Language, LanguageExpression, LanguageWriter, InterfaceConvertor, MaterializedClassConvertor,
+    ObjectConvertor,
 } from "@idlizer/core";
 
 export class ArkoalaInterfaceConvertor extends InterfaceConvertor {
@@ -34,7 +35,7 @@ export class ArkoalaInterfaceConvertor extends InterfaceConvertor {
     }
 }
 
-export class ArkoalaImportTypeConvertor extends ImportTypeConvertor {
+export class ArkoalaImportTypeConvertor extends ObjectConvertor {
     private static knownTypes: Map<string, string[]> = new Map([
         ["CircleShape", ["isInstanceOf", "\"CircleShape\""]],
         ["EllipseShape", ["isInstanceOf", "\"EllipseShape\""]],
@@ -44,8 +45,8 @@ export class ArkoalaImportTypeConvertor extends ImportTypeConvertor {
         ["DrawableDescriptor", ["isInstanceOf", "\"DrawableDescriptor\""]],
         ["SymbolGlyphModifier", ["isInstanceOf", "\"SymbolGlyphModifier\""]],
         ["Scene", ["isInstanceOf", "\"Scene\""]]])
-    constructor(param: string, importedName: string) {
-        super(param, importedName)
+    constructor(param: string, private importedName: string) {
+        super(param, idl.IDLObjectType)
     }
     override unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
         const handler = ArkoalaImportTypeConvertor.knownTypes.get(this.importedName)

@@ -15,6 +15,7 @@
 
 import * as idl from '../../idl'
 import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
+import { reportError, terminateWithPanic } from '../../process'
 import { maybeRestoreGenerics } from '../../transformers/GenericTransformer'
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from '../nameConvertor'
 
@@ -137,7 +138,8 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
             }
             return `${type.name}${maybeTypeArguments}`
         }
-        return this.convert(idl.IDLCustomObjectType)
+        console.error(idl.DebugUtils.debugPrintType(type))
+        terminateWithPanic(reportError.fromNode(type))
     }
     convertTypeParameter(type: idl.IDLTypeParameterType): string {
         return type.name
@@ -146,8 +148,7 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
         switch (type) {
             case idl.IDLFunctionType: return 'Function'
 
-            case idl.IDLUnknownType:
-            case idl.IDLCustomObjectType: return 'any'
+            case idl.IDLUnknownType: return 'any'
             case idl.IDLThisType: return 'this'
             case idl.IDLObjectType: return 'Object'
             case idl.IDLAnyType: return 'any'
