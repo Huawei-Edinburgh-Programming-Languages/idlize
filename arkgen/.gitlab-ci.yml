@@ -55,8 +55,6 @@ arkgen TS sdk:
   before_script:
     - !reference [.npm, script]
     - !reference [.panda, script]
-    - npm i --prefix external/incremental --prefer-offline --no-audit --no-fund
-    - npm i --prefix external/arkoala-arkts --prefer-offline --no-audit --no-fund
   script:
     - npm run -C arkgen setup:sdk:ts
     - npm run -C arkgen gen-idl:sdk:ts
@@ -70,22 +68,28 @@ arkgen TS sdk:
     - build external
     - download sdk
 
-compile arkts peers:
+arkgen ARKTS sdk:
   stage: test
-  when: manual
   tags:
     - idlize-ci
     - koala-ci
-  needs:
-  - build idlize
-  - build external
-  - download sdk
   before_script:
     - !reference [.npm, script]
     - !reference [.panda, script]
-    - cd $CI_PROJECT_DIR/arkgen
+    - npm i --prefix external/incremental --prefer-offline --no-audit --no-fund
+    - npm i --prefix external/arkoala-arkts --prefer-offline --no-audit --no-fund
   script:
-    - npm run make:compile:arkts:peers
+    - npm run -C arkgen etsgen:sdk
+    - npm run -C arkgen gen:sdk:arkts
+    - npm run -C arkgen gen-modules:sdk:arkts
+    - npm run -C arkgen build:sdk:arkts
+    - npm run -C arkgen build-native:sdk:arkts
+    - npm run -C arkgen compile:arkts:libs
+    - npm run -C arkgen exec:sdk:arkts
+  needs:
+    - build idlize
+    - build external
+    - download sdk
 
 build arkoala-ts:
   allow_failure: true
