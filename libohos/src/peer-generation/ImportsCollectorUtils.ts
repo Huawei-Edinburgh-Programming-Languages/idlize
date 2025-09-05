@@ -14,7 +14,7 @@
  */
 
 import * as idl from "@idlizer/core/idl"
-import { Language, LayoutNodeRole, isStaticMaterialized, maybeRestoreGenerics, isInExternalModule, isInStdlibModule, isTopLevelConflicted } from "@idlizer/core"
+import { Language, LayoutNodeRole, isStaticMaterialized, maybeRestoreGenerics, isInExternalModule, isInStdlibModule, isTopLevelConflicted, isInCurrentModule } from "@idlizer/core"
 import { ImportFeature, ImportsCollector } from "./ImportsCollector"
 import { createDependenciesCollector } from "./idl/IdlDependenciesCollector"
 import { getInternalClassName, isBuilderClass, isMaterialized, PeerLibrary, maybeTransformManagedCallback } from "@idlizer/core"
@@ -52,6 +52,7 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | 
         alias,
         module: `${moduleName}`,
         isDefault: isDefaultDeclaration(node, library.language)
+        isOuterModule: !isInCurrentModule(node)
     }
 }
 
@@ -102,7 +103,7 @@ export function collectDeclItself(
         if (!feature.module) {
             return
         }
-        emitter.addFeature(feature.feature, feature.module, feature.alias, feature.isDefault)
+        emitter.addFeature(feature.feature, feature.module, feature.alias, feature.isDefault, feature.isOuterModule)
         if (options?.includeMaterializedInternals) {
             if (idl.isInterface(node) && isMaterialized(node, library) && !isBuilderClass(node) && !isStaticMaterialized(node, library) && !isInExternalModule(node)) {
                 const ns = idl.getNamespaceName(node)

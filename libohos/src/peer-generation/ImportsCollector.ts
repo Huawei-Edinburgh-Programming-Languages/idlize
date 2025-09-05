@@ -20,6 +20,7 @@ import { LanguageWriter } from "@idlizer/core";
 class FeatureInfo {
     aliases: Set<string | undefined> = new Set()
     isDefault: boolean = false
+    isOuterModule: boolean = false
 }
 
 export class ImportsCollector {
@@ -32,9 +33,9 @@ export class ImportsCollector {
     addFeature(feature: ImportFeature): void
     addFeature(feature: string, module: string, alias?: string): void
     addFeature(feature: string, module: string, alias?: string, isDefault?: boolean): void
-    addFeature(feature: string | ImportFeature, module?: string, alias?: string, isDefault?: boolean) {
+    addFeature(feature: string | ImportFeature, module?: string, alias?: string, isDefault?: boolean, isOuterModule?: boolean) {
         if (typeof feature != "string")
-            return this.addFeature(feature.feature, feature.module, feature.alias, feature.isDefault)
+            return this.addFeature(feature.feature, feature.module, feature.alias, feature.isDefault, feature.isOuterModule)
         let normalizedModule = path.normalize(module!)
         // TODO processing cases when there is path to file like `./@ohos.mediaquery` to not recognise it as package.
         // Should migrate to multimodules and then remove this hack
@@ -67,6 +68,7 @@ export class ImportsCollector {
                 const dstInfo = getOrPut(dstFeatures, feature, () => new FeatureInfo())
                 info.aliases.forEach(alias => dstInfo.aliases.add(alias))
                 dstInfo.isDefault = info.isDefault
+                dstInfo.isOuterModule = info.isOuterModule
             }
         }
     }
