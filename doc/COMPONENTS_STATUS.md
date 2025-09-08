@@ -421,7 +421,7 @@
 |*FormComponent*| *Component* | Vadim Voronov | blocked IDL |  | whole component out of scope, no need to develop |
 |`construct`| Function | Vadim Voronov | done | out of scope |  |
 |`setFormComponentOptions`| Function | Vadim Voronov |skip | out of scope |  |
-|`setSize`| Function | Vadim Voronov | in progress | out of scope | empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
+|`setSize`| Function | Vadim Voronov | done | out of scope | empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
 |`setModuleName`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setDimension`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setAllowUpdate`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
@@ -3863,17 +3863,17 @@
 |*TapRecognizer*| *Class* | Lobah Mikhail| done| | |
 |`construct`| Function | Lobah Mikhail| done| | |
 |`getTapCount`| Function | Lobah Mikhail| done| | |
-|*LongPressRecognizer*| *Class* | Vadim Voronov | in progress | | |
-|`construct`| Function | Vadim Voronov | in progress | | |
-|`isRepeat`| Function | Vadim Voronov | in progress | | |
-|`getDuration`| Function | Vadim Voronov | in progress | | |
-|*SwipeRecognizer*| *Class* | Vadim Voronov | in progress | | |
-|`construct`| Function | Vadim Voronov | in progress | | |
-|`getVelocityThreshold`| Function | Vadim Voronov | in progress | | |
-|`getDirection`| Function | Vadim Voronov | in progress | | |
-|*PinchRecognizer*| *Class* | Vadim Voronov | in progress | | |
-|`construct`| Function | Vadim Voronov | in progress | | |
-|`getDistance`| Function | Vadim Voronov | in progress | | |
+|*LongPressRecognizer*| *Class* | Vadim Voronov | done | | |
+|`construct`| Function | Vadim Voronov | done | | |
+|`isRepeat`| Function | Vadim Voronov | done | | |
+|`getDuration`| Function | Vadim Voronov | done | | |
+|*SwipeRecognizer*| *Class* | Vadim Voronov | done | | |
+|`construct`| Function | Vadim Voronov | done | | |
+|`getVelocityThreshold`| Function | Vadim Voronov | done | | |
+|`getDirection`| Function | Vadim Voronov | done | | |
+|*PinchRecognizer*| *Class* | Vadim Voronov | done | | |
+|`construct`| Function | Vadim Voronov | done | | |
+|`getDistance`| Function | Vadim Voronov | done | | |
 |*RotationRecognizer*| *Class* | Lobah Mikhail| done| | |
 |`construct`| Function | Lobah Mikhail| done| | |
 |`getAngle`| Function | Lobah Mikhail| done| | |
