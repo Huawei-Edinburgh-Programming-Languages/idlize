@@ -90,8 +90,8 @@
 |`setSelect`| Function | Andrey Khudenkikh | done | pass |  |
 |`setSelectedColor`| Function | Andrey Khudenkikh | done | pass |  |
 |`setShape`| Function | Andrey Khudenkikh | done | pass |  |
-|`setUnselectedColor`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2401 |
-|`setMark`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2401 |
+|`setUnselectedColor`| Function | Andrey Khudenkikh | done | pass |  |
+|`setMark`| Function | Andrey Khudenkikh | done | pass |  |
 |`setOnChange`| Function | Andrey Khudenkikh | done | pass |  |
 |`setContentModifier`| Function | Andrey Khudenkikh | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*CheckboxGroup*| *Component* | Dudkin Sergey| done |  |  |
