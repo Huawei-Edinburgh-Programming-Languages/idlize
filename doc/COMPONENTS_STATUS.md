@@ -169,12 +169,12 @@
 |`setOnKeyEvent1`| Function |Pavelyev Ivan | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setOnDigitalCrown`| Function | Evstigneev Roman | done | test blocked | feature: API not present, test blocked since wearable, commented ViewAbstract static methods code |
 |`setOnKeyPreIme`| Function | Pavelyev Ivan | done | failed | unit tests failed, commented ViewAbstractModelNG static methods code |
-|`setOnKeyEventDispatch`| Function | Lobah Mikhail| done| failed  | Not exists on FB, commented ViewAbstract static methods code|
+|`setOnKeyEventDispatch`| Function | Lobah Mikhail| done| failed | |
 |`setOnFocusAxisEvent`| Function | Evstigneev Roman | done | test blocked | feature: API not present, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setOnAxisEvent`| Function | Tuzhilkin Ivan | done | failed | need cherry-pick to feature_branch, need to submit issue |
 |`setFocusable`| Function | Roman Sedaikin | done | failed | commented ViewAbstract static methods code |
 |`setNextFocus`| Function | Politov Mikhail | done | test blocked | done on upstream, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`setTabStop`| Function | Lobah Mikhail| done| failed | Not exists on FB, commented ViewAbstract static methods code |
+|`setTabStop`| Function | Lobah Mikhail| done| failed | |
 |`setOnFocus`| Function | Roman Sedaikin | done | pass | |
 |`setOnBlur`| Function | Roman Sedaikin | done | pass | |
 |`setTabIndex`| Function | Dmitry A Smirnov| done | failed | commented ViewAbstract static methods code |
@@ -244,7 +244,7 @@
 |`setClip`| Function | Dudkin Sergey | done |  | clip1, clip2 not implemented |
 |`setClipShape`| Function | Tuzhilkin Ivan | testskipped | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setMask`| Function | Maksimov Nikita | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
-|`setMaskShape`| Function |Tuzhilkin Ivan| done | test blocked | need cherry-pick to feature_branch, test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
+|`setMaskShape`| Function |Tuzhilkin Ivan| done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setKey`| Function | Lobah Mikhail | done | failed | commented ViewAbstract static methods code |
 |`setId`| Function | Erokhin Ilya | done | failed | commented ViewAbstract static methods code |
 |`setGeometryTransition0`| Function | Lobah Mikhail | testskipped | test blocked | no method found test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IC3EHG |
