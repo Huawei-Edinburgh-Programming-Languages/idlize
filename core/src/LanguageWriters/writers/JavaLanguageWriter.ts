@@ -253,9 +253,6 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     makeStatement(expr: LanguageExpression): LanguageStatement {
         return new CLikeExpressionStatement(expr)
     }
-    makeUnionSelector(value: string, valueType: string): LanguageStatement {
-        return this.makeAssign(valueType, undefined, this.makeMethodCall(value, "getSelector", []), false)
-    }
     makeUnionVariantCondition(_convertor: ArgConvertor,
                               _valueName: string,
                               valueType: string,
@@ -330,10 +327,6 @@ export class JavaLanguageWriter extends CLikeLanguageWriter {
     }
     makeValueFromOption(value: string): LanguageExpression {
         return this.makeString(`${value}`)
-    }
-    runtimeType(param: ArgConvertor, valueType: string, value: string) {
-        this.writeStatement(this.makeAssign(valueType, undefined,
-            this.makeRuntimeTypeGetterCall(value), false))
     }
     override i32FromEnum(value: LanguageExpression, enumEntry: idl.IDLEnum): LanguageExpression {
         const i32Value = idl.isStringEnum(enumEntry)

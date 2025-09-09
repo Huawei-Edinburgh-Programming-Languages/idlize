@@ -340,9 +340,6 @@ export class CppLanguageWriter extends CLikeLanguageWriter {
     override makeTupleAccess(value: string, index: number): LanguageExpression {
         return this.makeString(`${value}.value${index}`)
     }
-    override makeUnionSelector(value: string, valueType: string): LanguageStatement {
-        return this.makeAssign(valueType, undefined, this.makeString(`${value}.selector`), false)
-    }
 
     override makeUnionVariantCast(value: string, type: string, convertor: ArgConvertor, index: number) {
         return this.makeString(`${value}.value${index}`)

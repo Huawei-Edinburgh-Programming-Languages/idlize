@@ -583,9 +583,6 @@ export class KotlinLanguageWriter extends LanguageWriter {
     makeDefinedCheck(value: string): LanguageExpression {
         return this.makeString(`${value} != null`)
     }
-    makeUnionSelector(value: string, valueType: string): LanguageStatement {
-        return this.makeAssign(valueType, undefined, this.makeMethodCall(value, "getSelector", []), false)
-    }
     makeUnionVariantCast(value: string, type: string, convertor: ArgConvertor, index: number) {
         return this.makeMethodCall(value, `getValue${index}`, [])
     }

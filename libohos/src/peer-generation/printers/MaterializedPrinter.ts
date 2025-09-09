@@ -582,7 +582,6 @@ class TSMaterializedFileVisitor extends MaterializedFileVisitorBase {
         // common runtime dependencies
         this.collector.addFeatures([
             'Finalizable',
-            'runtimeType',
             'RuntimeType',
             'SerializerBase',
             'DeserializerBase',

@@ -572,9 +572,6 @@ export class CJLanguageWriter extends LanguageWriter {
     get supportedFieldModifiers(): FieldModifier[] {
         return [FieldModifier.PUBLIC, FieldModifier.PRIVATE, FieldModifier.PROTECTED, FieldModifier.READONLY, FieldModifier.STATIC]
     }
-    makeUnionSelector(value: string, valueType: string): LanguageStatement {
-        return this.makeAssign(valueType, undefined, this.makeMethodCall(value, "getSelector", []), false)
-    }
     makeUnionVariantCondition(_convertor: ArgConvertor, _valueName: string, valueType: string, type: string, convertorIndex?: number): LanguageExpression {
         return this.makeString(`${valueType} == ${convertorIndex}`)
     }
@@ -592,10 +589,6 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     makeEquals(args: LanguageExpression[]): LanguageExpression {
         return this.makeString(`refEq(${args.map(arg => `${arg.asString()}`).join(`, `)})`)
-    }
-    runtimeType(param: ArgConvertor, valueType: string, value: string) {
-        this.writeStatement(this.makeAssign(valueType, undefined,
-            this.makeRuntimeTypeGetterCall(value), false))
     }
     escapeKeyword(word: string): string {
         return CJKeywords.has(word) ? word.concat("_") : word

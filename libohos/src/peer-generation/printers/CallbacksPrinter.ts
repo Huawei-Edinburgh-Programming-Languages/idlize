@@ -152,7 +152,7 @@ class DeserializeCallbacksVisitor {
                 "ResourceHolder", "KInt", "KStringPtr", "wrapSystemCallback",
                 "DeserializerBase", "SerializerBase", "CallbackResource",
                 "InteropNativeModule", "KPointer", "RuntimeType",
-                "KSerializerBuffer", "NativeBuffer", "runtimeType",
+                "KSerializerBuffer", "NativeBuffer",
             ], "@koalaui/interop")
             if (this.writer.language === Language.TS) {
                 this.imports.addFeatures(["unsafeCast"], "@koalaui/common")

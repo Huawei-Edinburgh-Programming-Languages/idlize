@@ -122,7 +122,7 @@ class TSComponentFileVisitor implements ComponentFileVisitor {
         collectDeclItself(this.library, idl.createReferenceType(getReferenceTo('AttributeModifier')), imports)
         collectDeclItself(this.library, idl.createReferenceType(getReferenceTo('AttributeUpdater')), imports)
         if (!this.options.isDeclared) {
-            imports.addFeatures(["RuntimeType", "runtimeType"], "@koalaui/interop")
+            imports.addFeature("RuntimeType", "@koalaui/interop")
             imports.addFeatures(["NodeAttach", "remember"], "@koalaui/runtime")
             imports.addFeature('ComponentBase', './ComponentBase')
             if (this.library.language === Language.TS) {

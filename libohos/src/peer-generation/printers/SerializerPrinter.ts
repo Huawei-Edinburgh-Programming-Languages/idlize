@@ -402,7 +402,7 @@ export function getSerializerDeclarations(library: PeerLibrary, dependencyFilter
 export function printSerializerImports(library: PeerLibrary, language: Language, collector: ImportsCollector) {
     if (language === Language.TS || language === Language.ARKTS) {
         collector.addFeatures([
-            "SerializerBase", "DeserializerBase", "CallbackResource", "InteropNativeModule", "MaterializedBase", "Tags", "RuntimeType", "runtimeType", "toPeerPtr", 'nullptr', 'KPointer'
+            "SerializerBase", "DeserializerBase", "CallbackResource", "InteropNativeModule", "MaterializedBase", "Tags", "RuntimeType", "toPeerPtr", 'nullptr', 'KPointer'
         ], "@koalaui/interop")
         collector.addFeatures(["int32", "int64", "float32", "unsafeCast"], "@koalaui/common")
         if (language == Language.TS && library.name === "arkoala") {

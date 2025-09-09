@@ -192,7 +192,6 @@ function fillPeerImports(collector: ImportsCollector, library: PeerLibrary) {
         collector.addFeatures(['unsafeCast'], '@koalaui/common')
         collector.addFeatures([
             'Finalizable',
-            'runtimeType',
             'RuntimeType',
             'SerializerBase',
             'DeserializerBase',

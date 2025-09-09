@@ -250,9 +250,6 @@ export class ETSLanguageWriter extends TSLanguageWriter {
     get supportedModifiers(): MethodModifier[] {
         return [MethodModifier.PUBLIC, MethodModifier.PRIVATE, MethodModifier.NATIVE, MethodModifier.STATIC]
     }
-    runtimeType(param: ArgConvertor, valueType: string, value: string) {
-        super.runtimeType(param, valueType, value)
-    }
     makeUnionVariantCast(value: string, type: string, convertor: ArgConvertor, index?: number): LanguageExpression {
         return this.makeString(`${value} as ${type}`)
     }

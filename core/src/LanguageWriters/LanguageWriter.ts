@@ -675,9 +675,6 @@ export abstract class LanguageWriter {
     makeTupleAccess(value: string, index: number): LanguageExpression {
         return this.makeString(`${value}[${index}]`)
     }
-    makeUnionSelector(value: string, valueType: string): LanguageStatement {
-        return this.makeAssign(valueType, undefined, this.makeString(`runtimeType(${value})`), false)
-    }
 
     makeUnionVariantCast(value: string, type: string, convertor: ArgConvertor, index?: number): LanguageExpression {
         return this.makeString(`unsafeCast<${type}>(${value})`)
@@ -751,10 +748,6 @@ export abstract class LanguageWriter {
     }
     makeUnsafeCast_(value: LanguageExpression, type: idl.IDLType, typeOptions?: PrintHint) {
         return `(${value.asString()} as ${this.getNodeName(type)})`
-    }
-    runtimeType(param: ArgConvertor, valueType: string, value: string) {
-        this.writeStatement(this.makeAssign(valueType, idl.IDLI32Type,
-            this.makeFunctionCall("runtimeType", [this.makeString(value)]), false))
     }
 
     makeEnumEntity(enumEntity: idl.IDLEnum, options: { isExport: boolean, isDeclare?: boolean }): LanguageStatement {
