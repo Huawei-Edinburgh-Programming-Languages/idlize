@@ -418,7 +418,7 @@
 |`setOnHoverStatusChange`| Function | Politov Mikhail | done | pass |  |
 |`setEnableAnimation`| Function | Politov Mikhail | done | test blocked | no screen rotation supported by dayu200 |
 |`setAutoHalfFold`| Function | Politov Mikhail | done | test blocked | no screen rotation supported by dayu200 |
-|*FormComponent*| *Component* | Vadim Voronov | blocked IDL |  | whole component out of scope, no need to develop |
+|*FormComponent*| *Component* | Vadim Voronov | in progress |  | whole component out of scope, no need to develop |
 |`construct`| Function | Vadim Voronov | done | out of scope |  |
 |`setFormComponentOptions`| Function | Vadim Voronov |skip | out of scope |  |
 |`setSize`| Function | Vadim Voronov | done | out of scope | empty method https://gitee.com/openharmony/arkui_ace_engine/issues/IB78HF |
@@ -431,7 +431,7 @@
 |`setOnRouter`| Function | Vadim Voronov | skip | out of scope | https://gitee.com/nikolay-igotti/idlize/issues/ICAZXO |
 |`setOnUninstall`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setOnLoad`| Function | Vadim Voronov | done | out of scope | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-| `setOnUpdate` | Function |  |  |  |  |  |  |
+|`setOnUpdate`| Function | Vadim Voronov | in progress |  |  |  |  |
 |*FormLink*| *Component* | Dmitry A Smirnov| done | out of scope | whole component out of scope, no need to develop |
 |`construct`| Function |Dmitry A Smirnov| done | out of scope |  |
 |`setFormLinkOptions`| Function | Dmitry A Smirnov| done | out of scope |  |
@@ -3143,13 +3143,13 @@
 |*CanvasPattern*| *Class* | Vadim Voronov | done |  |  |
 |`construct`| Function |Vadim Voronov | done |  |  |
 |`setTransform`| Function | Vadim Voronov | done |  |  |
-|*ImageBitmap*| *Class* | Vadim Voronov | testskipped  |  | |
+|*ImageBitmap*| *Class* | Vadim Voronov | in progress |  | |
 |`construct`| Function | Vadim Voronov | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`close`| Function | Vadim Voronov | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`getHeight`| Function | Vadim Voronov | testskipped | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`setHeight`| Function | | | | |
+|`setHeight`| Function | Vadim Voronov | in progress | | |
 |`getWidth`| Function | Vadim Voronov | testskipped | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`setWidth`| Function | | | | |
+|`setWidth`| Function |  Vadim Voronov | in progress | | | |
 |*ImageData*| *Class* | Morozov Sergey | in progress | | |
 |`construct`| Function |Morozov Sergey | done | | |
 |`getData`| Function | Morozov Sergey | in progress | | |
@@ -3248,7 +3248,7 @@
 |`setTextAlign`| Function  | Vadim Voronov | done |  |   |
 |`getTextBaseline`| Function  | Vadim Voronov | blocked IDL |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 |
 |`setTextBaseline`| Function  | Vadim Voronov | done |  |   |
-|*CanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov |  |
+|*CanvasRenderingContext2D*| *Class* | Vadim Voronov | in progress | Vadim Voronov |  |
 |`construct`| Function |Vadim Voronov| in progress | pass | todo in API v.129 |
 |`toDataURL`| Function |Vadim Voronov| done | failed | bug hos2393 |
 |`startImageAnalyzer`| Function | Vadim Voronov | done | failed  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 |
@@ -3258,9 +3258,9 @@
 |`onOnDetach`| Function | Vadim Voronov | done | failed | bug hos2391 |
 |`offOnDetach`| Function | Vadim Voronov | done | failed | bug hos2391 |
 |`getHeight`| Function |Vadim Voronov| done | pass | |
-|`setHeight`| Function |Vadim Voronov | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/ICDSL|
+|`setHeight`| Function |Vadim Voronov | in progress | | |
 |`getWidth`| Function |Vadim Voronov| done | pass | |
-|`setWidth`| Function |Vadim Voronov | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/ICDSL|
+|`setWidth`| Function |Vadim Voronov | in progress |  | |
 |`getCanvas`| Function |Vadim Voronov | testskipped | |  |
 |`setCanvas`| Function |Vadim Voronov | in progress | | todo in API v.129 |
 |*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov | |
