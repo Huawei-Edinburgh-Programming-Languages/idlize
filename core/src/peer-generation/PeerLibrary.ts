@@ -98,6 +98,8 @@ export class PeerLibrary implements LibraryInterface {
         return this._cachedIdlLibrary
     }
 
+    private lazyConvertors = new Map<string, ()=> ArgConvertor>()
+    private typedefConvertors = new Map<string, ArgConvertor>()
     public get globals() {
         return query(this.asIDLLibrary(), lenses.globals)
     }
@@ -332,7 +334,12 @@ export class PeerLibrary implements LibraryInterface {
         return undefined
     }
 
+    static toName(type: idl.IDLType): string {
+        return idl.isNamedNode(type) ? type.name : "unknown"
+    }
+
     typeConvertor(param: string, type: idl.IDLType, isOptionalParam = false): ArgConvertor {
+        console.log(`Type convertor type: ${PeerLibrary.toName(type)}`)
         if (isOptionalParam) {
             return new OptionConvertor(this, param, idl.isOptionalType(type) ? type : idl.createOptionalType(type))
         }
@@ -445,11 +452,30 @@ export class PeerLibrary implements LibraryInterface {
             return new CallbackConvertor(this, param, declaration, this.interopNativeModule)
         }
         if (idl.isTypedef(declaration)) {
-            if (isCyclicTypeDef(declaration)) {
-                warn(`Cyclic typedef: ${idl.DebugUtils.debugPrintType(type)}`)
-                return new CustomTypeConvertor(param, declaration.name, false, declaration.name)
+            const fqn = idl.getFQName(declaration)
+            var convertor = this.typedefConvertors.get(fqn)
+            console.log(`Typedef: ${fqn}, convertor: ${convertor ? "yes": "no"}, map: ${this.typedefConvertors.size}`)
+            if (convertor) return convertor
+
+            var lazyConvertor = this.lazyConvertors.get(fqn)
+            console.log(`  lazy convertor: ${lazyConvertor ? "yes": "no"}, map: ${this.lazyConvertors.size}`)
+
+            
+            if (!lazyConvertor) {
+                lazyConvertor = () => this.typeConvertor(param, declaration.type)
+                this.lazyConvertors.set(fqn, lazyConvertor)
             }
-            return new TypeAliasConvertor(this, param, declaration)
+            convertor = new TypeAliasConvertor(lazyConvertor)
+            this.typedefConvertors.set(fqn, convertor)
+            return convertor
+            // if (isCyclicTypeDef(declaration)) {
+            //     warn(`Cyclic typedef: ${idl.DebugUtils.debugPrintType(type)}`)
+            //     return new CustomTypeConvertor(param, declaration.name, false, declaration.name)
+            // }
+            // convertor = new TypeAliasConvertor(this, param, declaration)
+            // this.typedefConvertors.set(declaration.name, convertor)
+            // console.log(`  convertors: ${this.typedefConvertors}`)
+            // return convertor
         }
         if (idl.isInterface(declaration)) {
             if (isMaterialized(declaration, this)) {

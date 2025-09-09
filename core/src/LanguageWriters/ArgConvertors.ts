@@ -82,7 +82,7 @@ export function isDirectConvertedType(originalType: idl.IDLType|undefined, libra
     let convertor = library.typeConvertor("x", originalType, false)
     // Resolve aliases.
     while (convertor instanceof TypeAliasConvertor) {
-        convertor = convertor.convertor
+        convertor = convertor.convertor()
     }
     if (convertor instanceof ArrayConvertor ||
         convertor instanceof CustomTypeConvertor ||
@@ -959,11 +959,83 @@ export class ProxyConvertor extends BaseArgConvertor {
     }
 }
 
-export class TypeAliasConvertor extends ProxyConvertor {
-    constructor(library: LibraryInterface, param: string, typedef: idl.IDLTypedef) {
-        super(library.typeConvertor(param, typedef.type), idl.createReferenceType(typedef))
+
+export class LazyArgConvertor implements ArgConvertor {
+
+    constructor(public convertor: ()=> ArgConvertor) {
+    }
+
+    // constructor(library: LibraryInterface, param: string, typedef: idl.IDLTypedef) {
+    //     super(library.typeConvertor(param, typedef.type), idl.createReferenceType(typedef))
+    // }
+
+    //  constructor(public convertor: ArgConvertor, suggestedReference?: idl.IDLReferenceType) {
+    //     super(suggestedReference ? suggestedReference : convertor.idlType, convertor.runtimeTypes, convertor.isScoped, convertor.useArray, convertor.param)
+    // }
+
+
+    get param(): string {
+        return this.convertor().param
+    }
+    get idlType(): idl.IDLType {
+        return this.convertor().idlType
+    }
+    get isScoped(): boolean {
+        return this.convertor().isScoped
+    }
+    get useArray(): boolean {
+        return this.convertor().useArray
+    }
+    get runtimeTypes(): RuntimeType[] {
+        return this.convertor().runtimeTypes
+    }
+
+    convertorArg(param: string, writer: LanguageWriter): string {
+        return this.convertor().convertorArg(param, writer)
+    }
+    convertorDeserialize(bufferName: string, deserializerName: string, assigneer: ExpressionAssigner, writer: LanguageWriter): LanguageStatement {
+        return this.convertor().convertorDeserialize(bufferName, deserializerName, assigneer, writer)
+    }
+    convertorSerialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
+        return this.convertor().convertorSerialize(param, value, printer)
+    }
+    nativeType(): idl.IDLType {
+        return this.convertor().nativeType()
+    }
+    interopType(): idl.IDLType {
+        return this.convertor().interopType()
+    }
+    isPointerType(): boolean {
+        return this.convertor().isPointerType()
+    }
+    unionDiscriminator(value: string, index: number, writer: LanguageWriter, duplicates: Set<string>): LanguageExpression | undefined {
+        return this.convertor().unionDiscriminator(value, index, writer, duplicates)
+    }
+    getMembers(): string[] {
+        return this.convertor().getMembers()
+    }
+    holdResource(resourceName: string, holder: string, writer: LanguageWriter): void {
+        return this.convertor().holdResource(resourceName, holder, writer)
+    }
+    getObjectAccessor(languge: Language, value: string, args?: Record<string, string>, writer?: LanguageWriter): string {
+        return this.convertor().getObjectAccessor(languge, value, args, writer)        
+    }
+    targetType(writer: LanguageWriter): string {
+        return this.convertor().targetType(writer)
     }
 }
+
+export class TypeAliasConvertor extends LazyArgConvertor {
+    constructor(convertor: () => ArgConvertor) {
+        super(convertor)
+    }
+}
+
+// export class TypeAliasConvertor extends ProxyConvertor {
+//     constructor(library: LibraryInterface, param: string, typedef: idl.IDLTypedef) {
+//         super(library.typeConvertor(param, typedef.type), idl.createReferenceType(typedef))
+//     }
+// }
 
 export class CustomTypeConvertor extends BaseArgConvertor {
     constructor(param: string,
