@@ -3545,8 +3545,8 @@
 |`addText`| Function | Morozov Sergey | done | | | |
 |`deleteText`| Function | Morozov Sergey | done | | | |
 |`getSelection`| Function | Morozov Sergey | done | | | |
-|`clearPreviewText`| Function | - | done | | UT by Samarin Sergey |
-|`getText`| Function | - | done | | UT by Samarin Sergey |
+|`clearPreviewText`| Function | HQ | done | | UT by Samarin Sergey |
+|`getText`| Function | HQ | done | | UT by Samarin Sergey |
 |*ScrollResult*| *Class* | | | | |
 |`construct`| Function | | | | |
 |`getOffsetRemain`| Function | | | | |
