@@ -219,6 +219,7 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
         return subst
     }
     protected applySubstitution(subst:Map<string, idl.IDLType>, type:idl.IDLType): idl.IDLType {
+        if (subst.size == 0) return type
         if (idl.isContainerType(type)) {
             return idl.createContainerType(type.containerKind, type.elementType.map(it => this.applySubstitution(subst, it)))
         }
@@ -235,7 +236,7 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
     }
     protected mapCallback(decl: idl.IDLCallback, args?:idl.IDLType[]): string {
         const subst = this.createTypeSubstitution(decl.typeParameters, args)
-        const parameters = decl.parameters.map(it => {
+        const parameters = subst.size == 0 ? decl.parameters : decl.parameters.map(it => {
             const param = idl.clone(it)
             param.type = this.applySubstitution(subst, param.type)
             return param
@@ -250,6 +251,7 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
             } ${decl.properties
                 .map(it => isTuple ? this.processTupleType(it) : it)
                 .map(it => {
+                    if (subst.size == 0) return it
                     const prop = idl.clone(it)
                     prop.type = this.applySubstitution(subst, prop.type)
                     return prop
