@@ -3542,11 +3542,11 @@
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
 |`getTextContentRect`| Function | Morozov Sergey | done | test blocked |
 |`getTextContentLineCount`| Function | Morozov Sergey | done |  | |
-|`addText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
-|`deleteText`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
-|`getSelection`| Function | Morozov Sergey | done | | done on UB, no api in sdk on FB | |
-|`clearPreviewText`| Function | | | | not generated on Upstream|
-|`getText`| Function | | | | not generated on Upstream|
+|`addText`| Function | Morozov Sergey | done | | | |
+|`deleteText`| Function | Morozov Sergey | done | | | |
+|`getSelection`| Function | Morozov Sergey | done | | | |
+|`clearPreviewText`| Function | - | done | | UT by Samarin Sergey |
+|`getText`| Function | - | done | | UT by Samarin Sergey |
 |*ScrollResult*| *Class* | | | | |
 |`construct`| Function | | | | |
 |`getOffsetRemain`| Function | | | | |
