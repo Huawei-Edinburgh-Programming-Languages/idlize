@@ -7213,12 +7213,12 @@ SDK version:    d322c45c777fc2fed131cf0860e3a827103954d5 remotes/origin/revert-m
 |undefined|unknown|unknown|-1|ComponentRoot|construct|Function|  |  |  |  |  |
 |static_components.idl|unknown|unknown|-1|unnamed|*CustomBuilderRoot*|*Component*|  |  |  |  |  |
 |undefined|unknown|unknown|-1|CustomBuilderRoot|construct|Function|  |  |  |  |  |
-|static_components.idl|unknown|unknown|-1|unnamed|*CustomLayoutRoot*|*Component*|  |  |  |  |  |
-|undefined|unknown|unknown|-1|CustomLayoutRoot|construct|Function|  |  |  |  |  |
-|static_components.idl|unknown|unknown|-1|CustomLayoutRoot|setSubscribeOnMeasureSize|Function|  |  |  |  |  |
-|static_components.idl|unknown|unknown|-1|CustomLayoutRoot|setSubscribeOnPlaceChildren|Function|  |  |  |  |  |
-|static_components.idl|unknown|unknown|-1|unnamed|*Callback_onMeasureSize_SizeResult*|*Typedef*|  | generated |  |  |  |
-|static_components.idl|unknown|unknown|-1|unnamed|*Callback_onPlaceChildren_Void*|*Typedef*|  | generated |  |  |  |
+|static_components.idl|unknown|unknown|-1|unnamed|*CustomLayoutRoot*|*Component*| Erokhin Ilya |  |  |  |  |
+|undefined|unknown|unknown|-1|CustomLayoutRoot|construct|Function| Erokhin Ilya | done |  |  |  |
+|static_components.idl|unknown|unknown|-1|CustomLayoutRoot|setSubscribeOnMeasureSize|Function| Erokhin Ilya | done |  |  |  |
+|static_components.idl|unknown|unknown|-1|CustomLayoutRoot|setSubscribeOnPlaceChildren|Function| Erokhin Ilya | done |  |  |  |
+|static_components.idl|unknown|unknown|-1|unnamed|*Callback_onMeasureSize_SizeResult*|*Typedef*| Erokhin Ilya | generated |  |  |  |
+|static_components.idl|unknown|unknown|-1|unnamed|*Callback_onPlaceChildren_Void*|*Typedef*| Erokhin Ilya | generated |  |  |  |
 |textFieldOps.idl|unknown|unknown|-1|unnamed|*TextFieldValueCallback*|*Typedef*|  | generated |  |  |  |
 |transformation_matrix.idl|unknown|unknown|-1|unnamed|*TransformationMatrix*|*Interface*|  | generated |  |  |  |
 |transformation_matrix.idl|unknown|unknown|-1|TransformationMatrix|matrix4x4|Property|  | generated |  |  |  |
@@ -8337,24 +8337,24 @@ SDK version:    d322c45c777fc2fed131cf0860e3a827103954d5 remotes/origin/revert-m
 |arkui.component.common|ProgressMask|updateProgress|0|ProgressMask|updateProgress|Function| Maksimov Nikita | done |  |  |  |
 |arkui.component.common|ProgressMask|updateColor|0|ProgressMask|updateColor|Function| Maksimov Nikita | done |  |  |  |
 |arkui.component.common|ProgressMask|enableBreathingAnimation|0|ProgressMask|enableBreathingAnimation|Function| Maksimov Nikita | done |  |  |  |
-|arkui.component.common|unnamed|Layoutable|0|unnamed|*Layoutable*|*Class*|  |  |  |  |  |
-|undefined|unknown|unknown|-1|Layoutable|construct|Function|  |  |  |  |  |
-|arkui.component.common|Layoutable|layout|0|Layoutable|layout|Function|  |  |  |  |  |
-|arkui.component.common|Layoutable|getMargin|0|Layoutable|getMargin|Function|  |  |  |  |  |
-|arkui.component.common|Layoutable|getPadding|0|Layoutable|getPadding|Function|  |  |  |  |  |
-|arkui.component.common|Layoutable|getBorderWidth|0|Layoutable|getBorderWidth|Function|  |  |  |  |  |
-|arkui.component.common|Layoutable|measureResult|0|Layoutable|getMeasureResult|Property|  |  |  |  |  |
-|arkui.component.common|Layoutable|measureResult|0|Layoutable|setMeasureResult|Property|  |  |  |  |  |
-|arkui.component.common|Layoutable|uniqueId|0|Layoutable|getUniqueId|Property|  |  |  |  |  |
-|arkui.component.common|Layoutable|uniqueId|0|Layoutable|setUniqueId|Property|  |  |  |  |  |
-|arkui.component.common|unnamed|Measurable|0|unnamed|*Measurable*|*Class*|  |  |  |  |  |
-|undefined|unknown|unknown|-1|Measurable|construct|Function|  |  |  |  |  |
-|arkui.component.common|Measurable|measure|0|Measurable|measure|Function|  |  |  |  |  |
-|arkui.component.common|Measurable|getMargin|0|Measurable|getMargin|Function|  |  |  |  |  |
-|arkui.component.common|Measurable|getPadding|0|Measurable|getPadding|Function|  |  |  |  |  |
-|arkui.component.common|Measurable|getBorderWidth|0|Measurable|getBorderWidth|Function|  |  |  |  |  |
-|arkui.component.common|Measurable|uniqueId|0|Measurable|getUniqueId|Property|  |  |  |  |  |
-|arkui.component.common|Measurable|uniqueId|0|Measurable|setUniqueId|Property|  |  |  |  |  |
+|arkui.component.common|unnamed|Layoutable|0|unnamed|*Layoutable*|*Class*| Erokhin Ilya | done |  |  |  |
+|undefined|unknown|unknown|-1|Layoutable|construct|Function| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Layoutable|layout|0|Layoutable|layout|Function| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Layoutable|getMargin|0|Layoutable|getMargin|Function| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Layoutable|getPadding|0|Layoutable|getPadding|Function| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Layoutable|getBorderWidth|0|Layoutable|getBorderWidth|Function| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Layoutable|measureResult|0|Layoutable|getMeasureResult|Property| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Layoutable|measureResult|0|Layoutable|setMeasureResult|Property| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Layoutable|uniqueId|0|Layoutable|getUniqueId|Property| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Layoutable|uniqueId|0|Layoutable|setUniqueId|Property| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|unnamed|Measurable|0|unnamed|*Measurable*|*Class*| Erokhin Ilya | done |  |  |  |
+|undefined|unknown|unknown|-1|Measurable|construct|Function| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Measurable|measure|0|Measurable|measure|Function| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Measurable|getMargin|0|Measurable|getMargin|Function| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Measurable|getPadding|0|Measurable|getPadding|Function| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Measurable|getBorderWidth|0|Measurable|getBorderWidth|Function| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Measurable|uniqueId|0|Measurable|getUniqueId|Property| Erokhin Ilya | done |  |  |  |
+|arkui.component.common|Measurable|uniqueId|0|Measurable|setUniqueId|Property| Erokhin Ilya | done |  |  |  |
 |arkui.component.common|unnamed|TextContentControllerBase|0|unnamed|*TextContentControllerBase*|*Class*| Morozov Sergey | blocked IDL |  |  |  |
 |arkui.component.common|TextContentControllerBase|constructor|0|TextContentControllerBase|construct|Function|  |  |  |  |  |
 |arkui.component.common|TextContentControllerBase|getCaretOffset|0|TextContentControllerBase|getCaretOffset|Function| Dudkin Sergey | done |  |  |  |
