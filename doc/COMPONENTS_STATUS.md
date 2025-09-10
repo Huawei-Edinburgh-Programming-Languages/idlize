@@ -1608,10 +1608,10 @@
 |`construct`| Function |Tuzhilkin Ivan | testskipped | | implementation is created early by Nikolay Pisanov |
 |*CustomBuilderRoot*|*Component*||||
 |`construct`|Function||||
-|*CustomLayoutRoot*| *Component* | Erokhin Ilya | in progress | | |
-|`construct`| Function | Erokhin Ilya | in progress | | |
-|`setSubscribeOnMeasureSize`| Function | Erokhin Ilya | in progress | | |
-|`setSubscribeOnPlaceChildren`| Function | Erokhin Ilya | in progress | | |
+|*CustomLayoutRoot*| *Component* | Erokhin Ilya | done | | |
+|`construct`| Function | Erokhin Ilya | done | | |
+|`setSubscribeOnMeasureSize`| Function | Erokhin Ilya | done | | |
+|`setSubscribeOnPlaceChildren`| Function | Erokhin Ilya | done | | |
 |*AnimatorOptions*|*Class*||||
 |`construct`      |Function|||| 
 |`getDuration`    |Property|||| 
@@ -3519,24 +3519,24 @@
 |`updateProgress`| Function | Maksimov Nikita | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`updateColor`| Function | Maksimov Nikita | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`enableBreathingAnimation`| Function | Maksimov Nikita | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|*Layoutable*| *Class* | Samarin Sergey | in progress | | |
-|`construct`| Function | Samarin Sergey | in progress | | |
-|`layout`|Function||||
-|`getMargin`| Function | Samarin Sergey | in progress | | |
-|`getPadding`| Function | Samarin Sergey | in progress | | |
-|`getBorderWidth`| Function | Samarin Sergey | in progress | | |
-|`getMeasureResult`| Function | Samarin Sergey | in progress | | |
-|`setMeasureResult`| Function | Samarin Sergey | in progress | | |
-|`getUniqueId`| Function | Samarin Sergey | in progress | | |
-|`setUniqueId`| Function | Samarin Sergey | in progress | | |
-|*Measurable*| *Class* | Samarin Sergey | in progress | | |
-|`construct`| Function | Samarin Sergey | in progress | | |
-|`measure`| Function | Samarin Sergey | in progress | | |
-|`getMargin`| Function | Samarin Sergey | in progress | | |
-|`getPadding`| Function | Samarin Sergey | in progress | | |
-|`getBorderWidth`| Function | Samarin Sergey | in progress | | |
-|`getUniqueId`| Function | Samarin Sergey | in progress | | |
-|`setUniqueId`| Function | Samarin Sergey | in progress | | |
+|*Layoutable*| *Class* | Samarin Sergey | done | | |
+|`construct`| Function | Samarin Sergey | done | | |
+|`layout`|Function| Samarin Sergey | done ||
+|`getMargin`| Function | Samarin Sergey | done | | |
+|`getPadding`| Function | Samarin Sergey | done | | |
+|`getBorderWidth`| Function | Samarin Sergey | done | | |
+|`getMeasureResult`| Function | Samarin Sergey | done | | |
+|`setMeasureResult`| Function | Samarin Sergey | done | | |
+|`getUniqueId`| Function | Samarin Sergey | done | | |
+|`setUniqueId`| Function | Samarin Sergey | done | | |
+|*Measurable*| *Class* | Samarin Sergey | done | | |
+|`construct`| Function | Samarin Sergey | done | | |
+|`measure`| Function | Samarin Sergey | done | | |
+|`getMargin`| Function | Samarin Sergey | done | | |
+|`getPadding`| Function | Samarin Sergey | done | | |
+|`getBorderWidth`| Function | Samarin Sergey | done | | |
+|`getUniqueId`| Function | Samarin Sergey | done | | |
+|`setUniqueId`| Function | Samarin Sergey | done | | |
 |*TextContentControllerBase*| *Class* | Morozov Sergey | done |  | |
 |`construct`| Function | Dudkin Sergey | done |  |  |
 |`getCaretOffset`| Function | Dudkin Sergey | done |  |  |
