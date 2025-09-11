@@ -3149,7 +3149,7 @@
 |`getHeight`| Function | Vadim Voronov | testskipped | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setHeight`| Function | Vadim Voronov | in progress | | |
 |`getWidth`| Function | Vadim Voronov | testskipped | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`setWidth`| Function |  Vadim Voronov | in progress | | | |
+|`setWidth`| Function |  Vadim Voronov | in progress | | |
 |*ImageData*| *Class* | Morozov Sergey | in progress | | |
 |`construct`| Function |Morozov Sergey | done | | |
 |`getData`| Function | Morozov Sergey | in progress | | |
@@ -3258,11 +3258,11 @@
 |`onOnDetach`| Function | Vadim Voronov | done | failed | bug hos2391 |
 |`offOnDetach`| Function | Vadim Voronov | done | failed | bug hos2391 |
 |`getHeight`| Function |Vadim Voronov| done | pass | |
-|`setHeight`| Function |Vadim Voronov | in progress | | |
+|`setHeight`| Function |Vadim Voronov | out of scope | | |
 |`getWidth`| Function |Vadim Voronov| done | pass | |
-|`setWidth`| Function |Vadim Voronov | in progress |  | |
+|`setWidth`| Function |Vadim Voronov | out of scope | | |
 |`getCanvas`| Function |Vadim Voronov | testskipped | |  |
-|`setCanvas`| Function |Vadim Voronov | in progress | | todo in API v.129 |
+|`setCanvas`| Function |Vadim Voronov | out of scope | | |
 |*OffscreenCanvasRenderingContext2D*| *Class* | Vadim Voronov | done | Vadim Voronov | |
 |`construct`| Function |Vadim Voronov | done | | |
 |`toDataURL`| Function | Vadim Voronov | done | | |
