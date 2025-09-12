@@ -2203,7 +2203,7 @@
 |*SamplingOptions*| *Class* | | |
 | `construct0` | Function |  |  |  |  |  |  |
 | `construct1` | Function |  |  |  |  |  |  |
-|*Canvas*| *Class* |Vadim Voronov | blocked AceEngine |  |
+|*Canvas*| *Class* |Vadim Voronov | out of scope |  | external object |
 |`construct`         |Function||||
 |`drawRect0`         |Function||||
 |`drawRect1`         |Function||||
@@ -2220,7 +2220,7 @@
 |*ColorFilter*| *Class* | Evstigneev Roman | done |
 |`construct`| Function | Evstigneev Roman | in progress |
 |`createBlendModeColorFilter`| Function | Evstigneev Roman | in progress |
-|*Brush*| *Class* | | |
+|*Brush*| *Class* | Samarin Sergey | out of scope | | external object |
 |`construct0`| Function | | |
 |`construct1`| Function | | |
 |`setBlendMode`| Function | | |
@@ -4852,7 +4852,7 @@
 |`popToName`| Function | | |
 |*SearchOps*| *Class* | | |
 |`registerSearchValueCallback`| Function | | |
-|*PersistentStorageBackend*|*Class*||||
+|*PersistentStorageBackend*|*Class*| Samarin Sergey | in progress |||
 |`get`                     |Function||||
 |`has`                     |Function||||
 |`remove`                  |Function||||
