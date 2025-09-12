@@ -299,7 +299,7 @@
 |`setParallelGesture`| Function | Erokhin Ilya | testskipped | test blocked | test blocked by `id` interface |
 |`setBlur`| Function | Erokhin Ilya | done | test blocked | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setLinearGradientBlur`| Function |Lobah Mikhail | done | failed | linearGradientBlur1 not implemented |
-|`setSystemBarEffect`| Function | Lobah Mikhail | blocked IDL | test blocked IDL | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified|
+|`setSystemBarEffect`| Function | Ekaterina Stepanova | in progress |  |  |
 |`setBackdropBlur`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setSharedTransition`|Function|Skroba Gleb | done | test blocked | navigation between pages does not work to check transition, commented ViewAbstract static methods code |
 |`setChainMode`| Function | Berezin Kirill | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
