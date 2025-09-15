@@ -9,6 +9,8 @@ test arktscgen:
     - !reference [.npm, script]
     - !reference [.panda, script]
     - npm run all --prefix arktscgen
+    - npm run download:sdk --prefix external
+    - npm run absolute:sdk --prefix external
     - npm run build --prefix external/arkoala-arkts
     - npm run compile --prefix external/incremental/compat
     - npm run compile --prefix external/incremental/common
