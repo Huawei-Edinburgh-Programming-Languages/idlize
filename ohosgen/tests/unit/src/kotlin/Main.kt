@@ -1,6 +1,6 @@
-import xmldemo.init
-import xmldemo.pullEvents
-import xmldemo.run
+import unittests.init
+import unittests.pullEvents
+import unittests.run
 
 fun main() {
     init()
