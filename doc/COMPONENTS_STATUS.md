@@ -2494,13 +2494,13 @@
 |`setShortName`           |Property||||
 |*EllipseShape*| *Class* | Erokhin Ilya | done | | |
 |`construct`| Function | Erokhin Ilya | done | | |
-|*EnvironmentBackend*     |*Class*||||
-|`isAccessibilityEnabled`  |Function||||
-|`getColorMode`            |Function||||
-|`getFontScale`            |Function||||
-|`getFontWeightScale`      |Function||||
-|`getLayoutDirection`      |Function||||
-|`getLanguageCode`         |Function||||
+|*EnvironmentBackend*     |*Class*| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
+|`isAccessibilityEnabled`  |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
+|`getColorMode`            |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
+|`getFontScale`            |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
+|`getFontWeightScale`      |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
+|`getLayoutDirection`      |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
+|`getLanguageCode`         |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
 |*EnvironmentCallback*|*Class*||||
 |`construct`             |Function||||
 |`onConfigurationUpdated`|Function||||
@@ -3305,12 +3305,12 @@
 |`getOrigin`        |Function||||
 |`getAccessibleResource`|Function||||
 |`grant`            |Function||||
-|*PersistentStorageBackend*|*Class*| Samarin Sergey | in progress |||
-|`get`                     |Function||||
-|`has`                     |Function||||
-|`remove`                  |Function||||
-|`set`                     |Function||||
-|`clear`                   |Function||||
+|*PersistentStorageBackend*|*Class*| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
+|`get`                     |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
+|`has`                     |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
+|`remove`                  |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
+|`set`                     |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
+|`clear`                   |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
 |*PinchGestureEvent*| *Class* | Vadim Voronov | done | | |
 |`construct`| Function |Vadim Voronov | done | | |
 |`getScale`| Function | Vadim Voronov | done | | |
