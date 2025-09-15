@@ -1,25 +1,25 @@
 #!/bin/bash
 
-# $1 - filePath to save patch
-# $2 - search path (file or directory or multiple)
+# $1 - search path (file or directory or multiple)
 
 curDir="$(pwd)"
 rootDir="$(git rev-parse --show-toplevel)"
 
-patchFile=${1:-$curDir"/patches/clang-format.patch"}
+mkfile() { mkdir -p "$(dirname "$1")" && touch "$1" ;  }
+
+patchFile="./patches/clang-format.patch"
 patchFile=$(readlink -m $patchFile)
+mkfile $patchFile
 > $patchFile
 
 searchDir=($@)
-searchDir=${searchDir[@]:1}
+searchDir=${searchDir[@]:0}
 searchDir=$(readlink -m $searchDir)
 
 cd $rootDir
 searchDir=$(realpath -m --relative-to=$rootDir $searchDir)
 echo "Search paths: "$searchDir
-files=($(find $searchDir -type f -iname '*.h' -o -iname '*.cc'))
-
-# find idlize-copy/external/arkoala-arkts/ \( \( -iname '*.h' -or -iname '*.cc' \) -and -not -path "*/node_modules/*" -and -not -path "*/tools/*" \)
+files=($(find $searchDir -not -iname "*.ttf.cc" -and -type f -and \( -iname '*.h' -or -iname '*.cc' \)))
 
 for file in ${files[*]}
 do 
@@ -35,3 +35,5 @@ cd $curDir
 
 echo "Patch saved: "$patchFile
 
+# to apply patch use:
+# git apply --stat --apply --unsafe-paths --verbose ./clang-format/patches/clang-format.patch

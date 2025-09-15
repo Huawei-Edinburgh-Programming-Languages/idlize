@@ -5,13 +5,12 @@
   "license": "Apache-2.0",
   "keywords": [],
   "config": {
-    "sig_path": "../external/arkoala-arkts/framework/native/src ../external/arkoala-arkts/arkui/src/ani/native/",
-    "patch_path": "./patches/sig_patch.patch"
+    "sig_path": "../external/interop/src/cpp/ ../external/incremental/graphics/native/platform/cpp ../external/subset/arkoala-arkts/framework/native/src/generated ../external/ui2abc/libarkts/native/src"
   },
   "scripts": {
-    "check-format": "bash ./check-format.sh ${PATCH_FILE} ${DIR_PATH}",
-    "apply-format": "bash ./apply-correct-format.sh ${PATCH_FILE}",
-    "check-format:external": "DIR_PATH=$npm_package_config_sig_path PATCH_FILE=$npm_package_config_patch_path npm run check-format",
-    "apply-format:external": "PATCH_FILE=$npm_package_config_patch_path npm run apply-format"
+    "check-format": "bash ./check-format.sh ${DIR_PATH}",
+    "apply-format": "bash ./apply-correct-format.sh ${DIR_PATH}",
+    "check-format:external": "DIR_PATH=$npm_package_config_sig_path npm run check-format",
+    "apply-format:external": "DIR_PATH=$npm_package_config_sig_path npm run apply-format"
   }
 }

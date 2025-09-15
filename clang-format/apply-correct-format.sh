@@ -1,16 +1,22 @@
 #!/bin/bash
 
-# $1 - filePath to patch (default - `./patches/clang-format.patch`)
-
-patchFile=${1:-$curDir"/patches/clang-format.patch"}
-patchFile=$(readlink -m $patchFile)
+# $1 - search path (file or directory or multiple)
 
 curDir="$(pwd)"
 rootDir="$(git rev-parse --show-toplevel)"
 
+searchDir=($@)
+searchDir=${searchDir[@]:0}
+searchDir=$(readlink -m $searchDir)
+
 cd $rootDir
+searchDir=$(realpath -m --relative-to=$rootDir $searchDir)
+echo "Search paths: "$searchDir
+files=($(find $searchDir -not -iname "*.ttf.cc" -and -type f -and \( -iname '*.h' -or -iname '*.cc' \)))
 
-echo "Try to apply patch: "$patchFile
-git apply --stat --apply --unsafe-paths --verbose $patchFile
-
+for file in ${files[*]}
+do 
+    echo "Applying clang format: "$file
+    clang-format $file --style=file -i
+done
 cd $curDir
