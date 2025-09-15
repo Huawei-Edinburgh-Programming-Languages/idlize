@@ -67,6 +67,7 @@ export const CoreConfigurationSchema = D.object({
 
 export type CoreConfiguration = ConfigTypeInfer<typeof CoreConfigurationSchema>
 
+
 export const defaultCoreConfiguration: CoreConfiguration = {
     ApiKind: 0,
     TypePrefix: "",

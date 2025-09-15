@@ -147,11 +147,29 @@
         "ignoreMethods": {}
     },
     "constants": {
-        "att1": "0",
-        "ClassWithComplexPropertyType.prop": "new ClassWithPrimitivePropertyType(true, 10)",
-        "DataClass.propString": "''",
-        "DataClass.propObject": "[false, 0, '']",
-        "IDLDataClass.propString": "''",
-        "IDLDataClass.propObject": "[false, 0, '']"
+        "TS": {
+            "att1": "0",
+            "ClassWithComplexPropertyType.prop": "new ClassWithPrimitivePropertyType(true, 10)",
+            "DataClass.propString": "''",
+            "DataClass.propObject": "[false, 0, '']",
+            "IDLDataClass.propString": "''",
+            "IDLDataClass.propObject": "[false, 0, '']"
+        },
+        "ArkTS": {
+            "att1": "0",
+            "ClassWithComplexPropertyType.prop": "new ClassWithPrimitivePropertyType(true, 10)",
+            "DataClass.propString": "''",
+            "DataClass.propObject": "[false, 0, '']",
+            "IDLDataClass.propString": "''",
+            "IDLDataClass.propObject": "[false, 0, '']"
+        },
+        "Kotlin": {
+            "att1": "0",
+            "ClassWithComplexPropertyType.prop": "new ClassWithPrimitivePropertyType(true, 10)",
+            "DataClass.propString": "''",
+            "DataClass.propObject": "Tuple_Boolean_Number_String(false, 0.0, \"\")",
+            "IDLDataClass.propString": "''",
+            "IDLDataClass.propObject": "IDLDataTuple(false, 0.0, \"\")"
+        }
     }
 }

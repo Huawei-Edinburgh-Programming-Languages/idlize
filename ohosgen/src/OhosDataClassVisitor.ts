@@ -66,7 +66,9 @@ export function printDataClasses(library: PeerLibrary): PrinterResult[] {
 
 function printInterfaceBody(library: PeerLibrary, entry: IDLInterface, printer: LanguageWriter): void {
     entry.properties.forEach(prop => {
-        const defValue = peerGeneratorConfiguration().constants.get(`${entry.name}.${prop.name}`)
+        const defValue = peerGeneratorConfiguration().constants
+            .get(printer.language.name)
+            ?.get(`${entry.name}.${prop.name}`)
         const initExpr = defValue != undefined ? printer.makeString(defValue) : undefined
         printer.writeFieldDeclaration(prop.name, prop.type, toFieldModifiers(prop), prop.isOptional, initExpr)
     })

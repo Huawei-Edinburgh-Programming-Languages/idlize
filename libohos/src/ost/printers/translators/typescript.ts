@@ -434,7 +434,9 @@ export class TSPrinter {
         this.p.inc()
         declaration.fields.forEach((field, i) => {
           this.p.newline()
-          const value = peerGeneratorConfiguration().constants.get(`${declaration.name}.${field.name}`)
+          const value = peerGeneratorConfiguration().constants
+            .get("TS")
+            ?.get(`${declaration.name}.${field.name}`)
           this.printField(field.name, field.type, field.modifiers, value)
         })
         declaration.methods.forEach((method, i) => {
