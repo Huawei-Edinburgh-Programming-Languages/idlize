@@ -1,0 +1,6 @@
+package arkui.component.root;
+
+[Component=Root]
+interface Root {
+
+};

@@ -1,0 +1,19 @@
+{
+    "$schema": "../../generation-config/schema.json",
+    "TypePrefix": "Ark_",
+    "ApiKind": 0,
+    "ApiVersion": 9999,
+    "GenerateUnused": true,
+    "rootComponents": [
+        "Root"
+    ],
+    "moduleName": "arkui",
+    "modules": {
+        "arkui": {
+            "name": "arkui",
+            "packages": [
+                "arkui"
+            ]
+        }
+    }
+}

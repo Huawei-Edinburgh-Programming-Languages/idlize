@@ -1,0 +1,10 @@
+{
+    "name": "arkgen-tests-system",
+    "private": true,
+    "devDependencies": {
+        "@idlizer/arkgen": "file:../.."
+    },
+    "scripts": {
+        "generate:ts": "node ../.. --only-integrated --no-implicit-predefined --api-version 99 --idl2peer --use-memo-m3 --arkts-extension .ets --input-dir ./idl --output-dir ./out --language arkts --options-file ./config.json"
+    }
+}

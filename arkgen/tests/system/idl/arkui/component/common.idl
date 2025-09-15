@@ -1,0 +1,4 @@
+package arkui.component.common;
+
+interface AttributeModifier {};
+interface AttributeUpdater {};
