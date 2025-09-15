@@ -2848,12 +2848,12 @@
 |`getWidth`| Function | Vadim Voronov | testskipped | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*ImageData*| *Class* | Morozov Sergey | in progress | | |
 |`construct`| Function |Morozov Sergey | done | | |
-|`getData`| Function | Morozov Sergey | in progress | | |
-|`setData`| Function | | |
+|`getData`| Function | Morozov Sergey, Dudkin Sergey | in progress | | |
+|`setData`| Function | | Dudkin Sergey | in progress | | |
 |`getHeight`| Function | Morozov Sergey | done | | |
-|`setHeight`| Function | | | | |
+|`setHeight`| Function | Dudkin Sergey | in progress | | |
 |`getWidth`| Function | Morozov Sergey | done | | |
-|`setWidth`| Function | | | | |
+|`setWidth`| Function | Dudkin Sergey | in progress| | |
 |*IndicatorComponentController*| *Class* | Skroba Gleb | done |  |  |
 |`construct`| Function | Skroba Gleb | done | failed | "Can't have nullptr ptr ${}" probably no the component code |
 |`showNext`| Function | Skroba Gleb | done |  |  |
