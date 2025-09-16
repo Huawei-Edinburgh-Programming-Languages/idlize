@@ -3771,11 +3771,11 @@
 | construct                                            | Function    |                                  |                   |
 | createCamera                                         | Function    |                                  |                   |
 | createLight                                          | Function    |                                  |                   |
-|*ScreenCaptureHandler*|*Class*||||
-|`construct`           |Function||||
-|`getOrigin`          |Function||||
-|`grant`              |Function||||
-|`deny`               |Function||||
+|*ScreenCaptureHandler*|*Class*| Erokhin Ilya | done ||
+|`construct`           |Function| Erokhin Ilya | done ||
+|`getOrigin`          |Function| Erokhin Ilya | done ||
+|`grant`              |Function| Erokhin Ilya | done ||
+|`deny`               |Function| Erokhin Ilya | done ||
 |*ScreenshotService*| *Class* | | |
 |`requestScreenshot`| Function | | |
 |*ScrollableTargetInfo*| *Class* | Maksimov Nikita | done |  | |
@@ -4465,22 +4465,22 @@
 |`update`| Function | Kovalev Sergey | done |  | |
 |`values`| Function | Kovalev Sergey | done |  |  |
 |`length`| Function | Kovalev Sergey | done |  | |
-|*WebContextMenuParam*|*Class*||||
-|`construct`          |Function||||
-|`x`                  |Function||||
-|`y`                  |Function||||
-|`getLinkUrl`         |Function||||
-|`getUnfilteredLinkUrl`|Function||||
-|`getSourceUrl`       |Function||||
-|`existsImageContents`|Function||||
-|`getMediaType`       |Function||||
-|`getSelectionText`   |Function||||
-|`getSourceType`      |Function||||
-|`getInputFieldType`  |Function||||
-|`isEditable`         |Function||||
-|`getEditStateFlags`  |Function||||
-|`getPreviewWidth`    |Function||||
-|`getPreviewHeight`   |Function||||
+|*WebContextMenuParam*|*Class*| Erokhin Ilya | done ||
+|`construct`          |Function| Erokhin Ilya | done ||
+|`x`                  |Function| Erokhin Ilya | done ||
+|`y`                  |Function| Erokhin Ilya | done ||
+|`getLinkUrl`         |Function| Erokhin Ilya | done ||
+|`getUnfilteredLinkUrl`|Function| Erokhin Ilya | done ||
+|`getSourceUrl`       |Function| Erokhin Ilya | done ||
+|`existsImageContents`|Function| Erokhin Ilya | done ||
+|`getMediaType`       |Function| Erokhin Ilya | done ||
+|`getSelectionText`   |Function| Erokhin Ilya | done ||
+|`getSourceType`      |Function| Erokhin Ilya | done ||
+|`getInputFieldType`  |Function| Erokhin Ilya | done ||
+|`isEditable`         |Function| Erokhin Ilya | done ||
+|`getEditStateFlags`  |Function| Erokhin Ilya | done ||
+|`getPreviewWidth`    |Function| Erokhin Ilya | done ||
+|`getPreviewHeight`   |Function| Erokhin Ilya | done ||
 |*WebContextMenuResult*|*Class*||||
 |`construct`           |Function||||
 |`closeContextMenu`    |Function||||
@@ -4500,10 +4500,10 @@
 |`deleteBackward`     |Function||||
 |`sendFunctionKey`    |Function||||
 |`close`              |Function||||
-|*WebResourceError*|*Class*||||
-|`construct`        |Function||||
-|`getErrorInfo`     |Function||||
-|`getErrorCode`     |Function||||
+|*WebResourceError*|*Class*| Erokhin Ilya | done ||
+|`construct`        |Function| Erokhin Ilya | done ||
+|`getErrorInfo`     |Function| Erokhin Ilya | done ||
+|`getErrorCode`     |Function| Erokhin Ilya | done ||
 |*WebResourceRequest*|*Class*||||
 |`construct`          |Function||||
 |`getRequestHeader`   |Function||||
