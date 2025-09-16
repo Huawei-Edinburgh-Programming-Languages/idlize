@@ -3274,13 +3274,13 @@
 |`getPanGestureOptions`| Function | Politov Mikhail | done |  | done on upstream |
 |*ParagraphStyle*| *Class* |Dudkin Sergey | done |  | |
 |`construct`| Function |Dudkin Sergey | done |  | |
-|`getTextAlign`| Function |Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
-|`getTextIndent`| Function |Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
-|`getMaxLines`| Function |Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
-|`getOverflow`| Function |Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
-|`getWordBreak`| Function |Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation|
-|`getLeadingMargin`| Function | Tuzhilkin Ivan | done | | FB: Return value will be changed to optional after 125 generation |
-|`getParagraphSpacing`| Function | | | | no such API in generation 125 |
+|`getTextAlign`| Function |Tuzhilkin Ivan | done | | |
+|`getTextIndent`| Function |Tuzhilkin Ivan | done | | |
+|`getMaxLines`| Function |Tuzhilkin Ivan | done | | |
+|`getOverflow`| Function |Tuzhilkin Ivan | done | | |
+|`getWordBreak`| Function |Tuzhilkin Ivan | done | | |
+|`getLeadingMargin`| Function | Tuzhilkin Ivan | done | | |
+|`getParagraphSpacing`| Function | HQ | done | | |
 | *PasteEvent*                                         | *Class*     |                                  |                   |
 | construct                                            | Function    |                                  |                   |
 | preventDefault                                       | Function    |                                  |                   |
