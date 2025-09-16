@@ -66,7 +66,7 @@
 |`setFontWeight`| Function |Evstigneev Roman | testskipped | pass12 | Ace issue fixed, test in progress Evstigneev Roman |
 |`setFontStyle`| Function |Evstigneev Roman | done | pass12 |  |
 |`setFontFamily`| Function |Evstigneev Roman | done | pass12|  |
-|`setContentModifier`| Function |Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG (+) & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
+|`setContentModifier`| Function |Evstigneev Roman | done |  | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG (+) & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`setLabelStyle`| Function |Evstigneev Roman | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setMinFontScale`| Function | Kovalev Sergey | done |  | |
 |`setMaxFontScale`| Function | Kovalev Sergey | done |  | |
@@ -92,7 +92,7 @@
 |`setUnselectedColor`| Function | Andrey Khudenkikh | done | pass |  |
 |`setMark`| Function | Andrey Khudenkikh | done | pass |  |
 |`setOnChange`| Function | Andrey Khudenkikh | done | pass |  |
-|`setContentModifier`| Function | Andrey Khudenkikh | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`setContentModifier`| Function | Andrey Khudenkikh | done | | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*CheckboxGroup*| *Component* | Dudkin Sergey| done |  |  |
 |`construct`| Function |Dudkin Sergey| done | pass |  |
 |`setCheckboxGroupOptions`| Function | Dudkin Sergey| done | pass |  |
@@ -384,7 +384,7 @@
 |`setTrackBackgroundColor`| Function |Morozov Sergey | done | pass |  |
 |`setStrokeWidth`| Function | Morozov Sergey | done | pass |  |
 |`setTrackShadow`| Function |Morozov Sergey | testskipped | test blocked | https://gitee.com/openharmony/arkui_ace_engine/issues/IBVDFV , demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA|
-|`setContentModifier`| Function | Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
+|`setContentModifier`| Function | Morozov Sergey | done |  | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |*DatePicker*| *Component* | Vadim Voronov | done |  |  |
 |`construct`| Function |Vadim Voronov | done | pass |  |
 |`setDatePickerOptions`| Function | Vadim Voronov| done | pass | |
@@ -458,7 +458,7 @@
 |`setTrackShadow`| Function | Maksimov Nikita | done | pass |  |
 |`setIndicator`| Function | Maksimov Nikita | done | pass |  |
 |`setPrivacySensitive`| Function | Maksimov Nikita | done | pass ||
-|`setContentModifier`| Function | Maksimov Nikita | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`setContentModifier`| Function | Maksimov Nikita | done |  | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*Grid*|*Component*| Erokhin Ilya | done |  |  |
 |`construct`| Function |Erokhin Ilya | done | pass | |
 |`setGridOptions`|Function| Erokhin Ilya | done | pass | |
@@ -635,7 +635,7 @@
 |`setLoadingProgressOptions`|Function| Samarin Sergey | done | pass |  |
 |`setColor`|Function| Samarin Sergey | done | pass |  |
 |`setEnableLoading`|Function| Samarin Sergey | done | pass |  |
-|`setContentModifier`|Function| Samarin Sergey| blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`setContentModifier`|Function| Samarin Sergey| done | test blocked | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*Marquee*| *Component* | Andrey Khudenkikh| done |  |  |
 |`construct`| Function |Andrey Khudenkikh| done |  |  |
 |`setMarqueeOptions`| Function | Andrey Khudenkikh| done | failed | loop is not applied |
@@ -784,7 +784,7 @@
 |`setColor`| Function | Erokhin Ilya | done | test blocked | test blocked by runtime error in Koala part during setProgressOptions |
 |`setStyle`| Function | Erokhin Ilya | done | test blocked | UT by Vadim Voronov linearStyle.strokeRadius need to be tested, test blocked by runtime error in Koala part during setProgressOptions |
 |`setPrivacySensitive`| Function | Erokhin Ilya | done | test blocked | test blocked by runtime error in Koala part during setProgressOptions |
-|`setContentModifier`| Function | Erokhin Ilya | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
+|`setContentModifier`| Function | Erokhin Ilya | done | test blocked | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |*QRCode*| *Component* | Evstigneev Roman | done | pass  |  |
 |`construct`| Function |Evstigneev Roman | done | pass |  |
 |`setQRCodeOptions`| Function |Evstigneev Roman | done | pass |  |
@@ -797,7 +797,7 @@
 |`setChecked`| Function | Evstigneev Roman | done | pass |  |
 |`setOnChange`| Function |  Evstigneev Roman | done | pass |  |
 |`setRadioStyle`| Function | Evstigneev Roman | done | pass |  |
-|`setContentModifier`| Function | Evstigneev Roman | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
+|`setContentModifier`| Function | Evstigneev Roman | done |  | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |*Rating*| *Component* | Lobah Mikhail| done |  |  |
 |`construct`| Function | Lobah Mikhail| done |  |  |
 |`setRatingOptions`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
@@ -805,7 +805,7 @@
 |`setStepSize`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
 |`setStarStyle`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
 |`setOnChange`| Function | Lobah Mikhail| done | failed | OHOSUI-2171 |
-|`setContentModifier`| Function | Lobah Mikhail| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`setContentModifier`| Function | Lobah Mikhail| done |  | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*Rect*|*Component*|Dudkin Sergey| done |  |  |
 |`construct`| Function |Dudkin Sergey| done |  |  |
 |`setRectOptions`|Function|Dudkin Sergey| done | pass |  |
@@ -982,7 +982,7 @@
 |`setMenuBackgroundColor` | Function | Samarin Sergey | done | test blocked |  |
 |`setMenuBackgroundBlurStyle` | Function | Samarin Sergey | done | test blocked |  |
 |`setControlSize` | Function | Samarin Sergey | done | test blocked |  |
-|`setMenuItemContentModifier` | Function | Samarin Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`setMenuItemContentModifier` | Function | Samarin Sergey | done |  | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`setDivider` | Function | Samarin Sergey | done | test blocked |  |
 |`setTextModifier`| Function | managed side | managed side |  | |
 |`setArrowModifier`| Function | managed side | managed side | | https://gitee.com/nikolay-igotti/idlize/issues/IBREFA, https://gitee.com/nikolay-igotti/idlize/issues/IBIKVB  |
@@ -1041,7 +1041,7 @@
 |`setStepSize`| Function |Morozov Sergey | done | pass |  |
 |`setSliderInteractionMode`| Function |Morozov Sergey | done | pass |  |
 |`setMinResponsiveDistance`| Function |Morozov Sergey | done | pass |  |
-|`setContentModifier`| Function |Morozov Sergey | blocked IDL | test blocked | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`setContentModifier`| Function |Morozov Sergey | done | test blocked | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |`setSlideRange`| Function | Morozov Sergey | done | pass |  |
 |`setDigitalCrownSensitivity`| Function | Kovalev Sergey | done | | |
 |`setEnableHapticFeedback`| Function | Kovalev Sergey | done |  | not supported by dayu200; need to test on mobile device |
@@ -1293,7 +1293,7 @@
 |`setFontFamily`| Function |Pavelyev Ivan| done | pass | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6QC |
 |`setTextShadow`| Function |Pavelyev Ivan| done | failed | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6PK, when ShadowOptions is empty cpp crash happen |
 |`setFontFeature`| Function |Pavelyev Ivan| done |  |  |
-|`setContentModifier`| Function |Pavelyev Ivan| blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
+|`setContentModifier`| Function |Pavelyev Ivan| done |  | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`setDateTimeOptions`| Function |Politov Mikhail| testskipped |  |  |
 |*TextInput*| *Component* | Spirin Andrey | in progress |  |  |
 |`construct`| Function | Spirin Andrey | done | pass | |
@@ -1398,7 +1398,7 @@
 |`setFontFamily`| Function |Ekaterina Stepanova| done | pass  |  |
 |`setOnTimer`| Function |Ekaterina Stepanova| blocked IDL | not covered | https://gitee.com/nikolay-igotti/idlize/issues/IB3V0H |
 |`setTextShadow`| Function |Ekaterina Stepanova| testskipped | pass | UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB2SZK |
-|`setContentModifier`| Function |Ekaterina Stepanova| blocked IDL | not covered | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
+|`setContentModifier`| Function |Ekaterina Stepanova| done | not covered | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7 |
 |*TimePicker*| *Component* | Ekaterina Stepanova| blocked IDL |  |  |
 |`construct`| Function |Politov Mikhail| done |  |  |
 |`setTimePickerOptions`| Function |Politov Mikhail| done |  |  |
@@ -1417,7 +1417,7 @@
 |`construct`| Function |Morozov Sergey | done | | unblocked since AceEngine won't fix it |
 |`setToggleOptions`| Function |Morozov Sergey | done |  | unblocked since AceEngine won't fix it |
 |`setOnChange`| Function | Morozov Sergey| done | pass |  |
-|`setContentModifier`| Function |Morozov Sergey | blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
+|`setContentModifier`| Function |Morozov Sergey | done |  | removed from generation https://gitee.com/nikolay-igotti/idlize/issues/IAU9SG & https://gitee.com/rri_opensource/koala_projects/issues/IC1OJ7|
 |`setSelectedColor`| Function | Morozov Sergey| done | pass |  |
 |`setSwitchPointColor`| Function | Morozov Sergey| done | pass |  |
 |`setSwitchStyle`| Function | Morozov Sergey| done | pass |  |
@@ -2246,33 +2246,33 @@
 |`construct`              |Function||||
 |`update`                 |Function||||
 |`close`                  |Function||||
-|*ContentModifierHelper*| *Class* | | |
-|`contentModifierButton`              |Function||||
-|`resetContentModifierButton`         |Function||||
-|`contentModifierCheckBox`            |Function||||
-|`resetContentModifierCheckBox`       |Function||||
-|`contentModifierDataPanel`           |Function||||
-|`resetContentModifierDataPanel`      |Function||||
-|`contentModifierGauge`               |Function||||
-|`resetContentModifierGauge`          |Function||||
-|`contentModifierLoadingProgress`     |Function||||
-|`resetContentModifierLoadingProgress`|Function||||
-|`contentModifierProgress`            |Function||||
-|`resetContentModifierProgress`       |Function||||
-|`contentModifierRadio`               |Function||||
-|`resetContentModifierRadio`          |Function||||
-|`contentModifierRating`              |Function||||
-|`resetContentModifierRating`         |Function||||
-|`contentModifierMenuItem`            |Function||||
-|`resetContentModifierMenuItem`       |Function||||
-|`contentModifierSlider`              |Function||||
-|`resetContentModifierSlider`         |Function||||
-|`contentModifierTextClock`           |Function||||
-|`resetContentModifierTextClock`      |Function||||
-|`contentModifierTextTimer`           |Function||||
-|`resetContentModifierTextTimer`      |Function||||
-|`contentModifierToggle`              |Function||||
-|`resetContentModifierToggle`         |Function||||
+|*ContentModifierHelper*| *Class* | Erokhin Ilya | done |
+|`contentModifierButton`              |Function| Erokhin Ilya | done ||
+|`resetContentModifierButton`         |Function| Erokhin Ilya | done ||
+|`contentModifierCheckBox`            |Function| Erokhin Ilya | done ||
+|`resetContentModifierCheckBox`       |Function| Erokhin Ilya | done ||
+|`contentModifierDataPanel`           |Function| Erokhin Ilya | done ||
+|`resetContentModifierDataPanel`      |Function| Erokhin Ilya | done ||
+|`contentModifierGauge`               |Function| Erokhin Ilya | done ||
+|`resetContentModifierGauge`          |Function| Erokhin Ilya | done ||
+|`contentModifierLoadingProgress`     |Function| Erokhin Ilya | done ||
+|`resetContentModifierLoadingProgress`|Function| Erokhin Ilya | done ||
+|`contentModifierProgress`            |Function| Erokhin Ilya | done ||
+|`resetContentModifierProgress`       |Function| Erokhin Ilya | done ||
+|`contentModifierRadio`               |Function| Erokhin Ilya | done ||
+|`resetContentModifierRadio`          |Function| Erokhin Ilya | done ||
+|`contentModifierRating`              |Function| Erokhin Ilya | done ||
+|`resetContentModifierRating`         |Function| Erokhin Ilya | done ||
+|`contentModifierMenuItem`            |Function| Erokhin Ilya | done ||
+|`resetContentModifierMenuItem`       |Function| Erokhin Ilya | done ||
+|`contentModifierSlider`              |Function| Erokhin Ilya | done ||
+|`resetContentModifierSlider`         |Function| Erokhin Ilya | done ||
+|`contentModifierTextClock`           |Function| Erokhin Ilya | done ||
+|`resetContentModifierTextClock`      |Function| Erokhin Ilya | done ||
+|`contentModifierTextTimer`           |Function| Erokhin Ilya | done ||
+|`resetContentModifierTextTimer`      |Function| Erokhin Ilya | done ||
+|`contentModifierToggle`              |Function| Erokhin Ilya | done ||
+|`resetContentModifierToggle`         |Function| Erokhin Ilya | done ||
 |*Context*            |*Class*||||
 |`construct`          |Function||||
 |`getApplicationContext`|Function||||
