@@ -409,11 +409,11 @@
 |*Ellipse*| *Component* | Ekaterina Stepanova | done | pass | |
 |`construct`| Function |Ekaterina Stepanova | done | pass | |
 |`setEllipseOptions`| Function | Ekaterina Stepanova | done | pass | |
-|*EmbeddedComponent*| *Component* | Ekaterina Stepanova | blocked IDL |  | |
-|`construct`| Function | Ekaterina Stepanova | in progress |  |  |
-|`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | in progress |  |  |
-|`setOnTerminated`| Function | Ekaterina Stepanova | in progress |  |  |
-|`setOnError`| Function |Skroba Gleb | testskipped |  |  |
+|*EmbeddedComponent*| *Component* | Ekaterina Stepanova | blocked |  | |
+|`construct`| Function | Ekaterina Stepanova | testskipped |  |  |
+|`setEmbeddedComponentOptions`| Function | Ekaterina Stepanova | blocked |  | blocked Arkoala. Want processing |
+|`setOnTerminated`| Function | Ekaterina Stepanova | blocked |  | blocked Arkoala. Want processing |
+|`setOnError`| Function | Ekaterina Stepanova | testskipped |  |  |
 |*Flex*| *Component* | Kovalev Sergey | done | |  |
 |`construct`| Function | Kovalev Sergey | done | pass |  |
 |`setFlexOptions`| Function | Kovalev Sergey | done | pass |  |
@@ -3973,12 +3973,12 @@
 |`resourceManagerReset`| Function | | |
 |`setFrameCallback`| Function | | |
 |`colorMetricsResourceColor`| Function | | |
-|*TabBarSymbol*| *Class* | | |
-|`construct`| Function | | |
-|`getNormal`| Property | | |
-|`setNormal`| Property | | |
-|`getSelected`| Property | | |
-|`setSelected`| Property | | |
+|*TabBarSymbol*| *Class* | Ekaterina Stepanova | in progress |  |  |
+|`construct`| Function | Ekaterina Stepanova | in progress |  |  |
+|`getNormal`| Property | Ekaterina Stepanova | in progress |  |  |
+|`setNormal`| Property | Ekaterina Stepanova | in progress |  |  |
+|`getSelected`| Property | Ekaterina Stepanova | in progress |  |  |
+|`setSelected`| Property | Ekaterina Stepanova | in progress |  |  |
 |*TabContentTransitionProxy*| *Class* | Dudkin Sergey | done |  | |
 |`construct`| Function | Dudkin Sergey | done |  | |
 |`finishTransition`| Function | Dudkin Sergey | done |  | |
