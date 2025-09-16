@@ -56,19 +56,19 @@ export function generateArkComponentName(component: string) {
 }
 
 export function expandComponentWithSupers(library: PeerLibrary, decl: idl.IDLInterface): idl.IDLInterface[] {
-    const result: idl.IDLInterface[] = []
+    const results: idl.IDLInterface[] = []
     while (decl) {
         const superResolved = getSuper(decl, library)
-        result.push(decl)
+        results.push(decl)
         decl = superResolved as idl.IDLInterface
     }
-    return result
+    return results
 }
 
 export function generateAttributeModifierSignature(library: PeerLibrary, component: IdlComponentDeclaration): MethodSignature {
     const modifiers = expandComponentWithSupers(library, component.attributeDeclaration).map(it =>
         idl.createReferenceType(getReferenceTo('AttributeModifier'),
-            [idl.createReferenceType(component.attributeDeclaration)],
+            [idl.createReferenceType(it)],
         )
     )
     return new NamedMethodSignature(
