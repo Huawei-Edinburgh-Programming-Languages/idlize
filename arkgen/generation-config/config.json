@@ -613,7 +613,9 @@
             "makeBuilderParameterProxy",
             "ComponentContent",
             "ComponentContentBase",
-            "TabContent"
+            "TabContent",
+            "ListItem",
+            "GridItem"
         ],
         "ignoreEntry": [
             "Optional",
