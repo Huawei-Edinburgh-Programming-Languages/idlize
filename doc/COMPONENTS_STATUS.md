@@ -3280,7 +3280,7 @@
 |`getOverflow`| Function |Tuzhilkin Ivan | done | | |
 |`getWordBreak`| Function |Tuzhilkin Ivan | done | | |
 |`getLeadingMargin`| Function | Tuzhilkin Ivan | done | | |
-|`getParagraphSpacing`| Function | HQ | done | | |
+|`getParagraphSpacing`| Function | HQ | testskipped | | |
 | *PasteEvent*                                         | *Class*     |                                  |                   |
 | construct                                            | Function    |                                  |                   |
 | preventDefault                                       | Function    |                                  |                   |
@@ -4110,12 +4110,12 @@
 |`setPreventDefault`| Property | Tuzhilkin Ivan | done |  | empty implementation |
 |*TransitionEffect*| *Class* | Andrey Khudenkikh | in progress | Sergey Kovalev |OHOSUI-2171 |
 |`construct0`| Function |Andrey Khudenkikh | done |  | |
-|`construct1`| Function | | |
-|`construct2`| Function | | |
-|`construct3`| Function | | |
-|`construct4`| Function | | |
-|`construct5`| Function | | |
-|`construct6`| Function | | |
+|`construct1`| Function | HQ | testskipped |
+|`construct2`| Function | HQ | testskipped |
+|`construct3`| Function | HQ | testskipped |
+|`construct4`| Function | HQ | testskipped |
+|`construct5`| Function | HQ | testskipped |
+|`construct6`| Function | HQ | testskipped |
 |`translate`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2171 |
 |`rotate`| Function | Andrey Khudenkikh | done | failed| OHOSUI-2171|
 |`scale`| Function | Andrey Khudenkikh | done | failed | OHOSUI-2171|
