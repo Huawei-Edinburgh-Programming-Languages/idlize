@@ -2762,11 +2762,11 @@
 |`setDisplayY`| Function | Tuzhilkin Ivan | done | | need cherry-pick to FB |
 |`getStopPropagation`| Function | Samarin Sergey | done | | |
 |`setStopPropagation`| Function | Tuzhilkin Ivan | done |  | empty implementation |
-|*HttpAuthHandler*|*Class*||||
-|`construct`       |Function||||
-|`confirm`         |Function||||
-|`cancel`          |Function||||
-|`isHttpAuthInfoSaved`|Function||||
+|*HttpAuthHandler*|*Class*| Erokhin Ilya | done ||
+|`construct`       |Function| Erokhin Ilya | done ||
+|`confirm`         |Function| Erokhin Ilya | done ||
+|`cancel`          |Function| Erokhin Ilya | done ||
+|`isHttpAuthInfoSaved`|Function| Erokhin Ilya | done ||
 |*PixelMap*| *Class* | Andrey Khudenkikh | blocked  | |
 |`construct`| Function | Andrey Khudenkikh | blocked IDL |  | To be removed from generation. https://gitee.com/nikolay-igotti/idlize/issues/IBZ4RZ |
 |`readPixelsToBuffer0`          |Function||||
@@ -3299,12 +3299,12 @@
 |`construct`| Function |Dmitry A Smirnov| done |  |  |
 |`reset`| Function |Dmitry A Smirnov| done |  |  |
 |`setChallengeResult`| Function |Dmitry A Smirnov| done |  |  |
-|*PermissionRequest*|*Class*||||
-|`construct`        |Function||||
-|`deny`             |Function||||
-|`getOrigin`        |Function||||
-|`getAccessibleResource`|Function||||
-|`grant`            |Function||||
+|*PermissionRequest*|*Class*| Erokhin Ilya | done ||
+|`construct`        |Function| Erokhin Ilya | done ||
+|`deny`             |Function| Erokhin Ilya | done ||
+|`getOrigin`        |Function| Erokhin Ilya | done ||
+|`getAccessibleResource`|Function| Erokhin Ilya | done ||
+|`grant`            |Function| Erokhin Ilya | done ||
 |*PersistentStorageBackend*|*Class*| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
 |`get`                     |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
 |`has`                     |Function| Tuzhilkin Ivan | blocked || https://gitee.com/rri_opensource/koala_projects/issues/ICTC33 |
