@@ -2848,7 +2848,7 @@
 |`getWidth`| Function | Vadim Voronov | testskipped | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |*ImageData*| *Class* | Morozov Sergey | in progress | | |
 |`construct`| Function |Morozov Sergey | done | | |
-|`getData`| Function | Morozov Sergey, Dudkin Sergey | in progress | | |
+|`getData`| Function | Dudkin Sergey | in progress | | |
 |`setData`| Function | | Dudkin Sergey | in progress | | |
 |`getHeight`| Function | Morozov Sergey | done | | |
 |`setHeight`| Function | Dudkin Sergey | in progress | | |
