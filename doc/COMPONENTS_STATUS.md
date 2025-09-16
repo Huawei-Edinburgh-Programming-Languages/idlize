@@ -3796,10 +3796,10 @@
 |`getItemIndex`| Function | Erokhin Ilya | done | pass |  |
 |*ScrollMotion*| *Class* |managed side | managed side| | |
 |`construct`| Function |managed side | managed side| | |
-|*ScrollResult*| *Class* | | | | |
-|`construct`| Function | | | | |
-|`getOffsetRemain`| Property | | | | |
-|`setOffsetRemain`| Property | | | | |
+|*ScrollResult*| *Class* | Dudkin Sergey| in progress | | |
+|`construct`| Function | Dudkin Sergey | in progress| | |
+|`getOffsetRemain`| Property | Dudkin Sergey |in progress | | |
+|`setOffsetRemain`| Property | Dudkin Sergey |in progress | | |
 |*SearchController*| *Class* |Evstigneev Roman | done |  |  |
 |`construct`| Function |Evstigneev Roman | done |  |  |
 |`caretPosition`| Function |Evstigneev Roman | done |  |  |
