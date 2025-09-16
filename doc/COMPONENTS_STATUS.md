@@ -3244,12 +3244,12 @@
 |`setRenderRootOverlay`         |Property||||
 |`getEnableBackPressedEvent`    |Property||||
 |`setEnableBackPressedEvent`    |Property||||
-|*PageInfo*|*Class*||||
-|`construct`                |Function||||
-|`getRouterPageInfo`        |Property||||
-|`setRouterPageInfo`        |Property||||
-|`getNavDestinationInfo`    |Property||||
-|`setNavDestinationInfo`    |Property||||
+|*PageInfo*|*Class*|| out of scope || external object |
+|`construct`                |Function|| out of scope || external object |
+|`getRouterPageInfo`        |Property|| out of scope || external object |
+|`setRouterPageInfo`        |Property|| out of scope || external object |
+|`getNavDestinationInfo`    |Property|| out of scope || external object |
+|`setNavDestinationInfo`    |Property|| out of scope || external object |
 |*PanGestureEvent*| *Class* | Morozov Sergey | done | | |
 |`construct`| Function | Morozov Sergey | done | | |
 |`getOffsetX`| Function | Morozov Sergey | done | | |
@@ -3281,9 +3281,9 @@
 |`getWordBreak`| Function |Tuzhilkin Ivan | done | | |
 |`getLeadingMargin`| Function | Tuzhilkin Ivan | done | | |
 |`getParagraphSpacing`| Function | HQ | testskipped | | |
-| *PasteEvent*                                         | *Class*     |                                  |                   |
-| construct                                            | Function    |                                  |                   |
-| preventDefault                                       | Function    |                                  |                   |
+| *PasteEvent*                                         | *Class*     | | blocked | | no such API in generation 137 |
+| construct                                            | Function    | | blocked | | no such API in generation 137 |
+| preventDefault                                       | Function    | | blocked | | no such API in generation 137 |
 |*Path2D*| *Class* | Vadim Voronov | done |  | |
 |`construct0`| Function | Vadim Voronov | done |  | |
 |`construct1`| Function | Vadim Voronov | done |
@@ -4241,82 +4241,82 @@
 |`setOnMouse`| Function |  Andrey Khudenkikh| done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |`setOnSizeChange`| Function | Andrey Khudenkikh | done | test blocked | Compilation error: Cannot find type 'BuilderNode' |
 |`setOnVisibleAreaApproximateChange`| Function | Andrey Khudenkikh | testskipped | test blocked | Compilation error: Cannot find type 'BuilderNode' |
-|*UIContext*| *Class* | | | | |
-|`construct`                         |Function||||
-|`getFont`                           |Function||||
-|`isAvailable`                       |Function||||
-|`getMediaQuery`                     |Function||||
-|`getUIInspector`                    |Function||||
-|`getFilteredInspectorTree`          |Function||||
-|`getFilteredInspectorTreeById`      |Function||||
-|`getRouter`                         |Function||||
-|`getPromptAction`                   |Function||||
-|`getComponentUtils`                 |Function||||
-|`getUIObserver`                     |Function||||
-|`getOverlayManager`                 |Function||||
-|`setOverlayManagerOptions`          |Function||||
-|`getOverlayManagerOptions`          |Function||||
-|`createAnimator`                    |Function||||
-|`animateTo`                         |Function||||
-|`showAlertDialog`                   |Function||||
-|`showActionSheet`                   |Function||||
-|`showDatePickerDialog`              |Function||||
-|`showTimePickerDialog`              |Function||||
-|`showTextPickerDialog`              |Function||||
-|`runScopedTask`                     |Function||||
-|`setKeyboardAvoidMode`              |Function||||
-|`getKeyboardAvoidMode`              |Function||||
-|`setPixelRoundMode`                 |Function||||
-|`getPixelRoundMode`                 |Function||||
-|`dispatchKeyEvent`                  |Function||||
-|`getAtomicServiceBar`               |Function||||
-|`getDragController`                 |Function||||
-|`getMeasureUtils`                   |Function||||
-|`keyframeAnimateTo`                 |Function||||
-|`getFocusController`                |Function||||
-|`animateToImmediately`              |Function||||
-|`getFrameNodeById`                  |Function||||
-|`getAttachedFrameNodeById`          |Function||||
-|`getFrameNodeByUniqueId`            |Function||||
-|`getPageInfoByUniqueId`             |Function||||
-|`getNavigationInfoByUniqueId`       |Function||||
-|`setDynamicDimming`                 |Function||||
-|`getCursorController`               |Function||||
-|`getContextMenuController`          |Function||||
-|`getComponentSnapshot`              |Function||||
-|`vp2px`                             |Function||||
-|`px2vp`                             |Function||||
-|`fp2px`                             |Function||||
-|`px2fp`                             |Function||||
-|`lpx2px`                            |Function||||
-|`px2lpx`                            |Function||||
-|`getSharedLocalStorage`             |Function||||
-|`getHostContext`                    |Function||||
-|`getWindowName`                     |Function||||
-|`getWindowWidthBreakpoint`          |Function||||
-|`getWindowHeightBreakpoint`         |Function||||
-|`openBindSheet`                     |Function||||
-|`updateBindSheet`                   |Function||||
-|`closeBindSheet`                    |Function||||
-|`postFrameCallback`                 |Function||||
-|`postDelayedFrameCallback`          |Function||||
-|`requireDynamicSyncScene`           |Function||||
-|`clearResourceCache`                |Function||||
-|`isFollowingSystemFontScale`        |Function||||
-|`getMaxFontScale`                   |Function||||
-|`bindTabsToScrollable`              |Function||||
-|`unbindTabsFromScrollable`          |Function||||
-|`bindTabsToNestedScrollable`        |Function||||
-|`unbindTabsFromNestedScrollable`    |Function||||
-|`enableSwipeBack`                   |Function||||
-|`openBindContentCover`              |Function||||
-|`freezeUINode0`                     |Function||||
-|`freezeUINode1`                     |Function||||
-|`getTextMenuController`             |Function||||
-|`createUIContextWithoutWindow`      |Function||||
-|`destroyUIContextWithoutWindow`     |Function||||
-|`setUIStates`                       |Function||||
-|`getFocusedUIContext`               |Function||||
+|*UIContext*| *Class* | | out of scope | | |
+|`construct`                         |Function|| out of scope || external object |
+|`getFont`                           |Function|| out of scope || external object |
+|`isAvailable`                       |Function|| out of scope || external object |
+|`getMediaQuery`                     |Function|| out of scope || external object |
+|`getUIInspector`                    |Function|| out of scope || external object |
+|`getFilteredInspectorTree`          |Function|| out of scope || external object |
+|`getFilteredInspectorTreeById`      |Function|| out of scope || external object |
+|`getRouter`                         |Function|| out of scope || external object |
+|`getPromptAction`                   |Function|| out of scope || external object |
+|`getComponentUtils`                 |Function|| out of scope || external object |
+|`getUIObserver`                     |Function|| out of scope || external object |
+|`getOverlayManager`                 |Function|| out of scope || external object |
+|`setOverlayManagerOptions`          |Function|| out of scope || external object |
+|`getOverlayManagerOptions`          |Function|| out of scope || external object |
+|`createAnimator`                    |Function|| out of scope || external object |
+|`animateTo`                         |Function|| out of scope || external object |
+|`showAlertDialog`                   |Function|| out of scope || external object |
+|`showActionSheet`                   |Function|| out of scope || external object |
+|`showDatePickerDialog`              |Function|| out of scope || external object |
+|`showTimePickerDialog`              |Function|| out of scope || external object |
+|`showTextPickerDialog`              |Function|| out of scope || external object |
+|`runScopedTask`                     |Function|| out of scope || external object |
+|`setKeyboardAvoidMode`              |Function|| out of scope || external object |
+|`getKeyboardAvoidMode`              |Function|| out of scope || external object |
+|`setPixelRoundMode`                 |Function|| out of scope || external object |
+|`getPixelRoundMode`                 |Function|| out of scope || external object |
+|`dispatchKeyEvent`                  |Function|| out of scope || external object |
+|`getAtomicServiceBar`               |Function|| out of scope || external object |
+|`getDragController`                 |Function|| out of scope || external object |
+|`getMeasureUtils`                   |Function|| out of scope || external object |
+|`keyframeAnimateTo`                 |Function|| out of scope || external object |
+|`getFocusController`                |Function|| out of scope || external object |
+|`animateToImmediately`              |Function|| out of scope || external object |
+|`getFrameNodeById`                  |Function|| out of scope || external object |
+|`getAttachedFrameNodeById`          |Function|| out of scope || external object |
+|`getFrameNodeByUniqueId`            |Function|| out of scope || external object |
+|`getPageInfoByUniqueId`             |Function|| out of scope || external object |
+|`getNavigationInfoByUniqueId`       |Function|| out of scope || external object |
+|`setDynamicDimming`                 |Function|| out of scope || external object |
+|`getCursorController`               |Function|| out of scope || external object |
+|`getContextMenuController`          |Function|| out of scope || external object |
+|`getComponentSnapshot`              |Function|| out of scope || external object |
+|`vp2px`                             |Function|| out of scope || external object |
+|`px2vp`                             |Function|| out of scope || external object |
+|`fp2px`                             |Function|| out of scope || external object |
+|`px2fp`                             |Function|| out of scope || external object |
+|`lpx2px`                            |Function|| out of scope || external object |
+|`px2lpx`                            |Function|| out of scope || external object |
+|`getSharedLocalStorage`             |Function|| out of scope || external object |
+|`getHostContext`                    |Function|| out of scope || external object |
+|`getWindowName`                     |Function|| out of scope || external object |
+|`getWindowWidthBreakpoint`          |Function|| out of scope || external object |
+|`getWindowHeightBreakpoint`         |Function|| out of scope || external object |
+|`openBindSheet`                     |Function|| out of scope || external object |
+|`updateBindSheet`                   |Function|| out of scope || external object |
+|`closeBindSheet`                    |Function|| out of scope || external object |
+|`postFrameCallback`                 |Function|| out of scope || external object |
+|`postDelayedFrameCallback`          |Function|| out of scope || external object |
+|`requireDynamicSyncScene`           |Function|| out of scope || external object |
+|`clearResourceCache`                |Function|| out of scope || external object |
+|`isFollowingSystemFontScale`        |Function|| out of scope || external object |
+|`getMaxFontScale`                   |Function|| out of scope || external object |
+|`bindTabsToScrollable`              |Function|| out of scope || external object |
+|`unbindTabsFromScrollable`          |Function|| out of scope || external object |
+|`bindTabsToNestedScrollable`        |Function|| out of scope || external object |
+|`unbindTabsFromNestedScrollable`    |Function|| out of scope || external object |
+|`enableSwipeBack`                   |Function|| out of scope || external object |
+|`openBindContentCover`              |Function|| out of scope || external object |
+|`freezeUINode0`                     |Function|| out of scope || external object |
+|`freezeUINode1`                     |Function|| out of scope || external object |
+|`getTextMenuController`             |Function|| out of scope || external object |
+|`createUIContextWithoutWindow`      |Function|| out of scope || external object |
+|`destroyUIContextWithoutWindow`     |Function|| out of scope || external object |
+|`setUIStates`                       |Function|| out of scope || external object |
+|`getFocusedUIContext`               |Function|| out of scope || external object |
 |*UIContextAtomicServiceBar*| *Class* | | |
 |`getBarRect`| Function | | |
 |*Filter*|*Class*||||
