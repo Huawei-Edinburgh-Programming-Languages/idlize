@@ -1,4 +1,37 @@
 | Package | SDK Parent | SDK Name | Override | Type | Item Status | C API Parent | C API Name | TS Status | C API Status | Owner | Last test status | Last test version | Comments | Declaration |
+| ohos.animator | AnimatorOptions | AnimatorOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface AnimatorOptions {` |
+| ohos.animator | AnimatorOptions | duration | 0 | field |  |  |  |  | - |  |  |  |  | `duration: number;` |
+| ohos.animator | AnimatorOptions | easing | 0 | field |  |  |  |  | - |  |  |  |  | `easing: string;` |
+| ohos.animator | AnimatorOptions | delay | 0 | field |  |  |  |  | - |  |  |  |  | `delay: number;` |
+| ohos.animator | AnimatorOptions | fill | 0 | field |  |  |  |  | - |  |  |  |  | `fill: ("none" | "forwards" | "backwards" | "both");` |
+| ohos.animator | AnimatorOptions | direction | 0 | field |  |  |  |  | - |  |  |  |  | `direction: ("normal" | "reverse" | "alternate" | "alternate-reverse");` |
+| ohos.animator | AnimatorOptions | iterations | 0 | field |  |  |  |  | - |  |  |  |  | `iterations: number;` |
+| ohos.animator | AnimatorOptions | begin | 0 | field |  |  |  |  | - |  |  |  |  | `begin: number;` |
+| ohos.animator | AnimatorOptions | end | 0 | field |  |  |  |  | - |  |  |  |  | `end: number;` |
+| ohos.animator | SimpleAnimatorOptions | SimpleAnimatorOptions | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class SimpleAnimatorOptions {` |
+| ohos.animator | SimpleAnimatorOptions | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(begin: number, end: number)` |
+| ohos.animator | SimpleAnimatorOptions | duration | 0 | method |  |  |  |  | - |  |  |  |  | `public duration(duration: number): SimpleAnimatorOptions` |
+| ohos.animator | SimpleAnimatorOptions | easing | 0 | method |  |  |  |  | - |  |  |  |  | `public easing(curve: string): SimpleAnimatorOptions` |
+| ohos.animator | SimpleAnimatorOptions | delay | 0 | method |  |  |  |  | - |  |  |  |  | `public delay(delay: number): SimpleAnimatorOptions` |
+| ohos.animator | SimpleAnimatorOptions | fill | 0 | method |  |  |  |  | - |  |  |  |  | `public fill(fillMode: FillMode): SimpleAnimatorOptions` |
+| ohos.animator | SimpleAnimatorOptions | direction | 0 | method |  |  |  |  | - |  |  |  |  | `public direction(direction: PlayMode): SimpleAnimatorOptions` |
+| ohos.animator | SimpleAnimatorOptions | iterations | 0 | method |  |  |  |  | - |  |  |  |  | `public iterations(iterations: number): SimpleAnimatorOptions` |
+| ohos.animator | AnimatorResult | AnimatorResult | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface AnimatorResult {` |
+| ohos.animator | AnimatorResult | reset | 0 | method | Deleted because of RedundantMethodsOverloads |  |  | Deleted because of RedundantMethodsOverloads | - |  |  |  |  | `reset(options: AnimatorOptions): void` |
+| ohos.animator | AnimatorResult | reset | 1 | method |  |  |  |  | - |  |  |  |  | `reset(options: (AnimatorOptions | SimpleAnimatorOptions)): void` |
+| ohos.animator | AnimatorResult | play | 0 | method |  |  |  |  | - |  |  |  |  | `play(): void` |
+| ohos.animator | AnimatorResult | finish | 0 | method |  |  |  |  | - |  |  |  |  | `finish(): void` |
+| ohos.animator | AnimatorResult | pause | 0 | method |  |  |  |  | - |  |  |  |  | `pause(): void` |
+| ohos.animator | AnimatorResult | cancel | 0 | method |  |  |  |  | - |  |  |  |  | `cancel(): void` |
+| ohos.animator | AnimatorResult | reverse | 0 | method |  |  |  |  | - |  |  |  |  | `reverse(): void` |
+| ohos.animator | AnimatorResult | onFrame | 0 | field |  |  |  |  | - |  |  |  |  | `onFrame: ((progress: number)=> void);` |
+| ohos.animator | AnimatorResult | onFinish | 0 | field |  |  |  |  | - |  |  |  |  | `onFinish: (()=> void);` |
+| ohos.animator | AnimatorResult | onCancel | 0 | field |  |  |  |  | - |  |  |  |  | `onCancel: (()=> void);` |
+| ohos.animator | AnimatorResult | onRepeat | 0 | field |  |  |  |  | - |  |  |  |  | `onRepeat: (()=> void);` |
+| ohos.animator | AnimatorResult | setExpectedFrameRateRange | 0 | method |  |  |  |  | - |  |  |  |  | `setExpectedFrameRateRange(rateRange: ExpectedFrameRateRange): void` |
+| ohos.animator | Animator | Animator | 0 | class |  |  |  |  | - |  |  |  |  | `declare class Animator {` |
+| ohos.animator | Animator | create | 0 | method |  |  |  |  | - |  |  |  |  | `public static create(options: (AnimatorOptions | SimpleAnimatorOptions)): AnimatorResult` |
+| ohos.animator | Animator | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | ohos.arkui.advanced.ComposeListItem | IconType | IconType | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum IconType {` |
 | ohos.arkui.advanced.ComposeListItem | IconType | BADGE | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `BADGE = 1` |
 | ohos.arkui.advanced.ComposeListItem | IconType | NORMAL_ICON | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `NORMAL_ICON = 2` |
@@ -731,59 +764,1101 @@
 | ohos.arkui.advanced.TreeView | TreeController | refreshNode | 0 | method |  |  |  |  | - |  |  |  |  | `public refreshNode(parentId: int, parentSubTitle: ResourceStr, currentSubtitle: ResourceStr): void` |
 | ohos.arkui.advanced.TreeView | TreeController | buildDone | 0 | method |  |  |  |  | - |  |  |  |  | `public buildDone(): void` |
 | ohos.arkui.advanced.TreeView | TreeController | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
-| arkui.component.actionSheet | SheetInfo | SheetInfo | 0 | interface | generated | unnamed | SheetInfo | - | generated |  |  |  |  | `export interface SheetInfo {` |
-| arkui.component.actionSheet | SheetInfo | title | 0 | field | generated | SheetInfo | title | - | generated |  |  |  |  | `title: (string | Resource);` |
-| arkui.component.actionSheet | SheetInfo | icon | 0 | field | generated | SheetInfo | icon | - | generated |  |  |  |  | `icon?: (string | Resource);` |
-| arkui.component.actionSheet | SheetInfo | action | 0 | field | generated | SheetInfo | action | - | generated |  |  |  |  | `action: VoidCallback;` |
+| ohos.arkui.ArcSwiper | unnamed | FinishAnimationHandler | 0 | field |  |  |  |  | - |  |  |  |  | `export type FinishAnimationHandler = (()=> void);` |
+| ohos.arkui.ArcSwiper | ArcSwiperController | ArcSwiperController | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ArcSwiperController {` |
+| ohos.arkui.ArcSwiper | ArcSwiperController | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor()` |
+| ohos.arkui.ArcSwiper | ArcSwiperController | showNext | 0 | method |  |  |  |  | - |  |  |  |  | `public showNext(): void` |
+| ohos.arkui.ArcSwiper | ArcSwiperController | showPrevious | 0 | method |  |  |  |  | - |  |  |  |  | `public showPrevious(): void` |
+| ohos.arkui.ArcSwiper | ArcSwiperController | finishAnimation | 0 | method |  |  |  |  | - |  |  |  |  | `public finishAnimation(handler?: FinishAnimationHandler): void` |
+| ohos.arkui.ArcSwiper | ArcDirection | ArcDirection | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum ArcDirection {` |
+| ohos.arkui.ArcSwiper | ArcDirection | THREE_CLOCK_DIRECTION | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `THREE_CLOCK_DIRECTION = 0` |
+| ohos.arkui.ArcSwiper | ArcDirection | SIX_CLOCK_DIRECTION | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `SIX_CLOCK_DIRECTION = 1` |
+| ohos.arkui.ArcSwiper | ArcDirection | NINE_CLOCK_DIRECTION | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `NINE_CLOCK_DIRECTION = 2` |
+| ohos.arkui.ArcSwiper | ArcDotIndicator | ArcDotIndicator | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ArcDotIndicator {` |
+| ohos.arkui.ArcSwiper | ArcDotIndicator | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor()` |
+| ohos.arkui.ArcSwiper | ArcDotIndicator | arcDirection | 0 | method |  |  |  |  | - |  |  |  |  | `public arcDirection(direction: (ArcDirection | undefined)): ArcDotIndicator` |
+| ohos.arkui.ArcSwiper | ArcDotIndicator | itemColor | 0 | method |  |  |  |  | - |  |  |  |  | `public itemColor(color: (ResourceColor | undefined)): ArcDotIndicator` |
+| ohos.arkui.ArcSwiper | ArcDotIndicator | selectedItemColor | 0 | method |  |  |  |  | - |  |  |  |  | `public selectedItemColor(color: (ResourceColor | undefined)): ArcDotIndicator` |
+| ohos.arkui.ArcSwiper | ArcDotIndicator | backgroundColor | 0 | method |  |  |  |  | - |  |  |  |  | `public backgroundColor(color: (ResourceColor | undefined)): ArcDotIndicator` |
+| ohos.arkui.ArcSwiper | ArcDotIndicator | maskColor | 0 | method |  |  |  |  | - |  |  |  |  | `public maskColor(color: (LinearGradient | undefined)): ArcDotIndicator` |
+| ohos.arkui.ArcSwiper | unnamed | IndexChangedHandler | 0 | field |  |  |  |  | - |  |  |  |  | `export type IndexChangedHandler = ((index: number)=> void);` |
+| ohos.arkui.ArcSwiper | unnamed | AnimationStartHandler | 0 | field |  |  |  |  | - |  |  |  |  | `export type AnimationStartHandler = ((index: number, targetIndex: number, event: SwiperAnimationEvent)=> void);` |
+| ohos.arkui.ArcSwiper | unnamed | AnimationEndHandler | 0 | field |  |  |  |  | - |  |  |  |  | `export type AnimationEndHandler = ((index: number, event: SwiperAnimationEvent)=> void);` |
+| ohos.arkui.ArcSwiper | unnamed | GestureSwipeHandler | 0 | field |  |  |  |  | - |  |  |  |  | `export type GestureSwipeHandler = ((index: number, event: SwiperAnimationEvent)=> void);` |
+| ohos.arkui.ArcSwiper | ArcSwiperContentAnimatedTransition | ArcSwiperContentAnimatedTransition | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface ArcSwiperContentAnimatedTransition {` |
+| ohos.arkui.ArcSwiper | ArcSwiperContentAnimatedTransition | timeout | 0 | field |  |  |  |  | - |  |  |  |  | `timeout?: number;` |
+| ohos.arkui.ArcSwiper | ArcSwiperContentAnimatedTransition | transition | 0 | field |  |  |  |  | - |  |  |  |  | `transition: Callback<ArcSwiperContentTransitionProxy>;` |
+| ohos.arkui.ArcSwiper | ArcSwiperContentTransitionProxy | ArcSwiperContentTransitionProxy | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface ArcSwiperContentTransitionProxy {` |
+| ohos.arkui.ArcSwiper | ArcSwiperContentTransitionProxy | selectedIndex | 0 | field |  |  |  |  | - |  |  |  |  | `selectedIndex: number;` |
+| ohos.arkui.ArcSwiper | ArcSwiperContentTransitionProxy | index | 0 | field |  |  |  |  | - |  |  |  |  | `index: number;` |
+| ohos.arkui.ArcSwiper | ArcSwiperContentTransitionProxy | position | 0 | field |  |  |  |  | - |  |  |  |  | `position: number;` |
+| ohos.arkui.ArcSwiper | ArcSwiperContentTransitionProxy | mainAxisLength | 0 | field |  |  |  |  | - |  |  |  |  | `mainAxisLength: number;` |
+| ohos.arkui.ArcSwiper | ArcSwiperContentTransitionProxy | finishTransition | 0 | method |  |  |  |  | - |  |  |  |  | `finishTransition(): void` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | ArcSwiperAttribute | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface ArcSwiperAttribute extends CommonMethod {` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | index | 0 | method |  |  |  |  | - |  |  |  |  | `index(index: (number | undefined)): this` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | indicator | 0 | method |  |  |  |  | - |  |  |  |  | `indicator(style: (ArcDotIndicator | boolean | undefined)): this` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | duration | 0 | method |  |  |  |  | - |  |  |  |  | `duration(duration: (number | undefined)): this` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | vertical | 0 | method |  |  |  |  | - |  |  |  |  | `vertical(isVertical: (boolean | undefined)): this` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | disableSwipe | 0 | method |  |  |  |  | - |  |  |  |  | `disableSwipe(disabled: (boolean | undefined)): this` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | digitalCrownSensitivity | 0 | method |  |  |  |  | - |  |  |  |  | `digitalCrownSensitivity(sensitivity: (CrownSensitivity | undefined)): this` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | onChange | 0 | method |  |  |  |  | - |  |  |  |  | `onChange(handler: (IndexChangedHandler | undefined)): this` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | onAnimationStart | 0 | method |  |  |  |  | - |  |  |  |  | `onAnimationStart(handler: (AnimationStartHandler | undefined)): this` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | onAnimationEnd | 0 | method |  |  |  |  | - |  |  |  |  | `onAnimationEnd(handler: (AnimationEndHandler | undefined)): this` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | onGestureSwipe | 0 | method |  |  |  |  | - |  |  |  |  | `onGestureSwipe(handler: (GestureSwipeHandler | undefined)): this` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | effectMode | 0 | method |  |  |  |  | - |  |  |  |  | `effectMode(edgeEffect: (EdgeEffect | undefined)): this` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | customContentTransition | 0 | method |  |  |  |  | - |  |  |  |  | `customContentTransition(transition: (ArcSwiperContentAnimatedTransition | undefined)): this` |
+| ohos.arkui.ArcSwiper | ArcSwiperAttribute | disableTransitionAnimation | 0 | method |  |  |  |  | - |  |  |  |  | `disableTransitionAnimation(disabled: (boolean | undefined)): this` |
+| ohos.arkui.ArcSwiper | unnamed | ArcSwiper | 0 | function |  |  |  |  | - |  |  |  |  | `@memo() @ComponentBuilder() export declare function ArcSwiper(controller?: ArcSwiperController, @memo() content_?: (()=> void)): ArcSwiperAttribute` |
+| ohos.arkui.componentSnapshot | componentSnapshot | componentSnapshot | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace componentSnapshot {` |
+| ohos.arkui.componentSnapshot | SnapshotRegion | SnapshotRegion | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface SnapshotRegion {` |
+| ohos.arkui.componentSnapshot | componentSnapshot.SnapshotRegion | left | 0 | field |  |  |  |  | - |  |  |  |  | `left: number;` |
+| ohos.arkui.componentSnapshot | componentSnapshot.SnapshotRegion | right | 0 | field |  |  |  |  | - |  |  |  |  | `right: number;` |
+| ohos.arkui.componentSnapshot | componentSnapshot.SnapshotRegion | top | 0 | field |  |  |  |  | - |  |  |  |  | `top: number;` |
+| ohos.arkui.componentSnapshot | componentSnapshot.SnapshotRegion | bottom | 0 | field |  |  |  |  | - |  |  |  |  | `bottom: number;` |
+| ohos.arkui.componentSnapshot | LocalizedSnapshotRegion | LocalizedSnapshotRegion | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface LocalizedSnapshotRegion {` |
+| ohos.arkui.componentSnapshot | componentSnapshot.LocalizedSnapshotRegion | start | 0 | field |  |  |  |  | - |  |  |  |  | `start: number;` |
+| ohos.arkui.componentSnapshot | componentSnapshot.LocalizedSnapshotRegion | end | 0 | field |  |  |  |  | - |  |  |  |  | `end: number;` |
+| ohos.arkui.componentSnapshot | componentSnapshot.LocalizedSnapshotRegion | top | 0 | field |  |  |  |  | - |  |  |  |  | `top: number;` |
+| ohos.arkui.componentSnapshot | componentSnapshot.LocalizedSnapshotRegion | bottom | 0 | field |  |  |  |  | - |  |  |  |  | `bottom: number;` |
+| ohos.arkui.componentSnapshot | componentSnapshot | SnapshotRegionType | 0 | field |  |  |  |  | - |  |  |  |  | `export type SnapshotRegionType = (SnapshotRegion | LocalizedSnapshotRegion);` |
+| ohos.arkui.componentSnapshot | SnapshotOptions | SnapshotOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface SnapshotOptions {` |
+| ohos.arkui.componentSnapshot | componentSnapshot.SnapshotOptions | scale | 0 | field |  |  |  |  | - |  |  |  |  | `scale?: number;` |
+| ohos.arkui.componentSnapshot | componentSnapshot.SnapshotOptions | waitUntilRenderFinished | 0 | field |  |  |  |  | - |  |  |  |  | `waitUntilRenderFinished?: boolean;` |
+| ohos.arkui.componentSnapshot | componentSnapshot.SnapshotOptions | region | 0 | field |  |  |  |  | - |  |  |  |  | `region?: SnapshotRegionType;` |
+| ohos.arkui.componentSnapshot | componentSnapshot | getSync | 0 | function |  |  |  |  | - |  |  |  |  | `export function getSync(id: string, options?: SnapshotOptions): image.PixelMap` |
+| ohos.arkui.componentUtils | componentUtils | componentUtils | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace componentUtils {` |
+| ohos.arkui.componentUtils | ComponentInfo | ComponentInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ComponentInfo {` |
+| ohos.arkui.componentUtils | componentUtils.ComponentInfo | size | 0 | field |  |  |  |  | - |  |  |  |  | `size: Size;` |
+| ohos.arkui.componentUtils | componentUtils.ComponentInfo | localOffset | 0 | field |  |  |  |  | - |  |  |  |  | `localOffset: Offset;` |
+| ohos.arkui.componentUtils | componentUtils.ComponentInfo | windowOffset | 0 | field |  |  |  |  | - |  |  |  |  | `windowOffset: Offset;` |
+| ohos.arkui.componentUtils | componentUtils.ComponentInfo | screenOffset | 0 | field |  |  |  |  | - |  |  |  |  | `screenOffset: Offset;` |
+| ohos.arkui.componentUtils | componentUtils.ComponentInfo | translate | 0 | field |  |  |  |  | - |  |  |  |  | `translate: TranslateResult;` |
+| ohos.arkui.componentUtils | componentUtils.ComponentInfo | scale | 0 | field |  |  |  |  | - |  |  |  |  | `scale: ScaleResult;` |
+| ohos.arkui.componentUtils | componentUtils.ComponentInfo | rotate | 0 | field |  |  |  |  | - |  |  |  |  | `rotate: RotateResult;` |
+| ohos.arkui.componentUtils | componentUtils.ComponentInfo | transform | 0 | field |  |  |  |  | - |  |  |  |  | `transform: Matrix4Result;` |
+| ohos.arkui.componentUtils | Size | Size | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface Size {` |
+| ohos.arkui.componentUtils | componentUtils.Size | width | 0 | field |  |  |  |  | - |  |  |  |  | `width: number;` |
+| ohos.arkui.componentUtils | componentUtils.Size | height | 0 | field |  |  |  |  | - |  |  |  |  | `height: number;` |
+| ohos.arkui.componentUtils | Offset | Offset | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface Offset {` |
+| ohos.arkui.componentUtils | componentUtils.Offset | x | 0 | field |  |  |  |  | - |  |  |  |  | `x: number;` |
+| ohos.arkui.componentUtils | componentUtils.Offset | y | 0 | field |  |  |  |  | - |  |  |  |  | `y: number;` |
+| ohos.arkui.componentUtils | TranslateResult | TranslateResult | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface TranslateResult {` |
+| ohos.arkui.componentUtils | componentUtils.TranslateResult | x | 0 | field |  |  |  |  | - |  |  |  |  | `x: number;` |
+| ohos.arkui.componentUtils | componentUtils.TranslateResult | y | 0 | field |  |  |  |  | - |  |  |  |  | `y: number;` |
+| ohos.arkui.componentUtils | componentUtils.TranslateResult | z | 0 | field |  |  |  |  | - |  |  |  |  | `z: number;` |
+| ohos.arkui.componentUtils | ScaleResult | ScaleResult | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ScaleResult {` |
+| ohos.arkui.componentUtils | componentUtils.ScaleResult | x | 0 | field |  |  |  |  | - |  |  |  |  | `x: number;` |
+| ohos.arkui.componentUtils | componentUtils.ScaleResult | y | 0 | field |  |  |  |  | - |  |  |  |  | `y: number;` |
+| ohos.arkui.componentUtils | componentUtils.ScaleResult | z | 0 | field |  |  |  |  | - |  |  |  |  | `z: number;` |
+| ohos.arkui.componentUtils | componentUtils.ScaleResult | centerX | 0 | field |  |  |  |  | - |  |  |  |  | `centerX: number;` |
+| ohos.arkui.componentUtils | componentUtils.ScaleResult | centerY | 0 | field |  |  |  |  | - |  |  |  |  | `centerY: number;` |
+| ohos.arkui.componentUtils | RotateResult | RotateResult | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface RotateResult {` |
+| ohos.arkui.componentUtils | componentUtils.RotateResult | x | 0 | field |  |  |  |  | - |  |  |  |  | `x: number;` |
+| ohos.arkui.componentUtils | componentUtils.RotateResult | y | 0 | field |  |  |  |  | - |  |  |  |  | `y: number;` |
+| ohos.arkui.componentUtils | componentUtils.RotateResult | z | 0 | field |  |  |  |  | - |  |  |  |  | `z: number;` |
+| ohos.arkui.componentUtils | componentUtils.RotateResult | centerX | 0 | field |  |  |  |  | - |  |  |  |  | `centerX: number;` |
+| ohos.arkui.componentUtils | componentUtils.RotateResult | centerY | 0 | field |  |  |  |  | - |  |  |  |  | `centerY: number;` |
+| ohos.arkui.componentUtils | componentUtils.RotateResult | angle | 0 | field |  |  |  |  | - |  |  |  |  | `angle: number;` |
+| ohos.arkui.componentUtils | componentUtils | Matrix4Result | 0 | field |  |  |  |  | - |  |  |  |  | `export type Matrix4Result = [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];` |
+| ohos.arkui.dragController | dragController | dragController | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace dragController {` |
+| ohos.arkui.dragController | DragStatus | DragStatus | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum DragStatus {` |
+| ohos.arkui.dragController | dragController.DragStatus | STARTED | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `STARTED = 0` |
+| ohos.arkui.dragController | dragController.DragStatus | ENDED | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ENDED = 1` |
+| ohos.arkui.dragController | DragAndDropInfo | DragAndDropInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `interface DragAndDropInfo {` |
+| ohos.arkui.dragController | dragController.DragAndDropInfo | status | 0 | field |  |  |  |  | - |  |  |  |  | `status: DragStatus;` |
+| ohos.arkui.dragController | dragController.DragAndDropInfo | event | 0 | field |  |  |  |  | - |  |  |  |  | `event: DragEvent;` |
+| ohos.arkui.dragController | dragController.DragAndDropInfo | extraParams | 0 | field |  |  |  |  | - |  |  |  |  | `extraParams?: string;` |
+| ohos.arkui.dragController | DragAction | DragAction | 0 | interface |  |  |  |  | - |  |  |  |  | `interface DragAction {` |
+| ohos.arkui.dragController | dragController.DragAction | startDrag | 0 | method |  |  |  |  | - |  |  |  |  | `startDrag(): Promise<void>` |
+| ohos.arkui.dragController | dragController.DragAction | on | 0 | method |  |  |  |  | - |  |  |  |  | `on(type: "statusChange", callback: Callback<DragAndDropInfo>): void` |
+| ohos.arkui.dragController | dragController.DragAction | off | 0 | method |  |  |  |  | - |  |  |  |  | `off(type: "statusChange", callback?: Callback<DragAndDropInfo>): void` |
+| ohos.arkui.dragController | DragInfo | DragInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `interface DragInfo {` |
+| ohos.arkui.dragController | dragController.DragInfo | pointerId | 0 | field |  |  |  |  | - |  |  |  |  | `pointerId: number;` |
+| ohos.arkui.dragController | dragController.DragInfo | data | 0 | field |  |  |  |  | - |  |  |  |  | `data?: unifiedDataChannel.UnifiedData;` |
+| ohos.arkui.dragController | dragController.DragInfo | extraParams | 0 | field |  |  |  |  | - |  |  |  |  | `extraParams?: string;` |
+| ohos.arkui.dragController | dragController.DragInfo | touchPoint | 0 | field |  |  |  |  | - |  |  |  |  | `touchPoint?: TouchPoint;` |
+| ohos.arkui.dragController | dragController.DragInfo | previewOptions | 0 | field |  |  |  |  | - |  |  |  |  | `previewOptions?: DragPreviewOptions;` |
+| ohos.arkui.dragController | AnimationOptions | AnimationOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `interface AnimationOptions {` |
+| ohos.arkui.dragController | dragController.AnimationOptions | duration | 0 | field |  |  |  |  | - |  |  |  |  | `duration?: number;` |
+| ohos.arkui.dragController | dragController.AnimationOptions | curve | 0 | field |  |  |  |  | - |  |  |  |  | `curve?: (Curve | ICurve);` |
+| ohos.arkui.dragController | DragPreview | DragPreview | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class DragPreview {` |
+| ohos.arkui.dragController | dragController.DragPreview | setForegroundColor | 0 | method |  |  |  |  | - |  |  |  |  | `public setForegroundColor(color: ResourceColor): void` |
+| ohos.arkui.dragController | dragController.DragPreview | animate | 0 | method |  |  |  |  | - |  |  |  |  | `public animate(options: AnimationOptions, handler: (()=> void)): void` |
+| ohos.arkui.dragController | dragController.DragPreview | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.dragController | DragEventParam | DragEventParam | 0 | interface |  |  |  |  | - |  |  |  |  | `interface DragEventParam {` |
+| ohos.arkui.dragController | dragController.DragEventParam | event | 0 | field |  |  |  |  | - |  |  |  |  | `event: DragEvent;` |
+| ohos.arkui.dragController | dragController.DragEventParam | extraParams | 0 | field |  |  |  |  | - |  |  |  |  | `extraParams: string;` |
+| ohos.arkui.dragController | DragStartRequestStatus | DragStartRequestStatus | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum DragStartRequestStatus {` |
+| ohos.arkui.dragController | dragController.DragStartRequestStatus | WAITING | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `WAITING = 0` |
+| ohos.arkui.dragController | dragController.DragStartRequestStatus | READY | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `READY = 1` |
+| ohos.arkui.drawableDescriptor | DrawableDescriptor | DrawableDescriptor | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class DrawableDescriptor {` |
+| ohos.arkui.drawableDescriptor | DrawableDescriptor | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor()` |
+| ohos.arkui.drawableDescriptor | DrawableDescriptor | getPixelMap | 0 | method |  |  |  |  | - |  |  |  |  | `public getPixelMap(): (image.PixelMap | undefined)` |
+| ohos.arkui.drawableDescriptor | LayeredDrawableDescriptor | LayeredDrawableDescriptor | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class LayeredDrawableDescriptor extends DrawableDescriptor {` |
+| ohos.arkui.drawableDescriptor | LayeredDrawableDescriptor | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(foreground?: DrawableDescriptor, background?: DrawableDescriptor, mask?: DrawableDescriptor)` |
+| ohos.arkui.drawableDescriptor | LayeredDrawableDescriptor | getForeground | 0 | method |  |  |  |  | - |  |  |  |  | `public getForeground(): (DrawableDescriptor | undefined)` |
+| ohos.arkui.drawableDescriptor | LayeredDrawableDescriptor | getBackground | 0 | method |  |  |  |  | - |  |  |  |  | `public getBackground(): (DrawableDescriptor | undefined)` |
+| ohos.arkui.drawableDescriptor | LayeredDrawableDescriptor | getMask | 0 | method |  |  |  |  | - |  |  |  |  | `public getMask(): (DrawableDescriptor | undefined)` |
+| ohos.arkui.drawableDescriptor | LayeredDrawableDescriptor | getMaskClipPath | 0 | method |  |  |  |  | - |  |  |  |  | `public static getMaskClipPath(): string` |
+| ohos.arkui.drawableDescriptor | PixelMapDrawableDescriptor | PixelMapDrawableDescriptor | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class PixelMapDrawableDescriptor extends DrawableDescriptor {` |
+| ohos.arkui.drawableDescriptor | PixelMapDrawableDescriptor | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(src?: image.PixelMap)` |
+| ohos.arkui.drawableDescriptor | AnimationOptions | AnimationOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface AnimationOptions {` |
+| ohos.arkui.drawableDescriptor | AnimationOptions | duration | 0 | field |  |  |  |  | - |  |  |  |  | `duration?: number;` |
+| ohos.arkui.drawableDescriptor | AnimationOptions | iterations | 0 | field |  |  |  |  | - |  |  |  |  | `iterations?: number;` |
+| ohos.arkui.drawableDescriptor | AnimatedDrawableDescriptor | AnimatedDrawableDescriptor | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class AnimatedDrawableDescriptor extends DrawableDescriptor {` |
+| ohos.arkui.drawableDescriptor | AnimatedDrawableDescriptor | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(pixelMaps: Array<image.PixelMap>, options?: AnimationOptions)` |
+| ohos.arkui.inspector | inspector | inspector | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace inspector {` |
+| ohos.arkui.inspector | ComponentObserver | ComponentObserver | 0 | interface |  |  |  |  | - |  |  |  |  | `interface ComponentObserver {` |
+| ohos.arkui.inspector | inspector.ComponentObserver | onLayout | 0 | method |  |  |  |  | - |  |  |  |  | `onLayout(type: "layout", callback: Callback<void>): void` |
+| ohos.arkui.inspector | inspector.ComponentObserver | offLayout | 0 | method |  |  |  |  | - |  |  |  |  | `offLayout(type: "layout", callback?: Callback<void>): void` |
+| ohos.arkui.inspector | inspector.ComponentObserver | onDraw | 0 | method |  |  |  |  | - |  |  |  |  | `onDraw(type: "draw", callback: Callback<void>): void` |
+| ohos.arkui.inspector | inspector.ComponentObserver | offDraw | 0 | method |  |  |  |  | - |  |  |  |  | `offDraw(type: "draw", callback?: Callback<void>): void` |
+| ohos.arkui.inspector | inspector.ComponentObserver | onDrawChildren | 0 | method |  |  |  |  | - |  |  |  |  | `onDrawChildren(type: "drawChildren", callback: Callback<void>): void` |
+| ohos.arkui.inspector | inspector.ComponentObserver | offDrawChildren | 0 | method |  |  |  |  | - |  |  |  |  | `offDrawChildren(type: "drawChildren", callback?: Callback<void>): void` |
+| ohos.arkui.inspector | inspector.ComponentObserver | on | 0 | method | Deleted because of overload |  |  | Deleted because of overload | - |  |  |  |  | `overload on{onLayout, onDraw, onDrawChildren};` |
+| ohos.arkui.inspector | inspector.ComponentObserver | off | 0 | method | Deleted because of overload |  |  | Deleted because of overload | - |  |  |  |  | `overload off{offLayout, offDraw, offDrawChildren};` |
+| ohos.arkui.inspector | inspector | getInspectorByKey | 0 | function |  |  |  |  | - |  |  |  |  | `function getInspectorByKey(id: string): string` |
+| ohos.arkui.inspector | inspector | getInspectorTree | 0 | function |  |  |  |  | - |  |  |  |  | `function getInspectorTree(): RecordData` |
+| ohos.arkui.inspector | inspector | sendEventByKey | 0 | function |  |  |  |  | - |  |  |  |  | `function sendEventByKey(id: string, action: int, params: string): boolean` |
+| ohos.arkui.observer | uiObserver | uiObserver | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace uiObserver {` |
+| ohos.arkui.observer | NavDestinationState | NavDestinationState | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum NavDestinationState {` |
+| ohos.arkui.observer | uiObserver.NavDestinationState | ON_SHOWN | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_SHOWN = 0` |
+| ohos.arkui.observer | uiObserver.NavDestinationState | ON_HIDDEN | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_HIDDEN = 1` |
+| ohos.arkui.observer | uiObserver.NavDestinationState | ON_APPEAR | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_APPEAR = 2` |
+| ohos.arkui.observer | uiObserver.NavDestinationState | ON_DISAPPEAR | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_DISAPPEAR = 3` |
+| ohos.arkui.observer | uiObserver.NavDestinationState | ON_WILL_SHOW | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_WILL_SHOW = 4` |
+| ohos.arkui.observer | uiObserver.NavDestinationState | ON_WILL_HIDE | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_WILL_HIDE = 5` |
+| ohos.arkui.observer | uiObserver.NavDestinationState | ON_WILL_APPEAR | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_WILL_APPEAR = 6` |
+| ohos.arkui.observer | uiObserver.NavDestinationState | ON_WILL_DISAPPEAR | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_WILL_DISAPPEAR = 7` |
+| ohos.arkui.observer | uiObserver.NavDestinationState | ON_ACTIVE | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_ACTIVE = 8` |
+| ohos.arkui.observer | uiObserver.NavDestinationState | ON_INACTIVE | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_INACTIVE = 9` |
+| ohos.arkui.observer | uiObserver.NavDestinationState | ON_BACKPRESS | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_BACKPRESS = 100` |
+| ohos.arkui.observer | RouterPageState | RouterPageState | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum RouterPageState {` |
+| ohos.arkui.observer | uiObserver.RouterPageState | ABOUT_TO_APPEAR | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ABOUT_TO_APPEAR = 0` |
+| ohos.arkui.observer | uiObserver.RouterPageState | ABOUT_TO_DISAPPEAR | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ABOUT_TO_DISAPPEAR = 1` |
+| ohos.arkui.observer | uiObserver.RouterPageState | ON_PAGE_SHOW | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_PAGE_SHOW = 2` |
+| ohos.arkui.observer | uiObserver.RouterPageState | ON_PAGE_HIDE | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_PAGE_HIDE = 3` |
+| ohos.arkui.observer | uiObserver.RouterPageState | ON_BACK_PRESS | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_BACK_PRESS = 4` |
+| ohos.arkui.observer | ScrollEventType | ScrollEventType | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum ScrollEventType {` |
+| ohos.arkui.observer | uiObserver.ScrollEventType | SCROLL_START | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `SCROLL_START = 0` |
+| ohos.arkui.observer | uiObserver.ScrollEventType | SCROLL_STOP | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `SCROLL_STOP = 1` |
+| ohos.arkui.observer | TabContentState | TabContentState | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum TabContentState {` |
+| ohos.arkui.observer | uiObserver.TabContentState | ON_SHOW | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_SHOW = 0` |
+| ohos.arkui.observer | uiObserver.TabContentState | ON_HIDE | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ON_HIDE = 1` |
+| ohos.arkui.observer | NavDestinationInfo | NavDestinationInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface NavDestinationInfo {` |
+| ohos.arkui.observer | uiObserver.NavDestinationInfo | navigationId | 0 | field |  |  |  |  | - |  |  |  |  | `navigationId: ResourceStr;` |
+| ohos.arkui.observer | uiObserver.NavDestinationInfo | name | 0 | field |  |  |  |  | - |  |  |  |  | `name: ResourceStr;` |
+| ohos.arkui.observer | uiObserver.NavDestinationInfo | state | 0 | field |  |  |  |  | - |  |  |  |  | `state: NavDestinationState;` |
+| ohos.arkui.observer | uiObserver.NavDestinationInfo | index | 0 | field |  |  |  |  | - |  |  |  |  | `index: number;` |
+| ohos.arkui.observer | uiObserver.NavDestinationInfo | param | 0 | field |  |  |  |  | - |  |  |  |  | `param?: Object;` |
+| ohos.arkui.observer | uiObserver.NavDestinationInfo | navDestinationId | 0 | field |  |  |  |  | - |  |  |  |  | `navDestinationId: string;` |
+| ohos.arkui.observer | uiObserver.NavDestinationInfo | uniqueId | 0 | field |  |  |  |  | - |  |  |  |  | `uniqueId?: number;` |
+| ohos.arkui.observer | uiObserver.NavDestinationInfo | mode | 0 | field |  |  |  |  | - |  |  |  |  | `mode?: NavDestinationMode;` |
+| ohos.arkui.observer | NavigationInfo | NavigationInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface NavigationInfo {` |
+| ohos.arkui.observer | uiObserver.NavigationInfo | navigationId | 0 | field |  |  |  |  | - |  |  |  |  | `navigationId: string;` |
+| ohos.arkui.observer | uiObserver.NavigationInfo | pathStack | 0 | field |  |  |  |  | - |  |  |  |  | `pathStack: NavPathStack;` |
+| ohos.arkui.observer | uiObserver.NavigationInfo | uniqueId | 0 | field |  |  |  |  | - |  |  |  |  | `uniqueId?: int;` |
+| ohos.arkui.observer | ScrollEventInfo | ScrollEventInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ScrollEventInfo {` |
+| ohos.arkui.observer | uiObserver.ScrollEventInfo | id | 0 | field |  |  |  |  | - |  |  |  |  | `id: string;` |
+| ohos.arkui.observer | uiObserver.ScrollEventInfo | uniqueId | 0 | field |  |  |  |  | - |  |  |  |  | `uniqueId: number;` |
+| ohos.arkui.observer | uiObserver.ScrollEventInfo | scrollEvent | 0 | field |  |  |  |  | - |  |  |  |  | `scrollEvent: ScrollEventType;` |
+| ohos.arkui.observer | uiObserver.ScrollEventInfo | offset | 0 | field |  |  |  |  | - |  |  |  |  | `offset: number;` |
+| ohos.arkui.observer | TabContentInfo | TabContentInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface TabContentInfo {` |
+| ohos.arkui.observer | uiObserver.TabContentInfo | tabContentId | 0 | field |  |  |  |  | - |  |  |  |  | `tabContentId: string;` |
+| ohos.arkui.observer | uiObserver.TabContentInfo | tabContentUniqueId | 0 | field |  |  |  |  | - |  |  |  |  | `tabContentUniqueId: number;` |
+| ohos.arkui.observer | uiObserver.TabContentInfo | state | 0 | field |  |  |  |  | - |  |  |  |  | `state: TabContentState;` |
+| ohos.arkui.observer | uiObserver.TabContentInfo | index | 0 | field |  |  |  |  | - |  |  |  |  | `index: number;` |
+| ohos.arkui.observer | uiObserver.TabContentInfo | id | 0 | field |  |  |  |  | - |  |  |  |  | `id: string;` |
+| ohos.arkui.observer | uiObserver.TabContentInfo | uniqueId | 0 | field |  |  |  |  | - |  |  |  |  | `uniqueId: number;` |
+| ohos.arkui.observer | ObserverOptions | ObserverOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ObserverOptions {` |
+| ohos.arkui.observer | uiObserver.ObserverOptions | id | 0 | field |  |  |  |  | - |  |  |  |  | `id: string;` |
+| ohos.arkui.observer | RouterPageInfo | RouterPageInfo | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class RouterPageInfo {` |
+| ohos.arkui.observer | uiObserver.RouterPageInfo | context | 0 | field |  |  |  |  | - |  |  |  |  | `public context: (UIAbilityContext | UIContext);` |
+| ohos.arkui.observer | uiObserver.RouterPageInfo | index | 0 | field |  |  |  |  | - |  |  |  |  | `public index: number;` |
+| ohos.arkui.observer | uiObserver.RouterPageInfo | name | 0 | field |  |  |  |  | - |  |  |  |  | `public name: string;` |
+| ohos.arkui.observer | uiObserver.RouterPageInfo | path | 0 | field |  |  |  |  | - |  |  |  |  | `public path: string;` |
+| ohos.arkui.observer | uiObserver.RouterPageInfo | state | 0 | field |  |  |  |  | - |  |  |  |  | `public state: RouterPageState;` |
+| ohos.arkui.observer | uiObserver.RouterPageInfo | pageId | 0 | field |  |  |  |  | - |  |  |  |  | `public pageId: string;` |
+| ohos.arkui.observer | uiObserver.RouterPageInfo | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.observer | DensityInfo | DensityInfo | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class DensityInfo {` |
+| ohos.arkui.observer | uiObserver.DensityInfo | context | 0 | field |  |  |  |  | - |  |  |  |  | `public context: UIContext;` |
+| ohos.arkui.observer | uiObserver.DensityInfo | density | 0 | field |  |  |  |  | - |  |  |  |  | `public density: number;` |
+| ohos.arkui.observer | uiObserver.DensityInfo | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.observer | NavDestinationSwitchInfo | NavDestinationSwitchInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface NavDestinationSwitchInfo {` |
+| ohos.arkui.observer | uiObserver.NavDestinationSwitchInfo | context | 0 | field |  |  |  |  | - |  |  |  |  | `context: (UIAbilityContext | UIContext);` |
+| ohos.arkui.observer | uiObserver.NavDestinationSwitchInfo | from | 0 | field |  |  |  |  | - |  |  |  |  | `from: (NavDestinationInfo | NavBar);` |
+| ohos.arkui.observer | uiObserver.NavDestinationSwitchInfo | to | 0 | field |  |  |  |  | - |  |  |  |  | `to: (NavDestinationInfo | NavBar);` |
+| ohos.arkui.observer | uiObserver.NavDestinationSwitchInfo | operation | 0 | field |  |  |  |  | - |  |  |  |  | `operation: NavigationOperation;` |
+| ohos.arkui.observer | NavDestinationSwitchObserverOptions | NavDestinationSwitchObserverOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface NavDestinationSwitchObserverOptions {` |
+| ohos.arkui.observer | uiObserver.NavDestinationSwitchObserverOptions | navigationId | 0 | field |  |  |  |  | - |  |  |  |  | `navigationId: ResourceStr;` |
+| ohos.arkui.observer | uiObserver | on | 0 | function |  |  |  |  | - |  |  |  |  | `export function on(type: "navDestinationUpdate", options: NavDestinationSwitchObserverOptions, callback: Callback<NavDestinationInfo>): void` |
+| ohos.arkui.observer | uiObserver | off | 0 | function |  |  |  |  | - |  |  |  |  | `export function off(type: "navDestinationUpdate", options: NavDestinationSwitchObserverOptions, callback?: Callback<NavDestinationInfo>): void` |
+| ohos.arkui.observer | uiObserver | on | 1 | function |  |  |  |  | - |  |  |  |  | `export function on(type: "navDestinationUpdate", callback: Callback<NavDestinationInfo>): void` |
+| ohos.arkui.observer | uiObserver | off | 1 | function |  |  |  |  | - |  |  |  |  | `export function off(type: "navDestinationUpdate", callback?: Callback<NavDestinationInfo>): void` |
+| ohos.arkui.observer | uiObserver | on | 2 | function |  |  |  |  | - |  |  |  |  | `export function on(type: "scrollEvent", options: ObserverOptions, callback: Callback<ScrollEventInfo>): void` |
+| ohos.arkui.observer | uiObserver | off | 2 | function |  |  |  |  | - |  |  |  |  | `export function off(type: "scrollEvent", options: ObserverOptions, callback?: Callback<ScrollEventInfo>): void` |
+| ohos.arkui.observer | uiObserver | on | 3 | function |  |  |  |  | - |  |  |  |  | `export function on(type: "scrollEvent", callback: Callback<ScrollEventInfo>): void` |
+| ohos.arkui.observer | uiObserver | off | 3 | function |  |  |  |  | - |  |  |  |  | `export function off(type: "scrollEvent", callback?: Callback<ScrollEventInfo>): void` |
+| ohos.arkui.observer | uiObserver | on | 4 | function |  |  |  |  | - |  |  |  |  | `export function on(type: "routerPageUpdate", context: (UIAbilityContext | UIContext), callback: Callback<RouterPageInfo>): void` |
+| ohos.arkui.observer | uiObserver | off | 4 | function |  |  |  |  | - |  |  |  |  | `export function off(type: "routerPageUpdate", context: (UIAbilityContext | UIContext), callback?: Callback<RouterPageInfo>): void` |
+| ohos.arkui.observer | uiObserver | on | 5 | function |  |  |  |  | - |  |  |  |  | `export function on(type: "densityUpdate", context: UIContext, callback: Callback<DensityInfo>): void` |
+| ohos.arkui.observer | uiObserver | off | 5 | function |  |  |  |  | - |  |  |  |  | `export function off(type: "densityUpdate", context: UIContext, callback?: Callback<DensityInfo>): void` |
+| ohos.arkui.observer | uiObserver | on | 6 | function |  |  |  |  | - |  |  |  |  | `export function on(type: "willDraw", context: UIContext, callback: Callback<void>): void` |
+| ohos.arkui.observer | uiObserver | off | 6 | function |  |  |  |  | - |  |  |  |  | `export function off(type: "willDraw", context: UIContext, callback?: Callback<void>): void` |
+| ohos.arkui.observer | uiObserver | on | 7 | function |  |  |  |  | - |  |  |  |  | `export function on(type: "didLayout", context: UIContext, callback: Callback<void>): void` |
+| ohos.arkui.observer | uiObserver | off | 7 | function |  |  |  |  | - |  |  |  |  | `export function off(type: "didLayout", context: UIContext, callback?: Callback<void>): void` |
+| ohos.arkui.observer | uiObserver | on | 8 | function |  |  |  |  | - |  |  |  |  | `export function on(type: "tabContentUpdate", options: ObserverOptions, callback: Callback<TabContentInfo>): void` |
+| ohos.arkui.observer | uiObserver | off | 8 | function |  |  |  |  | - |  |  |  |  | `export function off(type: "tabContentUpdate", options: ObserverOptions, callback?: Callback<TabContentInfo>): void` |
+| ohos.arkui.observer | uiObserver | on | 9 | function |  |  |  |  | - |  |  |  |  | `export function on(type: "tabContentUpdate", callback: Callback<TabContentInfo>): void` |
+| ohos.arkui.observer | uiObserver | off | 9 | function |  |  |  |  | - |  |  |  |  | `export function off(type: "tabContentUpdate", callback?: Callback<TabContentInfo>): void` |
+| ohos.arkui.observer | uiObserver | on | 10 | function |  |  |  |  | - |  |  |  |  | `export function on(type: "navDestinationSwitch", context: (UIAbilityContext | UIContext), callback: Callback<NavDestinationSwitchInfo>): void` |
+| ohos.arkui.observer | uiObserver | off | 10 | function |  |  |  |  | - |  |  |  |  | `export function off(type: "navDestinationSwitch", context: (UIAbilityContext | UIContext), callback?: Callback<NavDestinationSwitchInfo>): void` |
+| ohos.arkui.observer | uiObserver | on | 11 | function |  |  |  |  | - |  |  |  |  | `export function on(type: "navDestinationSwitch", context: (UIAbilityContext | UIContext), observerOptions: NavDestinationSwitchObserverOptions, callback: Callback<NavDestinationSwitchInfo>): void` |
+| ohos.arkui.observer | uiObserver | off | 11 | function |  |  |  |  | - |  |  |  |  | `export function off(type: "navDestinationSwitch", context: (UIAbilityContext | UIContext), observerOptions: NavDestinationSwitchObserverOptions, callback?: Callback<NavDestinationSwitchInfo>): void` |
+| ohos.arkui.Parallelize | ParallelOption | ParallelOption | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ParallelOption {` |
+| ohos.arkui.Parallelize | ParallelOption | enable | 0 | field |  |  |  |  | - |  |  |  |  | `enable?: boolean;` |
+| ohos.arkui.Parallelize | UIParallelAttribute | UIParallelAttribute | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface UIParallelAttribute {` |
+| ohos.arkui.Parallelize | unnamed | ParallelizeUI | 0 | function |  |  |  |  | - |  |  |  |  | `@ComponentBuilder() export declare function ParallelizeUI(options?: (ParallelOption | undefined), @memo() content_?: (()=> void)): UIParallelAttribute` |
+| ohos.arkui.performanceMonitor | performanceMonitor | performanceMonitor | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace performanceMonitor {` |
+| ohos.arkui.performanceMonitor | ActionType | ActionType | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum ActionType {` |
+| ohos.arkui.performanceMonitor | performanceMonitor.ActionType | LAST_DOWN | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `LAST_DOWN = 0` |
+| ohos.arkui.performanceMonitor | performanceMonitor.ActionType | LAST_UP | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `LAST_UP = 1` |
+| ohos.arkui.performanceMonitor | performanceMonitor.ActionType | FIRST_MOVE | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `FIRST_MOVE = 2` |
+| ohos.arkui.performanceMonitor | SourceType | SourceType | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum SourceType {` |
+| ohos.arkui.performanceMonitor | performanceMonitor.SourceType | PERF_TOUCH_EVENT | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `PERF_TOUCH_EVENT = 0` |
+| ohos.arkui.performanceMonitor | performanceMonitor.SourceType | PERF_MOUSE_EVENT | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `PERF_MOUSE_EVENT = 1` |
+| ohos.arkui.performanceMonitor | performanceMonitor.SourceType | PERF_TOUCHPAD_EVENT | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `PERF_TOUCHPAD_EVENT = 2` |
+| ohos.arkui.performanceMonitor | performanceMonitor.SourceType | PERF_JOYSTICK_EVENT | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `PERF_JOYSTICK_EVENT = 3` |
+| ohos.arkui.performanceMonitor | performanceMonitor.SourceType | PERF_KEY_EVENT | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `PERF_KEY_EVENT = 4` |
+| ohos.arkui.performanceMonitor | performanceMonitor | begin | 0 | function |  |  |  |  | - |  |  |  |  | `function begin(scene: string, startInputType: ActionType, note?: string): void` |
+| ohos.arkui.performanceMonitor | performanceMonitor | end | 0 | function |  |  |  |  | - |  |  |  |  | `function end(scene: string): void` |
+| ohos.arkui.performanceMonitor | performanceMonitor | recordInputEventTime | 0 | function |  |  |  |  | - |  |  |  |  | `function recordInputEventTime(type: ActionType, sourceType: SourceType, time: number): void` |
+| ohos.arkui.shape | ShapeSize | ShapeSize | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ShapeSize {` |
+| ohos.arkui.shape | ShapeSize | width | 0 | field |  |  |  |  | - |  |  |  |  | `width?: (number | string);` |
+| ohos.arkui.shape | ShapeSize | height | 0 | field |  |  |  |  | - |  |  |  |  | `height?: (number | string);` |
+| ohos.arkui.shape | RectShapeOptions | RectShapeOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface RectShapeOptions extends ShapeSize {` |
+| ohos.arkui.shape | RectShapeOptions | radius | 0 | field |  |  |  |  | - |  |  |  |  | `radius?: (number | string | Array<(number | string)>);` |
+| ohos.arkui.shape | RoundRectShapeOptions | RoundRectShapeOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface RoundRectShapeOptions extends ShapeSize {` |
+| ohos.arkui.shape | RoundRectShapeOptions | radiusWidth | 0 | field |  |  |  |  | - |  |  |  |  | `radiusWidth?: (number | string);` |
+| ohos.arkui.shape | RoundRectShapeOptions | radiusHeight | 0 | field |  |  |  |  | - |  |  |  |  | `radiusHeight?: (number | string);` |
+| ohos.arkui.shape | PathShapeOptions | PathShapeOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface PathShapeOptions {` |
+| ohos.arkui.shape | PathShapeOptions | commands | 0 | field |  |  |  |  | - |  |  |  |  | `commands?: string;` |
+| ohos.arkui.shape | CommonShapeMethod | CommonShapeMethod | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class CommonShapeMethod<T>  {` |
+| ohos.arkui.shape | CommonShapeMethod | offset | 0 | method |  |  |  |  | - |  |  |  |  | `public offset(offset: Position): T` |
+| ohos.arkui.shape | CommonShapeMethod | fill | 0 | method |  |  |  |  | - |  |  |  |  | `public fill(color: ResourceColor): T` |
+| ohos.arkui.shape | CommonShapeMethod | position | 0 | method |  |  |  |  | - |  |  |  |  | `public position(position: Position): T` |
+| ohos.arkui.shape | CommonShapeMethod | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.shape | BaseShape | BaseShape | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class BaseShape<T>  extends CommonShapeMethod<T> {` |
+| ohos.arkui.shape | BaseShape | width | 0 | method |  |  |  |  | - |  |  |  |  | `public width(width: Length): T` |
+| ohos.arkui.shape | BaseShape | height | 0 | method |  |  |  |  | - |  |  |  |  | `public height(height: Length): T` |
+| ohos.arkui.shape | BaseShape | size | 0 | method |  |  |  |  | - |  |  |  |  | `public size(size: SizeOptions): T` |
+| ohos.arkui.shape | BaseShape | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.shape | RectShape | RectShape | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class RectShape extends BaseShape<RectShape> {` |
+| ohos.arkui.shape | RectShape | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(options?: (RectShapeOptions | RoundRectShapeOptions))` |
+| ohos.arkui.shape | RectShape | radiusWidth | 0 | method |  |  |  |  | - |  |  |  |  | `public radiusWidth(rWidth: (number | string)): RectShape` |
+| ohos.arkui.shape | RectShape | radiusHeight | 0 | method |  |  |  |  | - |  |  |  |  | `public radiusHeight(rHeight: (number | string)): RectShape` |
+| ohos.arkui.shape | RectShape | radius | 0 | method |  |  |  |  | - |  |  |  |  | `public radius(radius: (number | string | Array<(number | string)>)): RectShape` |
+| ohos.arkui.shape | CircleShape | CircleShape | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class CircleShape extends BaseShape<CircleShape> {` |
+| ohos.arkui.shape | CircleShape | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(options?: ShapeSize)` |
+| ohos.arkui.shape | EllipseShape | EllipseShape | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class EllipseShape extends BaseShape<EllipseShape> {` |
+| ohos.arkui.shape | EllipseShape | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(options?: ShapeSize)` |
+| ohos.arkui.shape | PathShape | PathShape | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class PathShape extends CommonShapeMethod<PathShape> {` |
+| ohos.arkui.shape | PathShape | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(options?: PathShapeOptions)` |
+| ohos.arkui.shape | PathShape | commands | 0 | method |  |  |  |  | - |  |  |  |  | `public commands(commands: string): PathShape` |
+| ohos.arkui.theme | Theme | Theme | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface Theme {` |
+| ohos.arkui.theme | Theme | colors | 0 | field |  |  |  |  | - |  |  |  |  | `colors: Colors;` |
+| ohos.arkui.theme | Colors | Colors | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface Colors {` |
+| ohos.arkui.theme | Colors | brand | 0 | field |  |  |  |  | - |  |  |  |  | `brand: ResourceColor;` |
+| ohos.arkui.theme | Colors | warning | 0 | field |  |  |  |  | - |  |  |  |  | `warning: ResourceColor;` |
+| ohos.arkui.theme | Colors | alert | 0 | field |  |  |  |  | - |  |  |  |  | `alert: ResourceColor;` |
+| ohos.arkui.theme | Colors | confirm | 0 | field |  |  |  |  | - |  |  |  |  | `confirm: ResourceColor;` |
+| ohos.arkui.theme | Colors | fontPrimary | 0 | field |  |  |  |  | - |  |  |  |  | `fontPrimary: ResourceColor;` |
+| ohos.arkui.theme | Colors | fontSecondary | 0 | field |  |  |  |  | - |  |  |  |  | `fontSecondary: ResourceColor;` |
+| ohos.arkui.theme | Colors | fontTertiary | 0 | field |  |  |  |  | - |  |  |  |  | `fontTertiary: ResourceColor;` |
+| ohos.arkui.theme | Colors | fontFourth | 0 | field |  |  |  |  | - |  |  |  |  | `fontFourth: ResourceColor;` |
+| ohos.arkui.theme | Colors | fontEmphasize | 0 | field |  |  |  |  | - |  |  |  |  | `fontEmphasize: ResourceColor;` |
+| ohos.arkui.theme | Colors | fontOnPrimary | 0 | field |  |  |  |  | - |  |  |  |  | `fontOnPrimary: ResourceColor;` |
+| ohos.arkui.theme | Colors | fontOnSecondary | 0 | field |  |  |  |  | - |  |  |  |  | `fontOnSecondary: ResourceColor;` |
+| ohos.arkui.theme | Colors | fontOnTertiary | 0 | field |  |  |  |  | - |  |  |  |  | `fontOnTertiary: ResourceColor;` |
+| ohos.arkui.theme | Colors | fontOnFourth | 0 | field |  |  |  |  | - |  |  |  |  | `fontOnFourth: ResourceColor;` |
+| ohos.arkui.theme | Colors | iconPrimary | 0 | field |  |  |  |  | - |  |  |  |  | `iconPrimary: ResourceColor;` |
+| ohos.arkui.theme | Colors | iconSecondary | 0 | field |  |  |  |  | - |  |  |  |  | `iconSecondary: ResourceColor;` |
+| ohos.arkui.theme | Colors | iconTertiary | 0 | field |  |  |  |  | - |  |  |  |  | `iconTertiary: ResourceColor;` |
+| ohos.arkui.theme | Colors | iconFourth | 0 | field |  |  |  |  | - |  |  |  |  | `iconFourth: ResourceColor;` |
+| ohos.arkui.theme | Colors | iconEmphasize | 0 | field |  |  |  |  | - |  |  |  |  | `iconEmphasize: ResourceColor;` |
+| ohos.arkui.theme | Colors | iconSubEmphasize | 0 | field |  |  |  |  | - |  |  |  |  | `iconSubEmphasize: ResourceColor;` |
+| ohos.arkui.theme | Colors | iconOnPrimary | 0 | field |  |  |  |  | - |  |  |  |  | `iconOnPrimary: ResourceColor;` |
+| ohos.arkui.theme | Colors | iconOnSecondary | 0 | field |  |  |  |  | - |  |  |  |  | `iconOnSecondary: ResourceColor;` |
+| ohos.arkui.theme | Colors | iconOnTertiary | 0 | field |  |  |  |  | - |  |  |  |  | `iconOnTertiary: ResourceColor;` |
+| ohos.arkui.theme | Colors | iconOnFourth | 0 | field |  |  |  |  | - |  |  |  |  | `iconOnFourth: ResourceColor;` |
+| ohos.arkui.theme | Colors | backgroundPrimary | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundPrimary: ResourceColor;` |
+| ohos.arkui.theme | Colors | backgroundSecondary | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundSecondary: ResourceColor;` |
+| ohos.arkui.theme | Colors | backgroundTertiary | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundTertiary: ResourceColor;` |
+| ohos.arkui.theme | Colors | backgroundFourth | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundFourth: ResourceColor;` |
+| ohos.arkui.theme | Colors | backgroundEmphasize | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundEmphasize: ResourceColor;` |
+| ohos.arkui.theme | Colors | compForegroundPrimary | 0 | field |  |  |  |  | - |  |  |  |  | `compForegroundPrimary: ResourceColor;` |
+| ohos.arkui.theme | Colors | compBackgroundPrimary | 0 | field |  |  |  |  | - |  |  |  |  | `compBackgroundPrimary: ResourceColor;` |
+| ohos.arkui.theme | Colors | compBackgroundPrimaryTran | 0 | field |  |  |  |  | - |  |  |  |  | `compBackgroundPrimaryTran: ResourceColor;` |
+| ohos.arkui.theme | Colors | compBackgroundPrimaryContrary | 0 | field |  |  |  |  | - |  |  |  |  | `compBackgroundPrimaryContrary: ResourceColor;` |
+| ohos.arkui.theme | Colors | compBackgroundGray | 0 | field |  |  |  |  | - |  |  |  |  | `compBackgroundGray: ResourceColor;` |
+| ohos.arkui.theme | Colors | compBackgroundSecondary | 0 | field |  |  |  |  | - |  |  |  |  | `compBackgroundSecondary: ResourceColor;` |
+| ohos.arkui.theme | Colors | compBackgroundTertiary | 0 | field |  |  |  |  | - |  |  |  |  | `compBackgroundTertiary: ResourceColor;` |
+| ohos.arkui.theme | Colors | compBackgroundEmphasize | 0 | field |  |  |  |  | - |  |  |  |  | `compBackgroundEmphasize: ResourceColor;` |
+| ohos.arkui.theme | Colors | compBackgroundNeutral | 0 | field |  |  |  |  | - |  |  |  |  | `compBackgroundNeutral: ResourceColor;` |
+| ohos.arkui.theme | Colors | compEmphasizeSecondary | 0 | field |  |  |  |  | - |  |  |  |  | `compEmphasizeSecondary: ResourceColor;` |
+| ohos.arkui.theme | Colors | compEmphasizeTertiary | 0 | field |  |  |  |  | - |  |  |  |  | `compEmphasizeTertiary: ResourceColor;` |
+| ohos.arkui.theme | Colors | compDivider | 0 | field |  |  |  |  | - |  |  |  |  | `compDivider: ResourceColor;` |
+| ohos.arkui.theme | Colors | compCommonContrary | 0 | field |  |  |  |  | - |  |  |  |  | `compCommonContrary: ResourceColor;` |
+| ohos.arkui.theme | Colors | compBackgroundFocus | 0 | field |  |  |  |  | - |  |  |  |  | `compBackgroundFocus: ResourceColor;` |
+| ohos.arkui.theme | Colors | compFocusedPrimary | 0 | field |  |  |  |  | - |  |  |  |  | `compFocusedPrimary: ResourceColor;` |
+| ohos.arkui.theme | Colors | compFocusedSecondary | 0 | field |  |  |  |  | - |  |  |  |  | `compFocusedSecondary: ResourceColor;` |
+| ohos.arkui.theme | Colors | compFocusedTertiary | 0 | field |  |  |  |  | - |  |  |  |  | `compFocusedTertiary: ResourceColor;` |
+| ohos.arkui.theme | Colors | interactiveHover | 0 | field |  |  |  |  | - |  |  |  |  | `interactiveHover: ResourceColor;` |
+| ohos.arkui.theme | Colors | interactivePressed | 0 | field |  |  |  |  | - |  |  |  |  | `interactivePressed: ResourceColor;` |
+| ohos.arkui.theme | Colors | interactiveFocus | 0 | field |  |  |  |  | - |  |  |  |  | `interactiveFocus: ResourceColor;` |
+| ohos.arkui.theme | Colors | interactiveActive | 0 | field |  |  |  |  | - |  |  |  |  | `interactiveActive: ResourceColor;` |
+| ohos.arkui.theme | Colors | interactiveSelect | 0 | field |  |  |  |  | - |  |  |  |  | `interactiveSelect: ResourceColor;` |
+| ohos.arkui.theme | Colors | interactiveClick | 0 | field |  |  |  |  | - |  |  |  |  | `interactiveClick: ResourceColor;` |
+| ohos.arkui.theme | CustomTheme | CustomTheme | 0 | interface | generated | unnamed | CustomTheme | - | generated |  |  |  |  | `export declare interface CustomTheme {` |
+| ohos.arkui.theme | CustomTheme | colors | 0 | field | generated | CustomTheme | colors | - | generated |  |  |  |  | `colors?: CustomColors;` |
+| ohos.arkui.theme | unnamed | CustomColors | 0 | field |  |  |  |  | - |  |  |  |  | `export type CustomColors = Object;` |
+| ohos.arkui.theme | ThemeControl | ThemeControl | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ThemeControl {` |
+| ohos.arkui.theme | ThemeControl | setDefaultTheme | 0 | method |  |  |  |  | - |  |  |  |  | `public static setDefaultTheme(theme: CustomTheme): void` |
+| ohos.arkui.theme | ThemeControl | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | Font | Font | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class Font {` |
+| ohos.arkui.UIContext | Font | registerFont | 0 | method |  |  |  |  | - |  |  |  |  | `public registerFont(options: font.FontOptions): void` |
+| ohos.arkui.UIContext | Font | getSystemFontList | 0 | method |  |  |  |  | - |  |  |  |  | `public getSystemFontList(): Array<string>` |
+| ohos.arkui.UIContext | Font | getFontByName | 0 | method |  |  |  |  | - |  |  |  |  | `public getFontByName(fontName: string): font.FontInfo` |
+| ohos.arkui.UIContext | Font | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | MediaQuery | MediaQuery | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class MediaQuery {` |
+| ohos.arkui.UIContext | MediaQuery | matchMediaSync | 0 | method |  |  |  |  | - |  |  |  |  | `public matchMediaSync(condition: string): mediaQuery.MediaQueryListener` |
+| ohos.arkui.UIContext | MediaQuery | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | UIInspector | UIInspector | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class UIInspector {` |
+| ohos.arkui.UIContext | UIInspector | createComponentObserver | 0 | method |  |  |  |  | - |  |  |  |  | `public createComponentObserver(id: string): (inspector.ComponentObserver | undefined)` |
+| ohos.arkui.UIContext | UIInspector | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | Router | Router | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class Router {` |
+| ohos.arkui.UIContext | Router | pushUrl | 0 | method |  |  |  |  | - |  |  |  |  | `public pushUrl(options: router.RouterOptions, callback: AsyncCallback<void>): void` |
+| ohos.arkui.UIContext | Router | pushUrl | 1 | method |  |  |  |  | - |  |  |  |  | `public pushUrl(options: router.RouterOptions): Promise<void>` |
+| ohos.arkui.UIContext | Router | pushUrl | 2 | method |  |  |  |  | - |  |  |  |  | `public pushUrl(options: router.RouterOptions, mode: router.RouterMode, callback: AsyncCallback<void>): void` |
+| ohos.arkui.UIContext | Router | pushUrl | 3 | method |  |  |  |  | - |  |  |  |  | `public pushUrl(options: router.RouterOptions, mode: router.RouterMode): Promise<void>` |
+| ohos.arkui.UIContext | Router | replaceUrl | 0 | method |  |  |  |  | - |  |  |  |  | `public replaceUrl(options: router.RouterOptions, callback: AsyncCallback<void>): void` |
+| ohos.arkui.UIContext | Router | replaceUrl | 1 | method |  |  |  |  | - |  |  |  |  | `public replaceUrl(options: router.RouterOptions): Promise<void>` |
+| ohos.arkui.UIContext | Router | replaceUrl | 2 | method |  |  |  |  | - |  |  |  |  | `public replaceUrl(options: router.RouterOptions, mode: router.RouterMode, callback: AsyncCallback<void>): void` |
+| ohos.arkui.UIContext | Router | replaceUrl | 3 | method |  |  |  |  | - |  |  |  |  | `public replaceUrl(options: router.RouterOptions, mode: router.RouterMode): Promise<void>` |
+| ohos.arkui.UIContext | Router | back | 0 | method |  |  |  |  | - |  |  |  |  | `public back(options?: router.RouterOptions): void` |
+| ohos.arkui.UIContext | Router | back | 1 | method |  |  |  |  | - |  |  |  |  | `public back(index: number, params?: Object): void` |
+| ohos.arkui.UIContext | Router | clear | 0 | method |  |  |  |  | - |  |  |  |  | `public clear(): void` |
+| ohos.arkui.UIContext | Router | getLength | 0 | method |  |  |  |  | - |  |  |  |  | `public getLength(): string` |
+| ohos.arkui.UIContext | Router | getState | 0 | method |  |  |  |  | - |  |  |  |  | `public getState(): router.RouterState` |
+| ohos.arkui.UIContext | Router | getStateByIndex | 0 | method |  |  |  |  | - |  |  |  |  | `public getStateByIndex(index: number): (router.RouterState | undefined)` |
+| ohos.arkui.UIContext | Router | getStateByUrl | 0 | method |  |  |  |  | - |  |  |  |  | `public getStateByUrl(url: string): Array<router.RouterState>` |
+| ohos.arkui.UIContext | Router | showAlertBeforeBackPage | 0 | method |  |  |  |  | - |  |  |  |  | `public showAlertBeforeBackPage(options: router.EnableAlertOptions): void` |
+| ohos.arkui.UIContext | Router | hideAlertBeforeBackPage | 0 | method |  |  |  |  | - |  |  |  |  | `public hideAlertBeforeBackPage(): void` |
+| ohos.arkui.UIContext | Router | getParams | 0 | method |  |  |  |  | - |  |  |  |  | `public getParams(): Object` |
+| ohos.arkui.UIContext | Router | pushNamedRoute | 0 | method |  |  |  |  | - |  |  |  |  | `public pushNamedRoute(options: router.NamedRouterOptions, callback: AsyncCallback<void>): void` |
+| ohos.arkui.UIContext | Router | pushNamedRoute | 1 | method |  |  |  |  | - |  |  |  |  | `public pushNamedRoute(options: router.NamedRouterOptions): Promise<void>` |
+| ohos.arkui.UIContext | Router | pushNamedRoute | 2 | method |  |  |  |  | - |  |  |  |  | `public pushNamedRoute(options: router.NamedRouterOptions, mode: router.RouterMode, callback: AsyncCallback<void>): void` |
+| ohos.arkui.UIContext | Router | pushNamedRoute | 3 | method |  |  |  |  | - |  |  |  |  | `public pushNamedRoute(options: router.NamedRouterOptions, mode: router.RouterMode): Promise<void>` |
+| ohos.arkui.UIContext | Router | replaceNamedRoute | 0 | method |  |  |  |  | - |  |  |  |  | `public replaceNamedRoute(options: router.NamedRouterOptions, callback: AsyncCallback<void>): void` |
+| ohos.arkui.UIContext | Router | replaceNamedRoute | 1 | method |  |  |  |  | - |  |  |  |  | `public replaceNamedRoute(options: router.NamedRouterOptions): Promise<void>` |
+| ohos.arkui.UIContext | Router | replaceNamedRoute | 2 | method |  |  |  |  | - |  |  |  |  | `public replaceNamedRoute(options: router.NamedRouterOptions, mode: router.RouterMode, callback: AsyncCallback<void>): void` |
+| ohos.arkui.UIContext | Router | replaceNamedRoute | 3 | method |  |  |  |  | - |  |  |  |  | `public replaceNamedRoute(options: router.NamedRouterOptions, mode: router.RouterMode): Promise<void>` |
+| ohos.arkui.UIContext | Router | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | unnamed | CustomBuilderWithId | 0 | field |  |  |  |  | - |  |  |  |  | `type CustomBuilderWithId = ((id: number)=> void);` |
+| ohos.arkui.UIContext | TargetInfo | TargetInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface TargetInfo {` |
+| ohos.arkui.UIContext | TargetInfo | id | 0 | field |  |  |  |  | - |  |  |  |  | `id: (string | number);` |
+| ohos.arkui.UIContext | TargetInfo | componentId | 0 | field |  |  |  |  | - |  |  |  |  | `componentId?: number;` |
+| ohos.arkui.UIContext | PromptAction | PromptAction | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class PromptAction {` |
+| ohos.arkui.UIContext | PromptAction | showToast | 0 | method |  |  |  |  | - |  |  |  |  | `public showToast(options: promptAction.ShowToastOptions): void` |
+| ohos.arkui.UIContext | PromptAction | openToast | 0 | method |  |  |  |  | - |  |  |  |  | `public openToast(options: promptAction.ShowToastOptions): Promise<number>` |
+| ohos.arkui.UIContext | PromptAction | closeToast | 0 | method |  |  |  |  | - |  |  |  |  | `public closeToast(toastId: number): void` |
+| ohos.arkui.UIContext | PromptAction | showDialog | 0 | method |  |  |  |  | - |  |  |  |  | `public showDialog(options: promptAction.ShowDialogOptions, callback: AsyncCallback<promptAction.ShowDialogSuccessResponse>): void` |
+| ohos.arkui.UIContext | PromptAction | showDialog | 1 | method |  |  |  |  | - |  |  |  |  | `public showDialog(options: promptAction.ShowDialogOptions): Promise<promptAction.ShowDialogSuccessResponse>` |
+| ohos.arkui.UIContext | PromptAction | showActionMenu | 0 | method |  |  |  |  | - |  |  |  |  | `public showActionMenu(options: promptAction.ActionMenuOptions, callback: AsyncCallback<promptAction.ActionMenuSuccessResponse>): void` |
+| ohos.arkui.UIContext | PromptAction | showActionMenu | 1 | method |  |  |  |  | - |  |  |  |  | `public showActionMenu(options: promptAction.ActionMenuOptions): Promise<promptAction.ActionMenuSuccessResponse>` |
+| ohos.arkui.UIContext | PromptAction | openCustomDialog | 0 | method |  |  |  |  | - |  |  |  |  | `public openCustomDialog<T extends Object>(dialogContent: ComponentContent<T>, options?: promptAction.BaseDialogOptions): Promise<void>` |
+| ohos.arkui.UIContext | PromptAction | openCustomDialogWithController | 0 | method |  |  |  |  | - |  |  |  |  | `public openCustomDialogWithController<T extends Object>(dialogContent: ComponentContent<T>, controller: promptAction.DialogController, options?: promptAction.BaseDialogOptions): Promise<void>` |
+| ohos.arkui.UIContext | PromptAction | updateCustomDialog | 0 | method |  |  |  |  | - |  |  |  |  | `public updateCustomDialog<T extends Object>(dialogContent: ComponentContent<T>, options: promptAction.BaseDialogOptions): Promise<void>` |
+| ohos.arkui.UIContext | PromptAction | closeCustomDialog | 0 | method |  |  |  |  | - |  |  |  |  | `public closeCustomDialog<T extends Object>(dialogContent: ComponentContent<T>): Promise<void>` |
+| ohos.arkui.UIContext | PromptAction | openCustomDialog | 1 | method |  |  |  |  | - |  |  |  |  | `public openCustomDialog(options: promptAction.CustomDialogOptions): Promise<number>` |
+| ohos.arkui.UIContext | PromptAction | presentCustomDialog | 0 | method |  |  |  |  | - |  |  |  |  | `public presentCustomDialog(builder: (CustomBuilder | CustomBuilderT<number>), controller?: promptAction.DialogController, options?: promptAction.DialogOptions): Promise<number>` |
+| ohos.arkui.UIContext | PromptAction | closeCustomDialog | 1 | method |  |  |  |  | - |  |  |  |  | `public closeCustomDialog(dialogId: number): void` |
+| ohos.arkui.UIContext | PromptAction | getTopOrder | 0 | method |  |  |  |  | - |  |  |  |  | `public getTopOrder(): (LevelOrder | undefined)` |
+| ohos.arkui.UIContext | PromptAction | getBottomOrder | 0 | method |  |  |  |  | - |  |  |  |  | `public getBottomOrder(): (LevelOrder | undefined)` |
+| ohos.arkui.UIContext | PromptAction | openPopup | 0 | method |  |  |  |  | - |  |  |  |  | `public openPopup<T extends Object>(content: ComponentContent<T>, target: TargetInfo, options?: PopupCommonOptions): Promise<void>` |
+| ohos.arkui.UIContext | PromptAction | updatePopup | 0 | method |  |  |  |  | - |  |  |  |  | `public updatePopup<T extends Object>(content: ComponentContent<T>, options: PopupCommonOptions, partialUpdate?: boolean): Promise<void>` |
+| ohos.arkui.UIContext | PromptAction | closePopup | 0 | method |  |  |  |  | - |  |  |  |  | `public closePopup<T extends Object>(content: ComponentContent<T>): Promise<void>` |
+| ohos.arkui.UIContext | PromptAction | openMenu | 0 | method |  |  |  |  | - |  |  |  |  | `public openMenu<T extends Object>(content: ComponentContent<T>, target: TargetInfo, options?: MenuOptions): Promise<void>` |
+| ohos.arkui.UIContext | PromptAction | updateMenu | 0 | method |  |  |  |  | - |  |  |  |  | `public updateMenu<T extends Object>(content: ComponentContent<T>, options: MenuOptions, partialUpdate?: boolean): Promise<void>` |
+| ohos.arkui.UIContext | PromptAction | closeMenu | 0 | method |  |  |  |  | - |  |  |  |  | `public closeMenu<T extends Object>(content: ComponentContent<T>): Promise<void>` |
+| ohos.arkui.UIContext | PromptAction | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | unnamed | ClickEventListenerCallback | 0 | field |  |  |  |  | - |  |  |  |  | `type ClickEventListenerCallback = ((event: ClickEvent, node?: FrameNode)=> void);` |
+| ohos.arkui.UIContext | unnamed | PanListenerCallback | 0 | field |  |  |  |  | - |  |  |  |  | `type PanListenerCallback = ((event: GestureEvent, current: GestureRecognizer, node?: FrameNode)=> void);` |
+| ohos.arkui.UIContext | unnamed | GestureEventListenerCallback | 0 | field |  |  |  |  | - |  |  |  |  | `type GestureEventListenerCallback = ((event: GestureEvent, node?: FrameNode)=> void);` |
+| ohos.arkui.UIContext | PageInfo | PageInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface PageInfo {` |
+| ohos.arkui.UIContext | PageInfo | routerPageInfo | 0 | field |  |  |  |  | - |  |  |  |  | `routerPageInfo?: observer.RouterPageInfo;` |
+| ohos.arkui.UIContext | PageInfo | navDestinationInfo | 0 | field |  |  |  |  | - |  |  |  |  | `navDestinationInfo?: observer.NavDestinationInfo;` |
+| ohos.arkui.UIContext | OverlayManagerOptions | OverlayManagerOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface OverlayManagerOptions {` |
+| ohos.arkui.UIContext | OverlayManagerOptions | renderRootOverlay | 0 | field |  |  |  |  | - |  |  |  |  | `renderRootOverlay?: boolean;` |
+| ohos.arkui.UIContext | OverlayManagerOptions | enableBackPressedEvent | 0 | field |  |  |  |  | - |  |  |  |  | `enableBackPressedEvent?: boolean;` |
+| ohos.arkui.UIContext | unnamed | NodeIdentity | 0 | field |  |  |  |  | - |  |  |  |  | `export type NodeIdentity = (string | number);` |
+| ohos.arkui.UIContext | NodeRenderState | NodeRenderState | 0 | enum_class |  |  |  |  | - |  |  |  |  | `enum NodeRenderState {` |
+| ohos.arkui.UIContext | NodeRenderState | ABOUT_TO_RENDER_IN | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ABOUT_TO_RENDER_IN = 0` |
+| ohos.arkui.UIContext | NodeRenderState | ABOUT_TO_RENDER_OUT | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ABOUT_TO_RENDER_OUT = 1` |
+| ohos.arkui.UIContext | unnamed | NodeRenderStateChangeCallback | 0 | field |  |  |  |  | - |  |  |  |  | `export type NodeRenderStateChangeCallback = ((state: NodeRenderState, node?: FrameNode)=> void);` |
+| ohos.arkui.UIContext | GestureActionPhase | GestureActionPhase | 0 | enum_class |  |  |  |  | - |  |  |  |  | `enum GestureActionPhase {` |
+| ohos.arkui.UIContext | GestureActionPhase | WILL_START | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `WILL_START = 0` |
+| ohos.arkui.UIContext | GestureActionPhase | WILL_END | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `WILL_END = 1` |
+| ohos.arkui.UIContext | GestureListenerType | GestureListenerType | 0 | enum_class |  |  |  |  | - |  |  |  |  | `enum GestureListenerType {` |
+| ohos.arkui.UIContext | GestureListenerType | TAP | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `TAP = 0` |
+| ohos.arkui.UIContext | GestureListenerType | LONG_PRESS | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `LONG_PRESS = 1` |
+| ohos.arkui.UIContext | GestureListenerType | PAN | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `PAN = 2` |
+| ohos.arkui.UIContext | GestureListenerType | PINCH | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `PINCH = 3` |
+| ohos.arkui.UIContext | GestureListenerType | SWIPE | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `SWIPE = 4` |
+| ohos.arkui.UIContext | GestureListenerType | ROTATION | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ROTATION = 5` |
+| ohos.arkui.UIContext | GestureTriggerInfo | GestureTriggerInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface GestureTriggerInfo {` |
+| ohos.arkui.UIContext | GestureTriggerInfo | event | 0 | field |  |  |  |  | - |  |  |  |  | `event: GestureEvent;` |
+| ohos.arkui.UIContext | GestureTriggerInfo | current | 0 | field |  |  |  |  | - |  |  |  |  | `current: GestureRecognizer;` |
+| ohos.arkui.UIContext | GestureTriggerInfo | currentPhase | 0 | field |  |  |  |  | - |  |  |  |  | `currentPhase: GestureActionPhase;` |
+| ohos.arkui.UIContext | GestureTriggerInfo | node | 0 | field |  |  |  |  | - |  |  |  |  | `node?: FrameNode;` |
+| ohos.arkui.UIContext | GestureObserverConfigs | GestureObserverConfigs | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface GestureObserverConfigs {` |
+| ohos.arkui.UIContext | GestureObserverConfigs | actionPhases | 0 | field |  |  |  |  | - |  |  |  |  | `actionPhases: Array<GestureActionPhase>;` |
+| ohos.arkui.UIContext | unnamed | GestureListenerCallback | 0 | field |  |  |  |  | - |  |  |  |  | `export type GestureListenerCallback = ((info: GestureTriggerInfo)=> void);` |
+| ohos.arkui.UIContext | UIObserver | UIObserver | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class UIObserver {` |
+| ohos.arkui.UIContext | UIObserver | on | 0 | method |  |  |  |  | - |  |  |  |  | `public on(type: "navDestinationUpdate", options: observer.NavDestinationSwitchObserverOptions, callback: Callback<observer.NavDestinationInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | off | 0 | method |  |  |  |  | - |  |  |  |  | `public off(type: "navDestinationUpdate", options: observer.NavDestinationSwitchObserverOptions, callback?: Callback<observer.NavDestinationInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | on | 1 | method |  |  |  |  | - |  |  |  |  | `public on(type: "navDestinationUpdate", callback: Callback<observer.NavDestinationInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | off | 1 | method |  |  |  |  | - |  |  |  |  | `public off(type: "navDestinationUpdate", callback?: Callback<observer.NavDestinationInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | on | 2 | method |  |  |  |  | - |  |  |  |  | `public on(type: "scrollEvent", options: observer.ObserverOptions, callback: Callback<observer.ScrollEventInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | off | 2 | method |  |  |  |  | - |  |  |  |  | `public off(type: "scrollEvent", options: observer.ObserverOptions, callback?: Callback<observer.ScrollEventInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | on | 3 | method |  |  |  |  | - |  |  |  |  | `public on(type: "scrollEvent", callback: Callback<observer.ScrollEventInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | off | 3 | method |  |  |  |  | - |  |  |  |  | `public off(type: "scrollEvent", callback?: Callback<observer.ScrollEventInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | on | 4 | method |  |  |  |  | - |  |  |  |  | `public on(type: "routerPageUpdate", callback: Callback<observer.RouterPageInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | off | 4 | method |  |  |  |  | - |  |  |  |  | `public off(type: "routerPageUpdate", callback?: Callback<observer.RouterPageInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | on | 5 | method |  |  |  |  | - |  |  |  |  | `public on(type: "densityUpdate", callback: Callback<observer.DensityInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | off | 5 | method |  |  |  |  | - |  |  |  |  | `public off(type: "densityUpdate", callback?: Callback<observer.DensityInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | on | 6 | method |  |  |  |  | - |  |  |  |  | `public on(type: "willDraw", callback: Callback<void>): void` |
+| ohos.arkui.UIContext | UIObserver | off | 6 | method |  |  |  |  | - |  |  |  |  | `public off(type: "willDraw", callback?: Callback<void>): void` |
+| ohos.arkui.UIContext | UIObserver | on | 7 | method |  |  |  |  | - |  |  |  |  | `public on(type: "didLayout", callback: Callback<void>): void` |
+| ohos.arkui.UIContext | UIObserver | off | 7 | method |  |  |  |  | - |  |  |  |  | `public off(type: "didLayout", callback?: Callback<void>): void` |
+| ohos.arkui.UIContext | UIObserver | on | 8 | method |  |  |  |  | - |  |  |  |  | `public on(type: "navDestinationSwitch", callback: Callback<observer.NavDestinationSwitchInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | off | 8 | method |  |  |  |  | - |  |  |  |  | `public off(type: "navDestinationSwitch", callback?: Callback<observer.NavDestinationSwitchInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | on | 9 | method |  |  |  |  | - |  |  |  |  | `public on(type: "navDestinationSwitch", observerOptions: observer.NavDestinationSwitchObserverOptions, callback: Callback<observer.NavDestinationSwitchInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | off | 9 | method |  |  |  |  | - |  |  |  |  | `public off(type: "navDestinationSwitch", observerOptions: observer.NavDestinationSwitchObserverOptions, callback?: Callback<observer.NavDestinationSwitchInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | on | 10 | method |  |  |  |  | - |  |  |  |  | `public on(type: "willClick", callback: ClickEventListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | off | 10 | method |  |  |  |  | - |  |  |  |  | `public off(type: "willClick", callback?: ClickEventListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | on | 11 | method |  |  |  |  | - |  |  |  |  | `public on(type: "didClick", callback: ClickEventListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | off | 11 | method |  |  |  |  | - |  |  |  |  | `public off(type: "didClick", callback?: ClickEventListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | on | 12 | method |  |  |  |  | - |  |  |  |  | `public on(type: "willClick", callback: GestureEventListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | off | 12 | method |  |  |  |  | - |  |  |  |  | `public off(type: "willClick", callback?: GestureEventListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | on | 13 | method |  |  |  |  | - |  |  |  |  | `public on(type: "didClick", callback: GestureEventListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | off | 13 | method |  |  |  |  | - |  |  |  |  | `public off(type: "didClick", callback?: GestureEventListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | on | 14 | method |  |  |  |  | - |  |  |  |  | `public on(type: "beforePanStart", callback: PanListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | off | 14 | method |  |  |  |  | - |  |  |  |  | `public off(type: "beforePanStart", callback?: PanListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | on | 15 | method |  |  |  |  | - |  |  |  |  | `public on(type: "beforePanEnd", callback: PanListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | off | 15 | method |  |  |  |  | - |  |  |  |  | `public off(type: "beforePanEnd", callback?: PanListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | on | 16 | method |  |  |  |  | - |  |  |  |  | `public on(type: "afterPanStart", callback: PanListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | off | 16 | method |  |  |  |  | - |  |  |  |  | `public off(type: "afterPanStart", callback?: PanListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | on | 17 | method |  |  |  |  | - |  |  |  |  | `public on(type: "afterPanEnd", callback: PanListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | off | 17 | method |  |  |  |  | - |  |  |  |  | `public off(type: "afterPanEnd", callback?: PanListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | on | 18 | method |  |  |  |  | - |  |  |  |  | `public on(type: "nodeRenderState", nodeIdentity: NodeIdentity, callback: NodeRenderStateChangeCallback): void` |
+| ohos.arkui.UIContext | UIObserver | off | 18 | method |  |  |  |  | - |  |  |  |  | `public off(type: "nodeRenderState", nodeIdentity: NodeIdentity, callback?: NodeRenderStateChangeCallback): void` |
+| ohos.arkui.UIContext | UIObserver | on | 19 | method |  |  |  |  | - |  |  |  |  | `public on(type: "tabContentUpdate", options: observer.ObserverOptions, callback: Callback<observer.TabContentInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | off | 19 | method |  |  |  |  | - |  |  |  |  | `public off(type: "tabContentUpdate", options: observer.ObserverOptions, callback?: Callback<observer.TabContentInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | on | 20 | method |  |  |  |  | - |  |  |  |  | `public on(type: "tabContentUpdate", callback: Callback<observer.TabContentInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | off | 20 | method |  |  |  |  | - |  |  |  |  | `public off(type: "tabContentUpdate", callback?: Callback<observer.TabContentInfo>): void` |
+| ohos.arkui.UIContext | UIObserver | addGlobalGestureListener | 0 | method |  |  |  |  | - |  |  |  |  | `public addGlobalGestureListener(type: GestureListenerType, option: GestureObserverConfigs, callback: GestureListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | removeGlobalGestureListener | 0 | method |  |  |  |  | - |  |  |  |  | `public removeGlobalGestureListener(type: GestureListenerType, callback?: GestureListenerCallback): void` |
+| ohos.arkui.UIContext | UIObserver | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | ComponentUtils | ComponentUtils | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ComponentUtils {` |
+| ohos.arkui.UIContext | ComponentUtils | getRectangleById | 0 | method |  |  |  |  | - |  |  |  |  | `public getRectangleById(id: string): componentUtils.ComponentInfo` |
+| ohos.arkui.UIContext | ComponentUtils | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | OverlayManager | OverlayManager | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class OverlayManager {` |
+| ohos.arkui.UIContext | OverlayManager | addComponentContent | 0 | method |  |  |  |  | - |  |  |  |  | `public addComponentContent<T>(content: ComponentContent<T>, index?: number): void` |
+| ohos.arkui.UIContext | OverlayManager | addComponentContentWithOrder | 0 | method |  |  |  |  | - |  |  |  |  | `public addComponentContentWithOrder<T>(content: ComponentContent<T>, levelOrder?: LevelOrder): void` |
+| ohos.arkui.UIContext | OverlayManager | removeComponentContent | 0 | method |  |  |  |  | - |  |  |  |  | `public removeComponentContent<T>(content: ComponentContent<T>): void` |
+| ohos.arkui.UIContext | OverlayManager | showComponentContent | 0 | method |  |  |  |  | - |  |  |  |  | `public showComponentContent<T>(content: ComponentContent<T>): void` |
+| ohos.arkui.UIContext | OverlayManager | hideComponentContent | 0 | method |  |  |  |  | - |  |  |  |  | `public hideComponentContent<T>(content: ComponentContent<T>): void` |
+| ohos.arkui.UIContext | OverlayManager | showAllComponentContents | 0 | method |  |  |  |  | - |  |  |  |  | `public showAllComponentContents(): void` |
+| ohos.arkui.UIContext | OverlayManager | hideAllComponentContents | 0 | method |  |  |  |  | - |  |  |  |  | `public hideAllComponentContents(): void` |
+| ohos.arkui.UIContext | OverlayManager | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | AtomicServiceBar | AtomicServiceBar | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface AtomicServiceBar {` |
+| ohos.arkui.UIContext | AtomicServiceBar | setVisible | 0 | method |  |  |  |  | - |  |  |  |  | `setVisible(visible: boolean): void` |
+| ohos.arkui.UIContext | AtomicServiceBar | setBackgroundColor | 0 | method |  |  |  |  | - |  |  |  |  | `setBackgroundColor(color: Nullable<(Color | number | string)>): void` |
+| ohos.arkui.UIContext | AtomicServiceBar | setTitleContent | 0 | method |  |  |  |  | - |  |  |  |  | `setTitleContent(content: string): void` |
+| ohos.arkui.UIContext | AtomicServiceBar | setTitleFontStyle | 0 | method |  |  |  |  | - |  |  |  |  | `setTitleFontStyle(font: FontStyle): void` |
+| ohos.arkui.UIContext | AtomicServiceBar | setIconColor | 0 | method |  |  |  |  | - |  |  |  |  | `setIconColor(color: Nullable<(Color | number | string)>): void` |
+| ohos.arkui.UIContext | AtomicServiceBar | getBarRect | 0 | method |  |  |  |  | - |  |  |  |  | `getBarRect(): Frame` |
+| ohos.arkui.UIContext | DynamicSyncScene | DynamicSyncScene | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class DynamicSyncScene {` |
+| ohos.arkui.UIContext | DynamicSyncScene | setFrameRateRange | 0 | method |  |  |  |  | - |  |  |  |  | `public setFrameRateRange(range: ExpectedFrameRateRange): void` |
+| ohos.arkui.UIContext | DynamicSyncScene | getFrameRateRange | 0 | method |  |  |  |  | - |  |  |  |  | `public getFrameRateRange(): ExpectedFrameRateRange` |
+| ohos.arkui.UIContext | DynamicSyncScene | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | SwiperDynamicSyncScene | SwiperDynamicSyncScene | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class SwiperDynamicSyncScene extends DynamicSyncScene {` |
+| ohos.arkui.UIContext | SwiperDynamicSyncScene | type | 0 | field |  |  |  |  | - |  |  |  |  | `public readonly type: SwiperDynamicSyncSceneType;` |
+| ohos.arkui.UIContext | SwiperDynamicSyncScene | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | MarqueeDynamicSyncScene | MarqueeDynamicSyncScene | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class MarqueeDynamicSyncScene extends DynamicSyncScene {` |
+| ohos.arkui.UIContext | MarqueeDynamicSyncScene | type | 0 | field |  |  |  |  | - |  |  |  |  | `public readonly type: MarqueeDynamicSyncSceneType;` |
+| ohos.arkui.UIContext | MarqueeDynamicSyncScene | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | DragController | DragController | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class DragController {` |
+| ohos.arkui.UIContext | DragController | executeDrag | 0 | method |  |  |  |  | - |  |  |  |  | `public executeDrag(custom: (CustomBuilder | DragItemInfo | undefined), dragInfo: dragController.DragInfo, callback: AsyncCallback<dragController.DragEventParam>): void` |
+| ohos.arkui.UIContext | DragController | executeDrag | 1 | method |  |  |  |  | - |  |  |  |  | `public executeDrag(custom: (CustomBuilder | DragItemInfo | undefined), dragInfo: dragController.DragInfo): Promise<dragController.DragEventParam>` |
+| ohos.arkui.UIContext | DragController | createDragAction | 0 | method |  |  |  |  | - |  |  |  |  | `public createDragAction(customArray: (Array<(CustomBuilder | DragItemInfo)> | undefined), dragInfo: dragController.DragInfo): dragController.DragAction` |
+| ohos.arkui.UIContext | DragController | getDragPreview | 0 | method |  |  |  |  | - |  |  |  |  | `public getDragPreview(): dragController.DragPreview` |
+| ohos.arkui.UIContext | DragController | setDragEventStrictReportingEnabled | 0 | method |  |  |  |  | - |  |  |  |  | `public setDragEventStrictReportingEnabled(enable: boolean): void` |
+| ohos.arkui.UIContext | DragController | notifyDragStartRequest | 0 | method |  |  |  |  | - |  |  |  |  | `public notifyDragStartRequest(requestStatus: dragController.DragStartRequestStatus): void` |
+| ohos.arkui.UIContext | DragController | cancelDataLoading | 0 | method |  |  |  |  | - |  |  |  |  | `public cancelDataLoading(key: string): void` |
+| ohos.arkui.UIContext | DragController | enableDropDisallowedBadge | 0 | method |  |  |  |  | - |  |  |  |  | `public enableDropDisallowedBadge(enabled: boolean): void` |
+| ohos.arkui.UIContext | DragController | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | MeasureUtils | MeasureUtils | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class MeasureUtils {` |
+| ohos.arkui.UIContext | MeasureUtils | measureText | 0 | method |  |  |  |  | - |  |  |  |  | `public measureText(options: MeasureOptions): number` |
+| ohos.arkui.UIContext | MeasureUtils | measureTextSize | 0 | method |  |  |  |  | - |  |  |  |  | `public measureTextSize(options: MeasureOptions): SizeOptions` |
+| ohos.arkui.UIContext | MeasureUtils | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | FocusController | FocusController | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class FocusController {` |
+| ohos.arkui.UIContext | FocusController | clearFocus | 0 | method |  |  |  |  | - |  |  |  |  | `public clearFocus(): void` |
+| ohos.arkui.UIContext | FocusController | requestFocus | 0 | method |  |  |  |  | - |  |  |  |  | `public requestFocus(key: string): void` |
+| ohos.arkui.UIContext | FocusController | activate | 0 | method |  |  |  |  | - |  |  |  |  | `public activate(isActive: boolean, autoInactive?: boolean): void` |
+| ohos.arkui.UIContext | FocusController | isActive | 0 | method |  |  |  |  | - |  |  |  |  | `public isActive(): boolean` |
+| ohos.arkui.UIContext | FocusController | setAutoFocusTransfer | 0 | method |  |  |  |  | - |  |  |  |  | `public setAutoFocusTransfer(isAutoFocusTransfer: boolean): void` |
+| ohos.arkui.UIContext | FocusController | setKeyProcessingMode | 0 | method |  |  |  |  | - |  |  |  |  | `public setKeyProcessingMode(mode: KeyProcessingMode): void` |
+| ohos.arkui.UIContext | FocusController | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | unnamed | PointerStyle | 0 | field |  |  |  |  | - |  |  |  |  | `export type PointerStyle = pointer.PointerStyle;` |
+| ohos.arkui.UIContext | CursorController | CursorController | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class CursorController {` |
+| ohos.arkui.UIContext | CursorController | restoreDefault | 0 | method |  |  |  |  | - |  |  |  |  | `public restoreDefault(): void` |
+| ohos.arkui.UIContext | CursorController | setCursor | 0 | method |  |  |  |  | - |  |  |  |  | `public setCursor(value: PointerStyle): void` |
+| ohos.arkui.UIContext | CursorController | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | ContextMenuController | ContextMenuController | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ContextMenuController {` |
+| ohos.arkui.UIContext | ContextMenuController | close | 0 | method |  |  |  |  | - |  |  |  |  | `public close(): void` |
+| ohos.arkui.UIContext | ContextMenuController | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | FrameCallback | FrameCallback | 0 | class |  |  |  |  | - |  |  |  |  | `export declare abstract class FrameCallback {` |
+| ohos.arkui.UIContext | FrameCallback | onFrame | 0 | method |  |  |  |  | - |  |  |  |  | `public onFrame(frameTimeInNano: number): void` |
+| ohos.arkui.UIContext | FrameCallback | onIdle | 0 | method |  |  |  |  | - |  |  |  |  | `public onIdle(timeLeftInNano: number): void` |
+| ohos.arkui.UIContext | FrameCallback | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | unnamed | Context | 0 | field |  |  |  |  | - |  |  |  |  | `export type Context = common.Context;` |
+| ohos.arkui.UIContext | ComponentSnapshot | ComponentSnapshot | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ComponentSnapshot {` |
+| ohos.arkui.UIContext | ComponentSnapshot | get | 0 | method |  |  |  |  | - |  |  |  |  | `public get(id: string, callback: AsyncCallback<image.PixelMap>, options?: componentSnapshot.SnapshotOptions): void` |
+| ohos.arkui.UIContext | ComponentSnapshot | get | 1 | method |  |  |  |  | - |  |  |  |  | `public get(id: string, options?: componentSnapshot.SnapshotOptions): Promise<image.PixelMap>` |
+| ohos.arkui.UIContext | ComponentSnapshot | createFromBuilder | 0 | method |  |  |  |  | - |  |  |  |  | `public createFromBuilder(builder: CustomBuilder, callback: AsyncCallback<image.PixelMap>, delay?: number, checkImageStatus?: boolean, options?: componentSnapshot.SnapshotOptions): void` |
+| ohos.arkui.UIContext | ComponentSnapshot | createFromBuilder | 1 | method |  |  |  |  | - |  |  |  |  | `public createFromBuilder(builder: CustomBuilder, delay?: number, checkImageStatus?: boolean, options?: componentSnapshot.SnapshotOptions): Promise<image.PixelMap>` |
+| ohos.arkui.UIContext | ComponentSnapshot | getSync | 0 | method |  |  |  |  | - |  |  |  |  | `public getSync(id: string, options?: componentSnapshot.SnapshotOptions): image.PixelMap` |
+| ohos.arkui.UIContext | ComponentSnapshot | getWithUniqueId | 0 | method |  |  |  |  | - |  |  |  |  | `public getWithUniqueId(uniqueId: number, options?: componentSnapshot.SnapshotOptions): Promise<image.PixelMap>` |
+| ohos.arkui.UIContext | ComponentSnapshot | getSyncWithUniqueId | 0 | method |  |  |  |  | - |  |  |  |  | `public getSyncWithUniqueId(uniqueId: number, options?: componentSnapshot.SnapshotOptions): image.PixelMap` |
+| ohos.arkui.UIContext | ComponentSnapshot | createFromComponent | 0 | method |  |  |  |  | - |  |  |  |  | `public createFromComponent<T extends Object>(content: ComponentContent<T>, delay?: number, checkImageStatus?: boolean, options?: componentSnapshot.SnapshotOptions): Promise<image.PixelMap>` |
+| ohos.arkui.UIContext | ComponentSnapshot | getWithRange | 0 | method |  |  |  |  | - |  |  |  |  | `public getWithRange(start: NodeIdentity, end: NodeIdentity, isStartRect: boolean, options?: componentSnapshot.SnapshotOptions): Promise<image.PixelMap>` |
+| ohos.arkui.UIContext | ComponentSnapshot | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | UIContext | UIContext | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class UIContext {` |
+| ohos.arkui.UIContext | UIContext | getFont | 0 | method |  |  |  |  | - |  |  |  |  | `public getFont(): Font` |
+| ohos.arkui.UIContext | UIContext | isAvailable | 0 | method |  |  |  |  | - |  |  |  |  | `public isAvailable(): boolean` |
+| ohos.arkui.UIContext | UIContext | getMediaQuery | 0 | method |  |  |  |  | - |  |  |  |  | `public getMediaQuery(): MediaQuery` |
+| ohos.arkui.UIContext | UIContext | getUIInspector | 0 | method |  |  |  |  | - |  |  |  |  | `public getUIInspector(): UIInspector` |
+| ohos.arkui.UIContext | UIContext | getFilteredInspectorTree | 0 | method |  |  |  |  | - |  |  |  |  | `public getFilteredInspectorTree(filters?: Array<string>): string` |
+| ohos.arkui.UIContext | UIContext | getFilteredInspectorTreeById | 0 | method |  |  |  |  | - |  |  |  |  | `public getFilteredInspectorTreeById(id: string, depth: number, filters?: Array<string>): string` |
+| ohos.arkui.UIContext | UIContext | getRouter | 0 | method |  |  |  |  | - |  |  |  |  | `public getRouter(): Router` |
+| ohos.arkui.UIContext | UIContext | getPromptAction | 0 | method |  |  |  |  | - |  |  |  |  | `public getPromptAction(): PromptAction` |
+| ohos.arkui.UIContext | UIContext | getComponentUtils | 0 | method |  |  |  |  | - |  |  |  |  | `public getComponentUtils(): ComponentUtils` |
+| ohos.arkui.UIContext | UIContext | getUIObserver | 0 | method |  |  |  |  | - |  |  |  |  | `public getUIObserver(): UIObserver` |
+| ohos.arkui.UIContext | UIContext | getOverlayManager | 0 | method |  |  |  |  | - |  |  |  |  | `public getOverlayManager(): OverlayManager` |
+| ohos.arkui.UIContext | UIContext | setOverlayManagerOptions | 0 | method |  |  |  |  | - |  |  |  |  | `public setOverlayManagerOptions(options: OverlayManagerOptions): boolean` |
+| ohos.arkui.UIContext | UIContext | getOverlayManagerOptions | 0 | method |  |  |  |  | - |  |  |  |  | `public getOverlayManagerOptions(): OverlayManagerOptions` |
+| ohos.arkui.UIContext | UIContext | createAnimator | 0 | method | Deleted because of RedundantMethodsOverloads |  |  | Deleted because of RedundantMethodsOverloads | - |  |  |  |  | `public createAnimator(options: AnimatorOptions): AnimatorResult` |
+| ohos.arkui.UIContext | UIContext | createAnimator | 1 | method |  |  |  |  | - |  |  |  |  | `public createAnimator(options: (AnimatorOptions | SimpleAnimatorOptions)): AnimatorResult` |
+| ohos.arkui.UIContext | UIContext | animateTo | 0 | method |  |  |  |  | - |  |  |  |  | `public animateTo(value: AnimateParam, event: (()=> void)): void` |
+| ohos.arkui.UIContext | UIContext | showAlertDialog | 0 | method |  |  |  |  | - |  |  |  |  | `public showAlertDialog(options: (AlertDialogParamWithConfirm | AlertDialogParamWithButtons | AlertDialogParamWithOptions)): void` |
+| ohos.arkui.UIContext | UIContext | showActionSheet | 0 | method |  |  |  |  | - |  |  |  |  | `public showActionSheet(value: ActionSheetOptions): void` |
+| ohos.arkui.UIContext | UIContext | showDatePickerDialog | 0 | method |  |  |  |  | - |  |  |  |  | `public showDatePickerDialog(options: DatePickerDialogOptions): void` |
+| ohos.arkui.UIContext | UIContext | showTimePickerDialog | 0 | method |  |  |  |  | - |  |  |  |  | `public showTimePickerDialog(options: TimePickerDialogOptions): void` |
+| ohos.arkui.UIContext | UIContext | showTextPickerDialog | 0 | method |  |  |  |  | - |  |  |  |  | `public showTextPickerDialog(options: TextPickerDialogOptions): void` |
+| ohos.arkui.UIContext | UIContext | runScopedTask | 0 | method |  |  |  |  | - |  |  |  |  | `public runScopedTask(callback: (()=> void)): void` |
+| ohos.arkui.UIContext | UIContext | setKeyboardAvoidMode | 0 | method |  |  |  |  | - |  |  |  |  | `public setKeyboardAvoidMode(value: KeyboardAvoidMode): void` |
+| ohos.arkui.UIContext | UIContext | getKeyboardAvoidMode | 0 | method |  |  |  |  | - |  |  |  |  | `public getKeyboardAvoidMode(): KeyboardAvoidMode` |
+| ohos.arkui.UIContext | UIContext | setPixelRoundMode | 0 | method |  |  |  |  | - |  |  |  |  | `public setPixelRoundMode(mode: PixelRoundMode): void` |
+| ohos.arkui.UIContext | UIContext | getPixelRoundMode | 0 | method |  |  |  |  | - |  |  |  |  | `public getPixelRoundMode(): PixelRoundMode` |
+| ohos.arkui.UIContext | UIContext | dispatchKeyEvent | 0 | method |  |  |  |  | - |  |  |  |  | `public dispatchKeyEvent(node: (number | string), event: KeyEvent): boolean` |
+| ohos.arkui.UIContext | UIContext | getAtomicServiceBar | 0 | method |  |  |  |  | - |  |  |  |  | `public getAtomicServiceBar(): Nullable<AtomicServiceBar>` |
+| ohos.arkui.UIContext | UIContext | getDragController | 0 | method |  |  |  |  | - |  |  |  |  | `public getDragController(): DragController` |
+| ohos.arkui.UIContext | UIContext | getMeasureUtils | 0 | method |  |  |  |  | - |  |  |  |  | `public getMeasureUtils(): MeasureUtils` |
+| ohos.arkui.UIContext | UIContext | keyframeAnimateTo | 0 | method |  |  |  |  | - |  |  |  |  | `public keyframeAnimateTo(param: KeyframeAnimateParam, keyframes: Array<KeyframeState>): void` |
+| ohos.arkui.UIContext | UIContext | getFocusController | 0 | method |  |  |  |  | - |  |  |  |  | `public getFocusController(): FocusController` |
+| ohos.arkui.UIContext | UIContext | animateToImmediately | 0 | method |  |  |  |  | - |  |  |  |  | `public animateToImmediately(param: AnimateParam, event: Callback<void>): void` |
+| ohos.arkui.UIContext | UIContext | getFrameNodeById | 0 | method |  |  |  |  | - |  |  |  |  | `public getFrameNodeById(id: string): (FrameNode | null)` |
+| ohos.arkui.UIContext | UIContext | getAttachedFrameNodeById | 0 | method |  |  |  |  | - |  |  |  |  | `public getAttachedFrameNodeById(id: string): (FrameNode | null)` |
+| ohos.arkui.UIContext | UIContext | getFrameNodeByUniqueId | 0 | method |  |  |  |  | - |  |  |  |  | `public getFrameNodeByUniqueId(id: number): (FrameNode | null)` |
+| ohos.arkui.UIContext | UIContext | getPageInfoByUniqueId | 0 | method |  |  |  |  | - |  |  |  |  | `public getPageInfoByUniqueId(id: number): PageInfo` |
+| ohos.arkui.UIContext | UIContext | getNavigationInfoByUniqueId | 0 | method |  |  |  |  | - |  |  |  |  | `public getNavigationInfoByUniqueId(id: number): (observer.NavigationInfo | undefined)` |
+| ohos.arkui.UIContext | UIContext | setDynamicDimming | 0 | method |  |  |  |  | - |  |  |  |  | `public setDynamicDimming(id: string, value: number): void` |
+| ohos.arkui.UIContext | UIContext | getCursorController | 0 | method |  |  |  |  | - |  |  |  |  | `public getCursorController(): CursorController` |
+| ohos.arkui.UIContext | UIContext | getContextMenuController | 0 | method |  |  |  |  | - |  |  |  |  | `public getContextMenuController(): ContextMenuController` |
+| ohos.arkui.UIContext | UIContext | getComponentSnapshot | 0 | method |  |  |  |  | - |  |  |  |  | `public getComponentSnapshot(): ComponentSnapshot` |
+| ohos.arkui.UIContext | UIContext | vp2px | 0 | method |  |  |  |  | - |  |  |  |  | `public vp2px(value: number): number` |
+| ohos.arkui.UIContext | UIContext | px2vp | 0 | method |  |  |  |  | - |  |  |  |  | `public px2vp(value: number): number` |
+| ohos.arkui.UIContext | UIContext | fp2px | 0 | method |  |  |  |  | - |  |  |  |  | `public fp2px(value: number): number` |
+| ohos.arkui.UIContext | UIContext | px2fp | 0 | method |  |  |  |  | - |  |  |  |  | `public px2fp(value: number): number` |
+| ohos.arkui.UIContext | UIContext | lpx2px | 0 | method |  |  |  |  | - |  |  |  |  | `public lpx2px(value: number): number` |
+| ohos.arkui.UIContext | UIContext | px2lpx | 0 | method |  |  |  |  | - |  |  |  |  | `public px2lpx(value: number): number` |
+| ohos.arkui.UIContext | UIContext | getSharedLocalStorage | 0 | method |  |  |  |  | - |  |  |  |  | `public getSharedLocalStorage(): (LocalStorage | undefined)` |
+| ohos.arkui.UIContext | UIContext | getHostContext | 0 | method |  |  |  |  | - |  |  |  |  | `public getHostContext(): (Context | undefined)` |
+| ohos.arkui.UIContext | UIContext | getWindowName | 0 | method |  |  |  |  | - |  |  |  |  | `public getWindowName(): (string | undefined)` |
+| ohos.arkui.UIContext | UIContext | getWindowWidthBreakpoint | 0 | method |  |  |  |  | - |  |  |  |  | `public getWindowWidthBreakpoint(): WidthBreakpoint` |
+| ohos.arkui.UIContext | UIContext | getWindowHeightBreakpoint | 0 | method |  |  |  |  | - |  |  |  |  | `public getWindowHeightBreakpoint(): HeightBreakpoint` |
+| ohos.arkui.UIContext | UIContext | openBindSheet | 0 | method |  |  |  |  | - |  |  |  |  | `public openBindSheet<T extends Object>(bindSheetContent: ComponentContent<T>, sheetOptions?: SheetOptions, targetId?: number): Promise<void>` |
+| ohos.arkui.UIContext | UIContext | updateBindSheet | 0 | method |  |  |  |  | - |  |  |  |  | `public updateBindSheet<T extends Object>(bindSheetContent: ComponentContent<T>, sheetOptions: SheetOptions, partialUpdate?: boolean): Promise<void>` |
+| ohos.arkui.UIContext | UIContext | closeBindSheet | 0 | method |  |  |  |  | - |  |  |  |  | `public closeBindSheet<T extends Object>(bindSheetContent: ComponentContent<T>): Promise<void>` |
+| ohos.arkui.UIContext | UIContext | postFrameCallback | 0 | method |  |  |  |  | - |  |  |  |  | `public postFrameCallback(frameCallback: FrameCallback): void` |
+| ohos.arkui.UIContext | UIContext | postDelayedFrameCallback | 0 | method |  |  |  |  | - |  |  |  |  | `public postDelayedFrameCallback(frameCallback: FrameCallback, delayTime: number): void` |
+| ohos.arkui.UIContext | UIContext | requireDynamicSyncScene | 0 | method |  |  |  |  | - |  |  |  |  | `public requireDynamicSyncScene(id: string): Array<DynamicSyncScene>` |
+| ohos.arkui.UIContext | UIContext | clearResourceCache | 0 | method |  |  |  |  | - |  |  |  |  | `public clearResourceCache(): void` |
+| ohos.arkui.UIContext | UIContext | isFollowingSystemFontScale | 0 | method |  |  |  |  | - |  |  |  |  | `public isFollowingSystemFontScale(): boolean` |
+| ohos.arkui.UIContext | UIContext | getMaxFontScale | 0 | method |  |  |  |  | - |  |  |  |  | `public getMaxFontScale(): number` |
+| ohos.arkui.UIContext | UIContext | bindTabsToScrollable | 0 | method |  |  |  |  | - |  |  |  |  | `public bindTabsToScrollable(tabsController: TabsController, scroller: Scroller): void` |
+| ohos.arkui.UIContext | UIContext | unbindTabsFromScrollable | 0 | method |  |  |  |  | - |  |  |  |  | `public unbindTabsFromScrollable(tabsController: TabsController, scroller: Scroller): void` |
+| ohos.arkui.UIContext | UIContext | bindTabsToNestedScrollable | 0 | method |  |  |  |  | - |  |  |  |  | `public bindTabsToNestedScrollable(tabsController: TabsController, parentScroller: Scroller, childScroller: Scroller): void` |
+| ohos.arkui.UIContext | UIContext | unbindTabsFromNestedScrollable | 0 | method |  |  |  |  | - |  |  |  |  | `public unbindTabsFromNestedScrollable(tabsController: TabsController, parentScroller: Scroller, childScroller: Scroller): void` |
+| ohos.arkui.UIContext | UIContext | enableSwipeBack | 0 | method |  |  |  |  | - |  |  |  |  | `public enableSwipeBack(enabled: Optional<boolean>): void` |
+| ohos.arkui.UIContext | UIContext | openBindContentCover | 0 | method |  |  |  |  | - |  |  |  |  | `public openBindContentCover<T extends Object>(content: ComponentContent<T>, controller: ContentCoverController, contentCoverOptions?: ContentCoverOptions, targetId?: number): Promise<void>` |
+| ohos.arkui.UIContext | UIContext | freezeUINode | 0 | method |  |  |  |  | - |  |  |  |  | `public freezeUINode(id: string, isFrozen: boolean): void` |
+| ohos.arkui.UIContext | UIContext | freezeUINode | 1 | method |  |  |  |  | - |  |  |  |  | `public freezeUINode(uniqueId: number, isFrozen: boolean): void` |
+| ohos.arkui.UIContext | UIContext | getTextMenuController | 0 | method |  |  |  |  | - |  |  |  |  | `public getTextMenuController(): TextMenuController` |
+| ohos.arkui.UIContext | UIContext | createUIContextWithoutWindow | 0 | method |  |  |  |  | - |  |  |  |  | `public static createUIContextWithoutWindow(context: (common.UIAbilityContext | common.ExtensionContext)): (UIContext | undefined)` |
+| ohos.arkui.UIContext | UIContext | destroyUIContextWithoutWindow | 0 | method |  |  |  |  | - |  |  |  |  | `public static destroyUIContextWithoutWindow(): void` |
+| ohos.arkui.UIContext | UIContext | setUIStates | 0 | method |  |  |  |  | - |  |  |  |  | `public setUIStates(callback: VoidCallback): void` |
+| ohos.arkui.UIContext | UIContext | getFocusedUIContext | 0 | method |  |  |  |  | - |  |  |  |  | `public static getFocusedUIContext(): (UIContext | undefined)` |
+| ohos.arkui.UIContext | UIContext | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | KeyboardAvoidMode | KeyboardAvoidMode | 0 | enum_class |  |  |  |  | - |  |  |  |  | `enum KeyboardAvoidMode {` |
+| ohos.arkui.UIContext | KeyboardAvoidMode | OFFSET | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `OFFSET = 0` |
+| ohos.arkui.UIContext | KeyboardAvoidMode | RESIZE | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `RESIZE = 1` |
+| ohos.arkui.UIContext | KeyboardAvoidMode | OFFSET_WITH_CARET | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `OFFSET_WITH_CARET = 2` |
+| ohos.arkui.UIContext | KeyboardAvoidMode | RESIZE_WITH_CARET | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `RESIZE_WITH_CARET = 3` |
+| ohos.arkui.UIContext | KeyboardAvoidMode | NONE | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `NONE = 4` |
+| ohos.arkui.UIContext | SwiperDynamicSyncSceneType | SwiperDynamicSyncSceneType | 0 | enum_class |  |  |  |  | - |  |  |  |  | `enum SwiperDynamicSyncSceneType {` |
+| ohos.arkui.UIContext | SwiperDynamicSyncSceneType | GESTURE | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `GESTURE = 0` |
+| ohos.arkui.UIContext | SwiperDynamicSyncSceneType | ANIMATION | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ANIMATION = 1` |
+| ohos.arkui.UIContext | MarqueeDynamicSyncSceneType | MarqueeDynamicSyncSceneType | 0 | enum_class |  |  |  |  | - |  |  |  |  | `enum MarqueeDynamicSyncSceneType {` |
+| ohos.arkui.UIContext | MarqueeDynamicSyncSceneType | ANIMATION | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ANIMATION = 1` |
+| ohos.arkui.UIContext | TextMenuController | TextMenuController | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class TextMenuController {` |
+| ohos.arkui.UIContext | TextMenuController | setMenuOptions | 0 | method |  |  |  |  | - |  |  |  |  | `public setMenuOptions(options: TextMenuOptions): void` |
+| ohos.arkui.UIContext | TextMenuController | disableSystemServiceMenuItems | 0 | method |  |  |  |  | - |  |  |  |  | `public static disableSystemServiceMenuItems(disable: boolean): void` |
+| ohos.arkui.UIContext | TextMenuController | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.arkui.UIContext | ContentCoverController | ContentCoverController | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ContentCoverController {` |
+| ohos.arkui.UIContext | ContentCoverController | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor()` |
+| ohos.arkui.UIContext | ContentCoverController | update | 0 | method |  |  |  |  | - |  |  |  |  | `public update(contentCoverOptions: ContentCoverOptions, partialUpdate?: boolean): void` |
+| ohos.arkui.UIContext | ContentCoverController | close | 0 | method |  |  |  |  | - |  |  |  |  | `public close(): void` |
+| ohos.arkui.uiExtension | uiExtension | uiExtension | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace uiExtension {` |
+| ohos.arkui.uiExtension | WindowProxy | WindowProxy | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface WindowProxy {` |
+| ohos.arkui.uiExtension | uiExtension.WindowProxy | getWindowAvoidArea | 0 | method |  |  |  |  | - |  |  |  |  | `getWindowAvoidArea(type: window.AvoidAreaType): window.AvoidArea` |
+| ohos.arkui.uiExtension | uiExtension.WindowProxy | on | 0 | method |  |  |  |  | - |  |  |  |  | `on(type: "avoidAreaChange", callback: Callback<AvoidAreaInfo>): void` |
+| ohos.arkui.uiExtension | uiExtension.WindowProxy | off | 0 | method |  |  |  |  | - |  |  |  |  | `off(type: "avoidAreaChange", callback?: Callback<AvoidAreaInfo>): void` |
+| ohos.arkui.uiExtension | uiExtension.WindowProxy | on | 1 | method |  |  |  |  | - |  |  |  |  | `on(type: "windowSizeChange", callback: Callback<window.Size>): void` |
+| ohos.arkui.uiExtension | uiExtension.WindowProxy | off | 1 | method |  |  |  |  | - |  |  |  |  | `off(type: "windowSizeChange", callback?: Callback<window.Size>): void` |
+| ohos.arkui.uiExtension | uiExtension.WindowProxy | hideNonSecureWindows | 0 | method |  |  |  |  | - |  |  |  |  | `hideNonSecureWindows(shouldHide: boolean): Promise<void>` |
+| ohos.arkui.uiExtension | uiExtension.WindowProxy | createSubWindowWithOptions | 0 | method |  |  |  |  | - |  |  |  |  | `createSubWindowWithOptions(name: string, subWindowOptions: window.SubWindowOptions): Promise<window.Window>` |
+| ohos.arkui.uiExtension | uiExtension.WindowProxy | setWaterMarkFlag | 0 | method |  |  |  |  | - |  |  |  |  | `setWaterMarkFlag(enable: boolean): Promise<void>` |
+| ohos.arkui.uiExtension | AvoidAreaInfo | AvoidAreaInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface AvoidAreaInfo {` |
+| ohos.arkui.uiExtension | uiExtension.AvoidAreaInfo | type | 0 | field |  |  |  |  | - |  |  |  |  | `type: window.AvoidAreaType;` |
+| ohos.arkui.uiExtension | uiExtension.AvoidAreaInfo | area | 0 | field |  |  |  |  | - |  |  |  |  | `area: window.AvoidArea;` |
+| ohos.arkui.uiExtension | WindowProxyProperties | WindowProxyProperties | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface WindowProxyProperties {` |
+| ohos.arkui.uiExtension | uiExtension.WindowProxyProperties | uiExtensionHostWindowProxyRect | 0 | field |  |  |  |  | - |  |  |  |  | `uiExtensionHostWindowProxyRect: window.Rect;` |
+| ohos.curves | curves | curves | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace curves {` |
+| ohos.curves | Curve | Curve | 0 | enum_class | generated | unnamed | Curve | - | generated |  |  |  |  | `declare enum Curve {` |
+| ohos.curves | curves.Curve | Linear | 0 | enum_instance | generated | Curve | LINEAR | - | generated |  |  |  |  | `Linear = 0` |
+| ohos.curves | curves.Curve | Ease | 0 | enum_instance | generated | Curve | EASE | - | generated |  |  |  |  | `Ease = ((0) + (1))` |
+| ohos.curves | curves.Curve | EaseIn | 0 | enum_instance | generated | Curve | EASE_IN | - | generated |  |  |  |  | `EaseIn = ((((0) + (1))) + (1))` |
+| ohos.curves | curves.Curve | EaseOut | 0 | enum_instance | generated | Curve | EASE_OUT | - | generated |  |  |  |  | `EaseOut = ((((((0) + (1))) + (1))) + (1))` |
+| ohos.curves | curves.Curve | EaseInOut | 0 | enum_instance | generated | Curve | EASE_IN_OUT | - | generated |  |  |  |  | `EaseInOut = ((((((((0) + (1))) + (1))) + (1))) + (1))` |
+| ohos.curves | curves.Curve | FastOutSlowIn | 0 | enum_instance | generated | Curve | FAST_OUT_SLOW_IN | - | generated |  |  |  |  | `FastOutSlowIn = ((((((((((0) + (1))) + (1))) + (1))) + (1))) + (1))` |
+| ohos.curves | curves.Curve | LinearOutSlowIn | 0 | enum_instance | generated | Curve | LINEAR_OUT_SLOW_IN | - | generated |  |  |  |  | `LinearOutSlowIn = ((((((((((((0) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))` |
+| ohos.curves | curves.Curve | FastOutLinearIn | 0 | enum_instance | generated | Curve | FAST_OUT_LINEAR_IN | - | generated |  |  |  |  | `FastOutLinearIn = ((((((((((((((0) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))` |
+| ohos.curves | curves.Curve | ExtremeDeceleration | 0 | enum_instance | generated | Curve | EXTREME_DECELERATION | - | generated |  |  |  |  | `ExtremeDeceleration = ((((((((((((((((0) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))` |
+| ohos.curves | curves.Curve | Sharp | 0 | enum_instance | generated | Curve | SHARP | - | generated |  |  |  |  | `Sharp = ((((((((((((((((((0) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))` |
+| ohos.curves | curves.Curve | Rhythm | 0 | enum_instance | generated | Curve | RHYTHM | - | generated |  |  |  |  | `Rhythm = ((((((((((((((((((((0) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))` |
+| ohos.curves | curves.Curve | Smooth | 0 | enum_instance | generated | Curve | SMOOTH | - | generated |  |  |  |  | `Smooth = ((((((((((((((((((((((0) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))` |
+| ohos.curves | curves.Curve | Friction | 0 | enum_instance | generated | Curve | FRICTION | - | generated |  |  |  |  | `Friction = ((((((((((((((((((((((((0) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))) + (1))` |
+| ohos.curves | ICurve | ICurve | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ICurve {` |
+| ohos.curves | curves.ICurve | interpolate | 0 | method |  |  |  |  | - |  |  |  |  | `interpolate(fraction: number): number` |
+| ohos.curves | curves | initCurve | 0 | function |  |  |  |  | - |  |  |  |  | `export function initCurve(curve?: Curve): ICurve` |
+| ohos.curves | curves | stepsCurve | 0 | function |  |  |  |  | - |  |  |  |  | `export function stepsCurve(count: number, end: boolean): ICurve` |
+| ohos.curves | curves | customCurve | 0 | function |  |  |  |  | - |  |  |  |  | `export function customCurve(interpolate: ((fraction: number)=> number)): ICurve` |
+| ohos.curves | curves | cubicBezierCurve | 0 | function |  |  |  |  | - |  |  |  |  | `export function cubicBezierCurve(x1: number, y1: number, x2: number, y2: number): ICurve` |
+| ohos.curves | curves | springCurve | 0 | function |  |  |  |  | - |  |  |  |  | `export function springCurve(velocity: number, mass: number, stiffness: number, damping: number): ICurve` |
+| ohos.curves | curves | springMotion | 0 | function |  |  |  |  | - |  |  |  |  | `export function springMotion(response?: number, dampingFraction?: number, overlapDuration?: number): ICurve` |
+| ohos.curves | curves | responsiveSpringMotion | 0 | function |  |  |  |  | - |  |  |  |  | `export function responsiveSpringMotion(response?: number, dampingFraction?: number, overlapDuration?: number): ICurve` |
+| ohos.curves | curves | interpolatingSpring | 0 | function |  |  |  |  | - |  |  |  |  | `export function interpolatingSpring(velocity: number, mass: number, stiffness: number, damping: number): ICurve` |
+| ohos.font | font | font | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace font {` |
+| ohos.font | FontOptions | FontOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `interface FontOptions {` |
+| ohos.font | font.FontOptions | familyName | 0 | field |  |  |  |  | - |  |  |  |  | `familyName: (string | Resource);` |
+| ohos.font | font.FontOptions | familySrc | 0 | field |  |  |  |  | - |  |  |  |  | `familySrc: (string | Resource);` |
+| ohos.font | FontInfo | FontInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `interface FontInfo {` |
+| ohos.font | font.FontInfo | path | 0 | field |  |  |  |  | - |  |  |  |  | `path: string;` |
+| ohos.font | font.FontInfo | postScriptName | 0 | field |  |  |  |  | - |  |  |  |  | `postScriptName: string;` |
+| ohos.font | font.FontInfo | fullName | 0 | field |  |  |  |  | - |  |  |  |  | `fullName: string;` |
+| ohos.font | font.FontInfo | family | 0 | field |  |  |  |  | - |  |  |  |  | `family: string;` |
+| ohos.font | font.FontInfo | subfamily | 0 | field |  |  |  |  | - |  |  |  |  | `subfamily: string;` |
+| ohos.font | font.FontInfo | weight | 0 | field |  |  |  |  | - |  |  |  |  | `weight: number;` |
+| ohos.font | font.FontInfo | width | 0 | field |  |  |  |  | - |  |  |  |  | `width: number;` |
+| ohos.font | font.FontInfo | italic | 0 | field |  |  |  |  | - |  |  |  |  | `italic: boolean;` |
+| ohos.font | font.FontInfo | monoSpace | 0 | field |  |  |  |  | - |  |  |  |  | `monoSpace: boolean;` |
+| ohos.font | font.FontInfo | symbolic | 0 | field |  |  |  |  | - |  |  |  |  | `symbolic: boolean;` |
+| ohos.font | UIFontConfig | UIFontConfig | 0 | interface |  |  |  |  | - |  |  |  |  | `interface UIFontConfig {` |
+| ohos.font | font.UIFontConfig | fontDir | 0 | field |  |  |  |  | - |  |  |  |  | `fontDir: Array<string>;` |
+| ohos.font | font.UIFontConfig | generic | 0 | field |  |  |  |  | - |  |  |  |  | `generic: Array<UIFontGenericInfo>;` |
+| ohos.font | font.UIFontConfig | fallbackGroups | 0 | field |  |  |  |  | - |  |  |  |  | `fallbackGroups: Array<UIFontFallbackGroupInfo>;` |
+| ohos.font | UIFontGenericInfo | UIFontGenericInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `interface UIFontGenericInfo {` |
+| ohos.font | font.UIFontGenericInfo | family | 0 | field |  |  |  |  | - |  |  |  |  | `family: string;` |
+| ohos.font | font.UIFontGenericInfo | alias | 0 | field |  |  |  |  | - |  |  |  |  | `alias: Array<UIFontAliasInfo>;` |
+| ohos.font | font.UIFontGenericInfo | adjust | 0 | field |  |  |  |  | - |  |  |  |  | `adjust: Array<UIFontAdjustInfo>;` |
+| ohos.font | UIFontAliasInfo | UIFontAliasInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `interface UIFontAliasInfo {` |
+| ohos.font | font.UIFontAliasInfo | name | 0 | field |  |  |  |  | - |  |  |  |  | `name: string;` |
+| ohos.font | font.UIFontAliasInfo | weight | 0 | field |  |  |  |  | - |  |  |  |  | `weight: number;` |
+| ohos.font | UIFontAdjustInfo | UIFontAdjustInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `interface UIFontAdjustInfo {` |
+| ohos.font | font.UIFontAdjustInfo | weight | 0 | field |  |  |  |  | - |  |  |  |  | `weight: number;` |
+| ohos.font | font.UIFontAdjustInfo | to | 0 | field |  |  |  |  | - |  |  |  |  | `to: number;` |
+| ohos.font | UIFontFallbackGroupInfo | UIFontFallbackGroupInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `interface UIFontFallbackGroupInfo {` |
+| ohos.font | font.UIFontFallbackGroupInfo | fontSetName | 0 | field |  |  |  |  | - |  |  |  |  | `fontSetName: string;` |
+| ohos.font | font.UIFontFallbackGroupInfo | fallback | 0 | field |  |  |  |  | - |  |  |  |  | `fallback: Array<UIFontFallbackInfo>;` |
+| ohos.font | UIFontFallbackInfo | UIFontFallbackInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `interface UIFontFallbackInfo {` |
+| ohos.font | font.UIFontFallbackInfo | language | 0 | field |  |  |  |  | - |  |  |  |  | `language: string;` |
+| ohos.font | font.UIFontFallbackInfo | family | 0 | field |  |  |  |  | - |  |  |  |  | `family: string;` |
+| ohos.font | font | getUIFontConfig | 0 | function |  |  |  |  | - |  |  |  |  | `function getUIFontConfig(): UIFontConfig` |
+| ohos.fontManager | fontManager | fontManager | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace fontManager {` |
+| ohos.fontManager | fontManager | installFont | 0 | function |  |  |  |  | - |  |  |  |  | `function installFont(path: string): Promise<int>` |
+| ohos.fontManager | fontManager | uninstallFont | 0 | function |  |  |  |  | - |  |  |  |  | `function uninstallFont(fullName: string): Promise<int>` |
+| ohos.matrix4 | matrix4 | matrix4 | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace matrix4 {` |
+| ohos.matrix4 | TranslateOption | TranslateOption | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface TranslateOption {` |
+| ohos.matrix4 | matrix4.TranslateOption | x | 0 | field |  |  |  |  | - |  |  |  |  | `x?: number;` |
+| ohos.matrix4 | matrix4.TranslateOption | y | 0 | field |  |  |  |  | - |  |  |  |  | `y?: number;` |
+| ohos.matrix4 | matrix4.TranslateOption | z | 0 | field |  |  |  |  | - |  |  |  |  | `z?: number;` |
+| ohos.matrix4 | ScaleOption | ScaleOption | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ScaleOption {` |
+| ohos.matrix4 | matrix4.ScaleOption | x | 0 | field |  |  |  |  | - |  |  |  |  | `x?: number;` |
+| ohos.matrix4 | matrix4.ScaleOption | y | 0 | field |  |  |  |  | - |  |  |  |  | `y?: number;` |
+| ohos.matrix4 | matrix4.ScaleOption | z | 0 | field |  |  |  |  | - |  |  |  |  | `z?: number;` |
+| ohos.matrix4 | matrix4.ScaleOption | centerX | 0 | field |  |  |  |  | - |  |  |  |  | `centerX?: number;` |
+| ohos.matrix4 | matrix4.ScaleOption | centerY | 0 | field |  |  |  |  | - |  |  |  |  | `centerY?: number;` |
+| ohos.matrix4 | RotateOption | RotateOption | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface RotateOption {` |
+| ohos.matrix4 | matrix4.RotateOption | x | 0 | field |  |  |  |  | - |  |  |  |  | `x?: number;` |
+| ohos.matrix4 | matrix4.RotateOption | y | 0 | field |  |  |  |  | - |  |  |  |  | `y?: number;` |
+| ohos.matrix4 | matrix4.RotateOption | z | 0 | field |  |  |  |  | - |  |  |  |  | `z?: number;` |
+| ohos.matrix4 | matrix4.RotateOption | centerX | 0 | field |  |  |  |  | - |  |  |  |  | `centerX?: number;` |
+| ohos.matrix4 | matrix4.RotateOption | centerY | 0 | field |  |  |  |  | - |  |  |  |  | `centerY?: number;` |
+| ohos.matrix4 | matrix4.RotateOption | angle | 0 | field |  |  |  |  | - |  |  |  |  | `angle?: number;` |
+| ohos.matrix4 | Point | Point | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface Point {` |
+| ohos.matrix4 | matrix4.Point | x | 0 | field |  |  |  |  | - |  |  |  |  | `x: number;` |
+| ohos.matrix4 | matrix4.Point | y | 0 | field |  |  |  |  | - |  |  |  |  | `y: number;` |
+| ohos.matrix4 | PolyToPolyOptions | PolyToPolyOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface PolyToPolyOptions {` |
+| ohos.matrix4 | matrix4.PolyToPolyOptions | src | 0 | field |  |  |  |  | - |  |  |  |  | `src: Array<Point>;` |
+| ohos.matrix4 | matrix4.PolyToPolyOptions | srcIndex | 0 | field |  |  |  |  | - |  |  |  |  | `srcIndex?: number;` |
+| ohos.matrix4 | matrix4.PolyToPolyOptions | dst | 0 | field |  |  |  |  | - |  |  |  |  | `dst: Array<Point>;` |
+| ohos.matrix4 | matrix4.PolyToPolyOptions | dstIndex | 0 | field |  |  |  |  | - |  |  |  |  | `dstIndex?: number;` |
+| ohos.matrix4 | matrix4.PolyToPolyOptions | pointCount | 0 | field |  |  |  |  | - |  |  |  |  | `pointCount?: number;` |
+| ohos.matrix4 | Matrix4Transit | Matrix4Transit | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface Matrix4Transit {` |
+| ohos.matrix4 | matrix4.Matrix4Transit | copy | 0 | method |  |  |  |  | - |  |  |  |  | `copy(): Matrix4Transit` |
+| ohos.matrix4 | matrix4.Matrix4Transit | invert | 0 | method |  |  |  |  | - |  |  |  |  | `invert(): Matrix4Transit` |
+| ohos.matrix4 | matrix4.Matrix4Transit | combine | 0 | method |  |  |  |  | - |  |  |  |  | `combine(options: Matrix4Transit): Matrix4Transit` |
+| ohos.matrix4 | matrix4.Matrix4Transit | translate | 0 | method |  |  |  |  | - |  |  |  |  | `translate(options: TranslateOption): Matrix4Transit` |
+| ohos.matrix4 | matrix4.Matrix4Transit | scale | 0 | method |  |  |  |  | - |  |  |  |  | `scale(options: ScaleOption): Matrix4Transit` |
+| ohos.matrix4 | matrix4.Matrix4Transit | skew | 0 | method |  |  |  |  | - |  |  |  |  | `skew(x: number, y: number): Matrix4Transit` |
+| ohos.matrix4 | matrix4.Matrix4Transit | rotate | 0 | method |  |  |  |  | - |  |  |  |  | `rotate(options: RotateOption): Matrix4Transit` |
+| ohos.matrix4 | matrix4.Matrix4Transit | transformPoint | 0 | method |  |  |  |  | - |  |  |  |  | `transformPoint(options: [number, number]): [number, number]` |
+| ohos.matrix4 | matrix4.Matrix4Transit | setPolyToPoly | 0 | method |  |  |  |  | - |  |  |  |  | `setPolyToPoly(options: PolyToPolyOptions): Matrix4Transit` |
+| ohos.matrix4 | matrix4 | init | 0 | function |  |  |  |  | - |  |  |  |  | `function init(options: [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number]): Matrix4Transit` |
+| ohos.matrix4 | matrix4 | identity | 0 | function |  |  |  |  | - |  |  |  |  | `function identity(): Matrix4Transit` |
+| ohos.measure | MeasureOptions | MeasureOptions | 0 | interface | generated | unnamed | MeasureOptions | - | generated |  |  |  |  | `export interface MeasureOptions {` |
+| ohos.measure | MeasureOptions | textContent | 0 | field | generated | MeasureOptions | textContent | - | generated |  |  |  |  | `textContent: (string | Resource);` |
+| ohos.measure | MeasureOptions | constraintWidth | 0 | field | generated | MeasureOptions | constraintWidth | - | generated |  |  |  |  | `constraintWidth?: (number | string | Resource);` |
+| ohos.measure | MeasureOptions | fontSize | 0 | field | generated | MeasureOptions | fontSize | - | generated |  |  |  |  | `fontSize?: (number | string | Resource);` |
+| ohos.measure | MeasureOptions | fontStyle | 0 | field | generated | MeasureOptions | fontStyle | - | generated |  |  |  |  | `fontStyle?: (number | FontStyle);` |
+| ohos.measure | MeasureOptions | fontWeight | 0 | field | generated | MeasureOptions | fontWeight | - | generated |  |  |  |  | `fontWeight?: (number | string | FontWeight);` |
+| ohos.measure | MeasureOptions | fontFamily | 0 | field | generated | MeasureOptions | fontFamily | - | generated |  |  |  |  | `fontFamily?: (string | Resource);` |
+| ohos.measure | MeasureOptions | letterSpacing | 0 | field | generated | MeasureOptions | letterSpacing | - | generated |  |  |  |  | `letterSpacing?: (number | string);` |
+| ohos.measure | MeasureOptions | textAlign | 0 | field | generated | MeasureOptions | textAlign | - | generated |  |  |  |  | `textAlign?: (number | TextAlign);` |
+| ohos.measure | MeasureOptions | overflow | 0 | field | generated | MeasureOptions | overflow | - | generated |  |  |  |  | `overflow?: (number | TextOverflow);` |
+| ohos.measure | MeasureOptions | maxLines | 0 | field | generated | MeasureOptions | maxLines | - | generated |  |  |  |  | `maxLines?: number;` |
+| ohos.measure | MeasureOptions | lineHeight | 0 | field | generated | MeasureOptions | lineHeight | - | generated |  |  |  |  | `lineHeight?: (number | string | Resource);` |
+| ohos.measure | MeasureOptions | baselineOffset | 0 | field | generated | MeasureOptions | baselineOffset | - | generated |  |  |  |  | `baselineOffset?: (number | string);` |
+| ohos.measure | MeasureOptions | textCase | 0 | field | generated | MeasureOptions | textCase | - | generated |  |  |  |  | `textCase?: (number | TextCase);` |
+| ohos.measure | MeasureOptions | textIndent | 0 | field | generated | MeasureOptions | textIndent | - | generated |  |  |  |  | `textIndent?: (number | string);` |
+| ohos.measure | MeasureOptions | wordBreak | 0 | field | generated | MeasureOptions | wordBreak | - | generated |  |  |  |  | `wordBreak?: WordBreak;` |
+| ohos.measure | MeasureText | MeasureText | 0 | class |  |  |  |  | - |  |  |  |  | `export default declare class MeasureText {` |
+| ohos.measure | MeasureText | measureText | 0 | method |  |  |  |  | - |  |  |  |  | `public static measureText(options: MeasureOptions): number` |
+| ohos.measure | MeasureText | measureTextSize | 0 | method |  |  |  |  | - |  |  |  |  | `public static measureTextSize(options: MeasureOptions): SizeOptions` |
+| ohos.measure | MeasureText | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.mediaquery | mediaquery | mediaquery | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace mediaquery {` |
+| ohos.mediaquery | MediaQueryResult | MediaQueryResult | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface MediaQueryResult {` |
+| ohos.mediaquery | mediaquery.MediaQueryResult | matches | 0 | field |  |  |  |  | - |  |  |  |  | `readonly matches: boolean;` |
+| ohos.mediaquery | mediaquery.MediaQueryResult | media | 0 | field |  |  |  |  | - |  |  |  |  | `readonly media: string;` |
+| ohos.mediaquery | MediaQueryListener | MediaQueryListener | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface MediaQueryListener extends MediaQueryResult {` |
+| ohos.mediaquery | mediaquery.MediaQueryListener | on | 0 | method |  |  |  |  | - |  |  |  |  | `on(type: "change", callback: Callback<MediaQueryResult>): void` |
+| ohos.mediaquery | mediaquery.MediaQueryListener | off | 0 | method |  |  |  |  | - |  |  |  |  | `off(type: "change", callback?: Callback<MediaQueryResult>): void` |
+| ohos.mediaquery | mediaquery | matchMediaSync | 0 | function |  |  |  |  | - |  |  |  |  | `export function matchMediaSync(condition: string): MediaQueryListener` |
+| ohos.pluginComponent | PluginComponentTemplate | PluginComponentTemplate | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface PluginComponentTemplate {` |
+| ohos.pluginComponent | PluginComponentTemplate | source | 0 | field |  |  |  |  | - |  |  |  |  | `source: string;` |
+| ohos.pluginComponent | PluginComponentTemplate | ability | 0 | field |  |  |  |  | - |  |  |  |  | `ability: string;` |
+| ohos.pluginComponent | pluginComponentManager | pluginComponentManager | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace pluginComponentManager {` |
+| ohos.pluginComponent | pluginComponentManager | KVObject | 0 | field |  |  |  |  | - |  |  |  |  | `export type KVObject = Record<string, (int | long | double | string | boolean | Array<KVObject> | KVObject)>;` |
+| ohos.pluginComponent | PushParameters | PushParameters | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface PushParameters {` |
+| ohos.pluginComponent | pluginComponentManager.PushParameters | want | 0 | field |  |  |  |  | - |  |  |  |  | `want: Want;` |
+| ohos.pluginComponent | pluginComponentManager.PushParameters | name | 0 | field |  |  |  |  | - |  |  |  |  | `name: string;` |
+| ohos.pluginComponent | pluginComponentManager.PushParameters | data | 0 | field |  |  |  |  | - |  |  |  |  | `data: KVObject;` |
+| ohos.pluginComponent | pluginComponentManager.PushParameters | extraData | 0 | field |  |  |  |  | - |  |  |  |  | `extraData: KVObject;` |
+| ohos.pluginComponent | pluginComponentManager.PushParameters | jsonPath | 0 | field |  |  |  |  | - |  |  |  |  | `jsonPath?: string;` |
+| ohos.pluginComponent | PushParameterForStage | PushParameterForStage | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface PushParameterForStage {` |
+| ohos.pluginComponent | pluginComponentManager.PushParameterForStage | owner | 0 | field |  |  |  |  | - |  |  |  |  | `owner: Want;` |
+| ohos.pluginComponent | pluginComponentManager.PushParameterForStage | target | 0 | field |  |  |  |  | - |  |  |  |  | `target: Want;` |
+| ohos.pluginComponent | pluginComponentManager.PushParameterForStage | name | 0 | field |  |  |  |  | - |  |  |  |  | `name: string;` |
+| ohos.pluginComponent | pluginComponentManager.PushParameterForStage | data | 0 | field |  |  |  |  | - |  |  |  |  | `data: KVObject;` |
+| ohos.pluginComponent | pluginComponentManager.PushParameterForStage | extraData | 0 | field |  |  |  |  | - |  |  |  |  | `extraData: KVObject;` |
+| ohos.pluginComponent | pluginComponentManager.PushParameterForStage | jsonPath | 0 | field |  |  |  |  | - |  |  |  |  | `jsonPath?: string;` |
+| ohos.pluginComponent | RequestParameters | RequestParameters | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface RequestParameters {` |
+| ohos.pluginComponent | pluginComponentManager.RequestParameters | want | 0 | field |  |  |  |  | - |  |  |  |  | `want: Want;` |
+| ohos.pluginComponent | pluginComponentManager.RequestParameters | name | 0 | field |  |  |  |  | - |  |  |  |  | `name: string;` |
+| ohos.pluginComponent | pluginComponentManager.RequestParameters | data | 0 | field |  |  |  |  | - |  |  |  |  | `data: KVObject;` |
+| ohos.pluginComponent | pluginComponentManager.RequestParameters | jsonPath | 0 | field |  |  |  |  | - |  |  |  |  | `jsonPath?: string;` |
+| ohos.pluginComponent | RequestParameterForStage | RequestParameterForStage | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface RequestParameterForStage {` |
+| ohos.pluginComponent | pluginComponentManager.RequestParameterForStage | owner | 0 | field |  |  |  |  | - |  |  |  |  | `owner: Want;` |
+| ohos.pluginComponent | pluginComponentManager.RequestParameterForStage | target | 0 | field |  |  |  |  | - |  |  |  |  | `target: Want;` |
+| ohos.pluginComponent | pluginComponentManager.RequestParameterForStage | name | 0 | field |  |  |  |  | - |  |  |  |  | `name: string;` |
+| ohos.pluginComponent | pluginComponentManager.RequestParameterForStage | data | 0 | field |  |  |  |  | - |  |  |  |  | `data: KVObject;` |
+| ohos.pluginComponent | pluginComponentManager.RequestParameterForStage | jsonPath | 0 | field |  |  |  |  | - |  |  |  |  | `jsonPath?: string;` |
+| ohos.pluginComponent | RequestCallbackParameters | RequestCallbackParameters | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface RequestCallbackParameters {` |
+| ohos.pluginComponent | pluginComponentManager.RequestCallbackParameters | componentTemplate | 0 | field |  |  |  |  | - |  |  |  |  | `componentTemplate: PluginComponentTemplate;` |
+| ohos.pluginComponent | pluginComponentManager.RequestCallbackParameters | data | 0 | field |  |  |  |  | - |  |  |  |  | `data: KVObject;` |
+| ohos.pluginComponent | pluginComponentManager.RequestCallbackParameters | extraData | 0 | field |  |  |  |  | - |  |  |  |  | `extraData: KVObject;` |
+| ohos.pluginComponent | RequestEventResult | RequestEventResult | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface RequestEventResult {` |
+| ohos.pluginComponent | pluginComponentManager.RequestEventResult | template | 0 | field |  |  |  |  | - |  |  |  |  | `template?: string;` |
+| ohos.pluginComponent | pluginComponentManager.RequestEventResult | data | 0 | field |  |  |  |  | - |  |  |  |  | `data?: KVObject;` |
+| ohos.pluginComponent | pluginComponentManager.RequestEventResult | extraData | 0 | field |  |  |  |  | - |  |  |  |  | `extraData?: KVObject;` |
+| ohos.pluginComponent | pluginComponentManager | OnPushEventCallback | 0 | field |  |  |  |  | - |  |  |  |  | `export type OnPushEventCallback = ((source: Want, template: PluginComponentTemplate, data: KVObject, extraData: KVObject)=> void);` |
+| ohos.pluginComponent | pluginComponentManager | OnRequestEventCallback | 0 | field |  |  |  |  | - |  |  |  |  | `export type OnRequestEventCallback = ((source: Want, name: string, data: KVObject)=> RequestEventResult);` |
+| ohos.pluginComponent | pluginComponentManager | push | 0 | function |  |  |  |  | - |  |  |  |  | `export function push(param: PushParameters, callback: AsyncCallback<void>): void` |
+| ohos.pluginComponent | pluginComponentManager | request | 0 | function |  |  |  |  | - |  |  |  |  | `export function request(param: RequestParameters, callback: AsyncCallback<RequestCallbackParameters>): void` |
+| ohos.pluginComponent | pluginComponentManager | push | 1 | function |  |  |  |  | - |  |  |  |  | `export function push(param: PushParameterForStage, callback: AsyncCallback<void>): void` |
+| ohos.pluginComponent | pluginComponentManager | request | 1 | function |  |  |  |  | - |  |  |  |  | `export function request(param: RequestParameterForStage, callback: AsyncCallback<RequestCallbackParameters>): void` |
+| ohos.pluginComponent | pluginComponentManager | on | 0 | function |  |  |  |  | - |  |  |  |  | `export function on(eventType: string, callback: (OnPushEventCallback | OnRequestEventCallback)): void` |
+| ohos.promptAction | LevelMode | LevelMode | 0 | enum_class | generated | unnamed | LevelMode | - | generated |  |  |  |  | `enum LevelMode {` |
+| ohos.promptAction | LevelMode | OVERLAY | 0 | enum_instance | generated | LevelMode | OVERLAY | - | generated |  |  |  |  | `OVERLAY = 0` |
+| ohos.promptAction | LevelMode | EMBEDDED | 0 | enum_instance | generated | LevelMode | EMBEDDED | - | generated |  |  |  |  | `EMBEDDED = 1` |
+| ohos.promptAction | ImmersiveMode | ImmersiveMode | 0 | enum_class | generated | unnamed | ImmersiveMode | - | generated |  |  |  |  | `enum ImmersiveMode {` |
+| ohos.promptAction | ImmersiveMode | DEFAULT | 0 | enum_instance | generated | ImmersiveMode | DEFAULT | - | generated |  |  |  |  | `DEFAULT = 0` |
+| ohos.promptAction | ImmersiveMode | EXTEND | 0 | enum_instance | generated | ImmersiveMode | EXTEND | - | generated |  |  |  |  | `EXTEND = 1` |
+| ohos.promptAction | LevelOrder | LevelOrder | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class LevelOrder {` |
+| ohos.promptAction | LevelOrder | clamp | 0 | method |  |  |  |  | - |  |  |  |  | `public static clamp(order: number): LevelOrder` |
+| ohos.promptAction | LevelOrder | getOrder | 0 | method |  |  |  |  | - |  |  |  |  | `public getOrder(): number` |
+| ohos.promptAction | LevelOrder | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.promptAction | promptAction | promptAction | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace promptAction {` |
+| ohos.promptAction | ShowToastOptions | ShowToastOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ShowToastOptions {` |
+| ohos.promptAction | promptAction.ShowToastOptions | message | 0 | field |  |  |  |  | - |  |  |  |  | `message: (string | Resource);` |
+| ohos.promptAction | promptAction.ShowToastOptions | duration | 0 | field |  |  |  |  | - |  |  |  |  | `duration?: number;` |
+| ohos.promptAction | promptAction.ShowToastOptions | bottom | 0 | field |  |  |  |  | - |  |  |  |  | `bottom?: (string | number);` |
+| ohos.promptAction | promptAction.ShowToastOptions | showMode | 0 | field |  |  |  |  | - |  |  |  |  | `showMode?: ToastShowMode;` |
+| ohos.promptAction | promptAction.ShowToastOptions | alignment | 0 | field |  |  |  |  | - |  |  |  |  | `alignment?: Alignment;` |
+| ohos.promptAction | promptAction.ShowToastOptions | offset | 0 | field |  |  |  |  | - |  |  |  |  | `offset?: Offset;` |
+| ohos.promptAction | promptAction.ShowToastOptions | backgroundColor | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundColor?: ResourceColor;` |
+| ohos.promptAction | promptAction.ShowToastOptions | textColor | 0 | field |  |  |  |  | - |  |  |  |  | `textColor?: ResourceColor;` |
+| ohos.promptAction | promptAction.ShowToastOptions | backgroundBlurStyle | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
+| ohos.promptAction | promptAction.ShowToastOptions | shadow | 0 | field |  |  |  |  | - |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
+| ohos.promptAction | promptAction.ShowToastOptions | enableHoverMode | 0 | field |  |  |  |  | - |  |  |  |  | `enableHoverMode?: boolean;` |
+| ohos.promptAction | promptAction.ShowToastOptions | hoverModeArea | 0 | field |  |  |  |  | - |  |  |  |  | `hoverModeArea?: HoverModeAreaType;` |
+| ohos.promptAction | ToastShowMode | ToastShowMode | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum ToastShowMode {` |
+| ohos.promptAction | promptAction.ToastShowMode | DEFAULT | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `DEFAULT = 0` |
+| ohos.promptAction | promptAction.ToastShowMode | TOP_MOST | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `TOP_MOST = 1` |
+| ohos.promptAction | promptAction.ToastShowMode | SYSTEM_TOP_MOST | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `SYSTEM_TOP_MOST = 2` |
+| ohos.promptAction | Button | Button | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface Button {` |
+| ohos.promptAction | promptAction.Button | text | 0 | field |  |  |  |  | - |  |  |  |  | `text: (string | Resource);` |
+| ohos.promptAction | promptAction.Button | color | 0 | field |  |  |  |  | - |  |  |  |  | `color: (string | Resource);` |
+| ohos.promptAction | promptAction.Button | primary | 0 | field |  |  |  |  | - |  |  |  |  | `primary?: boolean;` |
+| ohos.promptAction | promptAction | PromptActionSingleButton | 0 | field |  |  |  |  | - |  |  |  |  | `export type PromptActionSingleButton = [Button];` |
+| ohos.promptAction | promptAction | PromptActionDoubleButtons | 0 | field |  |  |  |  | - |  |  |  |  | `export type PromptActionDoubleButtons = [Button, (Button | undefined)];` |
+| ohos.promptAction | promptAction | PromptActionTripleButtons | 0 | field |  |  |  |  | - |  |  |  |  | `export type PromptActionTripleButtons = [Button, (Button | undefined), (Button | undefined)];` |
+| ohos.promptAction | promptAction | PromptActionQuadrupleButtons | 0 | field |  |  |  |  | - |  |  |  |  | `export type PromptActionQuadrupleButtons = [Button, (Button | undefined), (Button | undefined), (Button | undefined)];` |
+| ohos.promptAction | promptAction | PromptActionQuintupleButtons | 0 | field |  |  |  |  | - |  |  |  |  | `export type PromptActionQuintupleButtons = [Button, (Button | undefined), (Button | undefined), (Button | undefined), (Button | undefined)];` |
+| ohos.promptAction | promptAction | PromptActionSextupleButtons | 0 | field |  |  |  |  | - |  |  |  |  | `export type PromptActionSextupleButtons = [Button, (Button | undefined), (Button | undefined), (Button | undefined), (Button | undefined), (Button | undefined)];` |
+| ohos.promptAction | ShowDialogSuccessResponse | ShowDialogSuccessResponse | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ShowDialogSuccessResponse {` |
+| ohos.promptAction | promptAction.ShowDialogSuccessResponse | index | 0 | field |  |  |  |  | - |  |  |  |  | `index: number;` |
+| ohos.promptAction | ShowDialogOptions | ShowDialogOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ShowDialogOptions {` |
+| ohos.promptAction | promptAction.ShowDialogOptions | title | 0 | field |  |  |  |  | - |  |  |  |  | `title?: (string | Resource);` |
+| ohos.promptAction | promptAction.ShowDialogOptions | message | 0 | field |  |  |  |  | - |  |  |  |  | `message?: (string | Resource);` |
+| ohos.promptAction | promptAction.ShowDialogOptions | buttons | 0 | field |  |  |  |  | - |  |  |  |  | `buttons?: Array<Button>;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | maskRect | 0 | field |  |  |  |  | - |  |  |  |  | `maskRect?: Rectangle;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | alignment | 0 | field |  |  |  |  | - |  |  |  |  | `alignment?: DialogAlignment;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | offset | 0 | field |  |  |  |  | - |  |  |  |  | `offset?: Offset;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | showInSubWindow | 0 | field |  |  |  |  | - |  |  |  |  | `showInSubWindow?: boolean;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | isModal | 0 | field |  |  |  |  | - |  |  |  |  | `isModal?: boolean;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | backgroundColor | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundColor?: ResourceColor;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | backgroundBlurStyle | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | backgroundBlurStyleOptions | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyleOptions?: BackgroundBlurStyleOptions;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | backgroundEffect | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundEffect?: BackgroundEffectOptions;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | shadow | 0 | field |  |  |  |  | - |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
+| ohos.promptAction | promptAction.ShowDialogOptions | enableHoverMode | 0 | field |  |  |  |  | - |  |  |  |  | `enableHoverMode?: boolean;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | hoverModeArea | 0 | field |  |  |  |  | - |  |  |  |  | `hoverModeArea?: HoverModeAreaType;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | onDidAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidAppear?: Callback<void>;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | onDidDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidDisappear?: Callback<void>;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | onWillAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillAppear?: Callback<void>;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | onWillDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillDisappear?: Callback<void>;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | levelMode | 0 | field |  |  |  |  | - |  |  |  |  | `levelMode?: LevelMode;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | levelUniqueId | 0 | field |  |  |  |  | - |  |  |  |  | `levelUniqueId?: number;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | immersiveMode | 0 | field |  |  |  |  | - |  |  |  |  | `immersiveMode?: ImmersiveMode;` |
+| ohos.promptAction | promptAction.ShowDialogOptions | levelOrder | 0 | field |  |  |  |  | - |  |  |  |  | `levelOrder?: LevelOrder;` |
+| ohos.promptAction | CommonController | CommonController | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class CommonController {` |
+| ohos.promptAction | promptAction.CommonController | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor()` |
+| ohos.promptAction | promptAction.CommonController | close | 0 | method |  |  |  |  | - |  |  |  |  | `public close(): void` |
+| ohos.promptAction | DialogController | DialogController | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class DialogController extends CommonController {` |
+| ohos.promptAction | promptAction.DialogController | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| ohos.promptAction | BaseDialogOptions | BaseDialogOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface BaseDialogOptions {` |
+| ohos.promptAction | promptAction.BaseDialogOptions | maskRect | 0 | field |  |  |  |  | - |  |  |  |  | `maskRect?: Rectangle;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | alignment | 0 | field |  |  |  |  | - |  |  |  |  | `alignment?: DialogAlignment;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | offset | 0 | field |  |  |  |  | - |  |  |  |  | `offset?: Offset;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | showInSubWindow | 0 | field |  |  |  |  | - |  |  |  |  | `showInSubWindow?: boolean;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | isModal | 0 | field |  |  |  |  | - |  |  |  |  | `isModal?: boolean;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | autoCancel | 0 | field |  |  |  |  | - |  |  |  |  | `autoCancel?: boolean;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | transition | 0 | field |  |  |  |  | - |  |  |  |  | `transition?: TransitionEffect;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | dialogTransition | 0 | field |  |  |  |  | - |  |  |  |  | `dialogTransition?: TransitionEffect;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | maskTransition | 0 | field |  |  |  |  | - |  |  |  |  | `maskTransition?: TransitionEffect;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | maskColor | 0 | field |  |  |  |  | - |  |  |  |  | `maskColor?: ResourceColor;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | onWillDismiss | 0 | field |  |  |  |  | - |  |  |  |  | `onWillDismiss?: Callback<DismissDialogAction>;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | onDidAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidAppear?: Callback<void>;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | onDidDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidDisappear?: Callback<void>;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | onWillAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillAppear?: Callback<void>;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | onWillDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillDisappear?: Callback<void>;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | keyboardAvoidMode | 0 | field |  |  |  |  | - |  |  |  |  | `keyboardAvoidMode?: KeyboardAvoidMode;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | enableHoverMode | 0 | field |  |  |  |  | - |  |  |  |  | `enableHoverMode?: boolean;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | hoverModeArea | 0 | field |  |  |  |  | - |  |  |  |  | `hoverModeArea?: HoverModeAreaType;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | backgroundBlurStyleOptions | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyleOptions?: BackgroundBlurStyleOptions;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | backgroundEffect | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundEffect?: BackgroundEffectOptions;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | keyboardAvoidDistance | 0 | field |  |  |  |  | - |  |  |  |  | `keyboardAvoidDistance?: LengthMetrics;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | levelMode | 0 | field |  |  |  |  | - |  |  |  |  | `levelMode?: LevelMode;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | levelUniqueId | 0 | field |  |  |  |  | - |  |  |  |  | `levelUniqueId?: number;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | immersiveMode | 0 | field |  |  |  |  | - |  |  |  |  | `immersiveMode?: ImmersiveMode;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | levelOrder | 0 | field |  |  |  |  | - |  |  |  |  | `levelOrder?: LevelOrder;` |
+| ohos.promptAction | promptAction.BaseDialogOptions | focusable | 0 | field |  |  |  |  | - |  |  |  |  | `focusable?: boolean;` |
+| ohos.promptAction | CustomDialogOptions | CustomDialogOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface CustomDialogOptions extends BaseDialogOptions {` |
+| ohos.promptAction | promptAction.CustomDialogOptions | builder | 0 | field |  |  |  |  | - |  |  |  |  | `builder: CustomBuilder;` |
+| ohos.promptAction | promptAction.CustomDialogOptions | backgroundColor | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundColor?: ResourceColor;` |
+| ohos.promptAction | promptAction.CustomDialogOptions | cornerRadius | 0 | field |  |  |  |  | - |  |  |  |  | `cornerRadius?: (Dimension | BorderRadiuses);` |
+| ohos.promptAction | promptAction.CustomDialogOptions | width | 0 | field |  |  |  |  | - |  |  |  |  | `width?: Dimension;` |
+| ohos.promptAction | promptAction.CustomDialogOptions | height | 0 | field |  |  |  |  | - |  |  |  |  | `height?: Dimension;` |
+| ohos.promptAction | promptAction.CustomDialogOptions | borderWidth | 0 | field |  |  |  |  | - |  |  |  |  | `borderWidth?: (Dimension | EdgeWidths);` |
+| ohos.promptAction | promptAction.CustomDialogOptions | borderColor | 0 | field |  |  |  |  | - |  |  |  |  | `borderColor?: (ResourceColor | EdgeColors);` |
+| ohos.promptAction | promptAction.CustomDialogOptions | borderStyle | 0 | field |  |  |  |  | - |  |  |  |  | `borderStyle?: (BorderStyle | EdgeStyles);` |
+| ohos.promptAction | promptAction.CustomDialogOptions | shadow | 0 | field |  |  |  |  | - |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
+| ohos.promptAction | promptAction.CustomDialogOptions | backgroundBlurStyle | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
+| ohos.promptAction | promptAction | DialogOptionsCornerRadius | 0 | field |  |  |  |  | - |  |  |  |  | `export type DialogOptionsCornerRadius = (Dimension | BorderRadiuses);` |
+| ohos.promptAction | promptAction | DialogOptionsBorderWidth | 0 | field |  |  |  |  | - |  |  |  |  | `export type DialogOptionsBorderWidth = (Dimension | EdgeWidths);` |
+| ohos.promptAction | promptAction | DialogOptionsBorderColor | 0 | field |  |  |  |  | - |  |  |  |  | `export type DialogOptionsBorderColor = (ResourceColor | EdgeColors);` |
+| ohos.promptAction | promptAction | DialogOptionsBorderStyle | 0 | field |  |  |  |  | - |  |  |  |  | `export type DialogOptionsBorderStyle = (BorderStyle | EdgeStyles);` |
+| ohos.promptAction | promptAction | DialogOptionsShadow | 0 | field |  |  |  |  | - |  |  |  |  | `export type DialogOptionsShadow = (ShadowOptions | ShadowStyle);` |
+| ohos.promptAction | DialogOptions | DialogOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface DialogOptions extends BaseDialogOptions {` |
+| ohos.promptAction | promptAction.DialogOptions | backgroundColor | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundColor?: ResourceColor;` |
+| ohos.promptAction | promptAction.DialogOptions | cornerRadius | 0 | field |  |  |  |  | - |  |  |  |  | `cornerRadius?: DialogOptionsCornerRadius;` |
+| ohos.promptAction | promptAction.DialogOptions | width | 0 | field |  |  |  |  | - |  |  |  |  | `width?: Dimension;` |
+| ohos.promptAction | promptAction.DialogOptions | height | 0 | field |  |  |  |  | - |  |  |  |  | `height?: Dimension;` |
+| ohos.promptAction | promptAction.DialogOptions | borderWidth | 0 | field |  |  |  |  | - |  |  |  |  | `borderWidth?: DialogOptionsBorderWidth;` |
+| ohos.promptAction | promptAction.DialogOptions | borderColor | 0 | field |  |  |  |  | - |  |  |  |  | `borderColor?: DialogOptionsBorderColor;` |
+| ohos.promptAction | promptAction.DialogOptions | borderStyle | 0 | field |  |  |  |  | - |  |  |  |  | `borderStyle?: DialogOptionsBorderStyle;` |
+| ohos.promptAction | promptAction.DialogOptions | shadow | 0 | field |  |  |  |  | - |  |  |  |  | `shadow?: DialogOptionsShadow;` |
+| ohos.promptAction | promptAction.DialogOptions | backgroundBlurStyle | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
+| ohos.promptAction | ActionMenuSuccessResponse | ActionMenuSuccessResponse | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ActionMenuSuccessResponse {` |
+| ohos.promptAction | promptAction.ActionMenuSuccessResponse | index | 0 | field |  |  |  |  | - |  |  |  |  | `index: number;` |
+| ohos.promptAction | ActionMenuOptions | ActionMenuOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ActionMenuOptions {` |
+| ohos.promptAction | promptAction.ActionMenuOptions | title | 0 | field |  |  |  |  | - |  |  |  |  | `title?: (string | Resource);` |
+| ohos.promptAction | promptAction.ActionMenuOptions | buttons | 0 | field |  |  |  |  | - |  |  |  |  | `buttons: (PromptActionSingleButton | PromptActionDoubleButtons | PromptActionTripleButtons | PromptActionQuadrupleButtons | PromptActionQuintupleButtons | PromptActionSextupleButtons);` |
+| ohos.promptAction | promptAction.ActionMenuOptions | showInSubWindow | 0 | field |  |  |  |  | - |  |  |  |  | `showInSubWindow?: boolean;` |
+| ohos.promptAction | promptAction.ActionMenuOptions | isModal | 0 | field |  |  |  |  | - |  |  |  |  | `isModal?: boolean;` |
+| ohos.promptAction | promptAction.ActionMenuOptions | levelMode | 0 | field |  |  |  |  | - |  |  |  |  | `levelMode?: LevelMode;` |
+| ohos.promptAction | promptAction.ActionMenuOptions | levelUniqueId | 0 | field |  |  |  |  | - |  |  |  |  | `levelUniqueId?: number;` |
+| ohos.promptAction | promptAction.ActionMenuOptions | immersiveMode | 0 | field |  |  |  |  | - |  |  |  |  | `immersiveMode?: ImmersiveMode;` |
+| ohos.promptAction | promptAction | openToast | 0 | function |  |  |  |  | - |  |  |  |  | `export function openToast(options: ShowToastOptions): Promise<number>` |
+| ohos.promptAction | promptAction | closeToast | 0 | function |  |  |  |  | - |  |  |  |  | `export function closeToast(toastId: number): void` |
+| ohos.router | router | router | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace router {` |
+| ohos.router | RouterMode | RouterMode | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum RouterMode {` |
+| ohos.router | router.RouterMode | Standard | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `Standard = 0` |
+| ohos.router | router.RouterMode | Single | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `Single = ((0) + (1))` |
+| ohos.router | RouterOptions | RouterOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `interface RouterOptions {` |
+| ohos.router | router.RouterOptions | url | 0 | field |  |  |  |  | - |  |  |  |  | `url: string;` |
+| ohos.router | router.RouterOptions | params | 0 | field |  |  |  |  | - |  |  |  |  | `params?: Object;` |
+| ohos.router | router.RouterOptions | recoverable | 0 | field |  |  |  |  | - |  |  |  |  | `recoverable?: boolean;` |
+| ohos.router | RouterState | RouterState | 0 | interface |  |  |  |  | - |  |  |  |  | `interface RouterState {` |
+| ohos.router | router.RouterState | index | 0 | field |  |  |  |  | - |  |  |  |  | `index: number;` |
+| ohos.router | router.RouterState | name | 0 | field |  |  |  |  | - |  |  |  |  | `name: string;` |
+| ohos.router | router.RouterState | path | 0 | field |  |  |  |  | - |  |  |  |  | `path: string;` |
+| ohos.router | router.RouterState | params | 0 | field |  |  |  |  | - |  |  |  |  | `params: Object;` |
+| ohos.router | EnableAlertOptions | EnableAlertOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `interface EnableAlertOptions {` |
+| ohos.router | router.EnableAlertOptions | message | 0 | field |  |  |  |  | - |  |  |  |  | `message: string;` |
+| ohos.router | NamedRouterOptions | NamedRouterOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `interface NamedRouterOptions {` |
+| ohos.router | router.NamedRouterOptions | name | 0 | field |  |  |  |  | - |  |  |  |  | `name: string;` |
+| ohos.router | router.NamedRouterOptions | params | 0 | field |  |  |  |  | - |  |  |  |  | `params?: Object;` |
+| ohos.router | router.NamedRouterOptions | recoverable | 0 | field |  |  |  |  | - |  |  |  |  | `recoverable?: boolean;` |
+| ohos.uiAppearance | uiAppearance | uiAppearance | 0 | namespace |  |  |  |  | - |  |  |  |  | `declare namespace uiAppearance {` |
+| ohos.uiAppearance | DarkMode | DarkMode | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum DarkMode {` |
+| ohos.uiAppearance | uiAppearance.DarkMode | ALWAYS_DARK | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ALWAYS_DARK = 0` |
+| ohos.uiAppearance | uiAppearance.DarkMode | ALWAYS_LIGHT | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `ALWAYS_LIGHT = 1` |
+| ohos.uiAppearance | uiAppearance | setDarkMode | 0 | function |  |  |  |  | - |  |  |  |  | `function setDarkMode(mode: DarkMode, callback: AsyncCallback<void>): void` |
+| ohos.uiAppearance | uiAppearance | setDarkMode | 1 | function |  |  |  |  | - |  |  |  |  | `function setDarkMode(mode: DarkMode): Promise<void>` |
+| ohos.uiAppearance | uiAppearance | getDarkMode | 0 | function |  |  |  |  | - |  |  |  |  | `function getDarkMode(): DarkMode` |
+| ohos.uiAppearance | uiAppearance | setFontScale | 0 | function |  |  |  |  | - |  |  |  |  | `function setFontScale(fontScale: number): Promise<void>` |
+| ohos.uiAppearance | uiAppearance | getFontScale | 0 | function |  |  |  |  | - |  |  |  |  | `function getFontScale(): number` |
+| ohos.uiAppearance | uiAppearance | setFontWeightScale | 0 | function |  |  |  |  | - |  |  |  |  | `function setFontWeightScale(fontWeightScale: number): Promise<void>` |
+| ohos.uiAppearance | uiAppearance | getFontWeightScale | 0 | function |  |  |  |  | - |  |  |  |  | `function getFontWeightScale(): number` |
+| system.mediaquery | MediaQueryEvent | MediaQueryEvent | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface MediaQueryEvent {` |
+| system.mediaquery | MediaQueryEvent | matches | 0 | field |  |  |  |  | - |  |  |  |  | `matches: boolean;` |
+| system.mediaquery | MediaQueryList | MediaQueryList | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface MediaQueryList {` |
+| system.mediaquery | MediaQueryList | media | 0 | field |  |  |  |  | - |  |  |  |  | `media?: string;` |
+| system.mediaquery | MediaQueryList | matches | 0 | field |  |  |  |  | - |  |  |  |  | `matches?: boolean;` |
+| system.mediaquery | MediaQueryList | onchange | 0 | field |  |  |  |  | - |  |  |  |  | `onchange?: ((matches: boolean)=> void);` |
+| system.mediaquery | MediaQueryList | addListener | 0 | method |  |  |  |  | - |  |  |  |  | `addListener(callback: ((event: MediaQueryEvent)=> void)): void` |
+| system.mediaquery | MediaQueryList | removeListener | 0 | method |  |  |  |  | - |  |  |  |  | `removeListener(callback: ((event: MediaQueryEvent)=> void)): void` |
+| system.mediaquery | MediaQuery | MediaQuery | 0 | class |  |  |  |  | - |  |  |  |  | `declare class MediaQuery {` |
+| system.mediaquery | MediaQuery | matchMedia | 0 | method |  |  |  |  | - |  |  |  |  | `public static matchMedia(condition: string): MediaQueryList` |
+| system.mediaquery | MediaQuery | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.component.actionSheet | SheetInfo | SheetInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface SheetInfo {` |
+| arkui.component.actionSheet | SheetInfo | title | 0 | field |  |  |  |  | - |  |  |  |  | `title: (string | Resource);` |
+| arkui.component.actionSheet | SheetInfo | icon | 0 | field |  |  |  |  | - |  |  |  |  | `icon?: (string | Resource);` |
+| arkui.component.actionSheet | SheetInfo | action | 0 | field |  |  |  |  | - |  |  |  |  | `action: VoidCallback;` |
 | arkui.component.actionSheet | DismissDialogAction | DismissDialogAction | 0 | interface |  | unnamed | DismissDialogAction | - |  |  |  |  |  | `export declare interface DismissDialogAction {` |
 | arkui.component.actionSheet | DismissDialogAction | dismiss | 0 | method |  | DismissDialogAction | dismiss | - |  |  |  |  |  | `dismiss(): void` |
 | arkui.component.actionSheet | DismissDialogAction | reason | 0 | field |  | DismissDialogAction | getReason | - |  |  |  |  |  | `reason: DismissReason;` |
 | arkui.component.actionSheet | DismissDialogAction | reason | 0 | field |  | DismissDialogAction | setReason | - |  |  |  |  |  | `reason: DismissReason;` |
-| arkui.component.actionSheet | ActionSheetButtonOptions | ActionSheetButtonOptions | 0 | interface | generated | unnamed | ActionSheetButtonOptions | - | generated |  |  |  |  | `export interface ActionSheetButtonOptions {` |
-| arkui.component.actionSheet | ActionSheetButtonOptions | enabled | 0 | field | generated | ActionSheetButtonOptions | enabled | - | generated |  |  |  |  | `enabled?: boolean;` |
-| arkui.component.actionSheet | ActionSheetButtonOptions | defaultFocus | 0 | field | generated | ActionSheetButtonOptions | defaultFocus | - | generated |  |  |  |  | `defaultFocus?: boolean;` |
-| arkui.component.actionSheet | ActionSheetButtonOptions | style | 0 | field | generated | ActionSheetButtonOptions | style | - | generated |  |  |  |  | `style?: DialogButtonStyle;` |
-| arkui.component.actionSheet | ActionSheetButtonOptions | value | 0 | field | generated | ActionSheetButtonOptions | value | - | generated |  |  |  |  | `value: (string | Resource);` |
-| arkui.component.actionSheet | ActionSheetButtonOptions | action | 0 | field | generated | ActionSheetButtonOptions | action | - | generated |  |  |  |  | `action: VoidCallback;` |
-| arkui.component.actionSheet | ActionSheetOffset | ActionSheetOffset | 0 | interface | generated | unnamed | ActionSheetOffset | - | generated |  |  |  |  | `export interface ActionSheetOffset {` |
-| arkui.component.actionSheet | ActionSheetOffset | dx | 0 | field | generated | ActionSheetOffset | dx | - | generated |  |  |  |  | `dx: (number | string | Resource);` |
-| arkui.component.actionSheet | ActionSheetOffset | dy | 0 | field | generated | ActionSheetOffset | dy | - | generated |  |  |  |  | `dy: (number | string | Resource);` |
-| arkui.component.actionSheet | ActionSheetOptions | ActionSheetOptions | 0 | interface | generated | unnamed | ActionSheetOptions | - | generated |  |  |  |  | `export interface ActionSheetOptions {` |
-| arkui.component.actionSheet | ActionSheetOptions | title | 0 | field | generated | ActionSheetOptions | title | - | generated |  |  |  |  | `title: (string | Resource);` |
-| arkui.component.actionSheet | ActionSheetOptions | subtitle | 0 | field | generated | ActionSheetOptions | subtitle | - | generated |  |  |  |  | `subtitle?: ResourceStr;` |
-| arkui.component.actionSheet | ActionSheetOptions | message | 0 | field | generated | ActionSheetOptions | message | - | generated |  |  |  |  | `message: (string | Resource);` |
-| arkui.component.actionSheet | ActionSheetOptions | confirm | 0 | field | generated | ActionSheetOptions | confirm | - | generated |  |  |  |  | `confirm?: ActionSheetButtonOptions;` |
-| arkui.component.actionSheet | ActionSheetOptions | cancel | 0 | field | generated | ActionSheetOptions | cancel | - | generated |  |  |  |  | `cancel?: VoidCallback;` |
-| arkui.component.actionSheet | ActionSheetOptions | sheets | 0 | field | generated | ActionSheetOptions | sheets | - | generated |  |  |  |  | `sheets: Array<SheetInfo>;` |
-| arkui.component.actionSheet | ActionSheetOptions | autoCancel | 0 | field | generated | ActionSheetOptions | autoCancel | - | generated |  |  |  |  | `autoCancel?: boolean;` |
-| arkui.component.actionSheet | ActionSheetOptions | alignment | 0 | field | generated | ActionSheetOptions | alignment | - | generated |  |  |  |  | `alignment?: DialogAlignment;` |
-| arkui.component.actionSheet | ActionSheetOptions | offset | 0 | field | generated | ActionSheetOptions | offset | - | generated |  |  |  |  | `offset?: ActionSheetOffset;` |
-| arkui.component.actionSheet | ActionSheetOptions | maskRect | 0 | field | generated | ActionSheetOptions | maskRect | - | generated |  |  |  |  | `maskRect?: Rectangle;` |
-| arkui.component.actionSheet | ActionSheetOptions | showInSubWindow | 0 | field | generated | ActionSheetOptions | showInSubWindow | - | generated |  |  |  |  | `showInSubWindow?: boolean;` |
-| arkui.component.actionSheet | ActionSheetOptions | isModal | 0 | field | generated | ActionSheetOptions | isModal | - | generated |  |  |  |  | `isModal?: boolean;` |
-| arkui.component.actionSheet | ActionSheetOptions | backgroundColor | 0 | field | generated | ActionSheetOptions | backgroundColor | - | generated |  |  |  |  | `backgroundColor?: ResourceColor;` |
-| arkui.component.actionSheet | ActionSheetOptions | backgroundBlurStyle | 0 | field | generated | ActionSheetOptions | backgroundBlurStyle | - | generated |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
-| arkui.component.actionSheet | ActionSheetOptions | backgroundBlurStyleOptions | 0 | field | generated | ActionSheetOptions | backgroundBlurStyleOptions | - | generated |  |  |  |  | `backgroundBlurStyleOptions?: BackgroundBlurStyleOptions;` |
-| arkui.component.actionSheet | ActionSheetOptions | backgroundEffect | 0 | field | generated | ActionSheetOptions | backgroundEffect | - | generated |  |  |  |  | `backgroundEffect?: BackgroundEffectOptions;` |
-| arkui.component.actionSheet | ActionSheetOptions | onWillDismiss | 0 | field | generated | ActionSheetOptions | onWillDismiss | - | generated |  |  |  |  | `onWillDismiss?: Callback<DismissDialogAction>;` |
-| arkui.component.actionSheet | ActionSheetOptions | transition | 0 | field | generated | ActionSheetOptions | transition | - | generated |  |  |  |  | `transition?: TransitionEffect;` |
-| arkui.component.actionSheet | ActionSheetOptions | cornerRadius | 0 | field | generated | ActionSheetOptions | cornerRadius | - | generated |  |  |  |  | `cornerRadius?: (Dimension | BorderRadiuses | LocalizedBorderRadiuses);` |
-| arkui.component.actionSheet | ActionSheetOptions | width | 0 | field | generated | ActionSheetOptions | width | - | generated |  |  |  |  | `width?: Dimension;` |
-| arkui.component.actionSheet | ActionSheetOptions | height | 0 | field | generated | ActionSheetOptions | height | - | generated |  |  |  |  | `height?: Dimension;` |
-| arkui.component.actionSheet | ActionSheetOptions | borderWidth | 0 | field | generated | ActionSheetOptions | borderWidth | - | generated |  |  |  |  | `borderWidth?: (Dimension | EdgeWidths | LocalizedEdgeWidths);` |
-| arkui.component.actionSheet | ActionSheetOptions | borderColor | 0 | field | generated | ActionSheetOptions | borderColor | - | generated |  |  |  |  | `borderColor?: (ResourceColor | EdgeColors | LocalizedEdgeColors);` |
-| arkui.component.actionSheet | ActionSheetOptions | borderStyle | 0 | field | generated | ActionSheetOptions | borderStyle | - | generated |  |  |  |  | `borderStyle?: (BorderStyle | EdgeStyles);` |
-| arkui.component.actionSheet | ActionSheetOptions | shadow | 0 | field | generated | ActionSheetOptions | shadow | - | generated |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
-| arkui.component.actionSheet | ActionSheetOptions | enableHoverMode | 0 | field | generated | ActionSheetOptions | enableHoverMode | - | generated |  |  |  |  | `enableHoverMode?: boolean;` |
-| arkui.component.actionSheet | ActionSheetOptions | hoverModeArea | 0 | field | generated | ActionSheetOptions | hoverModeArea | - | generated |  |  |  |  | `hoverModeArea?: HoverModeAreaType;` |
-| arkui.component.actionSheet | ActionSheetOptions | onDidAppear | 0 | field | generated | ActionSheetOptions | onDidAppear | - | generated |  |  |  |  | `onDidAppear?: Callback<void>;` |
-| arkui.component.actionSheet | ActionSheetOptions | onDidDisappear | 0 | field | generated | ActionSheetOptions | onDidDisappear | - | generated |  |  |  |  | `onDidDisappear?: Callback<void>;` |
-| arkui.component.actionSheet | ActionSheetOptions | onWillAppear | 0 | field | generated | ActionSheetOptions | onWillAppear | - | generated |  |  |  |  | `onWillAppear?: Callback<void>;` |
-| arkui.component.actionSheet | ActionSheetOptions | onWillDisappear | 0 | field | generated | ActionSheetOptions | onWillDisappear | - | generated |  |  |  |  | `onWillDisappear?: Callback<void>;` |
-| arkui.component.actionSheet | ActionSheetOptions | levelMode | 0 | field | generated | ActionSheetOptions | levelMode | - | generated |  |  |  |  | `levelMode?: LevelMode;` |
-| arkui.component.actionSheet | ActionSheetOptions | levelUniqueId | 0 | field | generated | ActionSheetOptions | levelUniqueId | - | generated |  |  |  |  | `levelUniqueId?: number;` |
-| arkui.component.actionSheet | ActionSheetOptions | immersiveMode | 0 | field | generated | ActionSheetOptions | immersiveMode | - | generated |  |  |  |  | `immersiveMode?: ImmersiveMode;` |
-| arkui.component.actionSheet | ActionSheetOptions | levelOrder | 0 | field | generated | ActionSheetOptions | levelOrder | - | generated |  |  |  |  | `levelOrder?: LevelOrder;` |
+| arkui.component.actionSheet | ActionSheetButtonOptions | ActionSheetButtonOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ActionSheetButtonOptions {` |
+| arkui.component.actionSheet | ActionSheetButtonOptions | enabled | 0 | field |  |  |  |  | - |  |  |  |  | `enabled?: boolean;` |
+| arkui.component.actionSheet | ActionSheetButtonOptions | defaultFocus | 0 | field |  |  |  |  | - |  |  |  |  | `defaultFocus?: boolean;` |
+| arkui.component.actionSheet | ActionSheetButtonOptions | style | 0 | field |  |  |  |  | - |  |  |  |  | `style?: DialogButtonStyle;` |
+| arkui.component.actionSheet | ActionSheetButtonOptions | value | 0 | field |  |  |  |  | - |  |  |  |  | `value: (string | Resource);` |
+| arkui.component.actionSheet | ActionSheetButtonOptions | action | 0 | field |  |  |  |  | - |  |  |  |  | `action: VoidCallback;` |
+| arkui.component.actionSheet | ActionSheetOffset | ActionSheetOffset | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ActionSheetOffset {` |
+| arkui.component.actionSheet | ActionSheetOffset | dx | 0 | field |  |  |  |  | - |  |  |  |  | `dx: (number | string | Resource);` |
+| arkui.component.actionSheet | ActionSheetOffset | dy | 0 | field |  |  |  |  | - |  |  |  |  | `dy: (number | string | Resource);` |
+| arkui.component.actionSheet | ActionSheetOptions | ActionSheetOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface ActionSheetOptions {` |
+| arkui.component.actionSheet | ActionSheetOptions | title | 0 | field |  |  |  |  | - |  |  |  |  | `title: (string | Resource);` |
+| arkui.component.actionSheet | ActionSheetOptions | subtitle | 0 | field |  |  |  |  | - |  |  |  |  | `subtitle?: ResourceStr;` |
+| arkui.component.actionSheet | ActionSheetOptions | message | 0 | field |  |  |  |  | - |  |  |  |  | `message: (string | Resource);` |
+| arkui.component.actionSheet | ActionSheetOptions | confirm | 0 | field |  |  |  |  | - |  |  |  |  | `confirm?: ActionSheetButtonOptions;` |
+| arkui.component.actionSheet | ActionSheetOptions | cancel | 0 | field |  |  |  |  | - |  |  |  |  | `cancel?: VoidCallback;` |
+| arkui.component.actionSheet | ActionSheetOptions | sheets | 0 | field |  |  |  |  | - |  |  |  |  | `sheets: Array<SheetInfo>;` |
+| arkui.component.actionSheet | ActionSheetOptions | autoCancel | 0 | field |  |  |  |  | - |  |  |  |  | `autoCancel?: boolean;` |
+| arkui.component.actionSheet | ActionSheetOptions | alignment | 0 | field |  |  |  |  | - |  |  |  |  | `alignment?: DialogAlignment;` |
+| arkui.component.actionSheet | ActionSheetOptions | offset | 0 | field |  |  |  |  | - |  |  |  |  | `offset?: ActionSheetOffset;` |
+| arkui.component.actionSheet | ActionSheetOptions | maskRect | 0 | field |  |  |  |  | - |  |  |  |  | `maskRect?: Rectangle;` |
+| arkui.component.actionSheet | ActionSheetOptions | showInSubWindow | 0 | field |  |  |  |  | - |  |  |  |  | `showInSubWindow?: boolean;` |
+| arkui.component.actionSheet | ActionSheetOptions | isModal | 0 | field |  |  |  |  | - |  |  |  |  | `isModal?: boolean;` |
+| arkui.component.actionSheet | ActionSheetOptions | backgroundColor | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundColor?: ResourceColor;` |
+| arkui.component.actionSheet | ActionSheetOptions | backgroundBlurStyle | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
+| arkui.component.actionSheet | ActionSheetOptions | backgroundBlurStyleOptions | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyleOptions?: BackgroundBlurStyleOptions;` |
+| arkui.component.actionSheet | ActionSheetOptions | backgroundEffect | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundEffect?: BackgroundEffectOptions;` |
+| arkui.component.actionSheet | ActionSheetOptions | onWillDismiss | 0 | field |  |  |  |  | - |  |  |  |  | `onWillDismiss?: Callback<DismissDialogAction>;` |
+| arkui.component.actionSheet | ActionSheetOptions | transition | 0 | field |  |  |  |  | - |  |  |  |  | `transition?: TransitionEffect;` |
+| arkui.component.actionSheet | ActionSheetOptions | cornerRadius | 0 | field |  |  |  |  | - |  |  |  |  | `cornerRadius?: (Dimension | BorderRadiuses | LocalizedBorderRadiuses);` |
+| arkui.component.actionSheet | ActionSheetOptions | width | 0 | field |  |  |  |  | - |  |  |  |  | `width?: Dimension;` |
+| arkui.component.actionSheet | ActionSheetOptions | height | 0 | field |  |  |  |  | - |  |  |  |  | `height?: Dimension;` |
+| arkui.component.actionSheet | ActionSheetOptions | borderWidth | 0 | field |  |  |  |  | - |  |  |  |  | `borderWidth?: (Dimension | EdgeWidths | LocalizedEdgeWidths);` |
+| arkui.component.actionSheet | ActionSheetOptions | borderColor | 0 | field |  |  |  |  | - |  |  |  |  | `borderColor?: (ResourceColor | EdgeColors | LocalizedEdgeColors);` |
+| arkui.component.actionSheet | ActionSheetOptions | borderStyle | 0 | field |  |  |  |  | - |  |  |  |  | `borderStyle?: (BorderStyle | EdgeStyles);` |
+| arkui.component.actionSheet | ActionSheetOptions | shadow | 0 | field |  |  |  |  | - |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
+| arkui.component.actionSheet | ActionSheetOptions | enableHoverMode | 0 | field |  |  |  |  | - |  |  |  |  | `enableHoverMode?: boolean;` |
+| arkui.component.actionSheet | ActionSheetOptions | hoverModeArea | 0 | field |  |  |  |  | - |  |  |  |  | `hoverModeArea?: HoverModeAreaType;` |
+| arkui.component.actionSheet | ActionSheetOptions | onDidAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidAppear?: Callback<void>;` |
+| arkui.component.actionSheet | ActionSheetOptions | onDidDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidDisappear?: Callback<void>;` |
+| arkui.component.actionSheet | ActionSheetOptions | onWillAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillAppear?: Callback<void>;` |
+| arkui.component.actionSheet | ActionSheetOptions | onWillDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillDisappear?: Callback<void>;` |
+| arkui.component.actionSheet | ActionSheetOptions | levelMode | 0 | field |  |  |  |  | - |  |  |  |  | `levelMode?: LevelMode;` |
+| arkui.component.actionSheet | ActionSheetOptions | levelUniqueId | 0 | field |  |  |  |  | - |  |  |  |  | `levelUniqueId?: number;` |
+| arkui.component.actionSheet | ActionSheetOptions | immersiveMode | 0 | field |  |  |  |  | - |  |  |  |  | `immersiveMode?: ImmersiveMode;` |
+| arkui.component.actionSheet | ActionSheetOptions | levelOrder | 0 | field |  |  |  |  | - |  |  |  |  | `levelOrder?: LevelOrder;` |
 | arkui.component.alertDialog | DialogAlignment | DialogAlignment | 0 | enum_class | generated | unnamed | DialogAlignment | - | generated |  |  |  |  | `declare enum DialogAlignment {` |
 | arkui.component.alertDialog | DialogAlignment | Top | 0 | enum_instance | generated | DialogAlignment | TOP | - | generated |  |  |  |  | `Top = 0` |
 | arkui.component.alertDialog | DialogAlignment | Center | 0 | enum_instance | generated | DialogAlignment | CENTER | - | generated |  |  |  |  | `Center = ((0) + (1))` |
@@ -799,18 +1874,18 @@
 | arkui.component.alertDialog | DialogButtonDirection | AUTO | 0 | enum_instance | generated | DialogButtonDirection | AUTO | - | generated |  |  |  |  | `AUTO = 0` |
 | arkui.component.alertDialog | DialogButtonDirection | HORIZONTAL | 0 | enum_instance | generated | DialogButtonDirection | HORIZONTAL | - | generated |  |  |  |  | `HORIZONTAL = 1` |
 | arkui.component.alertDialog | DialogButtonDirection | VERTICAL | 0 | enum_instance | generated | DialogButtonDirection | VERTICAL | - | generated |  |  |  |  | `VERTICAL = 2` |
-| arkui.component.alertDialog | AlertDialogButtonBaseOptions | AlertDialogButtonBaseOptions | 0 | interface | generated | unnamed | AlertDialogButtonBaseOptions | - | generated |  |  |  |  | `export declare interface AlertDialogButtonBaseOptions {` |
-| arkui.component.alertDialog | AlertDialogButtonBaseOptions | enabled | 0 | field | generated | AlertDialogButtonBaseOptions | enabled | - | generated |  |  |  |  | `enabled?: boolean;` |
-| arkui.component.alertDialog | AlertDialogButtonBaseOptions | defaultFocus | 0 | field | generated | AlertDialogButtonBaseOptions | defaultFocus | - | generated |  |  |  |  | `defaultFocus?: boolean;` |
-| arkui.component.alertDialog | AlertDialogButtonBaseOptions | style | 0 | field | generated | AlertDialogButtonBaseOptions | style | - | generated |  |  |  |  | `style?: DialogButtonStyle;` |
-| arkui.component.alertDialog | AlertDialogButtonBaseOptions | value | 0 | field | generated | AlertDialogButtonBaseOptions | value | - | generated |  |  |  |  | `value: ResourceStr;` |
-| arkui.component.alertDialog | AlertDialogButtonBaseOptions | fontColor | 0 | field | generated | AlertDialogButtonBaseOptions | fontColor | - | generated |  |  |  |  | `fontColor?: ResourceColor;` |
-| arkui.component.alertDialog | AlertDialogButtonBaseOptions | backgroundColor | 0 | field | generated | AlertDialogButtonBaseOptions | backgroundColor | - | generated |  |  |  |  | `backgroundColor?: ResourceColor;` |
-| arkui.component.alertDialog | AlertDialogButtonBaseOptions | action | 0 | field | generated | AlertDialogButtonBaseOptions | action | - | generated |  |  |  |  | `action: VoidCallback;` |
-| arkui.component.alertDialog | AlertDialogButtonOptions | AlertDialogButtonOptions | 0 | interface | generated | unnamed | AlertDialogButtonOptions | - | generated |  |  |  |  | `export declare interface AlertDialogButtonOptions extends AlertDialogButtonBaseOptions {` |
-| arkui.component.alertDialog | AlertDialogButtonOptions | primary | 0 | field | generated | AlertDialogButtonOptions | primary | - | generated |  |  |  |  | `primary?: boolean;` |
-| arkui.component.alertDialog | AlertDialogTextStyleOptions | AlertDialogTextStyleOptions | 0 | interface | generated | unnamed | AlertDialogTextStyleOptions | - | generated |  |  |  |  | `export declare interface AlertDialogTextStyleOptions {` |
-| arkui.component.alertDialog | AlertDialogTextStyleOptions | wordBreak | 0 | field | generated | AlertDialogTextStyleOptions | wordBreak | - | generated |  |  |  |  | `wordBreak?: WordBreak;` |
+| arkui.component.alertDialog | AlertDialogButtonBaseOptions | AlertDialogButtonBaseOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface AlertDialogButtonBaseOptions {` |
+| arkui.component.alertDialog | AlertDialogButtonBaseOptions | enabled | 0 | field |  |  |  |  | - |  |  |  |  | `enabled?: boolean;` |
+| arkui.component.alertDialog | AlertDialogButtonBaseOptions | defaultFocus | 0 | field |  |  |  |  | - |  |  |  |  | `defaultFocus?: boolean;` |
+| arkui.component.alertDialog | AlertDialogButtonBaseOptions | style | 0 | field |  |  |  |  | - |  |  |  |  | `style?: DialogButtonStyle;` |
+| arkui.component.alertDialog | AlertDialogButtonBaseOptions | value | 0 | field |  |  |  |  | - |  |  |  |  | `value: ResourceStr;` |
+| arkui.component.alertDialog | AlertDialogButtonBaseOptions | fontColor | 0 | field |  |  |  |  | - |  |  |  |  | `fontColor?: ResourceColor;` |
+| arkui.component.alertDialog | AlertDialogButtonBaseOptions | backgroundColor | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundColor?: ResourceColor;` |
+| arkui.component.alertDialog | AlertDialogButtonBaseOptions | action | 0 | field |  |  |  |  | - |  |  |  |  | `action: VoidCallback;` |
+| arkui.component.alertDialog | AlertDialogButtonOptions | AlertDialogButtonOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface AlertDialogButtonOptions extends AlertDialogButtonBaseOptions {` |
+| arkui.component.alertDialog | AlertDialogButtonOptions | primary | 0 | field |  |  |  |  | - |  |  |  |  | `primary?: boolean;` |
+| arkui.component.alertDialog | AlertDialogTextStyleOptions | AlertDialogTextStyleOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface AlertDialogTextStyleOptions {` |
+| arkui.component.alertDialog | AlertDialogTextStyleOptions | wordBreak | 0 | field |  |  |  |  | - |  |  |  |  | `wordBreak?: WordBreak;` |
 | arkui.component.alertDialog | AlertDialogParam | AlertDialogParam | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface AlertDialogParam {` |
 | arkui.component.alertDialog | AlertDialogParam | title | 0 | field |  |  |  |  | - |  |  |  |  | `title?: ResourceStr;` |
 | arkui.component.alertDialog | AlertDialogParam | subtitle | 0 | field |  |  |  |  | - |  |  |  |  | `subtitle?: ResourceStr;` |
@@ -847,14 +1922,14 @@
 | arkui.component.alertDialog | AlertDialogParam | levelUniqueId | 0 | field |  |  |  |  | - |  |  |  |  | `levelUniqueId?: number;` |
 | arkui.component.alertDialog | AlertDialogParam | immersiveMode | 0 | field |  |  |  |  | - |  |  |  |  | `immersiveMode?: ImmersiveMode;` |
 | arkui.component.alertDialog | AlertDialogParam | levelOrder | 0 | field |  |  |  |  | - |  |  |  |  | `levelOrder?: LevelOrder;` |
-| arkui.component.alertDialog | AlertDialogParamWithConfirm | AlertDialogParamWithConfirm | 0 | interface | generated | unnamed | AlertDialogParamWithConfirm | - | generated |  |  |  |  | `export declare interface AlertDialogParamWithConfirm extends AlertDialogParam {` |
-| arkui.component.alertDialog | AlertDialogParamWithConfirm | confirm | 0 | field | generated | AlertDialogParamWithConfirm | confirm | - | generated |  |  |  |  | `confirm?: AlertDialogButtonBaseOptions;` |
-| arkui.component.alertDialog | AlertDialogParamWithButtons | AlertDialogParamWithButtons | 0 | interface | generated | unnamed | AlertDialogParamWithButtons | - | generated |  |  |  |  | `export declare interface AlertDialogParamWithButtons extends AlertDialogParam {` |
-| arkui.component.alertDialog | AlertDialogParamWithButtons | primaryButton | 0 | field | generated | AlertDialogParamWithButtons | primaryButton | - | generated |  |  |  |  | `primaryButton: AlertDialogButtonBaseOptions;` |
-| arkui.component.alertDialog | AlertDialogParamWithButtons | secondaryButton | 0 | field | generated | AlertDialogParamWithButtons | secondaryButton | - | generated |  |  |  |  | `secondaryButton: AlertDialogButtonBaseOptions;` |
-| arkui.component.alertDialog | AlertDialogParamWithOptions | AlertDialogParamWithOptions | 0 | interface | generated | unnamed | AlertDialogParamWithOptions | - | generated |  |  |  |  | `export declare interface AlertDialogParamWithOptions extends AlertDialogParam {` |
-| arkui.component.alertDialog | AlertDialogParamWithOptions | buttons | 0 | field | generated | AlertDialogParamWithOptions | buttons | - | generated |  |  |  |  | `buttons: Array<AlertDialogButtonOptions>;` |
-| arkui.component.alertDialog | AlertDialogParamWithOptions | buttonDirection | 0 | field | generated | AlertDialogParamWithOptions | buttonDirection | - | generated |  |  |  |  | `buttonDirection?: DialogButtonDirection;` |
+| arkui.component.alertDialog | AlertDialogParamWithConfirm | AlertDialogParamWithConfirm | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface AlertDialogParamWithConfirm extends AlertDialogParam {` |
+| arkui.component.alertDialog | AlertDialogParamWithConfirm | confirm | 0 | field |  |  |  |  | - |  |  |  |  | `confirm?: AlertDialogButtonBaseOptions;` |
+| arkui.component.alertDialog | AlertDialogParamWithButtons | AlertDialogParamWithButtons | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface AlertDialogParamWithButtons extends AlertDialogParam {` |
+| arkui.component.alertDialog | AlertDialogParamWithButtons | primaryButton | 0 | field |  |  |  |  | - |  |  |  |  | `primaryButton: AlertDialogButtonBaseOptions;` |
+| arkui.component.alertDialog | AlertDialogParamWithButtons | secondaryButton | 0 | field |  |  |  |  | - |  |  |  |  | `secondaryButton: AlertDialogButtonBaseOptions;` |
+| arkui.component.alertDialog | AlertDialogParamWithOptions | AlertDialogParamWithOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface AlertDialogParamWithOptions extends AlertDialogParam {` |
+| arkui.component.alertDialog | AlertDialogParamWithOptions | buttons | 0 | field |  |  |  |  | - |  |  |  |  | `buttons: Array<AlertDialogButtonOptions>;` |
+| arkui.component.alertDialog | AlertDialogParamWithOptions | buttonDirection | 0 | field |  |  |  |  | - |  |  |  |  | `buttonDirection?: DialogButtonDirection;` |
 | arkui.component.alphabetIndexer | IndexerAlign | IndexerAlign | 0 | enum_class | generated | unnamed | IndexerAlign | - | generated |  |  |  |  | `declare enum IndexerAlign {` |
 | arkui.component.alphabetIndexer | IndexerAlign | Left | 0 | enum_instance | generated | IndexerAlign | LEFT | - | generated |  |  |  |  | `Left = 0` |
 | arkui.component.alphabetIndexer | IndexerAlign | Right | 0 | enum_instance | generated | IndexerAlign | RIGHT | - | generated |  |  |  |  | `Right = ((0) + (1))` |
@@ -961,7 +2036,7 @@
 | arkui.component.blank | BlankAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<BlankAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.blank | unnamed | Blank | 0 | function | done | Blank | setBlankOptions | - | done | Skroba Gleb | pass |  |  | `@memo() @ComponentBuilder() export declare function Blank(min?: (number | string), @memo() content_?: (()=> void)): BlankAttribute` |
 | arkui.component.builder | unnamed | CustomBuilder | 0 | field |  |  |  |  | - |  |  |  |  | `export type CustomBuilder = @Builder() (()=> void);` |
-| arkui.component.builder | unnamed | CustomBuilderT | 0 | field | generated | unnamed | CustomBuilderT | - | generated |  |  |  |  | `export type CustomBuilderT<T> = @Builder() ((t: T)=> void);` |
+| arkui.component.builder | unnamed | CustomBuilderT | 0 | field |  |  |  |  | - |  |  |  |  | `export type CustomBuilderT<T> = @Builder() ((t: T)=> void);` |
 | arkui.component.builder | unnamed | PageMapBuilder | 0 | field |  |  |  |  | - |  |  |  |  | `export type PageMapBuilder = @Builder() ((name: string, param: (Object | null | undefined))=> void);` |
 | arkui.component.builder | unnamed | wrapBuilder | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare function wrapBuilder<T>(builder: T): WrappedBuilder<T>` |
 | arkui.component.builder | WrappedBuilder | WrappedBuilder | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class WrappedBuilder<T>  {` |
@@ -2138,34 +3213,34 @@
 | arkui.component.common | PopupBorderLinearGradient | PopupBorderLinearGradient | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface PopupBorderLinearGradient {` |
 | arkui.component.common | PopupBorderLinearGradient | direction | 0 | field |  |  |  |  | - |  |  |  |  | `direction?: GradientDirection;` |
 | arkui.component.common | PopupBorderLinearGradient | colors | 0 | field |  |  |  |  | - |  |  |  |  | `colors: Array<[ResourceColor, number]>;` |
-| arkui.component.common | PopupCommonOptions | PopupCommonOptions | 0 | interface | generated | unnamed | PopupCommonOptions | - | generated |  |  |  |  | `export declare interface PopupCommonOptions {` |
-| arkui.component.common | PopupCommonOptions | placement | 0 | field | generated | PopupCommonOptions | placement | - | generated |  |  |  |  | `placement?: Placement;` |
-| arkui.component.common | PopupCommonOptions | popupColor | 0 | field | generated | PopupCommonOptions | popupColor | - | generated |  |  |  |  | `popupColor?: ResourceColor;` |
-| arkui.component.common | PopupCommonOptions | enableArrow | 0 | field | generated | PopupCommonOptions | enableArrow | - | generated |  |  |  |  | `enableArrow?: boolean;` |
-| arkui.component.common | PopupCommonOptions | autoCancel | 0 | field | generated | PopupCommonOptions | autoCancel | - | generated |  |  |  |  | `autoCancel?: boolean;` |
-| arkui.component.common | PopupCommonOptions | onStateChange | 0 | field | generated | PopupCommonOptions | onStateChange | - | generated |  |  |  |  | `onStateChange?: PopupStateChangeCallback;` |
-| arkui.component.common | PopupCommonOptions | arrowOffset | 0 | field | generated | PopupCommonOptions | arrowOffset | - | generated |  |  |  |  | `arrowOffset?: Length;` |
-| arkui.component.common | PopupCommonOptions | showInSubWindow | 0 | field | generated | PopupCommonOptions | showInSubWindow | - | generated |  |  |  |  | `showInSubWindow?: boolean;` |
-| arkui.component.common | PopupCommonOptions | mask | 0 | field | generated | PopupCommonOptions | mask | - | generated |  |  |  |  | `mask?: (boolean | PopupMaskType);` |
-| arkui.component.common | PopupCommonOptions | targetSpace | 0 | field | generated | PopupCommonOptions | targetSpace | - | generated |  |  |  |  | `targetSpace?: Length;` |
-| arkui.component.common | PopupCommonOptions | offset | 0 | field | generated | PopupCommonOptions | offset | - | generated |  |  |  |  | `offset?: Position;` |
-| arkui.component.common | PopupCommonOptions | width | 0 | field | generated | PopupCommonOptions | width | - | generated |  |  |  |  | `width?: Dimension;` |
-| arkui.component.common | PopupCommonOptions | arrowPointPosition | 0 | field | generated | PopupCommonOptions | arrowPointPosition | - | generated |  |  |  |  | `arrowPointPosition?: ArrowPointPosition;` |
-| arkui.component.common | PopupCommonOptions | arrowWidth | 0 | field | generated | PopupCommonOptions | arrowWidth | - | generated |  |  |  |  | `arrowWidth?: Dimension;` |
-| arkui.component.common | PopupCommonOptions | arrowHeight | 0 | field | generated | PopupCommonOptions | arrowHeight | - | generated |  |  |  |  | `arrowHeight?: Dimension;` |
-| arkui.component.common | PopupCommonOptions | radius | 0 | field | generated | PopupCommonOptions | radius | - | generated |  |  |  |  | `radius?: Dimension;` |
-| arkui.component.common | PopupCommonOptions | shadow | 0 | field | generated | PopupCommonOptions | shadow | - | generated |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
-| arkui.component.common | PopupCommonOptions | backgroundBlurStyle | 0 | field | generated | PopupCommonOptions | backgroundBlurStyle | - | generated |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
-| arkui.component.common | PopupCommonOptions | focusable | 0 | field | generated | PopupCommonOptions | focusable | - | generated |  |  |  |  | `focusable?: boolean;` |
-| arkui.component.common | PopupCommonOptions | transition | 0 | field | generated | PopupCommonOptions | transition | - | generated |  |  |  |  | `transition?: TransitionEffect;` |
-| arkui.component.common | PopupCommonOptions | onWillDismiss | 0 | field | generated | PopupCommonOptions | onWillDismiss | - | generated |  |  |  |  | `onWillDismiss?: (boolean | Callback<DismissPopupAction>);` |
-| arkui.component.common | PopupCommonOptions | enableHoverMode | 0 | field | generated | PopupCommonOptions | enableHoverMode | - | generated |  |  |  |  | `enableHoverMode?: boolean;` |
-| arkui.component.common | PopupCommonOptions | followTransformOfTarget | 0 | field | generated | PopupCommonOptions | followTransformOfTarget | - | generated |  |  |  |  | `followTransformOfTarget?: boolean;` |
-| arkui.component.common | PopupCommonOptions | colorMode | 0 | field | generated | PopupCommonOptions | colorMode | - | generated |  |  |  |  | `colorMode?: AnchoredColorMode;` |
-| arkui.component.common | PopupCommonOptions | onDidDisappear | 0 | field | generated | PopupCommonOptions | onDidDisappear | - | generated |  |  |  |  | `onDidDisappear?: Callback<void>;` |
-| arkui.component.common | PopupCommonOptions | onWillDisappear | 0 | field | generated | PopupCommonOptions | onWillDisappear | - | generated |  |  |  |  | `onWillDisappear?: Callback<void>;` |
-| arkui.component.common | PopupCommonOptions | onWillAppear | 0 | field | generated | PopupCommonOptions | onWillAppear | - | generated |  |  |  |  | `onWillAppear?: Callback<void>;` |
-| arkui.component.common | PopupCommonOptions | onDidAppear | 0 | field | generated | PopupCommonOptions | onDidAppear | - | generated |  |  |  |  | `onDidAppear?: Callback<void>;` |
+| arkui.component.common | PopupCommonOptions | PopupCommonOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface PopupCommonOptions {` |
+| arkui.component.common | PopupCommonOptions | placement | 0 | field |  |  |  |  | - |  |  |  |  | `placement?: Placement;` |
+| arkui.component.common | PopupCommonOptions | popupColor | 0 | field |  |  |  |  | - |  |  |  |  | `popupColor?: ResourceColor;` |
+| arkui.component.common | PopupCommonOptions | enableArrow | 0 | field |  |  |  |  | - |  |  |  |  | `enableArrow?: boolean;` |
+| arkui.component.common | PopupCommonOptions | autoCancel | 0 | field |  |  |  |  | - |  |  |  |  | `autoCancel?: boolean;` |
+| arkui.component.common | PopupCommonOptions | onStateChange | 0 | field |  |  |  |  | - |  |  |  |  | `onStateChange?: PopupStateChangeCallback;` |
+| arkui.component.common | PopupCommonOptions | arrowOffset | 0 | field |  |  |  |  | - |  |  |  |  | `arrowOffset?: Length;` |
+| arkui.component.common | PopupCommonOptions | showInSubWindow | 0 | field |  |  |  |  | - |  |  |  |  | `showInSubWindow?: boolean;` |
+| arkui.component.common | PopupCommonOptions | mask | 0 | field |  |  |  |  | - |  |  |  |  | `mask?: (boolean | PopupMaskType);` |
+| arkui.component.common | PopupCommonOptions | targetSpace | 0 | field |  |  |  |  | - |  |  |  |  | `targetSpace?: Length;` |
+| arkui.component.common | PopupCommonOptions | offset | 0 | field |  |  |  |  | - |  |  |  |  | `offset?: Position;` |
+| arkui.component.common | PopupCommonOptions | width | 0 | field |  |  |  |  | - |  |  |  |  | `width?: Dimension;` |
+| arkui.component.common | PopupCommonOptions | arrowPointPosition | 0 | field |  |  |  |  | - |  |  |  |  | `arrowPointPosition?: ArrowPointPosition;` |
+| arkui.component.common | PopupCommonOptions | arrowWidth | 0 | field |  |  |  |  | - |  |  |  |  | `arrowWidth?: Dimension;` |
+| arkui.component.common | PopupCommonOptions | arrowHeight | 0 | field |  |  |  |  | - |  |  |  |  | `arrowHeight?: Dimension;` |
+| arkui.component.common | PopupCommonOptions | radius | 0 | field |  |  |  |  | - |  |  |  |  | `radius?: Dimension;` |
+| arkui.component.common | PopupCommonOptions | shadow | 0 | field |  |  |  |  | - |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
+| arkui.component.common | PopupCommonOptions | backgroundBlurStyle | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
+| arkui.component.common | PopupCommonOptions | focusable | 0 | field |  |  |  |  | - |  |  |  |  | `focusable?: boolean;` |
+| arkui.component.common | PopupCommonOptions | transition | 0 | field |  |  |  |  | - |  |  |  |  | `transition?: TransitionEffect;` |
+| arkui.component.common | PopupCommonOptions | onWillDismiss | 0 | field |  |  |  |  | - |  |  |  |  | `onWillDismiss?: (boolean | Callback<DismissPopupAction>);` |
+| arkui.component.common | PopupCommonOptions | enableHoverMode | 0 | field |  |  |  |  | - |  |  |  |  | `enableHoverMode?: boolean;` |
+| arkui.component.common | PopupCommonOptions | followTransformOfTarget | 0 | field |  |  |  |  | - |  |  |  |  | `followTransformOfTarget?: boolean;` |
+| arkui.component.common | PopupCommonOptions | colorMode | 0 | field |  |  |  |  | - |  |  |  |  | `colorMode?: AnchoredColorMode;` |
+| arkui.component.common | PopupCommonOptions | onDidDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidDisappear?: Callback<void>;` |
+| arkui.component.common | PopupCommonOptions | onWillDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillDisappear?: Callback<void>;` |
+| arkui.component.common | PopupCommonOptions | onWillAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillAppear?: Callback<void>;` |
+| arkui.component.common | PopupCommonOptions | onDidAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidAppear?: Callback<void>;` |
 | arkui.component.common | TipsOptions | TipsOptions | 0 | interface | generated | unnamed | TipsOptions | - | generated |  |  |  |  | `export declare interface TipsOptions {` |
 | arkui.component.common | TipsOptions | appearingTime | 0 | field | generated | TipsOptions | appearingTime | - | generated |  |  |  |  | `appearingTime?: number;` |
 | arkui.component.common | TipsOptions | disappearingTime | 0 | field | generated | TipsOptions | disappearingTime | - | generated |  |  |  |  | `disappearingTime?: number;` |
@@ -2519,6 +3594,7 @@
 | arkui.component.common | CommonMethod | enabled | 0 | method | done | CommonMethod | setEnabled | - | done | Roman Sedaikin | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `enabled(value: (boolean | undefined)): this` |
 | arkui.component.common | CommonMethod | alignRulesWithAlignRuleOptionTypedValue | 0 | method | done | CommonMethod | setAlignRulesWithAlignRuleOptionTypedValue | - | done | Dmitry A Smirnov | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `alignRulesWithAlignRuleOptionTypedValue(value: (AlignRuleOption | undefined)): this` |
 | arkui.component.common | CommonMethod | alignRulesWithLocalizedAlignRuleOptionsTypedValue | 0 | method | done | CommonMethod | setAlignRulesWithLocalizedAlignRuleOptionsTypedValue | - | done | Dmitry A Smirnov | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `alignRulesWithLocalizedAlignRuleOptionsTypedValue(value: (LocalizedAlignRuleOptions | undefined)): this` |
+| arkui.component.common | CommonMethod | alignRules | 0 | method | Deleted because of overload |  |  | Deleted because of overload | - |  |  |  |  | `overload alignRules{alignRulesWithAlignRuleOptionTypedValue, alignRulesWithLocalizedAlignRuleOptionsTypedValue};` |
 | arkui.component.common | CommonMethod | chainMode | 0 | method | done | CommonMethod | setChainMode | - | done | Berezin Kirill | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `chainMode(direction: (Axis | undefined), style: (ChainStyle | undefined)): this` |
 | arkui.component.common | CommonMethod | aspectRatio | 0 | method | done | CommonMethod | setAspectRatio | - | done | Roman Sedaikin | pass |  |  | `aspectRatio(value: (number | undefined)): this` |
 | arkui.component.common | CommonMethod | clickEffect | 0 | method | done | CommonMethod | setClickEffect | - | done | Lobah Mikhail | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code | `clickEffect(value: (ClickEffect | null | undefined)): this` |
@@ -2570,17 +3646,20 @@
 | arkui.component.common | CommonMethod | keyboardShortcut | 0 | method | done | CommonMethod | setKeyboardShortcut | - | done | Erokhin Ilya | test blocked |  | UT by Vadim Voronov, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code | `keyboardShortcut(value: (string | FunctionKey | undefined), keys: (Array<ModifierKey> | undefined), action?: (()=> void)): this` |
 | arkui.component.common | CommonMethod | accessibilityGroupWithValue | 0 | method | done | CommonMethod | setAccessibilityGroupWithValue | - | done | Lobah Mikhail | test blocked |  | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code | `accessibilityGroupWithValue(value: (boolean | undefined)): this` |
 | arkui.component.common | CommonMethod | accessibilityGroupWithConfig | 0 | method | done | CommonMethod | setAccessibilityGroupWithConfig | - | done | Lobah Mikhail | test blocked |  | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code | `accessibilityGroupWithConfig(isGroup: (boolean | undefined), config: (AccessibilityOptions | undefined)): this` |
+| arkui.component.common | CommonMethod | accessibilityGroup | 0 | method | Deleted because of overload |  |  | Deleted because of overload | - |  |  |  |  | `overload accessibilityGroup{accessibilityGroupWithValue, accessibilityGroupWithConfig};` |
 | arkui.component.common | CommonMethod | accessibilityTextOfStringType | 0 | method | done | CommonMethod | setAccessibilityTextOfStringType | - | done | Lobah Mikhail | test blocked |  | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code | `accessibilityTextOfStringType(value: (string | undefined)): this` |
 | arkui.component.common | CommonMethod | accessibilityNextFocusId | 0 | method | done | CommonMethod | setAccessibilityNextFocusId | - | done | Lobah Mikhail | test blocked |  | Not exists on FB, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code | `accessibilityNextFocusId(nextId: (string | undefined)): this` |
 | arkui.component.common | CommonMethod | accessibilityDefaultFocus | 0 | method | blocked IDL | CommonMethod | setAccessibilityDefaultFocus | - | blocked IDL | Lobah Mikhail | test blocked IDL |  | managed side https://gitee.com/openharmony/arkui_ace_engine/issues/IBYL00, commented ViewAbstractModelNG static methods code | `accessibilityDefaultFocus(focus: (boolean | undefined)): this` |
 | arkui.component.common | CommonMethod | accessibilityUseSamePage | 0 | method | done | CommonMethod | setAccessibilityUseSamePage | - | done | Lobah Mikhail | test blocked |  | Not exists on FB, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code | `accessibilityUseSamePage(pageMode: (AccessibilitySamePageMode | undefined)): this` |
 | arkui.component.common | CommonMethod | accessibilityScrollTriggerable | 0 | method | done | CommonMethod | setAccessibilityScrollTriggerable | - | done | Tuzhilkin Ivan | test blocked |  | WRONG_GENERATION: parameter should be Opt, need cherry-pick to feature_branch, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code | `accessibilityScrollTriggerable(isTriggerable: (boolean | undefined)): this` |
 | arkui.component.common | CommonMethod | accessibilityTextOfResourceType | 0 | method | done | CommonMethod | setAccessibilityTextOfResourceType | - | done | Lobah Mikhail | test blocked |  | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code | `accessibilityTextOfResourceType(text: Resource): this` |
+| arkui.component.common | CommonMethod | accessibilityText | 0 | method | Deleted because of overload |  |  | Deleted because of overload | - |  |  |  |  | `overload accessibilityText{accessibilityTextOfStringType, accessibilityTextOfResourceType};` |
 | arkui.component.common | CommonMethod | accessibilityRole | 0 | method | done | CommonMethod | setAccessibilityRole | - | done | Lobah Mikhail | test blocked |  | Not exists on FB, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code | `accessibilityRole(role: (AccessibilityRoleType | undefined)): this` |
 | arkui.component.common | CommonMethod | onAccessibilityFocus | 0 | method | done | CommonMethod | setOnAccessibilityFocus | - | done | Evstigneev Roman | test blocked |  | feature: API not present, no accessibility srvice on FB, commented ViewAbstractModelNG static methods code | `onAccessibilityFocus(callback: (AccessibilityFocusCallback | undefined)): this` |
 | arkui.component.common | CommonMethod | accessibilityTextHint | 0 | method | done | CommonMethod | setAccessibilityTextHint | - | done | Lobah Mikhail | test blocked |  | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code | `accessibilityTextHint(value: (string | undefined)): this` |
 | arkui.component.common | CommonMethod | accessibilityDescriptionOfStringType | 0 | method | done | CommonMethod | setAccessibilityDescriptionOfStringType | - | done | Lobah Mikhail | test blocked |  | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code | `accessibilityDescriptionOfStringType(value: (string | undefined)): this` |
 | arkui.component.common | CommonMethod | accessibilityDescriptionOfResourceType | 0 | method | done | CommonMethod | setAccessibilityDescriptionOfResourceType | - | done | Lobah Mikhail | test blocked |  | test blocked by by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code | `accessibilityDescriptionOfResourceType(description: Resource): this` |
+| arkui.component.common | CommonMethod | accessibilityDescription | 0 | method | Deleted because of overload |  |  | Deleted because of overload | - |  |  |  |  | `overload accessibilityDescription{accessibilityDescriptionOfStringType, accessibilityDescriptionOfResourceType};` |
 | arkui.component.common | CommonMethod | accessibilityLevel | 0 | method | done | CommonMethod | setAccessibilityLevel | - | done | Lobah Mikhail | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code | `accessibilityLevel(value: (string | undefined)): this` |
 | arkui.component.common | CommonMethod | accessibilityVirtualNode | 0 | method | done | CommonMethod | setAccessibilityVirtualNode | - | done | Lobah Mikhail | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code | `accessibilityVirtualNode(builder: (CustomBuilder | undefined)): this` |
 | arkui.component.common | CommonMethod | accessibilityChecked | 0 | method | done | CommonMethod | setAccessibilityChecked | - | done | Lobah Mikhail | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstractModelNG static methods code | `accessibilityChecked(isCheck: (boolean | undefined)): this` |
@@ -2749,15 +3828,15 @@
 | arkui.component.common | LightSource | positionZ | 0 | field | generated | LightSource | positionZ | - | generated |  |  |  |  | `positionZ: Dimension;` |
 | arkui.component.common | LightSource | intensity | 0 | field | generated | LightSource | intensity | - | generated |  |  |  |  | `intensity: number;` |
 | arkui.component.common | LightSource | color | 0 | field | generated | LightSource | color | - | generated |  |  |  |  | `color?: ResourceColor;` |
-| arkui.component.common | KeyframeAnimateParam | KeyframeAnimateParam | 0 | interface | generated | unnamed | KeyframeAnimateParam | - | generated |  |  |  |  | `export declare interface KeyframeAnimateParam {` |
-| arkui.component.common | KeyframeAnimateParam | delay | 0 | field | generated | KeyframeAnimateParam | delay | - | generated |  |  |  |  | `delay?: number;` |
-| arkui.component.common | KeyframeAnimateParam | iterations | 0 | field | generated | KeyframeAnimateParam | iterations | - | generated |  |  |  |  | `iterations?: number;` |
-| arkui.component.common | KeyframeAnimateParam | onFinish | 0 | field | generated | KeyframeAnimateParam | onFinish | - | generated |  |  |  |  | `onFinish?: (()=> void);` |
-| arkui.component.common | KeyframeAnimateParam | expectedFrameRateRange | 0 | field | generated | KeyframeAnimateParam | expectedFrameRateRange | - | generated |  |  |  |  | `expectedFrameRateRange?: ExpectedFrameRateRange;` |
-| arkui.component.common | KeyframeState | KeyframeState | 0 | interface | generated | unnamed | KeyframeState | - | generated |  |  |  |  | `export declare interface KeyframeState {` |
-| arkui.component.common | KeyframeState | duration | 0 | field | generated | KeyframeState | duration | - | generated |  |  |  |  | `duration: number;` |
-| arkui.component.common | KeyframeState | curve | 0 | field | generated | KeyframeState | curve | - | generated |  |  |  |  | `curve?: (Curve | string | ICurve);` |
-| arkui.component.common | KeyframeState | event | 0 | field | generated | KeyframeState | event | - | generated |  |  |  |  | `event: (()=> void);` |
+| arkui.component.common | KeyframeAnimateParam | KeyframeAnimateParam | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface KeyframeAnimateParam {` |
+| arkui.component.common | KeyframeAnimateParam | delay | 0 | field |  |  |  |  | - |  |  |  |  | `delay?: number;` |
+| arkui.component.common | KeyframeAnimateParam | iterations | 0 | field |  |  |  |  | - |  |  |  |  | `iterations?: number;` |
+| arkui.component.common | KeyframeAnimateParam | onFinish | 0 | field |  |  |  |  | - |  |  |  |  | `onFinish?: (()=> void);` |
+| arkui.component.common | KeyframeAnimateParam | expectedFrameRateRange | 0 | field |  |  |  |  | - |  |  |  |  | `expectedFrameRateRange?: ExpectedFrameRateRange;` |
+| arkui.component.common | KeyframeState | KeyframeState | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface KeyframeState {` |
+| arkui.component.common | KeyframeState | duration | 0 | field |  |  |  |  | - |  |  |  |  | `duration: number;` |
+| arkui.component.common | KeyframeState | curve | 0 | field |  |  |  |  | - |  |  |  |  | `curve?: (Curve | string | ICurve);` |
+| arkui.component.common | KeyframeState | event | 0 | field |  |  |  |  | - |  |  |  |  | `event: (()=> void);` |
 | arkui.component.common | unnamed | Callback | 0 | field |  |  |  |  | - |  |  |  |  | `export type Callback<T, V = void> = ((data: T)=> V);` |
 | arkui.component.common | unnamed | HoverCallback | 0 | field | generated | unnamed | HoverCallback | - | generated |  |  |  |  | `export type HoverCallback = ((isHover: boolean, event: HoverEvent)=> void);` |
 | arkui.component.common | unnamed | AccessibilityCallback | 0 | field | generated | unnamed | AccessibilityCallback | - | generated |  |  |  |  | `export type AccessibilityCallback = ((isHover: boolean, event: AccessibilityHoverEvent)=> void);` |
@@ -2937,40 +4016,40 @@
 | arkui.component.datePicker | DatePickerAttribute | digitalCrownSensitivity | 0 | method | done | DatePicker | setDigitalCrownSensitivity | - | done | Vadim Voronov |  |  |  | `digitalCrownSensitivity(sensitivity: (CrownSensitivity | undefined)): this` |
 | arkui.component.datePicker | DatePickerAttribute | enableHapticFeedback | 0 | method | done | DatePicker | setEnableHapticFeedback | - | done | Vadim Voronov |  |  | not supported by dayu200; need to test on mobile device | `enableHapticFeedback(enable: (boolean | undefined)): this` |
 | arkui.component.datePicker | DatePickerAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<DatePickerAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
-| arkui.component.datePicker | LunarSwitchStyle | LunarSwitchStyle | 0 | interface | generated | unnamed | LunarSwitchStyle | - | generated |  |  |  |  | `export declare interface LunarSwitchStyle {` |
-| arkui.component.datePicker | LunarSwitchStyle | selectedColor | 0 | field | generated | LunarSwitchStyle | selectedColor | - | generated |  |  |  |  | `selectedColor?: ResourceColor;` |
-| arkui.component.datePicker | LunarSwitchStyle | unselectedColor | 0 | field | generated | LunarSwitchStyle | unselectedColor | - | generated |  |  |  |  | `unselectedColor?: ResourceColor;` |
-| arkui.component.datePicker | LunarSwitchStyle | strokeColor | 0 | field | generated | LunarSwitchStyle | strokeColor | - | generated |  |  |  |  | `strokeColor?: ResourceColor;` |
-| arkui.component.datePicker | DatePickerDialogOptions | DatePickerDialogOptions | 0 | interface | generated | unnamed | DatePickerDialogOptions | - | generated |  |  |  |  | `export declare interface DatePickerDialogOptions extends DatePickerOptions {` |
-| arkui.component.datePicker | DatePickerDialogOptions | lunar | 0 | field | generated | DatePickerDialogOptions | lunar | - | generated |  |  |  |  | `lunar?: boolean;` |
-| arkui.component.datePicker | DatePickerDialogOptions | lunarSwitch | 0 | field | generated | DatePickerDialogOptions | lunarSwitch | - | generated |  |  |  |  | `lunarSwitch?: boolean;` |
-| arkui.component.datePicker | DatePickerDialogOptions | lunarSwitchStyle | 0 | field | generated | DatePickerDialogOptions | lunarSwitchStyle | - | generated |  |  |  |  | `lunarSwitchStyle?: LunarSwitchStyle;` |
-| arkui.component.datePicker | DatePickerDialogOptions | showTime | 0 | field | generated | DatePickerDialogOptions | showTime | - | generated |  |  |  |  | `showTime?: boolean;` |
-| arkui.component.datePicker | DatePickerDialogOptions | useMilitaryTime | 0 | field | generated | DatePickerDialogOptions | useMilitaryTime | - | generated |  |  |  |  | `useMilitaryTime?: boolean;` |
-| arkui.component.datePicker | DatePickerDialogOptions | disappearTextStyle | 0 | field | generated | DatePickerDialogOptions | disappearTextStyle | - | generated |  |  |  |  | `disappearTextStyle?: PickerTextStyle;` |
-| arkui.component.datePicker | DatePickerDialogOptions | textStyle | 0 | field | generated | DatePickerDialogOptions | textStyle | - | generated |  |  |  |  | `textStyle?: PickerTextStyle;` |
-| arkui.component.datePicker | DatePickerDialogOptions | acceptButtonStyle | 0 | field | generated | DatePickerDialogOptions | acceptButtonStyle | - | generated |  |  |  |  | `acceptButtonStyle?: PickerDialogButtonStyle;` |
-| arkui.component.datePicker | DatePickerDialogOptions | cancelButtonStyle | 0 | field | generated | DatePickerDialogOptions | cancelButtonStyle | - | generated |  |  |  |  | `cancelButtonStyle?: PickerDialogButtonStyle;` |
-| arkui.component.datePicker | DatePickerDialogOptions | selectedTextStyle | 0 | field | generated | DatePickerDialogOptions | selectedTextStyle | - | generated |  |  |  |  | `selectedTextStyle?: PickerTextStyle;` |
-| arkui.component.datePicker | DatePickerDialogOptions | maskRect | 0 | field | generated | DatePickerDialogOptions | maskRect | - | generated |  |  |  |  | `maskRect?: Rectangle;` |
-| arkui.component.datePicker | DatePickerDialogOptions | alignment | 0 | field | generated | DatePickerDialogOptions | alignment | - | generated |  |  |  |  | `alignment?: DialogAlignment;` |
-| arkui.component.datePicker | DatePickerDialogOptions | offset | 0 | field | generated | DatePickerDialogOptions | offset | - | generated |  |  |  |  | `offset?: Offset;` |
-| arkui.component.datePicker | DatePickerDialogOptions | onCancel | 0 | field | generated | DatePickerDialogOptions | onCancel | - | generated |  |  |  |  | `onCancel?: VoidCallback;` |
-| arkui.component.datePicker | DatePickerDialogOptions | onDateAccept | 0 | field | generated | DatePickerDialogOptions | onDateAccept | - | generated |  |  |  |  | `onDateAccept?: Callback<Date>;` |
-| arkui.component.datePicker | DatePickerDialogOptions | onDateChange | 0 | field | generated | DatePickerDialogOptions | onDateChange | - | generated |  |  |  |  | `onDateChange?: Callback<Date>;` |
-| arkui.component.datePicker | DatePickerDialogOptions | backgroundColor | 0 | field | generated | DatePickerDialogOptions | backgroundColor | - | generated |  |  |  |  | `backgroundColor?: ResourceColor;` |
-| arkui.component.datePicker | DatePickerDialogOptions | backgroundBlurStyle | 0 | field | generated | DatePickerDialogOptions | backgroundBlurStyle | - | generated |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
-| arkui.component.datePicker | DatePickerDialogOptions | backgroundBlurStyleOptions | 0 | field | generated | DatePickerDialogOptions | backgroundBlurStyleOptions | - | generated |  |  |  |  | `backgroundBlurStyleOptions?: BackgroundBlurStyleOptions;` |
-| arkui.component.datePicker | DatePickerDialogOptions | backgroundEffect | 0 | field | generated | DatePickerDialogOptions | backgroundEffect | - | generated |  |  |  |  | `backgroundEffect?: BackgroundEffectOptions;` |
-| arkui.component.datePicker | DatePickerDialogOptions | onDidAppear | 0 | field | generated | DatePickerDialogOptions | onDidAppear | - | generated |  |  |  |  | `onDidAppear?: VoidCallback;` |
-| arkui.component.datePicker | DatePickerDialogOptions | onDidDisappear | 0 | field | generated | DatePickerDialogOptions | onDidDisappear | - | generated |  |  |  |  | `onDidDisappear?: VoidCallback;` |
-| arkui.component.datePicker | DatePickerDialogOptions | onWillAppear | 0 | field | generated | DatePickerDialogOptions | onWillAppear | - | generated |  |  |  |  | `onWillAppear?: VoidCallback;` |
-| arkui.component.datePicker | DatePickerDialogOptions | onWillDisappear | 0 | field | generated | DatePickerDialogOptions | onWillDisappear | - | generated |  |  |  |  | `onWillDisappear?: VoidCallback;` |
-| arkui.component.datePicker | DatePickerDialogOptions | shadow | 0 | field | generated | DatePickerDialogOptions | shadow | - | generated |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
-| arkui.component.datePicker | DatePickerDialogOptions | dateTimeOptions | 0 | field | generated | DatePickerDialogOptions | dateTimeOptions | - | generated |  |  |  |  | `dateTimeOptions?: DateTimeOptions;` |
-| arkui.component.datePicker | DatePickerDialogOptions | enableHoverMode | 0 | field | generated | DatePickerDialogOptions | enableHoverMode | - | generated |  |  |  |  | `enableHoverMode?: boolean;` |
-| arkui.component.datePicker | DatePickerDialogOptions | hoverModeArea | 0 | field | generated | DatePickerDialogOptions | hoverModeArea | - | generated |  |  |  |  | `hoverModeArea?: HoverModeAreaType;` |
-| arkui.component.datePicker | DatePickerDialogOptions | enableHapticFeedback | 0 | field | generated | DatePickerDialogOptions | enableHapticFeedback | - | generated |  |  |  |  | `enableHapticFeedback?: boolean;` |
+| arkui.component.datePicker | LunarSwitchStyle | LunarSwitchStyle | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface LunarSwitchStyle {` |
+| arkui.component.datePicker | LunarSwitchStyle | selectedColor | 0 | field |  |  |  |  | - |  |  |  |  | `selectedColor?: ResourceColor;` |
+| arkui.component.datePicker | LunarSwitchStyle | unselectedColor | 0 | field |  |  |  |  | - |  |  |  |  | `unselectedColor?: ResourceColor;` |
+| arkui.component.datePicker | LunarSwitchStyle | strokeColor | 0 | field |  |  |  |  | - |  |  |  |  | `strokeColor?: ResourceColor;` |
+| arkui.component.datePicker | DatePickerDialogOptions | DatePickerDialogOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface DatePickerDialogOptions extends DatePickerOptions {` |
+| arkui.component.datePicker | DatePickerDialogOptions | lunar | 0 | field |  |  |  |  | - |  |  |  |  | `lunar?: boolean;` |
+| arkui.component.datePicker | DatePickerDialogOptions | lunarSwitch | 0 | field |  |  |  |  | - |  |  |  |  | `lunarSwitch?: boolean;` |
+| arkui.component.datePicker | DatePickerDialogOptions | lunarSwitchStyle | 0 | field |  |  |  |  | - |  |  |  |  | `lunarSwitchStyle?: LunarSwitchStyle;` |
+| arkui.component.datePicker | DatePickerDialogOptions | showTime | 0 | field |  |  |  |  | - |  |  |  |  | `showTime?: boolean;` |
+| arkui.component.datePicker | DatePickerDialogOptions | useMilitaryTime | 0 | field |  |  |  |  | - |  |  |  |  | `useMilitaryTime?: boolean;` |
+| arkui.component.datePicker | DatePickerDialogOptions | disappearTextStyle | 0 | field |  |  |  |  | - |  |  |  |  | `disappearTextStyle?: PickerTextStyle;` |
+| arkui.component.datePicker | DatePickerDialogOptions | textStyle | 0 | field |  |  |  |  | - |  |  |  |  | `textStyle?: PickerTextStyle;` |
+| arkui.component.datePicker | DatePickerDialogOptions | acceptButtonStyle | 0 | field |  |  |  |  | - |  |  |  |  | `acceptButtonStyle?: PickerDialogButtonStyle;` |
+| arkui.component.datePicker | DatePickerDialogOptions | cancelButtonStyle | 0 | field |  |  |  |  | - |  |  |  |  | `cancelButtonStyle?: PickerDialogButtonStyle;` |
+| arkui.component.datePicker | DatePickerDialogOptions | selectedTextStyle | 0 | field |  |  |  |  | - |  |  |  |  | `selectedTextStyle?: PickerTextStyle;` |
+| arkui.component.datePicker | DatePickerDialogOptions | maskRect | 0 | field |  |  |  |  | - |  |  |  |  | `maskRect?: Rectangle;` |
+| arkui.component.datePicker | DatePickerDialogOptions | alignment | 0 | field |  |  |  |  | - |  |  |  |  | `alignment?: DialogAlignment;` |
+| arkui.component.datePicker | DatePickerDialogOptions | offset | 0 | field |  |  |  |  | - |  |  |  |  | `offset?: Offset;` |
+| arkui.component.datePicker | DatePickerDialogOptions | onCancel | 0 | field |  |  |  |  | - |  |  |  |  | `onCancel?: VoidCallback;` |
+| arkui.component.datePicker | DatePickerDialogOptions | onDateAccept | 0 | field |  |  |  |  | - |  |  |  |  | `onDateAccept?: Callback<Date>;` |
+| arkui.component.datePicker | DatePickerDialogOptions | onDateChange | 0 | field |  |  |  |  | - |  |  |  |  | `onDateChange?: Callback<Date>;` |
+| arkui.component.datePicker | DatePickerDialogOptions | backgroundColor | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundColor?: ResourceColor;` |
+| arkui.component.datePicker | DatePickerDialogOptions | backgroundBlurStyle | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
+| arkui.component.datePicker | DatePickerDialogOptions | backgroundBlurStyleOptions | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyleOptions?: BackgroundBlurStyleOptions;` |
+| arkui.component.datePicker | DatePickerDialogOptions | backgroundEffect | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundEffect?: BackgroundEffectOptions;` |
+| arkui.component.datePicker | DatePickerDialogOptions | onDidAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidAppear?: VoidCallback;` |
+| arkui.component.datePicker | DatePickerDialogOptions | onDidDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidDisappear?: VoidCallback;` |
+| arkui.component.datePicker | DatePickerDialogOptions | onWillAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillAppear?: VoidCallback;` |
+| arkui.component.datePicker | DatePickerDialogOptions | onWillDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillDisappear?: VoidCallback;` |
+| arkui.component.datePicker | DatePickerDialogOptions | shadow | 0 | field |  |  |  |  | - |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
+| arkui.component.datePicker | DatePickerDialogOptions | dateTimeOptions | 0 | field |  |  |  |  | - |  |  |  |  | `dateTimeOptions?: DateTimeOptions;` |
+| arkui.component.datePicker | DatePickerDialogOptions | enableHoverMode | 0 | field |  |  |  |  | - |  |  |  |  | `enableHoverMode?: boolean;` |
+| arkui.component.datePicker | DatePickerDialogOptions | hoverModeArea | 0 | field |  |  |  |  | - |  |  |  |  | `hoverModeArea?: HoverModeAreaType;` |
+| arkui.component.datePicker | DatePickerDialogOptions | enableHapticFeedback | 0 | field |  |  |  |  | - |  |  |  |  | `enableHapticFeedback?: boolean;` |
 | arkui.component.datePicker | DatePickerDialog | DatePickerDialog | 0 | class | testskipped | unnamed | DatePickerDialog | - | testskipped | Ekaterina Stepanova |  |  |  | `export declare class DatePickerDialog {` |
 | arkui.component.datePicker | DatePickerDialog | constructor | 0 | method | testskipped | DatePickerDialog | construct | - | testskipped | Ekaterina Stepanova |  |  | UT in progress, Skroba Gleb | `public constructor() {}` |
 | arkui.component.datePicker | unnamed | DatePicker | 0 | function | done | DatePicker | setDatePickerOptions | - | done | Vadim Voronov | pass |  |  | `@memo() @ComponentBuilder() export declare function DatePicker(options?: DatePickerOptions, @memo() content_?: (()=> void)): DatePickerAttribute` |
@@ -5943,7 +7022,7 @@
 | arkui.component.stepperItem | StepperItemAttribute | status | 0 | method | done | StepperItem | setStatus | - | done | Morozov Sergey | test blocked |  | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `status(value?: (ItemState | undefined)): this` |
 | arkui.component.stepperItem | StepperItemAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<StepperItemAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.stepperItem | unnamed | StepperItem | 0 | function | done | StepperItem | setStepperItemOptions | - | done | Morozov Sergey | test blocked |  | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `@memo() @ComponentBuilder() export declare function StepperItem(@memo() content_?: (()=> void)): StepperItemAttribute` |
-| arkui.stateManagement.storage.storageProperty | unnamed | OnChangeType | 0 | field | generated | unnamed | OnChangeType | - | generated |  |  |  |  | `export type OnChangeType<T> = ((propertyName: string, newValue: T)=> void);` |
+| arkui.stateManagement.storage.storageProperty | unnamed | OnChangeType | 0 | field |  |  |  |  | - |  |  |  |  | `export type OnChangeType<T> = ((propertyName: string, newValue: T)=> void);` |
 | arkui.stateManagement.storage.storageProperty | AbstractProperty | AbstractProperty | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface AbstractProperty<T> {` |
 | arkui.stateManagement.storage.storageProperty | AbstractProperty | info | 0 | method |  |  |  |  | - |  |  |  |  | `info(): string` |
 | arkui.stateManagement.storage.storageProperty | AbstractProperty | get | 0 | method |  |  |  |  | - |  |  |  |  | `get(): T` |
@@ -6750,8 +7829,8 @@
 | arkui.component.textCommon | TextMenuShowMode | TextMenuShowMode | 0 | enum_class | generated | unnamed | TextMenuShowMode | - | generated |  |  |  |  | `declare enum TextMenuShowMode {` |
 | arkui.component.textCommon | TextMenuShowMode | DEFAULT | 0 | enum_instance | generated | TextMenuShowMode | DEFAULT | - | generated |  |  |  |  | `DEFAULT = 0` |
 | arkui.component.textCommon | TextMenuShowMode | PREFER_WINDOW | 0 | enum_instance | generated | TextMenuShowMode | PREFER_WINDOW | - | generated |  |  |  |  | `PREFER_WINDOW = 1` |
-| arkui.component.textCommon | TextMenuOptions | TextMenuOptions | 0 | interface | generated | unnamed | TextMenuOptions | - | generated |  |  |  |  | `export declare interface TextMenuOptions {` |
-| arkui.component.textCommon | TextMenuOptions | showMode | 0 | field | generated | TextMenuOptions | showMode | - | generated |  |  |  |  | `showMode?: TextMenuShowMode;` |
+| arkui.component.textCommon | TextMenuOptions | TextMenuOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface TextMenuOptions {` |
+| arkui.component.textCommon | TextMenuOptions | showMode | 0 | field |  |  |  |  | - |  |  |  |  | `showMode?: TextMenuShowMode;` |
 | arkui.component.textCommon | KeyboardAppearance | KeyboardAppearance | 0 | enum_class | generated | unnamed | KeyboardAppearance | - | generated |  |  |  |  | `declare enum KeyboardAppearance {` |
 | arkui.component.textCommon | KeyboardAppearance | NONE_IMMERSIVE | 0 | enum_instance | generated | KeyboardAppearance | NONE_IMMERSIVE | - | generated |  |  |  |  | `NONE_IMMERSIVE = 0` |
 | arkui.component.textCommon | KeyboardAppearance | IMMERSIVE | 0 | enum_instance | generated | KeyboardAppearance | IMMERSIVE | - | generated |  |  |  |  | `IMMERSIVE = 1` |
@@ -6953,39 +8032,39 @@
 | arkui.component.textPicker | TextPickerAttribute | enableHapticFeedback | 0 | method | done | TextPicker | setEnableHapticFeedback | - | done | Kovalev Sergey | pass |  |  | `enableHapticFeedback(enable: (boolean | undefined)): this` |
 | arkui.component.textPicker | TextPickerAttribute | digitalCrownSensitivity | 0 | method | done | TextPicker | setDigitalCrownSensitivity | - | done | Kovalev Sergey | pass |  |  | `digitalCrownSensitivity(sensitivity: (CrownSensitivity | undefined)): this` |
 | arkui.component.textPicker | TextPickerAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<TextPickerAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
-| arkui.component.textPicker | TextPickerResult | TextPickerResult | 0 | interface | generated | unnamed | TextPickerResult | - | generated |  |  |  |  | `export declare interface TextPickerResult {` |
-| arkui.component.textPicker | TextPickerResult | value | 0 | field | generated | TextPickerResult | value | - | generated |  |  |  |  | `value: (string | string[]);` |
-| arkui.component.textPicker | TextPickerResult | index | 0 | field | generated | TextPickerResult | index | - | generated |  |  |  |  | `index: (number | number[]);` |
-| arkui.component.textPicker | TextPickerDialogOptions | TextPickerDialogOptions | 0 | interface | generated | unnamed | TextPickerDialogOptions | - | generated |  |  |  |  | `export declare interface TextPickerDialogOptions extends TextPickerOptions {` |
-| arkui.component.textPicker | TextPickerDialogOptions | defaultPickerItemHeight | 0 | field | generated | TextPickerDialogOptions | defaultPickerItemHeight | - | generated |  |  |  |  | `defaultPickerItemHeight?: (number | string);` |
-| arkui.component.textPicker | TextPickerDialogOptions | canLoop | 0 | field | generated | TextPickerDialogOptions | canLoop | - | generated |  |  |  |  | `canLoop?: boolean;` |
-| arkui.component.textPicker | TextPickerDialogOptions | disappearTextStyle | 0 | field | generated | TextPickerDialogOptions | disappearTextStyle | - | generated |  |  |  |  | `disappearTextStyle?: PickerTextStyle;` |
-| arkui.component.textPicker | TextPickerDialogOptions | textStyle | 0 | field | generated | TextPickerDialogOptions | textStyle | - | generated |  |  |  |  | `textStyle?: PickerTextStyle;` |
-| arkui.component.textPicker | TextPickerDialogOptions | acceptButtonStyle | 0 | field | generated | TextPickerDialogOptions | acceptButtonStyle | - | generated |  |  |  |  | `acceptButtonStyle?: PickerDialogButtonStyle;` |
-| arkui.component.textPicker | TextPickerDialogOptions | cancelButtonStyle | 0 | field | generated | TextPickerDialogOptions | cancelButtonStyle | - | generated |  |  |  |  | `cancelButtonStyle?: PickerDialogButtonStyle;` |
-| arkui.component.textPicker | TextPickerDialogOptions | selectedTextStyle | 0 | field | generated | TextPickerDialogOptions | selectedTextStyle | - | generated |  |  |  |  | `selectedTextStyle?: PickerTextStyle;` |
-| arkui.component.textPicker | TextPickerDialogOptions | disableTextStyleAnimation | 0 | field | generated | TextPickerDialogOptions | disableTextStyleAnimation | - | generated |  |  |  |  | `disableTextStyleAnimation?: boolean;` |
-| arkui.component.textPicker | TextPickerDialogOptions | defaultTextStyle | 0 | field | generated | TextPickerDialogOptions | defaultTextStyle | - | generated |  |  |  |  | `defaultTextStyle?: TextPickerTextStyle;` |
-| arkui.component.textPicker | TextPickerDialogOptions | onAccept | 0 | field | generated | TextPickerDialogOptions | onAccept | - | generated |  |  |  |  | `onAccept?: ((value: TextPickerResult)=> void);` |
-| arkui.component.textPicker | TextPickerDialogOptions | onCancel | 0 | field | generated | TextPickerDialogOptions | onCancel | - | generated |  |  |  |  | `onCancel?: (()=> void);` |
-| arkui.component.textPicker | TextPickerDialogOptions | onChange | 0 | field | generated | TextPickerDialogOptions | onChange | - | generated |  |  |  |  | `onChange?: ((value: TextPickerResult)=> void);` |
-| arkui.component.textPicker | TextPickerDialogOptions | onScrollStop | 0 | field | generated | TextPickerDialogOptions | onScrollStop | - | generated |  |  |  |  | `onScrollStop?: Callback<TextPickerResult>;` |
-| arkui.component.textPicker | TextPickerDialogOptions | onEnterSelectedArea | 0 | field | generated | TextPickerDialogOptions | onEnterSelectedArea | - | generated |  |  |  |  | `onEnterSelectedArea?: Callback<TextPickerResult>;` |
-| arkui.component.textPicker | TextPickerDialogOptions | maskRect | 0 | field | generated | TextPickerDialogOptions | maskRect | - | generated |  |  |  |  | `maskRect?: Rectangle;` |
-| arkui.component.textPicker | TextPickerDialogOptions | alignment | 0 | field | generated | TextPickerDialogOptions | alignment | - | generated |  |  |  |  | `alignment?: DialogAlignment;` |
-| arkui.component.textPicker | TextPickerDialogOptions | offset | 0 | field | generated | TextPickerDialogOptions | offset | - | generated |  |  |  |  | `offset?: Offset;` |
-| arkui.component.textPicker | TextPickerDialogOptions | backgroundColor | 0 | field | generated | TextPickerDialogOptions | backgroundColor | - | generated |  |  |  |  | `backgroundColor?: ResourceColor;` |
-| arkui.component.textPicker | TextPickerDialogOptions | backgroundBlurStyle | 0 | field | generated | TextPickerDialogOptions | backgroundBlurStyle | - | generated |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
-| arkui.component.textPicker | TextPickerDialogOptions | backgroundBlurStyleOptions | 0 | field | generated | TextPickerDialogOptions | backgroundBlurStyleOptions | - | generated |  |  |  |  | `backgroundBlurStyleOptions?: BackgroundBlurStyleOptions;` |
-| arkui.component.textPicker | TextPickerDialogOptions | backgroundEffect | 0 | field | generated | TextPickerDialogOptions | backgroundEffect | - | generated |  |  |  |  | `backgroundEffect?: BackgroundEffectOptions;` |
-| arkui.component.textPicker | TextPickerDialogOptions | onDidAppear | 0 | field | generated | TextPickerDialogOptions | onDidAppear | - | generated |  |  |  |  | `onDidAppear?: (()=> void);` |
-| arkui.component.textPicker | TextPickerDialogOptions | onDidDisappear | 0 | field | generated | TextPickerDialogOptions | onDidDisappear | - | generated |  |  |  |  | `onDidDisappear?: (()=> void);` |
-| arkui.component.textPicker | TextPickerDialogOptions | onWillAppear | 0 | field | generated | TextPickerDialogOptions | onWillAppear | - | generated |  |  |  |  | `onWillAppear?: (()=> void);` |
-| arkui.component.textPicker | TextPickerDialogOptions | onWillDisappear | 0 | field | generated | TextPickerDialogOptions | onWillDisappear | - | generated |  |  |  |  | `onWillDisappear?: (()=> void);` |
-| arkui.component.textPicker | TextPickerDialogOptions | shadow | 0 | field | generated | TextPickerDialogOptions | shadow | - | generated |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
-| arkui.component.textPicker | TextPickerDialogOptions | enableHoverMode | 0 | field | generated | TextPickerDialogOptions | enableHoverMode | - | generated |  |  |  |  | `enableHoverMode?: boolean;` |
-| arkui.component.textPicker | TextPickerDialogOptions | hoverModeArea | 0 | field | generated | TextPickerDialogOptions | hoverModeArea | - | generated |  |  |  |  | `hoverModeArea?: HoverModeAreaType;` |
-| arkui.component.textPicker | TextPickerDialogOptions | enableHapticFeedback | 0 | field | generated | TextPickerDialogOptions | enableHapticFeedback | - | generated |  |  |  |  | `enableHapticFeedback?: boolean;` |
+| arkui.component.textPicker | TextPickerResult | TextPickerResult | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface TextPickerResult {` |
+| arkui.component.textPicker | TextPickerResult | value | 0 | field |  |  |  |  | - |  |  |  |  | `value: (string | string[]);` |
+| arkui.component.textPicker | TextPickerResult | index | 0 | field |  |  |  |  | - |  |  |  |  | `index: (number | number[]);` |
+| arkui.component.textPicker | TextPickerDialogOptions | TextPickerDialogOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface TextPickerDialogOptions extends TextPickerOptions {` |
+| arkui.component.textPicker | TextPickerDialogOptions | defaultPickerItemHeight | 0 | field |  |  |  |  | - |  |  |  |  | `defaultPickerItemHeight?: (number | string);` |
+| arkui.component.textPicker | TextPickerDialogOptions | canLoop | 0 | field |  |  |  |  | - |  |  |  |  | `canLoop?: boolean;` |
+| arkui.component.textPicker | TextPickerDialogOptions | disappearTextStyle | 0 | field |  |  |  |  | - |  |  |  |  | `disappearTextStyle?: PickerTextStyle;` |
+| arkui.component.textPicker | TextPickerDialogOptions | textStyle | 0 | field |  |  |  |  | - |  |  |  |  | `textStyle?: PickerTextStyle;` |
+| arkui.component.textPicker | TextPickerDialogOptions | acceptButtonStyle | 0 | field |  |  |  |  | - |  |  |  |  | `acceptButtonStyle?: PickerDialogButtonStyle;` |
+| arkui.component.textPicker | TextPickerDialogOptions | cancelButtonStyle | 0 | field |  |  |  |  | - |  |  |  |  | `cancelButtonStyle?: PickerDialogButtonStyle;` |
+| arkui.component.textPicker | TextPickerDialogOptions | selectedTextStyle | 0 | field |  |  |  |  | - |  |  |  |  | `selectedTextStyle?: PickerTextStyle;` |
+| arkui.component.textPicker | TextPickerDialogOptions | disableTextStyleAnimation | 0 | field |  |  |  |  | - |  |  |  |  | `disableTextStyleAnimation?: boolean;` |
+| arkui.component.textPicker | TextPickerDialogOptions | defaultTextStyle | 0 | field |  |  |  |  | - |  |  |  |  | `defaultTextStyle?: TextPickerTextStyle;` |
+| arkui.component.textPicker | TextPickerDialogOptions | onAccept | 0 | field |  |  |  |  | - |  |  |  |  | `onAccept?: ((value: TextPickerResult)=> void);` |
+| arkui.component.textPicker | TextPickerDialogOptions | onCancel | 0 | field |  |  |  |  | - |  |  |  |  | `onCancel?: (()=> void);` |
+| arkui.component.textPicker | TextPickerDialogOptions | onChange | 0 | field |  |  |  |  | - |  |  |  |  | `onChange?: ((value: TextPickerResult)=> void);` |
+| arkui.component.textPicker | TextPickerDialogOptions | onScrollStop | 0 | field |  |  |  |  | - |  |  |  |  | `onScrollStop?: Callback<TextPickerResult>;` |
+| arkui.component.textPicker | TextPickerDialogOptions | onEnterSelectedArea | 0 | field |  |  |  |  | - |  |  |  |  | `onEnterSelectedArea?: Callback<TextPickerResult>;` |
+| arkui.component.textPicker | TextPickerDialogOptions | maskRect | 0 | field |  |  |  |  | - |  |  |  |  | `maskRect?: Rectangle;` |
+| arkui.component.textPicker | TextPickerDialogOptions | alignment | 0 | field |  |  |  |  | - |  |  |  |  | `alignment?: DialogAlignment;` |
+| arkui.component.textPicker | TextPickerDialogOptions | offset | 0 | field |  |  |  |  | - |  |  |  |  | `offset?: Offset;` |
+| arkui.component.textPicker | TextPickerDialogOptions | backgroundColor | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundColor?: ResourceColor;` |
+| arkui.component.textPicker | TextPickerDialogOptions | backgroundBlurStyle | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
+| arkui.component.textPicker | TextPickerDialogOptions | backgroundBlurStyleOptions | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyleOptions?: BackgroundBlurStyleOptions;` |
+| arkui.component.textPicker | TextPickerDialogOptions | backgroundEffect | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundEffect?: BackgroundEffectOptions;` |
+| arkui.component.textPicker | TextPickerDialogOptions | onDidAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidAppear?: (()=> void);` |
+| arkui.component.textPicker | TextPickerDialogOptions | onDidDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidDisappear?: (()=> void);` |
+| arkui.component.textPicker | TextPickerDialogOptions | onWillAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillAppear?: (()=> void);` |
+| arkui.component.textPicker | TextPickerDialogOptions | onWillDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillDisappear?: (()=> void);` |
+| arkui.component.textPicker | TextPickerDialogOptions | shadow | 0 | field |  |  |  |  | - |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
+| arkui.component.textPicker | TextPickerDialogOptions | enableHoverMode | 0 | field |  |  |  |  | - |  |  |  |  | `enableHoverMode?: boolean;` |
+| arkui.component.textPicker | TextPickerDialogOptions | hoverModeArea | 0 | field |  |  |  |  | - |  |  |  |  | `hoverModeArea?: HoverModeAreaType;` |
+| arkui.component.textPicker | TextPickerDialogOptions | enableHapticFeedback | 0 | field |  |  |  |  | - |  |  |  |  | `enableHapticFeedback?: boolean;` |
 | arkui.component.textPicker | TextPickerDialog | TextPickerDialog | 0 | class | done | unnamed | TextPickerDialog | - | done | Ekaterina Stepanova |  |  |  | `export declare class TextPickerDialog {` |
 | arkui.component.textPicker | TextPickerDialog | constructor | 0 | method | done | TextPickerDialog | construct | - | done | Ekaterina Stepanova |  |  |  | `public constructor() {}` |
 | arkui.component.textPicker | unnamed | TextPicker | 0 | function | done | TextPicker | setTextPickerOptions | - | done | Tuzhilkin Ivan | failed |  | OHOSUI-2386 multi column picker not working | `@memo() @ComponentBuilder() export declare function TextPicker(options?: TextPickerOptions, @memo() content_?: (()=> void)): TextPickerAttribute` |
@@ -7041,34 +8120,34 @@
 | arkui.component.timePicker | TimePickerAttribute | digitalCrownSensitivity | 0 | method | done | TimePicker | setDigitalCrownSensitivity | - | done | Kovalev Sergey |  |  | API is present on Upstream only | `digitalCrownSensitivity(sensitivity: (CrownSensitivity | undefined)): this` |
 | arkui.component.timePicker | TimePickerAttribute | enableCascade | 0 | method | done | TimePicker | setEnableCascade | - | done | Kovalev Sergey | pass |  | API is present on Upstream only | `enableCascade(enabled: (boolean | undefined)): this` |
 | arkui.component.timePicker | TimePickerAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<TimePickerAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
-| arkui.component.timePicker | TimePickerDialogOptions | TimePickerDialogOptions | 0 | interface | generated | unnamed | TimePickerDialogOptions | - | generated |  |  |  |  | `export declare interface TimePickerDialogOptions extends TimePickerOptions {` |
-| arkui.component.timePicker | TimePickerDialogOptions | useMilitaryTime | 0 | field | generated | TimePickerDialogOptions | useMilitaryTime | - | generated |  |  |  |  | `useMilitaryTime?: boolean;` |
-| arkui.component.timePicker | TimePickerDialogOptions | disappearTextStyle | 0 | field | generated | TimePickerDialogOptions | disappearTextStyle | - | generated |  |  |  |  | `disappearTextStyle?: PickerTextStyle;` |
-| arkui.component.timePicker | TimePickerDialogOptions | textStyle | 0 | field | generated | TimePickerDialogOptions | textStyle | - | generated |  |  |  |  | `textStyle?: PickerTextStyle;` |
-| arkui.component.timePicker | TimePickerDialogOptions | acceptButtonStyle | 0 | field | generated | TimePickerDialogOptions | acceptButtonStyle | - | generated |  |  |  |  | `acceptButtonStyle?: PickerDialogButtonStyle;` |
-| arkui.component.timePicker | TimePickerDialogOptions | cancelButtonStyle | 0 | field | generated | TimePickerDialogOptions | cancelButtonStyle | - | generated |  |  |  |  | `cancelButtonStyle?: PickerDialogButtonStyle;` |
-| arkui.component.timePicker | TimePickerDialogOptions | selectedTextStyle | 0 | field | generated | TimePickerDialogOptions | selectedTextStyle | - | generated |  |  |  |  | `selectedTextStyle?: PickerTextStyle;` |
-| arkui.component.timePicker | TimePickerDialogOptions | maskRect | 0 | field | generated | TimePickerDialogOptions | maskRect | - | generated |  |  |  |  | `maskRect?: Rectangle;` |
-| arkui.component.timePicker | TimePickerDialogOptions | alignment | 0 | field | generated | TimePickerDialogOptions | alignment | - | generated |  |  |  |  | `alignment?: DialogAlignment;` |
-| arkui.component.timePicker | TimePickerDialogOptions | offset | 0 | field | generated | TimePickerDialogOptions | offset | - | generated |  |  |  |  | `offset?: Offset;` |
-| arkui.component.timePicker | TimePickerDialogOptions | onAccept | 0 | field | generated | TimePickerDialogOptions | onAccept | - | generated |  |  |  |  | `onAccept?: ((value: TimePickerResult)=> void);` |
-| arkui.component.timePicker | TimePickerDialogOptions | onCancel | 0 | field | generated | TimePickerDialogOptions | onCancel | - | generated |  |  |  |  | `onCancel?: VoidCallback;` |
-| arkui.component.timePicker | TimePickerDialogOptions | onChange | 0 | field | generated | TimePickerDialogOptions | onChange | - | generated |  |  |  |  | `onChange?: ((value: TimePickerResult)=> void);` |
-| arkui.component.timePicker | TimePickerDialogOptions | onEnterSelectedArea | 0 | field | generated | TimePickerDialogOptions | onEnterSelectedArea | - | generated |  |  |  |  | `onEnterSelectedArea?: Callback<TimePickerResult>;` |
-| arkui.component.timePicker | TimePickerDialogOptions | backgroundColor | 0 | field | generated | TimePickerDialogOptions | backgroundColor | - | generated |  |  |  |  | `backgroundColor?: ResourceColor;` |
-| arkui.component.timePicker | TimePickerDialogOptions | backgroundBlurStyle | 0 | field | generated | TimePickerDialogOptions | backgroundBlurStyle | - | generated |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
-| arkui.component.timePicker | TimePickerDialogOptions | backgroundBlurStyleOptions | 0 | field | generated | TimePickerDialogOptions | backgroundBlurStyleOptions | - | generated |  |  |  |  | `backgroundBlurStyleOptions?: BackgroundBlurStyleOptions;` |
-| arkui.component.timePicker | TimePickerDialogOptions | backgroundEffect | 0 | field | generated | TimePickerDialogOptions | backgroundEffect | - | generated |  |  |  |  | `backgroundEffect?: BackgroundEffectOptions;` |
-| arkui.component.timePicker | TimePickerDialogOptions | enableCascade | 0 | field | generated | TimePickerDialogOptions | enableCascade | - | generated |  |  |  |  | `enableCascade?: boolean;` |
-| arkui.component.timePicker | TimePickerDialogOptions | onDidAppear | 0 | field | generated | TimePickerDialogOptions | onDidAppear | - | generated |  |  |  |  | `onDidAppear?: VoidCallback;` |
-| arkui.component.timePicker | TimePickerDialogOptions | onDidDisappear | 0 | field | generated | TimePickerDialogOptions | onDidDisappear | - | generated |  |  |  |  | `onDidDisappear?: VoidCallback;` |
-| arkui.component.timePicker | TimePickerDialogOptions | onWillAppear | 0 | field | generated | TimePickerDialogOptions | onWillAppear | - | generated |  |  |  |  | `onWillAppear?: VoidCallback;` |
-| arkui.component.timePicker | TimePickerDialogOptions | onWillDisappear | 0 | field | generated | TimePickerDialogOptions | onWillDisappear | - | generated |  |  |  |  | `onWillDisappear?: VoidCallback;` |
-| arkui.component.timePicker | TimePickerDialogOptions | shadow | 0 | field | generated | TimePickerDialogOptions | shadow | - | generated |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
-| arkui.component.timePicker | TimePickerDialogOptions | dateTimeOptions | 0 | field | generated | TimePickerDialogOptions | dateTimeOptions | - | generated |  |  |  |  | `dateTimeOptions?: DateTimeOptions;` |
-| arkui.component.timePicker | TimePickerDialogOptions | enableHoverMode | 0 | field | generated | TimePickerDialogOptions | enableHoverMode | - | generated |  |  |  |  | `enableHoverMode?: boolean;` |
-| arkui.component.timePicker | TimePickerDialogOptions | hoverModeArea | 0 | field | generated | TimePickerDialogOptions | hoverModeArea | - | generated |  |  |  |  | `hoverModeArea?: HoverModeAreaType;` |
-| arkui.component.timePicker | TimePickerDialogOptions | enableHapticFeedback | 0 | field | generated | TimePickerDialogOptions | enableHapticFeedback | - | generated |  |  |  |  | `enableHapticFeedback?: boolean;` |
+| arkui.component.timePicker | TimePickerDialogOptions | TimePickerDialogOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface TimePickerDialogOptions extends TimePickerOptions {` |
+| arkui.component.timePicker | TimePickerDialogOptions | useMilitaryTime | 0 | field |  |  |  |  | - |  |  |  |  | `useMilitaryTime?: boolean;` |
+| arkui.component.timePicker | TimePickerDialogOptions | disappearTextStyle | 0 | field |  |  |  |  | - |  |  |  |  | `disappearTextStyle?: PickerTextStyle;` |
+| arkui.component.timePicker | TimePickerDialogOptions | textStyle | 0 | field |  |  |  |  | - |  |  |  |  | `textStyle?: PickerTextStyle;` |
+| arkui.component.timePicker | TimePickerDialogOptions | acceptButtonStyle | 0 | field |  |  |  |  | - |  |  |  |  | `acceptButtonStyle?: PickerDialogButtonStyle;` |
+| arkui.component.timePicker | TimePickerDialogOptions | cancelButtonStyle | 0 | field |  |  |  |  | - |  |  |  |  | `cancelButtonStyle?: PickerDialogButtonStyle;` |
+| arkui.component.timePicker | TimePickerDialogOptions | selectedTextStyle | 0 | field |  |  |  |  | - |  |  |  |  | `selectedTextStyle?: PickerTextStyle;` |
+| arkui.component.timePicker | TimePickerDialogOptions | maskRect | 0 | field |  |  |  |  | - |  |  |  |  | `maskRect?: Rectangle;` |
+| arkui.component.timePicker | TimePickerDialogOptions | alignment | 0 | field |  |  |  |  | - |  |  |  |  | `alignment?: DialogAlignment;` |
+| arkui.component.timePicker | TimePickerDialogOptions | offset | 0 | field |  |  |  |  | - |  |  |  |  | `offset?: Offset;` |
+| arkui.component.timePicker | TimePickerDialogOptions | onAccept | 0 | field |  |  |  |  | - |  |  |  |  | `onAccept?: ((value: TimePickerResult)=> void);` |
+| arkui.component.timePicker | TimePickerDialogOptions | onCancel | 0 | field |  |  |  |  | - |  |  |  |  | `onCancel?: VoidCallback;` |
+| arkui.component.timePicker | TimePickerDialogOptions | onChange | 0 | field |  |  |  |  | - |  |  |  |  | `onChange?: ((value: TimePickerResult)=> void);` |
+| arkui.component.timePicker | TimePickerDialogOptions | onEnterSelectedArea | 0 | field |  |  |  |  | - |  |  |  |  | `onEnterSelectedArea?: Callback<TimePickerResult>;` |
+| arkui.component.timePicker | TimePickerDialogOptions | backgroundColor | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundColor?: ResourceColor;` |
+| arkui.component.timePicker | TimePickerDialogOptions | backgroundBlurStyle | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyle?: BlurStyle;` |
+| arkui.component.timePicker | TimePickerDialogOptions | backgroundBlurStyleOptions | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundBlurStyleOptions?: BackgroundBlurStyleOptions;` |
+| arkui.component.timePicker | TimePickerDialogOptions | backgroundEffect | 0 | field |  |  |  |  | - |  |  |  |  | `backgroundEffect?: BackgroundEffectOptions;` |
+| arkui.component.timePicker | TimePickerDialogOptions | enableCascade | 0 | field |  |  |  |  | - |  |  |  |  | `enableCascade?: boolean;` |
+| arkui.component.timePicker | TimePickerDialogOptions | onDidAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidAppear?: VoidCallback;` |
+| arkui.component.timePicker | TimePickerDialogOptions | onDidDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onDidDisappear?: VoidCallback;` |
+| arkui.component.timePicker | TimePickerDialogOptions | onWillAppear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillAppear?: VoidCallback;` |
+| arkui.component.timePicker | TimePickerDialogOptions | onWillDisappear | 0 | field |  |  |  |  | - |  |  |  |  | `onWillDisappear?: VoidCallback;` |
+| arkui.component.timePicker | TimePickerDialogOptions | shadow | 0 | field |  |  |  |  | - |  |  |  |  | `shadow?: (ShadowOptions | ShadowStyle);` |
+| arkui.component.timePicker | TimePickerDialogOptions | dateTimeOptions | 0 | field |  |  |  |  | - |  |  |  |  | `dateTimeOptions?: DateTimeOptions;` |
+| arkui.component.timePicker | TimePickerDialogOptions | enableHoverMode | 0 | field |  |  |  |  | - |  |  |  |  | `enableHoverMode?: boolean;` |
+| arkui.component.timePicker | TimePickerDialogOptions | hoverModeArea | 0 | field |  |  |  |  | - |  |  |  |  | `hoverModeArea?: HoverModeAreaType;` |
+| arkui.component.timePicker | TimePickerDialogOptions | enableHapticFeedback | 0 | field |  |  |  |  | - |  |  |  |  | `enableHapticFeedback?: boolean;` |
 | arkui.component.timePicker | TimePickerDialog | TimePickerDialog | 0 | class | done | unnamed | TimePickerDialog | - | done | Ekaterina Stepanova |  |  |  | `export declare class TimePickerDialog {` |
 | arkui.component.timePicker | TimePickerDialog | constructor | 0 | method | done | TimePickerDialog | construct | - | done | Ekaterina Stepanova |  |  |  | `public constructor() {}` |
 | arkui.component.timePicker | unnamed | TimePicker | 0 | function | done | TimePicker | setTimePickerOptions | - | done | Politov Mikhail |  |  |  | `@memo() @ComponentBuilder() export declare function TimePicker(options?: TimePickerOptions, @memo() content_?: (()=> void)): TimePickerAttribute` |
@@ -7124,6 +8203,8 @@
 | arkui.component.uiExtensionComponent | UIExtensionProxy | onSyncReceiverRegister | 0 | method | testskipped | UIExtensionProxy | onSyncReceiverRegisterSyncReceiverRegister | - | testskipped | Tuzhilkin Ivan |  |  |  | `onSyncReceiverRegister(type: "syncReceiverRegister", callback: Callback<UIExtensionProxy>): void` |
 | arkui.component.uiExtensionComponent | UIExtensionProxy | offAsyncReceiverRegister | 0 | method | testskipped | UIExtensionProxy | offAsyncReceiverRegisterAsyncReceiverRegister | - | testskipped | Tuzhilkin Ivan |  |  |  | `offAsyncReceiverRegister(type: "asyncReceiverRegister", callback?: Callback<UIExtensionProxy>): void` |
 | arkui.component.uiExtensionComponent | UIExtensionProxy | offSyncReceiverRegister | 0 | method | testskipped | UIExtensionProxy | offSyncReceiverRegisterSyncReceiverRegister | - | testskipped | Tuzhilkin Ivan |  |  |  | `offSyncReceiverRegister(type: "syncReceiverRegister", callback?: Callback<UIExtensionProxy>): void` |
+| arkui.component.uiExtensionComponent | UIExtensionProxy | on | 0 | method | Deleted because of overload |  |  | Deleted because of overload | - |  |  |  |  | `overload on{onAsyncReceiverRegister, onSyncReceiverRegister};` |
+| arkui.component.uiExtensionComponent | UIExtensionProxy | off | 0 | method | Deleted because of overload |  |  | Deleted because of overload | - |  |  |  |  | `overload off{offAsyncReceiverRegister, offSyncReceiverRegister};` |
 | arkui.component.uiExtensionComponent | UIExtensionComponentAttribute | UIExtensionComponentAttribute | 0 | interface |  | unnamed | UIExtensionComponent | - |  | Tuzhilkin Ivan |  |  |  | `export declare interface UIExtensionComponentAttribute extends CommonMethod {` |
 | arkui.component.uiExtensionComponent | UIExtensionComponentAttribute | onRemoteReady | 0 | method | testskipped | UIExtensionComponent | setOnRemoteReady | - | testskipped | Tuzhilkin Ivan |  |  |  | `onRemoteReady(callback: (Callback<UIExtensionProxy> | undefined)): this` |
 | arkui.component.uiExtensionComponent | UIExtensionComponentAttribute | onReceive | 0 | method |  | UIExtensionComponent | setOnReceive | - |  | Tuzhilkin Ivan |  |  |  | `onReceive(callback: (ReceiveCallback | undefined)): this` |
@@ -7272,9 +8353,9 @@
 | arkui.component.units | MarkStyle | strokeWidth | 0 | field | generated | MarkStyle | strokeWidth | - | generated |  |  |  |  | `strokeWidth?: Length;` |
 | arkui.component.units | ColorFilter | ColorFilter | 0 | class | done | unnamed | ColorFilter | - | done | Evstigneev Roman |  |  |  | `export declare class ColorFilter {` |
 | arkui.component.units | ColorFilter | constructor | 0 | method | in progress | ColorFilter | construct | - | in progress | Evstigneev Roman |  |  |  | `public constructor(value: number[])` |
-| arkui.component.units | TouchPoint | TouchPoint | 0 | interface | generated | unnamed | TouchPoint | - | generated |  |  |  |  | `export declare interface TouchPoint {` |
-| arkui.component.units | TouchPoint | x | 0 | field | generated | TouchPoint | x | - | generated |  |  |  |  | `x: Dimension;` |
-| arkui.component.units | TouchPoint | y | 0 | field | generated | TouchPoint | y | - | generated |  |  |  |  | `y: Dimension;` |
+| arkui.component.units | TouchPoint | TouchPoint | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface TouchPoint {` |
+| arkui.component.units | TouchPoint | x | 0 | field |  |  |  |  | - |  |  |  |  | `x: Dimension;` |
+| arkui.component.units | TouchPoint | y | 0 | field |  |  |  |  | - |  |  |  |  | `y: Dimension;` |
 | arkui.component.units | DirectionalEdgesT | DirectionalEdgesT | 0 | interface | generated | unnamed | DirectionalEdgesT_Number | - | generated |  |  |  |  | `export declare interface DirectionalEdgesT<T> {` |
 | arkui.component.units | DirectionalEdgesT | start | 0 | field | generated | DirectionalEdgesT_Number | start | - | generated |  |  |  |  | `start: T;` |
 | arkui.component.units | DirectionalEdgesT | end | 0 | field | generated | DirectionalEdgesT_Number | end | - | generated |  |  |  |  | `end: T;` |
@@ -7299,6 +8380,7 @@
 | arkui.stateManagement.utils | UIUtils | makeObserved | 0 | method |  |  |  |  | - |  |  |  |  | `public static makeObserved<T extends object>(source: T): T` |
 | arkui.stateManagement.utils | UIUtils | makeBindingReadonly | 0 | method |  |  |  |  | - |  |  |  |  | `public static makeBindingReadonly<T>(getter: GetterCallback<T>): Binding<T>` |
 | arkui.stateManagement.utils | UIUtils | makeBindingMutable | 0 | method |  |  |  |  | - |  |  |  |  | `public static makeBindingMutable<T>(getter: GetterCallback<T>, setter: SetterCallback<T>): MutableBinding<T>` |
+| arkui.stateManagement.utils | UIUtils | makeBinding | 0 | method | Deleted because of overload |  |  | Deleted because of overload | - |  |  |  |  | `public static overload makeBinding{makeBindingReadonly, makeBindingMutable};` |
 | arkui.stateManagement.utils | UIUtils | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.stateManagement.utils | unnamed | GetterCallback | 0 | field |  |  |  |  | - |  |  |  |  | `export type GetterCallback<T> = (()=> T);` |
 | arkui.stateManagement.utils | unnamed | SetterCallback | 0 | field |  |  |  |  | - |  |  |  |  | `export type SetterCallback<T> = ((newValue: T)=> void);` |
@@ -7344,6 +8426,7 @@
 | arkui.component.video | VideoController | exitFullscreen | 0 | method | done | VideoController | exitFullscreen | - | done | Erokhin Ilya |  |  |  | `public exitFullscreen(): void` |
 | arkui.component.video | VideoController | setCurrentTimeDefault | 0 | method |  | VideoController | setCurrentTimeDefault | - |  |  |  |  |  | `public setCurrentTimeDefault(value: double): void` |
 | arkui.component.video | VideoController | setCurrentTimeWithMode | 0 | method |  | VideoController | setCurrentTimeWithMode | - |  |  |  |  |  | `public setCurrentTimeWithMode(value: double, seekMode: SeekMode): void` |
+| arkui.component.video | VideoController | setCurrentTime | 0 | method | Deleted because of overload |  |  | Deleted because of overload | - |  |  |  |  | `public overload setCurrentTime{setCurrentTimeDefault, setCurrentTimeWithMode};` |
 | arkui.component.video | VideoController | reset | 0 | method | done | VideoController | reset | - | done | Erokhin Ilya |  |  |  | `public reset(): void` |
 | arkui.component.video | VideoAttribute | VideoAttribute | 0 | interface | blocked AceEngine | unnamed | Video | - | blocked AceEngine | Erokhin Ilya |  |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 | `export declare interface VideoAttribute extends CommonMethod {` |
 | arkui.component.video | VideoAttribute | muted | 0 | method | done | Video | setMuted | - | done | Erokhin Ilya | pass |  |  | `muted(value: (boolean | undefined)): this` |
