@@ -3928,10 +3928,10 @@
 |`keepEditableState`| Function | Tuzhilkin Ivan | done |  | |
 |`getText`| Property | Tuzhilkin Ivan | done |  | |
 |`setText`| Property | Tuzhilkin Ivan | done |  | |
-|*SwipeGesture*| *Class* | | | | |
-|`construct`| Function | | | | |
-|`$_instantiate`| Function | | | | |
-|`onAction`| Function | | | | |
+|*SwipeGesture*| *Class* | Samarin Sergey | in progress | | |
+|`construct`| Function | Samarin Sergey | in progress | | |
+|`$_instantiate`| Function | Samarin Sergey | in progress | | |
+|`onAction`| Function | Samarin Sergey | in progress | | |
 |*SwipeGestureEvent*| *Class* | Evstigneev Roman | done | | |
 |`construct`| Function |Evstigneev Roman | done | | |
 |`getAngle`| Property | Evstigneev Roman | done | | |
@@ -4081,13 +4081,13 @@
 |*TextShadowStyle*| *Class* |  Politov Mikhail | done |  | |
 |`construct`| Function |Politov Mikhail | done |  | |
 |`getTextShadow`| Property |  Politov Mikhail | done | | |
-|*TextStyle*| *Class* | | |
-|`construct`| Function | | |
-|`getFontColor`| Property | | |
-|`getFontFamily`| Property | | |
-|`getFontSize`| Property | | |
-|`getFontWeight`| Property | | |
-|`getFontStyle`| Property | | |
+|*TextStyle*| *Class* | ? | testskipped |
+|`construct`| Function | ? | testskipped |
+|`getFontColor`| Property | ? | testskipped |
+|`getFontFamily`| Property | ? | testskipped |
+|`getFontSize`| Property | ? | testskipped |
+|`getFontWeight`| Property | ? | testskipped |
+|`getFontStyle`| Property | ? | testskipped |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |  |
 |`construct`| Function |Ekaterina Stepanova| done | pass |  |
 |`start`| Function |Ekaterina Stepanova| done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
