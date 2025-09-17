@@ -2644,10 +2644,10 @@
 |*FullScreenExitHandler*|*Class*||||
 |`construct`           |Function||||
 |`exitFullScreen`      |Function||||
-|*Gesture*| *Class* | | | | |
-|`construct`| Function | | | | |
-|`tag`| Function | | | | |
-|`allowedTypes`| Function | | | | |
+|*Gesture*| *Class* | Samarin Sergey | in progress | | |
+|`construct`| Function | Samarin Sergey | in progress | | |
+|`tag`| Function | Samarin Sergey | in progress | | |
+|`allowedTypes`| Function | Samarin Sergey | in progress | | |
 |*GestureEvent*| *Class* | Samarin Sergey | done |  | |
 |`construct`| Function |Samarin Sergey | done |  | |
 |`getRepeat`| Function | Samarin Sergey | done | pass | |
@@ -4081,13 +4081,13 @@
 |*TextShadowStyle*| *Class* |  Politov Mikhail | done |  | |
 |`construct`| Function |Politov Mikhail | done |  | |
 |`getTextShadow`| Property |  Politov Mikhail | done | | |
-|*TextStyle*| *Class* | ? | testskipped |
-|`construct`| Function | ? | testskipped |
-|`getFontColor`| Property | ? | testskipped |
-|`getFontFamily`| Property | ? | testskipped |
-|`getFontSize`| Property | ? | testskipped |
-|`getFontWeight`| Property | ? | testskipped |
-|`getFontStyle`| Property | ? | testskipped |
+|*TextStyle*| *Class* | Tuzhilkin Ivan | done |
+|`construct`| Function | Tuzhilkin Ivan | done |
+|`getFontColor`| Property | Tuzhilkin Ivan | done |
+|`getFontFamily`| Property | Tuzhilkin Ivan | done |
+|`getFontSize`| Property | Tuzhilkin Ivan | done |
+|`getFontWeight`| Property | Tuzhilkin Ivan | done |
+|`getFontStyle`| Property | Tuzhilkin Ivan | done |
 |*TextTimerController*| *Class* |Ekaterina Stepanova| done |  |  |
 |`construct`| Function |Ekaterina Stepanova| done | pass |  |
 |`start`| Function |Ekaterina Stepanova| done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
