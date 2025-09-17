@@ -920,6 +920,12 @@
 | arkui.component.animator | AnimatorAttribute | onFrame | 0 | method | managed side | Animator | setOnFrame | - | managed side | managed side |  |  | deprecated since 12 | `onFrame(event: (((value: number)=> void) | undefined)): this` |
 | arkui.component.animator | AnimatorAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<AnimatorAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.animator | unnamed | Animator | 0 | function | managed side | Animator | setAnimatorOptions | - | managed side | managed side |  |  |  | `@memo() @ComponentBuilder() export declare function Animator(value: string, @memo() content_?: (()=> void)): AnimatorAttribute` |
+| arkui.stateManagement.storage.appStorageV2 | AppStorageV2 | AppStorageV2 | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class AppStorageV2 {` |
+| arkui.stateManagement.storage.appStorageV2 | AppStorageV2 | connect | 0 | method |  |  |  |  | - |  |  |  |  | `public static connect<T extends object>(ttype: Type, key: string, defaultCreator?: StorageDefaultCreator<T>): (T | undefined)` |
+| arkui.stateManagement.storage.appStorageV2 | AppStorageV2 | connect | 1 | method |  |  |  |  | - |  |  |  |  | `public static connect<T extends object>(ttype: Type, defaultCreator?: StorageDefaultCreator<T>): (T | undefined)` |
+| arkui.stateManagement.storage.appStorageV2 | AppStorageV2 | remove | 0 | method |  |  |  |  | - |  |  |  |  | `public static remove(keyOrType: (string | Type)): void` |
+| arkui.stateManagement.storage.appStorageV2 | AppStorageV2 | keys | 0 | method |  |  |  |  | - |  |  |  |  | `public static keys(): Array<string>` |
+| arkui.stateManagement.storage.appStorageV2 | AppStorageV2 | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.AttributeUpdater | unnamed | Initializer | 0 | field | generated | unnamed | Initializer | - | generated |  |  |  |  | `export type Initializer<T> = ((...params: FixedArray<Object>)=> T);` |
 | arkui.AttributeUpdater | AttributeUpdater | AttributeUpdater | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class AttributeUpdater<T>  implements AttributeModifier<T> {` |
 | arkui.AttributeUpdater | AttributeUpdater | attribute | 0 | method |  |  |  |  | - |  |  |  |  | `public get attribute(): (T | undefined)` |
@@ -1102,13 +1108,13 @@
 | arkui.component.canvas | ImageBitmap | close | 0 | method | done | ImageBitmap | close | - | done | Vadim Voronov | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `public close(): void` |
 | arkui.component.canvas | ImageBitmap | constructor | 0 | method | done | ImageBitmap | construct | - | done | Vadim Voronov | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `public constructor(src: (PixelMap | string), unit?: LengthMetricsUnit)` |
 | arkui.component.canvas | ImageData | ImageData | 0 | class | in progress | unnamed | ImageData | - | in progress | Morozov Sergey |  |  |  | `export declare class ImageData {` |
-| arkui.component.canvas | ImageData | data | 0 | method | in progress | ImageData | getData | - | in progress | Morozov Sergey |  |  |  | `public get data(): Uint8ClampedArray` |
+| arkui.component.canvas | ImageData | data | 0 | method | in progress | ImageData | getData | - | in progress | Dudkin Sergey |  |  |  | `public get data(): Uint8ClampedArray` |
 | arkui.component.canvas | ImageData | height | 0 | method | done | ImageData | getHeight | - | done | Morozov Sergey |  |  |  | `public get height(): int` |
 | arkui.component.canvas | ImageData | width | 0 | method | done | ImageData | getWidth | - | done | Morozov Sergey |  |  |  | `public get width(): int` |
 | arkui.component.canvas | ImageData | constructor | 0 | method | done | ImageData | construct | - | done | Morozov Sergey |  |  |  | `public constructor(width: double, height: double, data?: Uint8ClampedArray, unit?: LengthMetricsUnit)` |
 | arkui.component.canvas | RenderingContextSettings | RenderingContextSettings | 0 | class | done | unnamed | RenderingContextSettings | - | done | Vadim Voronov | Vadim Voronov |  |  | `export declare class RenderingContextSettings {` |
-| arkui.component.canvas | RenderingContextSettings | antialias | 0 | method | done | RenderingContextSettings | getAntialias | - | done | Vadim Voronov |  |  |  | `public get antialias(): (boolean | undefined)` |
-| arkui.component.canvas | RenderingContextSettings | antialias | 1 | method | done | RenderingContextSettings | setAntialias | - | done | Vadim Voronov |  |  |  | `public set antialias(antialias: (boolean | undefined))` |
+| arkui.component.canvas | RenderingContextSettings | antialias | 0 | method |  | RenderingContextSettings | getAntialias | - |  |  |  |  |  | `public get antialias(): (boolean | undefined)` |
+| arkui.component.canvas | RenderingContextSettings | antialias | 1 | method |  | RenderingContextSettings | setAntialias | - |  |  |  |  |  | `public set antialias(antialias: (boolean | undefined))` |
 | arkui.component.canvas | RenderingContextSettings | constructor | 0 | method | done | RenderingContextSettings | construct | - | done | Vadim Voronov |  |  |  | `public constructor(antialias?: boolean)` |
 | arkui.component.canvas | CanvasRenderer | CanvasRenderer | 0 | class | blocked IDL | unnamed | CanvasRenderer | - | blocked IDL | Vadim Voronov | Vadim Voronov |  |  | `export declare class CanvasRenderer extends CanvasPath {` |
 | arkui.component.canvas | CanvasRenderer | letterSpacing | 0 | method | blocked IDL | CanvasRenderer | getLetterSpacing | - | blocked IDL | Vadim Voronov |  |  | to be removed from generation, https://gitee.com/nikolay-igotti/idlize/issues/IBP7O2 | `public get letterSpacing(): (LengthMetrics | string)` |
@@ -1579,10 +1585,10 @@
 | arkui.component.common | DrawModifier | invalidate | 0 | method | done | DrawModifier | invalidate | - | done | Erokhin Ilya | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `public invalidate(): void` |
 | arkui.component.common | DrawModifier | constructor | 0 | method | done | DrawModifier | construct | - | done | Erokhin Ilya | pass |  |  | `public constructor() {}` |
 | arkui.component.common | TransitionEffect | TransitionEffect | 0 | class | in progress | unnamed | TransitionEffect | - | in progress | Andrey Khudenkikh | Sergey Kovalev |  | OHOSUI-2171 | `export declare class TransitionEffect {` |
-| arkui.component.common | TransitionEffect | IDENTITY | 0 | method | done | TransitionEffect | getIDENTITY | - | done | Andrey Khudenkikh | failed |  | OHOSUI-2171 | `public static get IDENTITY(): TransitionEffect` |
-| arkui.component.common | TransitionEffect | OPACITY | 0 | method | done | TransitionEffect | getOPACITY | - | done | Andrey Khudenkikh | failed |  | OHOSUI-2171 | `public static get OPACITY(): TransitionEffect` |
-| arkui.component.common | TransitionEffect | SLIDE | 0 | method | done | TransitionEffect | getSLIDE | - | done | Andrey Khudenkikh | failed |  | OHOSUI-2171 | `public static get SLIDE(): TransitionEffect` |
-| arkui.component.common | TransitionEffect | SLIDE_SWITCH | 0 | method | done | TransitionEffect | getSLIDE_SWITCH | - | done | Andrey Khudenkikh | failed |  | OHOSUI-2171 | `public static get SLIDE_SWITCH(): TransitionEffect` |
+| arkui.component.common | TransitionEffect | IDENTITY | 0 | method |  | TransitionEffect | getIDENTITY | - |  |  |  |  |  | `public static get IDENTITY(): TransitionEffect` |
+| arkui.component.common | TransitionEffect | OPACITY | 0 | method |  | TransitionEffect | getOPACITY | - |  |  |  |  |  | `public static get OPACITY(): TransitionEffect` |
+| arkui.component.common | TransitionEffect | SLIDE | 0 | method |  | TransitionEffect | getSLIDE | - |  |  |  |  |  | `public static get SLIDE(): TransitionEffect` |
+| arkui.component.common | TransitionEffect | SLIDE_SWITCH | 0 | method |  | TransitionEffect | getSLIDE_SWITCH | - |  |  |  |  |  | `public static get SLIDE_SWITCH(): TransitionEffect` |
 | arkui.component.common | TransitionEffect | translate | 0 | method | done | TransitionEffect | translate | - | done | Andrey Khudenkikh | failed |  | OHOSUI-2171 | `public static translate(options: TranslateOptions): TransitionEffect` |
 | arkui.component.common | TransitionEffect | rotate | 0 | method | done | TransitionEffect | rotate | - | done | Andrey Khudenkikh | failed |  | OHOSUI-2171 | `public static rotate(options: RotateOptions): TransitionEffect` |
 | arkui.component.common | TransitionEffect | scale | 0 | method | done | TransitionEffect | scale | - | done | Andrey Khudenkikh | failed |  | OHOSUI-2171 | `public static scale(options: ScaleOptions): TransitionEffect` |
@@ -1590,12 +1596,12 @@
 | arkui.component.common | TransitionEffect | move | 0 | method | done | TransitionEffect | move | - | done | Andrey Khudenkikh | failed |  | OHOSUI-2171 | `public static move(edge: TransitionEdge): TransitionEffect` |
 | arkui.component.common | TransitionEffect | asymmetric | 0 | method | done | TransitionEffect | asymmetric | - | done | Andrey Khudenkikh | failed |  | OHOSUI-2171 | `public static asymmetric(appear: TransitionEffect, disappear: TransitionEffect): TransitionEffect` |
 | arkui.component.common | TransitionEffect | constructor | 0 | method | done | TransitionEffect | construct0 | - | done | Andrey Khudenkikh |  |  |  | `public constructor(type: ("identity" | "slideSwitch"), effect: undefined)` |
-| arkui.component.common | TransitionEffect | constructor | 1 | method |  | TransitionEffect | construct1 | - |  |  |  |  |  | `public constructor(type: "opacity", effect: number)` |
-| arkui.component.common | TransitionEffect | constructor | 2 | method |  | TransitionEffect | construct2 | - |  |  |  |  |  | `public constructor(type: "move", effect: TransitionEdge)` |
-| arkui.component.common | TransitionEffect | constructor | 3 | method |  | TransitionEffect | construct3 | - |  |  |  |  |  | `public constructor(type: "translate", effect: TranslateOptions)` |
-| arkui.component.common | TransitionEffect | constructor | 4 | method |  | TransitionEffect | construct4 | - |  |  |  |  |  | `public constructor(type: "rotate", effect: RotateOptions)` |
-| arkui.component.common | TransitionEffect | constructor | 5 | method |  | TransitionEffect | construct5 | - |  |  |  |  |  | `public constructor(type: "scale", effect: ScaleOptions)` |
-| arkui.component.common | TransitionEffect | constructor | 6 | method |  | TransitionEffect | construct6 | - |  |  |  |  |  | `public constructor(type: "asymmetric", effect: AsymmetricTransitionOption)` |
+| arkui.component.common | TransitionEffect | constructor | 1 | method | testskipped | TransitionEffect | construct1 | - | testskipped | HQ |  |  |  | `public constructor(type: "opacity", effect: number)` |
+| arkui.component.common | TransitionEffect | constructor | 2 | method | testskipped | TransitionEffect | construct2 | - | testskipped | HQ |  |  |  | `public constructor(type: "move", effect: TransitionEdge)` |
+| arkui.component.common | TransitionEffect | constructor | 3 | method | testskipped | TransitionEffect | construct3 | - | testskipped | HQ |  |  |  | `public constructor(type: "translate", effect: TranslateOptions)` |
+| arkui.component.common | TransitionEffect | constructor | 4 | method | testskipped | TransitionEffect | construct4 | - | testskipped | HQ |  |  |  | `public constructor(type: "rotate", effect: RotateOptions)` |
+| arkui.component.common | TransitionEffect | constructor | 5 | method | testskipped | TransitionEffect | construct5 | - | testskipped | HQ |  |  |  | `public constructor(type: "scale", effect: ScaleOptions)` |
+| arkui.component.common | TransitionEffect | constructor | 6 | method | testskipped | TransitionEffect | construct6 | - | testskipped | HQ |  |  |  | `public constructor(type: "asymmetric", effect: AsymmetricTransitionOption)` |
 | arkui.component.common | TransitionEffect | animation | 0 | method | done | TransitionEffect | animation | - | done | Andrey Khudenkikh | failed |  | OHOSUI-2171 | `public animation(value: AnimateParam): TransitionEffect` |
 | arkui.component.common | TransitionEffect | combine | 0 | method | done | TransitionEffect | combine | - | done | Andrey Khudenkikh | failed |  | OHOSUI-2171 | `public combine(transitionEffect: TransitionEffect): TransitionEffect` |
 | arkui.component.common | ItemDragInfo | ItemDragInfo | 0 | interface | generated | unnamed | ItemDragInfo | - | generated |  |  |  |  | `export declare interface ItemDragInfo {` |
@@ -1850,20 +1856,20 @@
 | arkui.component.common | MouseEvent | pressedButtons | 0 | field | done | MouseEvent | getPressedButtons | - | done | Kovalev Sergey |  |  | doesn't present in FB missed in SDK since 15, done for Upstream | `pressedButtons?: MouseButton[];` |
 | arkui.component.common | MouseEvent | pressedButtons | 0 | field | done | MouseEvent | setPressedButtons | - | done | Kovalev Sergey |  |  | doesn't present in FB missed in SDK since 15, done for Upstream | `pressedButtons?: MouseButton[];` |
 | arkui.component.common | AccessibilityHoverEvent | AccessibilityHoverEvent | 0 | interface | done | unnamed | AccessibilityHoverEvent | - | done | Pavelyev Ivan |  |  |  | `export declare interface AccessibilityHoverEvent extends BaseEvent {` |
-| arkui.component.common | AccessibilityHoverEvent | type | 0 | field | done | AccessibilityHoverEvent | getType | - | done | Pavelyev Ivan |  |  |  | `type: AccessibilityHoverType;` |
-| arkui.component.common | AccessibilityHoverEvent | type | 0 | field | done | AccessibilityHoverEvent | setType | - | done | Pavelyev Ivan |  |  |  | `type: AccessibilityHoverType;` |
-| arkui.component.common | AccessibilityHoverEvent | x | 0 | field | done | AccessibilityHoverEvent | getX | - | done | Pavelyev Ivan |  |  | UT by Vadim Voronov | `x: double;` |
-| arkui.component.common | AccessibilityHoverEvent | x | 0 | field | done | AccessibilityHoverEvent | setX | - | done | Pavelyev Ivan |  |  | UT by Vadim Voronov | `x: double;` |
-| arkui.component.common | AccessibilityHoverEvent | y | 0 | field | done | AccessibilityHoverEvent | getY | - | done | Pavelyev Ivan |  |  | UT by Vadim Voronov | `y: double;` |
-| arkui.component.common | AccessibilityHoverEvent | y | 0 | field | done | AccessibilityHoverEvent | setY | - | done | Pavelyev Ivan |  |  | UT by Vadim Voronov | `y: double;` |
-| arkui.component.common | AccessibilityHoverEvent | displayX | 0 | field | done | AccessibilityHoverEvent | getDisplayX | - | done | Pavelyev Ivan |  |  | UT by Vadim Voronov | `displayX: double;` |
-| arkui.component.common | AccessibilityHoverEvent | displayX | 0 | field | done | AccessibilityHoverEvent | setDisplayX | - | done | Pavelyev Ivan |  |  | UT by Vadim Voronov | `displayX: double;` |
-| arkui.component.common | AccessibilityHoverEvent | displayY | 0 | field | done | AccessibilityHoverEvent | getDisplayY | - | done | Pavelyev Ivan |  |  | UT by Vadim Voronov | `displayY: double;` |
-| arkui.component.common | AccessibilityHoverEvent | displayY | 0 | field | done | AccessibilityHoverEvent | setDisplayY | - | done | Pavelyev Ivan |  |  | UT by Vadim Voronov | `displayY: double;` |
-| arkui.component.common | AccessibilityHoverEvent | windowX | 0 | field | done | AccessibilityHoverEvent | getWindowX | - | done | Pavelyev Ivan |  |  | UT by Vadim Voronov | `windowX: double;` |
-| arkui.component.common | AccessibilityHoverEvent | windowX | 0 | field | done | AccessibilityHoverEvent | setWindowX | - | done | Pavelyev Ivan |  |  | UT by Vadim Voronov | `windowX: double;` |
-| arkui.component.common | AccessibilityHoverEvent | windowY | 0 | field | done | AccessibilityHoverEvent | getWindowY | - | done | Pavelyev Ivan |  |  | UT by Vadim Voronov | `windowY: double;` |
-| arkui.component.common | AccessibilityHoverEvent | windowY | 0 | field | done | AccessibilityHoverEvent | setWindowY | - | done | Pavelyev Ivan |  |  | UT by Vadim Voronov | `windowY: double;` |
+| arkui.component.common | AccessibilityHoverEvent | type | 0 | field |  | AccessibilityHoverEvent | getType | - |  |  |  |  |  | `type: AccessibilityHoverType;` |
+| arkui.component.common | AccessibilityHoverEvent | type | 0 | field |  | AccessibilityHoverEvent | setType | - |  |  |  |  |  | `type: AccessibilityHoverType;` |
+| arkui.component.common | AccessibilityHoverEvent | x | 0 | field |  | AccessibilityHoverEvent | getX | - |  |  |  |  |  | `x: double;` |
+| arkui.component.common | AccessibilityHoverEvent | x | 0 | field |  | AccessibilityHoverEvent | setX | - |  |  |  |  |  | `x: double;` |
+| arkui.component.common | AccessibilityHoverEvent | y | 0 | field |  | AccessibilityHoverEvent | getY | - |  |  |  |  |  | `y: double;` |
+| arkui.component.common | AccessibilityHoverEvent | y | 0 | field |  | AccessibilityHoverEvent | setY | - |  |  |  |  |  | `y: double;` |
+| arkui.component.common | AccessibilityHoverEvent | displayX | 0 | field |  | AccessibilityHoverEvent | getDisplayX | - |  |  |  |  |  | `displayX: double;` |
+| arkui.component.common | AccessibilityHoverEvent | displayX | 0 | field |  | AccessibilityHoverEvent | setDisplayX | - |  |  |  |  |  | `displayX: double;` |
+| arkui.component.common | AccessibilityHoverEvent | displayY | 0 | field |  | AccessibilityHoverEvent | getDisplayY | - |  |  |  |  |  | `displayY: double;` |
+| arkui.component.common | AccessibilityHoverEvent | displayY | 0 | field |  | AccessibilityHoverEvent | setDisplayY | - |  |  |  |  |  | `displayY: double;` |
+| arkui.component.common | AccessibilityHoverEvent | windowX | 0 | field |  | AccessibilityHoverEvent | getWindowX | - |  |  |  |  |  | `windowX: double;` |
+| arkui.component.common | AccessibilityHoverEvent | windowX | 0 | field |  | AccessibilityHoverEvent | setWindowX | - |  |  |  |  |  | `windowX: double;` |
+| arkui.component.common | AccessibilityHoverEvent | windowY | 0 | field |  | AccessibilityHoverEvent | getWindowY | - |  |  |  |  |  | `windowY: double;` |
+| arkui.component.common | AccessibilityHoverEvent | windowY | 0 | field |  | AccessibilityHoverEvent | setWindowY | - |  |  |  |  |  | `windowY: double;` |
 | arkui.component.common | TouchObject | TouchObject | 0 | interface | generated | unnamed | TouchObject | - | generated |  |  |  |  | `export declare interface TouchObject {` |
 | arkui.component.common | TouchObject | type | 0 | field | generated | TouchObject | type | - | generated |  |  |  |  | `type: TouchType;` |
 | arkui.component.common | TouchObject | id | 0 | field | generated | TouchObject | id | - | generated |  |  |  |  | `id: number;` |
@@ -1884,17 +1890,17 @@
 | arkui.component.common | HistoricalPoint | force | 0 | field | generated | HistoricalPoint | force | - | generated |  |  |  |  | `force: number;` |
 | arkui.component.common | HistoricalPoint | timestamp | 0 | field | generated | HistoricalPoint | timestamp | - | generated |  |  |  |  | `timestamp: number;` |
 | arkui.component.common | TouchEvent | TouchEvent | 0 | interface | done | unnamed | TouchEvent | - | done | Tuzhilkin Ivan |  |  |  | `export declare interface TouchEvent extends BaseEvent {` |
-| arkui.component.common | TouchEvent | type | 0 | field | done | TouchEvent | getType | - | done | Tuzhilkin Ivan |  |  |  | `type: TouchType;` |
-| arkui.component.common | TouchEvent | type | 0 | field | done | TouchEvent | setType | - | done | Tuzhilkin Ivan |  |  | empty implementation | `type: TouchType;` |
-| arkui.component.common | TouchEvent | touches | 0 | field | done | TouchEvent | getTouches | - | done | Tuzhilkin Ivan |  |  |  | `touches: TouchObject[];` |
-| arkui.component.common | TouchEvent | touches | 0 | field | done | TouchEvent | setTouches | - | done | Tuzhilkin Ivan |  |  | empty implementation | `touches: TouchObject[];` |
-| arkui.component.common | TouchEvent | changedTouches | 0 | field | done | TouchEvent | getChangedTouches | - | done | Tuzhilkin Ivan |  |  |  | `changedTouches: TouchObject[];` |
-| arkui.component.common | TouchEvent | changedTouches | 0 | field | done | TouchEvent | setChangedTouches | - | done | Tuzhilkin Ivan |  |  | empty implementation | `changedTouches: TouchObject[];` |
-| arkui.component.common | TouchEvent | stopPropagation | 0 | field | done | TouchEvent | getStopPropagation | - | done | Samarin Sergey |  |  |  | `stopPropagation: (()=> void);` |
-| arkui.component.common | TouchEvent | stopPropagation | 0 | field | done | TouchEvent | setStopPropagation | - | done | Tuzhilkin Ivan |  |  | empty implementation | `stopPropagation: (()=> void);` |
+| arkui.component.common | TouchEvent | type | 0 | field |  | TouchEvent | getType | - |  |  |  |  |  | `type: TouchType;` |
+| arkui.component.common | TouchEvent | type | 0 | field |  | TouchEvent | setType | - |  |  |  |  |  | `type: TouchType;` |
+| arkui.component.common | TouchEvent | touches | 0 | field |  | TouchEvent | getTouches | - |  |  |  |  |  | `touches: TouchObject[];` |
+| arkui.component.common | TouchEvent | touches | 0 | field |  | TouchEvent | setTouches | - |  |  |  |  |  | `touches: TouchObject[];` |
+| arkui.component.common | TouchEvent | changedTouches | 0 | field |  | TouchEvent | getChangedTouches | - |  |  |  |  |  | `changedTouches: TouchObject[];` |
+| arkui.component.common | TouchEvent | changedTouches | 0 | field |  | TouchEvent | setChangedTouches | - |  |  |  |  |  | `changedTouches: TouchObject[];` |
+| arkui.component.common | TouchEvent | stopPropagation | 0 | field |  | TouchEvent | getStopPropagation | - |  |  |  |  |  | `stopPropagation: (()=> void);` |
+| arkui.component.common | TouchEvent | stopPropagation | 0 | field |  | TouchEvent | setStopPropagation | - |  |  |  |  |  | `stopPropagation: (()=> void);` |
 | arkui.component.common | TouchEvent | getHistoricalPoints | 0 | method | done | TouchEvent | getHistoricalPoints | - | done | Tuzhilkin Ivan |  |  |  | `getHistoricalPoints(): Array<HistoricalPoint>` |
-| arkui.component.common | TouchEvent | preventDefault | 0 | field | done | TouchEvent | getPreventDefault | - | done | Samarin Sergey |  |  |  | `preventDefault: (()=> void);` |
-| arkui.component.common | TouchEvent | preventDefault | 0 | field | done | TouchEvent | setPreventDefault | - | done | Tuzhilkin Ivan |  |  | empty implementation | `preventDefault: (()=> void);` |
+| arkui.component.common | TouchEvent | preventDefault | 0 | field |  | TouchEvent | getPreventDefault | - |  |  |  |  |  | `preventDefault: (()=> void);` |
+| arkui.component.common | TouchEvent | preventDefault | 0 | field |  | TouchEvent | setPreventDefault | - |  |  |  |  |  | `preventDefault: (()=> void);` |
 | arkui.component.common | AxisEvent | AxisEvent | 0 | interface | done | unnamed | AxisEvent | - | done | Tuzhilkin Ivan |  |  |  | `export declare interface AxisEvent extends BaseEvent {` |
 | arkui.component.common | AxisEvent | action | 0 | field | done | AxisEvent | getAction | - | done | Tuzhilkin Ivan |  |  | need cherry-pick to FB | `action: AxisAction;` |
 | arkui.component.common | AxisEvent | action | 0 | field | done | AxisEvent | setAction | - | done | Tuzhilkin Ivan |  |  | need cherry-pick to FB | `action: AxisAction;` |
@@ -2479,7 +2485,7 @@
 | arkui.component.common | CommonMethod | saturate | 0 | method | done | CommonMethod | setSaturate | - | done | Lobah Mikhail | failed |  | commented ViewAbstract static methods code | `saturate(value: (number | undefined)): this` |
 | arkui.component.common | CommonMethod | sepia | 0 | method | done | CommonMethod | setSepia | - | done | Lobah Mikhail | failed |  | commented ViewAbstract static methods code | `sepia(value: (number | undefined)): this` |
 | arkui.component.common | CommonMethod | invert | 0 | method | done | CommonMethod | setInvert | - | done | Lobah Mikhail | failed |  | commented ViewAbstract static methods code | `invert(value: (number | InvertOptions | undefined)): this` |
-| arkui.component.common | CommonMethod | systemBarEffect | 0 | method | blocked IDL | CommonMethod | setSystemBarEffect | - | blocked IDL | Lobah Mikhail | test blocked IDL |  | https://gitee.com/nikolay-igotti/idlize/issues/IBUQXK The common method must have two parameters specified | `systemBarEffect(): this` |
+| arkui.component.common | CommonMethod | systemBarEffect | 0 | method | in progress | CommonMethod | setSystemBarEffect | - | in progress | Ekaterina Stepanova |  |  |  | `systemBarEffect(): this` |
 | arkui.component.common | CommonMethod | hueRotate | 0 | method | done | CommonMethod | setHueRotate | - | done | Lobah Mikhail | pass |  |  | `hueRotate(value: (number | string | undefined)): this` |
 | arkui.component.common | CommonMethod | useShadowBatching | 0 | method | done | CommonMethod | setUseShadowBatching | - | done | Lobah Mikhail | failed |  | commented ViewAbstract static methods code | `useShadowBatching(value: (boolean | undefined)): this` |
 | arkui.component.common | CommonMethod | useEffect | 0 | method | done | CommonMethod | setUseEffect1 | - | done | Evstigneev Roman | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code | `useEffect(useEffect: (boolean | undefined), effectType: (EffectType | undefined)): this` |
@@ -2631,22 +2637,22 @@
 | arkui.component.common | GeometryInfo | borderWidth | 0 | field | generated | GeometryInfo | borderWidth | - | generated |  |  |  |  | `borderWidth: EdgeWidth;` |
 | arkui.component.common | GeometryInfo | margin | 0 | field | generated | GeometryInfo | margin | - | generated |  |  |  |  | `margin: Margin;` |
 | arkui.component.common | GeometryInfo | padding | 0 | field | generated | GeometryInfo | padding | - | generated |  |  |  |  | `padding: Padding;` |
-| arkui.component.common | Layoutable | Layoutable | 0 | interface | done | unnamed | Layoutable | - | done | Samarin Sergey |  |  |  | `export declare interface Layoutable {` |
-| arkui.component.common | Layoutable | measureResult | 0 | field | done | Layoutable | getMeasureResult | - | done | Samarin Sergey |  |  |  | `measureResult: MeasureResult;` |
-| arkui.component.common | Layoutable | measureResult | 0 | field | done | Layoutable | setMeasureResult | - | done | Samarin Sergey |  |  |  | `measureResult: MeasureResult;` |
-| arkui.component.common | Layoutable | uniqueId | 0 | field | done | Layoutable | getUniqueId | - | done | Samarin Sergey |  |  |  | `uniqueId?: number;` |
-| arkui.component.common | Layoutable | uniqueId | 0 | field | done | Layoutable | setUniqueId | - | done | Samarin Sergey |  |  |  | `uniqueId?: number;` |
-| arkui.component.common | Layoutable | layout | 0 | method | done | Layoutable | layout | - | done | Samarin Sergey |  |  |  | `layout(position: Position): void` |
-| arkui.component.common | Layoutable | getMargin | 0 | method | done | Layoutable | getMargin | - | done | Samarin Sergey |  |  |  | `getMargin(): DirectionalEdgesT<number>` |
-| arkui.component.common | Layoutable | getPadding | 0 | method | done | Layoutable | getPadding | - | done | Samarin Sergey |  |  |  | `getPadding(): DirectionalEdgesT<number>` |
-| arkui.component.common | Layoutable | getBorderWidth | 0 | method | done | Layoutable | getBorderWidth | - | done | Samarin Sergey |  |  |  | `getBorderWidth(): DirectionalEdgesT<number>` |
-| arkui.component.common | Measurable | Measurable | 0 | interface | done | unnamed | Measurable | - | done | Samarin Sergey |  |  |  | `export declare interface Measurable {` |
-| arkui.component.common | Measurable | uniqueId | 0 | field | done | Measurable | getUniqueId | - | done | Samarin Sergey |  |  |  | `uniqueId?: number;` |
-| arkui.component.common | Measurable | uniqueId | 0 | field | done | Measurable | setUniqueId | - | done | Samarin Sergey |  |  |  | `uniqueId?: number;` |
-| arkui.component.common | Measurable | measure | 0 | method | done | Measurable | measure | - | done | Samarin Sergey |  |  |  | `measure(constraint: ConstraintSizeOptions): MeasureResult` |
-| arkui.component.common | Measurable | getMargin | 0 | method | done | Measurable | getMargin | - | done | Samarin Sergey |  |  |  | `getMargin(): DirectionalEdgesT<number>` |
-| arkui.component.common | Measurable | getPadding | 0 | method | done | Measurable | getPadding | - | done | Samarin Sergey |  |  |  | `getPadding(): DirectionalEdgesT<number>` |
-| arkui.component.common | Measurable | getBorderWidth | 0 | method | done | Measurable | getBorderWidth | - | done | Samarin Sergey |  |  |  | `getBorderWidth(): DirectionalEdgesT<number>` |
+| arkui.component.common | Layoutable | Layoutable | 0 | interface | in progress | unnamed | Layoutable | - | in progress | Samarin Sergey |  |  |  | `export declare interface Layoutable {` |
+| arkui.component.common | Layoutable | measureResult | 0 | field | in progress | Layoutable | getMeasureResult | - | in progress | Samarin Sergey |  |  |  | `measureResult: MeasureResult;` |
+| arkui.component.common | Layoutable | measureResult | 0 | field | in progress | Layoutable | setMeasureResult | - | in progress | Samarin Sergey |  |  |  | `measureResult: MeasureResult;` |
+| arkui.component.common | Layoutable | uniqueId | 0 | field | in progress | Layoutable | getUniqueId | - | in progress | Samarin Sergey |  |  |  | `uniqueId?: number;` |
+| arkui.component.common | Layoutable | uniqueId | 0 | field | in progress | Layoutable | setUniqueId | - | in progress | Samarin Sergey |  |  |  | `uniqueId?: number;` |
+| arkui.component.common | Layoutable | layout | 0 | method |  | Layoutable | layout | - |  |  |  |  |  | `layout(position: Position): void` |
+| arkui.component.common | Layoutable | getMargin | 0 | method | in progress | Layoutable | getMargin | - | in progress | Samarin Sergey |  |  |  | `getMargin(): DirectionalEdgesT<number>` |
+| arkui.component.common | Layoutable | getPadding | 0 | method | in progress | Layoutable | getPadding | - | in progress | Samarin Sergey |  |  |  | `getPadding(): DirectionalEdgesT<number>` |
+| arkui.component.common | Layoutable | getBorderWidth | 0 | method | in progress | Layoutable | getBorderWidth | - | in progress | Samarin Sergey |  |  |  | `getBorderWidth(): DirectionalEdgesT<number>` |
+| arkui.component.common | Measurable | Measurable | 0 | interface | in progress | unnamed | Measurable | - | in progress | Samarin Sergey |  |  |  | `export declare interface Measurable {` |
+| arkui.component.common | Measurable | uniqueId | 0 | field | in progress | Measurable | getUniqueId | - | in progress | Samarin Sergey |  |  |  | `uniqueId?: number;` |
+| arkui.component.common | Measurable | uniqueId | 0 | field | in progress | Measurable | setUniqueId | - | in progress | Samarin Sergey |  |  |  | `uniqueId?: number;` |
+| arkui.component.common | Measurable | measure | 0 | method | in progress | Measurable | measure | - | in progress | Samarin Sergey |  |  |  | `measure(constraint: ConstraintSizeOptions): MeasureResult` |
+| arkui.component.common | Measurable | getMargin | 0 | method | in progress | Measurable | getMargin | - | in progress | Samarin Sergey |  |  |  | `getMargin(): DirectionalEdgesT<number>` |
+| arkui.component.common | Measurable | getPadding | 0 | method | in progress | Measurable | getPadding | - | in progress | Samarin Sergey |  |  |  | `getPadding(): DirectionalEdgesT<number>` |
+| arkui.component.common | Measurable | getBorderWidth | 0 | method | in progress | Measurable | getBorderWidth | - | in progress | Samarin Sergey |  |  |  | `getBorderWidth(): DirectionalEdgesT<number>` |
 | arkui.component.common | SizeResult | SizeResult | 0 | interface | generated | unnamed | SizeResult | - | generated |  |  |  |  | `export declare interface SizeResult {` |
 | arkui.component.common | SizeResult | width | 0 | field | generated | SizeResult | width | - | generated |  |  |  |  | `width: number;` |
 | arkui.component.common | SizeResult | height | 0 | field | generated | SizeResult | height | - | generated |  |  |  |  | `height: number;` |
@@ -2702,10 +2708,10 @@
 | arkui.component.common | ScrollableCommonMethod | clipContent | 0 | method | done | ScrollableCommonMethod | setClipContent | - | done | Evstigneev Roman |  |  |  | `clipContent(clip: (ContentClipMode | RectShape | undefined)): this` |
 | arkui.component.common | ScrollableCommonMethod | digitalCrownSensitivity | 0 | method | done | ScrollableCommonMethod | setDigitalCrownSensitivity | - | done | Kovalev Sergey | test blocked |  | test blocked since wearable feature | `digitalCrownSensitivity(sensitivity: (CrownSensitivity | undefined)): this` |
 | arkui.component.common | ScrollableCommonMethod | backToTop | 0 | method | done | ScrollableCommonMethod | setBackToTop | - | done | Kovalev Sergey |  |  |  | `backToTop(backToTop: (boolean | undefined)): this` |
-| arkui.component.common | ScrollResult | ScrollResult | 0 | class |  | unnamed | ScrollResult | - |  |  |  |  |  | `export declare class ScrollResult {` |
+| arkui.component.common | ScrollResult | ScrollResult | 0 | class | in progress | unnamed | ScrollResult | - | in progress | Dudkin Sergey |  |  |  | `export declare class ScrollResult {` |
 | arkui.component.common | ScrollResult | offsetRemain | 0 | field |  | ScrollResult | getOffsetRemain | - |  |  |  |  |  | `public offsetRemain: number;` |
 | arkui.component.common | ScrollResult | offsetRemain | 0 | field |  | ScrollResult | setOffsetRemain | - |  |  |  |  |  | `public offsetRemain: number;` |
-| arkui.component.common | ScrollResult | constructor | 0 | method |  | ScrollResult | construct | - |  |  |  |  |  | `public constructor() {}` |
+| arkui.component.common | ScrollResult | constructor | 0 | method | in progress | ScrollResult | construct | - | in progress | Dudkin Sergey |  |  |  | `public constructor() {}` |
 | arkui.component.common | unnamed | OnWillScrollCallback | 0 | field | generated | unnamed | OnWillScrollCallback | - | generated |  |  |  |  | `export type OnWillScrollCallback = ((scrollOffset: number, scrollState: ScrollState, scrollSource: ScrollSource)=> (undefined | ScrollResult));` |
 | arkui.component.common | unnamed | OnScrollCallback | 0 | field | generated | unnamed | OnScrollCallback | - | generated |  |  |  |  | `export type OnScrollCallback = ((scrollOffset: number, scrollState: ScrollState)=> void);` |
 | arkui.component.common | unnamed | OnItemDragStartCallback | 0 | field | generated | unnamed | OnItemDragStartCallback | - | generated |  |  |  |  | `export type OnItemDragStartCallback = ((event: ItemDragInfo, itemIndex: number)=> (CustomBuilder | undefined));` |
@@ -2968,6 +2974,91 @@
 | arkui.component.datePicker | DatePickerDialog | DatePickerDialog | 0 | class | testskipped | unnamed | DatePickerDialog | - | testskipped | Ekaterina Stepanova |  |  |  | `export declare class DatePickerDialog {` |
 | arkui.component.datePicker | DatePickerDialog | constructor | 0 | method | testskipped | DatePickerDialog | construct | - | testskipped | Ekaterina Stepanova |  |  | UT in progress, Skroba Gleb | `public constructor() {}` |
 | arkui.component.datePicker | unnamed | DatePicker | 0 | function | done | DatePicker | setDatePickerOptions | - | done | Vadim Voronov | pass |  |  | `@memo() @ComponentBuilder() export declare function DatePicker(options?: DatePickerOptions, @memo() content_?: (()=> void)): DatePickerAttribute` |
+| arkui.stateManagement.decorator | IMonitor | IMonitor | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare interface IMonitor {` |
+| arkui.stateManagement.decorator | IMonitorValue | IMonitorValue | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare interface IMonitorValue<T> {` |
+| arkui.stateManagement.decorator | IDecoratedVariable | IDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IDecoratedVariable {` |
+| arkui.stateManagement.decorator | IDecoratedVariable | varName | 0 | field |  |  |  |  | - |  |  |  |  | `readonly varName: string;` |
+| arkui.stateManagement.decorator | IDecoratedV1Variable | IDecoratedV1Variable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IDecoratedV1Variable<T> extends IDecoratedVariable {` |
+| arkui.stateManagement.decorator | IDecoratedV1Variable | registerWatchToSource | 0 | method |  |  |  |  | - |  |  |  |  | `registerWatchToSource(decoratedVar: IDecoratedV1Variable<T>): void` |
+| arkui.stateManagement.decorator | IDecoratedImmutableVariable | IDecoratedImmutableVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IDecoratedImmutableVariable<T> {` |
+| arkui.stateManagement.decorator | IDecoratedImmutableVariable | get | 0 | method |  |  |  |  | - |  |  |  |  | `get(): T` |
+| arkui.stateManagement.decorator | IDecoratedMutableVariable | IDecoratedMutableVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IDecoratedMutableVariable<T> {` |
+| arkui.stateManagement.decorator | IDecoratedMutableVariable | get | 0 | method |  |  |  |  | - |  |  |  |  | `get(): T` |
+| arkui.stateManagement.decorator | IDecoratedMutableVariable | set | 0 | method |  |  |  |  | - |  |  |  |  | `set(newValue: T): void` |
+| arkui.stateManagement.decorator | IDecoratedUpdatableVariable | IDecoratedUpdatableVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IDecoratedUpdatableVariable<T> {` |
+| arkui.stateManagement.decorator | IDecoratedUpdatableVariable | update | 0 | method |  |  |  |  | - |  |  |  |  | `update(newValue: T): void` |
+| arkui.stateManagement.decorator | IStateDecoratedVariable | IStateDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IStateDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV1Variable<T> {` |
+| arkui.stateManagement.decorator | IPropDecoratedVariable | IPropDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IPropDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedUpdatableVariable<T>, IDecoratedV1Variable<T> {` |
+| arkui.stateManagement.decorator | IPropRefDecoratedVariable | IPropRefDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IPropRefDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedUpdatableVariable<T>, IDecoratedV1Variable<T> {` |
+| arkui.stateManagement.decorator | ILocalStoragePropRefDecoratedVariable | ILocalStoragePropRefDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface ILocalStoragePropRefDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV1Variable<T> {` |
+| arkui.stateManagement.decorator | ILinkDecoratedVariable | ILinkDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface ILinkDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV1Variable<T> {` |
+| arkui.stateManagement.decorator | IProvideDecoratedVariable | IProvideDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IProvideDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV1Variable<T> {` |
+| arkui.stateManagement.decorator | IConsumeDecoratedVariable | IConsumeDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IConsumeDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV1Variable<T> {` |
+| arkui.stateManagement.decorator | IObjectLinkDecoratedVariable | IObjectLinkDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IObjectLinkDecoratedVariable<T> extends IDecoratedImmutableVariable<T>, IDecoratedUpdatableVariable<T>, IDecoratedV1Variable<T> {` |
+| arkui.stateManagement.decorator | IStorageLinkDecoratedVariable | IStorageLinkDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IStorageLinkDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV1Variable<T> {` |
+| arkui.stateManagement.decorator | IStoragePropDecoratedVariable | IStoragePropDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IStoragePropDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV1Variable<T> {` |
+| arkui.stateManagement.decorator | IStoragePropRefDecoratedVariable | IStoragePropRefDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IStoragePropRefDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV1Variable<T> {` |
+| arkui.stateManagement.decorator | ILocalStorageLinkDecoratedVariable | ILocalStorageLinkDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface ILocalStorageLinkDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV1Variable<T> {` |
+| arkui.stateManagement.decorator | ILocalDecoratedVariable | ILocalDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface ILocalDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV2Variable {` |
+| arkui.stateManagement.decorator | IParamDecoratedVariable | IParamDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IParamDecoratedVariable<T> extends IDecoratedImmutableVariable<T>, IDecoratedUpdatableVariable<T>, IDecoratedV2Variable {` |
+| arkui.stateManagement.decorator | IParamOnceDecoratedVariable | IParamOnceDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IParamOnceDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV2Variable {` |
+| arkui.stateManagement.decorator | unnamed | LinkSourceType | 0 | field |  |  |  |  | - |  |  |  |  | `export type LinkSourceType<T> = IDecoratedV1Variable<T>;` |
+| arkui.stateManagement.decorator | IMutableStateMeta | IMutableStateMeta | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IMutableStateMeta {` |
+| arkui.stateManagement.decorator | IMutableStateMeta | addRef | 0 | method |  |  |  |  | - |  |  |  |  | `addRef(): void` |
+| arkui.stateManagement.decorator | IMutableStateMeta | fireChange | 0 | method |  |  |  |  | - |  |  |  |  | `fireChange(): void` |
+| arkui.stateManagement.decorator | IMutableKeyedStateMeta | IMutableKeyedStateMeta | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IMutableKeyedStateMeta {` |
+| arkui.stateManagement.decorator | IMutableKeyedStateMeta | addRef | 0 | method |  |  |  |  | - |  |  |  |  | `addRef(key: string): void` |
+| arkui.stateManagement.decorator | IMutableKeyedStateMeta | addRef | 1 | method |  |  |  |  | - |  |  |  |  | `addRef(index: int): void` |
+| arkui.stateManagement.decorator | IMutableKeyedStateMeta | fireChange | 0 | method |  |  |  |  | - |  |  |  |  | `fireChange(key: string): void` |
+| arkui.stateManagement.decorator | IMutableKeyedStateMeta | fireChange | 1 | method |  |  |  |  | - |  |  |  |  | `fireChange(index: int): void` |
+| arkui.stateManagement.decorator | IObserve | IObserve | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IObserve {` |
+| arkui.stateManagement.decorator | IObserve | renderingComponent | 0 | field |  |  |  |  | - |  |  |  |  | `readonly renderingComponent: int;` |
+| arkui.stateManagement.decorator | IObserve | renderingId | 0 | field |  |  |  |  | - |  |  |  |  | `readonly renderingId: RenderIdType;` |
+| arkui.stateManagement.decorator | IObserve | shouldAddRef | 0 | method |  |  |  |  | - |  |  |  |  | `shouldAddRef(iObjectsRenderId: RenderIdType): boolean` |
+| arkui.stateManagement.decorator | unnamed | RenderIdType | 0 | field |  |  |  |  | - |  |  |  |  | `export type RenderIdType = int;` |
+| arkui.stateManagement.decorator | IObservedObject | IObservedObject | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IObservedObject extends IWatchSubscriberRegister {` |
+| arkui.stateManagement.decorator | IObservedObject | setV1RenderId | 0 | method |  |  |  |  | - |  |  |  |  | `setV1RenderId(renderId: RenderIdType): void` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | IStateMgmtFactory | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IStateMgmtFactory {` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeMutableStateMeta | 0 | method |  |  |  |  | - |  |  |  |  | `makeMutableStateMeta(): IMutableStateMeta` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeSubscribedWatches | 0 | method |  |  |  |  | - |  |  |  |  | `makeSubscribedWatches(): ISubscribedWatches` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeState | 0 | method |  |  |  |  | - |  |  |  |  | `makeState<T>(owningView: ExtendableComponent, varName: string, initValue: T, watchFunc?: WatchFuncType): IStateDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makePropRef | 0 | method |  |  |  |  | - |  |  |  |  | `makePropRef<T>(owningView: ExtendableComponent, varName: string, initValue: T, watchFunc?: WatchFuncType): IPropRefDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeLink | 0 | method |  |  |  |  | - |  |  |  |  | `makeLink<T>(owningView: ExtendableComponent, varName: string, source: LinkSourceType<T>, watchFunc?: WatchFuncType): ILinkDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeProp | 0 | method |  |  |  |  | - |  |  |  |  | `makeProp<T>(owningView: ExtendableComponent, varName: string, initValue: T, watchFunc?: WatchFuncType): IPropDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeProvide | 0 | method |  |  |  |  | - |  |  |  |  | `makeProvide<T>(owningView: ExtendableComponent, varName: string, provideAlias: string, initValue: T, allowOverride: boolean, watchFunc?: WatchFuncType): IProvideDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeConsume | 0 | method |  |  |  |  | - |  |  |  |  | `makeConsume<T>(owningView: ExtendableComponent, varName: string, provideAlias: string, watchFunc?: WatchFuncType): IConsumeDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeObjectLink | 0 | method |  |  |  |  | - |  |  |  |  | `makeObjectLink<T>(owningView: ExtendableComponent, varName: string, initValue: T, wathcFunc?: WatchFuncType): IObjectLinkDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeStorageLink | 0 | method |  |  |  |  | - |  |  |  |  | `makeStorageLink<T>(owningView: ExtendableComponent, propName: string, varName: string, initValue: T, watchFunc?: WatchFuncType): IStorageLinkDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeStoragePropRef | 0 | method |  |  |  |  | - |  |  |  |  | `makeStoragePropRef<T>(owningView: ExtendableComponent, propName: string, varName: string, initValue: T, watchFunc?: WatchFuncType): IStoragePropRefDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeLocalStoragePropRef | 0 | method |  |  |  |  | - |  |  |  |  | `makeLocalStoragePropRef<T>(owningView: ExtendableComponent, propName: string, varName: string, initValue: T, watchFunc?: WatchFuncType): ILocalStoragePropRefDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeLocalStorageLink | 0 | method |  |  |  |  | - |  |  |  |  | `makeLocalStorageLink<T>(owningView: ExtendableComponent, propName: string, varName: string, initValue: T, watchFunc?: WatchFuncType): ILocalStorageLinkDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeLocal | 0 | method |  |  |  |  | - |  |  |  |  | `makeLocal<T>(owningView: ExtendableComponent, varName: string, localInitValue: T): ILocalDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeStaticLocal | 0 | method |  |  |  |  | - |  |  |  |  | `makeStaticLocal<T>(varName: string, localInitValue: T): ILocalDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeParam | 0 | method |  |  |  |  | - |  |  |  |  | `makeParam<T>(owningView: ExtendableComponent, varName: string, initValue: T): IParamDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeParamOnce | 0 | method |  |  |  |  | - |  |  |  |  | `makeParamOnce<T>(owningView: ExtendableComponent, varName: string, initValue: T): IParamOnceDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeProvider | 0 | method |  |  |  |  | - |  |  |  |  | `makeProvider<T>(owningView: ExtendableComponent, varName: string, providerAlias: string, localInitValue: T): IProviderDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeConsumer | 0 | method |  |  |  |  | - |  |  |  |  | `makeConsumer<T>(owningView: ExtendableComponent, varName: string, providerAlias: string, defaultValue: T): IConsumerDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeComputed | 0 | method |  |  |  |  | - |  |  |  |  | `makeComputed<T>(computedCallback: ComputedCallback<T>, computeName: string): IComputedDecoratedVariable<T>` |
+| arkui.stateManagement.decorator | IStateMgmtFactory | makeMonitor | 0 | method |  |  |  |  | - |  |  |  |  | `makeMonitor(pathInfos: Array<IMonitorPathInfo>, monitorCallback: MonitorCallback): IMonitorDecoratedVariable` |
+| arkui.stateManagement.decorator | IDecoratedV2Variable | IDecoratedV2Variable | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface IDecoratedV2Variable extends IDecoratedVariable {` |
+| arkui.stateManagement.decorator | IProviderDecoratedVariable | IProviderDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IProviderDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV2Variable {` |
+| arkui.stateManagement.decorator | IConsumerDecoratedVariable | IConsumerDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IConsumerDecoratedVariable<T> extends IDecoratedMutableVariable<T>, IDecoratedV2Variable {` |
+| arkui.stateManagement.decorator | unnamed | ComputedCallback | 0 | field |  |  |  |  | - |  |  |  |  | `type ComputedCallback<T> = (()=> T);` |
+| arkui.stateManagement.decorator | unnamed | MonitorCallback | 0 | field |  |  |  |  | - |  |  |  |  | `type MonitorCallback = ((iMonitor: IMonitor)=> void);` |
+| arkui.stateManagement.decorator | unnamed | MonitorValueCallback | 0 | field |  |  |  |  | - |  |  |  |  | `type MonitorValueCallback = (()=> Any);` |
+| arkui.stateManagement.decorator | unnamed | WatchFuncType | 0 | field |  |  |  |  | - |  |  |  |  | `export type WatchFuncType = ((propertyName: string)=> void);` |
+| arkui.stateManagement.decorator | unnamed | WatchIdType | 0 | field |  |  |  |  | - |  |  |  |  | `export type WatchIdType = int;` |
+| arkui.stateManagement.decorator | IWatchSubscriberRegister | IWatchSubscriberRegister | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IWatchSubscriberRegister {` |
+| arkui.stateManagement.decorator | IWatchSubscriberRegister | addWatchSubscriber | 0 | method |  |  |  |  | - |  |  |  |  | `addWatchSubscriber(watchId: WatchIdType): void` |
+| arkui.stateManagement.decorator | IWatchSubscriberRegister | removeWatchSubscriber | 0 | method |  |  |  |  | - |  |  |  |  | `removeWatchSubscriber(watchId: WatchIdType): boolean` |
+| arkui.stateManagement.decorator | ISubscribedWatches | ISubscribedWatches | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface ISubscribedWatches extends IWatchSubscriberRegister {` |
+| arkui.stateManagement.decorator | ISubscribedWatches | executeOnSubscribingWatches | 0 | method |  |  |  |  | - |  |  |  |  | `executeOnSubscribingWatches(propertyName: string): void` |
+| arkui.stateManagement.decorator | IComputedDecoratedVariable | IComputedDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IComputedDecoratedVariable<T> {` |
+| arkui.stateManagement.decorator | IComputedDecoratedVariable | get | 0 | method |  |  |  |  | - |  |  |  |  | `get(): T` |
+| arkui.stateManagement.decorator | IMonitorDecoratedVariable | IMonitorDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IMonitorDecoratedVariable {` |
+| arkui.stateManagement.decorator | IMonitorPathInfo | IMonitorPathInfo | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IMonitorPathInfo {` |
+| arkui.stateManagement.decorator | IMonitorPathInfo | path | 0 | field |  |  |  |  | - |  |  |  |  | `path: string;` |
+| arkui.stateManagement.decorator | IMonitorPathInfo | valueCallback | 0 | field |  |  |  |  | - |  |  |  |  | `valueCallback: MonitorValueCallback;` |
 | arkui.component.divider | DividerAttribute | DividerAttribute | 0 | interface | done | unnamed | Divider | - | done | Tuzhilkin Ivan | pass |  |  | `export declare interface DividerAttribute extends CommonMethod {` |
 | arkui.component.divider | DividerAttribute | vertical | 0 | method | done | Divider | setVertical | - | done | Tuzhilkin Ivan | pass |  |  | `vertical(value: (boolean | undefined)): this` |
 | arkui.component.divider | DividerAttribute | color | 0 | method | done | Divider | setColor | - | done | Tuzhilkin Ivan | pass |  |  | `color(value: (ResourceColor | undefined)): this` |
@@ -2985,11 +3076,11 @@
 | arkui.component.ellipse | EllipseAttribute | EllipseAttribute | 0 | interface | done | unnamed | Ellipse | - | done | Ekaterina Stepanova | pass |  |  | `export declare interface EllipseAttribute extends CommonShapeMethod {` |
 | arkui.component.ellipse | EllipseAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<EllipseAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.ellipse | unnamed | Ellipse | 0 | function | done | Ellipse | setEllipseOptions | - | done | Ekaterina Stepanova | pass |  |  | `@memo() @ComponentBuilder() export declare function Ellipse(options?: EllipseOptions, @memo() content_?: (()=> void)): EllipseAttribute` |
-| arkui.component.embeddedComponent | EmbeddedComponentAttribute | EmbeddedComponentAttribute | 0 | interface | in progress | unnamed | EmbeddedComponent | - | in progress | Ekaterina Stepanova |  |  |  | `export declare interface EmbeddedComponentAttribute extends CommonMethod {` |
-| arkui.component.embeddedComponent | EmbeddedComponentAttribute | onTerminated | 0 | method | in progress | EmbeddedComponent | setOnTerminated | - | in progress | Ekaterina Stepanova |  |  |  | `onTerminated(callback: (Callback<TerminationInfo> | undefined)): this` |
-| arkui.component.embeddedComponent | EmbeddedComponentAttribute | onError | 0 | method | testskipped | EmbeddedComponent | setOnError | - | testskipped | Skroba Gleb |  |  |  | `onError(callback: (ErrorCallback<BusinessError> | undefined)): this` |
+| arkui.component.embeddedComponent | EmbeddedComponentAttribute | EmbeddedComponentAttribute | 0 | interface | blocked | unnamed | EmbeddedComponent | - | blocked | Ekaterina Stepanova |  |  | blocked Arkoala. Want processing | `export declare interface EmbeddedComponentAttribute extends CommonMethod {` |
+| arkui.component.embeddedComponent | EmbeddedComponentAttribute | onTerminated | 0 | method | blocked | EmbeddedComponent | setOnTerminated | - | blocked | Ekaterina Stepanova |  |  | blocked Arkoala. Want processing | `onTerminated(callback: (Callback<TerminationInfo> | undefined)): this` |
+| arkui.component.embeddedComponent | EmbeddedComponentAttribute | onError | 0 | method | testskipped | EmbeddedComponent | setOnError | - | testskipped | Ekaterina Stepanova |  |  |  | `onError(callback: (ErrorCallback<BusinessError> | undefined)): this` |
 | arkui.component.embeddedComponent | EmbeddedComponentAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<EmbeddedComponentAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
-| arkui.component.embeddedComponent | unnamed | EmbeddedComponent | 0 | function | in progress | EmbeddedComponent | setEmbeddedComponentOptions | - | in progress | Ekaterina Stepanova |  |  |  | `@memo() @ComponentBuilder() export declare function EmbeddedComponent(loader: Want, type?: EmbeddedType, @memo() content_?: (()=> void)): EmbeddedComponentAttribute` |
+| arkui.component.embeddedComponent | unnamed | EmbeddedComponent | 0 | function | blocked | EmbeddedComponent | setEmbeddedComponentOptions | - | blocked | Ekaterina Stepanova |  |  | blocked Arkoala. Want processing | `@memo() @ComponentBuilder() export declare function EmbeddedComponent(loader: Want, type?: EmbeddedType, @memo() content_?: (()=> void)): EmbeddedComponentAttribute` |
 | arkui.component.enums | CheckBoxShape | CheckBoxShape | 0 | enum_class | generated | unnamed | CheckBoxShape | - | generated |  |  |  |  | `declare enum CheckBoxShape {` |
 | arkui.component.enums | CheckBoxShape | CIRCLE | 0 | enum_instance | generated | CheckBoxShape | CIRCLE | - | generated |  |  |  |  | `CIRCLE = 0` |
 | arkui.component.enums | CheckBoxShape | ROUNDED_SQUARE | 0 | enum_instance | generated | CheckBoxShape | ROUNDED_SQUARE | - | generated |  |  |  |  | `ROUNDED_SQUARE = 1` |
@@ -3473,6 +3564,14 @@
 | arkui.component.enums | ColorSpace | ColorSpace | 0 | enum_class | generated | unnamed | ColorSpace | - | generated |  |  |  |  | `declare enum ColorSpace {` |
 | arkui.component.enums | ColorSpace | SRGB | 0 | enum_instance | generated | ColorSpace | SRGB | - | generated |  |  |  |  | `SRGB = 0` |
 | arkui.component.enums | ColorSpace | DISPLAY_P3 | 0 | enum_instance | generated | ColorSpace | DISPLAY_P3 | - | generated |  |  |  |  | `DISPLAY_P3 = 1` |
+| arkui.stateManagement.storage.environment | EnvPropsOptions | EnvPropsOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface EnvPropsOptions {` |
+| arkui.stateManagement.storage.environment | EnvPropsOptions | key | 0 | field |  |  |  |  | - |  |  |  |  | `key: string;` |
+| arkui.stateManagement.storage.environment | EnvPropsOptions | defaultValue | 0 | field |  |  |  |  | - |  |  |  |  | `defaultValue: (int | long | double | string | boolean);` |
+| arkui.stateManagement.storage.environment | Environment | Environment | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class Environment {` |
+| arkui.stateManagement.storage.environment | Environment | envProp | 0 | method |  |  |  |  | - |  |  |  |  | `public static envProp<T>(key: string, value: T): boolean` |
+| arkui.stateManagement.storage.environment | Environment | envProps | 0 | method |  |  |  |  | - |  |  |  |  | `public static envProps(props: EnvPropsOptions[]): void` |
+| arkui.stateManagement.storage.environment | Environment | keys | 0 | method |  |  |  |  | - |  |  |  |  | `public static keys(): Array<string>` |
+| arkui.stateManagement.storage.environment | Environment | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.extendableComponent | LifeCycle | LifeCycle | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface LifeCycle {` |
 | arkui.component.extendableComponent | LifeCycle | aboutToAppear | 0 | method |  |  |  |  | - |  |  |  |  | `aboutToAppear(): void {}` |
 | arkui.component.extendableComponent | LifeCycle | aboutToDisappear | 0 | method |  |  |  |  | - |  |  |  |  | `aboutToDisappear(): void {}` |
@@ -3697,13 +3796,13 @@
 | arkui.component.gesture | PinchGestureEvent | pinchCenterY | 0 | field | done | PinchGestureEvent | getPinchCenterY | - | done | Vadim Voronov |  |  |  | `pinchCenterY: number;` |
 | arkui.component.gesture | PinchGestureEvent | pinchCenterY | 0 | field | done | PinchGestureEvent | setPinchCenterY | - | done | Vadim Voronov |  |  |  | `pinchCenterY: number;` |
 | arkui.component.gesture | RotationGestureEvent | RotationGestureEvent | 0 | interface | done | unnamed | RotationGestureEvent | - | done | Andrey Khudenkikh |  |  |  | `export interface RotationGestureEvent extends BaseGestureEvent {` |
-| arkui.component.gesture | RotationGestureEvent | angle | 0 | field | done | RotationGestureEvent | getAngle | - | done | Andrey Khudenkikh |  |  |  | `angle: number;` |
-| arkui.component.gesture | RotationGestureEvent | angle | 0 | field | done | RotationGestureEvent | setAngle | - | done | Andrey Khudenkikh |  |  |  | `angle: number;` |
+| arkui.component.gesture | RotationGestureEvent | angle | 0 | field |  | RotationGestureEvent | getAngle | - |  |  |  |  |  | `angle: number;` |
+| arkui.component.gesture | RotationGestureEvent | angle | 0 | field |  | RotationGestureEvent | setAngle | - |  |  |  |  |  | `angle: number;` |
 | arkui.component.gesture | SwipeGestureEvent | SwipeGestureEvent | 0 | interface | done | unnamed | SwipeGestureEvent | - | done | Evstigneev Roman |  |  |  | `export interface SwipeGestureEvent extends BaseGestureEvent {` |
-| arkui.component.gesture | SwipeGestureEvent | angle | 0 | field | done | SwipeGestureEvent | getAngle | - | done | Evstigneev Roman |  |  |  | `angle: number;` |
-| arkui.component.gesture | SwipeGestureEvent | angle | 0 | field | done | SwipeGestureEvent | setAngle | - | done | Evstigneev Roman |  |  |  | `angle: number;` |
-| arkui.component.gesture | SwipeGestureEvent | speed | 0 | field | done | SwipeGestureEvent | getSpeed | - | done | Evstigneev Roman |  |  |  | `speed: number;` |
-| arkui.component.gesture | SwipeGestureEvent | speed | 0 | field | done | SwipeGestureEvent | setSpeed | - | done | Evstigneev Roman |  |  |  | `speed: number;` |
+| arkui.component.gesture | SwipeGestureEvent | angle | 0 | field |  | SwipeGestureEvent | getAngle | - |  |  |  |  |  | `angle: number;` |
+| arkui.component.gesture | SwipeGestureEvent | angle | 0 | field |  | SwipeGestureEvent | setAngle | - |  |  |  |  |  | `angle: number;` |
+| arkui.component.gesture | SwipeGestureEvent | speed | 0 | field |  | SwipeGestureEvent | getSpeed | - |  |  |  |  |  | `speed: number;` |
+| arkui.component.gesture | SwipeGestureEvent | speed | 0 | field |  | SwipeGestureEvent | setSpeed | - |  |  |  |  |  | `speed: number;` |
 | arkui.component.gesture | GestureEvent | GestureEvent | 0 | interface | done | unnamed | GestureEvent | - | done | Samarin Sergey |  |  |  | `export interface GestureEvent extends BaseEvent {` |
 | arkui.component.gesture | GestureEvent | repeat | 0 | field | done | GestureEvent | getRepeat | - | done | Samarin Sergey | pass |  |  | `repeat: boolean;` |
 | arkui.component.gesture | GestureEvent | repeat | 0 | field | done | GestureEvent | setRepeat | - | done | Samarin Sergey |  |  |  | `repeat: boolean;` |
@@ -3731,10 +3830,10 @@
 | arkui.component.gesture | GestureEvent | velocity | 0 | field | done | GestureEvent | setVelocity | - | done | Lobah Mikhail |  |  |  | `velocity: number;` |
 | arkui.component.gesture | BaseHandlerOptions | BaseHandlerOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface BaseHandlerOptions {` |
 | arkui.component.gesture | BaseHandlerOptions | isFingerCountLimited | 0 | field |  |  |  |  | - |  |  |  |  | `isFingerCountLimited?: boolean;` |
-| arkui.component.gesture | Gesture | Gesture | 0 | class |  | unnamed | Gesture | - |  |  |  |  |  | `export declare class Gesture {` |
-| arkui.component.gesture | Gesture | tag | 0 | method |  | Gesture | tag | - |  |  |  |  |  | `public tag(tag: string): this` |
-| arkui.component.gesture | Gesture | allowedTypes | 0 | method |  | Gesture | allowedTypes | - |  |  |  |  |  | `public allowedTypes(types: Array<SourceTool>): this` |
-| arkui.component.gesture | Gesture | constructor | 0 | method |  | Gesture | construct | - |  |  |  |  |  | `public constructor() {}` |
+| arkui.component.gesture | Gesture | Gesture | 0 | class | in progress | unnamed | Gesture | - | in progress | Samarin Sergey |  |  |  | `export declare class Gesture {` |
+| arkui.component.gesture | Gesture | tag | 0 | method | in progress | Gesture | tag | - | in progress | Samarin Sergey |  |  |  | `public tag(tag: string): this` |
+| arkui.component.gesture | Gesture | allowedTypes | 0 | method | in progress | Gesture | allowedTypes | - | in progress | Samarin Sergey |  |  |  | `public allowedTypes(types: Array<SourceTool>): this` |
+| arkui.component.gesture | Gesture | constructor | 0 | method | in progress | Gesture | construct | - | in progress | Samarin Sergey |  |  |  | `public constructor() {}` |
 | arkui.component.gesture | TapGestureParameters | TapGestureParameters | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface TapGestureParameters extends BaseHandlerOptions {` |
 | arkui.component.gesture | TapGestureParameters | count | 0 | field |  |  |  |  | - |  |  |  |  | `count?: number;` |
 | arkui.component.gesture | TapGestureParameters | fingers | 0 | field |  |  |  |  | - |  |  |  |  | `fingers?: number;` |
@@ -3749,10 +3848,10 @@
 | arkui.component.gesture | PanGestureOptions | getDirection | 0 | method | done | PanGestureOptions | getDirection | - | done | Dudkin Sergey |  |  |  | `public getDirection(): PanDirection` |
 | arkui.component.gesture | PanGestureOptions | getDistance | 0 | method | done | PanGestureOptions | getDistance | - | done | Erokhin Ilya |  |  |  | `public getDistance(): number` |
 | arkui.component.gesture | PanGesture | PanGesture | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare class PanGesture extends Gesture {` |
-| arkui.component.gesture | SwipeGesture | SwipeGesture | 0 | class |  | unnamed | SwipeGesture | - |  |  |  |  |  | `export declare class SwipeGesture extends Gesture {` |
-| arkui.component.gesture | SwipeGesture | $_instantiate | 0 | method |  | SwipeGesture | $_instantiate | - |  |  |  |  |  | `public static $_instantiate(factory: (()=> SwipeGesture), value?: SwipeGestureHandlerOptions): SwipeGesture` |
-| arkui.component.gesture | SwipeGesture | onAction | 0 | method |  | SwipeGesture | onAction | - |  |  |  |  |  | `public onAction(event: Callback<GestureEvent>): this` |
-| arkui.component.gesture | SwipeGesture | constructor | 0 | method |  | SwipeGesture | construct | - |  |  |  |  |  | `public constructor() {}` |
+| arkui.component.gesture | SwipeGesture | SwipeGesture | 0 | class | in progress | unnamed | SwipeGesture | - | in progress | Samarin Sergey |  |  |  | `export declare class SwipeGesture extends Gesture {` |
+| arkui.component.gesture | SwipeGesture | $_instantiate | 0 | method | in progress | SwipeGesture | $_instantiate | - | in progress | Samarin Sergey |  |  |  | `public static $_instantiate(factory: (()=> SwipeGesture), value?: SwipeGestureHandlerOptions): SwipeGesture` |
+| arkui.component.gesture | SwipeGesture | onAction | 0 | method | in progress | SwipeGesture | onAction | - | in progress | Samarin Sergey |  |  |  | `public onAction(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | SwipeGesture | constructor | 0 | method | in progress | SwipeGesture | construct | - | in progress | Samarin Sergey |  |  |  | `public constructor() {}` |
 | arkui.component.gesture | PinchGesture | PinchGesture | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare class PinchGesture extends Gesture {` |
 | arkui.component.gesture | RotationGesture | RotationGesture | 0 | class |  | unnamed | RotationGesture | - |  |  |  |  |  | `export declare class RotationGesture extends Gesture {` |
 | arkui.component.gesture | RotationGesture | $_instantiate | 0 | method |  | RotationGesture | $_instantiate | - |  |  |  |  |  | `public static $_instantiate(factory: (()=> RotationGesture), value?: RotationGestureHandlerOptions): RotationGesture` |
@@ -4306,6 +4405,20 @@
 | arkui.component.loadingProgress | LoadingProgressConfiguration | LoadingProgressConfiguration | 0 | interface | generated | unnamed | LoadingProgressConfiguration | - | generated |  |  |  |  | `export declare interface LoadingProgressConfiguration extends CommonConfiguration<LoadingProgressConfiguration> {` |
 | arkui.component.loadingProgress | LoadingProgressConfiguration | enableLoading | 0 | field | generated | LoadingProgressConfiguration | enableLoading | - | generated |  |  |  |  | `enableLoading: boolean;` |
 | arkui.component.loadingProgress | unnamed | LoadingProgress | 0 | function | done | LoadingProgress | setLoadingProgressOptions | - | done | Samarin Sergey | pass |  |  | `@memo() @ComponentBuilder() export declare function LoadingProgress(@memo() content_?: (()=> void)): LoadingProgressAttribute` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | LocalStorage | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class LocalStorage {` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(initializingProperties?: RecordData)` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | ref | 0 | method |  |  |  |  | - |  |  |  |  | `public ref<T>(propName: string): (AbstractProperty<T> | undefined)` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | setAndRef | 0 | method |  |  |  |  | - |  |  |  |  | `public setAndRef<T>(propName: string, defaultValue: T): AbstractProperty<T>` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | link | 0 | method |  |  |  |  | - |  |  |  |  | `public link<T>(propName: string): (SubscribedAbstractProperty<T> | undefined)` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | setAndLink | 0 | method |  |  |  |  | - |  |  |  |  | `public setAndLink<T>(propName: string, defaultValue: T): SubscribedAbstractProperty<T>` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | has | 0 | method |  |  |  |  | - |  |  |  |  | `public has(propName: string): boolean` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | get | 0 | method |  |  |  |  | - |  |  |  |  | `public get<T>(propName: string): (T | undefined)` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | set | 0 | method |  |  |  |  | - |  |  |  |  | `public set<T>(propName: string, newValue: T): boolean` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | setOrCreate | 0 | method |  |  |  |  | - |  |  |  |  | `public setOrCreate<T>(propName: string, newValue: T): boolean` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | keys | 0 | method |  |  |  |  | - |  |  |  |  | `public keys(): IterableIterator<string>` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | size | 0 | method |  |  |  |  | - |  |  |  |  | `public size(): int` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | delete | 0 | method |  |  |  |  | - |  |  |  |  | `public delete(propName: string): boolean` |
+| arkui.stateManagement.storage.localStorage | LocalStorage | clear | 0 | method |  |  |  |  | - |  |  |  |  | `public clear(): boolean` |
 | arkui.component.marquee | MarqueeOptions | MarqueeOptions | 0 | interface | generated | unnamed | MarqueeOptions | - | generated |  |  |  |  | `export interface MarqueeOptions {` |
 | arkui.component.marquee | MarqueeOptions | start | 0 | field | generated | MarqueeOptions | start | - | generated |  |  |  |  | `start: boolean;` |
 | arkui.component.marquee | MarqueeOptions | step | 0 | field | generated | MarqueeOptions | step | - | generated |  |  |  |  | `step?: number;` |
@@ -4342,7 +4455,7 @@
 | arkui.component.matrix2d | Matrix2D | rotate | 0 | method | done | Matrix2D | rotate | - | done | Vadim Voronov |  |  |  | `public rotate(degree: double, rx?: double, ry?: double): Matrix2D` |
 | arkui.component.matrix2d | Matrix2D | translate | 0 | method | done | Matrix2D | translate | - | done | Vadim Voronov |  |  |  | `public translate(tx?: double, ty?: double): Matrix2D` |
 | arkui.component.matrix2d | Matrix2D | scale | 0 | method | done | Matrix2D | scale | - | done | Vadim Voronov |  |  |  | `public scale(sx?: double, sy?: double): Matrix2D` |
-| arkui.component.matrix2d | Matrix2D | constructor | 0 | method | done | Matrix2D | construct0 | - | done | Vadim Voronov |  |  |  | `public constructor()` |
+| arkui.component.matrix2d | Matrix2D | constructor | 0 | method |  | Matrix2D | construct0 | - |  |  |  |  |  | `public constructor()` |
 | arkui.component.matrix2d | Matrix2D | constructor | 1 | method |  | Matrix2D | construct1 | - |  |  |  |  |  | `public constructor(unit: LengthMetricsUnit)` |
 | arkui.component.mediaCachedImage | ASTCResource | ASTCResource | 0 | interface | generated | unnamed | ASTCResource | - | generated |  |  |  |  | `export interface ASTCResource {` |
 | arkui.component.mediaCachedImage | ASTCResource | sources | 0 | field | generated | ASTCResource | sources | - | generated |  |  |  |  | `sources: Array<string>;` |
@@ -4677,12 +4790,12 @@
 | arkui.component.pageTransition | SlideEffect | START | 0 | enum_instance | generated | SlideEffect | START | - | generated |  |  |  |  | `START = 5` |
 | arkui.component.pageTransition | SlideEffect | END | 0 | enum_instance | generated | SlideEffect | END | - | generated |  |  |  |  | `END = 6` |
 | arkui.component.pageTransition | CommonTransition | CommonTransition | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare class CommonTransition {` |
-| arkui.component.pageTransition | PageTransitionOptions | PageTransitionOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface PageTransitionOptions {` |
-| arkui.component.pageTransition | PageTransitionOptions | type | 0 | field |  |  |  |  | - |  |  |  |  | `type?: RouteType;` |
-| arkui.component.pageTransition | PageTransitionOptions | duration | 0 | field |  |  |  |  | - |  |  |  |  | `duration?: number;` |
-| arkui.component.pageTransition | PageTransitionOptions | curve | 0 | field |  |  |  |  | - |  |  |  |  | `curve?: (Curve | string | ICurve);` |
-| arkui.component.pageTransition | PageTransitionOptions | delay | 0 | field |  |  |  |  | - |  |  |  |  | `delay?: number;` |
-| arkui.component.pageTransition | unnamed | PageTransitionCallback | 0 | field |  |  |  |  | - |  |  |  |  | `export type PageTransitionCallback = ((type: RouteType, progress: number)=> void);` |
+| arkui.component.pageTransition | PageTransitionOptions | PageTransitionOptions | 0 | interface | generated | unnamed | PageTransitionOptions | - | generated |  |  |  |  | `export declare interface PageTransitionOptions {` |
+| arkui.component.pageTransition | PageTransitionOptions | type | 0 | field | generated | PageTransitionOptions | type | - | generated |  |  |  |  | `type?: RouteType;` |
+| arkui.component.pageTransition | PageTransitionOptions | duration | 0 | field | generated | PageTransitionOptions | duration | - | generated |  |  |  |  | `duration?: number;` |
+| arkui.component.pageTransition | PageTransitionOptions | curve | 0 | field | generated | PageTransitionOptions | curve | - | generated |  |  |  |  | `curve?: (Curve | string | ICurve);` |
+| arkui.component.pageTransition | PageTransitionOptions | delay | 0 | field | generated | PageTransitionOptions | delay | - | generated |  |  |  |  | `delay?: number;` |
+| arkui.component.pageTransition | unnamed | PageTransitionCallback | 0 | field | generated | unnamed | PageTransitionCallback | - | generated |  |  |  |  | `export type PageTransitionCallback = ((type: RouteType, progress: number)=> void);` |
 | arkui.component.pageTransition | PageTransitionEnter | PageTransitionEnter | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare class PageTransitionEnter extends CommonTransition {` |
 | arkui.component.pageTransition | PageTransitionExit | PageTransitionExit | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare class PageTransitionExit extends CommonTransition {` |
 | arkui.component.particle | unnamed | ParticleTuple | 0 | field | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export type ParticleTuple<T1, T2> = [T1, T2];` |
@@ -4809,6 +4922,39 @@
 | arkui.component.patternLock | PatternLockAttribute | skipUnselectedPoint | 0 | method | done | PatternLock | setSkipUnselectedPoint | - | done | Dmitry A Smirnov |  |  | need merge to fb | `skipUnselectedPoint(skipped: (boolean | undefined)): this` |
 | arkui.component.patternLock | PatternLockAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<PatternLockAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.patternLock | unnamed | PatternLock | 0 | function | done | PatternLock | setPatternLockOptions | - | done | Dmitry A Smirnov | pass |  |  | `@memo() @ComponentBuilder() export declare function PatternLock(controller?: PatternLockController, @memo() content_?: (()=> void)): PatternLockAttribute` |
+| arkui.stateManagement.storage.persistenceV2 | unnamed | StorageDefaultCreator | 0 | field |  |  |  |  | - |  |  |  |  | `export type StorageDefaultCreator<T> = (()=> T);` |
+| arkui.stateManagement.storage.persistenceV2 | ConnectOptions | ConnectOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface ConnectOptions<T extends object> {` |
+| arkui.stateManagement.storage.persistenceV2 | ConnectOptions | type | 0 | field |  |  |  |  | - |  |  |  |  | `type: Type;` |
+| arkui.stateManagement.storage.persistenceV2 | ConnectOptions | key | 0 | field |  |  |  |  | - |  |  |  |  | `key?: string;` |
+| arkui.stateManagement.storage.persistenceV2 | ConnectOptions | defaultCreator | 0 | field |  |  |  |  | - |  |  |  |  | `defaultCreator?: StorageDefaultCreator<T>;` |
+| arkui.stateManagement.storage.persistenceV2 | ConnectOptions | areaMode | 0 | field |  |  |  |  | - |  |  |  |  | `areaMode?: contextConstant.AreaMode;` |
+| arkui.stateManagement.storage.persistenceV2 | unnamed | PersistenceErrorCallback | 0 | field |  |  |  |  | - |  |  |  |  | `export type PersistenceErrorCallback = ((key: string, reason: ("quota" | "serialization" | "unknown"), message: string)=> void);` |
+| arkui.stateManagement.storage.persistenceV2 | SerializableObject | SerializableObject | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface SerializableObject extends jsonx.JsonElementSerializable, jsonx.JsonElementDeserializable {` |
+| arkui.stateManagement.storage.persistenceV2 | PersistenceV2 | PersistenceV2 | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class PersistenceV2 {` |
+| arkui.stateManagement.storage.persistenceV2 | PersistenceV2 | connect | 0 | method |  |  |  |  | - |  |  |  |  | `public static connect<T extends object>(ttype: Type, toJson: ToJSONType<T>, fromJson: FromJSONType<T>, defaultCreator?: StorageDefaultCreator<T>): (T | undefined)` |
+| arkui.stateManagement.storage.persistenceV2 | PersistenceV2 | connect | 1 | method |  |  |  |  | - |  |  |  |  | `public static connect<T extends object>(ttype: Type, key: string, toJson: ToJSONType<T>, fromJson: FromJSONType<T>, defaultCreator?: StorageDefaultCreator<T>): (T | undefined)` |
+| arkui.stateManagement.storage.persistenceV2 | PersistenceV2 | connect | 2 | method |  |  |  |  | - |  |  |  |  | `public static connect<T extends SerializableObject>(ttype: Type, defaultCreator?: StorageDefaultCreator<T>): (T | undefined)` |
+| arkui.stateManagement.storage.persistenceV2 | PersistenceV2 | connect | 3 | method |  |  |  |  | - |  |  |  |  | `public static connect<T extends SerializableObject>(ttype: Type, key: string, defaultCreator?: StorageDefaultCreator<T>): (T | undefined)` |
+| arkui.stateManagement.storage.persistenceV2 | PersistenceV2 | globalConnect | 0 | method |  |  |  |  | - |  |  |  |  | `public static globalConnect<T extends SerializableObject>(connectOptions: ConnectOptions<T>): (T | undefined)` |
+| arkui.stateManagement.storage.persistenceV2 | PersistenceV2 | globalConnect | 1 | method |  |  |  |  | - |  |  |  |  | `public static globalConnect<T extends object>(connectOptions: ConnectOptions<T>, toJson: ToJSONType<T>, fromJson: FromJSONType<T>): (T | undefined)` |
+| arkui.stateManagement.storage.persistenceV2 | PersistenceV2 | save | 0 | method |  |  |  |  | - |  |  |  |  | `public static save(keyOrType: (string | Type)): void` |
+| arkui.stateManagement.storage.persistenceV2 | PersistenceV2 | notifyOnError | 0 | method |  |  |  |  | - |  |  |  |  | `public static notifyOnError(callback: (PersistenceErrorCallback | undefined)): void` |
+| arkui.stateManagement.storage.persistenceV2 | PersistenceV2 | remove | 0 | method |  |  |  |  | - |  |  |  |  | `public static remove(keyOrType: (string | Type)): void` |
+| arkui.stateManagement.storage.persistenceV2 | PersistenceV2 | keys | 0 | method |  |  |  |  | - |  |  |  |  | `public static keys(): Array<string>` |
+| arkui.stateManagement.storage.persistenceV2 | PersistenceV2 | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.stateManagement.storage.persistentStorage | PersistentStorage | PersistentStorage | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class PersistentStorage {` |
+| arkui.stateManagement.storage.persistentStorage | PersistentStorage | persistProp | 0 | method |  |  |  |  | - |  |  |  |  | `public static persistProp<T>(key: string, defaultValue: T, toJson?: ToJSONType<T>, fromJson?: FromJSONType<T>): boolean` |
+| arkui.stateManagement.storage.persistentStorage | PersistentStorage | deleteProp | 0 | method |  |  |  |  | - |  |  |  |  | `public static deleteProp(key: string): void` |
+| arkui.stateManagement.storage.persistentStorage | PersistentStorage | keys | 0 | method |  |  |  |  | - |  |  |  |  | `public static keys(): Array<string>` |
+| arkui.stateManagement.storage.persistentStorage | PersistentStorage | persistProps | 0 | method |  |  |  |  | - |  |  |  |  | `public static persistProps(props: PersistPropsOptions<Any>[]): void` |
+| arkui.stateManagement.storage.persistentStorage | PersistentStorage | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.stateManagement.storage.persistentStorage | unnamed | ToJSONType | 0 | field |  |  |  |  | - |  |  |  |  | `export type ToJSONType<T> = ((value: T)=> jsonx.JsonElement);` |
+| arkui.stateManagement.storage.persistentStorage | unnamed | FromJSONType | 0 | field |  |  |  |  | - |  |  |  |  | `export type FromJSONType<T> = ((element: jsonx.JsonElement)=> T);` |
+| arkui.stateManagement.storage.persistentStorage | PersistPropsOptions | PersistPropsOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface PersistPropsOptions<T> {` |
+| arkui.stateManagement.storage.persistentStorage | PersistPropsOptions | key | 0 | field |  |  |  |  | - |  |  |  |  | `key: string;` |
+| arkui.stateManagement.storage.persistentStorage | PersistPropsOptions | defaultValue | 0 | field |  |  |  |  | - |  |  |  |  | `defaultValue: T;` |
+| arkui.stateManagement.storage.persistentStorage | PersistPropsOptions | toJson | 0 | field |  |  |  |  | - |  |  |  |  | `toJson?: ToJSONType<T>;` |
+| arkui.stateManagement.storage.persistentStorage | PersistPropsOptions | fromJson | 0 | field |  |  |  |  | - |  |  |  |  | `fromJson?: FromJSONType<T>;` |
 | arkui.component.pluginComponent | PluginComponentTemplate | PluginComponentTemplate | 0 | interface | generated | unnamed | PluginComponentTemplate | - | generated |  |  |  |  | `export interface PluginComponentTemplate {` |
 | arkui.component.pluginComponent | PluginComponentTemplate | source | 0 | field | generated | PluginComponentTemplate | source | - | generated |  |  |  |  | `source: (string | undefined);` |
 | arkui.component.pluginComponent | PluginComponentTemplate | bundleName | 0 | field | generated | PluginComponentTemplate | bundleName | - | generated |  |  |  |  | `bundleName: (string | undefined);` |
@@ -4962,8 +5108,8 @@
 | arkui.component.rect | RoundedRectOptions | radiusWidth | 0 | field | generated | RoundedRectOptions | radiusWidth | - | generated |  |  |  |  | `radiusWidth?: (double | string);` |
 | arkui.component.rect | RoundedRectOptions | radiusHeight | 0 | field | generated | RoundedRectOptions | radiusHeight | - | generated |  |  |  |  | `radiusHeight?: (double | string);` |
 | arkui.component.rect | RectAttribute | RectAttribute | 0 | interface | done | unnamed | Rect | - | done | Dudkin Sergey | pass |  |  | `export declare interface RectAttribute extends CommonShapeMethod {` |
-| arkui.component.rect | RectAttribute | radiusWidth | 0 | method |  | Rect | setRadiusWidth | - |  |  |  |  |  | `radiusWidth(value: (double | string | undefined)): this` |
-| arkui.component.rect | RectAttribute | radiusHeight | 0 | method |  | Rect | setRadiusHeight | - |  |  |  |  |  | `radiusHeight(value: (double | string | undefined)): this` |
+| arkui.component.rect | RectAttribute | radiusWidth | 0 | method | done | Rect | setRadiusWidth | - | done | Dudkin Sergey | pass |  |  | `radiusWidth(value: (double | string | undefined)): this` |
+| arkui.component.rect | RectAttribute | radiusHeight | 0 | method | done | Rect | setRadiusHeight | - | done | Dudkin Sergey | pass |  |  | `radiusHeight(value: (double | string | undefined)): this` |
 | arkui.component.rect | RectAttribute | radius | 0 | method | done | Rect | setRadius | - | done | Dudkin Sergey | pass |  |  | `radius(value: (Length | Array<RadiusItem> | undefined)): this` |
 | arkui.component.rect | RectAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<RectAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.rect | unnamed | Rect | 0 | function | done | Rect | setRectOptions | - | done | Dudkin Sergey | pass |  |  | `@memo() @ComponentBuilder() export declare function Rect(options?: (RectOptions | RoundedRectOptions), @memo() content_?: (()=> void)): RectAttribute` |
@@ -5017,6 +5163,8 @@
 | arkui.component.relativeContainer | RelativeContainerAttribute | barrier | 0 | method | done | RelativeContainer | setBarrier | - | done | Dmitry A Smirnov | blocked |  | LinkerUnresolvedClassError message: arkui.component.common.arkui$component$common$AlignRuleParam | `barrier(value: (Array<BarrierStyle> | undefined)): this` |
 | arkui.component.relativeContainer | RelativeContainerAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<RelativeContainerAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.relativeContainer | unnamed | RelativeContainer | 0 | function | done | RelativeContainer | setRelativeContainerOptions | - | done | Dmitry A Smirnov |  |  |  | `@memo() @ComponentBuilder() export declare function RelativeContainer(@memo() content_?: (()=> void)): RelativeContainerAttribute` |
+| arkui.stateManagement.remember | unnamed | RememberFactory | 0 | field |  |  |  |  | - |  |  |  |  | `type RememberFactory<T> = (()=> T);` |
+| arkui.stateManagement.remember | unnamed | memorizeUpdatedState | 0 | function |  |  |  |  | - |  |  |  |  | `@memo() export declare function memorizeUpdatedState<T>(factory: RememberFactory<T>): MemoState<T>` |
 | arkui.component.remoteWindow | RRect | RRect | 0 | interface | generated | unnamed | RRect | - | generated |  |  |  |  | `export interface RRect {` |
 | arkui.component.remoteWindow | RRect | left | 0 | field | generated | RRect | left | - | generated |  |  |  |  | `left: number;` |
 | arkui.component.remoteWindow | RRect | top | 0 | field | generated | RRect | top | - | generated |  |  |  |  | `top: number;` |
@@ -5072,8 +5220,8 @@
 | arkui.component.richEditor | RichEditorParagraphStyle | wordBreak | 0 | field | generated | RichEditorParagraphStyle | wordBreak | - | generated |  |  |  |  | `wordBreak?: WordBreak;` |
 | arkui.component.richEditor | RichEditorParagraphStyle | lineBreakStrategy | 0 | field | generated | RichEditorParagraphStyle | lineBreakStrategy | - | generated |  |  |  |  | `lineBreakStrategy?: LineBreakStrategy;` |
 | arkui.component.richEditor | RichEditorParagraphStyle | paragraphSpacing | 0 | field | generated | RichEditorParagraphStyle | paragraphSpacing | - | generated |  |  |  |  | `paragraphSpacing?: number;` |
-| arkui.component.richEditor | PasteEvent | PasteEvent | 0 | interface |  | unnamed | PasteEvent | - |  |  |  |  |  | `export declare interface PasteEvent {` |
-| arkui.component.richEditor | PasteEvent | preventDefault | 0 | method |  | PasteEvent | preventDefault | - |  |  |  |  |  | `preventDefault(): void` |
+| arkui.component.richEditor | PasteEvent | PasteEvent | 0 | interface | blocked | unnamed | PasteEvent | - | blocked |  |  |  | no such API in generation 137 | `export declare interface PasteEvent {` |
+| arkui.component.richEditor | PasteEvent | preventDefault | 0 | method | blocked | PasteEvent | preventDefault | - | blocked |  |  |  | no such API in generation 137 | `preventDefault(): void` |
 | arkui.component.richEditor | RichEditorTextSpan | RichEditorTextSpan | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface RichEditorTextSpan {` |
 | arkui.component.richEditor | RichEditorTextSpan | spanPosition | 0 | field |  |  |  |  | - |  |  |  |  | `spanPosition: RichEditorSpanPosition;` |
 | arkui.component.richEditor | RichEditorTextSpan | value | 0 | field |  |  |  |  | - |  |  |  |  | `value: string;` |
@@ -5313,6 +5461,37 @@
 | arkui.component.rowSplit | RowSplitAttribute | resizeable | 0 | method | done | RowSplit | setResizeable | - | done | Dmitry A Smirnov | failed |  | OHOSUI-2202 resizeable does not work | `resizeable(value: (boolean | undefined)): this` |
 | arkui.component.rowSplit | RowSplitAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<RowSplitAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.rowSplit | unnamed | RowSplit | 0 | function | done | RowSplit | setRowSplitOptions | - | done | Dmitry A Smirnov | failed |  | OHOSUI-2201 Text in rowSplit does not appear | `@memo() @ComponentBuilder() export declare function RowSplit(@memo() content_?: (()=> void)): RowSplitAttribute` |
+| arkui.stateManagement.runtime | unnamed | MemoCallSiteKey | 0 | field |  |  |  |  | - |  |  |  |  | `export type MemoCallSiteKey = int;` |
+| arkui.stateManagement.runtime | Disposable | Disposable | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface Disposable {` |
+| arkui.stateManagement.runtime | Disposable | disposed | 0 | field |  |  |  |  | - |  |  |  |  | `readonly disposed: boolean;` |
+| arkui.stateManagement.runtime | Disposable | dispose | 0 | method |  |  |  |  | - |  |  |  |  | `dispose(): void` |
+| arkui.stateManagement.runtime | State | State | 0 | interface |  |  |  |  | - |  |  |  |  | `interface State<T> {` |
+| arkui.stateManagement.runtime | State | modified | 0 | field |  |  |  |  | - |  |  |  |  | `readonly modified: boolean;` |
+| arkui.stateManagement.runtime | State | value | 0 | field |  |  |  |  | - |  |  |  |  | `readonly value: T;` |
+| arkui.stateManagement.runtime | MutableState | MutableState | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface MutableState<T> extends Disposable, State<T> {` |
+| arkui.stateManagement.runtime | MutableState | value | 0 | field |  |  |  |  | - |  |  |  |  | `value: T;` |
+| arkui.stateManagement.runtime | unnamed | Equivalent | 0 | field |  |  |  |  | - |  |  |  |  | `export type Equivalent<T> = ((oldV: T, newV: T)=> boolean);` |
+| arkui.stateManagement.runtime | InternalScope | InternalScope | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface InternalScope<Value> {` |
+| arkui.stateManagement.runtime | InternalScope | unchanged | 0 | field |  |  |  |  | - |  |  |  |  | `readonly unchanged: boolean;` |
+| arkui.stateManagement.runtime | InternalScope | cached | 0 | field |  |  |  |  | - |  |  |  |  | `readonly cached: Value;` |
+| arkui.stateManagement.runtime | InternalScope | recache | 0 | method |  |  |  |  | - |  |  |  |  | `recache(newValue?: Value): Value` |
+| arkui.stateManagement.runtime | InternalScope | param | 0 | method |  |  |  |  | - |  |  |  |  | `param<T>(index: int, value: T, equivalent?: Equivalent<T>, name?: string, contextLocal?: boolean): State<T>` |
+| arkui.stateManagement.runtime | unnamed | propState | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function propState<T>(value?: T): SyncedProperty<T>` |
+| arkui.stateManagement.runtime | unnamed | objectLinkState | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function objectLinkState<T>(value?: T): SyncedProperty<T>` |
+| arkui.stateManagement.runtime | unnamed | stateOf | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function stateOf<T>(value: T): MutableState<T>` |
+| arkui.stateManagement.runtime | unnamed | contextLocalStateOf | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function contextLocalStateOf<T>(value: string, key: (()=> T)): MutableState<T>` |
+| arkui.stateManagement.runtime | unnamed | contextLocal | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function contextLocal<T>(value: string): MutableState<T>` |
+| arkui.stateManagement.runtime | unnamed | observableProxy | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function observableProxy<T>(value: T): T` |
+| arkui.stateManagement.runtime | unnamed | StorageLinkState | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function StorageLinkState<T>(storage: LocalStorage, name: string, value: T): MutableState<T>` |
+| arkui.stateManagement.runtime | unnamed | AppStorageLinkState | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function AppStorageLinkState<T>(name: string, value: T): MutableState<T>` |
+| arkui.stateManagement.runtime | SyncedProperty | SyncedProperty | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class SyncedProperty<T>  implements MutableState<T> {` |
+| arkui.stateManagement.runtime | SyncedProperty | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(value: (T | undefined), deepCopyOnUpdate: boolean)` |
+| arkui.stateManagement.runtime | SyncedProperty | dispose | 0 | method |  |  |  |  | - |  |  |  |  | `public dispose(): void` |
+| arkui.stateManagement.runtime | SyncedProperty | disposed | 0 | method |  |  |  |  | - |  |  |  |  | `public get disposed(): boolean` |
+| arkui.stateManagement.runtime | SyncedProperty | modified | 0 | method |  |  |  |  | - |  |  |  |  | `public get modified(): boolean` |
+| arkui.stateManagement.runtime | SyncedProperty | value | 0 | method |  |  |  |  | - |  |  |  |  | `public get value(): T` |
+| arkui.stateManagement.runtime | SyncedProperty | value | 1 | method |  |  |  |  | - |  |  |  |  | `public set value(value: T)` |
+| arkui.stateManagement.runtime | SyncedProperty | update | 0 | method |  |  |  |  | - |  |  |  |  | `public update(value?: T): void` |
 | arkui.component.saveButton | SaveIconStyle | SaveIconStyle | 0 | enum_class | generated | unnamed | SaveIconStyle | - | generated |  |  |  |  | `enum SaveIconStyle {` |
 | arkui.component.saveButton | SaveIconStyle | FULL_FILLED | 0 | enum_instance | generated | SaveIconStyle | FULL_FILLED | - | generated |  |  |  |  | `FULL_FILLED = 0` |
 | arkui.component.saveButton | SaveIconStyle | LINES | 0 | enum_instance | generated | SaveIconStyle | LINES | - | generated |  |  |  |  | `LINES = 1` |
@@ -5643,8 +5822,8 @@
 | arkui.component.sidebar | SideBarContainerAttribute | showControlButton | 0 | method | done | SideBarContainer | setShowControlButton | - | done | Dmitry A Smirnov | pass |  |  | `showControlButton(value: (boolean | undefined)): this` |
 | arkui.component.sidebar | SideBarContainerAttribute | onChange | 0 | method | done | SideBarContainer | setOnChange | - | done | Dmitry A Smirnov |  |  |  | `onChange(callback: (((value: boolean)=> void) | undefined)): this` |
 | arkui.component.sidebar | SideBarContainerAttribute | sideBarWidth | 0 | method | done | SideBarContainer | setSideBarWidth | - | done | Dmitry A Smirnov | failed |  | OHOSUI-2169 | `sideBarWidth(value: (Length | Bindable<Length> | undefined)): this` |
-| arkui.component.sidebar | SideBarContainerAttribute | minSideBarWidth | 0 | method |  | SideBarContainer | setMinSideBarWidth | - |  |  |  |  |  | `minSideBarWidth(value: (Length | undefined)): this` |
-| arkui.component.sidebar | SideBarContainerAttribute | maxSideBarWidth | 0 | method |  | SideBarContainer | setMaxSideBarWidth | - |  |  |  |  |  | `maxSideBarWidth(value: (Length | undefined)): this` |
+| arkui.component.sidebar | SideBarContainerAttribute | minSideBarWidth | 0 | method | done | SideBarContainer | setMinSideBarWidth | - | done | Dmitry A Smirnov | failed |  | OHOSUI-2169 | `minSideBarWidth(value: (Length | undefined)): this` |
+| arkui.component.sidebar | SideBarContainerAttribute | maxSideBarWidth | 0 | method | done | SideBarContainer | setMaxSideBarWidth | - | done | Dmitry A Smirnov | failed |  | OHOSUI-2169 | `maxSideBarWidth(value: (Length | undefined)): this` |
 | arkui.component.sidebar | SideBarContainerAttribute | autoHide | 0 | method | done | SideBarContainer | setAutoHide | - | done | Dmitry A Smirnov | pass |  |  | `autoHide(value: (boolean | undefined)): this` |
 | arkui.component.sidebar | SideBarContainerAttribute | sideBarPosition | 0 | method | done | SideBarContainer | setSideBarPosition | - | done | Dmitry A Smirnov | pass |  |  | `sideBarPosition(value: (SideBarPosition | undefined)): this` |
 | arkui.component.sidebar | SideBarContainerAttribute | divider | 0 | method | done | SideBarContainer | setDivider | - | done | Dmitry A Smirnov | failed |  | OHOSUI-2170 | `divider(value: (DividerStyle | null | undefined)): this` |
@@ -5741,6 +5920,8 @@
 | arkui.component.stack | StackAttribute | pointLight | 0 | method | done | Stack | setPointLight | - | done | Evstigneev Roman |  |  | UT by Evstigneev Roman | `pointLight(value: PointLightStyle): StackAttribute` |
 | arkui.component.stack | StackAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<StackAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.stack | unnamed | Stack | 0 | function | done | Stack | setStackOptions | - | done | Korobeinikov Evgeny | pass |  |  | `@memo() @ComponentBuilder() export declare function Stack(options?: StackOptions, @memo() content_?: (()=> void)): StackAttribute` |
+| arkui.stateManagement.memorize.state | MemoState | MemoState | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface MemoState<T> {` |
+| arkui.stateManagement.memorize.state | MemoState | value | 0 | field |  |  |  |  | - |  |  |  |  | `readonly value: T;` |
 | arkui.component.stepper | StepperOptions | StepperOptions | 0 | interface | generated | unnamed | StepperOptions | - | generated |  |  |  |  | `export interface StepperOptions {` |
 | arkui.component.stepper | StepperOptions | index | 0 | field | generated | StepperOptions | index | - | generated |  |  |  |  | `index?: (number | Bindable<number>);` |
 | arkui.component.stepper | StepperAttribute | StepperAttribute | 0 | interface | done | unnamed | Stepper | - | done | Morozov Sergey |  |  |  | `export declare interface StepperAttribute extends CommonMethod {` |
@@ -5762,12 +5943,27 @@
 | arkui.component.stepperItem | StepperItemAttribute | status | 0 | method | done | StepperItem | setStatus | - | done | Morozov Sergey | test blocked |  | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `status(value?: (ItemState | undefined)): this` |
 | arkui.component.stepperItem | StepperItemAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<StepperItemAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.stepperItem | unnamed | StepperItem | 0 | function | done | StepperItem | setStepperItemOptions | - | done | Morozov Sergey | test blocked |  | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `@memo() @ComponentBuilder() export declare function StepperItem(@memo() content_?: (()=> void)): StepperItemAttribute` |
+| arkui.stateManagement.storage.storageProperty | unnamed | OnChangeType | 0 | field | generated | unnamed | OnChangeType | - | generated |  |  |  |  | `export type OnChangeType<T> = ((propertyName: string, newValue: T)=> void);` |
+| arkui.stateManagement.storage.storageProperty | AbstractProperty | AbstractProperty | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface AbstractProperty<T> {` |
+| arkui.stateManagement.storage.storageProperty | AbstractProperty | info | 0 | method |  |  |  |  | - |  |  |  |  | `info(): string` |
+| arkui.stateManagement.storage.storageProperty | AbstractProperty | get | 0 | method |  |  |  |  | - |  |  |  |  | `get(): T` |
+| arkui.stateManagement.storage.storageProperty | AbstractProperty | set | 0 | method |  |  |  |  | - |  |  |  |  | `set(newValue: T): void` |
+| arkui.stateManagement.storage.storageProperty | AbstractProperty | onChange | 0 | method |  |  |  |  | - |  |  |  |  | `onChange(onChangeFunc: (OnChangeType<T> | undefined)): void` |
+| arkui.stateManagement.storage.storageProperty | SubscribedAbstractProperty | SubscribedAbstractProperty | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface SubscribedAbstractProperty<T> extends AbstractProperty<T> {` |
+| arkui.stateManagement.storage.storageProperty | SubscribedAbstractProperty | aboutToBeDeleted | 0 | method |  |  |  |  | - |  |  |  |  | `aboutToBeDeleted(): void {}` |
+| arkui.stateManagement.storage.storageProperty | ColorMode | ColorMode | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum ColorMode {` |
+| arkui.stateManagement.storage.storageProperty | ColorMode | LIGHT | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `LIGHT = 0` |
+| arkui.stateManagement.storage.storageProperty | ColorMode | DARK | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `DARK = ((0) + (1))` |
+| arkui.stateManagement.storage.storageProperty | LayoutDirection | LayoutDirection | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum LayoutDirection {` |
+| arkui.stateManagement.storage.storageProperty | LayoutDirection | LTR | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `LTR = 0` |
+| arkui.stateManagement.storage.storageProperty | LayoutDirection | RTL | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `RTL = ((0) + (1))` |
+| arkui.stateManagement.storage.storageProperty | LayoutDirection | Auto | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `Auto = ((((0) + (1))) + (1))` |
 | arkui.component.styledString | unnamed | StyledStringMarshallingValue | 0 | field |  |  |  |  | - |  |  |  |  | `export type StyledStringMarshallingValue = UserDataSpan;` |
 | arkui.component.styledString | unnamed | StyledStringMarshallCallback | 0 | field | generated | unnamed | StyledStringMarshallCallback | - | generated |  |  |  |  | `export type StyledStringMarshallCallback = ((marshallableVal: StyledStringMarshallingValue)=> ArrayBuffer);` |
 | arkui.component.styledString | unnamed | StyledStringUnmarshallCallback | 0 | field | generated | unnamed | StyledStringUnmarshallCallback | - | generated |  |  |  |  | `export type StyledStringUnmarshallCallback = ((buf: ArrayBuffer)=> StyledStringMarshallingValue);` |
 | arkui.component.styledString | StyledString | StyledString | 0 | class | blocked IDL | unnamed | StyledString | - | blocked IDL | Pavelyev Ivan |  |  |  | `export declare class StyledString {` |
 | arkui.component.styledString | StyledString | constructor | 0 | method | blocked IDL | StyledString | construct | - | blocked IDL | Pavelyev Ivan |  |  | https://gitee.com/nikolay-igotti/idlize/issues/IB4H0N | `public constructor(value: (string | ImageAttachment | CustomSpan), styles?: Array<StyleOptions>)` |
-| arkui.component.styledString | StyledString | length | 0 | field | done | StyledString | getLength | - | done | Pavelyev Ivan |  |  |  | `public readonly length: number;` |
+| arkui.component.styledString | StyledString | length | 0 | field |  | StyledString | getLength | - |  |  |  |  |  | `public readonly length: number;` |
 | arkui.component.styledString | StyledString | getString | 0 | method | done | StyledString | getString | - | done | Pavelyev Ivan |  |  |  | `public getString(): string` |
 | arkui.component.styledString | StyledString | getStyles | 0 | method | done | StyledString | getStyles | - | done | Politov Mikhail |  |  |  | `public getStyles(start: number, length: number, styledKey?: StyledStringKey): Array<SpanStyle>` |
 | arkui.component.styledString | StyledString | equals | 0 | method | done | StyledString | equals | - | done | Pavelyev Ivan |  |  |  | `public equals(other: StyledString): boolean` |
@@ -5788,8 +5984,8 @@
 | arkui.component.styledString | SpanStyle | length | 0 | field | generated | SpanStyle | length | - | generated |  |  |  |  | `length: number;` |
 | arkui.component.styledString | SpanStyle | styledKey | 0 | field | generated | SpanStyle | styledKey | - | generated |  |  |  |  | `styledKey: StyledStringKey;` |
 | arkui.component.styledString | SpanStyle | styledValue | 0 | field | generated | SpanStyle | styledValue | - | generated |  |  |  |  | `styledValue: StyledStringValue;` |
-| arkui.component.styledString | TextStyle | TextStyle | 0 | class |  | unnamed | TextStyle | - |  |  |  |  |  | `export declare class TextStyle {` |
-| arkui.component.styledString | TextStyle | constructor | 0 | method |  | TextStyle | construct | - |  |  |  |  |  | `public constructor(value?: TextStyleInterface)` |
+| arkui.component.styledString | TextStyle | TextStyle | 0 | class | done | unnamed | TextStyle | - | done | Tuzhilkin Ivan |  |  |  | `export declare class TextStyle {` |
+| arkui.component.styledString | TextStyle | constructor | 0 | method | done | TextStyle | construct | - | done | Tuzhilkin Ivan |  |  |  | `public constructor(value?: TextStyleInterface)` |
 | arkui.component.styledString | TextStyle | fontColor | 0 | field |  | TextStyle | getFontColor | - |  |  |  |  |  | `public readonly fontColor?: (ResourceColor | undefined);` |
 | arkui.component.styledString | TextStyle | fontFamily | 0 | field |  | TextStyle | getFontFamily | - |  |  |  |  |  | `public readonly fontFamily?: (string | undefined);` |
 | arkui.component.styledString | TextStyle | fontSize | 0 | field |  | TextStyle | getFontSize | - |  |  |  |  |  | `public readonly fontSize?: (number | undefined);` |
@@ -5818,7 +6014,7 @@
 | arkui.component.styledString | LetterSpacingStyle | letterSpacing | 0 | field | done | LetterSpacingStyle | getLetterSpacing | - | done | Tuzhilkin Ivan |  |  |  | `public readonly letterSpacing: number;` |
 | arkui.component.styledString | TextShadowStyle | TextShadowStyle | 0 | class | done | unnamed | TextShadowStyle | - | done | Politov Mikhail |  |  |  | `export declare class TextShadowStyle {` |
 | arkui.component.styledString | TextShadowStyle | constructor | 0 | method | done | TextShadowStyle | construct | - | done | Politov Mikhail |  |  |  | `public constructor(value: (ShadowOptions | Array<ShadowOptions>))` |
-| arkui.component.styledString | TextShadowStyle | textShadow | 0 | field | done | TextShadowStyle | getTextShadow | - | done | Politov Mikhail |  |  |  | `public readonly textShadow: Array<ShadowOptions>;` |
+| arkui.component.styledString | TextShadowStyle | textShadow | 0 | field |  | TextShadowStyle | getTextShadow | - |  |  |  |  |  | `public readonly textShadow: Array<ShadowOptions>;` |
 | arkui.component.styledString | BackgroundColorStyle | BackgroundColorStyle | 0 | class | done | unnamed | BackgroundColorStyle | - | done | Politov Mikhail |  |  |  | `export declare class BackgroundColorStyle {` |
 | arkui.component.styledString | BackgroundColorStyle | constructor | 0 | method | done | BackgroundColorStyle | construct | - | done | Politov Mikhail |  |  |  | `public constructor(textBackgroundStyle: TextBackgroundStyle)` |
 | arkui.component.styledString | BackgroundColorStyle | textBackgroundStyle | 0 | field | done | BackgroundColorStyle | getTextBackgroundStyle | - | done | Tuzhilkin Ivan |  |  |  | `public readonly textBackgroundStyle: TextBackgroundStyle;` |
@@ -5829,13 +6025,13 @@
 | arkui.component.styledString | GestureStyleInterface | onLongPress | 0 | field | generated | GestureStyleInterface | onLongPress | - | generated |  |  |  |  | `onLongPress?: Callback<GestureEvent>;` |
 | arkui.component.styledString | ParagraphStyle | ParagraphStyle | 0 | class | done | unnamed | ParagraphStyle | - | done | Dudkin Sergey |  |  |  | `export declare class ParagraphStyle {` |
 | arkui.component.styledString | ParagraphStyle | constructor | 0 | method | done | ParagraphStyle | construct | - | done | Dudkin Sergey |  |  |  | `public constructor(value?: ParagraphStyleInterface)` |
-| arkui.component.styledString | ParagraphStyle | textAlign | 0 | field | done | ParagraphStyle | getTextAlign | - | done | Tuzhilkin Ivan |  |  | FB: Return value will be changed to optional after 125 generation | `public readonly textAlign?: (TextAlign | undefined);` |
-| arkui.component.styledString | ParagraphStyle | textIndent | 0 | field | done | ParagraphStyle | getTextIndent | - | done | Tuzhilkin Ivan |  |  | FB: Return value will be changed to optional after 125 generation | `public readonly textIndent?: (number | undefined);` |
-| arkui.component.styledString | ParagraphStyle | maxLines | 0 | field | done | ParagraphStyle | getMaxLines | - | done | Tuzhilkin Ivan |  |  | FB: Return value will be changed to optional after 125 generation | `public readonly maxLines?: (number | undefined);` |
-| arkui.component.styledString | ParagraphStyle | overflow | 0 | field | done | ParagraphStyle | getOverflow | - | done | Tuzhilkin Ivan |  |  | FB: Return value will be changed to optional after 125 generation | `public readonly overflow?: (TextOverflow | undefined);` |
-| arkui.component.styledString | ParagraphStyle | wordBreak | 0 | field | done | ParagraphStyle | getWordBreak | - | done | Tuzhilkin Ivan |  |  | FB: Return value will be changed to optional after 125 generation | `public readonly wordBreak?: (WordBreak | undefined);` |
-| arkui.component.styledString | ParagraphStyle | leadingMargin | 0 | field | done | ParagraphStyle | getLeadingMargin | - | done | Tuzhilkin Ivan |  |  | FB: Return value will be changed to optional after 125 generation | `public readonly leadingMargin?: (number | LeadingMarginPlaceholder | undefined);` |
-| arkui.component.styledString | ParagraphStyle | paragraphSpacing | 0 | field |  | ParagraphStyle | getParagraphSpacing | - |  |  |  |  | no such API in generation 125 | `public readonly paragraphSpacing?: (number | undefined);` |
+| arkui.component.styledString | ParagraphStyle | textAlign | 0 | field | done | ParagraphStyle | getTextAlign | - | done | Tuzhilkin Ivan |  |  |  | `public readonly textAlign?: (TextAlign | undefined);` |
+| arkui.component.styledString | ParagraphStyle | textIndent | 0 | field | done | ParagraphStyle | getTextIndent | - | done | Tuzhilkin Ivan |  |  |  | `public readonly textIndent?: (number | undefined);` |
+| arkui.component.styledString | ParagraphStyle | maxLines | 0 | field | done | ParagraphStyle | getMaxLines | - | done | Tuzhilkin Ivan |  |  |  | `public readonly maxLines?: (number | undefined);` |
+| arkui.component.styledString | ParagraphStyle | overflow | 0 | field | done | ParagraphStyle | getOverflow | - | done | Tuzhilkin Ivan |  |  |  | `public readonly overflow?: (TextOverflow | undefined);` |
+| arkui.component.styledString | ParagraphStyle | wordBreak | 0 | field | done | ParagraphStyle | getWordBreak | - | done | Tuzhilkin Ivan |  |  |  | `public readonly wordBreak?: (WordBreak | undefined);` |
+| arkui.component.styledString | ParagraphStyle | leadingMargin | 0 | field | done | ParagraphStyle | getLeadingMargin | - | done | Tuzhilkin Ivan |  |  |  | `public readonly leadingMargin?: (number | LeadingMarginPlaceholder | undefined);` |
+| arkui.component.styledString | ParagraphStyle | paragraphSpacing | 0 | field | testskipped | ParagraphStyle | getParagraphSpacing | - | testskipped | HQ |  |  |  | `public readonly paragraphSpacing?: (number | undefined);` |
 | arkui.component.styledString | ParagraphStyleInterface | ParagraphStyleInterface | 0 | interface | generated | unnamed | ParagraphStyleInterface | - | generated |  |  |  |  | `export declare interface ParagraphStyleInterface {` |
 | arkui.component.styledString | ParagraphStyleInterface | textAlign | 0 | field | generated | ParagraphStyleInterface | textAlign | - | generated |  |  |  |  | `textAlign?: TextAlign;` |
 | arkui.component.styledString | ParagraphStyleInterface | textIndent | 0 | field | generated | ParagraphStyleInterface | textIndent | - | generated |  |  |  |  | `textIndent?: LengthMetrics;` |
@@ -5918,10 +6114,10 @@
 | arkui.component.styledString | CustomSpanMeasureInfo | CustomSpanMeasureInfo | 0 | interface | generated | unnamed | CustomSpanMeasureInfo | - | generated |  |  |  |  | `export declare interface CustomSpanMeasureInfo {` |
 | arkui.component.styledString | CustomSpanMeasureInfo | fontSize | 0 | field | generated | CustomSpanMeasureInfo | fontSize | - | generated |  |  |  |  | `fontSize: number;` |
 | arkui.component.styledString | CustomSpan | CustomSpan | 0 | class | in progress | unnamed | CustomSpan | - | in progress | Samarin Sergey |  |  |  | `export declare abstract class CustomSpan {` |
-| arkui.component.styledString | CustomSpan | onMeasure | 0 | method |  | CustomSpan | getOnMeasure_callback | - |  |  |  |  |  | `public abstract onMeasure(measureInfo: CustomSpanMeasureInfo): CustomSpanMetrics` |
-| arkui.component.styledString | CustomSpan | onMeasure | 0 | method |  | CustomSpan | setOnMeasure_callback | - |  |  |  |  |  | `public abstract onMeasure(measureInfo: CustomSpanMeasureInfo): CustomSpanMetrics` |
-| arkui.component.styledString | CustomSpan | onDraw | 0 | method |  | CustomSpan | getOnDraw_callback | - |  |  |  |  |  | `public abstract onDraw(context: DrawContext, drawInfo: CustomSpanDrawInfo): void` |
-| arkui.component.styledString | CustomSpan | onDraw | 0 | method |  | CustomSpan | setOnDraw_callback | - |  |  |  |  |  | `public abstract onDraw(context: DrawContext, drawInfo: CustomSpanDrawInfo): void` |
+| arkui.component.styledString | CustomSpan | onMeasure | 0 | method | in progress | CustomSpan | getOnMeasure_callback | - | in progress | Samarin Sergey |  |  |  | `public abstract onMeasure(measureInfo: CustomSpanMeasureInfo): CustomSpanMetrics` |
+| arkui.component.styledString | CustomSpan | onMeasure | 0 | method | in progress | CustomSpan | setOnMeasure_callback | - | in progress | Samarin Sergey |  |  |  | `public abstract onMeasure(measureInfo: CustomSpanMeasureInfo): CustomSpanMetrics` |
+| arkui.component.styledString | CustomSpan | onDraw | 0 | method | in progress | CustomSpan | getOnDraw_callback | - | in progress | Samarin Sergey |  |  |  | `public abstract onDraw(context: DrawContext, drawInfo: CustomSpanDrawInfo): void` |
+| arkui.component.styledString | CustomSpan | onDraw | 0 | method | in progress | CustomSpan | setOnDraw_callback | - | in progress | Samarin Sergey |  |  |  | `public abstract onDraw(context: DrawContext, drawInfo: CustomSpanDrawInfo): void` |
 | arkui.component.styledString | CustomSpan | invalidate | 0 | method | in progress | CustomSpan | invalidate | - | in progress | Samarin Sergey |  |  |  | `public invalidate(): void` |
 | arkui.component.styledString | CustomSpan | constructor | 0 | method | in progress | CustomSpan | construct | - | in progress | Samarin Sergey |  |  |  | `public constructor() {}` |
 | arkui.component.styledString | UserDataSpan | UserDataSpan | 0 | class |  | unnamed | UserDataSpan | - |  | Pavelyev Ivan |  |  |  | `export declare abstract class UserDataSpan {` |
@@ -5990,8 +6186,8 @@
 | arkui.component.swiper | unnamed | OnSwiperGestureSwipeCallback | 0 | field | generated | unnamed | OnSwiperGestureSwipeCallback | - | generated |  |  |  |  | `export type OnSwiperGestureSwipeCallback = ((index: number, extraInfo: SwiperAnimationEvent)=> void);` |
 | arkui.component.swiper | SwiperAttribute | SwiperAttribute | 0 | interface | done | unnamed | Swiper | - | done | Skroba Gleb | pass |  |  | `export declare interface SwiperAttribute extends CommonMethod {` |
 | arkui.component.swiper | SwiperAttribute | index | 0 | method | done | Swiper | setIndex | - | done | Skroba Gleb | pass |  |  | `index(value: (number | Bindable<number> | undefined)): this` |
-| arkui.component.swiper | SwiperAttribute | autoPlay | 0 | method | done | Swiper | setAutoPlay0 | - | done | Skroba Gleb | pass |  |  | `autoPlay(value: (boolean | undefined)): this` |
-| arkui.component.swiper | SwiperAttribute | autoPlay | 1 | method |  | Swiper | setAutoPlay1 | - |  |  |  |  |  | `autoPlay(autoPlay: (boolean | undefined), options: (AutoPlayOptions | undefined)): this` |
+| arkui.component.swiper | SwiperAttribute | autoPlay | 0 | method |  | Swiper | setAutoPlay0 | - |  |  |  |  |  | `autoPlay(value: (boolean | undefined)): this` |
+| arkui.component.swiper | SwiperAttribute | autoPlay | 1 | method | done | Swiper | setAutoPlay1 | - | done | Skroba Gleb | pass |  |  | `autoPlay(autoPlay: (boolean | undefined), options: (AutoPlayOptions | undefined)): this` |
 | arkui.component.swiper | SwiperAttribute | interval | 0 | method | done | Swiper | setInterval | - | done | Skroba Gleb | pass |  |  | `interval(value: (number | undefined)): this` |
 | arkui.component.swiper | SwiperAttribute | indicator | 0 | method | done | Swiper | setIndicator | - | done | Skroba Gleb | pass |  |  | `indicator(indicator: (IndicatorComponentController | DotIndicator | DigitIndicator | boolean | undefined)): this` |
 | arkui.component.swiper | SwiperAttribute | displayArrow | 0 | method | done | Swiper | setDisplayArrow | - | done | Skroba Gleb | pass |  |  | `displayArrow(value: (ArrowStyle | boolean | undefined), isHoverShow?: (boolean | undefined)): this` |
@@ -6025,14 +6221,14 @@
 | arkui.component.swiper | SwiperContentAnimatedTransition | timeout | 0 | field | generated | SwiperContentAnimatedTransition | timeout | - | generated |  |  |  |  | `timeout?: number;` |
 | arkui.component.swiper | SwiperContentAnimatedTransition | transition | 0 | field | generated | SwiperContentAnimatedTransition | transition | - | generated |  |  |  |  | `transition: Callback<SwiperContentTransitionProxy>;` |
 | arkui.component.swiper | SwiperContentTransitionProxy | SwiperContentTransitionProxy | 0 | interface | done | unnamed | SwiperContentTransitionProxy | - | done | Skroba Gleb |  |  |  | `export declare interface SwiperContentTransitionProxy {` |
-| arkui.component.swiper | SwiperContentTransitionProxy | selectedIndex | 0 | field | done | SwiperContentTransitionProxy | getSelectedIndex | - | done | Skroba Gleb |  |  |  | `selectedIndex: number;` |
-| arkui.component.swiper | SwiperContentTransitionProxy | selectedIndex | 0 | field | done | SwiperContentTransitionProxy | setSelectedIndex | - | done | Skroba Gleb |  |  |  | `selectedIndex: number;` |
-| arkui.component.swiper | SwiperContentTransitionProxy | index | 0 | field | done | SwiperContentTransitionProxy | getIndex | - | done | Skroba Gleb |  |  |  | `index: number;` |
-| arkui.component.swiper | SwiperContentTransitionProxy | index | 0 | field | done | SwiperContentTransitionProxy | setIndex | - | done | Skroba Gleb |  |  |  | `index: number;` |
-| arkui.component.swiper | SwiperContentTransitionProxy | position | 0 | field | done | SwiperContentTransitionProxy | getPosition | - | done | Skroba Gleb |  |  |  | `position: number;` |
-| arkui.component.swiper | SwiperContentTransitionProxy | position | 0 | field | done | SwiperContentTransitionProxy | setPosition | - | done | Skroba Gleb |  |  |  | `position: number;` |
-| arkui.component.swiper | SwiperContentTransitionProxy | mainAxisLength | 0 | field | done | SwiperContentTransitionProxy | getMainAxisLength | - | done | Skroba Gleb |  |  |  | `mainAxisLength: number;` |
-| arkui.component.swiper | SwiperContentTransitionProxy | mainAxisLength | 0 | field | done | SwiperContentTransitionProxy | setMainAxisLength | - | done | Skroba Gleb |  |  |  | `mainAxisLength: number;` |
+| arkui.component.swiper | SwiperContentTransitionProxy | selectedIndex | 0 | field |  | SwiperContentTransitionProxy | getSelectedIndex | - |  |  |  |  |  | `selectedIndex: number;` |
+| arkui.component.swiper | SwiperContentTransitionProxy | selectedIndex | 0 | field |  | SwiperContentTransitionProxy | setSelectedIndex | - |  |  |  |  |  | `selectedIndex: number;` |
+| arkui.component.swiper | SwiperContentTransitionProxy | index | 0 | field |  | SwiperContentTransitionProxy | getIndex | - |  |  |  |  |  | `index: number;` |
+| arkui.component.swiper | SwiperContentTransitionProxy | index | 0 | field |  | SwiperContentTransitionProxy | setIndex | - |  |  |  |  |  | `index: number;` |
+| arkui.component.swiper | SwiperContentTransitionProxy | position | 0 | field |  | SwiperContentTransitionProxy | getPosition | - |  |  |  |  |  | `position: number;` |
+| arkui.component.swiper | SwiperContentTransitionProxy | position | 0 | field |  | SwiperContentTransitionProxy | setPosition | - |  |  |  |  |  | `position: number;` |
+| arkui.component.swiper | SwiperContentTransitionProxy | mainAxisLength | 0 | field |  | SwiperContentTransitionProxy | getMainAxisLength | - |  |  |  |  |  | `mainAxisLength: number;` |
+| arkui.component.swiper | SwiperContentTransitionProxy | mainAxisLength | 0 | field |  | SwiperContentTransitionProxy | setMainAxisLength | - |  |  |  |  |  | `mainAxisLength: number;` |
 | arkui.component.swiper | SwiperContentTransitionProxy | finishTransition | 0 | method | done | SwiperContentTransitionProxy | finishTransition | - | done | Skroba Gleb |  |  |  | `finishTransition(): void` |
 | arkui.component.swiper | SwiperContentWillScrollResult | SwiperContentWillScrollResult | 0 | interface | generated | unnamed | SwiperContentWillScrollResult | - | generated |  |  |  |  | `export declare interface SwiperContentWillScrollResult {` |
 | arkui.component.swiper | SwiperContentWillScrollResult | currentIndex | 0 | field | generated | SwiperContentWillScrollResult | currentIndex | - | generated |  |  |  |  | `currentIndex: number;` |
@@ -6062,10 +6258,10 @@
 | arkui.component.symbolglyph | SymbolEffect | constructor | 0 | method | done | SymbolEffect | construct | - | done | wangtao |  |  | empty implementation | `public constructor() {}` |
 | arkui.component.symbolglyph | ScaleSymbolEffect | ScaleSymbolEffect | 0 | class | done | unnamed | ScaleSymbolEffect | - | done | Andrey Khudenkikh |  |  |  | `export declare class ScaleSymbolEffect extends SymbolEffect {` |
 | arkui.component.symbolglyph | ScaleSymbolEffect | constructor | 0 | method | done | ScaleSymbolEffect | construct | - | done | Andrey Khudenkikh |  |  |  | `public constructor(scope?: EffectScope, direction?: EffectDirection)` |
-| arkui.component.symbolglyph | ScaleSymbolEffect | scope | 0 | field | done | ScaleSymbolEffect | getScope | - | done | Andrey Khudenkikh |  |  |  | `public scope?: (EffectScope | undefined);` |
-| arkui.component.symbolglyph | ScaleSymbolEffect | scope | 0 | field | done | ScaleSymbolEffect | setScope | - | done | Andrey Khudenkikh |  |  |  | `public scope?: (EffectScope | undefined);` |
-| arkui.component.symbolglyph | ScaleSymbolEffect | direction | 0 | field | done | ScaleSymbolEffect | getDirection | - | done | Andrey Khudenkikh |  |  |  | `public direction?: (EffectDirection | undefined);` |
-| arkui.component.symbolglyph | ScaleSymbolEffect | direction | 0 | field | done | ScaleSymbolEffect | setDirection | - | done | Andrey Khudenkikh |  |  |  | `public direction?: (EffectDirection | undefined);` |
+| arkui.component.symbolglyph | ScaleSymbolEffect | scope | 0 | field |  | ScaleSymbolEffect | getScope | - |  |  |  |  |  | `public scope?: (EffectScope | undefined);` |
+| arkui.component.symbolglyph | ScaleSymbolEffect | scope | 0 | field |  | ScaleSymbolEffect | setScope | - |  |  |  |  |  | `public scope?: (EffectScope | undefined);` |
+| arkui.component.symbolglyph | ScaleSymbolEffect | direction | 0 | field |  | ScaleSymbolEffect | getDirection | - |  |  |  |  |  | `public direction?: (EffectDirection | undefined);` |
+| arkui.component.symbolglyph | ScaleSymbolEffect | direction | 0 | field |  | ScaleSymbolEffect | setDirection | - |  |  |  |  |  | `public direction?: (EffectDirection | undefined);` |
 | arkui.component.symbolglyph | HierarchicalSymbolEffect | HierarchicalSymbolEffect | 0 | class | done | unnamed | HierarchicalSymbolEffect | - | done | wangtao |  |  |  | `export declare class HierarchicalSymbolEffect extends SymbolEffect {` |
 | arkui.component.symbolglyph | HierarchicalSymbolEffect | constructor | 0 | method | done | HierarchicalSymbolEffect | construct | - | done | wangtao |  |  |  | `public constructor(fillStyle?: EffectFillStyle)` |
 | arkui.component.symbolglyph | HierarchicalSymbolEffect | fillStyle | 0 | field | done | HierarchicalSymbolEffect | getFillStyle | - | done | wangtao |  |  |  | `public fillStyle?: (EffectFillStyle | undefined);` |
@@ -6137,12 +6333,12 @@
 | arkui.component.tabContent | TabBarIconStyle | TabBarIconStyle | 0 | interface | generated | unnamed | TabBarIconStyle | - | generated |  |  |  |  | `export declare interface TabBarIconStyle {` |
 | arkui.component.tabContent | TabBarIconStyle | selectedColor | 0 | field | generated | TabBarIconStyle | selectedColor | - | generated |  |  |  |  | `selectedColor?: ResourceColor;` |
 | arkui.component.tabContent | TabBarIconStyle | unselectedColor | 0 | field | generated | TabBarIconStyle | unselectedColor | - | generated |  |  |  |  | `unselectedColor?: ResourceColor;` |
-| arkui.component.tabContent | TabBarSymbol | TabBarSymbol | 0 | class |  | unnamed | TabBarSymbol | - |  |  |  |  |  | `export declare class TabBarSymbol {` |
+| arkui.component.tabContent | TabBarSymbol | TabBarSymbol | 0 | class | in progress | unnamed | TabBarSymbol | - | in progress | Ekaterina Stepanova |  |  |  | `export declare class TabBarSymbol {` |
 | arkui.component.tabContent | TabBarSymbol | normal | 0 | field |  | TabBarSymbol | getNormal | - |  |  |  |  |  | `public normal: SymbolGlyphModifier;` |
 | arkui.component.tabContent | TabBarSymbol | normal | 0 | field |  | TabBarSymbol | setNormal | - |  |  |  |  |  | `public normal: SymbolGlyphModifier;` |
 | arkui.component.tabContent | TabBarSymbol | selected | 0 | field |  | TabBarSymbol | getSelected | - |  |  |  |  |  | `public selected?: (SymbolGlyphModifier | undefined);` |
 | arkui.component.tabContent | TabBarSymbol | selected | 0 | field |  | TabBarSymbol | setSelected | - |  |  |  |  |  | `public selected?: (SymbolGlyphModifier | undefined);` |
-| arkui.component.tabContent | TabBarSymbol | constructor | 0 | method |  | TabBarSymbol | construct | - |  |  |  |  |  | `public constructor() {}` |
+| arkui.component.tabContent | TabBarSymbol | constructor | 0 | method | in progress | TabBarSymbol | construct | - | in progress | Ekaterina Stepanova |  |  |  | `public constructor() {}` |
 | arkui.component.tabContent | TabBarOptions | TabBarOptions | 0 | interface | generated | unnamed | TabBarOptions | - | generated |  |  |  |  | `export declare interface TabBarOptions {` |
 | arkui.component.tabContent | TabBarOptions | icon | 0 | field | generated | TabBarOptions | icon | - | generated |  |  |  |  | `icon?: (string | Resource);` |
 | arkui.component.tabContent | TabBarOptions | text | 0 | field | generated | TabBarOptions | text | - | generated |  |  |  |  | `text?: (string | Resource);` |
@@ -6244,9 +6440,9 @@
 | arkui.component.tabs | TabsAttribute | barBackgroundColor | 0 | method | done | Tabs | setBarBackgroundColor | - | done | Tuzhilkin Ivan | pass |  |  | `barBackgroundColor(value: (ResourceColor | undefined)): this` |
 | arkui.component.tabs | TabsAttribute | barGridAlign | 0 | method | done | Tabs | setBarGridAlign | - | done | Tuzhilkin Ivan | Andrey Khudenkikh |  |  | `barGridAlign(value: (BarGridColumnOptions | undefined)): this` |
 | arkui.component.tabs | TabsAttribute | customContentTransition | 0 | method | done | Tabs | setCustomContentTransition | - | done | Dudkin Sergey | Andrey Khudenkikh |  |  | `customContentTransition(delegate: (TabsCustomContentTransitionCallback | undefined)): this` |
-| arkui.component.tabs | TabsAttribute | barBackgroundBlurStyle | 0 | method | done | Tabs | setBarBackgroundBlurStyle0 | - | done | Tuzhilkin Ivan | Andrey Khudenkikh |  |  | `barBackgroundBlurStyle(value: (BlurStyle | undefined)): this` |
+| arkui.component.tabs | TabsAttribute | barBackgroundBlurStyle | 0 | method | done | Tabs | setBarBackgroundBlurStyle0 | - | done | Tuzhilkin Ivan |  |  |  | `barBackgroundBlurStyle(value: (BlurStyle | undefined)): this` |
 | arkui.component.tabs | TabsAttribute | pageFlipMode | 0 | method | done | Tabs | setPageFlipMode | - | done | Lobah Mikhail |  |  | Not exists on FB | `pageFlipMode(mode: (PageFlipMode | undefined)): this` |
-| arkui.component.tabs | TabsAttribute | barBackgroundBlurStyle | 1 | method | done | Tabs | setBarBackgroundBlurStyle1 | - | done | Tuzhilkin Ivan | Andrey Khudenkikh |  |  | `barBackgroundBlurStyle(style: (BlurStyle | undefined), options: (BackgroundBlurStyleOptions | undefined)): this` |
+| arkui.component.tabs | TabsAttribute | barBackgroundBlurStyle | 1 | method |  | Tabs | setBarBackgroundBlurStyle1 | - |  |  |  |  |  | `barBackgroundBlurStyle(style: (BlurStyle | undefined), options: (BackgroundBlurStyleOptions | undefined)): this` |
 | arkui.component.tabs | TabsAttribute | barBackgroundEffect | 0 | method | done | Tabs | setBarBackgroundEffect | - | done | Tuzhilkin Ivan | Andrey Khudenkikh |  |  | `barBackgroundEffect(options: (BackgroundEffectOptions | undefined)): this` |
 | arkui.component.tabs | TabsAttribute | onContentWillChange | 0 | method | done | Tabs | setOnContentWillChange | - | done | Dudkin Sergey | Andrey Khudenkikh |  |  | `onContentWillChange(handler: (OnTabsContentWillChangeCallback | undefined)): this` |
 | arkui.component.tabs | TabsAttribute | cachedMaxCount | 0 | method | done | Tabs | setCachedMaxCount | - | done | Erokhin Ilya | failed |  |  | `cachedMaxCount(count: (number | undefined), mode: (TabsCacheMode | undefined)): this` |
@@ -6255,10 +6451,10 @@
 | arkui.component.tabs | TabContentAnimatedTransition | timeout | 0 | field | generated | TabContentAnimatedTransition | timeout | - | generated |  |  |  |  | `timeout?: number;` |
 | arkui.component.tabs | TabContentAnimatedTransition | transition | 0 | field | generated | TabContentAnimatedTransition | transition | - | generated |  |  |  |  | `transition: Callback<TabContentTransitionProxy>;` |
 | arkui.component.tabs | TabContentTransitionProxy | TabContentTransitionProxy | 0 | interface | done | unnamed | TabContentTransitionProxy | - | done | Dudkin Sergey |  |  |  | `export declare interface TabContentTransitionProxy {` |
-| arkui.component.tabs | TabContentTransitionProxy | from | 0 | field | done | TabContentTransitionProxy | getFrom | - | done | Dudkin Sergey |  |  |  | `from: number;` |
-| arkui.component.tabs | TabContentTransitionProxy | from | 0 | field | done | TabContentTransitionProxy | setFrom | - | done | Dudkin Sergey |  |  |  | `from: number;` |
-| arkui.component.tabs | TabContentTransitionProxy | to | 0 | field | done | TabContentTransitionProxy | getTo | - | done | Dudkin Sergey |  |  |  | `to: number;` |
-| arkui.component.tabs | TabContentTransitionProxy | to | 0 | field | done | TabContentTransitionProxy | setTo | - | done | Dudkin Sergey |  |  |  | `to: number;` |
+| arkui.component.tabs | TabContentTransitionProxy | from | 0 | field |  | TabContentTransitionProxy | getFrom | - |  |  |  |  |  | `from: number;` |
+| arkui.component.tabs | TabContentTransitionProxy | from | 0 | field |  | TabContentTransitionProxy | setFrom | - |  |  |  |  |  | `from: number;` |
+| arkui.component.tabs | TabContentTransitionProxy | to | 0 | field |  | TabContentTransitionProxy | getTo | - |  |  |  |  |  | `to: number;` |
+| arkui.component.tabs | TabContentTransitionProxy | to | 0 | field |  | TabContentTransitionProxy | setTo | - |  |  |  |  |  | `to: number;` |
 | arkui.component.tabs | TabContentTransitionProxy | finishTransition | 0 | method | done | TabContentTransitionProxy | finishTransition | - | done | Dudkin Sergey |  |  |  | `finishTransition(): void` |
 | arkui.component.tabs | unnamed | Tabs | 0 | function | done | Tabs | setTabsOptions | - | done | Skroba Gleb | pass |  |  | `@memo() @ComponentBuilder() export declare function Tabs(options?: TabsOptions, @memo() content_?: (()=> void)): TabsAttribute` |
 | arkui.component.text | TextOverflowOptions | TextOverflowOptions | 0 | interface | generated | unnamed | TextOverflowOptions | - | generated |  |  |  |  | `export declare interface TextOverflowOptions {` |
@@ -6434,7 +6630,7 @@
 | arkui.component.textClock | TextClockOptions | controller | 0 | field | generated | TextClockOptions | controller | - | generated |  |  |  |  | `controller?: TextClockController;` |
 | arkui.component.textClock | TextClockAttribute | TextClockAttribute | 0 | interface | done | unnamed | TextClock | - | done | Pavelyev Ivan | pass |  |  | `export declare interface TextClockAttribute extends CommonMethod {` |
 | arkui.component.textClock | TextClockAttribute | format | 0 | method | done | TextClock | setFormat0 | - | done | Pavelyev Ivan | pass |  |  | `format(value: (ResourceStr | undefined)): this` |
-| arkui.component.textClock | TextClockAttribute | format | 1 | method |  | TextClock | setFormat1 | - |  |  |  |  |  | `format(value: (string | undefined)): this` |
+| arkui.component.textClock | TextClockAttribute | format | 1 | method |  | TextClock | setFormat1 | - |  | Pavelyev Ivan |  |  |  | `format(value: (string | undefined)): this` |
 | arkui.component.textClock | TextClockAttribute | onDateChange | 0 | method | done | TextClock | setOnDateChange | - | done | Pavelyev Ivan | not covered |  |  | `onDateChange(event: (((value: number)=> void) | undefined)): this` |
 | arkui.component.textClock | TextClockAttribute | fontColor | 0 | method | done | TextClock | setFontColor | - | done | Pavelyev Ivan | pass |  |  | `fontColor(value: (ResourceColor | undefined)): this` |
 | arkui.component.textClock | TextClockAttribute | fontSize | 0 | method | done | TextClock | setFontSize | - | done | Pavelyev Ivan | pass |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IBT6PK | `fontSize(value: (Length | undefined)): this` |
@@ -6515,16 +6711,16 @@
 | arkui.component.textCommon | TextMenuItemId | TextMenuItemId | 0 | class | done | unnamed | TextMenuItemId | - | done | Maksimov Nikita |  |  |  | `export declare class TextMenuItemId {` |
 | arkui.component.textCommon | TextMenuItemId | of | 0 | method | done | TextMenuItemId | of | - | done | Maksimov Nikita |  |  |  | `public static of(id: ResourceStr): TextMenuItemId` |
 | arkui.component.textCommon | TextMenuItemId | equals | 0 | method | done | TextMenuItemId | equals | - | done | Maksimov Nikita |  |  |  | `public equals(id: TextMenuItemId): boolean` |
-| arkui.component.textCommon | TextMenuItemId | CUT | 0 | field | done | TextMenuItemId | getCUT | - | done | Maksimov Nikita |  |  |  | `public static readonly CUT: TextMenuItemId;` |
-| arkui.component.textCommon | TextMenuItemId | COPY | 0 | field | done | TextMenuItemId | getCOPY | - | done | Maksimov Nikita |  |  |  | `public static readonly COPY: TextMenuItemId;` |
-| arkui.component.textCommon | TextMenuItemId | PASTE | 0 | field | done | TextMenuItemId | getPASTE | - | done | Maksimov Nikita |  |  |  | `public static readonly PASTE: TextMenuItemId;` |
-| arkui.component.textCommon | TextMenuItemId | SELECT_ALL | 0 | field | done | TextMenuItemId | getSELECT_ALL | - | done | Maksimov Nikita |  |  |  | `public static readonly SELECT_ALL: TextMenuItemId;` |
-| arkui.component.textCommon | TextMenuItemId | COLLABORATION_SERVICE | 0 | field | done | TextMenuItemId | getCOLLABORATION_SERVICE | - | done | Maksimov Nikita |  |  |  | `public static readonly COLLABORATION_SERVICE: TextMenuItemId;` |
-| arkui.component.textCommon | TextMenuItemId | CAMERA_INPUT | 0 | field | done | TextMenuItemId | getCAMERA_INPUT | - | done | Maksimov Nikita |  |  |  | `public static readonly CAMERA_INPUT: TextMenuItemId;` |
-| arkui.component.textCommon | TextMenuItemId | AI_WRITER | 0 | field | done | TextMenuItemId | getAI_WRITER | - | done | Maksimov Nikita |  |  |  | `public static readonly AI_WRITER: TextMenuItemId;` |
-| arkui.component.textCommon | TextMenuItemId | TRANSLATE | 0 | field | done | TextMenuItemId | getTRANSLATE | - | done | Maksimov Nikita |  |  |  | `public static readonly TRANSLATE: TextMenuItemId;` |
-| arkui.component.textCommon | TextMenuItemId | SEARCH | 0 | field | done | TextMenuItemId | getSEARCH | - | done | Maksimov Nikita |  |  |  | `public static readonly SEARCH: TextMenuItemId;` |
-| arkui.component.textCommon | TextMenuItemId | SHARE | 0 | field | done | TextMenuItemId | getSHARE | - | done | Maksimov Nikita |  |  |  | `public static readonly SHARE: TextMenuItemId;` |
+| arkui.component.textCommon | TextMenuItemId | CUT | 0 | field |  | TextMenuItemId | getCUT | - |  |  |  |  |  | `public static readonly CUT: TextMenuItemId;` |
+| arkui.component.textCommon | TextMenuItemId | COPY | 0 | field |  | TextMenuItemId | getCOPY | - |  |  |  |  |  | `public static readonly COPY: TextMenuItemId;` |
+| arkui.component.textCommon | TextMenuItemId | PASTE | 0 | field |  | TextMenuItemId | getPASTE | - |  |  |  |  |  | `public static readonly PASTE: TextMenuItemId;` |
+| arkui.component.textCommon | TextMenuItemId | SELECT_ALL | 0 | field |  | TextMenuItemId | getSELECT_ALL | - |  |  |  |  |  | `public static readonly SELECT_ALL: TextMenuItemId;` |
+| arkui.component.textCommon | TextMenuItemId | COLLABORATION_SERVICE | 0 | field |  | TextMenuItemId | getCOLLABORATION_SERVICE | - |  |  |  |  |  | `public static readonly COLLABORATION_SERVICE: TextMenuItemId;` |
+| arkui.component.textCommon | TextMenuItemId | CAMERA_INPUT | 0 | field |  | TextMenuItemId | getCAMERA_INPUT | - |  |  |  |  |  | `public static readonly CAMERA_INPUT: TextMenuItemId;` |
+| arkui.component.textCommon | TextMenuItemId | AI_WRITER | 0 | field |  | TextMenuItemId | getAI_WRITER | - |  |  |  |  |  | `public static readonly AI_WRITER: TextMenuItemId;` |
+| arkui.component.textCommon | TextMenuItemId | TRANSLATE | 0 | field |  | TextMenuItemId | getTRANSLATE | - |  |  |  |  |  | `public static readonly TRANSLATE: TextMenuItemId;` |
+| arkui.component.textCommon | TextMenuItemId | SEARCH | 0 | field |  | TextMenuItemId | getSEARCH | - |  |  |  |  |  | `public static readonly SEARCH: TextMenuItemId;` |
+| arkui.component.textCommon | TextMenuItemId | SHARE | 0 | field |  | TextMenuItemId | getSHARE | - |  |  |  |  |  | `public static readonly SHARE: TextMenuItemId;` |
 | arkui.component.textCommon | TextMenuItemId | constructor | 0 | method | done | TextMenuItemId | construct | - | done | Maksimov Nikita |  |  |  | `public constructor() {}` |
 | arkui.component.textCommon | TextMenuItem | TextMenuItem | 0 | interface | generated | unnamed | TextMenuItem | - | generated |  |  |  |  | `export declare interface TextMenuItem {` |
 | arkui.component.textCommon | TextMenuItem | content | 0 | field | generated | TextMenuItem | content | - | generated |  |  |  |  | `content: ResourceStr;` |
@@ -6622,8 +6818,8 @@
 | arkui.component.textInput | UnderlineColor | disable | 0 | field | generated | UnderlineColor | disable | - | generated |  |  |  |  | `disable?: (ResourceColor | undefined);` |
 | arkui.component.textInput | SubmitEvent | SubmitEvent | 0 | interface | done | unnamed | SubmitEvent | - | done | Tuzhilkin Ivan |  |  |  | `export declare interface SubmitEvent {` |
 | arkui.component.textInput | SubmitEvent | keepEditableState | 0 | method | done | SubmitEvent | keepEditableState | - | done | Tuzhilkin Ivan |  |  |  | `keepEditableState(): void` |
-| arkui.component.textInput | SubmitEvent | text | 0 | field | done | SubmitEvent | getText | - | done | Tuzhilkin Ivan |  |  |  | `text: string;` |
-| arkui.component.textInput | SubmitEvent | text | 0 | field | done | SubmitEvent | setText | - | done | Tuzhilkin Ivan |  |  |  | `text: string;` |
+| arkui.component.textInput | SubmitEvent | text | 0 | field |  | SubmitEvent | getText | - |  |  |  |  |  | `text: string;` |
+| arkui.component.textInput | SubmitEvent | text | 0 | field |  | SubmitEvent | setText | - |  |  |  |  |  | `text: string;` |
 | arkui.component.textInput | TextInputController | TextInputController | 0 | class | done | unnamed | TextInputController | - | done | Spirin Andrey |  |  |  | `export declare class TextInputController extends TextContentControllerBase {` |
 | arkui.component.textInput | TextInputController | constructor | 0 | method | done | TextInputController | construct | - | done | Spirin Andrey |  |  |  | `public constructor()` |
 | arkui.component.textInput | TextInputController | caretPosition | 0 | method | done | TextInputController | caretPosition | - | done | Spirin Andrey |  |  |  | `public caretPosition(value: number): void` |
@@ -7075,7 +7271,7 @@
 | arkui.component.units | MarkStyle | size | 0 | field | generated | MarkStyle | size | - | generated |  |  |  |  | `size?: Length;` |
 | arkui.component.units | MarkStyle | strokeWidth | 0 | field | generated | MarkStyle | strokeWidth | - | generated |  |  |  |  | `strokeWidth?: Length;` |
 | arkui.component.units | ColorFilter | ColorFilter | 0 | class | done | unnamed | ColorFilter | - | done | Evstigneev Roman |  |  |  | `export declare class ColorFilter {` |
-| arkui.component.units | ColorFilter | constructor | 0 | method | in progress | ColorFilter | construct | - | in progress | Evstigneev Roman | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `public constructor(value: number[])` |
+| arkui.component.units | ColorFilter | constructor | 0 | method | in progress | ColorFilter | construct | - | in progress | Evstigneev Roman |  |  |  | `public constructor(value: number[])` |
 | arkui.component.units | TouchPoint | TouchPoint | 0 | interface | generated | unnamed | TouchPoint | - | generated |  |  |  |  | `export declare interface TouchPoint {` |
 | arkui.component.units | TouchPoint | x | 0 | field | generated | TouchPoint | x | - | generated |  |  |  |  | `x: Dimension;` |
 | arkui.component.units | TouchPoint | y | 0 | field | generated | TouchPoint | y | - | generated |  |  |  |  | `y: Dimension;` |
@@ -7098,6 +7294,21 @@
 | arkui.component.units | ChainWeightOptions | vertical | 0 | field | generated | ChainWeightOptions | vertical | - | generated |  |  |  |  | `vertical?: number;` |
 | arkui.component.units | AccessibilityOptions | AccessibilityOptions | 0 | interface | generated | unnamed | AccessibilityOptions | - | generated |  |  |  |  | `export declare interface AccessibilityOptions {` |
 | arkui.component.units | AccessibilityOptions | accessibilityPreferred | 0 | field | generated | AccessibilityOptions | accessibilityPreferred | - | generated |  |  |  |  | `accessibilityPreferred?: boolean;` |
+| arkui.stateManagement.utils | UIUtils | UIUtils | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class UIUtils {` |
+| arkui.stateManagement.utils | UIUtils | getTarget | 0 | method |  |  |  |  | - |  |  |  |  | `public static getTarget<T extends object>(source: T): T` |
+| arkui.stateManagement.utils | UIUtils | makeObserved | 0 | method |  |  |  |  | - |  |  |  |  | `public static makeObserved<T extends object>(source: T): T` |
+| arkui.stateManagement.utils | UIUtils | makeBindingReadonly | 0 | method |  |  |  |  | - |  |  |  |  | `public static makeBindingReadonly<T>(getter: GetterCallback<T>): Binding<T>` |
+| arkui.stateManagement.utils | UIUtils | makeBindingMutable | 0 | method |  |  |  |  | - |  |  |  |  | `public static makeBindingMutable<T>(getter: GetterCallback<T>, setter: SetterCallback<T>): MutableBinding<T>` |
+| arkui.stateManagement.utils | UIUtils | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.stateManagement.utils | unnamed | GetterCallback | 0 | field |  |  |  |  | - |  |  |  |  | `export type GetterCallback<T> = (()=> T);` |
+| arkui.stateManagement.utils | unnamed | SetterCallback | 0 | field |  |  |  |  | - |  |  |  |  | `export type SetterCallback<T> = ((newValue: T)=> void);` |
+| arkui.stateManagement.utils | Binding | Binding | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class Binding<T>  {` |
+| arkui.stateManagement.utils | Binding | value | 0 | method |  |  |  |  | - |  |  |  |  | `public get value(): T` |
+| arkui.stateManagement.utils | Binding | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.stateManagement.utils | MutableBinding | MutableBinding | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class MutableBinding<T>  {` |
+| arkui.stateManagement.utils | MutableBinding | value | 0 | method |  |  |  |  | - |  |  |  |  | `public get value(): T` |
+| arkui.stateManagement.utils | MutableBinding | value | 1 | method |  |  |  |  | - |  |  |  |  | `public set value(newValue: T)` |
+| arkui.stateManagement.utils | MutableBinding | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.video | SeekMode | SeekMode | 0 | enum_class | generated | unnamed | SeekMode | - | generated |  |  |  |  | `declare enum SeekMode {` |
 | arkui.component.video | SeekMode | PreviousKeyframe | 0 | enum_instance | generated | SeekMode | PREVIOUS_KEYFRAME | - | generated |  |  |  |  | `PreviousKeyframe = 0` |
 | arkui.component.video | SeekMode | NextKeyframe | 0 | enum_instance | generated | SeekMode | NEXT_KEYFRAME | - | generated |  |  |  |  | `NextKeyframe = ((0) + (1))` |
@@ -7322,11 +7533,11 @@
 | arkui.component.web | FileSelectorResult | FileSelectorResult | 0 | class |  | unnamed | FileSelectorResult | - |  |  |  |  |  | `export declare class FileSelectorResult {` |
 | arkui.component.web | FileSelectorResult | constructor | 0 | method |  | FileSelectorResult | construct | - |  |  |  |  |  | `public constructor()` |
 | arkui.component.web | FileSelectorResult | handleFileList | 0 | method |  | FileSelectorResult | handleFileList | - |  |  |  |  |  | `public handleFileList(fileList: Array<string>): void` |
-| arkui.component.web | HttpAuthHandler | HttpAuthHandler | 0 | class |  | unnamed | HttpAuthHandler | - |  |  |  |  |  | `export declare class HttpAuthHandler {` |
-| arkui.component.web | HttpAuthHandler | constructor | 0 | method |  | HttpAuthHandler | construct | - |  |  |  |  |  | `public constructor()` |
-| arkui.component.web | HttpAuthHandler | confirm | 0 | method |  | HttpAuthHandler | confirm | - |  |  |  |  |  | `public confirm(userName: string, password: string): boolean` |
-| arkui.component.web | HttpAuthHandler | cancel | 0 | method |  | HttpAuthHandler | cancel | - |  |  |  |  |  | `public cancel(): void` |
-| arkui.component.web | HttpAuthHandler | isHttpAuthInfoSaved | 0 | method |  | HttpAuthHandler | isHttpAuthInfoSaved | - |  |  |  |  |  | `public isHttpAuthInfoSaved(): boolean` |
+| arkui.component.web | HttpAuthHandler | HttpAuthHandler | 0 | class | done | unnamed | HttpAuthHandler | - | done | Erokhin Ilya |  |  |  | `export declare class HttpAuthHandler {` |
+| arkui.component.web | HttpAuthHandler | constructor | 0 | method | done | HttpAuthHandler | construct | - | done | Erokhin Ilya |  |  |  | `public constructor()` |
+| arkui.component.web | HttpAuthHandler | confirm | 0 | method | done | HttpAuthHandler | confirm | - | done | Erokhin Ilya |  |  |  | `public confirm(userName: string, password: string): boolean` |
+| arkui.component.web | HttpAuthHandler | cancel | 0 | method | done | HttpAuthHandler | cancel | - | done | Erokhin Ilya |  |  |  | `public cancel(): void` |
+| arkui.component.web | HttpAuthHandler | isHttpAuthInfoSaved | 0 | method | done | HttpAuthHandler | isHttpAuthInfoSaved | - | done | Erokhin Ilya |  |  |  | `public isHttpAuthInfoSaved(): boolean` |
 | arkui.component.web | SslErrorHandler | SslErrorHandler | 0 | class |  | unnamed | SslErrorHandler | - |  |  |  |  |  | `export declare class SslErrorHandler {` |
 | arkui.component.web | SslErrorHandler | constructor | 0 | method |  | SslErrorHandler | construct | - |  |  |  |  |  | `public constructor()` |
 | arkui.component.web | SslErrorHandler | handleConfirm | 0 | method |  | SslErrorHandler | handleConfirm | - |  |  |  |  |  | `public handleConfirm(): void` |
@@ -7342,17 +7553,17 @@
 | arkui.component.web | ProtectedResourceType | VIDEO_CAPTURE | 0 | enum_instance | generated | ProtectedResourceType | VIDEO_CAPTURE | - | generated |  |  |  |  | `VIDEO_CAPTURE = "TYPE_VIDEO_CAPTURE"` |
 | arkui.component.web | ProtectedResourceType | AUDIO_CAPTURE | 0 | enum_instance | generated | ProtectedResourceType | AUDIO_CAPTURE | - | generated |  |  |  |  | `AUDIO_CAPTURE = "TYPE_AUDIO_CAPTURE"` |
 | arkui.component.web | ProtectedResourceType | SENSOR | 0 | enum_instance | generated | ProtectedResourceType | SENSOR | - | generated |  |  |  |  | `SENSOR = "TYPE_SENSOR"` |
-| arkui.component.web | PermissionRequest | PermissionRequest | 0 | class |  | unnamed | PermissionRequest | - |  |  |  |  |  | `export declare class PermissionRequest {` |
-| arkui.component.web | PermissionRequest | constructor | 0 | method |  | PermissionRequest | construct | - |  |  |  |  |  | `public constructor()` |
-| arkui.component.web | PermissionRequest | deny | 0 | method |  | PermissionRequest | deny | - |  |  |  |  |  | `public deny(): void` |
-| arkui.component.web | PermissionRequest | getOrigin | 0 | method |  | PermissionRequest | getOrigin | - |  |  |  |  |  | `public getOrigin(): string` |
-| arkui.component.web | PermissionRequest | getAccessibleResource | 0 | method |  | PermissionRequest | getAccessibleResource | - |  |  |  |  |  | `public getAccessibleResource(): Array<string>` |
-| arkui.component.web | PermissionRequest | grant | 0 | method |  | PermissionRequest | grant | - |  |  |  |  |  | `public grant(resources: Array<string>): void` |
-| arkui.component.web | ScreenCaptureHandler | ScreenCaptureHandler | 0 | class |  | unnamed | ScreenCaptureHandler | - |  |  |  |  |  | `export declare class ScreenCaptureHandler {` |
-| arkui.component.web | ScreenCaptureHandler | constructor | 0 | method |  | ScreenCaptureHandler | construct | - |  |  |  |  |  | `public constructor()` |
-| arkui.component.web | ScreenCaptureHandler | getOrigin | 0 | method |  | ScreenCaptureHandler | getOrigin | - |  |  |  |  |  | `public getOrigin(): string` |
-| arkui.component.web | ScreenCaptureHandler | grant | 0 | method |  | ScreenCaptureHandler | grant | - |  |  |  |  |  | `public grant(config: ScreenCaptureConfig): void` |
-| arkui.component.web | ScreenCaptureHandler | deny | 0 | method |  | ScreenCaptureHandler | deny | - |  |  |  |  |  | `public deny(): void` |
+| arkui.component.web | PermissionRequest | PermissionRequest | 0 | class | done | unnamed | PermissionRequest | - | done | Erokhin Ilya |  |  |  | `export declare class PermissionRequest {` |
+| arkui.component.web | PermissionRequest | constructor | 0 | method | done | PermissionRequest | construct | - | done | Erokhin Ilya |  |  |  | `public constructor()` |
+| arkui.component.web | PermissionRequest | deny | 0 | method | done | PermissionRequest | deny | - | done | Erokhin Ilya |  |  |  | `public deny(): void` |
+| arkui.component.web | PermissionRequest | getOrigin | 0 | method | done | PermissionRequest | getOrigin | - | done | Erokhin Ilya |  |  |  | `public getOrigin(): string` |
+| arkui.component.web | PermissionRequest | getAccessibleResource | 0 | method | done | PermissionRequest | getAccessibleResource | - | done | Erokhin Ilya |  |  |  | `public getAccessibleResource(): Array<string>` |
+| arkui.component.web | PermissionRequest | grant | 0 | method | done | PermissionRequest | grant | - | done | Erokhin Ilya |  |  |  | `public grant(resources: Array<string>): void` |
+| arkui.component.web | ScreenCaptureHandler | ScreenCaptureHandler | 0 | class | done | unnamed | ScreenCaptureHandler | - | done | Erokhin Ilya |  |  |  | `export declare class ScreenCaptureHandler {` |
+| arkui.component.web | ScreenCaptureHandler | constructor | 0 | method | done | ScreenCaptureHandler | construct | - | done | Erokhin Ilya |  |  |  | `public constructor()` |
+| arkui.component.web | ScreenCaptureHandler | getOrigin | 0 | method | done | ScreenCaptureHandler | getOrigin | - | done | Erokhin Ilya |  |  |  | `public getOrigin(): string` |
+| arkui.component.web | ScreenCaptureHandler | grant | 0 | method | done | ScreenCaptureHandler | grant | - | done | Erokhin Ilya |  |  |  | `public grant(config: ScreenCaptureConfig): void` |
+| arkui.component.web | ScreenCaptureHandler | deny | 0 | method | done | ScreenCaptureHandler | deny | - | done | Erokhin Ilya |  |  |  | `public deny(): void` |
 | arkui.component.web | DataResubmissionHandler | DataResubmissionHandler | 0 | class |  | unnamed | DataResubmissionHandler | - |  |  |  |  |  | `export declare class DataResubmissionHandler {` |
 | arkui.component.web | DataResubmissionHandler | constructor | 0 | method |  | DataResubmissionHandler | construct | - |  |  |  |  |  | `public constructor()` |
 | arkui.component.web | DataResubmissionHandler | resend | 0 | method |  | DataResubmissionHandler | resend | - |  |  |  |  |  | `public resend(): void` |
@@ -7399,22 +7610,22 @@
 | arkui.component.web | ViewportFit | AUTO | 0 | enum_instance | generated | ViewportFit | AUTO | - | generated |  |  |  |  | `AUTO = 0` |
 | arkui.component.web | ViewportFit | CONTAINS | 0 | enum_instance | generated | ViewportFit | CONTAINS | - | generated |  |  |  |  | `CONTAINS = 1` |
 | arkui.component.web | ViewportFit | COVER | 0 | enum_instance | generated | ViewportFit | COVER | - | generated |  |  |  |  | `COVER = 2` |
-| arkui.component.web | WebContextMenuParam | WebContextMenuParam | 0 | class |  | unnamed | WebContextMenuParam | - |  |  |  |  |  | `export declare class WebContextMenuParam {` |
-| arkui.component.web | WebContextMenuParam | constructor | 0 | method |  | WebContextMenuParam | construct | - |  |  |  |  |  | `public constructor()` |
-| arkui.component.web | WebContextMenuParam | x | 0 | method |  | WebContextMenuParam | x | - |  |  |  |  |  | `public x(): int` |
-| arkui.component.web | WebContextMenuParam | y | 0 | method |  | WebContextMenuParam | y | - |  |  |  |  |  | `public y(): int` |
-| arkui.component.web | WebContextMenuParam | getLinkUrl | 0 | method |  | WebContextMenuParam | getLinkUrl | - |  |  |  |  |  | `public getLinkUrl(): string` |
-| arkui.component.web | WebContextMenuParam | getUnfilteredLinkUrl | 0 | method |  | WebContextMenuParam | getUnfilteredLinkUrl | - |  |  |  |  |  | `public getUnfilteredLinkUrl(): string` |
-| arkui.component.web | WebContextMenuParam | getSourceUrl | 0 | method |  | WebContextMenuParam | getSourceUrl | - |  |  |  |  |  | `public getSourceUrl(): string` |
-| arkui.component.web | WebContextMenuParam | existsImageContents | 0 | method |  | WebContextMenuParam | existsImageContents | - |  |  |  |  |  | `public existsImageContents(): boolean` |
-| arkui.component.web | WebContextMenuParam | getMediaType | 0 | method |  | WebContextMenuParam | getMediaType | - |  |  |  |  |  | `public getMediaType(): ContextMenuMediaType` |
-| arkui.component.web | WebContextMenuParam | getSelectionText | 0 | method |  | WebContextMenuParam | getSelectionText | - |  |  |  |  |  | `public getSelectionText(): string` |
-| arkui.component.web | WebContextMenuParam | getSourceType | 0 | method |  | WebContextMenuParam | getSourceType | - |  |  |  |  |  | `public getSourceType(): ContextMenuSourceType` |
-| arkui.component.web | WebContextMenuParam | getInputFieldType | 0 | method |  | WebContextMenuParam | getInputFieldType | - |  |  |  |  |  | `public getInputFieldType(): ContextMenuInputFieldType` |
-| arkui.component.web | WebContextMenuParam | isEditable | 0 | method |  | WebContextMenuParam | isEditable | - |  |  |  |  |  | `public isEditable(): boolean` |
-| arkui.component.web | WebContextMenuParam | getEditStateFlags | 0 | method |  | WebContextMenuParam | getEditStateFlags | - |  |  |  |  |  | `public getEditStateFlags(): int` |
-| arkui.component.web | WebContextMenuParam | getPreviewWidth | 0 | method |  | WebContextMenuParam | getPreviewWidth | - |  |  |  |  |  | `public getPreviewWidth(): int` |
-| arkui.component.web | WebContextMenuParam | getPreviewHeight | 0 | method |  | WebContextMenuParam | getPreviewHeight | - |  |  |  |  |  | `public getPreviewHeight(): int` |
+| arkui.component.web | WebContextMenuParam | WebContextMenuParam | 0 | class | done | unnamed | WebContextMenuParam | - | done | Erokhin Ilya |  |  |  | `export declare class WebContextMenuParam {` |
+| arkui.component.web | WebContextMenuParam | constructor | 0 | method | done | WebContextMenuParam | construct | - | done | Erokhin Ilya |  |  |  | `public constructor()` |
+| arkui.component.web | WebContextMenuParam | x | 0 | method | done | WebContextMenuParam | x | - | done | Erokhin Ilya |  |  |  | `public x(): int` |
+| arkui.component.web | WebContextMenuParam | y | 0 | method | done | WebContextMenuParam | y | - | done | Erokhin Ilya |  |  |  | `public y(): int` |
+| arkui.component.web | WebContextMenuParam | getLinkUrl | 0 | method | done | WebContextMenuParam | getLinkUrl | - | done | Erokhin Ilya |  |  |  | `public getLinkUrl(): string` |
+| arkui.component.web | WebContextMenuParam | getUnfilteredLinkUrl | 0 | method | done | WebContextMenuParam | getUnfilteredLinkUrl | - | done | Erokhin Ilya |  |  |  | `public getUnfilteredLinkUrl(): string` |
+| arkui.component.web | WebContextMenuParam | getSourceUrl | 0 | method | done | WebContextMenuParam | getSourceUrl | - | done | Erokhin Ilya |  |  |  | `public getSourceUrl(): string` |
+| arkui.component.web | WebContextMenuParam | existsImageContents | 0 | method | done | WebContextMenuParam | existsImageContents | - | done | Erokhin Ilya |  |  |  | `public existsImageContents(): boolean` |
+| arkui.component.web | WebContextMenuParam | getMediaType | 0 | method | done | WebContextMenuParam | getMediaType | - | done | Erokhin Ilya |  |  |  | `public getMediaType(): ContextMenuMediaType` |
+| arkui.component.web | WebContextMenuParam | getSelectionText | 0 | method | done | WebContextMenuParam | getSelectionText | - | done | Erokhin Ilya |  |  |  | `public getSelectionText(): string` |
+| arkui.component.web | WebContextMenuParam | getSourceType | 0 | method | done | WebContextMenuParam | getSourceType | - | done | Erokhin Ilya |  |  |  | `public getSourceType(): ContextMenuSourceType` |
+| arkui.component.web | WebContextMenuParam | getInputFieldType | 0 | method | done | WebContextMenuParam | getInputFieldType | - | done | Erokhin Ilya |  |  |  | `public getInputFieldType(): ContextMenuInputFieldType` |
+| arkui.component.web | WebContextMenuParam | isEditable | 0 | method | done | WebContextMenuParam | isEditable | - | done | Erokhin Ilya |  |  |  | `public isEditable(): boolean` |
+| arkui.component.web | WebContextMenuParam | getEditStateFlags | 0 | method | done | WebContextMenuParam | getEditStateFlags | - | done | Erokhin Ilya |  |  |  | `public getEditStateFlags(): int` |
+| arkui.component.web | WebContextMenuParam | getPreviewWidth | 0 | method | done | WebContextMenuParam | getPreviewWidth | - | done | Erokhin Ilya |  |  |  | `public getPreviewWidth(): int` |
+| arkui.component.web | WebContextMenuParam | getPreviewHeight | 0 | method | done | WebContextMenuParam | getPreviewHeight | - | done | Erokhin Ilya |  |  |  | `public getPreviewHeight(): int` |
 | arkui.component.web | WebContextMenuResult | WebContextMenuResult | 0 | class |  | unnamed | WebContextMenuResult | - |  |  |  |  |  | `export declare class WebContextMenuResult {` |
 | arkui.component.web | WebContextMenuResult | constructor | 0 | method |  | WebContextMenuResult | construct | - |  |  |  |  |  | `public constructor()` |
 | arkui.component.web | WebContextMenuResult | closeContextMenu | 0 | method |  | WebContextMenuResult | closeContextMenu | - |  |  |  |  |  | `public closeContextMenu(): void` |
@@ -7457,10 +7668,10 @@
 | arkui.component.web | Header | Header | 0 | interface | generated | unnamed | Header | - | generated |  |  |  |  | `export declare interface Header {` |
 | arkui.component.web | Header | headerKey | 0 | field | generated | Header | headerKey | - | generated |  |  |  |  | `headerKey: string;` |
 | arkui.component.web | Header | headerValue | 0 | field | generated | Header | headerValue | - | generated |  |  |  |  | `headerValue: string;` |
-| arkui.component.web | WebResourceError | WebResourceError | 0 | class |  | unnamed | WebResourceError | - |  |  |  |  |  | `export declare class WebResourceError {` |
-| arkui.component.web | WebResourceError | constructor | 0 | method |  | WebResourceError | construct | - |  |  |  |  |  | `public constructor()` |
-| arkui.component.web | WebResourceError | getErrorInfo | 0 | method |  | WebResourceError | getErrorInfo | - |  |  |  |  |  | `public getErrorInfo(): string` |
-| arkui.component.web | WebResourceError | getErrorCode | 0 | method |  | WebResourceError | getErrorCode | - |  |  |  |  |  | `public getErrorCode(): int` |
+| arkui.component.web | WebResourceError | WebResourceError | 0 | class | done | unnamed | WebResourceError | - | done | Erokhin Ilya |  |  |  | `export declare class WebResourceError {` |
+| arkui.component.web | WebResourceError | constructor | 0 | method | done | WebResourceError | construct | - | done | Erokhin Ilya |  |  |  | `public constructor()` |
+| arkui.component.web | WebResourceError | getErrorInfo | 0 | method | done | WebResourceError | getErrorInfo | - | done | Erokhin Ilya |  |  |  | `public getErrorInfo(): string` |
+| arkui.component.web | WebResourceError | getErrorCode | 0 | method | done | WebResourceError | getErrorCode | - | done | Erokhin Ilya |  |  |  | `public getErrorCode(): int` |
 | arkui.component.web | JsGeolocation | JsGeolocation | 0 | class |  | unnamed | JsGeolocation | - |  |  |  |  |  | `export declare class JsGeolocation {` |
 | arkui.component.web | JsGeolocation | constructor | 0 | method |  | JsGeolocation | construct | - |  |  |  |  |  | `public constructor()` |
 | arkui.component.web | JsGeolocation | invoke | 0 | method |  | JsGeolocation | invoke | - |  |  |  |  |  | `public invoke(origin: string, allow: boolean, retain: boolean): void` |
@@ -7686,8 +7897,8 @@
 | arkui.component.web | WebAttribute | metaViewport | 0 | method | out of scope | Web | setMetaViewport | - | out of scope | out of scope |  |  |  | `metaViewport(enabled: (boolean | undefined)): this` |
 | arkui.component.web | WebAttribute | onPageEnd | 0 | method | out of scope | Web | setOnPageEnd | - | out of scope | out of scope |  |  |  | `onPageEnd(callback: (Callback<OnPageEndEvent> | undefined)): this` |
 | arkui.component.web | WebAttribute | onPageBegin | 0 | method | out of scope | Web | setOnPageBegin | - | out of scope | out of scope |  |  |  | `onPageBegin(callback: (Callback<OnPageBeginEvent> | undefined)): this` |
-| arkui.component.web | WebAttribute | onLoadStarted | 0 | method |  | Web | setOnLoadStarted | - |  |  |  |  |  | `onLoadStarted(callback: (Callback<OnLoadStartedEvent> | undefined)): this` |
-| arkui.component.web | WebAttribute | onLoadFinished | 0 | method |  | Web | setOnLoadFinished | - |  |  |  |  |  | `onLoadFinished(callback: (Callback<OnLoadFinishedEvent> | undefined)): this` |
+| arkui.component.web | WebAttribute | onLoadStarted | 0 | method | out of scope | Web | setOnLoadStarted | - | out of scope | out of scope |  |  |  | `onLoadStarted(callback: (Callback<OnLoadStartedEvent> | undefined)): this` |
+| arkui.component.web | WebAttribute | onLoadFinished | 0 | method | out of scope | Web | setOnLoadFinished | - | out of scope | out of scope |  |  |  | `onLoadFinished(callback: (Callback<OnLoadFinishedEvent> | undefined)): this` |
 | arkui.component.web | WebAttribute | onProgressChange | 0 | method | out of scope | Web | setOnProgressChange | - | out of scope | out of scope |  |  |  | `onProgressChange(callback: (Callback<OnProgressChangeEvent> | undefined)): this` |
 | arkui.component.web | WebAttribute | onTitleReceive | 0 | method | out of scope | Web | setOnTitleReceive | - | out of scope | out of scope |  |  |  | `onTitleReceive(callback: (Callback<OnTitleReceiveEvent> | undefined)): this` |
 | arkui.component.web | WebAttribute | onGeolocationHide | 0 | method | out of scope | Web | setOnGeolocationHide | - | out of scope | out of scope |  |  |  | `onGeolocationHide(callback: ((()=> void) | undefined)): this` |
