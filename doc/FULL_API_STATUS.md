@@ -1970,6 +1970,8 @@
 | arkui.component.alphabetIndexer | AlphabetIndexerAttribute | enableHapticFeedback | 0 | method | done | AlphabetIndexer | setEnableHapticFeedback | - | done | Ekaterina Stepanova |  |  | not supported by dayu200; need to test on mobile device | `enableHapticFeedback(value: (boolean | undefined)): this` |
 | arkui.component.alphabetIndexer | AlphabetIndexerAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<AlphabetIndexerAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.alphabetIndexer | unnamed | AlphabetIndexer | 0 | function | done | AlphabetIndexer | setAlphabetIndexerOptions | - | done | Ekaterina Stepanova | pass |  | deprecated | `@memo() @ComponentBuilder() export declare function AlphabetIndexer(options: AlphabetIndexerOptions, @memo() content_?: (()=> void)): AlphabetIndexerAttribute` |
+| arkui.AlphabetIndexerModifier | AlphabetIndexerModifier | AlphabetIndexerModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class AlphabetIndexerModifier implements AlphabetIndexerAttribute, AttributeModifier<AlphabetIndexerAttribute> {` |
+| arkui.AlphabetIndexerModifier | AlphabetIndexerModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.animator | SpringProp | SpringProp | 0 | class | managed side | unnamed | SpringProp | - | managed side | managed side |  |  |  | `export declare class SpringProp {` |
 | arkui.component.animator | SpringProp | constructor | 0 | method | managed side | SpringProp | construct | - | managed side | managed side |  |  |  | `public constructor(mass: number, stiffness: number, damping: number)` |
 | arkui.component.animator | SpringMotion | SpringMotion | 0 | class | managed side | unnamed | SpringMotion | - | managed side | managed side |  |  |  | `export declare class SpringMotion {` |
@@ -2035,6 +2037,8 @@
 | arkui.component.blank | BlankAttribute | color | 0 | method | done | Blank | setColor | - | done | Skroba Gleb | pass |  |  | `color(value: (ResourceColor | undefined)): this` |
 | arkui.component.blank | BlankAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<BlankAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.blank | unnamed | Blank | 0 | function | done | Blank | setBlankOptions | - | done | Skroba Gleb | pass |  |  | `@memo() @ComponentBuilder() export declare function Blank(min?: (number | string), @memo() content_?: (()=> void)): BlankAttribute` |
+| arkui.BlankModifier | BlankModifier | BlankModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class BlankModifier implements BlankAttribute, AttributeModifier<BlankAttribute> {` |
+| arkui.BlankModifier | BlankModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.builder | unnamed | CustomBuilder | 0 | field |  |  |  |  | - |  |  |  |  | `export type CustomBuilder = @Builder() (()=> void);` |
 | arkui.component.builder | unnamed | CustomBuilderT | 0 | field |  |  |  |  | - |  |  |  |  | `export type CustomBuilderT<T> = @Builder() ((t: T)=> void);` |
 | arkui.component.builder | unnamed | PageMapBuilder | 0 | field |  |  |  |  | - |  |  |  |  | `export type PageMapBuilder = @Builder() ((name: string, param: (Object | null | undefined))=> void);` |
@@ -2044,6 +2048,31 @@
 | arkui.component.builder | WrappedBuilder | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(builder: T)` |
 | arkui.component.builder | unnamed | BuilderParameterCallback | 0 | field | generated | unnamed | BuilderParameterCallback | - | generated |  |  |  |  | `export type BuilderParameterCallback = (()=> Any);` |
 | arkui.component.builder | unnamed | makeBuilderParameterProxy | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function makeBuilderParameterProxy<T extends Object>(instance: T, propertyGetters: Map<string, BuilderParameterCallback>, initializer?: Callback<T>): T` |
+| arkui.BuilderNode | NodeRenderType | NodeRenderType | 0 | enum_class |  |  |  |  | - |  |  |  |  | `declare enum NodeRenderType {` |
+| arkui.BuilderNode | NodeRenderType | RENDER_TYPE_DISPLAY | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `RENDER_TYPE_DISPLAY = 0` |
+| arkui.BuilderNode | NodeRenderType | RENDER_TYPE_TEXTURE | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `RENDER_TYPE_TEXTURE = 1` |
+| arkui.BuilderNode | RenderOptions | RenderOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface RenderOptions {` |
+| arkui.BuilderNode | RenderOptions | selfIdealSize | 0 | field |  |  |  |  | - |  |  |  |  | `selfIdealSize?: Size;` |
+| arkui.BuilderNode | RenderOptions | type | 0 | field |  |  |  |  | - |  |  |  |  | `type?: NodeRenderType;` |
+| arkui.BuilderNode | RenderOptions | surfaceId | 0 | field |  |  |  |  | - |  |  |  |  | `surfaceId?: string;` |
+| arkui.BuilderNode | BuildOptions | BuildOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface BuildOptions {` |
+| arkui.BuilderNode | BuildOptions | useParallel | 0 | field |  |  |  |  | - |  |  |  |  | `useParallel?: boolean;` |
+| arkui.BuilderNode | BuilderNode | BuilderNode | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class BuilderNode<T = undefined>  {` |
+| arkui.BuilderNode | BuilderNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(uiContext: UIContext, options?: RenderOptions)` |
+| arkui.BuilderNode | BuilderNode | build | 0 | method |  |  |  |  | - |  |  |  |  | `public build(builder: WrappedBuilder<CustomBuilder>): void` |
+| arkui.BuilderNode | BuilderNode | build | 1 | method |  |  |  |  | - |  |  |  |  | `public build(builder: WrappedBuilder<CustomBuilderT<T>>, arg: T): void` |
+| arkui.BuilderNode | BuilderNode | build | 2 | method |  |  |  |  | - |  |  |  |  | `public build(builder: WrappedBuilder<CustomBuilderT<T>>, arg: T, options: BuildOptions): void` |
+| arkui.BuilderNode | BuilderNode | update | 0 | method |  |  |  |  | - |  |  |  |  | `public update(arg: T): void` |
+| arkui.BuilderNode | BuilderNode | getFrameNode | 0 | method |  |  |  |  | - |  |  |  |  | `public getFrameNode(): (FrameNode | null)` |
+| arkui.BuilderNode | BuilderNode | postTouchEvent | 0 | method |  |  |  |  | - |  |  |  |  | `public postTouchEvent(event: TouchEvent): boolean` |
+| arkui.BuilderNode | BuilderNode | dispose | 0 | method |  |  |  |  | - |  |  |  |  | `public dispose(): void` |
+| arkui.BuilderNode | BuilderNode | reuse | 0 | method |  |  |  |  | - |  |  |  |  | `public reuse(param?: Object): void` |
+| arkui.BuilderNode | BuilderNode | recycle | 0 | method |  |  |  |  | - |  |  |  |  | `public recycle(): void` |
+| arkui.BuilderNode | BuilderNode | updateConfiguration | 0 | method |  |  |  |  | - |  |  |  |  | `public updateConfiguration(): void` |
+| arkui.BuilderNode | BuilderNode | isDisposed | 0 | method |  |  |  |  | - |  |  |  |  | `public isDisposed(): boolean` |
+| arkui.BuilderNode | BuilderNode | postInputEvent | 0 | method |  |  |  |  | - |  |  |  |  | `public postInputEvent(event: InputEventType): boolean` |
+| arkui.BuilderNode | BuilderNode | inheritFreezeOptions | 0 | method |  |  |  |  | - |  |  |  |  | `public inheritFreezeOptions(enabled: boolean): void` |
+| arkui.BuilderNode | unnamed | InputEventType | 0 | field |  |  |  |  | - |  |  |  |  | `type InputEventType = (TouchEvent | MouseEvent | AxisEvent);` |
 | arkui.component.button | ButtonType | ButtonType | 0 | enum_class | generated | unnamed | ButtonType | - | generated |  |  |  |  | `declare enum ButtonType {` |
 | arkui.component.button | ButtonType | Capsule | 0 | enum_instance | generated | ButtonType | CAPSULE | - | generated |  |  |  |  | `Capsule = 0` |
 | arkui.component.button | ButtonType | Circle | 0 | enum_instance | generated | ButtonType | CIRCLE | - | generated |  |  |  |  | `Circle = ((0) + (1))` |
@@ -2094,6 +2123,8 @@
 | arkui.component.button | ButtonAttribute | maxFontScale | 0 | method | done | Button | setMaxFontScale | - | done | Kovalev Sergey |  |  |  | `maxFontScale(scale: (number | Resource | undefined)): this` |
 | arkui.component.button | ButtonAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<ButtonAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.button | unnamed | Button | 0 | function | done | Button | setButtonOptions | - | done | Evstigneev Roman | pass12 |  |  | `@memo() @ComponentBuilder() export declare function Button(label: (ButtonOptions | ResourceStr), options?: ButtonOptions, @memo() content_?: (()=> void)): ButtonAttribute` |
+| arkui.ButtonModifier | ButtonModifier | ButtonModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ButtonModifier implements ButtonAttribute, AttributeModifier<ButtonAttribute> {` |
+| arkui.ButtonModifier | ButtonModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.calendarPicker | CalendarAlign | CalendarAlign | 0 | enum_class | generated | unnamed | CalendarAlign | - | generated |  |  |  |  | `declare enum CalendarAlign {` |
 | arkui.component.calendarPicker | CalendarAlign | START | 0 | enum_instance | generated | CalendarAlign | START | - | generated |  |  |  |  | `START = 0` |
 | arkui.component.calendarPicker | CalendarAlign | CENTER | 0 | enum_instance | generated | CalendarAlign | CENTER | - | generated |  |  |  |  | `CENTER = 1` |
@@ -2132,6 +2163,8 @@
 | arkui.component.calendarPicker | CalendarPickerDialog | show | 0 | method | testskipped | CalendarPickerDialog | show | - | testskipped | Ekaterina Stepanova |  |  | UT in progress, Skroba Gleb | `public static show(options?: CalendarDialogOptions): void` |
 | arkui.component.calendarPicker | CalendarPickerDialog | constructor | 0 | method |  | CalendarPickerDialog | construct | - |  |  |  |  |  | `public constructor() {}` |
 | arkui.component.calendarPicker | unnamed | CalendarPicker | 0 | function | testskipped | CalendarPicker | setCalendarPickerOptions | - | testskipped | Politov Mikhail | failed |  | UT blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB7RNZ, test failed OHOSUI-2244 | `@memo() @ComponentBuilder() export declare function CalendarPicker(options?: CalendarOptions, @memo() content_?: (()=> void)): CalendarPickerAttribute` |
+| arkui.CalendarPickerModifier | CalendarPickerModifier | CalendarPickerModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class CalendarPickerModifier implements CalendarPickerAttribute, AttributeModifier<CalendarPickerAttribute> {` |
+| arkui.CalendarPickerModifier | CalendarPickerModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.canvas | unnamed | CanvasFillRule | 0 | field |  |  |  |  | - |  |  |  |  | `export type CanvasFillRule = ("evenodd" | "nonzero");` |
 | arkui.component.canvas | unnamed | CanvasLineCap | 0 | field |  |  |  |  | - |  |  |  |  | `export type CanvasLineCap = ("butt" | "round" | "square");` |
 | arkui.component.canvas | unnamed | CanvasLineJoin | 0 | field |  |  |  |  | - |  |  |  |  | `export type CanvasLineJoin = ("bevel" | "miter" | "round");` |
@@ -2349,6 +2382,10 @@
 | arkui.component.checkboxgroup | CheckboxGroupAttribute | checkboxShape | 0 | method | done | CheckboxGroup | setCheckboxShape | - | done | Dudkin Sergey | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `checkboxShape(value: (CheckBoxShape | undefined)): this` |
 | arkui.component.checkboxgroup | CheckboxGroupAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<CheckboxGroupAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.checkboxgroup | unnamed | CheckboxGroup | 0 | function | done | CheckboxGroup | setCheckboxGroupOptions | - | done | Dudkin Sergey | pass |  |  | `@memo() @ComponentBuilder() export declare function CheckboxGroup(options?: CheckboxGroupOptions, @memo() content_?: (()=> void)): CheckboxGroupAttribute` |
+| arkui.CheckboxGroupModifier | CheckboxGroupModifier | CheckboxGroupModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class CheckboxGroupModifier implements CheckboxGroupAttribute, AttributeModifier<CheckboxGroupAttribute> {` |
+| arkui.CheckboxGroupModifier | CheckboxGroupModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.CheckboxModifier | CheckboxModifier | CheckboxModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class CheckboxModifier implements CheckboxAttribute, AttributeModifier<CheckboxAttribute> {` |
+| arkui.CheckboxModifier | CheckboxModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.circle | CircleOptions | CircleOptions | 0 | interface | generated | unnamed | CircleOptions | - | generated |  |  |  |  | `export declare interface CircleOptions {` |
 | arkui.component.circle | CircleOptions | width | 0 | field | generated | CircleOptions | width | - | generated |  |  |  |  | `width?: (string | double);` |
 | arkui.component.circle | CircleOptions | height | 0 | field | generated | CircleOptions | height | - | generated |  |  |  |  | `height?: (string | double);` |
@@ -2366,6 +2403,8 @@
 | arkui.component.column | ColumnAttribute | reverse | 0 | method | done | Column | setReverse | - | done | Politov Mikhail | pass |  |  | `reverse(isReversed: (boolean | undefined)): this` |
 | arkui.component.column | ColumnAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<ColumnAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.column | unnamed | Column | 0 | function | done | Column | setColumnOptions | - | done | Politov Mikhail |  |  |  | `@memo() @ComponentBuilder() export declare function Column(options?: (ColumnOptions | ColumnOptions | ColumnOptionsV2), @memo() content_?: (()=> void)): ColumnAttribute` |
+| arkui.ColumnModifier | ColumnModifier | ColumnModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ColumnModifier implements ColumnAttribute, AttributeModifier<ColumnAttribute> {` |
+| arkui.ColumnModifier | ColumnModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.columnSplit | ColumnSplitDividerStyle | ColumnSplitDividerStyle | 0 | interface | generated | unnamed | ColumnSplitDividerStyle | - | generated |  |  |  |  | `export interface ColumnSplitDividerStyle {` |
 | arkui.component.columnSplit | ColumnSplitDividerStyle | startMargin | 0 | field | generated | ColumnSplitDividerStyle | startMargin | - | generated |  |  |  |  | `startMargin?: Dimension;` |
 | arkui.component.columnSplit | ColumnSplitDividerStyle | endMargin | 0 | field | generated | ColumnSplitDividerStyle | endMargin | - | generated |  |  |  |  | `endMargin?: Dimension;` |
@@ -2374,6 +2413,8 @@
 | arkui.component.columnSplit | ColumnSplitAttribute | divider | 0 | method | done | ColumnSplit | setDivider | - | done | Dmitry A Smirnov | test blocked IDL |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `divider(value: (ColumnSplitDividerStyle | null | undefined)): this` |
 | arkui.component.columnSplit | ColumnSplitAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<ColumnSplitAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.columnSplit | unnamed | ColumnSplit | 0 | function | done | ColumnSplit | setColumnSplitOptions | - | done | Dmitry A Smirnov | pass |  |  | `@memo() @ComponentBuilder() export declare function ColumnSplit(@memo() content_?: (()=> void)): ColumnSplitAttribute` |
+| arkui.ColumnSplitModifier | ColumnSplitModifier | ColumnSplitModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ColumnSplitModifier implements ColumnSplitAttribute, AttributeModifier<ColumnSplitAttribute> {` |
+| arkui.ColumnSplitModifier | ColumnSplitModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.common | InputCounterOptions | InputCounterOptions | 0 | interface | generated | unnamed | InputCounterOptions | - | generated |  |  |  |  | `export declare interface InputCounterOptions {` |
 | arkui.component.common | InputCounterOptions | thresholdPercentage | 0 | field | generated | InputCounterOptions | thresholdPercentage | - | generated |  |  |  |  | `thresholdPercentage?: number;` |
 | arkui.component.common | InputCounterOptions | highlightBorder | 0 | field | generated | InputCounterOptions | highlightBorder | - | generated |  |  |  |  | `highlightBorder?: boolean;` |
@@ -3893,6 +3934,8 @@
 | arkui.component.common | unnamed | BindableResourceStrArray | 0 | field | generated | unnamed | BindableResourceStrArray | - | generated |  |  |  |  | `export type BindableResourceStrArray = (ResourceStr[] | Bindable<ResourceStr[]> | Bindable<Resource[]> | Bindable<string[]>);` |
 | arkui.component.common | unnamed | $$ | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare function $$<T>(value: T): Bindable<T>` |
 | arkui.component.common | unnamed | applyStyles | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function applyStyles<T extends CommonMethod>(self: T, customStyles: CustomStyles): T` |
+| arkui.CommonModifier | CommonModifier | CommonModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class CommonModifier implements CommonAttribute, AttributeModifier<CommonAttribute> {` |
+| arkui.CommonModifier | CommonModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.component3d | ModelType | ModelType | 0 | enum_class | generated | unnamed | ModelType | - | generated |  |  |  |  | `declare enum ModelType {` |
 | arkui.component.component3d | ModelType | TEXTURE | 0 | enum_instance | generated | ModelType | TEXTURE | - | generated |  |  |  |  | `TEXTURE = 0` |
 | arkui.component.component3d | ModelType | SURFACE | 0 | enum_instance | generated | ModelType | SURFACE | - | generated |  |  |  |  | `SURFACE = 1` |
@@ -3909,10 +3952,25 @@
 | arkui.component.component3d | Component3DAttribute | renderHeight | 0 | method |  | Component3D | setRenderHeight | - |  |  |  |  |  | `renderHeight(value: (Dimension | undefined)): this` |
 | arkui.component.component3d | Component3DAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<Component3DAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.component3d | unnamed | Component3D | 0 | function |  | Component3D | setComponent3DOptions | - |  |  |  |  |  | `@memo() @ComponentBuilder() export declare function Component3D(sceneOptions?: SceneOptions, @memo() content_?: (()=> void)): Component3DAttribute` |
+| arkui.ComponentContent | ComponentContentBase | ComponentContentBase | 0 | class |  |  |  |  | - |  |  |  |  | `export abstract class ComponentContentBase extends Content {` |
+| arkui.ComponentContent | ComponentContentBase | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.ComponentContent | ComponentContent | ComponentContent | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ComponentContent<T = undefined>  extends ComponentContentBase {` |
+| arkui.ComponentContent | ComponentContent | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(uiContext: UIContext, builder: WrappedBuilder<CustomBuilder>)` |
+| arkui.ComponentContent | ComponentContent | constructor | 1 | method |  |  |  |  | - |  |  |  |  | `public constructor(uiContext: UIContext, builder: WrappedBuilder<CustomBuilderT<T>>, args: T)` |
+| arkui.ComponentContent | ComponentContent | constructor | 2 | method |  |  |  |  | - |  |  |  |  | `public constructor(uiContext: UIContext, builder: WrappedBuilder<CustomBuilderT<T>>, args: T, options: BuildOptions)` |
+| arkui.ComponentContent | ComponentContent | update | 0 | method |  |  |  |  | - |  |  |  |  | `public update(args: T): void` |
+| arkui.ComponentContent | ComponentContent | reuse | 0 | method |  |  |  |  | - |  |  |  |  | `public reuse(param?: Object): void` |
+| arkui.ComponentContent | ComponentContent | recycle | 0 | method |  |  |  |  | - |  |  |  |  | `public recycle(): void` |
+| arkui.ComponentContent | ComponentContent | dispose | 0 | method |  |  |  |  | - |  |  |  |  | `public dispose(): void` |
+| arkui.ComponentContent | ComponentContent | updateConfiguration | 0 | method |  |  |  |  | - |  |  |  |  | `public updateConfiguration(): void` |
 | arkui.component.containerSpan | ContainerSpanAttribute | ContainerSpanAttribute | 0 | interface | done | unnamed | ContainerSpan | - | done | Tuzhilkin Ivan | pass |  |  | `export declare interface ContainerSpanAttribute {` |
 | arkui.component.containerSpan | ContainerSpanAttribute | textBackgroundStyle | 0 | method | done | ContainerSpan | setTextBackgroundStyle | - | done | Tuzhilkin Ivan | pass |  |  | `textBackgroundStyle(style: (TextBackgroundStyle | undefined)): this` |
 | arkui.component.containerSpan | ContainerSpanAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<ContainerSpanAttribute> | undefined)): this` |
 | arkui.component.containerSpan | unnamed | ContainerSpan | 0 | function | done | ContainerSpan | setContainerSpanOptions | - | done | Tuzhilkin Ivan | pass |  |  | `@memo() @ComponentBuilder() export declare function ContainerSpan(@memo() content_?: (()=> void)): ContainerSpanAttribute` |
+| arkui.ContainerSpanModifier | ContainerSpanModifier | ContainerSpanModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ContainerSpanModifier implements ContainerSpanAttribute, AttributeModifier<ContainerSpanAttribute> {` |
+| arkui.ContainerSpanModifier | ContainerSpanModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.Content | Content | Content | 0 | class |  |  |  |  | - |  |  |  |  | `export abstract class Content {` |
+| arkui.Content | Content | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.contentSlot | ContentSlotAttribute | ContentSlotAttribute | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface ContentSlotAttribute {` |
 | arkui.component.contentSlot | unnamed | ContentSlot | 0 | function |  |  |  |  | - |  |  |  |  | `@memo() @ComponentBuilder() export declare function ContentSlot(content: Content, @memo() content_?: (()=> void)): ContentSlotAttribute` |
 | arkui.component.counter | CounterAttribute | CounterAttribute | 0 | interface | done | unnamed | Counter | - | done | Erokhin Ilya | pass |  |  | `export declare interface CounterAttribute extends CommonMethod {` |
@@ -3922,6 +3980,8 @@
 | arkui.component.counter | CounterAttribute | enableInc | 0 | method | done | Counter | setEnableInc | - | done | Erokhin Ilya | pass |  |  | `enableInc(value: (boolean | undefined)): this` |
 | arkui.component.counter | CounterAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<CounterAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.counter | unnamed | Counter | 0 | function | done | Counter | setCounterOptions | - | done | Erokhin Ilya | pass |  |  | `@memo() @ComponentBuilder() export declare function Counter(@memo() content_?: (()=> void)): CounterAttribute` |
+| arkui.CounterModifier | CounterModifier | CounterModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class CounterModifier implements CounterAttribute, AttributeModifier<CounterAttribute> {` |
+| arkui.CounterModifier | CounterModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.customDialogController | CustomDialogControllerOptions | CustomDialogControllerOptions | 0 | interface | generated | unnamed | CustomDialogControllerOptions | - | generated |  |  |  |  | `export declare interface CustomDialogControllerOptions {` |
 | arkui.component.customDialogController | CustomDialogControllerOptions | builder | 0 | field | generated | CustomDialogControllerOptions | builder | - | generated |  |  |  |  | `builder: (CustomBuilder | ExtendableComponent);` |
 | arkui.component.customDialogController | CustomDialogControllerOptions | cancel | 0 | field | generated | CustomDialogControllerOptions | cancel | - | generated |  |  |  |  | `cancel?: (()=> void);` |
@@ -3994,6 +4054,8 @@
 | arkui.component.dataPanel | DataPanelAttribute | contentModifier | 0 | method |  |  |  |  | - |  |  |  |  | `contentModifier(modifier: (ContentModifier<DataPanelConfiguration> | undefined)): this` |
 | arkui.component.dataPanel | DataPanelAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<DataPanelAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.dataPanel | unnamed | DataPanel | 0 | function | done | DataPanel | setDataPanelOptions | - | done | Morozov Sergey | pass |  |  | `@memo() @ComponentBuilder() export declare function DataPanel(options: DataPanelOptions, @memo() content_?: (()=> void)): DataPanelAttribute` |
+| arkui.DataPanelModifier | DataPanelModifier | DataPanelModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class DataPanelModifier implements DataPanelAttribute, AttributeModifier<DataPanelAttribute> {` |
+| arkui.DataPanelModifier | DataPanelModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.datePicker | DatePickerResult | DatePickerResult | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface DatePickerResult {` |
 | arkui.component.datePicker | DatePickerResult | year | 0 | field |  |  |  |  | - |  |  |  |  | `year?: number;` |
 | arkui.component.datePicker | DatePickerResult | month | 0 | field |  |  |  |  | - |  |  |  |  | `month?: number;` |
@@ -4053,6 +4115,8 @@
 | arkui.component.datePicker | DatePickerDialog | DatePickerDialog | 0 | class | testskipped | unnamed | DatePickerDialog | - | testskipped | Ekaterina Stepanova |  |  |  | `export declare class DatePickerDialog {` |
 | arkui.component.datePicker | DatePickerDialog | constructor | 0 | method | testskipped | DatePickerDialog | construct | - | testskipped | Ekaterina Stepanova |  |  | UT in progress, Skroba Gleb | `public constructor() {}` |
 | arkui.component.datePicker | unnamed | DatePicker | 0 | function | done | DatePicker | setDatePickerOptions | - | done | Vadim Voronov | pass |  |  | `@memo() @ComponentBuilder() export declare function DatePicker(options?: DatePickerOptions, @memo() content_?: (()=> void)): DatePickerAttribute` |
+| arkui.DatePickerModifier | DatePickerModifier | DatePickerModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class DatePickerModifier implements DatePickerAttribute, AttributeModifier<DatePickerAttribute> {` |
+| arkui.DatePickerModifier | DatePickerModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.stateManagement.decorator | IMonitor | IMonitor | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare interface IMonitor {` |
 | arkui.stateManagement.decorator | IMonitorValue | IMonitorValue | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare interface IMonitorValue<T> {` |
 | arkui.stateManagement.decorator | IDecoratedVariable | IDecoratedVariable | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface IDecoratedVariable {` |
@@ -4145,6 +4209,8 @@
 | arkui.component.divider | DividerAttribute | lineCap | 0 | method | done | Divider | setLineCap | - | done | Tuzhilkin Ivan | pass |  |  | `lineCap(value: (LineCapStyle | undefined)): this` |
 | arkui.component.divider | DividerAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<DividerAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.divider | unnamed | Divider | 0 | function | done | Divider | setDividerOptions | - | done | Tuzhilkin Ivan | pass |  |  | `@memo() @ComponentBuilder() export declare function Divider(@memo() content_?: (()=> void)): DividerAttribute` |
+| arkui.DividerModifier | DividerModifier | DividerModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class DividerModifier implements DividerAttribute, AttributeModifier<DividerAttribute> {` |
+| arkui.DividerModifier | DividerModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.effectComponent | EffectComponentAttribute | EffectComponentAttribute | 0 | interface | done | unnamed | EffectComponent | - | done | Ekaterina Stepanova | out of scope |  | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `export declare interface EffectComponentAttribute extends CommonMethod {` |
 | arkui.component.effectComponent | EffectComponentAttribute | alwaysSnapshot | 0 | method |  | EffectComponent | setAlwaysSnapshot | - |  |  |  |  |  | `alwaysSnapshot(enable: boolean): this` |
 | arkui.component.effectComponent | EffectComponentAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<EffectComponentAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
@@ -4679,6 +4745,8 @@
 | arkui.component.flex | FlexAttribute | pointLight | 0 | method | done | Flex | setPointLight | - | done | Evstigneev Roman | pass |  | UT by Evstigneev Roman | `pointLight(value: PointLightStyle): FlexAttribute` |
 | arkui.component.flex | FlexAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<FlexAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.flex | unnamed | Flex | 0 | function | done | Flex | setFlexOptions | - | done | Kovalev Sergey | pass |  |  | `@memo() @ComponentBuilder() export declare function Flex(value?: FlexOptions, @memo() content_?: (()=> void)): FlexAttribute` |
+| arkui.FlexModifier | FlexModifier | FlexModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class FlexModifier implements FlexAttribute, AttributeModifier<FlexAttribute> {` |
+| arkui.FlexModifier | FlexModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.flowItem | FlowItemAttribute | FlowItemAttribute | 0 | interface | done | unnamed | FlowItem | - | done | Evstigneev Roman |  |  |  | `export declare interface FlowItemAttribute extends CommonMethod {` |
 | arkui.component.flowItem | FlowItemAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<FlowItemAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.flowItem | unnamed | FlowItem | 0 | function | done | FlowItem | setFlowItemOptions | - | done | Evstigneev Roman |  |  |  | `@memo() @ComponentBuilder() export declare function FlowItem(@memo() content_?: (()=> void)): FlowItemAttribute` |
@@ -4713,6 +4781,8 @@
 | arkui.component.folderStack | HoverEventParam | appRotation | 0 | field | generated | HoverEventParam | appRotation | - | generated |  |  |  |  | `appRotation: AppRotation;` |
 | arkui.component.folderStack | HoverEventParam | windowStatusType | 0 | field | generated | HoverEventParam | windowStatusType | - | generated |  |  |  |  | `windowStatusType: WindowStatusType;` |
 | arkui.component.folderStack | unnamed | FolderStack | 0 | function | done | FolderStack | setFolderStackOptions | - | done | Politov Mikhail | pass |  |  | `@memo() @ComponentBuilder() export declare function FolderStack(options?: FolderStackOptions, @memo() content_?: (()=> void)): FolderStackAttribute` |
+| arkui.FolderStackModifier | FolderStackModifier | FolderStackModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class FolderStackModifier implements FolderStackAttribute, AttributeModifier<FolderStackAttribute> {` |
+| arkui.FolderStackModifier | FolderStackModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.forEach | unnamed | ItemGeneratorFunc | 0 | field |  |  |  |  | - |  |  |  |  | `@Builder() type ItemGeneratorFunc<T> = ((item: T, index: number)=> void);` |
 | arkui.component.forEach | unnamed | KeyGeneratorFunc | 0 | field |  |  |  |  | - |  |  |  |  | `type KeyGeneratorFunc<T> = ((item: T, index: number)=> string);` |
 | arkui.component.forEach | ForEachAttribute | ForEachAttribute | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export interface ForEachAttribute extends DynamicNode {` |
@@ -4776,6 +4846,308 @@
 | arkui.component.formLink | FormLinkAttribute | FormLinkAttribute | 0 | interface | done | unnamed | FormLink | - | done | Dmitry A Smirnov | out of scope |  |  | `export declare interface FormLinkAttribute extends CommonMethod {` |
 | arkui.component.formLink | FormLinkAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<FormLinkAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.formLink | unnamed | FormLink | 0 | function | done | FormLink | setFormLinkOptions | - | done | Dmitry A Smirnov | out of scope |  |  | `@memo() @ComponentBuilder() export declare function FormLink(options: FormLinkOptions, @memo() content_?: (()=> void)): FormLinkAttribute` |
+| arkui.FrameNode | LayoutConstraint | LayoutConstraint | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface LayoutConstraint {` |
+| arkui.FrameNode | LayoutConstraint | maxSize | 0 | field |  |  |  |  | - |  |  |  |  | `maxSize: Size;` |
+| arkui.FrameNode | LayoutConstraint | minSize | 0 | field |  |  |  |  | - |  |  |  |  | `minSize: Size;` |
+| arkui.FrameNode | LayoutConstraint | percentReference | 0 | field |  |  |  |  | - |  |  |  |  | `percentReference: Size;` |
+| arkui.FrameNode | CrossLanguageOptions | CrossLanguageOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface CrossLanguageOptions {` |
+| arkui.FrameNode | CrossLanguageOptions | attributeSetting | 0 | field |  |  |  |  | - |  |  |  |  | `attributeSetting?: boolean;` |
+| arkui.FrameNode | ExpandMode | ExpandMode | 0 | enum_class |  |  |  |  | - |  |  |  |  | `enum ExpandMode {` |
+| arkui.FrameNode | ExpandMode | NOT_EXPAND | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `NOT_EXPAND = 0` |
+| arkui.FrameNode | ExpandMode | EXPAND | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `EXPAND = 1` |
+| arkui.FrameNode | ExpandMode | LAZY_EXPAND | 0 | enum_instance |  |  |  |  | - |  |  |  |  | `LAZY_EXPAND = 2` |
+| arkui.FrameNode | FrameNode | FrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class FrameNode {` |
+| arkui.FrameNode | FrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(uiContext: UIContext)` |
+| arkui.FrameNode | FrameNode | getRenderNode | 0 | method |  |  |  |  | - |  |  |  |  | `public getRenderNode(): (RenderNode | null)` |
+| arkui.FrameNode | FrameNode | isModifiable | 0 | method |  |  |  |  | - |  |  |  |  | `public isModifiable(): boolean` |
+| arkui.FrameNode | FrameNode | appendChild | 0 | method |  |  |  |  | - |  |  |  |  | `public appendChild(node: FrameNode): void` |
+| arkui.FrameNode | FrameNode | insertChildAfter | 0 | method |  |  |  |  | - |  |  |  |  | `public insertChildAfter(child: FrameNode, sibling: (FrameNode | null)): void` |
+| arkui.FrameNode | FrameNode | removeChild | 0 | method |  |  |  |  | - |  |  |  |  | `public removeChild(node: FrameNode): void` |
+| arkui.FrameNode | FrameNode | clearChildren | 0 | method |  |  |  |  | - |  |  |  |  | `public clearChildren(): void` |
+| arkui.FrameNode | FrameNode | getChild | 0 | method |  |  |  |  | - |  |  |  |  | `public getChild(index: number, expandMode?: (ExpandMode | undefined)): (FrameNode | null)` |
+| arkui.FrameNode | FrameNode | getFirstChildIndexWithoutExpand | 0 | method |  |  |  |  | - |  |  |  |  | `public getFirstChildIndexWithoutExpand(): number` |
+| arkui.FrameNode | FrameNode | getLastChildIndexWithoutExpand | 0 | method |  |  |  |  | - |  |  |  |  | `public getLastChildIndexWithoutExpand(): number` |
+| arkui.FrameNode | FrameNode | getFirstChild | 0 | method |  |  |  |  | - |  |  |  |  | `public getFirstChild(): (FrameNode | null)` |
+| arkui.FrameNode | FrameNode | getNextSibling | 0 | method |  |  |  |  | - |  |  |  |  | `public getNextSibling(): (FrameNode | null)` |
+| arkui.FrameNode | FrameNode | getPreviousSibling | 0 | method |  |  |  |  | - |  |  |  |  | `public getPreviousSibling(): (FrameNode | null)` |
+| arkui.FrameNode | FrameNode | getParent | 0 | method |  |  |  |  | - |  |  |  |  | `public getParent(): (FrameNode | null)` |
+| arkui.FrameNode | FrameNode | getChildrenCount | 0 | method |  |  |  |  | - |  |  |  |  | `public getChildrenCount(): number` |
+| arkui.FrameNode | FrameNode | moveTo | 0 | method |  |  |  |  | - |  |  |  |  | `public moveTo(targetParent: FrameNode, index?: number): void` |
+| arkui.FrameNode | FrameNode | dispose | 0 | method |  |  |  |  | - |  |  |  |  | `public dispose(): void` |
+| arkui.FrameNode | FrameNode | getPositionToWindow | 0 | method |  |  |  |  | - |  |  |  |  | `public getPositionToWindow(): Position` |
+| arkui.FrameNode | FrameNode | isDisposed | 0 | method |  |  |  |  | - |  |  |  |  | `public isDisposed(): boolean` |
+| arkui.FrameNode | FrameNode | getPositionToParent | 0 | method |  |  |  |  | - |  |  |  |  | `public getPositionToParent(): Position` |
+| arkui.FrameNode | FrameNode | getMeasuredSize | 0 | method |  |  |  |  | - |  |  |  |  | `public getMeasuredSize(): Size` |
+| arkui.FrameNode | FrameNode | getLayoutPosition | 0 | method |  |  |  |  | - |  |  |  |  | `public getLayoutPosition(): Position` |
+| arkui.FrameNode | FrameNode | getUserConfigBorderWidth | 0 | method |  |  |  |  | - |  |  |  |  | `public getUserConfigBorderWidth(): Edges<LengthMetrics>` |
+| arkui.FrameNode | FrameNode | getUserConfigPadding | 0 | method |  |  |  |  | - |  |  |  |  | `public getUserConfigPadding(): Edges<LengthMetrics>` |
+| arkui.FrameNode | FrameNode | getUserConfigMargin | 0 | method |  |  |  |  | - |  |  |  |  | `public getUserConfigMargin(): Edges<LengthMetrics>` |
+| arkui.FrameNode | FrameNode | getUserConfigSize | 0 | method |  |  |  |  | - |  |  |  |  | `public getUserConfigSize(): SizeT<LengthMetrics>` |
+| arkui.FrameNode | FrameNode | getId | 0 | method |  |  |  |  | - |  |  |  |  | `public getId(): string` |
+| arkui.FrameNode | FrameNode | getUniqueId | 0 | method |  |  |  |  | - |  |  |  |  | `public getUniqueId(): number` |
+| arkui.FrameNode | FrameNode | getNodeType | 0 | method |  |  |  |  | - |  |  |  |  | `public getNodeType(): string` |
+| arkui.FrameNode | FrameNode | getOpacity | 0 | method |  |  |  |  | - |  |  |  |  | `public getOpacity(): number` |
+| arkui.FrameNode | FrameNode | isVisible | 0 | method |  |  |  |  | - |  |  |  |  | `public isVisible(): boolean` |
+| arkui.FrameNode | FrameNode | isClipToFrame | 0 | method |  |  |  |  | - |  |  |  |  | `public isClipToFrame(): boolean` |
+| arkui.FrameNode | FrameNode | isAttached | 0 | method |  |  |  |  | - |  |  |  |  | `public isAttached(): boolean` |
+| arkui.FrameNode | FrameNode | getInspectorInfo | 0 | method |  |  |  |  | - |  |  |  |  | `public getInspectorInfo(): Object` |
+| arkui.FrameNode | FrameNode | getCustomProperty | 0 | method |  |  |  |  | - |  |  |  |  | `public getCustomProperty(name: string): CustomProperty` |
+| arkui.FrameNode | FrameNode | commonEvent | 0 | method |  |  |  |  | - |  |  |  |  | `public get commonEvent(): UICommonEvent` |
+| arkui.FrameNode | FrameNode | gestureEvent | 0 | method |  |  |  |  | - |  |  |  |  | `public get gestureEvent(): UIGestureEvent` |
+| arkui.FrameNode | FrameNode | commonAttribute | 0 | method |  |  |  |  | - |  |  |  |  | `public get commonAttribute(): CommonAttribute` |
+| arkui.FrameNode | FrameNode | onMeasure | 0 | method |  |  |  |  | - |  |  |  |  | `public onMeasure(constraint: LayoutConstraint): void` |
+| arkui.FrameNode | FrameNode | onLayout | 0 | method |  |  |  |  | - |  |  |  |  | `public onLayout(position: Position): void` |
+| arkui.FrameNode | FrameNode | setMeasuredSize | 0 | method |  |  |  |  | - |  |  |  |  | `public setMeasuredSize(size: Size): void` |
+| arkui.FrameNode | FrameNode | setLayoutPosition | 0 | method |  |  |  |  | - |  |  |  |  | `public setLayoutPosition(position: Position): void` |
+| arkui.FrameNode | FrameNode | measure | 0 | method |  |  |  |  | - |  |  |  |  | `public measure(constraint: LayoutConstraint): void` |
+| arkui.FrameNode | FrameNode | layout | 0 | method |  |  |  |  | - |  |  |  |  | `public layout(position: Position): void` |
+| arkui.FrameNode | FrameNode | setNeedsLayout | 0 | method |  |  |  |  | - |  |  |  |  | `public setNeedsLayout(): void` |
+| arkui.FrameNode | FrameNode | invalidate | 0 | method |  |  |  |  | - |  |  |  |  | `public invalidate(): void` |
+| arkui.FrameNode | FrameNode | getPositionToScreen | 0 | method |  |  |  |  | - |  |  |  |  | `public getPositionToScreen(): Position` |
+| arkui.FrameNode | FrameNode | getGlobalPositionOnDisplay | 0 | method |  |  |  |  | - |  |  |  |  | `public getGlobalPositionOnDisplay(): Position` |
+| arkui.FrameNode | FrameNode | getPositionToWindowWithTransform | 0 | method |  |  |  |  | - |  |  |  |  | `public getPositionToWindowWithTransform(): Position` |
+| arkui.FrameNode | FrameNode | getPositionToParentWithTransform | 0 | method |  |  |  |  | - |  |  |  |  | `public getPositionToParentWithTransform(): Position` |
+| arkui.FrameNode | FrameNode | getPositionToScreenWithTransform | 0 | method |  |  |  |  | - |  |  |  |  | `public getPositionToScreenWithTransform(): Position` |
+| arkui.FrameNode | FrameNode | disposeTree | 0 | method |  |  |  |  | - |  |  |  |  | `public disposeTree(): void` |
+| arkui.FrameNode | FrameNode | addComponentContent | 0 | method |  |  |  |  | - |  |  |  |  | `public addComponentContent<T>(content: ComponentContent<T>): void` |
+| arkui.FrameNode | FrameNode | setCrossLanguageOptions | 0 | method |  |  |  |  | - |  |  |  |  | `public setCrossLanguageOptions(value: CrossLanguageOptions): void` |
+| arkui.FrameNode | FrameNode | getCrossLanguageOptions | 0 | method |  |  |  |  | - |  |  |  |  | `public getCrossLanguageOptions(): CrossLanguageOptions` |
+| arkui.FrameNode | FrameNode | recycle | 0 | method |  |  |  |  | - |  |  |  |  | `public recycle(): void` |
+| arkui.FrameNode | FrameNode | reuse | 0 | method |  |  |  |  | - |  |  |  |  | `public reuse(): void` |
+| arkui.FrameNode | FrameNode | isTransferred | 0 | method |  |  |  |  | - |  |  |  |  | `public isTransferred(): boolean` |
+| arkui.FrameNode | TypedFrameNode | TypedFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `export declare abstract class TypedFrameNode<T>  extends FrameNode {` |
+| arkui.FrameNode | TypedFrameNode | attribute | 0 | method |  |  |  |  | - |  |  |  |  | `public get attribute(): T` |
+| arkui.FrameNode | TypedFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | typeNode | 0 | namespace |  |  |  |  | - |  |  |  |  | `export declare namespace typeNode {` |
+| arkui.FrameNode | ColumnFrameNode | ColumnFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class ColumnFrameNode extends TypedFrameNode<ColumnAttribute> {` |
+| arkui.FrameNode | typeNode.ColumnFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: (ColumnOptions | ColumnOptionsV2)): ColumnAttribute` |
+| arkui.FrameNode | typeNode.ColumnFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Column | 0 | field |  |  |  |  | - |  |  |  |  | `type Column = ColumnFrameNode;` |
+| arkui.FrameNode | typeNode | createColumnNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createColumnNode(context: UIContext, nodeType: "Column"): Column` |
+| arkui.FrameNode | RowFrameNode | RowFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class RowFrameNode extends TypedFrameNode<RowAttribute> {` |
+| arkui.FrameNode | typeNode.RowFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: (RowOptions | RowOptionsV2)): RowAttribute` |
+| arkui.FrameNode | typeNode.RowFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Row | 0 | field |  |  |  |  | - |  |  |  |  | `type Row = RowFrameNode;` |
+| arkui.FrameNode | typeNode | createRowNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createRowNode(context: UIContext, nodeType: "Row"): Row` |
+| arkui.FrameNode | StackFrameNode | StackFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class StackFrameNode extends TypedFrameNode<StackAttribute> {` |
+| arkui.FrameNode | typeNode.StackFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: StackOptions): StackAttribute` |
+| arkui.FrameNode | typeNode.StackFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Stack | 0 | field |  |  |  |  | - |  |  |  |  | `type Stack = StackFrameNode;` |
+| arkui.FrameNode | typeNode | createStackNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createStackNode(context: UIContext, nodeType: "Stack"): Stack` |
+| arkui.FrameNode | GridRowFrameNode | GridRowFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class GridRowFrameNode extends TypedFrameNode<GridRowAttribute> {` |
+| arkui.FrameNode | typeNode.GridRowFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: GridRowOptions): GridRowAttribute` |
+| arkui.FrameNode | typeNode.GridRowFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | GridRow | 0 | field |  |  |  |  | - |  |  |  |  | `type GridRow = GridRowFrameNode;` |
+| arkui.FrameNode | typeNode | createGridRowNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createGridRowNode(context: UIContext, nodeType: "GridRow"): GridRow` |
+| arkui.FrameNode | GridColFrameNode | GridColFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class GridColFrameNode extends TypedFrameNode<GridColAttribute> {` |
+| arkui.FrameNode | typeNode.GridColFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: GridColOptions): GridColAttribute` |
+| arkui.FrameNode | typeNode.GridColFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | GridCol | 0 | field |  |  |  |  | - |  |  |  |  | `type GridCol = GridColFrameNode;` |
+| arkui.FrameNode | typeNode | createGridColNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createGridColNode(context: UIContext, nodeType: "GridCol"): GridCol` |
+| arkui.FrameNode | FlexFrameNode | FlexFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class FlexFrameNode extends TypedFrameNode<FlexAttribute> {` |
+| arkui.FrameNode | typeNode.FlexFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value?: FlexOptions): FlexAttribute` |
+| arkui.FrameNode | typeNode.FlexFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Flex | 0 | field |  |  |  |  | - |  |  |  |  | `type Flex = FlexFrameNode;` |
+| arkui.FrameNode | typeNode | createFlexNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createFlexNode(context: UIContext, nodeType: "Flex"): Flex` |
+| arkui.FrameNode | RelativeContainerFrameNode | RelativeContainerFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class RelativeContainerFrameNode extends TypedFrameNode<RelativeContainerAttribute> {` |
+| arkui.FrameNode | typeNode.RelativeContainerFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(): RelativeContainerAttribute` |
+| arkui.FrameNode | typeNode.RelativeContainerFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | RelativeContainer | 0 | field |  |  |  |  | - |  |  |  |  | `type RelativeContainer = RelativeContainerFrameNode;` |
+| arkui.FrameNode | typeNode | createRelativeContainerNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createRelativeContainerNode(context: UIContext, nodeType: "RelativeContainer"): RelativeContainer` |
+| arkui.FrameNode | DividerFrameNode | DividerFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class DividerFrameNode extends TypedFrameNode<DividerAttribute> {` |
+| arkui.FrameNode | typeNode.DividerFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(): DividerAttribute` |
+| arkui.FrameNode | typeNode.DividerFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Divider | 0 | field |  |  |  |  | - |  |  |  |  | `type Divider = DividerFrameNode;` |
+| arkui.FrameNode | typeNode | createDividerNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createDividerNode(context: UIContext, nodeType: "Divider"): Divider` |
+| arkui.FrameNode | LoadingProgressFrameNode | LoadingProgressFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class LoadingProgressFrameNode extends TypedFrameNode<LoadingProgressAttribute> {` |
+| arkui.FrameNode | typeNode.LoadingProgressFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(): LoadingProgressAttribute` |
+| arkui.FrameNode | typeNode.LoadingProgressFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | LoadingProgress | 0 | field |  |  |  |  | - |  |  |  |  | `type LoadingProgress = LoadingProgressFrameNode;` |
+| arkui.FrameNode | typeNode | createLoadingProgressNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createLoadingProgressNode(context: UIContext, nodeType: "LoadingProgress"): LoadingProgress` |
+| arkui.FrameNode | BlankFrameNode | BlankFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class BlankFrameNode extends TypedFrameNode<BlankAttribute> {` |
+| arkui.FrameNode | typeNode.BlankFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(min?: (number | string)): BlankAttribute` |
+| arkui.FrameNode | typeNode.BlankFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Blank | 0 | field |  |  |  |  | - |  |  |  |  | `type Blank = BlankFrameNode;` |
+| arkui.FrameNode | typeNode | createBlankNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createBlankNode(context: UIContext, nodeType: "Blank"): Blank` |
+| arkui.FrameNode | ImageFrameNode | ImageFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class ImageFrameNode extends TypedFrameNode<ImageAttribute> {` |
+| arkui.FrameNode | typeNode.ImageFrameNode | initialize | 0 | method | Deleted because of RedundantMethodsOverloads |  |  | Deleted because of RedundantMethodsOverloads | - |  |  |  |  | `public abstract initialize(src: (image.PixelMap | ResourceStr | DrawableDescriptor)): ImageAttribute` |
+| arkui.FrameNode | typeNode.ImageFrameNode | initialize | 1 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(src: (image.PixelMap | ResourceStr | DrawableDescriptor | ImageContent)): ImageAttribute` |
+| arkui.FrameNode | typeNode.ImageFrameNode | initialize | 2 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(src: (image.PixelMap | ResourceStr | DrawableDescriptor), value: ImageAIOptions): ImageAttribute` |
+| arkui.FrameNode | typeNode.ImageFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Image | 0 | field |  |  |  |  | - |  |  |  |  | `type Image = ImageFrameNode;` |
+| arkui.FrameNode | typeNode | createImageNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createImageNode(context: UIContext, nodeType: "Image"): Image` |
+| arkui.FrameNode | ListFrameNode | ListFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class ListFrameNode extends TypedFrameNode<ListAttribute> {` |
+| arkui.FrameNode | typeNode.ListFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: ListOptions): ListAttribute` |
+| arkui.FrameNode | typeNode.ListFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | List | 0 | field |  |  |  |  | - |  |  |  |  | `type List = ListFrameNode;` |
+| arkui.FrameNode | typeNode | createListNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createListNode(context: UIContext, nodeType: "List"): List` |
+| arkui.FrameNode | ListItemFrameNode | ListItemFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class ListItemFrameNode extends TypedFrameNode<ListItemAttribute> {` |
+| arkui.FrameNode | typeNode.ListItemFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: ListItemOptions): ListItemAttribute` |
+| arkui.FrameNode | typeNode.ListItemFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | ListItem | 0 | field |  |  |  |  | - |  |  |  |  | `type ListItem = ListItemFrameNode;` |
+| arkui.FrameNode | typeNode | createListItemNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createListItemNode(context: UIContext, nodeType: "ListItem"): ListItem` |
+| arkui.FrameNode | ListItemGroupFrameNode | ListItemGroupFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class ListItemGroupFrameNode extends TypedFrameNode<ListItemGroupAttribute> {` |
+| arkui.FrameNode | typeNode.ListItemGroupFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: ListItemGroupOptions): ListItemGroupAttribute` |
+| arkui.FrameNode | typeNode.ListItemGroupFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | ListItemGroup | 0 | field |  |  |  |  | - |  |  |  |  | `type ListItemGroup = ListItemGroupFrameNode;` |
+| arkui.FrameNode | typeNode | createListItemGroupNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createListItemGroupNode(context: UIContext, nodeType: "ListItemGroup"): ListItemGroup` |
+| arkui.FrameNode | ProgressFrameNode | ProgressFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class ProgressFrameNode extends TypedFrameNode<ProgressAttribute> {` |
+| arkui.FrameNode | typeNode.ProgressFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value: ProgressOptions): ProgressAttribute` |
+| arkui.FrameNode | typeNode.ProgressFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Progress | 0 | field |  |  |  |  | - |  |  |  |  | `type Progress = ProgressFrameNode;` |
+| arkui.FrameNode | typeNode | createProgressNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createProgressNode(context: UIContext, nodeType: "Progress"): Progress` |
+| arkui.FrameNode | ScrollFrameNode | ScrollFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class ScrollFrameNode extends TypedFrameNode<ScrollAttribute> {` |
+| arkui.FrameNode | typeNode.ScrollFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(scroller?: Scroller): ScrollAttribute` |
+| arkui.FrameNode | typeNode.ScrollFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Scroll | 0 | field |  |  |  |  | - |  |  |  |  | `type Scroll = ScrollFrameNode;` |
+| arkui.FrameNode | typeNode | createScrollNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createScrollNode(context: UIContext, nodeType: "Scroll"): Scroll` |
+| arkui.FrameNode | TextClockFrameNode | TextClockFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class TextClockFrameNode extends TypedFrameNode<TextClockAttribute> {` |
+| arkui.FrameNode | typeNode.TextClockFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: TextClockOptions): TextClockAttribute` |
+| arkui.FrameNode | typeNode.TextClockFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | TextClock | 0 | field |  |  |  |  | - |  |  |  |  | `type TextClock = TextClockFrameNode;` |
+| arkui.FrameNode | typeNode | createTextClockNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createTextClockNode(context: UIContext, nodeType: "TextClock"): TextClock` |
+| arkui.FrameNode | TextTimerFrameNode | TextTimerFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class TextTimerFrameNode extends TypedFrameNode<TextTimerAttribute> {` |
+| arkui.FrameNode | typeNode.TextTimerFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: TextTimerOptions): TextTimerAttribute` |
+| arkui.FrameNode | typeNode.TextTimerFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | TextTimer | 0 | field |  |  |  |  | - |  |  |  |  | `type TextTimer = TextTimerFrameNode;` |
+| arkui.FrameNode | typeNode | createTextTimerNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createTextTimerNode(context: UIContext, nodeType: "TextTimer"): TextTimer` |
+| arkui.FrameNode | GridFrameNode | GridFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class GridFrameNode extends TypedFrameNode<GridAttribute> {` |
+| arkui.FrameNode | typeNode.GridFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(scroller?: Scroller, layoutOptions?: GridLayoutOptions): GridAttribute` |
+| arkui.FrameNode | typeNode.GridFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Grid | 0 | field |  |  |  |  | - |  |  |  |  | `type Grid = GridFrameNode;` |
+| arkui.FrameNode | typeNode | createGridNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createGridNode(context: UIContext, nodeType: "Grid"): Grid` |
+| arkui.FrameNode | GridItemFrameNode | GridItemFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class GridItemFrameNode extends TypedFrameNode<GridItemAttribute> {` |
+| arkui.FrameNode | typeNode.GridItemFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: GridItemOptions): GridItemAttribute` |
+| arkui.FrameNode | typeNode.GridItemFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | GridItem | 0 | field |  |  |  |  | - |  |  |  |  | `type GridItem = GridItemFrameNode;` |
+| arkui.FrameNode | typeNode | createGridItemNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createGridItemNode(context: UIContext, nodeType: "GridItem"): GridItem` |
+| arkui.FrameNode | WaterFlowFrameNode | WaterFlowFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class WaterFlowFrameNode extends TypedFrameNode<WaterFlowAttribute> {` |
+| arkui.FrameNode | typeNode.WaterFlowFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: WaterFlowOptions): WaterFlowAttribute` |
+| arkui.FrameNode | typeNode.WaterFlowFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | WaterFlow | 0 | field |  |  |  |  | - |  |  |  |  | `type WaterFlow = WaterFlowFrameNode;` |
+| arkui.FrameNode | typeNode | createWaterFlowNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createWaterFlowNode(context: UIContext, nodeType: "WaterFlow"): WaterFlow` |
+| arkui.FrameNode | FlowItemFrameNode | FlowItemFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class FlowItemFrameNode extends TypedFrameNode<FlowItemAttribute> {` |
+| arkui.FrameNode | typeNode.FlowItemFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(): FlowItemAttribute` |
+| arkui.FrameNode | typeNode.FlowItemFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | FlowItem | 0 | field |  |  |  |  | - |  |  |  |  | `type FlowItem = FlowItemFrameNode;` |
+| arkui.FrameNode | typeNode | createFlowItemNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createFlowItemNode(context: UIContext, nodeType: "FlowItem"): FlowItem` |
+| arkui.FrameNode | TextFrameNode | TextFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class TextFrameNode extends TypedFrameNode<TextAttribute> {` |
+| arkui.FrameNode | typeNode.TextFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(content?: (string | Resource), value?: TextOptions): TextAttribute` |
+| arkui.FrameNode | typeNode.TextFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Text | 0 | field |  |  |  |  | - |  |  |  |  | `type Text = TextFrameNode;` |
+| arkui.FrameNode | typeNode | createTextNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createTextNode(context: UIContext, nodeType: "Text"): Text` |
+| arkui.FrameNode | SearchFrameNode | SearchFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class SearchFrameNode extends TypedFrameNode<SearchAttribute> {` |
+| arkui.FrameNode | typeNode.SearchFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value?: SearchOptions): SearchAttribute` |
+| arkui.FrameNode | typeNode.SearchFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Search | 0 | field |  |  |  |  | - |  |  |  |  | `type Search = SearchFrameNode;` |
+| arkui.FrameNode | typeNode | createSearchNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createSearchNode(context: UIContext, nodeType: "Search"): Search` |
+| arkui.FrameNode | TextInputFrameNode | TextInputFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class TextInputFrameNode extends TypedFrameNode<TextInputAttribute> {` |
+| arkui.FrameNode | typeNode.TextInputFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value?: TextInputOptions): TextInputAttribute` |
+| arkui.FrameNode | typeNode.TextInputFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | TextInput | 0 | field |  |  |  |  | - |  |  |  |  | `type TextInput = TextInputFrameNode;` |
+| arkui.FrameNode | typeNode | createTextInputNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createTextInputNode(context: UIContext, nodeType: "TextInput"): TextInput` |
+| arkui.FrameNode | TextAreaFrameNode | TextAreaFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class TextAreaFrameNode extends TypedFrameNode<TextAreaAttribute> {` |
+| arkui.FrameNode | typeNode.TextAreaFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value?: TextAreaOptions): TextAreaAttribute` |
+| arkui.FrameNode | typeNode.TextAreaFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | TextArea | 0 | field |  |  |  |  | - |  |  |  |  | `type TextArea = TextAreaFrameNode;` |
+| arkui.FrameNode | typeNode | createTextAreaNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createTextAreaNode(context: UIContext, nodeType: "TextArea"): TextArea` |
+| arkui.FrameNode | SymbolGlyphFrameNode | SymbolGlyphFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class SymbolGlyphFrameNode extends TypedFrameNode<SymbolGlyphAttribute> {` |
+| arkui.FrameNode | typeNode.SymbolGlyphFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value?: Resource): SymbolGlyphAttribute` |
+| arkui.FrameNode | typeNode.SymbolGlyphFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | SymbolGlyph | 0 | field |  |  |  |  | - |  |  |  |  | `type SymbolGlyph = SymbolGlyphFrameNode;` |
+| arkui.FrameNode | typeNode | createSymbolGlyphNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createSymbolGlyphNode(context: UIContext, nodeType: "SymbolGlyph"): SymbolGlyph` |
+| arkui.FrameNode | QRCodeFrameNode | QRCodeFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class QRCodeFrameNode extends TypedFrameNode<QRCodeAttribute> {` |
+| arkui.FrameNode | typeNode.QRCodeFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value: string): QRCodeAttribute` |
+| arkui.FrameNode | typeNode.QRCodeFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | QRCode | 0 | field |  |  |  |  | - |  |  |  |  | `type QRCode = QRCodeFrameNode;` |
+| arkui.FrameNode | typeNode | createQRCodeNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createQRCodeNode(context: UIContext, nodeType: "QRCode"): QRCode` |
+| arkui.FrameNode | BadgeFrameNode | BadgeFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class BadgeFrameNode extends TypedFrameNode<BadgeAttribute> {` |
+| arkui.FrameNode | typeNode.BadgeFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value: BadgeParamWithNumber): BadgeAttribute` |
+| arkui.FrameNode | typeNode.BadgeFrameNode | initialize | 1 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value: BadgeParamWithString): BadgeAttribute` |
+| arkui.FrameNode | typeNode.BadgeFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Badge | 0 | field |  |  |  |  | - |  |  |  |  | `type Badge = BadgeFrameNode;` |
+| arkui.FrameNode | typeNode | createBadgeNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createBadgeNode(context: UIContext, nodeType: "Badge"): Badge` |
+| arkui.FrameNode | MarqueeFrameNode | MarqueeFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class MarqueeFrameNode extends TypedFrameNode<MarqueeAttribute> {` |
+| arkui.FrameNode | typeNode.MarqueeFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value: MarqueeOptions): MarqueeAttribute` |
+| arkui.FrameNode | typeNode.MarqueeFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Marquee | 0 | field |  |  |  |  | - |  |  |  |  | `type Marquee = MarqueeFrameNode;` |
+| arkui.FrameNode | typeNode | createMarqueeNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createMarqueeNode(context: UIContext, nodeType: "Marquee"): Marquee` |
+| arkui.FrameNode | SwiperFrameNode | SwiperFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class SwiperFrameNode extends TypedFrameNode<SwiperAttribute> {` |
+| arkui.FrameNode | typeNode.SwiperFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(controller?: SwiperController): SwiperAttribute` |
+| arkui.FrameNode | typeNode.SwiperFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Swiper | 0 | field |  |  |  |  | - |  |  |  |  | `type Swiper = SwiperFrameNode;` |
+| arkui.FrameNode | typeNode | createSwiperNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createSwiperNode(context: UIContext, nodeType: "Swiper"): Swiper` |
+| arkui.FrameNode | XComponentFrameNode | XComponentFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class XComponentFrameNode extends TypedFrameNode<XComponentAttribute> {` |
+| arkui.FrameNode | typeNode.XComponentFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value: XComponentParameters): XComponentAttribute` |
+| arkui.FrameNode | typeNode.XComponentFrameNode | initialize | 1 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value: XComponentOptions): XComponentAttribute` |
+| arkui.FrameNode | typeNode.XComponentFrameNode | initialize | 2 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(params: NativeXComponentParameters): XComponentAttribute` |
+| arkui.FrameNode | typeNode.XComponentFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | XComponent | 0 | field |  |  |  |  | - |  |  |  |  | `type XComponent = XComponentFrameNode;` |
+| arkui.FrameNode | typeNode | createXComponentNodeDefault | 0 | function |  |  |  |  | - |  |  |  |  | `export function createXComponentNodeDefault(context: UIContext, nodeType: "XComponent"): XComponent` |
+| arkui.FrameNode | typeNode | createXComponentNodeWithOptions | 0 | function |  |  |  |  | - |  |  |  |  | `export function createXComponentNodeWithOptions(context: UIContext, nodeType: "XComponent", value: XComponentOptions): XComponent` |
+| arkui.FrameNode | typeNode | createXComponentNodeWithNativeParameters | 0 | function |  |  |  |  | - |  |  |  |  | `export function createXComponentNodeWithNativeParameters(context: UIContext, nodeType: "XComponent", parameters: NativeXComponentParameters): XComponent` |
+| arkui.FrameNode | ButtonFrameNode | ButtonFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class ButtonFrameNode extends TypedFrameNode<ButtonAttribute> {` |
+| arkui.FrameNode | typeNode.ButtonFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(): ButtonAttribute` |
+| arkui.FrameNode | typeNode.ButtonFrameNode | initialize | 1 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value: ButtonOptions): ButtonAttribute` |
+| arkui.FrameNode | typeNode.ButtonFrameNode | initialize | 2 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(label: ResourceStr, options?: ButtonOptions): ButtonAttribute` |
+| arkui.FrameNode | typeNode.ButtonFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Button | 0 | field |  |  |  |  | - |  |  |  |  | `type Button = ButtonFrameNode;` |
+| arkui.FrameNode | typeNode | createButtonNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createButtonNode(context: UIContext, nodeType: "Button"): Button` |
+| arkui.FrameNode | CheckboxFrameNode | CheckboxFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class CheckboxFrameNode extends TypedFrameNode<CheckboxAttribute> {` |
+| arkui.FrameNode | typeNode.CheckboxFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: CheckboxOptions): CheckboxAttribute` |
+| arkui.FrameNode | typeNode.CheckboxFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Checkbox | 0 | field |  |  |  |  | - |  |  |  |  | `type Checkbox = CheckboxFrameNode;` |
+| arkui.FrameNode | typeNode | createCheckboxNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createCheckboxNode(context: UIContext, nodeType: "Checkbox"): Checkbox` |
+| arkui.FrameNode | CheckboxGroupFrameNode | CheckboxGroupFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class CheckboxGroupFrameNode extends TypedFrameNode<CheckboxGroupAttribute> {` |
+| arkui.FrameNode | typeNode.CheckboxGroupFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: CheckboxGroupOptions): CheckboxGroupAttribute` |
+| arkui.FrameNode | typeNode.CheckboxGroupFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | CheckboxGroup | 0 | field |  |  |  |  | - |  |  |  |  | `type CheckboxGroup = CheckboxGroupFrameNode;` |
+| arkui.FrameNode | typeNode | createCheckboxGroupNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createCheckboxGroupNode(context: UIContext, nodeType: "CheckboxGroup"): CheckboxGroup` |
+| arkui.FrameNode | RadioFrameNode | RadioFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class RadioFrameNode extends TypedFrameNode<RadioAttribute> {` |
+| arkui.FrameNode | typeNode.RadioFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value: RadioOptions): RadioAttribute` |
+| arkui.FrameNode | typeNode.RadioFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Radio | 0 | field |  |  |  |  | - |  |  |  |  | `type Radio = RadioFrameNode;` |
+| arkui.FrameNode | typeNode | createRadioNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createRadioNode(context: UIContext, nodeType: "Radio"): Radio` |
+| arkui.FrameNode | RatingFrameNode | RatingFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class RatingFrameNode extends TypedFrameNode<RatingAttribute> {` |
+| arkui.FrameNode | typeNode.RatingFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: RatingOptions): RatingAttribute` |
+| arkui.FrameNode | typeNode.RatingFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Rating | 0 | field |  |  |  |  | - |  |  |  |  | `type Rating = RatingFrameNode;` |
+| arkui.FrameNode | typeNode | createRatingNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createRatingNode(context: UIContext, nodeType: "Rating"): Rating` |
+| arkui.FrameNode | SelectFrameNode | SelectFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class SelectFrameNode extends TypedFrameNode<SelectAttribute> {` |
+| arkui.FrameNode | typeNode.SelectFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value: Array<SelectOption>): SelectAttribute` |
+| arkui.FrameNode | typeNode.SelectFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Select | 0 | field |  |  |  |  | - |  |  |  |  | `type Select = SelectFrameNode;` |
+| arkui.FrameNode | typeNode | createSelectNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createSelectNode(context: UIContext, nodeType: "Select"): Select` |
+| arkui.FrameNode | SliderFrameNode | SliderFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class SliderFrameNode extends TypedFrameNode<SliderAttribute> {` |
+| arkui.FrameNode | typeNode.SliderFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(options?: SliderOptions): SliderAttribute` |
+| arkui.FrameNode | typeNode.SliderFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Slider | 0 | field |  |  |  |  | - |  |  |  |  | `type Slider = SliderFrameNode;` |
+| arkui.FrameNode | typeNode | createSliderNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createSliderNode(context: UIContext, nodeType: "Slider"): Slider` |
+| arkui.FrameNode | ToggleFrameNode | ToggleFrameNode | 0 | class |  |  |  |  | - |  |  |  |  | `declare abstract class ToggleFrameNode extends TypedFrameNode<ToggleAttribute> {` |
+| arkui.FrameNode | typeNode.ToggleFrameNode | initialize | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract initialize(value: ToggleOptions): ToggleAttribute` |
+| arkui.FrameNode | typeNode.ToggleFrameNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.FrameNode | typeNode | Toggle | 0 | field |  |  |  |  | - |  |  |  |  | `type Toggle = ToggleFrameNode;` |
+| arkui.FrameNode | typeNode | createToggleNode | 0 | function |  |  |  |  | - |  |  |  |  | `export function createToggleNode(context: UIContext, nodeType: "Toggle", options?: ToggleOptions): Toggle` |
+| arkui.FrameNode | NodeAdapter | NodeAdapter | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class NodeAdapter {` |
+| arkui.FrameNode | NodeAdapter | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor()` |
+| arkui.FrameNode | NodeAdapter | dispose | 0 | method |  |  |  |  | - |  |  |  |  | `public dispose(): void` |
+| arkui.FrameNode | NodeAdapter | isDisposed | 0 | method |  |  |  |  | - |  |  |  |  | `public isDisposed(): boolean` |
+| arkui.FrameNode | NodeAdapter | totalNodeCount | 0 | method |  |  |  |  | - |  |  |  |  | `public set totalNodeCount(count: number)` |
+| arkui.FrameNode | NodeAdapter | totalNodeCount | 1 | method |  |  |  |  | - |  |  |  |  | `public get totalNodeCount(): number` |
+| arkui.FrameNode | NodeAdapter | reloadAllItems | 0 | method |  |  |  |  | - |  |  |  |  | `public reloadAllItems(): void` |
+| arkui.FrameNode | NodeAdapter | reloadItem | 0 | method |  |  |  |  | - |  |  |  |  | `public reloadItem(start: number, count: number): void` |
+| arkui.FrameNode | NodeAdapter | removeItem | 0 | method |  |  |  |  | - |  |  |  |  | `public removeItem(start: number, count: number): void` |
+| arkui.FrameNode | NodeAdapter | insertItem | 0 | method |  |  |  |  | - |  |  |  |  | `public insertItem(start: number, count: number): void` |
+| arkui.FrameNode | NodeAdapter | moveItem | 0 | method |  |  |  |  | - |  |  |  |  | `public moveItem(from: number, to: number): void` |
+| arkui.FrameNode | NodeAdapter | getAllAvailableItems | 0 | method |  |  |  |  | - |  |  |  |  | `public getAllAvailableItems(): Array<FrameNode>` |
+| arkui.FrameNode | NodeAdapter | onAttachToNode | 0 | method |  |  |  |  | - |  |  |  |  | `public onAttachToNode(target: FrameNode): void` |
+| arkui.FrameNode | NodeAdapter | onDetachFromNode | 0 | method |  |  |  |  | - |  |  |  |  | `public onDetachFromNode(): void` |
+| arkui.FrameNode | NodeAdapter | onGetChildId | 0 | method |  |  |  |  | - |  |  |  |  | `public onGetChildId(index: number): number` |
+| arkui.FrameNode | NodeAdapter | onCreateChild | 0 | method |  |  |  |  | - |  |  |  |  | `public onCreateChild(index: number): FrameNode` |
+| arkui.FrameNode | NodeAdapter | onDisposeChild | 0 | method |  |  |  |  | - |  |  |  |  | `public onDisposeChild(id: number, node: FrameNode): void` |
+| arkui.FrameNode | NodeAdapter | onUpdateChild | 0 | method |  |  |  |  | - |  |  |  |  | `public onUpdateChild(id: number, node: FrameNode): void` |
+| arkui.FrameNode | NodeAdapter | attachNodeAdapter | 0 | method |  |  |  |  | - |  |  |  |  | `public static attachNodeAdapter(adapter: NodeAdapter, node: FrameNode): boolean` |
+| arkui.FrameNode | NodeAdapter | detachNodeAdapter | 0 | method |  |  |  |  | - |  |  |  |  | `public static detachNodeAdapter(node: FrameNode): void` |
 | arkui.component.gauge | GaugeOptions | GaugeOptions | 0 | interface | generated | unnamed | GaugeOptions | - | generated |  |  |  |  | `export interface GaugeOptions {` |
 | arkui.component.gauge | GaugeOptions | value | 0 | field | generated | GaugeOptions | value | - | generated |  |  |  |  | `value: (number | undefined);` |
 | arkui.component.gauge | GaugeOptions | min | 0 | field | generated | GaugeOptions | min | - | generated |  |  |  |  | `min?: number;` |
@@ -4801,6 +5173,8 @@
 | arkui.component.gauge | GaugeAttribute | contentModifier | 0 | method |  |  |  |  | - |  |  |  |  | `contentModifier(modifier: (ContentModifier<GaugeConfiguration> | undefined)): this` |
 | arkui.component.gauge | GaugeAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<GaugeAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.gauge | unnamed | Gauge | 0 | function | done | Gauge | setGaugeOptions | - | done | Maksimov Nikita | pass |  |  | `@memo() @ComponentBuilder() export declare function Gauge(options: GaugeOptions, @memo() content_?: (()=> void)): GaugeAttribute` |
+| arkui.GaugeModifier | GaugeModifier | GaugeModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class GaugeModifier implements GaugeAttribute, AttributeModifier<GaugeAttribute> {` |
+| arkui.GaugeModifier | GaugeModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.gesture | PanDirection | PanDirection | 0 | enum_class | generated | unnamed | PanDirection | - | generated |  |  |  |  | `declare enum PanDirection {` |
 | arkui.component.gesture | PanDirection | None | 0 | enum_instance | generated | PanDirection | NONE | - | generated |  |  |  |  | `None = 0` |
 | arkui.component.gesture | PanDirection | Horizontal | 0 | enum_instance | generated | PanDirection | HORIZONTAL | - | generated |  |  |  |  | `Horizontal = ((0) + (1))` |
@@ -5050,6 +5424,125 @@
 | arkui.component.gesture | PanRecognizer | PanRecognizer | 0 | class | done | unnamed | PanRecognizer | - | done | Politov Mikhail |  |  | done on upstream | `export declare class PanRecognizer extends GestureRecognizer {` |
 | arkui.component.gesture | PanRecognizer | getPanGestureOptions | 0 | method | done | PanRecognizer | getPanGestureOptions | - | done | Politov Mikhail |  |  | done on upstream | `public getPanGestureOptions(): PanGestureOptions` |
 | arkui.component.gesture | PanRecognizer | constructor | 0 | method | done | PanRecognizer | construct | - | done | Politov Mikhail |  |  | done on upstream | `public constructor() {}` |
+| arkui.Graphics | Size | Size | 0 | interface | generated | unnamed | Size | - | generated |  |  |  |  | `export interface Size {` |
+| arkui.Graphics | Size | width | 0 | field | generated | Size | width | - | generated |  |  |  |  | `width: number;` |
+| arkui.Graphics | Size | height | 0 | field | generated | Size | height | - | generated |  |  |  |  | `height: number;` |
+| arkui.Graphics | DrawContext | DrawContext | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class DrawContext {` |
+| arkui.Graphics | DrawContext | size | 0 | method |  |  |  |  | - |  |  |  |  | `public get size(): Size` |
+| arkui.Graphics | DrawContext | sizeInPixel | 0 | method |  |  |  |  | - |  |  |  |  | `public get sizeInPixel(): Size` |
+| arkui.Graphics | DrawContext | canvas | 0 | method |  |  |  |  | - |  |  |  |  | `public get canvas(): drawing.Canvas` |
+| arkui.Graphics | DrawContext | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.Graphics | Vector2 | Vector2 | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface Vector2 {` |
+| arkui.Graphics | Vector2 | x | 0 | field |  |  |  |  | - |  |  |  |  | `x: number;` |
+| arkui.Graphics | Vector2 | y | 0 | field |  |  |  |  | - |  |  |  |  | `y: number;` |
+| arkui.Graphics | Vector2T | Vector2T | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface Vector2T<T> {` |
+| arkui.Graphics | Vector2T | x | 0 | field |  |  |  |  | - |  |  |  |  | `x: T;` |
+| arkui.Graphics | Vector2T | y | 0 | field |  |  |  |  | - |  |  |  |  | `y: T;` |
+| arkui.Graphics | Vector3 | Vector3 | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface Vector3 {` |
+| arkui.Graphics | Vector3 | x | 0 | field |  |  |  |  | - |  |  |  |  | `x: number;` |
+| arkui.Graphics | Vector3 | y | 0 | field |  |  |  |  | - |  |  |  |  | `y: number;` |
+| arkui.Graphics | Vector3 | z | 0 | field |  |  |  |  | - |  |  |  |  | `z: number;` |
+| arkui.Graphics | unnamed | Matrix4 | 0 | field |  |  |  |  | - |  |  |  |  | `export type Matrix4 = [number, number, number, number, number, number, number, number, number, number, number, number, number, number, number, number];` |
+| arkui.Graphics | unnamed | Offset | 0 | field |  |  |  |  | - |  |  |  |  | `export type Offset = Vector2;` |
+| arkui.Graphics | unnamed | Position | 0 | field |  |  |  |  | - |  |  |  |  | `export type Position = Vector2;` |
+| arkui.Graphics | unnamed | PositionT | 0 | field |  |  |  |  | - |  |  |  |  | `export type PositionT<T> = Vector2T<T>;` |
+| arkui.Graphics | unnamed | Pivot | 0 | field |  |  |  |  | - |  |  |  |  | `export type Pivot = Vector2;` |
+| arkui.Graphics | unnamed | Scale | 0 | field |  |  |  |  | - |  |  |  |  | `export type Scale = Vector2;` |
+| arkui.Graphics | unnamed | Translation | 0 | field |  |  |  |  | - |  |  |  |  | `export type Translation = Vector2;` |
+| arkui.Graphics | unnamed | Rotation | 0 | field |  |  |  |  | - |  |  |  |  | `export type Rotation = Vector3;` |
+| arkui.Graphics | Frame | Frame | 0 | interface | generated | unnamed | Frame | - | generated |  |  |  |  | `export declare interface Frame {` |
+| arkui.Graphics | Frame | x | 0 | field | generated | Frame | x | - | generated |  |  |  |  | `x: number;` |
+| arkui.Graphics | Frame | y | 0 | field | generated | Frame | y | - | generated |  |  |  |  | `y: number;` |
+| arkui.Graphics | Frame | width | 0 | field | generated | Frame | width | - | generated |  |  |  |  | `width: number;` |
+| arkui.Graphics | Frame | height | 0 | field | generated | Frame | height | - | generated |  |  |  |  | `height: number;` |
+| arkui.Graphics | Edges | Edges | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface Edges<T> {` |
+| arkui.Graphics | Edges | left | 0 | field |  |  |  |  | - |  |  |  |  | `left: T;` |
+| arkui.Graphics | Edges | right | 0 | field |  |  |  |  | - |  |  |  |  | `right: T;` |
+| arkui.Graphics | Edges | top | 0 | field |  |  |  |  | - |  |  |  |  | `top: T;` |
+| arkui.Graphics | Edges | bottom | 0 | field |  |  |  |  | - |  |  |  |  | `bottom: T;` |
+| arkui.Graphics | LengthUnit | LengthUnit | 0 | enum_class | generated | unnamed | LengthUnit | - | generated |  |  |  |  | `declare enum LengthUnit {` |
+| arkui.Graphics | LengthUnit | PX | 0 | enum_instance | generated | LengthUnit | PX | - | generated |  |  |  |  | `PX = 0` |
+| arkui.Graphics | LengthUnit | VP | 0 | enum_instance | generated | LengthUnit | VP | - | generated |  |  |  |  | `VP = 1` |
+| arkui.Graphics | LengthUnit | FP | 0 | enum_instance | generated | LengthUnit | FP | - | generated |  |  |  |  | `FP = 2` |
+| arkui.Graphics | LengthUnit | PERCENT | 0 | enum_instance | generated | LengthUnit | PERCENT | - | generated |  |  |  |  | `PERCENT = 3` |
+| arkui.Graphics | LengthUnit | LPX | 0 | enum_instance | generated | LengthUnit | LPX | - | generated |  |  |  |  | `LPX = 4` |
+| arkui.Graphics | SizeT | SizeT | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface SizeT<T> {` |
+| arkui.Graphics | SizeT | width | 0 | field |  |  |  |  | - |  |  |  |  | `width: T;` |
+| arkui.Graphics | SizeT | height | 0 | field |  |  |  |  | - |  |  |  |  | `height: T;` |
+| arkui.Graphics | LengthMetricsUnit | LengthMetricsUnit | 0 | enum_class | generated | unnamed | LengthMetricsUnit | - | generated |  |  |  |  | `enum LengthMetricsUnit {` |
+| arkui.Graphics | LengthMetricsUnit | DEFAULT | 0 | enum_instance | generated | LengthMetricsUnit | DEFAULT | - | generated |  |  |  |  | `DEFAULT = 0` |
+| arkui.Graphics | LengthMetricsUnit | PX | 0 | enum_instance | generated | LengthMetricsUnit | PX | - | generated |  |  |  |  | `PX = 1` |
+| arkui.Graphics | LengthMetrics | LengthMetrics | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class LengthMetrics {` |
+| arkui.Graphics | LengthMetrics | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(value: number, unit?: LengthUnit)` |
+| arkui.Graphics | LengthMetrics | px | 0 | method |  |  |  |  | - |  |  |  |  | `public static px(value: number): LengthMetrics` |
+| arkui.Graphics | LengthMetrics | vp | 0 | method |  |  |  |  | - |  |  |  |  | `public static vp(value: number): LengthMetrics` |
+| arkui.Graphics | LengthMetrics | fp | 0 | method |  |  |  |  | - |  |  |  |  | `public static fp(value: number): LengthMetrics` |
+| arkui.Graphics | LengthMetrics | percent | 0 | method |  |  |  |  | - |  |  |  |  | `public static percent(value: number): LengthMetrics` |
+| arkui.Graphics | LengthMetrics | lpx | 0 | method |  |  |  |  | - |  |  |  |  | `public static lpx(value: number): LengthMetrics` |
+| arkui.Graphics | LengthMetrics | resource | 0 | method |  |  |  |  | - |  |  |  |  | `public static resource(value: Resource): LengthMetrics` |
+| arkui.Graphics | LengthMetrics | unit | 0 | field |  |  |  |  | - |  |  |  |  | `public unit: LengthUnit;` |
+| arkui.Graphics | LengthMetrics | value | 0 | field |  |  |  |  | - |  |  |  |  | `public value: number;` |
+| arkui.Graphics | ColorMetrics | ColorMetrics | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ColorMetrics {` |
+| arkui.Graphics | ColorMetrics | WHITE | 0 | field |  |  |  |  | - |  |  |  |  | `public static readonly WHITE: int;` |
+| arkui.Graphics | ColorMetrics | BLACK | 0 | field |  |  |  |  | - |  |  |  |  | `public static readonly BLACK: int;` |
+| arkui.Graphics | ColorMetrics | BLUE | 0 | field |  |  |  |  | - |  |  |  |  | `public static readonly BLUE: int;` |
+| arkui.Graphics | ColorMetrics | BROWN | 0 | field |  |  |  |  | - |  |  |  |  | `public static readonly BROWN: int;` |
+| arkui.Graphics | ColorMetrics | GRAY | 0 | field |  |  |  |  | - |  |  |  |  | `public static readonly GRAY: int;` |
+| arkui.Graphics | ColorMetrics | GREEN | 0 | field |  |  |  |  | - |  |  |  |  | `public static readonly GREEN: int;` |
+| arkui.Graphics | ColorMetrics | GREY | 0 | field |  |  |  |  | - |  |  |  |  | `public static readonly GREY: int;` |
+| arkui.Graphics | ColorMetrics | ORANGE | 0 | field |  |  |  |  | - |  |  |  |  | `public static readonly ORANGE: int;` |
+| arkui.Graphics | ColorMetrics | PINK | 0 | field |  |  |  |  | - |  |  |  |  | `public static readonly PINK: int;` |
+| arkui.Graphics | ColorMetrics | RED | 0 | field |  |  |  |  | - |  |  |  |  | `public static readonly RED: int;` |
+| arkui.Graphics | ColorMetrics | YELLOW | 0 | field |  |  |  |  | - |  |  |  |  | `public static readonly YELLOW: int;` |
+| arkui.Graphics | ColorMetrics | TRANSPARENT | 0 | field |  |  |  |  | - |  |  |  |  | `public static readonly TRANSPARENT: string;` |
+| arkui.Graphics | ColorMetrics | numeric | 0 | method |  |  |  |  | - |  |  |  |  | `public static numeric(value: number): ColorMetrics` |
+| arkui.Graphics | ColorMetrics | rgba | 0 | method |  |  |  |  | - |  |  |  |  | `public static rgba(red: number, green: number, blue: number, alpha?: number): ColorMetrics` |
+| arkui.Graphics | ColorMetrics | resourceColor | 0 | method |  |  |  |  | - |  |  |  |  | `public static resourceColor(color: ResourceColor): ColorMetrics` |
+| arkui.Graphics | ColorMetrics | blendColor | 0 | method |  |  |  |  | - |  |  |  |  | `public blendColor(overlayColor: ColorMetrics): ColorMetrics` |
+| arkui.Graphics | ColorMetrics | color | 0 | method |  |  |  |  | - |  |  |  |  | `public get color(): string` |
+| arkui.Graphics | ColorMetrics | red | 0 | method |  |  |  |  | - |  |  |  |  | `public get red(): number` |
+| arkui.Graphics | ColorMetrics | green | 0 | method |  |  |  |  | - |  |  |  |  | `public get green(): number` |
+| arkui.Graphics | ColorMetrics | blue | 0 | method |  |  |  |  | - |  |  |  |  | `public get blue(): number` |
+| arkui.Graphics | ColorMetrics | alpha | 0 | method |  |  |  |  | - |  |  |  |  | `public get alpha(): number` |
+| arkui.Graphics | ColorMetrics | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.Graphics | Corners | Corners | 0 | interface |  |  |  |  | - |  |  |  |  | `interface Corners<T> {` |
+| arkui.Graphics | Corners | topLeft | 0 | field |  |  |  |  | - |  |  |  |  | `topLeft: T;` |
+| arkui.Graphics | Corners | topRight | 0 | field |  |  |  |  | - |  |  |  |  | `topRight: T;` |
+| arkui.Graphics | Corners | bottomLeft | 0 | field |  |  |  |  | - |  |  |  |  | `bottomLeft: T;` |
+| arkui.Graphics | Corners | bottomRight | 0 | field |  |  |  |  | - |  |  |  |  | `bottomRight: T;` |
+| arkui.Graphics | unnamed | CornerRadius | 0 | field |  |  |  |  | - |  |  |  |  | `export type CornerRadius = Corners<Vector2>;` |
+| arkui.Graphics | unnamed | NodeBorderRadiuses | 0 | field |  |  |  |  | - |  |  |  |  | `export type NodeBorderRadiuses = Corners<number>;` |
+| arkui.Graphics | unnamed | Rect | 0 | field |  |  |  |  | - |  |  |  |  | `export type Rect = common2D.Rect;` |
+| arkui.Graphics | RoundRect | RoundRect | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface RoundRect {` |
+| arkui.Graphics | RoundRect | rect | 0 | field |  |  |  |  | - |  |  |  |  | `rect: Rect;` |
+| arkui.Graphics | RoundRect | corners | 0 | field |  |  |  |  | - |  |  |  |  | `corners: CornerRadius;` |
+| arkui.Graphics | Circle | Circle | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface Circle {` |
+| arkui.Graphics | Circle | centerX | 0 | field |  |  |  |  | - |  |  |  |  | `centerX: number;` |
+| arkui.Graphics | Circle | centerY | 0 | field |  |  |  |  | - |  |  |  |  | `centerY: number;` |
+| arkui.Graphics | Circle | radius | 0 | field |  |  |  |  | - |  |  |  |  | `radius: number;` |
+| arkui.Graphics | CommandPath | CommandPath | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface CommandPath {` |
+| arkui.Graphics | CommandPath | commands | 0 | field |  |  |  |  | - |  |  |  |  | `commands: string;` |
+| arkui.Graphics | ShapeMask | ShapeMask | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ShapeMask {` |
+| arkui.Graphics | ShapeMask | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor()` |
+| arkui.Graphics | ShapeMask | setRectShape | 0 | method |  |  |  |  | - |  |  |  |  | `public setRectShape(rect: Rect): void` |
+| arkui.Graphics | ShapeMask | setRoundRectShape | 0 | method |  |  |  |  | - |  |  |  |  | `public setRoundRectShape(roundRect: RoundRect): void` |
+| arkui.Graphics | ShapeMask | setCircleShape | 0 | method |  |  |  |  | - |  |  |  |  | `public setCircleShape(circle: Circle): void` |
+| arkui.Graphics | ShapeMask | setOvalShape | 0 | method |  |  |  |  | - |  |  |  |  | `public setOvalShape(oval: Rect): void` |
+| arkui.Graphics | ShapeMask | setCommandPath | 0 | method |  |  |  |  | - |  |  |  |  | `public setCommandPath(path: CommandPath): void` |
+| arkui.Graphics | ShapeMask | fillColor | 0 | field |  |  |  |  | - |  |  |  |  | `public fillColor: number;` |
+| arkui.Graphics | ShapeMask | strokeColor | 0 | field |  |  |  |  | - |  |  |  |  | `public strokeColor: number;` |
+| arkui.Graphics | ShapeMask | strokeWidth | 0 | field |  |  |  |  | - |  |  |  |  | `public strokeWidth: number;` |
+| arkui.Graphics | ShapeClip | ShapeClip | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ShapeClip {` |
+| arkui.Graphics | ShapeClip | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor()` |
+| arkui.Graphics | ShapeClip | setRectShape | 0 | method |  |  |  |  | - |  |  |  |  | `public setRectShape(rect: Rect): void` |
+| arkui.Graphics | ShapeClip | setRoundRectShape | 0 | method |  |  |  |  | - |  |  |  |  | `public setRoundRectShape(roundRect: RoundRect): void` |
+| arkui.Graphics | ShapeClip | setCircleShape | 0 | method |  |  |  |  | - |  |  |  |  | `public setCircleShape(circle: Circle): void` |
+| arkui.Graphics | ShapeClip | setOvalShape | 0 | method |  |  |  |  | - |  |  |  |  | `public setOvalShape(oval: Rect): void` |
+| arkui.Graphics | ShapeClip | setCommandPath | 0 | method |  |  |  |  | - |  |  |  |  | `public setCommandPath(path: CommandPath): void` |
+| arkui.Graphics | unnamed | edgeColors | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function edgeColors(all: number): Edges<number>` |
+| arkui.Graphics | unnamed | edgeWidths | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function edgeWidths(all: number): Edges<number>` |
+| arkui.Graphics | unnamed | borderStyles | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function borderStyles(all: BorderStyle): Edges<BorderStyle>` |
+| arkui.Graphics | unnamed | borderRadiuses | 0 | function |  |  |  |  | - |  |  |  |  | `export declare function borderRadiuses(all: number): NodeBorderRadiuses` |
 | arkui.component.grid | GridLayoutOptions | GridLayoutOptions | 0 | interface | generated | unnamed | GridLayoutOptions | - | generated |  |  |  |  | `export declare interface GridLayoutOptions {` |
 | arkui.component.grid | GridLayoutOptions | regularSize | 0 | field | generated | GridLayoutOptions | regularSize | - | generated |  |  |  |  | `regularSize: [number, number];` |
 | arkui.component.grid | GridLayoutOptions | irregularIndexes | 0 | field | generated | GridLayoutOptions | irregularIndexes | - | generated |  |  |  |  | `irregularIndexes?: number[];` |
@@ -5117,6 +5610,8 @@
 | arkui.component.gridCol | GridColAttribute | order | 0 | method | done | GridCol | setOrder | - | done | Lobah Mikhail | pass |  |  | `order(value: (number | GridColColumnOption | undefined)): this` |
 | arkui.component.gridCol | GridColAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<GridColAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.gridCol | unnamed | GridCol | 0 | function | done | GridCol | setGridColOptions | - | done | Lobah Mikhail | pass |  |  | `@memo() @ComponentBuilder() export declare function GridCol(option?: GridColOptions, @memo() content_?: (()=> void)): GridColAttribute` |
+| arkui.GridColModifier | GridColModifier | GridColModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class GridColModifier implements GridColAttribute, AttributeModifier<GridColAttribute> {` |
+| arkui.GridColModifier | GridColModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.gridItem | GridItemStyle | GridItemStyle | 0 | enum_class | generated | unnamed | GridItemStyle | - | generated |  |  |  |  | `declare enum GridItemStyle {` |
 | arkui.component.gridItem | GridItemStyle | NONE | 0 | enum_instance | generated | GridItemStyle | NONE | - | generated |  |  |  |  | `NONE = 0` |
 | arkui.component.gridItem | GridItemStyle | PLAIN | 0 | enum_instance | generated | GridItemStyle | PLAIN | - | generated |  |  |  |  | `PLAIN = 1` |
@@ -5132,6 +5627,10 @@
 | arkui.component.gridItem | GridItemAttribute | onSelect | 0 | method | done | GridItem | setOnSelect | - | done | Erokhin Ilya |  |  |  | `onSelect(event: (((isSelected: boolean)=> void) | undefined)): this` |
 | arkui.component.gridItem | GridItemAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<GridItemAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.gridItem | unnamed | GridItem | 0 | function | done | GridItem | setGridItemOptions | - | done | Erokhin Ilya | test blocked |  |  | `@memo() @ComponentBuilder() export declare function GridItem(value?: GridItemOptions, @memo() content_?: (()=> void)): GridItemAttribute` |
+| arkui.GridItemModifier | GridItemModifier | GridItemModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class GridItemModifier implements GridItemAttribute, AttributeModifier<GridItemAttribute> {` |
+| arkui.GridItemModifier | GridItemModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.GridModifier | GridModifier | GridModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class GridModifier implements GridAttribute, AttributeModifier<GridAttribute> {` |
+| arkui.GridModifier | GridModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.gridRow | GridRowSizeOption | GridRowSizeOption | 0 | interface | generated | unnamed | GridRowSizeOption | - | generated |  |  |  |  | `export declare interface GridRowSizeOption {` |
 | arkui.component.gridRow | GridRowSizeOption | xs | 0 | field | generated | GridRowSizeOption | xs | - | generated |  |  |  |  | `xs?: Length;` |
 | arkui.component.gridRow | GridRowSizeOption | sm | 0 | field | generated | GridRowSizeOption | sm | - | generated |  |  |  |  | `sm?: Length;` |
@@ -5168,10 +5667,14 @@
 | arkui.component.gridRow | GridRowAttribute | alignItems | 0 | method | done | GridRow | setAlignItems | - | done | Lobah Mikhail | pass |  |  | `alignItems(value: (ItemAlign | undefined)): this` |
 | arkui.component.gridRow | GridRowAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<GridRowAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.gridRow | unnamed | GridRow | 0 | function | done | GridRow | setGridRowOptions | - | done | Lobah Mikhail | pass |  |  | `@memo() @ComponentBuilder() export declare function GridRow(option?: GridRowOptions, @memo() content_?: (()=> void)): GridRowAttribute` |
+| arkui.GridRowModifier | GridRowModifier | GridRowModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class GridRowModifier implements GridRowAttribute, AttributeModifier<GridRowAttribute> {` |
+| arkui.GridRowModifier | GridRowModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.hyperlink | HyperlinkAttribute | HyperlinkAttribute | 0 | interface | done | unnamed | Hyperlink | - | done | Morozov Sergey | pass |  |  | `export declare interface HyperlinkAttribute extends CommonMethod {` |
 | arkui.component.hyperlink | HyperlinkAttribute | color | 0 | method | done | Hyperlink | setColor | - | done | Morozov Sergey | pass |  |  | `color(value: (Color | number | string | Resource | undefined)): this` |
 | arkui.component.hyperlink | HyperlinkAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<HyperlinkAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.hyperlink | unnamed | Hyperlink | 0 | function | done | Hyperlink | setHyperlinkOptions | - | done | Morozov Sergey | pass |  |  | `@memo() @ComponentBuilder() export declare function Hyperlink(address: (string | Resource), content?: (string | Resource), @memo() content_?: (()=> void)): HyperlinkAttribute` |
+| arkui.HyperlinkModifier | HyperlinkModifier | HyperlinkModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class HyperlinkModifier implements HyperlinkAttribute, AttributeModifier<HyperlinkAttribute> {` |
+| arkui.HyperlinkModifier | HyperlinkModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.image | unnamed | DrawingColorFilter | 0 | field |  |  |  |  | - |  |  |  |  | `export type DrawingColorFilter = drawing.ColorFilter;` |
 | arkui.component.image | unnamed | ResolutionQuality | 0 | field |  |  |  |  | - |  |  |  |  | `export type ResolutionQuality = image.ResolutionQuality;` |
 | arkui.component.image | unnamed | DrawingLattice | 0 | field |  |  |  |  | - |  |  |  |  | `export type DrawingLattice = drawing.Lattice;` |
@@ -5279,6 +5782,8 @@
 | arkui.component.imageAnimator | ImageAnimatorAttribute | onFinish | 0 | method | done | ImageAnimator | setOnFinish | - | done | Pavelyev Ivan | pass |  |  | `onFinish(event: ((()=> void) | undefined)): this` |
 | arkui.component.imageAnimator | ImageAnimatorAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<ImageAnimatorAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.imageAnimator | unnamed | ImageAnimator | 0 | function | done | ImageAnimator | setImageAnimatorOptions | - | done | Pavelyev Ivan | pass |  |  | `@memo() @ComponentBuilder() export declare function ImageAnimator(@memo() content_?: (()=> void)): ImageAnimatorAttribute` |
+| arkui.ImageAnimatorModifier | ImageAnimatorModifier | ImageAnimatorModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ImageAnimatorModifier implements ImageAnimatorAttribute, AttributeModifier<ImageAnimatorAttribute> {` |
+| arkui.ImageAnimatorModifier | ImageAnimatorModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.imageCommon | ImageAnalyzerType | ImageAnalyzerType | 0 | enum_class | generated | unnamed | ImageAnalyzerType | - | generated |  |  |  |  | `declare enum ImageAnalyzerType {` |
 | arkui.component.imageCommon | ImageAnalyzerType | SUBJECT | 0 | enum_instance | generated | ImageAnalyzerType | SUBJECT | - | generated |  |  |  |  | `SUBJECT = 0` |
 | arkui.component.imageCommon | ImageAnalyzerType | TEXT | 0 | enum_instance | generated | ImageAnalyzerType | TEXT | - | generated |  |  |  |  | `TEXT = ((0) + (1))` |
@@ -5291,6 +5796,8 @@
 | arkui.component.imageCommon | ImageAIOptions | ImageAIOptions | 0 | interface | generated | unnamed | ImageAIOptions | - | generated |  |  |  |  | `export declare interface ImageAIOptions {` |
 | arkui.component.imageCommon | ImageAIOptions | types | 0 | field | generated | ImageAIOptions | types | - | generated |  |  |  |  | `types?: ImageAnalyzerType[];` |
 | arkui.component.imageCommon | ImageAIOptions | aiController | 0 | field | generated | ImageAIOptions | aiController | - | generated |  |  |  |  | `aiController?: ImageAnalyzerController;` |
+| arkui.ImageModifier | ImageModifier | ImageModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ImageModifier implements ImageAttribute, AttributeModifier<ImageAttribute> {` |
+| arkui.ImageModifier | ImageModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.imageSpan | ImageSpanAttribute | ImageSpanAttribute | 0 | interface | done | unnamed | ImageSpan | - | done | Politov Mikhail | pass |  |  | `export declare interface ImageSpanAttribute extends BaseSpan {` |
 | arkui.component.imageSpan | ImageSpanAttribute | verticalAlign | 0 | method | done | ImageSpan | setVerticalAlign | - | done | Politov Mikhail | pass |  |  | `verticalAlign(value: (ImageSpanAlignment | undefined)): this` |
 | arkui.component.imageSpan | ImageSpanAttribute | colorFilter | 0 | method | blocked | ImageSpan | setColorFilter | - | blocked | Evstigneev Roman |  |  |  | `colorFilter(filter: (ColorFilter | DrawingColorFilter | undefined)): this` |
@@ -5311,6 +5818,8 @@
 | arkui.component.imageSpan | ImageLoadResult | contentOffsetX | 0 | field | generated | ImageLoadResult | contentOffsetX | - | generated |  |  |  |  | `contentOffsetX: number;` |
 | arkui.component.imageSpan | ImageLoadResult | contentOffsetY | 0 | field | generated | ImageLoadResult | contentOffsetY | - | generated |  |  |  |  | `contentOffsetY: number;` |
 | arkui.component.imageSpan | unnamed | ImageSpan | 0 | function | done | ImageSpan | setImageSpanOptions | - | done | Politov Mikhail | pass |  |  | `@memo() @ComponentBuilder() export declare function ImageSpan(value: (ResourceStr | PixelMap), @memo() content_?: (()=> void)): ImageSpanAttribute` |
+| arkui.ImageSpanModifier | ImageSpanModifier | ImageSpanModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ImageSpanModifier implements ImageSpanAttribute, AttributeModifier<ImageSpanAttribute> {` |
+| arkui.ImageSpanModifier | ImageSpanModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.indicatorcomponent | IndicatorComponentController | IndicatorComponentController | 0 | class | done | unnamed | IndicatorComponentController | - | done | Skroba Gleb |  |  |  | `export declare class IndicatorComponentController {` |
 | arkui.component.indicatorcomponent | IndicatorComponentController | constructor | 0 | method | done | IndicatorComponentController | construct | - | done | Skroba Gleb | failed |  | "Can't have nullptr ptr ${}" probably no the component code | `public constructor()` |
 | arkui.component.indicatorcomponent | IndicatorComponentController | showNext | 0 | method | done | IndicatorComponentController | showNext | - | done | Skroba Gleb |  |  |  | `public showNext(): void` |
@@ -5340,6 +5849,8 @@
 | arkui.component.line | LineAttribute | endPoint | 0 | method | done | Line | setEndPoint | - | done | Dudkin Sergey | pass |  |  | `endPoint(value: (ShapePoint | undefined)): this` |
 | arkui.component.line | LineAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<LineAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.line | unnamed | Line | 0 | function | done | Line | setLineOptions | - | done | Dudkin Sergey | test blocked |  | https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `@memo() @ComponentBuilder() export declare function Line(options?: LineOptions, @memo() content_?: (()=> void)): LineAttribute` |
+| arkui.LineModifier | LineModifier | LineModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class LineModifier implements LineAttribute, AttributeModifier<LineAttribute> {` |
+| arkui.LineModifier | LineModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.list | ScrollState | ScrollState | 0 | enum_class | generated | unnamed | ScrollState | - | generated |  |  |  |  | `declare enum ScrollState {` |
 | arkui.component.list | ScrollState | Idle | 0 | enum_instance | generated | ScrollState | IDLE | - | generated |  |  |  |  | `Idle = 0` |
 | arkui.component.list | ScrollState | Scroll | 0 | enum_instance | generated | ScrollState | SCROLL | - | generated |  |  |  |  | `Scroll = ((0) + (1))` |
@@ -5472,6 +5983,12 @@
 | arkui.component.listItemGroup | ListItemGroupAttribute | childrenMainSize | 0 | method | done | ListItemGroup | setChildrenMainSize | - | done | Morozov Sergey | in progress |  |  | `childrenMainSize(value: (ChildrenMainSize | undefined)): this` |
 | arkui.component.listItemGroup | ListItemGroupAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<ListItemGroupAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.listItemGroup | unnamed | ListItemGroup | 0 | function | done | ListItemGroup | setListItemGroupOptions | - | done | Dmitry A Smirnov | in progress |  |  | `@memo() @ComponentBuilder() export declare function ListItemGroup(options?: ListItemGroupOptions, @memo() content_?: (()=> void)): ListItemGroupAttribute` |
+| arkui.ListItemGroupModifier | ListItemGroupModifier | ListItemGroupModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ListItemGroupModifier implements ListItemGroupAttribute, AttributeModifier<ListItemGroupAttribute> {` |
+| arkui.ListItemGroupModifier | ListItemGroupModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.ListItemModifier | ListItemModifier | ListItemModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ListItemModifier implements ListItemAttribute, AttributeModifier<ListItemAttribute> {` |
+| arkui.ListItemModifier | ListItemModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.ListModifier | ListModifier | ListModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ListModifier implements ListAttribute, AttributeModifier<ListAttribute> {` |
+| arkui.ListModifier | ListModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.loadingProgress | LoadingProgressStyle | LoadingProgressStyle | 0 | enum_class | generated | unnamed | LoadingProgressStyle | - | generated |  |  |  |  | `declare enum LoadingProgressStyle {` |
 | arkui.component.loadingProgress | LoadingProgressStyle | Default | 0 | enum_instance | generated | LoadingProgressStyle | DEFAULT | - | generated |  |  |  |  | `Default = 0` |
 | arkui.component.loadingProgress | LoadingProgressStyle | Circular | 0 | enum_instance | generated | LoadingProgressStyle | CIRCULAR | - | generated |  |  |  |  | `Circular = ((0) + (1))` |
@@ -5484,6 +6001,8 @@
 | arkui.component.loadingProgress | LoadingProgressConfiguration | LoadingProgressConfiguration | 0 | interface | generated | unnamed | LoadingProgressConfiguration | - | generated |  |  |  |  | `export declare interface LoadingProgressConfiguration extends CommonConfiguration<LoadingProgressConfiguration> {` |
 | arkui.component.loadingProgress | LoadingProgressConfiguration | enableLoading | 0 | field | generated | LoadingProgressConfiguration | enableLoading | - | generated |  |  |  |  | `enableLoading: boolean;` |
 | arkui.component.loadingProgress | unnamed | LoadingProgress | 0 | function | done | LoadingProgress | setLoadingProgressOptions | - | done | Samarin Sergey | pass |  |  | `@memo() @ComponentBuilder() export declare function LoadingProgress(@memo() content_?: (()=> void)): LoadingProgressAttribute` |
+| arkui.LoadingProgressModifier | LoadingProgressModifier | LoadingProgressModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class LoadingProgressModifier implements LoadingProgressAttribute, AttributeModifier<LoadingProgressAttribute> {` |
+| arkui.LoadingProgressModifier | LoadingProgressModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.stateManagement.storage.localStorage | LocalStorage | LocalStorage | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class LocalStorage {` |
 | arkui.stateManagement.storage.localStorage | LocalStorage | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(initializingProperties?: RecordData)` |
 | arkui.stateManagement.storage.localStorage | LocalStorage | ref | 0 | method |  |  |  |  | - |  |  |  |  | `public ref<T>(propName: string): (AbstractProperty<T> | undefined)` |
@@ -5516,6 +6035,8 @@
 | arkui.component.marquee | MarqueeAttribute | onFinish | 0 | method | done | Marquee | setOnFinish | - | done | Andrey Khudenkikh | failed |  | wrong timing for "on" events | `onFinish(event: ((()=> void) | undefined)): this` |
 | arkui.component.marquee | MarqueeAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<MarqueeAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.marquee | unnamed | Marquee | 0 | function | done | Marquee | setMarqueeOptions | - | done | Andrey Khudenkikh | failed |  | loop is not applied | `@memo() @ComponentBuilder() export declare function Marquee(options: MarqueeOptions, @memo() content_?: (()=> void)): MarqueeAttribute` |
+| arkui.MarqueeModifier | MarqueeModifier | MarqueeModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class MarqueeModifier implements MarqueeAttribute, AttributeModifier<MarqueeAttribute> {` |
+| arkui.MarqueeModifier | MarqueeModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.matrix2d | Matrix2D | Matrix2D | 0 | class | done | unnamed | Matrix2D | - | done | Vadim Voronov |  |  |  | `export declare class Matrix2D {` |
 | arkui.component.matrix2d | Matrix2D | scaleX | 0 | method | done | Matrix2D | getScaleX | - | done | Vadim Voronov |  |  |  | `public get scaleX(): (double | undefined)` |
 | arkui.component.matrix2d | Matrix2D | scaleX | 1 | method | done | Matrix2D | setScaleX | - | done | Vadim Voronov |  |  |  | `public set scaleX(scaleX: (double | undefined))` |
@@ -5579,6 +6100,10 @@
 | arkui.component.menuItemGroup | MenuItemGroupAttribute | MenuItemGroupAttribute | 0 | interface | done | unnamed | MenuItemGroup | - | done | Dmitry A Smirnov | test blocked |  | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `export declare interface MenuItemGroupAttribute extends CommonMethod {` |
 | arkui.component.menuItemGroup | MenuItemGroupAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<MenuItemGroupAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.menuItemGroup | unnamed | MenuItemGroup | 0 | function | done | MenuItemGroup | setMenuItemGroupOptions | - | done | Dmitry A Smirnov | test blocked |  | test blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `@memo() @ComponentBuilder() export declare function MenuItemGroup(value?: MenuItemGroupOptions, @memo() content_?: (()=> void)): MenuItemGroupAttribute` |
+| arkui.MenuItemModifier | MenuItemModifier | MenuItemModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class MenuItemModifier implements MenuItemAttribute, AttributeModifier<MenuItemAttribute> {` |
+| arkui.MenuItemModifier | MenuItemModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.MenuModifier | MenuModifier | MenuModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class MenuModifier implements MenuAttribute, AttributeModifier<MenuAttribute> {` |
+| arkui.MenuModifier | MenuModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.navDestination | unnamed | Orientation | 0 | field |  |  |  |  | - |  |  |  |  | `export type Orientation = window.Orientation;` |
 | arkui.component.navDestination | NavDestinationCommonTitle | NavDestinationCommonTitle | 0 | interface | generated | unnamed | NavDestinationCommonTitle | - | generated |  |  |  |  | `export declare interface NavDestinationCommonTitle {` |
 | arkui.component.navDestination | NavDestinationCommonTitle | main | 0 | field | generated | NavDestinationCommonTitle | main | - | generated |  |  |  |  | `main: (string | Resource);` |
@@ -5663,6 +6188,9 @@
 | arkui.component.navDestination | NavDestinationAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<NavDestinationAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.navDestination | unnamed | NavDestinationTransitionDelegate | 0 | field | generated | unnamed | NavDestinationTransitionDelegate | - | generated |  |  |  |  | `export type NavDestinationTransitionDelegate = ((operation: NavigationOperation, isEnter: boolean)=> (Array<NavDestinationTransition> | undefined));` |
 | arkui.component.navDestination | unnamed | NavDestination | 0 | function | done | NavDestination | setNavDestinationOptions | - | done | Kovalev Sergey | test blocked |  |  | `@memo() @ComponentBuilder() export declare function NavDestination(@memo() content_?: (()=> void)): NavDestinationAttribute` |
+| arkui.NavDestinationModifier | NavDestinationModifier | NavDestinationModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class NavDestinationModifier implements NavDestinationAttribute, AttributeModifier<NavDestinationAttribute> {` |
+| arkui.NavDestinationModifier | NavDestinationModifier | applyNormalAttribute | 0 | method |  |  |  |  | - |  |  |  |  | `public applyNormalAttribute(instance: NavDestinationAttribute): void` |
+| arkui.NavDestinationModifier | NavDestinationModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.navigation | unnamed | SystemBarStyle | 0 | field |  |  |  |  | - |  |  |  |  | `export type SystemBarStyle = window.SystemBarStyle;` |
 | arkui.component.navigation | NavigationCommonTitle | NavigationCommonTitle | 0 | interface | generated | unnamed | NavigationCommonTitle | - | generated |  |  |  |  | `export declare interface NavigationCommonTitle {` |
 | arkui.component.navigation | NavigationCommonTitle | main | 0 | field | generated | NavigationCommonTitle | main | - | generated |  |  |  |  | `main: (string | Resource);` |
@@ -5854,9 +6382,30 @@
 | arkui.component.navigation | NavContentInfo | param | 0 | field | generated | NavContentInfo | param | - | generated |  |  |  |  | `param?: Object;` |
 | arkui.component.navigation | NavContentInfo | navDestinationId | 0 | field | generated | NavContentInfo | navDestinationId | - | generated |  |  |  |  | `navDestinationId?: string;` |
 | arkui.component.navigation | unnamed | Navigation | 0 | function |  | Navigation | setNavigationOptions | - |  |  |  |  |  | `@memo() @ComponentBuilder() export declare function Navigation(pathInfos?: NavPathStack, @memo() content_?: (()=> void)): NavigationAttribute` |
+| arkui.NavigationModifier | NavigationModifier | NavigationModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class NavigationModifier implements NavigationAttribute, AttributeModifier<NavigationAttribute> {` |
+| arkui.NavigationModifier | NavigationModifier | applyNormalAttribute | 0 | method |  |  |  |  | - |  |  |  |  | `public applyNormalAttribute(instance: NavigationAttribute): void` |
+| arkui.NavigationModifier | NavigationModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.nodeContainer | NodeContainerAttribute | NodeContainerAttribute | 0 | interface | managed side | unnamed | NodeContainer | - | managed side | managed side | test blocked |  | Compilation error: Cannot find type 'BuilderNode' | `export declare interface NodeContainerAttribute extends CommonMethod {` |
 | arkui.component.nodeContainer | NodeContainerAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<NodeContainerAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.nodeContainer | unnamed | NodeContainer | 0 | function | managed side | NodeContainer | setNodeContainerOptions | - | managed side | managed side | test blocked |  | Compilation error: Cannot find type 'BuilderNode' | `@memo() @ComponentBuilder() export declare function NodeContainer(controller: NodeController, @memo() content_?: (()=> void)): NodeContainerAttribute` |
+| arkui.NodeContent | NodeContent | NodeContent | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class NodeContent extends Content {` |
+| arkui.NodeContent | NodeContent | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor()` |
+| arkui.NodeContent | NodeContent | addFrameNode | 0 | method |  |  |  |  | - |  |  |  |  | `public addFrameNode(node: FrameNode): void` |
+| arkui.NodeContent | NodeContent | removeFrameNode | 0 | method |  |  |  |  | - |  |  |  |  | `public removeFrameNode(node: FrameNode): void` |
+| arkui.NodeController | NodeController | NodeController | 0 | class |  |  |  |  | - |  |  |  |  | `export declare abstract class NodeController {` |
+| arkui.NodeController | NodeController | makeNode | 0 | method |  |  |  |  | - |  |  |  |  | `public abstract makeNode(uiContext: UIContext): (FrameNode | null)` |
+| arkui.NodeController | NodeController | aboutToResize | 0 | method |  |  |  |  | - |  |  |  |  | `public aboutToResize(size: Size): void` |
+| arkui.NodeController | NodeController | aboutToAppear | 0 | method |  |  |  |  | - |  |  |  |  | `public aboutToAppear(): void` |
+| arkui.NodeController | NodeController | aboutToDisappear | 0 | method |  |  |  |  | - |  |  |  |  | `public aboutToDisappear(): void` |
+| arkui.NodeController | NodeController | rebuild | 0 | method |  |  |  |  | - |  |  |  |  | `public rebuild(): void` |
+| arkui.NodeController | NodeController | onTouchEvent | 0 | method |  |  |  |  | - |  |  |  |  | `public onTouchEvent(event: TouchEvent): void` |
+| arkui.NodeController | NodeController | onAttach | 0 | method |  |  |  |  | - |  |  |  |  | `public onAttach(): void` |
+| arkui.NodeController | NodeController | onDetach | 0 | method |  |  |  |  | - |  |  |  |  | `public onDetach(): void` |
+| arkui.NodeController | NodeController | onWillBind | 0 | method |  |  |  |  | - |  |  |  |  | `public onWillBind(containerId: number): void` |
+| arkui.NodeController | NodeController | onWillUnbind | 0 | method |  |  |  |  | - |  |  |  |  | `public onWillUnbind(containerId: number): void` |
+| arkui.NodeController | NodeController | onBind | 0 | method |  |  |  |  | - |  |  |  |  | `public onBind(containerId: number): void` |
+| arkui.NodeController | NodeController | onUnbind | 0 | method |  |  |  |  | - |  |  |  |  | `public onUnbind(containerId: number): void` |
+| arkui.NodeController | NodeController | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.pageTransition | RouteType | RouteType | 0 | enum_class | generated | unnamed | RouteType | - | generated |  |  |  |  | `declare enum RouteType {` |
 | arkui.component.pageTransition | RouteType | None | 0 | enum_instance | generated | RouteType | NONE | - | generated |  |  |  |  | `None = 0` |
 | arkui.component.pageTransition | RouteType | Push | 0 | enum_instance | generated | RouteType | PUSH | - | generated |  |  |  |  | `Push = ((0) + (1))` |
@@ -5948,6 +6497,7 @@
 | arkui.component.particle | ParticleAnnulusRegion | startAngle | 0 | field |  |  |  |  | - |  |  |  |  | `startAngle?: number;` |
 | arkui.component.particle | ParticleAnnulusRegion | endAngle | 0 | field |  |  |  |  | - |  |  |  |  | `endAngle?: number;` |
 | arkui.component.particle | unnamed | Particle | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `@memo() @ComponentBuilder() export declare function Particle(particles: Particles, @memo() content_?: (()=> void)): ParticleAttribute` |
+| arkui.ParticleModifier | ParticleModifier | ParticleModifier | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare class ParticleModifier implements ParticleAttribute, AttributeModifier<ParticleAttribute> {` |
 | arkui.component.pasteButton | PasteIconStyle | PasteIconStyle | 0 | enum_class | generated | unnamed | PasteIconStyle | - | generated |  |  |  |  | `enum PasteIconStyle {` |
 | arkui.component.pasteButton | PasteIconStyle | LINES | 0 | enum_instance | generated | PasteIconStyle | LINES | - | generated |  |  |  |  | `LINES = 0` |
 | arkui.component.pasteButton | PasteDescription | PasteDescription | 0 | enum_class | generated | unnamed | PasteDescription | - | generated |  |  |  |  | `enum PasteDescription {` |
@@ -5973,6 +6523,8 @@
 | arkui.component.path | PathAttribute | commands | 0 | method | done | Path | setCommands | - | done | Skroba Gleb | pass |  |  | `commands(value: (string | undefined)): this` |
 | arkui.component.path | PathAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<PathAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.path | unnamed | Path | 0 | function | done | Path | setPathOptions | - | done | Skroba Gleb | pass |  |  | `@memo() @ComponentBuilder() export declare function Path(options?: PathOptions, @memo() content_?: (()=> void)): PathAttribute` |
+| arkui.PathModifier | PathModifier | PathModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class PathModifier implements PathAttribute, AttributeModifier<PathAttribute> {` |
+| arkui.PathModifier | PathModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.patternLock | PatternLockChallengeResult | PatternLockChallengeResult | 0 | enum_class | generated | unnamed | PatternLockChallengeResult | - | generated |  |  |  |  | `declare enum PatternLockChallengeResult {` |
 | arkui.component.patternLock | PatternLockChallengeResult | CORRECT | 0 | enum_instance | generated | PatternLockChallengeResult | CORRECT | - | generated |  |  |  |  | `CORRECT = 1` |
 | arkui.component.patternLock | PatternLockChallengeResult | WRONG | 0 | enum_instance | generated | PatternLockChallengeResult | WRONG | - | generated |  |  |  |  | `WRONG = 2` |
@@ -6001,6 +6553,8 @@
 | arkui.component.patternLock | PatternLockAttribute | skipUnselectedPoint | 0 | method | done | PatternLock | setSkipUnselectedPoint | - | done | Dmitry A Smirnov |  |  | need merge to fb | `skipUnselectedPoint(skipped: (boolean | undefined)): this` |
 | arkui.component.patternLock | PatternLockAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<PatternLockAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.patternLock | unnamed | PatternLock | 0 | function | done | PatternLock | setPatternLockOptions | - | done | Dmitry A Smirnov | pass |  |  | `@memo() @ComponentBuilder() export declare function PatternLock(controller?: PatternLockController, @memo() content_?: (()=> void)): PatternLockAttribute` |
+| arkui.PatternLockModifier | PatternLockModifier | PatternLockModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class PatternLockModifier implements PatternLockAttribute, AttributeModifier<PatternLockAttribute> {` |
+| arkui.PatternLockModifier | PatternLockModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.stateManagement.storage.persistenceV2 | unnamed | StorageDefaultCreator | 0 | field |  |  |  |  | - |  |  |  |  | `export type StorageDefaultCreator<T> = (()=> T);` |
 | arkui.stateManagement.storage.persistenceV2 | ConnectOptions | ConnectOptions | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface ConnectOptions<T extends object> {` |
 | arkui.stateManagement.storage.persistenceV2 | ConnectOptions | type | 0 | field |  |  |  |  | - |  |  |  |  | `type: Type;` |
@@ -6057,6 +6611,8 @@
 | arkui.component.polygon | PolygonAttribute | points | 0 | method | done | Polygon | setPoints | - | done | Politov Mikhail | pass |  |  | `points(value: (Array<ShapePoint> | undefined)): this` |
 | arkui.component.polygon | PolygonAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<PolygonAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.polygon | unnamed | Polygon | 0 | function | done | Polygon | setPolygonOptions | - | done | Politov Mikhail | pass |  |  | `@memo() @ComponentBuilder() export declare function Polygon(options?: PolygonOptions, @memo() content_?: (()=> void)): PolygonAttribute` |
+| arkui.PolygonModifier | PolygonModifier | PolygonModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class PolygonModifier implements PolygonAttribute, AttributeModifier<PolygonAttribute> {` |
+| arkui.PolygonModifier | PolygonModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.polyline | PolylineOptions | PolylineOptions | 0 | interface | generated | unnamed | PolylineOptions | - | generated |  |  |  |  | `export declare interface PolylineOptions {` |
 | arkui.component.polyline | PolylineOptions | width | 0 | field | generated | PolylineOptions | width | - | generated |  |  |  |  | `width?: (string | double);` |
 | arkui.component.polyline | PolylineOptions | height | 0 | field | generated | PolylineOptions | height | - | generated |  |  |  |  | `height?: (string | double);` |
@@ -6064,6 +6620,8 @@
 | arkui.component.polyline | PolylineAttribute | points | 0 | method | done | Polyline | setPoints | - | done | Politov Mikhail | pass |  |  | `points(value: (Array<ShapePoint> | undefined)): this` |
 | arkui.component.polyline | PolylineAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<PolylineAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.polyline | unnamed | Polyline | 0 | function | done | Polyline | setPolylineOptions | - | done | Politov Mikhail | pass |  |  | `@memo() @ComponentBuilder() export declare function Polyline(options?: PolylineOptions, @memo() content_?: (()=> void)): PolylineAttribute` |
+| arkui.PolylineModifier | PolylineModifier | PolylineModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class PolylineModifier implements PolylineAttribute, AttributeModifier<PolylineAttribute> {` |
+| arkui.PolylineModifier | PolylineModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.progress | ProgressOptions | ProgressOptions | 0 | interface | generated | unnamed | ProgressOptions | - | generated |  |  |  |  | `export declare interface ProgressOptions {` |
 | arkui.component.progress | ProgressOptions | value | 0 | field | generated | ProgressOptions | value | - | generated |  |  |  |  | `value: number;` |
 | arkui.component.progress | ProgressOptions | total | 0 | field | generated | ProgressOptions | total | - | generated |  |  |  |  | `total?: number;` |
@@ -6123,12 +6681,16 @@
 | arkui.component.progress | ProgressConfiguration | value | 0 | field | generated | ProgressConfiguration | value | - | generated |  |  |  |  | `value: number;` |
 | arkui.component.progress | ProgressConfiguration | total | 0 | field | generated | ProgressConfiguration | total | - | generated |  |  |  |  | `total: number;` |
 | arkui.component.progress | unnamed | Progress | 0 | function | done | Progress | setProgressOptions | - | done | Erokhin Ilya | test blocked |  | deprecated for `style` property, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `@memo() @ComponentBuilder() export declare function Progress(options: ProgressOptions, @memo() content_?: (()=> void)): ProgressAttribute` |
+| arkui.ProgressModifier | ProgressModifier | ProgressModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ProgressModifier implements ProgressAttribute, AttributeModifier<ProgressAttribute> {` |
+| arkui.ProgressModifier | ProgressModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.qrcode | QRCodeAttribute | QRCodeAttribute | 0 | interface | done | unnamed | QRCode | - | done | Evstigneev Roman | pass |  |  | `export declare interface QRCodeAttribute extends CommonMethod {` |
 | arkui.component.qrcode | QRCodeAttribute | color | 0 | method | testskipped | QRCode | setColor | - | testskipped | Evstigneev Roman | pass |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ (+) or https://gitee.com/openharmony/arkui_ace_engine/issues/IBJUC2 | `color(value: (ResourceColor | undefined)): this` |
 | arkui.component.qrcode | QRCodeAttribute | backgroundColor | 0 | method | testskipped | QRCode | setBackgroundColor | - | testskipped | Evstigneev Roman | pass |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ (+) or https://gitee.com/openharmony/arkui_ace_engine/issues/IBJUC2 | `backgroundColor(value: (ResourceColor | undefined)): this` |
 | arkui.component.qrcode | QRCodeAttribute | contentOpacity | 0 | method | testskipped | QRCode | setContentOpacity | - | testskipped | Evstigneev Roman | pass |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZVOQ (+) or https://gitee.com/openharmony/arkui_ace_engine/issues/IBJUC2 | `contentOpacity(value: (number | Resource | undefined)): this` |
 | arkui.component.qrcode | QRCodeAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<QRCodeAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.qrcode | unnamed | QRCode | 0 | function | done | QRCode | setQRCodeOptions | - | done | Evstigneev Roman | pass |  |  | `@memo() @ComponentBuilder() export declare function QRCode(value: string, @memo() content_?: (()=> void)): QRCodeAttribute` |
+| arkui.QRCodeModifier | QRCodeModifier | QRCodeModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class QRCodeModifier implements QRCodeAttribute, AttributeModifier<QRCodeAttribute> {` |
+| arkui.QRCodeModifier | QRCodeModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.radio | RadioIndicatorType | RadioIndicatorType | 0 | enum_class | generated | unnamed | RadioIndicatorType | - | generated |  |  |  |  | `declare enum RadioIndicatorType {` |
 | arkui.component.radio | RadioIndicatorType | TICK | 0 | enum_instance | generated | RadioIndicatorType | TICK | - | generated |  |  |  |  | `TICK = 0` |
 | arkui.component.radio | RadioIndicatorType | DOT | 0 | enum_instance | generated | RadioIndicatorType | DOT | - | generated |  |  |  |  | `DOT = 1` |
@@ -6154,6 +6716,8 @@
 | arkui.component.radio | RadioConfiguration | checked | 0 | field | generated | RadioConfiguration | checked | - | generated |  |  |  |  | `checked: boolean;` |
 | arkui.component.radio | RadioConfiguration | triggerChange | 0 | field | generated | RadioConfiguration | triggerChange | - | generated |  |  |  |  | `triggerChange: Callback<boolean>;` |
 | arkui.component.radio | unnamed | Radio | 0 | function | done | Radio | setRadioOptions | - | done | Dmitry A Smirnov | pass |  | CustomBuilder, test passed but differs with ArkUI behavior | `@memo() @ComponentBuilder() export declare function Radio(options: RadioOptions, @memo() content_?: (()=> void)): RadioAttribute` |
+| arkui.RadioModifier | RadioModifier | RadioModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class RadioModifier implements RadioAttribute, AttributeModifier<RadioAttribute> {` |
+| arkui.RadioModifier | RadioModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.rating | RatingOptions | RatingOptions | 0 | interface | generated | unnamed | RatingOptions | - | generated |  |  |  |  | `export declare interface RatingOptions {` |
 | arkui.component.rating | RatingOptions | rating | 0 | field | generated | RatingOptions | rating | - | generated |  |  |  |  | `rating: (number | undefined | Bindable<number>);` |
 | arkui.component.rating | RatingOptions | indicator | 0 | field | generated | RatingOptions | indicator | - | generated |  |  |  |  | `indicator?: boolean;` |
@@ -6176,6 +6740,8 @@
 | arkui.component.rating | RatingAttribute | contentModifier | 0 | method |  |  |  |  | - |  |  |  |  | `contentModifier(modifier: (ContentModifier<RatingConfiguration> | undefined)): this` |
 | arkui.component.rating | RatingAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<RatingAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.rating | unnamed | Rating | 0 | function | done | Rating | setRatingOptions | - | done | Lobah Mikhail | failed |  | OHOSUI-2171 | `@memo() @ComponentBuilder() export declare function Rating(options?: RatingOptions, @memo() content_?: (()=> void)): RatingAttribute` |
+| arkui.RatingModifier | RatingModifier | RatingModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class RatingModifier implements RatingAttribute, AttributeModifier<RatingAttribute> {` |
+| arkui.RatingModifier | RatingModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.rect | unnamed | RadiusItem | 0 | field | generated | unnamed | RadiusItem | - | generated |  |  |  |  | `export type RadiusItem = [Length, Length];` |
 | arkui.component.rect | RectOptions | RectOptions | 0 | interface | generated | unnamed | RectOptions | - | generated |  |  |  |  | `export declare interface RectOptions {` |
 | arkui.component.rect | RectOptions | width | 0 | field | generated | RectOptions | width | - | generated |  |  |  |  | `width?: (double | string);` |
@@ -6192,6 +6758,8 @@
 | arkui.component.rect | RectAttribute | radius | 0 | method | done | Rect | setRadius | - | done | Dudkin Sergey | pass |  |  | `radius(value: (Length | Array<RadiusItem> | undefined)): this` |
 | arkui.component.rect | RectAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<RectAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.rect | unnamed | Rect | 0 | function | done | Rect | setRectOptions | - | done | Dudkin Sergey | pass |  |  | `@memo() @ComponentBuilder() export declare function Rect(options?: (RectOptions | RoundedRectOptions), @memo() content_?: (()=> void)): RectAttribute` |
+| arkui.RectModifier | RectModifier | RectModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class RectModifier implements RectAttribute, AttributeModifier<RectAttribute> {` |
+| arkui.RectModifier | RectModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.refresh | RefreshStatus | RefreshStatus | 0 | enum_class | generated | unnamed | RefreshStatus | - | generated |  |  |  |  | `declare enum RefreshStatus {` |
 | arkui.component.refresh | RefreshStatus | Inactive | 0 | enum_instance | generated | RefreshStatus | INACTIVE | - | generated |  |  |  |  | `Inactive = 0` |
 | arkui.component.refresh | RefreshStatus | Drag | 0 | enum_instance | generated | RefreshStatus | DRAG | - | generated |  |  |  |  | `Drag = ((0) + (1))` |
@@ -6212,6 +6780,8 @@
 | arkui.component.refresh | RefreshAttribute | pullDownRatio | 0 | method | done | Refresh | setPullDownRatio | - | done | Politov Mikhail | failed |  | is not called in demo | `pullDownRatio(ratio: (number | undefined)): this` |
 | arkui.component.refresh | RefreshAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<RefreshAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.refresh | unnamed | Refresh | 0 | function | blocked IDL | Refresh | setRefreshOptions | - | blocked IDL | Samarin Sergey | failed |  | is not called in demo; https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD ; offset, friction - deprecated + | `@memo() @ComponentBuilder() export declare function Refresh(value: RefreshOptions, @memo() content_?: (()=> void)): RefreshAttribute` |
+| arkui.RefreshModifier | RefreshModifier | RefreshModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class RefreshModifier implements RefreshAttribute, AttributeModifier<RefreshAttribute> {` |
+| arkui.RefreshModifier | RefreshModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.relativeContainer | GuideLinePosition | GuideLinePosition | 0 | interface | generated | unnamed | GuideLinePosition | - | generated |  |  |  |  | `export declare interface GuideLinePosition {` |
 | arkui.component.relativeContainer | GuideLinePosition | start | 0 | field | generated | GuideLinePosition | start | - | generated |  |  |  |  | `start?: Dimension;` |
 | arkui.component.relativeContainer | GuideLinePosition | end | 0 | field | generated | GuideLinePosition | end | - | generated |  |  |  |  | `end?: Dimension;` |
@@ -6242,6 +6812,8 @@
 | arkui.component.relativeContainer | RelativeContainerAttribute | barrier | 0 | method | done | RelativeContainer | setBarrier | - | done | Dmitry A Smirnov | blocked |  | LinkerUnresolvedClassError message: arkui.component.common.arkui$component$common$AlignRuleParam | `barrier(value: (Array<BarrierStyle> | undefined)): this` |
 | arkui.component.relativeContainer | RelativeContainerAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<RelativeContainerAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.relativeContainer | unnamed | RelativeContainer | 0 | function | done | RelativeContainer | setRelativeContainerOptions | - | done | Dmitry A Smirnov |  |  |  | `@memo() @ComponentBuilder() export declare function RelativeContainer(@memo() content_?: (()=> void)): RelativeContainerAttribute` |
+| arkui.RelativeContainerModifier | RelativeContainerModifier | RelativeContainerModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class RelativeContainerModifier implements RelativeContainerAttribute, AttributeModifier<RelativeContainerAttribute> {` |
+| arkui.RelativeContainerModifier | RelativeContainerModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.stateManagement.remember | unnamed | RememberFactory | 0 | field |  |  |  |  | - |  |  |  |  | `type RememberFactory<T> = (()=> T);` |
 | arkui.stateManagement.remember | unnamed | memorizeUpdatedState | 0 | function |  |  |  |  | - |  |  |  |  | `@memo() export declare function memorizeUpdatedState<T>(factory: RememberFactory<T>): MemoState<T>` |
 | arkui.component.remoteWindow | RRect | RRect | 0 | interface | generated | unnamed | RRect | - | generated |  |  |  |  | `export interface RRect {` |
@@ -6258,6 +6830,72 @@
 | arkui.component.remoteWindow | RemoteWindowAttribute | RemoteWindowAttribute | 0 | interface | blocked AceEngine | unnamed | RemoteWindow | - | blocked AceEngine | Spirin Andrey |  |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+) | `export declare interface RemoteWindowAttribute extends CommonMethod {` |
 | arkui.component.remoteWindow | RemoteWindowAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<RemoteWindowAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.remoteWindow | unnamed | RemoteWindow | 0 | function | blocked AceEngine | RemoteWindow | setRemoteWindowOptions | - | blocked AceEngine | Spirin Andrey |  |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+) | `@memo() @ComponentBuilder() export declare function RemoteWindow(target: WindowAnimationTarget, @memo() content_?: (()=> void)): RemoteWindowAttribute` |
+| arkui.RenderNode | RenderNode | RenderNode | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class RenderNode {` |
+| arkui.RenderNode | RenderNode | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor()` |
+| arkui.RenderNode | RenderNode | appendChild | 0 | method |  |  |  |  | - |  |  |  |  | `public appendChild(node: RenderNode): void` |
+| arkui.RenderNode | RenderNode | insertChildAfter | 0 | method |  |  |  |  | - |  |  |  |  | `public insertChildAfter(child: RenderNode, sibling: (RenderNode | null)): void` |
+| arkui.RenderNode | RenderNode | removeChild | 0 | method |  |  |  |  | - |  |  |  |  | `public removeChild(node: RenderNode): void` |
+| arkui.RenderNode | RenderNode | clearChildren | 0 | method |  |  |  |  | - |  |  |  |  | `public clearChildren(): void` |
+| arkui.RenderNode | RenderNode | getChild | 0 | method |  |  |  |  | - |  |  |  |  | `public getChild(index: number): (RenderNode | null)` |
+| arkui.RenderNode | RenderNode | getFirstChild | 0 | method |  |  |  |  | - |  |  |  |  | `public getFirstChild(): (RenderNode | null)` |
+| arkui.RenderNode | RenderNode | getNextSibling | 0 | method |  |  |  |  | - |  |  |  |  | `public getNextSibling(): (RenderNode | null)` |
+| arkui.RenderNode | RenderNode | getPreviousSibling | 0 | method |  |  |  |  | - |  |  |  |  | `public getPreviousSibling(): (RenderNode | null)` |
+| arkui.RenderNode | RenderNode | backgroundColor | 0 | method |  |  |  |  | - |  |  |  |  | `public set backgroundColor(color: number)` |
+| arkui.RenderNode | RenderNode | backgroundColor | 1 | method |  |  |  |  | - |  |  |  |  | `public get backgroundColor(): number` |
+| arkui.RenderNode | RenderNode | clipToFrame | 0 | method |  |  |  |  | - |  |  |  |  | `public set clipToFrame(useClip: boolean)` |
+| arkui.RenderNode | RenderNode | clipToFrame | 1 | method |  |  |  |  | - |  |  |  |  | `public get clipToFrame(): boolean` |
+| arkui.RenderNode | RenderNode | opacity | 0 | method |  |  |  |  | - |  |  |  |  | `public set opacity(value: number)` |
+| arkui.RenderNode | RenderNode | opacity | 1 | method |  |  |  |  | - |  |  |  |  | `public get opacity(): number` |
+| arkui.RenderNode | RenderNode | size | 0 | method |  |  |  |  | - |  |  |  |  | `public set size(size: Size)` |
+| arkui.RenderNode | RenderNode | size | 1 | method |  |  |  |  | - |  |  |  |  | `public get size(): Size` |
+| arkui.RenderNode | RenderNode | position | 0 | method |  |  |  |  | - |  |  |  |  | `public set position(position: Position)` |
+| arkui.RenderNode | RenderNode | position | 1 | method |  |  |  |  | - |  |  |  |  | `public get position(): Position` |
+| arkui.RenderNode | RenderNode | frame | 0 | method |  |  |  |  | - |  |  |  |  | `public set frame(frame: Frame)` |
+| arkui.RenderNode | RenderNode | frame | 1 | method |  |  |  |  | - |  |  |  |  | `public get frame(): Frame` |
+| arkui.RenderNode | RenderNode | pivot | 0 | method |  |  |  |  | - |  |  |  |  | `public set pivot(pivot: Pivot)` |
+| arkui.RenderNode | RenderNode | pivot | 1 | method |  |  |  |  | - |  |  |  |  | `public get pivot(): Pivot` |
+| arkui.RenderNode | RenderNode | scale | 0 | method |  |  |  |  | - |  |  |  |  | `public set scale(scale: Scale)` |
+| arkui.RenderNode | RenderNode | scale | 1 | method |  |  |  |  | - |  |  |  |  | `public get scale(): Scale` |
+| arkui.RenderNode | RenderNode | translation | 0 | method |  |  |  |  | - |  |  |  |  | `public set translation(translation: Translation)` |
+| arkui.RenderNode | RenderNode | translation | 1 | method |  |  |  |  | - |  |  |  |  | `public get translation(): Translation` |
+| arkui.RenderNode | RenderNode | rotation | 0 | method |  |  |  |  | - |  |  |  |  | `public set rotation(rotation: Rotation)` |
+| arkui.RenderNode | RenderNode | rotation | 1 | method |  |  |  |  | - |  |  |  |  | `public get rotation(): Rotation` |
+| arkui.RenderNode | RenderNode | transform | 0 | method |  |  |  |  | - |  |  |  |  | `public set transform(transform: Matrix4)` |
+| arkui.RenderNode | RenderNode | transform | 1 | method |  |  |  |  | - |  |  |  |  | `public get transform(): Matrix4` |
+| arkui.RenderNode | RenderNode | shadowColor | 0 | method |  |  |  |  | - |  |  |  |  | `public set shadowColor(color: number)` |
+| arkui.RenderNode | RenderNode | shadowColor | 1 | method |  |  |  |  | - |  |  |  |  | `public get shadowColor(): number` |
+| arkui.RenderNode | RenderNode | shadowOffset | 0 | method |  |  |  |  | - |  |  |  |  | `public set shadowOffset(offset: Offset)` |
+| arkui.RenderNode | RenderNode | shadowOffset | 1 | method |  |  |  |  | - |  |  |  |  | `public get shadowOffset(): Offset` |
+| arkui.RenderNode | RenderNode | label | 0 | method |  |  |  |  | - |  |  |  |  | `public set label(label: string)` |
+| arkui.RenderNode | RenderNode | label | 1 | method |  |  |  |  | - |  |  |  |  | `public get label(): string` |
+| arkui.RenderNode | RenderNode | shadowAlpha | 0 | method |  |  |  |  | - |  |  |  |  | `public set shadowAlpha(alpha: number)` |
+| arkui.RenderNode | RenderNode | shadowAlpha | 1 | method |  |  |  |  | - |  |  |  |  | `public get shadowAlpha(): number` |
+| arkui.RenderNode | RenderNode | shadowElevation | 0 | method |  |  |  |  | - |  |  |  |  | `public set shadowElevation(elevation: number)` |
+| arkui.RenderNode | RenderNode | shadowElevation | 1 | method |  |  |  |  | - |  |  |  |  | `public get shadowElevation(): number` |
+| arkui.RenderNode | RenderNode | shadowRadius | 0 | method |  |  |  |  | - |  |  |  |  | `public set shadowRadius(radius: number)` |
+| arkui.RenderNode | RenderNode | shadowRadius | 1 | method |  |  |  |  | - |  |  |  |  | `public get shadowRadius(): number` |
+| arkui.RenderNode | RenderNode | borderStyle | 0 | method |  |  |  |  | - |  |  |  |  | `public set borderStyle(style: Edges<BorderStyle>)` |
+| arkui.RenderNode | RenderNode | borderStyle | 1 | method |  |  |  |  | - |  |  |  |  | `public get borderStyle(): Edges<BorderStyle>` |
+| arkui.RenderNode | RenderNode | borderWidth | 0 | method |  |  |  |  | - |  |  |  |  | `public set borderWidth(width: Edges<number>)` |
+| arkui.RenderNode | RenderNode | borderWidth | 1 | method |  |  |  |  | - |  |  |  |  | `public get borderWidth(): Edges<number>` |
+| arkui.RenderNode | RenderNode | borderColor | 0 | method |  |  |  |  | - |  |  |  |  | `public set borderColor(color: Edges<number>)` |
+| arkui.RenderNode | RenderNode | borderColor | 1 | method |  |  |  |  | - |  |  |  |  | `public get borderColor(): Edges<number>` |
+| arkui.RenderNode | RenderNode | borderRadius | 0 | method |  |  |  |  | - |  |  |  |  | `public set borderRadius(radius: NodeBorderRadiuses)` |
+| arkui.RenderNode | RenderNode | borderRadius | 1 | method |  |  |  |  | - |  |  |  |  | `public get borderRadius(): (NodeBorderRadiuses | undefined)` |
+| arkui.RenderNode | RenderNode | shapeMask | 0 | method |  |  |  |  | - |  |  |  |  | `public set shapeMask(shapeMask: ShapeMask)` |
+| arkui.RenderNode | RenderNode | shapeMask | 1 | method |  |  |  |  | - |  |  |  |  | `public get shapeMask(): ShapeMask` |
+| arkui.RenderNode | RenderNode | shapeClip | 0 | method |  |  |  |  | - |  |  |  |  | `public set shapeClip(shapeClip: ShapeClip)` |
+| arkui.RenderNode | RenderNode | shapeClip | 1 | method |  |  |  |  | - |  |  |  |  | `public get shapeClip(): ShapeClip` |
+| arkui.RenderNode | RenderNode | markNodeGroup | 0 | method |  |  |  |  | - |  |  |  |  | `public set markNodeGroup(isNodeGroup: boolean)` |
+| arkui.RenderNode | RenderNode | markNodeGroup | 1 | method |  |  |  |  | - |  |  |  |  | `public get markNodeGroup(): boolean` |
+| arkui.RenderNode | RenderNode | draw | 0 | method |  |  |  |  | - |  |  |  |  | `public draw(context: DrawContext): void` |
+| arkui.RenderNode | RenderNode | invalidate | 0 | method |  |  |  |  | - |  |  |  |  | `public invalidate(): void` |
+| arkui.RenderNode | RenderNode | dispose | 0 | method |  |  |  |  | - |  |  |  |  | `public dispose(): void` |
+| arkui.RenderNode | RenderNode | lengthMetricsUnit | 0 | method |  |  |  |  | - |  |  |  |  | `public set lengthMetricsUnit(unit: LengthMetricsUnit)` |
+| arkui.RenderNode | RenderNode | lengthMetricsUnit | 1 | method |  |  |  |  | - |  |  |  |  | `public get lengthMetricsUnit(): LengthMetricsUnit` |
+| arkui.external.resource | unnamed | Resource | 0 | field |  |  |  |  | - |  |  |  |  | `export type Resource = __Resource__;` |
+| arkui.external.resource | unnamed | _r | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `declare function _r(bundleName: string, moduleName: string, name: string, ...params: string[]): Resource` |
+| arkui.external.resource | unnamed | _rawfile | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `declare function _rawfile(bundleName: string, moduleName: string, name: string): Resource` |
 | arkui.component.resources | unnamed | _r | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare function _r(id: number, type: number, bundleName: string, moduleName: string, ...params: Object[]): Resource` |
 | arkui.component.resources | unnamed | _rawfile | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | - |  |  |  |  | `export declare function _rawfile(id: number, type: number, bundleName: string, moduleName: string, ...params: Object[]): Resource` |
 | arkui.component.richEditor | RichEditorDeleteDirection | RichEditorDeleteDirection | 0 | enum_class | generated | unnamed | RichEditorDeleteDirection | - | generated |  |  |  |  | `declare enum RichEditorDeleteDirection {` |
@@ -6517,6 +7155,8 @@
 | arkui.component.richEditor | unnamed | PasteEventCallback | 0 | field | generated | unnamed | PasteEventCallback | - | generated |  |  |  |  | `export type PasteEventCallback = ((event?: PasteEvent)=> void);` |
 | arkui.component.richEditor | unnamed | OnHoverCallback | 0 | field | generated | unnamed | OnHoverCallback | - | generated |  |  |  |  | `export type OnHoverCallback = ((status: boolean, event: HoverEvent)=> void);` |
 | arkui.component.richEditor | unnamed | RichEditor | 0 | function | done | RichEditor | setRichEditorOptions | - | done | Dudkin Sergey |  |  |  | `@memo() @ComponentBuilder() export declare function RichEditor(options: (RichEditorOptions | RichEditorStyledStringOptions), @memo() content_?: (()=> void)): RichEditorAttribute` |
+| arkui.RichEditorModifier | RichEditorModifier | RichEditorModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class RichEditorModifier implements RichEditorAttribute, AttributeModifier<RichEditorAttribute> {` |
+| arkui.RichEditorModifier | RichEditorModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.richText | RichTextAttribute | RichTextAttribute | 0 | interface | done | unnamed | RichText | - | done | Dudkin Sergey | pass |  |  | `export declare interface RichTextAttribute extends CommonMethod {` |
 | arkui.component.richText | RichTextAttribute | onStart | 0 | method | done | RichText | setOnStart | - | done | Dudkin Sergey | pass |  |  | `onStart(callback: ((()=> void) | undefined)): this` |
 | arkui.component.richText | RichTextAttribute | onComplete | 0 | method | done | RichText | setOnComplete | - | done | Dudkin Sergey | pass |  |  | `onComplete(callback: ((()=> void) | undefined)): this` |
@@ -6536,10 +7176,14 @@
 | arkui.component.row | RowAttribute | reverse | 0 | method | done | Row | setReverse | - | done | Andrey Khudenkikh | pass |  |  | `reverse(isReversed: (boolean | undefined)): this` |
 | arkui.component.row | RowAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<RowAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.row | unnamed | Row | 0 | function | done | Row | setRowOptions | - | done | Andrey Khudenkikh | pass |  |  | `@memo() @ComponentBuilder() export declare function Row(options?: (RowOptions | RowOptions | RowOptionsV2), @memo() content_?: (()=> void)): RowAttribute` |
+| arkui.RowModifier | RowModifier | RowModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class RowModifier implements RowAttribute, AttributeModifier<RowAttribute> {` |
+| arkui.RowModifier | RowModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.rowSplit | RowSplitAttribute | RowSplitAttribute | 0 | interface | done | unnamed | RowSplit | - | done | Dmitry A Smirnov | failed |  | OHOSUI-2201 Text in rowSplit does not appear | `export declare interface RowSplitAttribute extends CommonMethod {` |
 | arkui.component.rowSplit | RowSplitAttribute | resizeable | 0 | method | done | RowSplit | setResizeable | - | done | Dmitry A Smirnov | failed |  | OHOSUI-2202 resizeable does not work | `resizeable(value: (boolean | undefined)): this` |
 | arkui.component.rowSplit | RowSplitAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<RowSplitAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.rowSplit | unnamed | RowSplit | 0 | function | done | RowSplit | setRowSplitOptions | - | done | Dmitry A Smirnov | failed |  | OHOSUI-2201 Text in rowSplit does not appear | `@memo() @ComponentBuilder() export declare function RowSplit(@memo() content_?: (()=> void)): RowSplitAttribute` |
+| arkui.RowSplitModifier | RowSplitModifier | RowSplitModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class RowSplitModifier implements RowSplitAttribute, AttributeModifier<RowSplitAttribute> {` |
+| arkui.RowSplitModifier | RowSplitModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.stateManagement.runtime | unnamed | MemoCallSiteKey | 0 | field |  |  |  |  | - |  |  |  |  | `export type MemoCallSiteKey = int;` |
 | arkui.stateManagement.runtime | Disposable | Disposable | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface Disposable {` |
 | arkui.stateManagement.runtime | Disposable | disposed | 0 | field |  |  |  |  | - |  |  |  |  | `readonly disposed: boolean;` |
@@ -6688,6 +7332,8 @@
 | arkui.component.scrollBar | ScrollBarAttribute | enableNestedScroll | 0 | method | done | ScrollBar | setEnableNestedScroll | - | done | Maksimov Nikita |  |  |  | `enableNestedScroll(enabled: (boolean | undefined)): this` |
 | arkui.component.scrollBar | ScrollBarAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<ScrollBarAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.scrollBar | unnamed | ScrollBar | 0 | function | done | ScrollBar | setScrollBarOptions | - | done | Maksimov Nikita | pass |  |  | `@memo() @ComponentBuilder() export declare function ScrollBar(value: ScrollBarOptions, @memo() content_?: (()=> void)): ScrollBarAttribute` |
+| arkui.ScrollModifier | ScrollModifier | ScrollModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ScrollModifier implements ScrollAttribute, AttributeModifier<ScrollAttribute> {` |
+| arkui.ScrollModifier | ScrollModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.search | SearchController | SearchController | 0 | class | done | unnamed | SearchController | - | done | Evstigneev Roman |  |  |  | `export declare class SearchController extends TextContentControllerBase {` |
 | arkui.component.search | SearchController | constructor | 0 | method | done | SearchController | construct | - | done | Evstigneev Roman |  |  |  | `public constructor()` |
 | arkui.component.search | SearchController | caretPosition | 0 | method | done | SearchController | caretPosition | - | done | Evstigneev Roman |  |  |  | `public caretPosition(value: number): void` |
@@ -6774,6 +7420,8 @@
 | arkui.component.search | SearchAttribute | keyboardAppearance | 0 | method | done | Search | setKeyboardAppearance | - | done | Kovalev Sergey |  |  |  | `keyboardAppearance(appearance: (KeyboardAppearance | undefined)): this` |
 | arkui.component.search | SearchAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<SearchAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.search | unnamed | Search | 0 | function | done | Search | setSearchOptions | - | done | Evstigneev Roman | pass |  |  | `@memo() @ComponentBuilder() export declare function Search(options?: SearchOptions, @memo() content_?: (()=> void)): SearchAttribute` |
+| arkui.SearchModifier | SearchModifier | SearchModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class SearchModifier implements SearchAttribute, AttributeModifier<SearchAttribute> {` |
+| arkui.SearchModifier | SearchModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.securityComponent | SecurityComponentLayoutDirection | SecurityComponentLayoutDirection | 0 | enum_class | generated | unnamed | SecurityComponentLayoutDirection | - | generated |  |  |  |  | `enum SecurityComponentLayoutDirection {` |
 | arkui.component.securityComponent | SecurityComponentLayoutDirection | HORIZONTAL | 0 | enum_instance | generated | SecurityComponentLayoutDirection | HORIZONTAL | - | generated |  |  |  |  | `HORIZONTAL = 0` |
 | arkui.component.securityComponent | SecurityComponentLayoutDirection | VERTICAL | 0 | enum_instance | generated | SecurityComponentLayoutDirection | VERTICAL | - | generated |  |  |  |  | `VERTICAL = 1` |
@@ -6857,6 +7505,8 @@
 | arkui.component.select | MenuItemConfiguration | index | 0 | field | generated | MenuItemConfiguration | index | - | generated |  |  |  |  | `index: number;` |
 | arkui.component.select | MenuItemConfiguration | triggerSelect | 0 | method |  |  |  |  | - |  |  |  |  | `triggerSelect(index: number, value: string): void` |
 | arkui.component.select | unnamed | Select | 0 | function | blocked IDL | Select | setSelectOptions | - | blocked IDL | Samarin Sergey | failed |  | https://gitee.com/nikolay-igotti/idlize/issues/IBC7UD +; runtime error in Arkoala part, issue https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `@memo() @ComponentBuilder() export declare function Select(options: Array<SelectOption>, @memo() content_?: (()=> void)): SelectAttribute` |
+| arkui.SelectModifier | SelectModifier | SelectModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class SelectModifier implements SelectAttribute, AttributeModifier<SelectAttribute> {` |
+| arkui.SelectModifier | SelectModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.shape | ViewportRect | ViewportRect | 0 | interface | generated | unnamed | ViewportRect | - | generated |  |  |  |  | `export declare interface ViewportRect {` |
 | arkui.component.shape | ViewportRect | x | 0 | field | generated | ViewportRect | x | - | generated |  |  |  |  | `x?: (double | string);` |
 | arkui.component.shape | ViewportRect | y | 0 | field | generated | ViewportRect | y | - | generated |  |  |  |  | `y?: (double | string);` |
@@ -6878,6 +7528,8 @@
 | arkui.component.shape | ShapeAttribute | mesh | 0 | method | done | Shape | setMesh | - | done | Erokhin Ilya | test blocked |  | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `mesh(value: (Array<double> | undefined), column: (int | undefined), row: (int | undefined)): this` |
 | arkui.component.shape | ShapeAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<ShapeAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.shape | unnamed | Shape | 0 | function | testskipped | Shape | setShapeOptions | - | testskipped | Samarin Sergey | test blocked |  | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `@memo() @ComponentBuilder() export declare function Shape(value?: PixelMap, @memo() content_?: (()=> void)): ShapeAttribute` |
+| arkui.ShapeModifier | ShapeModifier | ShapeModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ShapeModifier implements ShapeAttribute, AttributeModifier<ShapeAttribute> {` |
+| arkui.ShapeModifier | ShapeModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.sidebar | SideBarContainerType | SideBarContainerType | 0 | enum_class | generated | unnamed | SideBarContainerType | - | generated |  |  |  |  | `declare enum SideBarContainerType {` |
 | arkui.component.sidebar | SideBarContainerType | Embed | 0 | enum_instance | generated | SideBarContainerType | EMBED | - | generated |  |  |  |  | `Embed = 0` |
 | arkui.component.sidebar | SideBarContainerType | Overlay | 0 | enum_instance | generated | SideBarContainerType | OVERLAY | - | generated |  |  |  |  | `Overlay = ((0) + (1))` |
@@ -6909,6 +7561,9 @@
 | arkui.component.sidebar | SideBarContainerAttribute | minContentWidth | 0 | method | done | SideBarContainer | setMinContentWidth | - | done | Dmitry A Smirnov | failed |  | OHOSUI-2170 | `minContentWidth(value: (Dimension | undefined)): this` |
 | arkui.component.sidebar | SideBarContainerAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<SideBarContainerAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.sidebar | unnamed | SideBarContainer | 0 | function | done | SideBarContainer | setSideBarContainerOptions | - | done | Dmitry A Smirnov |  |  |  | `@memo() @ComponentBuilder() export declare function SideBarContainer(type?: SideBarContainerType, @memo() content_?: (()=> void)): SideBarContainerAttribute` |
+| arkui.SideBarContainerModifier | SideBarContainerModifier | SideBarContainerModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class SideBarContainerModifier implements SideBarContainerAttribute, AttributeModifier<SideBarContainerAttribute> {` |
+| arkui.SideBarContainerModifier | SideBarContainerModifier | applyNormalAttribute | 0 | method |  |  |  |  | - |  |  |  |  | `public applyNormalAttribute(instance: SideBarContainerAttribute): void` |
+| arkui.SideBarContainerModifier | SideBarContainerModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.slider | SliderStyle | SliderStyle | 0 | enum_class | generated | unnamed | SliderStyle | - | generated |  |  |  |  | `declare enum SliderStyle {` |
 | arkui.component.slider | SliderStyle | OutSet | 0 | enum_instance | generated | SliderStyle | OUT_SET | - | generated |  |  |  |  | `OutSet = 0` |
 | arkui.component.slider | SliderStyle | InSet | 0 | enum_instance | generated | SliderStyle | IN_SET | - | generated |  |  |  |  | `InSet = ((0) + (1))` |
@@ -6972,6 +7627,8 @@
 | arkui.component.slider | SliderAttribute | enableHapticFeedback | 0 | method | done | Slider | setEnableHapticFeedback | - | done | Kovalev Sergey |  |  | not supported by dayu200; need to test on mobile device | `enableHapticFeedback(enabled: (boolean | undefined)): this` |
 | arkui.component.slider | SliderAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<SliderAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.slider | unnamed | Slider | 0 | function | done | Slider | setSliderOptions | - | done | Morozov Sergey | pass |  |  | `@memo() @ComponentBuilder() export declare function Slider(options?: SliderOptions, @memo() content_?: (()=> void)): SliderAttribute` |
+| arkui.SliderModifier | SliderModifier | SliderModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class SliderModifier implements SliderAttribute, AttributeModifier<SliderAttribute> {` |
+| arkui.SliderModifier | SliderModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.span | TextBackgroundStyle | TextBackgroundStyle | 0 | interface | generated | unnamed | TextBackgroundStyle | - | generated |  |  |  |  | `export declare interface TextBackgroundStyle {` |
 | arkui.component.span | TextBackgroundStyle | color | 0 | field | generated | TextBackgroundStyle | color | - | generated |  |  |  |  | `color?: ResourceColor;` |
 | arkui.component.span | TextBackgroundStyle | radius | 0 | field | generated | TextBackgroundStyle | radius | - | generated |  |  |  |  | `radius?: (Dimension | BorderRadiuses);` |
@@ -6992,6 +7649,8 @@
 | arkui.component.span | SpanAttribute | textShadow | 0 | method | testskipped | Span | setTextShadow | - | testskipped | Politov Mikhail | Olga Daryina |  | test blocked by https://gitee.com/openharmony/arkui_ace_engine/issues/IB1K3Z | `textShadow(value: (ShadowOptions | Array<ShadowOptions> | undefined)): this` |
 | arkui.component.span | SpanAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<SpanAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.span | unnamed | Span | 0 | function | done | Span | setSpanOptions | - | done | Politov Mikhail | pass |  |  | `@memo() @ComponentBuilder() export declare function Span(value: (string | Resource), @memo() content_?: (()=> void)): SpanAttribute` |
+| arkui.SpanModifier | SpanModifier | SpanModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class SpanModifier implements SpanAttribute, AttributeModifier<SpanAttribute> {` |
+| arkui.SpanModifier | SpanModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.stack | StackOptions | StackOptions | 0 | interface | generated | unnamed | StackOptions | - | generated |  |  |  |  | `export declare interface StackOptions {` |
 | arkui.component.stack | StackOptions | alignContent | 0 | field | generated | StackOptions | alignContent | - | generated |  |  |  |  | `alignContent?: Alignment;` |
 | arkui.component.stack | StackAttribute | StackAttribute | 0 | interface | done | unnamed | Stack | - | done | Korobeinikov Evgeny | pass |  |  | `export declare interface StackAttribute extends CommonMethod {` |
@@ -6999,6 +7658,8 @@
 | arkui.component.stack | StackAttribute | pointLight | 0 | method | done | Stack | setPointLight | - | done | Evstigneev Roman |  |  | UT by Evstigneev Roman | `pointLight(value: PointLightStyle): StackAttribute` |
 | arkui.component.stack | StackAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<StackAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.stack | unnamed | Stack | 0 | function | done | Stack | setStackOptions | - | done | Korobeinikov Evgeny | pass |  |  | `@memo() @ComponentBuilder() export declare function Stack(options?: StackOptions, @memo() content_?: (()=> void)): StackAttribute` |
+| arkui.StackModifier | StackModifier | StackModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class StackModifier implements StackAttribute, AttributeModifier<StackAttribute> {` |
+| arkui.StackModifier | StackModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.stateManagement.memorize.state | MemoState | MemoState | 0 | interface |  |  |  |  | - |  |  |  |  | `export interface MemoState<T> {` |
 | arkui.stateManagement.memorize.state | MemoState | value | 0 | field |  |  |  |  | - |  |  |  |  | `readonly value: T;` |
 | arkui.component.stepper | StepperOptions | StepperOptions | 0 | interface | generated | unnamed | StepperOptions | - | generated |  |  |  |  | `export interface StepperOptions {` |
@@ -7022,6 +7683,12 @@
 | arkui.component.stepperItem | StepperItemAttribute | status | 0 | method | done | StepperItem | setStatus | - | done | Morozov Sergey | test blocked |  | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `status(value?: (ItemState | undefined)): this` |
 | arkui.component.stepperItem | StepperItemAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<StepperItemAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.stepperItem | unnamed | StepperItem | 0 | function | done | StepperItem | setStepperItemOptions | - | done | Morozov Sergey | test blocked |  | demo blocked https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `@memo() @ComponentBuilder() export declare function StepperItem(@memo() content_?: (()=> void)): StepperItemAttribute` |
+| arkui.StepperItemModifier | StepperItemModifier | StepperItemModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class StepperItemModifier implements StepperItemAttribute, AttributeModifier<StepperItemAttribute> {` |
+| arkui.StepperItemModifier | StepperItemModifier | applyNormalAttribute | 0 | method |  |  |  |  | - |  |  |  |  | `public applyNormalAttribute(instance: StepperItemAttribute): void` |
+| arkui.StepperItemModifier | StepperItemModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.StepperModifier | StepperModifier | StepperModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class StepperModifier implements StepperAttribute, AttributeModifier<StepperAttribute> {` |
+| arkui.StepperModifier | StepperModifier | applyNormalAttribute | 0 | method |  |  |  |  | - |  |  |  |  | `public applyNormalAttribute(instance: StepperAttribute): void` |
+| arkui.StepperModifier | StepperModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.stateManagement.storage.storageProperty | unnamed | OnChangeType | 0 | field |  |  |  |  | - |  |  |  |  | `export type OnChangeType<T> = ((propertyName: string, newValue: T)=> void);` |
 | arkui.stateManagement.storage.storageProperty | AbstractProperty | AbstractProperty | 0 | interface |  |  |  |  | - |  |  |  |  | `export declare interface AbstractProperty<T> {` |
 | arkui.stateManagement.storage.storageProperty | AbstractProperty | info | 0 | method |  |  |  |  | - |  |  |  |  | `info(): string` |
@@ -7316,6 +7983,9 @@
 | arkui.component.swiper | unnamed | ContentDidScrollCallback | 0 | field | generated | unnamed | ContentDidScrollCallback | - | generated |  |  |  |  | `export type ContentDidScrollCallback = ((selectedIndex: number, index: number, position: number, mainAxisLength: number)=> void);` |
 | arkui.component.swiper | unnamed | ContentWillScrollCallback | 0 | field | generated | unnamed | ContentWillScrollCallback | - | generated |  |  |  |  | `export type ContentWillScrollCallback = ((result: SwiperContentWillScrollResult)=> boolean);` |
 | arkui.component.swiper | unnamed | Swiper | 0 | function | done | Swiper | setSwiperOptions | - | done | Skroba Gleb | pass |  |  | `@memo() @ComponentBuilder() export declare function Swiper(controller?: SwiperController, @memo() content_?: (()=> void)): SwiperAttribute` |
+| arkui.SwiperModifier | SwiperModifier | SwiperModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class SwiperModifier implements SwiperAttribute, AttributeModifier<SwiperAttribute> {` |
+| arkui.SwiperModifier | SwiperModifier | applyNormalAttribute | 0 | method |  |  |  |  | - |  |  |  |  | `public applyNormalAttribute(instance: SwiperAttribute): void` |
+| arkui.SwiperModifier | SwiperModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.symbolglyph | SymbolRenderingStrategy | SymbolRenderingStrategy | 0 | enum_class | generated | unnamed | SymbolRenderingStrategy | - | generated |  |  |  |  | `declare enum SymbolRenderingStrategy {` |
 | arkui.component.symbolglyph | SymbolRenderingStrategy | SINGLE | 0 | enum_instance | generated | SymbolRenderingStrategy | SINGLE | - | generated |  |  |  |  | `SINGLE = 0` |
 | arkui.component.symbolglyph | SymbolRenderingStrategy | MULTIPLE_COLOR | 0 | enum_instance | generated | SymbolRenderingStrategy | MULTIPLE_COLOR | - | generated |  |  |  |  | `MULTIPLE_COLOR = 1` |
@@ -7376,6 +8046,8 @@
 | arkui.component.symbolglyph | SymbolGlyphAttribute | maxFontScale | 0 | method | done | SymbolGlyph | setMaxFontScale | - | done | Kovalev Sergey |  |  |  | `maxFontScale(scale: (number | Resource | undefined)): this` |
 | arkui.component.symbolglyph | SymbolGlyphAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<SymbolGlyphAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.symbolglyph | unnamed | SymbolGlyph | 0 | function | done | SymbolGlyph | setSymbolGlyphOptions | - | done | Andrey Khudenkikh | pass |  |  | `@memo() @ComponentBuilder() export declare function SymbolGlyph(value?: Resource, @memo() content_?: (()=> void)): SymbolGlyphAttribute` |
+| arkui.SymbolGlyphModifier | SymbolGlyphModifier | SymbolGlyphModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class SymbolGlyphModifier implements SymbolGlyphAttribute, AttributeModifier<SymbolGlyphAttribute> {` |
+| arkui.SymbolGlyphModifier | SymbolGlyphModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(src?: Resource)` |
 | arkui.component.symbolSpan | SymbolSpanAttribute | SymbolSpanAttribute | 0 | interface | done | unnamed | SymbolSpan | - | done | Dmitry A Smirnov | pass |  |  | `export declare interface SymbolSpanAttribute extends CommonMethod {` |
 | arkui.component.symbolSpan | SymbolSpanAttribute | fontSize | 0 | method | done | SymbolSpan | setFontSize | - | done | Dmitry A Smirnov | pass |  |  | `fontSize(value: (number | string | Resource | undefined)): this` |
 | arkui.component.symbolSpan | SymbolSpanAttribute | fontColor | 0 | method | done | SymbolSpan | setFontColor | - | done | Dmitry A Smirnov | pass |  |  | `fontColor(value: (Array<ResourceColor> | undefined)): this` |
@@ -7385,6 +8057,8 @@
 | arkui.component.symbolSpan | SymbolSpanAttribute | attributeModifier | 0 | method | Deleted because of RedundantAttributesOverloads |  |  | Deleted because of RedundantAttributesOverloads | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<SymbolSpanAttribute> | undefined)): this` |
 | arkui.component.symbolSpan | SymbolSpanAttribute | attributeModifier | 1 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<SymbolSpanAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.symbolSpan | unnamed | SymbolSpan | 0 | function | done | SymbolSpan | setSymbolSpanOptions | - | done | Dmitry A Smirnov | pass |  |  | `@memo() @ComponentBuilder() export declare function SymbolSpan(value: Resource, @memo() content_?: (()=> void)): SymbolSpanAttribute` |
+| arkui.SymbolSpanModifier | SymbolSpanModifier | SymbolSpanModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class SymbolSpanModifier implements SymbolSpanAttribute, AttributeModifier<SymbolSpanAttribute> {` |
+| arkui.SymbolSpanModifier | SymbolSpanModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor(src?: Resource)` |
 | arkui.component.tabContent | SelectedMode | SelectedMode | 0 | enum_class | generated | unnamed | SelectedMode | - | generated |  |  |  |  | `declare enum SelectedMode {` |
 | arkui.component.tabContent | SelectedMode | INDICATOR | 0 | enum_instance | generated | SelectedMode | INDICATOR | - | generated |  |  |  |  | `INDICATOR = 0` |
 | arkui.component.tabContent | SelectedMode | BOARD | 0 | enum_instance | generated | SelectedMode | BOARD | - | generated |  |  |  |  | `BOARD = 1` |
@@ -7536,6 +8210,8 @@
 | arkui.component.tabs | TabContentTransitionProxy | to | 0 | field |  | TabContentTransitionProxy | setTo | - |  |  |  |  |  | `to: number;` |
 | arkui.component.tabs | TabContentTransitionProxy | finishTransition | 0 | method | done | TabContentTransitionProxy | finishTransition | - | done | Dudkin Sergey |  |  |  | `finishTransition(): void` |
 | arkui.component.tabs | unnamed | Tabs | 0 | function | done | Tabs | setTabsOptions | - | done | Skroba Gleb | pass |  |  | `@memo() @ComponentBuilder() export declare function Tabs(options?: TabsOptions, @memo() content_?: (()=> void)): TabsAttribute` |
+| arkui.TabsModifier | TabsModifier | TabsModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class TabsModifier implements TabsAttribute, AttributeModifier<TabsAttribute> {` |
+| arkui.TabsModifier | TabsModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.text | TextOverflowOptions | TextOverflowOptions | 0 | interface | generated | unnamed | TextOverflowOptions | - | generated |  |  |  |  | `export declare interface TextOverflowOptions {` |
 | arkui.component.text | TextOverflowOptions | overflow | 0 | field | generated | TextOverflowOptions | overflow | - | generated |  |  |  |  | `overflow: TextOverflow;` |
 | arkui.component.text | TextAttribute | TextAttribute | 0 | interface | done | unnamed | Text | - | done | Kirill Kirichenko | pass |  |  | `export declare interface TextAttribute extends CommonMethod {` |
@@ -7696,6 +8372,8 @@
 | arkui.component.textArea | TextAreaAttribute | keyboardAppearance | 0 | method | done | TextArea | setKeyboardAppearance | - | done | Erokhin Ilya | not covered |  |  | `keyboardAppearance(appearance: (KeyboardAppearance | undefined)): this` |
 | arkui.component.textArea | TextAreaAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<TextAreaAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.textArea | unnamed | TextArea | 0 | function | done | TextArea | setTextAreaOptions | - | done | Tuzhilkin Ivan | pass |  |  | `@memo() @ComponentBuilder() export declare function TextArea(value?: TextAreaOptions, @memo() content_?: (()=> void)): TextAreaAttribute` |
+| arkui.TextAreaModifier | TextAreaModifier | TextAreaModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class TextAreaModifier implements TextAreaAttribute, AttributeModifier<TextAreaAttribute> {` |
+| arkui.TextAreaModifier | TextAreaModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.textClock | TextClockController | TextClockController | 0 | class | done | unnamed | TextClockController | - | done | Pavelyev Ivan |  |  |  | `export declare class TextClockController {` |
 | arkui.component.textClock | TextClockController | constructor | 0 | method | done | TextClockController | construct | - | done | Pavelyev Ivan |  |  |  | `public constructor()` |
 | arkui.component.textClock | TextClockController | start | 0 | method | done | TextClockController | start | - | done | Pavelyev Ivan |  |  |  | `public start(): void` |
@@ -7722,6 +8400,8 @@
 | arkui.component.textClock | TextClockAttribute | dateTimeOptions | 0 | method | testskipped | TextClock | setDateTimeOptions | - | testskipped | Politov Mikhail |  |  |  | `dateTimeOptions(dateTimeOptions: (DateTimeOptions | undefined)): this` |
 | arkui.component.textClock | TextClockAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<TextClockAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.textClock | unnamed | TextClock | 0 | function | done | TextClock | setTextClockOptions | - | done | Pavelyev Ivan | pass |  |  | `@memo() @ComponentBuilder() export declare function TextClock(options?: TextClockOptions, @memo() content_?: (()=> void)): TextClockAttribute` |
+| arkui.TextClockModifier | TextClockModifier | TextClockModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class TextClockModifier implements TextClockAttribute, AttributeModifier<TextClockAttribute> {` |
+| arkui.TextClockModifier | TextClockModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.textCommon | TextDataDetectorType | TextDataDetectorType | 0 | enum_class | generated | unnamed | TextDataDetectorType | - | generated |  |  |  |  | `declare enum TextDataDetectorType {` |
 | arkui.component.textCommon | TextDataDetectorType | PHONE_NUMBER | 0 | enum_instance | generated | TextDataDetectorType | PHONE_NUMBER | - | generated |  |  |  |  | `PHONE_NUMBER = 0` |
 | arkui.component.textCommon | TextDataDetectorType | URL | 0 | enum_instance | generated | TextDataDetectorType | URL | - | generated |  |  |  |  | `URL = 1` |
@@ -7992,6 +8672,10 @@
 | arkui.component.textInput | TextInputAttribute | keyboardAppearance | 0 | method | done | TextInput | setKeyboardAppearance | - | done | Erokhin Ilya |  |  |  | `keyboardAppearance(appearance: (KeyboardAppearance | undefined)): this` |
 | arkui.component.textInput | TextInputAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<TextInputAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.textInput | unnamed | TextInput | 0 | function | done | TextInput | setTextInputOptions | - | done | Spirin Andrey | pass |  |  | `@memo() @ComponentBuilder() export declare function TextInput(value?: TextInputOptions, @memo() content_?: (()=> void)): TextInputAttribute` |
+| arkui.TextInputModifier | TextInputModifier | TextInputModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class TextInputModifier implements TextInputAttribute, AttributeModifier<TextInputAttribute> {` |
+| arkui.TextInputModifier | TextInputModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.TextModifier | TextModifier | TextModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class TextModifier implements TextAttribute, AttributeModifier<TextAttribute> {` |
+| arkui.TextModifier | TextModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.textPicker | TextPickerRangeContent | TextPickerRangeContent | 0 | interface | generated | unnamed | TextPickerRangeContent | - | generated |  |  |  |  | `export declare interface TextPickerRangeContent {` |
 | arkui.component.textPicker | TextPickerRangeContent | icon | 0 | field | generated | TextPickerRangeContent | icon | - | generated |  |  |  |  | `icon: (string | Resource);` |
 | arkui.component.textPicker | TextPickerRangeContent | text | 0 | field | generated | TextPickerRangeContent | text | - | generated |  |  |  |  | `text?: (string | Resource);` |
@@ -8068,6 +8752,8 @@
 | arkui.component.textPicker | TextPickerDialog | TextPickerDialog | 0 | class | done | unnamed | TextPickerDialog | - | done | Ekaterina Stepanova |  |  |  | `export declare class TextPickerDialog {` |
 | arkui.component.textPicker | TextPickerDialog | constructor | 0 | method | done | TextPickerDialog | construct | - | done | Ekaterina Stepanova |  |  |  | `public constructor() {}` |
 | arkui.component.textPicker | unnamed | TextPicker | 0 | function | done | TextPicker | setTextPickerOptions | - | done | Tuzhilkin Ivan | failed |  | OHOSUI-2386 multi column picker not working | `@memo() @ComponentBuilder() export declare function TextPicker(options?: TextPickerOptions, @memo() content_?: (()=> void)): TextPickerAttribute` |
+| arkui.TextPickerModifier | TextPickerModifier | TextPickerModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class TextPickerModifier implements TextPickerAttribute, AttributeModifier<TextPickerAttribute> {` |
+| arkui.TextPickerModifier | TextPickerModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.textTimer | TextTimerController | TextTimerController | 0 | class | done | unnamed | TextTimerController | - | done | Ekaterina Stepanova |  |  |  | `export declare class TextTimerController {` |
 | arkui.component.textTimer | TextTimerController | constructor | 0 | method | done | TextTimerController | construct | - | done | Ekaterina Stepanova | pass |  |  | `public constructor()` |
 | arkui.component.textTimer | TextTimerController | start | 0 | method | done | TextTimerController | start | - | done | Ekaterina Stepanova | test blocked |  | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `public start(): void` |
@@ -8094,6 +8780,8 @@
 | arkui.component.textTimer | TextTimerAttribute | contentModifier | 0 | method |  |  |  |  | - |  |  |  |  | `contentModifier(modifier: (ContentModifier<TextTimerConfiguration> | undefined)): this` |
 | arkui.component.textTimer | TextTimerAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<TextTimerAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.textTimer | unnamed | TextTimer | 0 | function | done | TextTimer | setTextTimerOptions | - | done | Ekaterina Stepanova | pass |  |  | `@memo() @ComponentBuilder() export declare function TextTimer(options?: TextTimerOptions, @memo() content_?: (()=> void)): TextTimerAttribute` |
+| arkui.TextTimerModifier | TextTimerModifier | TextTimerModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class TextTimerModifier implements TextTimerAttribute, AttributeModifier<TextTimerAttribute> {` |
+| arkui.TextTimerModifier | TextTimerModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.timePicker | TimePickerResult | TimePickerResult | 0 | interface | generated | unnamed | TimePickerResult | - | generated |  |  |  |  | `export declare interface TimePickerResult {` |
 | arkui.component.timePicker | TimePickerResult | hour | 0 | field | generated | TimePickerResult | hour | - | generated |  |  |  |  | `hour: number;` |
 | arkui.component.timePicker | TimePickerResult | minute | 0 | field | generated | TimePickerResult | minute | - | generated |  |  |  |  | `minute: number;` |
@@ -8151,6 +8839,8 @@
 | arkui.component.timePicker | TimePickerDialog | TimePickerDialog | 0 | class | done | unnamed | TimePickerDialog | - | done | Ekaterina Stepanova |  |  |  | `export declare class TimePickerDialog {` |
 | arkui.component.timePicker | TimePickerDialog | constructor | 0 | method | done | TimePickerDialog | construct | - | done | Ekaterina Stepanova |  |  |  | `public constructor() {}` |
 | arkui.component.timePicker | unnamed | TimePicker | 0 | function | done | TimePicker | setTimePickerOptions | - | done | Politov Mikhail |  |  |  | `@memo() @ComponentBuilder() export declare function TimePicker(options?: TimePickerOptions, @memo() content_?: (()=> void)): TimePickerAttribute` |
+| arkui.TimePickerModifier | TimePickerModifier | TimePickerModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class TimePickerModifier implements TimePickerAttribute, AttributeModifier<TimePickerAttribute> {` |
+| arkui.TimePickerModifier | TimePickerModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.toggle | ToggleType | ToggleType | 0 | enum_class | generated | unnamed | ToggleType | - | generated |  |  |  |  | `declare enum ToggleType {` |
 | arkui.component.toggle | ToggleType | Checkbox | 0 | enum_instance | generated | ToggleType | CHECKBOX | - | generated |  |  |  |  | `Checkbox = 0` |
 | arkui.component.toggle | ToggleType | Switch | 0 | enum_instance | generated | ToggleType | SWITCH | - | generated |  |  |  |  | `Switch = ((0) + (1))` |
@@ -8175,6 +8865,8 @@
 | arkui.component.toggle | ToggleAttribute | switchStyle | 0 | method | done | Toggle | setSwitchStyle | - | done | Morozov Sergey | pass |  |  | `switchStyle(value: (SwitchStyle | undefined)): this` |
 | arkui.component.toggle | ToggleAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<ToggleAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.toggle | unnamed | Toggle | 0 | function | done | Toggle | setToggleOptions | - | done | Morozov Sergey |  |  | unblocked since AceEngine won't fix it | `@memo() @ComponentBuilder() export declare function Toggle(options: ToggleOptions, @memo() content_?: (()=> void)): ToggleAttribute` |
+| arkui.ToggleModifier | ToggleModifier | ToggleModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class ToggleModifier implements ToggleAttribute, AttributeModifier<ToggleAttribute> {` |
+| arkui.ToggleModifier | ToggleModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.toolbar | ToolBarItemPlacement | ToolBarItemPlacement | 0 | enum_class | generated | unnamed | ToolBarItemPlacement | - | generated |  |  |  |  | `declare enum ToolBarItemPlacement {` |
 | arkui.component.toolbar | ToolBarItemPlacement | TOP_BAR_LEADING | 0 | enum_instance | generated | ToolBarItemPlacement | TOP_BAR_LEADING | - | generated |  |  |  |  | `TOP_BAR_LEADING = 0` |
 | arkui.component.toolbar | ToolBarItemPlacement | TOP_BAR_TRAILING | 0 | enum_instance | generated | ToolBarItemPlacement | TOP_BAR_TRAILING | - | generated |  |  |  |  | `TOP_BAR_TRAILING = 1` |
@@ -8375,6 +9067,13 @@
 | arkui.component.units | ChainWeightOptions | vertical | 0 | field | generated | ChainWeightOptions | vertical | - | generated |  |  |  |  | `vertical?: number;` |
 | arkui.component.units | AccessibilityOptions | AccessibilityOptions | 0 | interface | generated | unnamed | AccessibilityOptions | - | generated |  |  |  |  | `export declare interface AccessibilityOptions {` |
 | arkui.component.units | AccessibilityOptions | accessibilityPreferred | 0 | field | generated | AccessibilityOptions | accessibilityPreferred | - | generated |  |  |  |  | `accessibilityPreferred?: boolean;` |
+| arkui.UserView | unnamed | UserViewBuilder | 0 | field |  |  |  |  | - |  |  |  |  | `export type UserViewBuilder = @memo() (()=> void);` |
+| arkui.UserView | UserView | UserView | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class UserView {` |
+| arkui.UserView | UserView | getBuilder | 0 | method |  |  |  |  | - |  |  |  |  | `public getBuilder(): UserViewBuilder` |
+| arkui.UserView | UserView | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
+| arkui.UserView | EntryPoint | EntryPoint | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class EntryPoint {` |
+| arkui.UserView | EntryPoint | entry | 0 | method |  |  |  |  | - |  |  |  |  | `@memo() public entry(): void` |
+| arkui.UserView | EntryPoint | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.stateManagement.utils | UIUtils | UIUtils | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class UIUtils {` |
 | arkui.stateManagement.utils | UIUtils | getTarget | 0 | method |  |  |  |  | - |  |  |  |  | `public static getTarget<T extends object>(source: T): T` |
 | arkui.stateManagement.utils | UIUtils | makeObserved | 0 | method |  |  |  |  | - |  |  |  |  | `public static makeObserved<T extends object>(source: T): T` |
@@ -8449,6 +9148,8 @@
 | arkui.component.video | VideoAttribute | enableShortcutKey | 0 | method | done | Video | setEnableShortcutKey | - | done | Kovalev Sergey | pass |  |  | `enableShortcutKey(enabled: (boolean | undefined)): this` |
 | arkui.component.video | VideoAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<VideoAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.video | unnamed | Video | 0 | function | blocked AceEngine | Video | setVideoOptions | - | blocked AceEngine | Erokhin Ilya |  |  | https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 | `@memo() @ComponentBuilder() export declare function Video(value: VideoOptions, @memo() content_?: (()=> void)): VideoAttribute` |
+| arkui.VideoModifier | VideoModifier | VideoModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class VideoModifier implements VideoAttribute, AttributeModifier<VideoAttribute> {` |
+| arkui.VideoModifier | VideoModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.waterFlow | unnamed | GetItemMainSizeByIndex | 0 | field | generated | unnamed | GetItemMainSizeByIndex | - | generated |  |  |  |  | `export type GetItemMainSizeByIndex = ((index: number)=> number);` |
 | arkui.component.waterFlow | SectionOptions | SectionOptions | 0 | class | generated | unnamed | SectionOptions | - | generated |  |  |  |  | `export declare class SectionOptions {` |
 | arkui.component.waterFlow | SectionOptions | itemsCount | 0 | field | generated | SectionOptions | itemsCount | - | generated |  |  |  |  | `public itemsCount: number;` |
@@ -8489,6 +9190,8 @@
 | arkui.component.waterFlow | WaterFlowAttribute | onDidScroll | 0 | method | done | WaterFlow | setOnDidScroll | - | done | wangtao |  |  |  | `onDidScroll(handler: (OnScrollCallback | undefined)): this` |
 | arkui.component.waterFlow | WaterFlowAttribute | attributeModifier | 0 | method |  |  |  |  | - |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<WaterFlowAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.waterFlow | unnamed | WaterFlow | 0 | function | done | WaterFlow | setWaterFlowOptions | - | done | Kovalev Sergey | pass |  |  | `@memo() @ComponentBuilder() export declare function WaterFlow(options?: WaterFlowOptions, @memo() content_?: (()=> void)): WaterFlowAttribute` |
+| arkui.WaterFlowModifier | WaterFlowModifier | WaterFlowModifier | 0 | class |  |  |  |  | - |  |  |  |  | `export declare class WaterFlowModifier implements WaterFlowAttribute, AttributeModifier<WaterFlowAttribute> {` |
+| arkui.WaterFlowModifier | WaterFlowModifier | constructor | 0 | method |  |  |  |  | - |  |  |  |  | `public constructor() {}` |
 | arkui.component.web | unnamed | WebviewController | 0 | field |  |  |  |  | - |  |  |  |  | `export type WebviewController = webview.WebviewController;` |
 | arkui.component.web | unnamed | OnNavigationEntryCommittedCallback | 0 | field | generated | unnamed | OnNavigationEntryCommittedCallback | - | generated |  |  |  |  | `export type OnNavigationEntryCommittedCallback = ((loadCommittedDetails: LoadCommittedDetails)=> void);` |
 | arkui.component.web | unnamed | OnSslErrorEventCallback | 0 | field | generated | unnamed | OnSslErrorEventCallback | - | generated |  |  |  |  | `export type OnSslErrorEventCallback = ((sslErrorEvent: SslErrorEvent)=> void);` |
