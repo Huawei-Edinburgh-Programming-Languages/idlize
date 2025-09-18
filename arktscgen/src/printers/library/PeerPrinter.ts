@@ -15,12 +15,10 @@
 
 import {
     capitalize,
-    createEmptyReferenceResolver,
     createParameter,
     createProperty,
     createReferenceType,
     FieldModifier,
-    IDLFile,
     IDLInterface,
     IDLMethod,
     IDLParameter,
@@ -30,7 +28,6 @@ import {
     IDLType,
     IDLUndefinedType,
     IDLVoidType,
-    IndentedPrinter,
     isOptionalType,
     isProperty,
     isReferenceType,
@@ -48,10 +45,10 @@ import {
     makeMethod,
     nodeNamespace,
     baseNameString,
-    nativeType, baseName,
+    nativeType,
+    baseName,
     innerTypeCommon
 } from "../../utils/idl"
-import { PeersConstructions } from "../../constuctions/PeersConstructions"
 import {
     isAbstract,
     isCreateOrUpdate,
@@ -63,65 +60,42 @@ import {
     peerMethod
 } from "../../general/common"
 import { Importer } from "./Importer"
+import { PeersConstructions } from "../../constuctions/PeersConstructions"
 import { InteropConstructions } from "../../constuctions/InteropConstructions"
 import { Typechecker } from "../../general/Typechecker"
-import { LibraryTypeConvertor } from "../../type-convertors/top-level/LibraryTypeConvertor"
-import { convertAndImport } from "../../type-convertors/top-level/ImporterTypeConvertor"
-import { SingleFilePrinter } from "../SingleFilePrinter"
 import { BindingParameterTypeConvertor } from "../../type-convertors/top-level/peers/BindingParameterTypeConvertor"
 import { unpackWrapper, hasTypeHintArgument, typeHintArgument } from "../../type-convertors/top-level/peers/BindingReturnValueTypeConvertor"
 import { Config } from "../../general/Config"
 import { ExtraParameter } from "../../options/ExtraParameters"
 import assert from "node:assert"
-import { dropPrefix } from "../../utils/string"
 
-export class PeerPrinter extends SingleFilePrinter {
-    protected printInterface(iface: IDLInterface): void {
-        if (iface != this.node) throw new Error("Must match")
-        this.printPeer(iface, this.writer)
-        if (!isDataClass(iface)) {
-            this.printTypeGuard(iface, this.writer)
-        }
-        if (isReal(iface)) {
-            this.printAddToNodeMap(iface, this.writer)
-        }
-    }
-    protected filterInterface(node: IDLInterface): boolean {
-        return node != this.node
-    }
+export class PeerPrinter {
+    private bindingParameterTypeConvertor = new BindingParameterTypeConvertor(this.typechecker)
 
     constructor(
         private config: Config,
-        idl: IDLFile,
-        private node: IDLInterface
+        private typechecker: Typechecker, // = new Typechecker(this.idl)
+        private importer: Importer // = new Importer(this.typechecker, `.`, this.node.name)
+
     ) {
-        super(idl)
     }
 
-    protected typechecker = new Typechecker(this.idl)
-    protected importer = new Importer(this.typechecker, `.`, this.node.name)
-    private bindingParameterTypeConvertor = new BindingParameterTypeConvertor(this.typechecker)
-    private parent = parent(this.node) ?? Config.defaultAncestor
-
-    protected writer = new TSLanguageWriter(
-        new IndentedPrinter(),
-        createEmptyReferenceResolver(),
-        { convert: (node: IDLType) => convertAndImport(
-            this.importer,
-            new class extends LibraryTypeConvertor {
-                convertTypeReference(type: IDLReferenceType): string {
-                    return dropPrefix(super.convertTypeReference(type), Config.dataClassPrefix)
-                }
-            } (this.typechecker),
-            node
-        )}
-    )
+    public printInterface(iface: IDLInterface, writer: TSLanguageWriter): void {
+        this.printPeer(iface, writer)
+        if (!isDataClass(iface)) {
+            this.printTypeGuard(iface, writer)
+        }
+        if (isReal(iface)) {
+            this.printAddToNodeMap(iface, writer)
+        }
+    }
 
     private printPeer(iface: IDLInterface, writer: TSLanguageWriter): void {
+        const _parent = parent(iface) ?? Config.defaultAncestor
         writer.writeClass(
             PeersConstructions.peerName(iface.name), // XXX: Change peer name
             (writer: TSLanguageWriter) => this.printBody(iface, writer),
-            this.parent ? this.importer.withPeerImport(baseNameString(this.parent)) : undefined
+            _parent ? this.importer.withPeerImport(baseNameString(_parent)) : undefined
         )
     }
 

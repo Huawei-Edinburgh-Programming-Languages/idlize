@@ -14,23 +14,72 @@
  */
 
 import { MultiFilePrinter, MultiFileOutput } from "../MultiFilePrinter"
-import { IDLFile, IDLInterface, IDLNode, isInterface } from "@idlizer/core"
-import { PeersConstructions } from "../../constuctions/PeersConstructions"
+import {
+    createEmptyReferenceResolver,
+    IDLFile,
+    IDLInterface,
+    IDLKind,
+    IDLNamespace,
+    IDLNode,
+    IDLReferenceType,
+    IDLType,
+    IndentedPrinter,
+    isInterface,
+    TSLanguageWriter
+} from "@idlizer/core"
+import { Importer } from "./Importer"
 import { PeerPrinter } from "./PeerPrinter"
 import { Config } from "../../general/Config"
 import { fqName } from "../../utils/idl"
+import { dropPrefix } from "../../utils/string"
+import { PeersConstructions } from "../../constuctions/PeersConstructions"
+import { convertAndImport } from "../../type-convertors/top-level/ImporterTypeConvertor"
+import { LibraryTypeConvertor } from "../../type-convertors/top-level/LibraryTypeConvertor"
+import { Typechecker } from "../../general/Typechecker"
 
 export class AllPeersPrinter extends MultiFilePrinter {
+    private typechecker = new Typechecker(this.idl)
+
     constructor(private config: Config, idl: IDLFile) {
         super(idl)
     }
+
     protected filterInterface(node: IDLInterface): boolean {
         return !this.typechecker.isPeer(node) || this.config.ignore.isIgnoredPeer(fqName(node))
     }
+
     printInterface(node: IDLInterface): MultiFileOutput {
+        const importer = new Importer(this.typechecker, '.', node.name)
+        const printer = new PeerPrinter(this.config, this.typechecker, importer)
+        const writer = this.makeWriter(importer)
+
+        printer.printInterface(node, writer)
         return {
             fileName: PeersConstructions.fileName(node.name),
-            output: new PeerPrinter(this.config, this.idl, node).print()
-        }
+            output: [
+                importer?.getOutput() ?? [],
+                [''], // empty line
+                writer.getOutput()
+            ]
+                .flat()
+                .join(`\n`)
+            }
     }
+
+    private makeWriter(importer: Importer): TSLanguageWriter {
+        const converter = {
+            convert: (node: IDLType) => convertAndImport(
+                importer,
+                new class extends LibraryTypeConvertor {
+                    convertTypeReference(type: IDLReferenceType): string {
+                        return dropPrefix(super.convertTypeReference(type), Config.dataClassPrefix)
+                    }
+                } (this.typechecker),
+                node
+            )
+        }
+
+        return new TSLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver(), converter)
+    }
+
 }
