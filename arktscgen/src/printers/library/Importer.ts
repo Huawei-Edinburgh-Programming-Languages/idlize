@@ -66,6 +66,10 @@ export class Importer {
         return it
     }
 
+    addSeen(it: string): void {
+        this.seen.add(it)
+    }
+
     private import(name: string, from: string): void {
         this.writer.writeExpressionStatement(
             this.writer.makeString(

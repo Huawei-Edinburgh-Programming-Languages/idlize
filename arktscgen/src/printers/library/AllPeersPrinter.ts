@@ -38,6 +38,7 @@ import { LibraryTypeConvertor } from "../../type-convertors/top-level/LibraryTyp
 import { Typechecker } from "../../general/Typechecker"
 
 export class AllPeersPrinter extends MultiFilePrinter {
+    private static FlattenNamespaces = [Config.irNamespace]
     private typechecker = new Typechecker(this.idl)
 
     constructor(private config: Config, idl: IDLFile) {
@@ -45,25 +46,69 @@ export class AllPeersPrinter extends MultiFilePrinter {
     }
 
     protected filterInterface(node: IDLInterface): boolean {
-        return !this.typechecker.isPeer(node) || this.config.ignore.isIgnoredPeer(fqName(node))
+        throw "deprecated!";
+        return !this.isAllowed(node)
     }
 
-    printInterface(node: IDLInterface): MultiFileOutput {
-        const importer = new Importer(this.typechecker, '.', node.name)
-        const printer = new PeerPrinter(this.config, this.typechecker, importer)
-        const writer = this.makeWriter(importer)
+    printNamespace(ns: IDLNamespace): MultiFileOutput[] {
+        const members: IDLInterface[] = ns.members
+            .filter(isInterface)
+            .filter(this.isAllowed.bind(this))
 
-        printer.printInterface(node, writer)
+        if (members.length === 0) {
+            return []
+        }
+
+        const importer = new Importer(this.typechecker, '.')
+        const writer = this.makeWriter(importer)
+        const printer = new PeerPrinter(this.config, this.typechecker, importer)
+
+        writer.pushNamespace(ns.name, { ident: false });
+        members.forEach(m => printer.printInterface(m, writer))
+        writer.popNamespace({ ident: false });
+
+        return [{
+            //exports: [`${ns.name}.ts`],
+            fileName: `${ns.name}.ts`,
+            output: AllPeersPrinter.makeString(importer, writer)
+        }]
+    }
+
+    printInterface(iface: IDLInterface): MultiFileOutput {
+        const importer = new Importer(this.typechecker, '.', iface.name)
+        const writer = this.makeWriter(importer)
+        const printer = new PeerPrinter(this.config, this.typechecker, importer)
+
+        printer.printInterface(iface, writer)
+
         return {
-            fileName: PeersConstructions.fileName(node.name),
-            output: [
-                importer?.getOutput() ?? [],
-                [''], // empty line
-                writer.getOutput()
-            ]
-                .flat()
-                .join(`\n`)
+            fileName: PeersConstructions.fileName(iface.name),
+            output: AllPeersPrinter.makeString(importer, writer)
+        }
+    }
+
+    override print(): MultiFileOutput[] {
+        const visitInterfaces = (node: IDLNode): MultiFileOutput[] => {
+            switch (node.kind) {
+                case IDLKind.File:
+                    return (node as IDLFile).entries.flatMap((value) => visitInterfaces(value))
+
+                case IDLKind.Namespace: {
+                    const ns = (node as IDLNamespace)
+                    if (AllPeersPrinter.FlattenNamespaces.includes(ns.name)) {
+                        return ns.members.flatMap((value) => visitInterfaces(value))
+                    }
+                    return this.printNamespace(ns)
+                }
+
+                case IDLKind.Interface: {
+                    const iface = (node as IDLInterface)
+                    return this.isAllowed(iface) ? [this.printInterface(iface)] : []
+                }
             }
+            return []
+        }
+        return visitInterfaces(this.idl)
     }
 
     private makeWriter(importer: Importer): TSLanguageWriter {
@@ -78,8 +123,14 @@ export class AllPeersPrinter extends MultiFilePrinter {
                 node
             )
         }
-
         return new TSLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver(), converter)
     }
 
+    private isAllowed(node: IDLInterface): boolean {
+        return this.typechecker.isPeer(node) && !this.config.ignore.isIgnoredPeer(fqName(node))
+    }
+
+    private static makeString(importer: Importer, writer: TSLanguageWriter): string {
+        return [...importer.getOutput(), '', ...writer.getOutput()] .join(`\n`)
+    }
 }
