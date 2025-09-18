@@ -284,7 +284,7 @@
 |`setAccessibilityFocusDrawLevel`| Function | Tuzhilkin Ivan | done | test blocked | need cherry-pick to feature_branch, test blocked since no accessibility service on FB, commented ViewAbstract static methods code |
 |`setCustomProperty`| Function | Dmitry A Smirnov| in progress | test blocked | need clarify bridge implementation, test blocked by FrameNode.getCustomProperty, commented ViewAbstract static methods code |
 |`setExpandSafeArea`| Function | Dmitry A Smirnov| done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
-|`setBackground`| Function | Lobah Mikhail | done | test blocked | UT done Lobah Mikhail, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code, issue against Ace https://gitcode.com/openharmony/arkui_ace_engine/issues/64753 |
+|`setBackground`| Function | Lobah Mikhail | done | test blocked | UT done Lobah Mikhail, test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code,issue against Ace https://gitcode.com/openharmony/arkui_ace_engine/issues/64753 |
 |`setBackgroundImage0`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
 |`setBackgroundImage1`| Function | Erokhin Ilya | done | test blocked | test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA |
 |`setBackgroundBlurStyle`| Function | Skroba Gleb | done | test blocked |  test blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA, commented ViewAbstract static methods code |
