@@ -30,7 +30,7 @@ import {
 import { Importer } from "./Importer"
 import { PeerPrinter } from "./PeerPrinter"
 import { Config } from "../../general/Config"
-import { fqName } from "../../utils/idl"
+import { createDefaultTypescriptWriter, fqName } from "../../utils/idl"
 import { dropPrefix } from "../../utils/string"
 import { PeersConstructions } from "../../constuctions/PeersConstructions"
 import { convertAndImport } from "../../type-convertors/top-level/ImporterTypeConvertor"
@@ -59,7 +59,7 @@ export class AllPeersPrinter extends MultiFilePrinter {
             return []
         }
 
-        const importer = new Importer(this.typechecker, '.')
+        const importer = new Importer(this.typechecker, '.', ns.name)
         const writer = this.makeWriter(importer)
         const printer = new PeerPrinter(this.config, this.typechecker, importer)
 
@@ -68,7 +68,7 @@ export class AllPeersPrinter extends MultiFilePrinter {
         writer.popNamespace({ ident: false });
 
         return [{
-            //exports: [`${ns.name}.ts`],
+            exports: [ns.name],
             fileName: `${ns.name}.ts`,
             output: AllPeersPrinter.makeString(importer, writer)
         }]
@@ -82,6 +82,7 @@ export class AllPeersPrinter extends MultiFilePrinter {
         printer.printInterface(iface, writer)
 
         return {
+            exports: ['*'],
             fileName: PeersConstructions.fileName(iface.name),
             output: AllPeersPrinter.makeString(importer, writer)
         }
@@ -135,5 +136,21 @@ export class AllPeersPrinter extends MultiFilePrinter {
 
     private static makeString(importer: Importer, writer: TSLanguageWriter): string {
         return [...importer.getOutput(), '', ...writer.getOutput()] .join(`\n`)
+    }
+
+    public static printIndexFile(out: MultiFileOutput[], _: IDLFile): string {
+        const writer = createDefaultTypescriptWriter()
+        const dropExt = (file: string) => file.substring(0, file.lastIndexOf('.'))
+
+        for (const { exports, fileName, output } of out) {
+            const specs = exports.length === 1 && exports.at(0) === '*' ?
+                exports.at(0)! : `{ ${exports.join(', ')} }`
+
+            writer.writeExpressionStatement(
+                writer.makeString(`export ${specs} from "./peers/${dropExt(fileName)}"`)
+            )
+        }
+
+        return writer.getOutput().join('\n')
     }
 }
