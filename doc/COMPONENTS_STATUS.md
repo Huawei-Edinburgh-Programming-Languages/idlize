@@ -107,7 +107,7 @@
 |`setCircleOptions`|Function| Erokhin Ilya | done | pass |  |
 |*Column*| *Component* | Politov Mikhail | done |  |  |
 |`construct`| Function | Politov Mikhail | done | pass |  |
-|`setColumnOptions`| Function | Politov Mikhail | done | | |
+|`setColumnOptions`| Function | Politov Mikhail | blocked IDL | | https://gitee.com/nikolay-igotti/idlize/issues/ICYOTV |
 |`setAlignItems`| Function | Politov Mikhail | done | pass |  |
 |`setJustifyContent`| Function | Politov Mikhail | done | pass |  |
 |`setPointLight`| Function | Evstigneev Roman | done | pass | UT by Evstigneev Roman |
