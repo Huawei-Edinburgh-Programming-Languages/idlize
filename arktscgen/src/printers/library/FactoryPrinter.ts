@@ -90,7 +90,7 @@ export class FactoryPrinter extends SingleFilePrinter {
     }
 
     private printCreate(node: IDLInterface): void {
-        const extraParameters = PeerPrinter.makeExtraParameters(node, this.config, this.idl)
+        const extraParameters = PeerPrinter.makeExtraParameters(node, this.config, this.typechecker)
         const signature = makeSignature(
             this.makeParameters(node.properties).concat(extraParameters),
             flattenType(createReferenceType(node.name))
@@ -130,7 +130,7 @@ export class FactoryPrinter extends SingleFilePrinter {
             }]
                 .concat(parameters)
                 .concat(extraParameters
-                    .map(p => PeerPrinter.makeExtraParameter(p, node, this.idl))
+                    .map(p => PeerPrinter.makeExtraParameter(p, node, this.typechecker))
                 ),
             flattenType(createReferenceType(node.name)),
         )
@@ -150,7 +150,7 @@ export class FactoryPrinter extends SingleFilePrinter {
                         .map(param => same(param.name, param.name))
                         .concat(
                             extraParameters.map(param => {
-                                const [get, _] = PeerPrinter.resolveProperty(param, node, this.idl)
+                                const [get, _] = PeerPrinter.resolveProperty(param, node, this.typechecker)
                                 return same(param.name, peerMethod(get.name))
                             }
                         )

@@ -302,9 +302,3 @@ export function flatParentsImpl(
 
     return result // with self
 }
-
-export function flatParents(ref: IDLReferenceType | IDLInterface, idl: IDLFile): IDLInterface[] {
-    const resolveReference = (ref: IDLReferenceType, pov?: IDLNode) =>
-        resolveNamedNode(ref.name.split('.'), pov, [idl])
-    return flatParentsImpl(ref, resolveReference)
-}
