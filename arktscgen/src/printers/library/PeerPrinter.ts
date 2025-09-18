@@ -40,13 +40,11 @@ import {
     TSLanguageWriter
 } from "@idlizer/core"
 import {
-    parent,
     makeMethod,
     nodeNamespace,
-    baseNameString,
     nativeType,
-    baseName,
-    innerTypeCommon
+    innerTypeCommon,
+    makeEnoughQualifiedName
 } from "../../utils/idl"
 import {
     isAbstract,
@@ -90,12 +88,12 @@ export class PeerPrinter {
     }
 
     private printPeer(iface: IDLInterface, writer: TSLanguageWriter): void {
-        const _parent = parent(iface) ?? Config.defaultAncestor
+        const _parent = iface.inheritance[0] ?? createReferenceType(Config.defaultAncestor)
         this.importer.addSeen(PeersConstructions.peerName(iface.name))
         writer.writeClass(
             PeersConstructions.peerName(iface.name), // XXX: Change peer name to iface.name
             (writer: TSLanguageWriter) => this.printBody(iface, writer),
-            _parent ? this.importer.withPeerImport(baseNameString(_parent)) : undefined
+            this.importer.withPeerImport(_parent)
         )
     }
 
@@ -269,7 +267,9 @@ export class PeerPrinter {
             return writer.makeFunctionCall(wrapper, args)
         }
 
-        const convertName = (ref: IDLReferenceType): string => PeersConstructions.peerName(baseName(ref))
+        const convertName = (ref: IDLReferenceType): string =>
+            makeEnoughQualifiedName(ref, this.typechecker.resolveReference.bind(this.typechecker))
+
         return isOptionalType(node.returnType) && isReferenceType(innerType) ?
             writer.makeNewObject(convertName(innerType), [nativeCall]) : nativeCall
     }

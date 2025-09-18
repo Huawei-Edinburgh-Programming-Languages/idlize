@@ -115,16 +115,7 @@ export class AllPeersPrinter extends MultiFilePrinter {
     private makeWriter(importer: Importer): TSLanguageWriter {
         const converter = {
             convert: (node: IDLType) => convertAndImport(
-                importer,
-                new class extends LibraryTypeConvertor {
-                    convertTypeReference(type: IDLReferenceType): string {
-                        return dropPrefix(
-                            dropPrefix(super.convertTypeReference(type), Config.dataClassPrefix),
-                            `${Config.irNamespace}.`
-                        )
-                    }
-                } (this.typechecker),
-                node
+                importer, new LibraryTypeConvertor(this.typechecker), node
             )
         }
         return new TSLanguageWriter(new IndentedPrinter(), createEmptyReferenceResolver(), converter)

@@ -53,18 +53,8 @@ export class FactoryPrinter extends SingleFilePrinter {
         new IndentedPrinter(),
         createEmptyReferenceResolver(),
         {
-            // TODO: Duplicates in factory
             convert: (node: IDLType) => convertAndImport(
-                this.importer,
-                new class extends LibraryTypeConvertor {
-                    convertTypeReference(type: IDLReferenceType): string {
-                        return dropPrefix(
-                            dropPrefix(super.convertTypeReference(type), Config.dataClassPrefix),
-                            `${Config.irNamespace}.`
-                        )
-                    }
-                } (this.typechecker),
-                node
+                this.importer, new LibraryTypeConvertor(this.typechecker), node
             )
         }
     )

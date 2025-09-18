@@ -50,6 +50,7 @@ import {
 import * as idl from "@idlizer/core"
 import { Config } from "../general/Config"
 import { mangleIfKeyword } from "../general/common"
+import { dropPrefix } from "./string"
 
 export function isString(node: IDLType): node is IDLPrimitiveType {
     return isPrimitiveType(node) && node.name === `String`
@@ -247,9 +248,11 @@ export function makeStatement(writer: LanguageWriter, arg: string | LanguageExpr
     return typeof arg !== 'string' && 'write' in arg ? arg : writer.makeStatement(makeExpression(writer, arg))
 }
 
+export type ReferenceResolver = (ref: IDLReferenceType, pov?: IDLNode) => IDLNamedNode|undefined
+
 export function flatParentsImpl(
     ref: IDLReferenceType|IDLInterface,
-    resolveReference: (ref: IDLReferenceType, pov?: IDLNode) => IDLNamedNode|undefined
+    resolveReference: ReferenceResolver
 ): IDLInterface[] {
     if (isReferenceType(ref)) {
         const type = resolveReference(ref)
@@ -277,4 +280,32 @@ export function flatParentsImpl(
     }
 
     return result // with self
+}
+
+export function makePrettyName(name: string): string {
+    // ir namespace is a global namespace
+    return dropPrefix(dropPrefix(name, Config.dataClassPrefix), `${Config.irNamespace}.`)
+}
+
+export function makeEnoughQualifiedName(
+    ref: IDLReferenceType,
+    resolveReference: ReferenceResolver,
+): string {
+    const decl = resolveReference(ref)
+    if (!decl) {
+        return ref.name
+    }
+
+    const declNs = getNamespacesPathFor(decl).map(n => n.name).join('.')
+    const contextNs = getNamespacesPathFor(ref).map(n => n.name).join('.')
+
+    // ir namespace is a global namespace
+    if (declNs === contextNs || declNs === '' || declNs === Config.irNamespace) {
+        const name = declNs != '' && ref.name.startsWith(declNs)
+            ? ref.name.slice(declNs.length + 1)
+            : dropPrefix(ref.name, Config.dataClassPrefix)
+        return name
+    }
+
+    return fqName(decl)
 }
