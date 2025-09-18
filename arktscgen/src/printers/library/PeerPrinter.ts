@@ -47,7 +47,6 @@ import {
     flattenType,
     makeMethod,
     nodeNamespace,
-    flatParents,
     baseNameString,
     nativeType, baseName,
     innerTypeCommon
@@ -90,6 +89,7 @@ export class PeerPrinter extends SingleFilePrinter {
     protected filterInterface(node: IDLInterface): boolean {
         return node != this.node
     }
+
     constructor(
         private config: Config,
         idl: IDLFile,
@@ -303,9 +303,9 @@ export class PeerPrinter extends SingleFilePrinter {
     public static resolveProperty(
         property: ExtraParameter,
         iface: IDLInterface,
-        idl: IDLFile
+        typechecker: Typechecker
     ): [IDLMethod | IDLProperty, IDLMethod | IDLProperty] {
-        const parents = flatParents(iface, idl)
+        const parents = typechecker.flatParents(iface)
         const methods = parents.flatMap(p => p.methods)
         const props = parents.flatMap(p => p.properties)
         const getters = methods.filter(isGetter)
@@ -346,17 +346,21 @@ export class PeerPrinter extends SingleFilePrinter {
     public static makeExtraParameter(
         param: ExtraParameter,
         iface: IDLInterface,
-        idl: IDLFile
+        typechecker: Typechecker
     ): IDLParameter {
         const type = (m: IDLMethod | IDLProperty) => 'type' in m ? m.type : m.returnType
-        const [getter, setter] = this.resolveProperty(param, iface, idl)
+        const [getter, setter] = this.resolveProperty(param, iface, typechecker)
 
         return createParameter(param.name, flattenType(type(getter)), param.optional)
     }
 
-    public static makeExtraParameters(iface: IDLInterface, config: Config, idl: IDLFile): IDLParameter[] {
+    public static makeExtraParameters(
+        iface: IDLInterface,
+        config: Config,
+        typechecker: Typechecker
+    ): IDLParameter[] {
         return config.parameters.getParameters(iface.name)
-            .map(param => this.makeExtraParameter(param, iface, idl))
+            .map(param => this.makeExtraParameter(param, iface, typechecker))
     }
 
     public static makeExtraStatement(
@@ -388,7 +392,7 @@ export class PeerPrinter extends SingleFilePrinter {
     }
 
     private printCreateOrUpdate(iface: IDLInterface, node: IDLMethod, writer: TSLanguageWriter): void {
-        const extraParameters = PeerPrinter.makeExtraParameters(iface, this.config, this.idl)
+        const extraParameters = PeerPrinter.makeExtraParameters(iface, this.config, this.typechecker)
         writer.writeMethodImplementation(
             makeMethod(
                 PeersConstructions.createOrUpdate(
@@ -417,7 +421,7 @@ export class PeerPrinter extends SingleFilePrinter {
                 const makeStmt = (property: ExtraParameter) =>
                     PeerPrinter.makeExtraStatement(
                         property,
-                        PeerPrinter.resolveProperty(property, iface, this.idl),
+                        PeerPrinter.resolveProperty(property, iface, this.typechecker),
                         ['should_not_be_here', varName],
                         writer
                     )
