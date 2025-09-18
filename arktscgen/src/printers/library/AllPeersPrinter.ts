@@ -117,7 +117,10 @@ export class AllPeersPrinter extends MultiFilePrinter {
                 importer,
                 new class extends LibraryTypeConvertor {
                     convertTypeReference(type: IDLReferenceType): string {
-                        return dropPrefix(super.convertTypeReference(type), Config.dataClassPrefix)
+                        return dropPrefix(
+                            dropPrefix(super.convertTypeReference(type), Config.dataClassPrefix),
+                            `${Config.irNamespace}.`
+                        )
                     }
                 } (this.typechecker),
                 node

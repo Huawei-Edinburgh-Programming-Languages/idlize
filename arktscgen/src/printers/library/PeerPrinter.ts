@@ -41,7 +41,6 @@ import {
 } from "@idlizer/core"
 import {
     parent,
-    flattenType,
     makeMethod,
     nodeNamespace,
     baseNameString,
@@ -201,7 +200,7 @@ export class PeerPrinter {
             new Method(
                 peerMethod(node.name),
                 new MethodSignature(
-                    flattenType(node.returnType),
+                    node.returnType,
                     []
                 ),
                 [MethodModifier.GETTER]
@@ -223,8 +222,8 @@ export class PeerPrinter {
         writer.writeMethodImplementation(
             makeMethod(
                 peerMethod(node.name),
-                node.parameters.map(it => createParameter(it.name, flattenType(it.type))),
-                flattenType(PeersConstructions.this.type)
+                node.parameters.map(it => createParameter(it.name, it.type)),
+                PeersConstructions.this.type
             ),
             () => {
                 writer.writeExpressionStatement(
@@ -326,7 +325,7 @@ export class PeerPrinter {
         const type = (m: IDLMethod | IDLProperty) => 'type' in m ? m.type : m.returnType
         const [getter, setter] = this.resolveProperty(param, iface, typechecker)
 
-        return createParameter(param.name, flattenType(type(getter)), param.optional)
+        return createParameter(param.name, type(getter), param.optional)
     }
 
     public static makeExtraParameters(
@@ -375,9 +374,9 @@ export class PeerPrinter {
                     node.name
                 ),
                 node.parameters
-                    .map(it => createParameter(it.name, flattenType(it.type)))
+                    .map(it => createParameter(it.name, it.type))
                     .concat(extraParameters),
-                flattenType(node.returnType),
+                node.returnType,
                 [MethodModifier.STATIC]
             ),
             (writer: TSLanguageWriter) => {
