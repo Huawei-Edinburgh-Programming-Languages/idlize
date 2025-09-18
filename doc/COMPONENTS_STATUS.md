@@ -2913,7 +2913,7 @@
 |`getIntentionCode`| Function |Maksimov Nikita | done | | |
 |`setIntentionCode`| Function | Maksimov Nikita | done | |  KeyEventAccessor::SetIntentionCodeImpl doesn't have sense. |
 |`getGetModifierKeyState`| Function | Maksimov Nikita | done | | |
-|`setGetModifierKeyState`| Function | | | | |
+|`setGetModifierKeyState`| Function | done | | | |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
 |*Layoutable*| *Class* | Samarin Sergey | in progress | | |
