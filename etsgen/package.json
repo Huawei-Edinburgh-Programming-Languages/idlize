@@ -19,7 +19,7 @@
   "license": "Apache-2.0",
   "keywords": [],
   "dependencies": {
-    "@koalaui/libarkts": "file:../external/ui2abc/libarkts",
+    "@koalaui/libarkts": "file:../external/libarkts",
     "commander": "^10.0.0"
   },
   "devDependencies": {
