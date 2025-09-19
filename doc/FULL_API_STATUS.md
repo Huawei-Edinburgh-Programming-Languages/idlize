@@ -933,6 +933,9 @@
 | ohos.arkui.inspector | inspector | getInspectorByKey | 0 | function | external |  |  | ignore | ignore |  |  |  |  | `function getInspectorByKey(id: string): string` |
 | ohos.arkui.inspector | inspector | getInspectorTree | 0 | function | external |  |  | ignore | ignore |  |  |  |  | `function getInspectorTree(): RecordData` |
 | ohos.arkui.inspector | inspector | sendEventByKey | 0 | function | external |  |  | ignore | ignore |  |  |  |  | `function sendEventByKey(id: string, action: int, params: string): boolean` |
+| ohos.arkui.inspector | unnamed | GETINSPECTORBYKEY | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `const GETINSPECTORBYKEY = inspector.getInspectorByKey` |
+| ohos.arkui.inspector | unnamed | GETINSPECTORTREE | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `const GETINSPECTORTREE = inspector.getInspectorTree` |
+| ohos.arkui.inspector | unnamed | SENDEVENTBYKEY | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `const SENDEVENTBYKEY = inspector.sendEventByKey` |
 | ohos.arkui.observer | uiObserver | uiObserver | 0 | namespace | external |  |  | ignore | ignore |  |  |  |  | `declare namespace uiObserver {` |
 | ohos.arkui.observer | uiObserver.NavDestinationState | NavDestinationState | 0 | enum_class | external |  |  | ignore | ignore |  |  |  |  | `declare enum NavDestinationState {` |
 | ohos.arkui.observer | uiObserver.NavDestinationState | ON_SHOWN | 0 | enum_instance | external |  |  | ignore | ignore |  |  |  |  | `ON_SHOWN = 0` |
@@ -1985,6 +1988,7 @@
 | arkui.component.alphabetIndexer | unnamed | AlphabetIndexer | 0 | function | done | AlphabetIndexer | setAlphabetIndexerOptions | Native only | done | Ekaterina Stepanova | pass |  | deprecated | `@memo() @ComponentBuilder() export declare function AlphabetIndexer(options: AlphabetIndexerOptions, @memo() content_?: (()=> void)): AlphabetIndexerAttribute` |
 | arkui.AlphabetIndexerModifier | AlphabetIndexerModifier | AlphabetIndexerModifier | 0 | class | external |  |  | ignore | ignore |  |  |  |  | `export declare class AlphabetIndexerModifier implements AlphabetIndexerAttribute, AttributeModifier<AlphabetIndexerAttribute> {` |
 | arkui.AlphabetIndexerModifier | AlphabetIndexerModifier | constructor | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public constructor() {}` |
+| arkui.component.animation | unnamed | AnimatableExtend | 0 | annotation | Deleted because of annotation |  |  | Deleted because of annotation | TS only |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface AnimatableExtend {}` |
 | arkui.component.animator | SpringProp | SpringProp | 0 | class | managed side | unnamed | SpringProp | Native only | managed side | managed side |  |  |  | `export declare class SpringProp {` |
 | arkui.component.animator | SpringProp | constructor | 0 | method | managed side | SpringProp | construct | Native only | managed side | managed side |  |  |  | `public constructor(mass: number, stiffness: number, damping: number)` |
 | arkui.component.animator | SpringMotion | SpringMotion | 0 | class | managed side | unnamed | SpringMotion | Native only | managed side | managed side |  |  |  | `export declare class SpringMotion {` |
@@ -2010,6 +2014,7 @@
 | arkui.component.animator | AnimatorAttribute | onFrame | 0 | method | managed side | Animator | setOnFrame | Native only | managed side | managed side |  |  | deprecated since 12 | `onFrame(event: (((value: number)=> void) | undefined)): this` |
 | arkui.component.animator | AnimatorAttribute | attributeModifier | 0 | method |  |  |  |  | TS only |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<AnimatorAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.animator | unnamed | Animator | 0 | function | managed side | Animator | setAnimatorOptions | Native only | managed side | managed side |  |  |  | `@memo() @ComponentBuilder() export declare function Animator(value: string, @memo() content_?: (()=> void)): AnimatorAttribute` |
+| arkui.stateManagement.storage.appStorage | unnamed | AppStorage | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `declare const AppStorage: LocalStorage` |
 | arkui.stateManagement.storage.appStorageV2 | AppStorageV2 | AppStorageV2 | 0 | class | external |  |  | ignore | ignore |  |  |  |  | `export declare class AppStorageV2 {` |
 | arkui.stateManagement.storage.appStorageV2 | AppStorageV2 | connect | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public static connect<T extends object>(ttype: Type, key: string, defaultCreator?: StorageDefaultCreator<T>): (T | undefined)` |
 | arkui.stateManagement.storage.appStorageV2 | AppStorageV2 | connect | 1 | method | external |  |  | ignore | ignore |  |  |  |  | `public static connect<T extends object>(ttype: Type, defaultCreator?: StorageDefaultCreator<T>): (T | undefined)` |
@@ -2052,6 +2057,8 @@
 | arkui.component.blank | unnamed | Blank | 0 | function | done | Blank | setBlankOptions | Native only | done | Skroba Gleb | pass |  |  | `@memo() @ComponentBuilder() export declare function Blank(min?: (number | string), @memo() content_?: (()=> void)): BlankAttribute` |
 | arkui.BlankModifier | BlankModifier | BlankModifier | 0 | class | external |  |  | ignore | ignore |  |  |  |  | `export declare class BlankModifier implements BlankAttribute, AttributeModifier<BlankAttribute> {` |
 | arkui.BlankModifier | BlankModifier | constructor | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public constructor() {}` |
+| arkui.component.builder | unnamed | Builder | 0 | annotation | Deleted because of annotation |  |  | Deleted because of annotation | TS only |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Builder {}` |
+| arkui.component.builder | unnamed | BuilderParam | 0 | annotation | Deleted because of annotation |  |  | Deleted because of annotation | TS only |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface BuilderParam {}` |
 | arkui.component.builder | unnamed | CustomBuilder | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type CustomBuilder = @Builder() (()=> void);` |
 | arkui.component.builder | unnamed | CustomBuilderT | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type CustomBuilderT<T> = @Builder() ((t: T)=> void);` |
 | arkui.component.builder | unnamed | PageMapBuilder | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type PageMapBuilder = @Builder() ((name: string, param: (Object | null | undefined))=> void);` |
@@ -3782,22 +3789,22 @@
 | arkui.component.common | GeometryInfo | borderWidth | 0 | field | generated | GeometryInfo | borderWidth | Native only | generated |  |  |  |  | `borderWidth: EdgeWidth;` |
 | arkui.component.common | GeometryInfo | margin | 0 | field | generated | GeometryInfo | margin | Native only | generated |  |  |  |  | `margin: Margin;` |
 | arkui.component.common | GeometryInfo | padding | 0 | field | generated | GeometryInfo | padding | Native only | generated |  |  |  |  | `padding: Padding;` |
-| arkui.component.common | Layoutable | Layoutable | 0 | interface | in progress | unnamed | Layoutable | Native only | in progress | Samarin Sergey |  |  |  | `export declare interface Layoutable {` |
-| arkui.component.common | Layoutable | measureResult | 0 | field | in progress | Layoutable | getMeasureResult | Native only | in progress | Samarin Sergey |  |  |  | `measureResult: MeasureResult;` |
-| arkui.component.common | Layoutable | measureResult | 0 | field | in progress | Layoutable | setMeasureResult | Native only | in progress | Samarin Sergey |  |  |  | `measureResult: MeasureResult;` |
-| arkui.component.common | Layoutable | uniqueId | 0 | field | in progress | Layoutable | getUniqueId | Native only | in progress | Samarin Sergey |  |  |  | `uniqueId?: number;` |
-| arkui.component.common | Layoutable | uniqueId | 0 | field | in progress | Layoutable | setUniqueId | Native only | in progress | Samarin Sergey |  |  |  | `uniqueId?: number;` |
-| arkui.component.common | Layoutable | layout | 0 | method |  | Layoutable | layout | Native only |  |  |  |  |  | `layout(position: Position): void` |
-| arkui.component.common | Layoutable | getMargin | 0 | method | in progress | Layoutable | getMargin | Native only | in progress | Samarin Sergey |  |  |  | `getMargin(): DirectionalEdgesT<number>` |
-| arkui.component.common | Layoutable | getPadding | 0 | method | in progress | Layoutable | getPadding | Native only | in progress | Samarin Sergey |  |  |  | `getPadding(): DirectionalEdgesT<number>` |
-| arkui.component.common | Layoutable | getBorderWidth | 0 | method | in progress | Layoutable | getBorderWidth | Native only | in progress | Samarin Sergey |  |  |  | `getBorderWidth(): DirectionalEdgesT<number>` |
-| arkui.component.common | Measurable | Measurable | 0 | interface | in progress | unnamed | Measurable | Native only | in progress | Samarin Sergey |  |  |  | `export declare interface Measurable {` |
-| arkui.component.common | Measurable | uniqueId | 0 | field | in progress | Measurable | getUniqueId | Native only | in progress | Samarin Sergey |  |  |  | `uniqueId?: number;` |
-| arkui.component.common | Measurable | uniqueId | 0 | field | in progress | Measurable | setUniqueId | Native only | in progress | Samarin Sergey |  |  |  | `uniqueId?: number;` |
-| arkui.component.common | Measurable | measure | 0 | method | in progress | Measurable | measure | Native only | in progress | Samarin Sergey |  |  |  | `measure(constraint: ConstraintSizeOptions): MeasureResult` |
-| arkui.component.common | Measurable | getMargin | 0 | method | in progress | Measurable | getMargin | Native only | in progress | Samarin Sergey |  |  |  | `getMargin(): DirectionalEdgesT<number>` |
-| arkui.component.common | Measurable | getPadding | 0 | method | in progress | Measurable | getPadding | Native only | in progress | Samarin Sergey |  |  |  | `getPadding(): DirectionalEdgesT<number>` |
-| arkui.component.common | Measurable | getBorderWidth | 0 | method | in progress | Measurable | getBorderWidth | Native only | in progress | Samarin Sergey |  |  |  | `getBorderWidth(): DirectionalEdgesT<number>` |
+| arkui.component.common | Layoutable | Layoutable | 0 | interface | done | unnamed | Layoutable | Native only | done | Samarin Sergey |  |  |  | `export declare interface Layoutable {` |
+| arkui.component.common | Layoutable | measureResult | 0 | field | done | Layoutable | getMeasureResult | Native only | done | Samarin Sergey |  |  |  | `measureResult: MeasureResult;` |
+| arkui.component.common | Layoutable | measureResult | 0 | field | done | Layoutable | setMeasureResult | Native only | done | Samarin Sergey |  |  |  | `measureResult: MeasureResult;` |
+| arkui.component.common | Layoutable | uniqueId | 0 | field | done | Layoutable | getUniqueId | Native only | done | Samarin Sergey |  |  |  | `uniqueId?: number;` |
+| arkui.component.common | Layoutable | uniqueId | 0 | field | done | Layoutable | setUniqueId | Native only | done | Samarin Sergey |  |  |  | `uniqueId?: number;` |
+| arkui.component.common | Layoutable | layout | 0 | method | done | Layoutable | layout | Native only | done | Samarin Sergey |  |  |  | `layout(position: Position): void` |
+| arkui.component.common | Layoutable | getMargin | 0 | method | done | Layoutable | getMargin | Native only | done | Samarin Sergey |  |  |  | `getMargin(): DirectionalEdgesT<number>` |
+| arkui.component.common | Layoutable | getPadding | 0 | method | done | Layoutable | getPadding | Native only | done | Samarin Sergey |  |  |  | `getPadding(): DirectionalEdgesT<number>` |
+| arkui.component.common | Layoutable | getBorderWidth | 0 | method | done | Layoutable | getBorderWidth | Native only | done | Samarin Sergey |  |  |  | `getBorderWidth(): DirectionalEdgesT<number>` |
+| arkui.component.common | Measurable | Measurable | 0 | interface | done | unnamed | Measurable | Native only | done | Samarin Sergey |  |  |  | `export declare interface Measurable {` |
+| arkui.component.common | Measurable | uniqueId | 0 | field | done | Measurable | getUniqueId | Native only | done | Samarin Sergey |  |  |  | `uniqueId?: number;` |
+| arkui.component.common | Measurable | uniqueId | 0 | field | done | Measurable | setUniqueId | Native only | done | Samarin Sergey |  |  |  | `uniqueId?: number;` |
+| arkui.component.common | Measurable | measure | 0 | method | done | Measurable | measure | Native only | done | Samarin Sergey |  |  |  | `measure(constraint: ConstraintSizeOptions): MeasureResult` |
+| arkui.component.common | Measurable | getMargin | 0 | method | done | Measurable | getMargin | Native only | done | Samarin Sergey |  |  |  | `getMargin(): DirectionalEdgesT<number>` |
+| arkui.component.common | Measurable | getPadding | 0 | method | done | Measurable | getPadding | Native only | done | Samarin Sergey |  |  |  | `getPadding(): DirectionalEdgesT<number>` |
+| arkui.component.common | Measurable | getBorderWidth | 0 | method | done | Measurable | getBorderWidth | Native only | done | Samarin Sergey |  |  |  | `getBorderWidth(): DirectionalEdgesT<number>` |
 | arkui.component.common | SizeResult | SizeResult | 0 | interface | generated | unnamed | SizeResult | Native only | generated |  |  |  |  | `export declare interface SizeResult {` |
 | arkui.component.common | SizeResult | width | 0 | field | generated | SizeResult | width | Native only | generated |  |  |  |  | `width: number;` |
 | arkui.component.common | SizeResult | height | 0 | field | generated | SizeResult | height | Native only | generated |  |  |  |  | `height: number;` |
@@ -4007,6 +4014,13 @@
 | arkui.component.counter | unnamed | Counter | 0 | function | done | Counter | setCounterOptions | Native only | done | Erokhin Ilya | pass |  |  | `@memo() @ComponentBuilder() export declare function Counter(@memo() content_?: (()=> void)): CounterAttribute` |
 | arkui.CounterModifier | CounterModifier | CounterModifier | 0 | class | external |  |  | ignore | ignore |  |  |  |  | `export declare class CounterModifier implements CounterAttribute, AttributeModifier<CounterAttribute> {` |
 | arkui.CounterModifier | CounterModifier | constructor | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public constructor() {}` |
+| arkui.component.customComponent | unnamed | Entry | 0 | annotation | Deleted because of annotation |  |  | Deleted because of annotation | TS only |  |  |  |  | `@Retention({policy:"SOURCE"}) export @interface Entry {` |
+| arkui.component.customComponent | unnamed | Component | 0 | annotation | Deleted because of annotation |  |  | Deleted because of annotation | TS only |  |  |  |  | `@Retention({policy:"SOURCE"}) export @interface Component {}` |
+| arkui.component.customComponent | unnamed | ComponentV2 | 0 | annotation | Deleted because of annotation |  |  | Deleted because of annotation | TS only |  |  |  |  | `@Retention({policy:"SOURCE"}) export @interface ComponentV2 {}` |
+| arkui.component.customComponent | unnamed | Reusable | 0 | annotation | Deleted because of annotation |  |  | Deleted because of annotation | TS only |  |  |  |  | `@Retention({policy:"SOURCE"}) export @interface Reusable {}` |
+| arkui.component.customComponent | unnamed | ReusableV2 | 0 | annotation | Deleted because of annotation |  |  | Deleted because of annotation | TS only |  |  |  |  | `@Retention({policy:"SOURCE"}) export @interface ReusableV2 {}` |
+| arkui.component.customComponent | unnamed | CustomLayout | 0 | annotation | Deleted because of annotation |  |  | Deleted because of annotation | TS only |  |  |  |  | `@Retention({policy:"SOURCE"}) export @interface CustomLayout {}` |
+| arkui.component.customComponent | unnamed | CustomDialog | 0 | annotation | Deleted because of annotation |  |  | Deleted because of annotation | TS only |  |  |  |  | `@Retention({policy:"SOURCE"}) export @interface CustomDialog {}` |
 | arkui.component.customComponent | BaseCustomDialog | BaseCustomDialog | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare abstract class BaseCustomDialog<T extends BaseCustomDialog<T, T_Options>, T_Options>  extends ExtendableComponent {` |
 | arkui.component.customComponent | BaseCustomDialog | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor(useSharedStorage?: boolean, storage?: LocalStorage)` |
 | arkui.component.customComponent | BaseCustomDialog | $_instantiate | 0 | method |  |  |  |  | TS only |  |  |  |  | `@ComponentBuilder() public static $_instantiate(factory: (()=> T), initializers?: T_Options, @Builder() content?: (()=> void)): T` |
@@ -4165,6 +4179,33 @@
 | arkui.component.datePicker | unnamed | DatePicker | 0 | function | done | DatePicker | setDatePickerOptions | Native only | done | Vadim Voronov | pass |  |  | `@memo() @ComponentBuilder() export declare function DatePicker(options?: DatePickerOptions, @memo() content_?: (()=> void)): DatePickerAttribute` |
 | arkui.DatePickerModifier | DatePickerModifier | DatePickerModifier | 0 | class | external |  |  | ignore | ignore |  |  |  |  | `export declare class DatePickerModifier implements DatePickerAttribute, AttributeModifier<DatePickerAttribute> {` |
 | arkui.DatePickerModifier | DatePickerModifier | constructor | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public constructor() {}` |
+| arkui.stateManagement.decorator | unnamed | State | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface State {}` |
+| arkui.stateManagement.decorator | unnamed | Prop | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Prop {}` |
+| arkui.stateManagement.decorator | unnamed | PropRef | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface PropRef {}` |
+| arkui.stateManagement.decorator | unnamed | Link | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Link {}` |
+| arkui.stateManagement.decorator | unnamed | Observed | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Observed {}` |
+| arkui.stateManagement.decorator | unnamed | Track | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Track {}` |
+| arkui.stateManagement.decorator | unnamed | ObjectLink | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface ObjectLink {}` |
+| arkui.stateManagement.decorator | unnamed | StorageProp | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface StorageProp {` |
+| arkui.stateManagement.decorator | unnamed | StoragePropRef | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface StoragePropRef {` |
+| arkui.stateManagement.decorator | unnamed | StorageLink | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface StorageLink {` |
+| arkui.stateManagement.decorator | unnamed | LocalStorageProp | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface LocalStorageProp {` |
+| arkui.stateManagement.decorator | unnamed | LocalStoragePropRef | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface LocalStoragePropRef {` |
+| arkui.stateManagement.decorator | unnamed | LocalStorageLink | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface LocalStorageLink {` |
+| arkui.stateManagement.decorator | unnamed | Provide | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Provide {` |
+| arkui.stateManagement.decorator | unnamed | Consume | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Consume {` |
+| arkui.stateManagement.decorator | unnamed | Watch | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Watch {` |
+| arkui.stateManagement.decorator | unnamed | Require | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Require {}` |
+| arkui.stateManagement.decorator | unnamed | Local | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Local {}` |
+| arkui.stateManagement.decorator | unnamed | Param | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Param {}` |
+| arkui.stateManagement.decorator | unnamed | Once | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Once {}` |
+| arkui.stateManagement.decorator | unnamed | Event | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Event {}` |
+| arkui.stateManagement.decorator | unnamed | Provider | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Provider {` |
+| arkui.stateManagement.decorator | unnamed | Consumer | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Consumer {` |
+| arkui.stateManagement.decorator | unnamed | ObservedV2 | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface ObservedV2 {}` |
+| arkui.stateManagement.decorator | unnamed | Trace | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Trace {}` |
+| arkui.stateManagement.decorator | unnamed | Computed | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Computed {}` |
+| arkui.stateManagement.decorator | unnamed | Monitor | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface Monitor {` |
 | arkui.stateManagement.decorator | IMonitor | IMonitor | 0 | interface | external |  |  | ignore | ignore |  |  |  |  | `export declare interface IMonitor {` |
 | arkui.stateManagement.decorator | IMonitor | dirty | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `dirty: Array<string>;` |
 | arkui.stateManagement.decorator | IMonitor | value | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `value<T>(path?: string): (IMonitorValue<T> | undefined)` |
@@ -4211,9 +4252,11 @@
 | arkui.stateManagement.decorator | IObserve | renderingComponent | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `readonly renderingComponent: int;` |
 | arkui.stateManagement.decorator | IObserve | renderingId | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `readonly renderingId: RenderIdType;` |
 | arkui.stateManagement.decorator | IObserve | shouldAddRef | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `shouldAddRef(iObjectsRenderId: RenderIdType): boolean` |
+| arkui.stateManagement.decorator | unnamed | OBSERVE | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `declare const OBSERVE: IObserve` |
 | arkui.stateManagement.decorator | unnamed | RenderIdType | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `export type RenderIdType = int;` |
 | arkui.stateManagement.decorator | IObservedObject | IObservedObject | 0 | interface | external |  |  | ignore | ignore |  |  |  |  | `export declare interface IObservedObject extends IWatchSubscriberRegister {` |
 | arkui.stateManagement.decorator | IObservedObject | setV1RenderId | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `setV1RenderId(renderId: RenderIdType): void` |
+| arkui.stateManagement.decorator | unnamed | STATE_MGMT_FACTORY | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `declare const STATE_MGMT_FACTORY: IStateMgmtFactory` |
 | arkui.stateManagement.decorator | IStateMgmtFactory | IStateMgmtFactory | 0 | interface | external |  |  | ignore | ignore |  |  |  |  | `export declare interface IStateMgmtFactory {` |
 | arkui.stateManagement.decorator | IStateMgmtFactory | makeMutableStateMeta | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `makeMutableStateMeta(): IMutableStateMeta` |
 | arkui.stateManagement.decorator | IStateMgmtFactory | makeSubscribedWatches | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `makeSubscribedWatches(): ISubscribedWatches` |
@@ -7404,6 +7447,8 @@
 | arkui.component.rowSplit | unnamed | RowSplit | 0 | function | done | RowSplit | setRowSplitOptions | Native only | done | Dmitry A Smirnov | failed |  | OHOSUI-2201 Text in rowSplit does not appear | `@memo() @ComponentBuilder() export declare function RowSplit(@memo() content_?: (()=> void)): RowSplitAttribute` |
 | arkui.RowSplitModifier | RowSplitModifier | RowSplitModifier | 0 | class | external |  |  | ignore | ignore |  |  |  |  | `export declare class RowSplitModifier implements RowSplitAttribute, AttributeModifier<RowSplitAttribute> {` |
 | arkui.RowSplitModifier | RowSplitModifier | constructor | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public constructor() {}` |
+| arkui.stateManagement.runtime | unnamed | memo | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface memo {}` |
+| arkui.stateManagement.runtime | unnamed | ComponentBuilder | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export @interface ComponentBuilder {}` |
 | arkui.stateManagement.runtime | unnamed | MemoCallSiteKey | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `export type MemoCallSiteKey = int;` |
 | arkui.stateManagement.runtime | Disposable | Disposable | 0 | interface | external |  |  | ignore | ignore |  |  |  |  | `export interface Disposable {` |
 | arkui.stateManagement.runtime | Disposable | disposed | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `readonly disposed: boolean;` |
@@ -7435,6 +7480,7 @@
 | arkui.stateManagement.runtime | SyncedProperty | value | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public get value(): T` |
 | arkui.stateManagement.runtime | SyncedProperty | value | 1 | method | external |  |  | ignore | ignore |  |  |  |  | `public set value(value: T)` |
 | arkui.stateManagement.runtime | SyncedProperty | update | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public update(value?: T): void` |
+| arkui.stateManagement.runtime | unnamed | MemoSkip | 0 | annotation | external |  |  | ignore | ignore |  |  |  |  | `@Retention({policy:"SOURCE"}) export declare @interface MemoSkip {}` |
 | arkui.component.saveButton | SaveIconStyle | SaveIconStyle | 0 | enum_class | generated | unnamed | SaveIconStyle | Native only | generated |  |  |  |  | `enum SaveIconStyle {` |
 | arkui.component.saveButton | SaveIconStyle | FULL_FILLED | 0 | enum_instance | generated | SaveIconStyle | FULL_FILLED | Native only | generated |  |  |  |  | `FULL_FILLED = 0` |
 | arkui.component.saveButton | SaveIconStyle | LINES | 0 | enum_instance | generated | SaveIconStyle | LINES | Native only | generated |  |  |  |  | `LINES = 1` |
