@@ -142,6 +142,16 @@ export class AllPeersPrinter extends MultiFilePrinter {
             )
         }
 
+        // Aliases for widely used types
+        writer.writeExpressionStatements(...[
+            'import { parser } from "./peers/parser"',
+            'import { es2panda } from "./peers/es2panda"',
+
+            'export class Program extends parser.Program {}',
+            'export class ArkTsConfig extends es2panda.ArkTsConfig {}',
+            ].map(s => writer.makeString(s))
+        )
+
         return writer.getOutput().join('\n')
     }
 }
