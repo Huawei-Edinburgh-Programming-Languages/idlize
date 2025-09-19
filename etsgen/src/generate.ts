@@ -587,7 +587,18 @@ class IDLVisitor extends arkts.AbstractVisitor {
             if (arkts.isETSModule(node) && node.ident?.name !== 'ETSGLOBAL') {
                 return this.processNode(this.visitETSModule, node)
             }
-
+            if (arkts.isAnnotationDeclaration(node)) {
+                return this.processNode((node: arkts.AstNode) => {
+                    this.traceDeleted('annotation')
+                    return node
+                }, node)
+            }
+            if (arkts.arkts.isVariableDeclaration(node)) {
+                return this.processNode((node: arkts.AstNode) => {
+                    this.traceDeleted('variable')
+                    return node
+                }, node)
+            }
             //////////////////
 
             return this.visitEachChild(node)
@@ -1764,6 +1775,8 @@ class IDLVisitor extends arkts.AbstractVisitor {
         if (arkts.isMethodDefinition(node)) return 'method'
         if (arkts.isOverloadDeclaration(node)) return 'method'
         if (arkts.isTSTypeAliasDeclaration(node)) return 'field' // !!!
+        if (arkts.isAnnotationDeclaration(node)) return 'annotation'
+        if (arkts.isVariableDeclaration(node)) return 'field'
         throw new Error("Unknown node type!")
     }
 
@@ -1778,6 +1791,8 @@ class IDLVisitor extends arkts.AbstractVisitor {
         if (arkts.isMethodDefinition(node)) return node.id!.name
         if (arkts.isTSTypeAliasDeclaration(node)) return node.id!.name
         if (arkts.isOverloadDeclaration(node)) return node.id!.name
+        if (arkts.isAnnotationDeclaration(node)) return node.baseName!.name
+        if (arkts.isVariableDeclaration(node)) return node.declarators[0]!.id!.toString
         throw new Error("Unknown node type!")
     }
 
