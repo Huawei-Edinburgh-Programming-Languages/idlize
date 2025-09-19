@@ -21,7 +21,6 @@ import {
     IDLKind,
     IDLNamespace,
     IDLNode,
-    IDLReferenceType,
     IDLType,
     IndentedPrinter,
     isInterface,
@@ -31,7 +30,6 @@ import { Importer } from "./Importer"
 import { PeerPrinter } from "./PeerPrinter"
 import { Config } from "../../general/Config"
 import { createDefaultTypescriptWriter, fqName } from "../../utils/idl"
-import { dropPrefix } from "../../utils/string"
 import { PeersConstructions } from "../../constuctions/PeersConstructions"
 import { convertAndImport } from "../../type-convertors/top-level/ImporterTypeConvertor"
 import { LibraryTypeConvertor } from "../../type-convertors/top-level/LibraryTypeConvertor"

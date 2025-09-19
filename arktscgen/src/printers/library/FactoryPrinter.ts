@@ -20,20 +20,16 @@ import {
     IDLFile,
     IDLInterface,
     IDLMethod,
-    IDLNode,
     IDLParameter,
     IDLProperty,
-    IDLReferenceType,
     IDLType,
     IndentedPrinter,
-    isInterface,
-    isOptionalType,
     Method,
     throwException,
     TSLanguageWriter
 } from "@idlizer/core"
 import { SingleFilePrinter } from "../SingleFilePrinter"
-import { makeMethod, makeSignature } from "../../utils/idl"
+import { makeSignature } from "../../utils/idl"
 import { isCreate, mangleIfKeyword, peerMethod } from "../../general/common"
 import { PeersConstructions } from "../../constuctions/PeersConstructions"
 import { convertAndImport } from "../../type-convertors/top-level/ImporterTypeConvertor"
@@ -43,8 +39,6 @@ import { id } from "../../utils/types"
 import { FactoryConstructions } from "../../constuctions/FactoryConstructions"
 import { PeerPrinter } from "./PeerPrinter"
 import { Config } from "../../general/Config"
-import { ExtraParameter } from "../../options/ExtraParameters"
-import { dropPrefix } from "../../utils/string"
 
 export class FactoryPrinter extends SingleFilePrinter {
     protected importer = new Importer(this.typechecker, `peers`)
