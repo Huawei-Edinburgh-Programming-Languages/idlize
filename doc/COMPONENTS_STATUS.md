@@ -1615,10 +1615,10 @@
 |`construct`|Function||||
 | *ConditionScope*                                     | *Component* |                                  |                   |
 |`construct`| Function    |                                  |                   |
-|*CustomLayoutRoot*| *Component* | Erokhin Ilya | in progress | | |
-|`construct`| Function | Erokhin Ilya | in progress | | |
-|`setSubscribeOnMeasureSize`| Function | Erokhin Ilya | in progress | | |
-|`setSubscribeOnPlaceChildren`| Function | Erokhin Ilya | in progress | | |
+|*CustomLayoutRoot*| *Component* | Erokhin Ilya | done | | |
+|`construct`| Function | Erokhin Ilya | done | | |
+|`setSubscribeOnMeasureSize`| Function | Erokhin Ilya | done | | |
+|`setSubscribeOnPlaceChildren`| Function | Erokhin Ilya | done | | |
 |*Ability*|*Class*||||
 |`construct`|Function||||
 |`onConfigurationUpdate`|Function||||
@@ -2916,16 +2916,16 @@
 |`setGetModifierKeyState`| Function | done | | | |
 |`getUnicode`| Function | Maksimov Nikita | done | | |
 |`setUnicode`| Function | Maksimov Nikita | done | | |
-|*Layoutable*| *Class* | Samarin Sergey | in progress | | |
-|`construct`| Function | Samarin Sergey | in progress | | |
-|`layout`|Function||||
-|`getMargin`| Function | Samarin Sergey | in progress | | |
-|`getPadding`| Function | Samarin Sergey | in progress | | |
-|`getBorderWidth`| Function | Samarin Sergey | in progress | | |
-|`getMeasureResult`| Function | Samarin Sergey | in progress | | |
-|`setMeasureResult`| Function | Samarin Sergey | in progress | | |
-|`getUniqueId`| Function | Samarin Sergey | in progress | | |
-|`setUniqueId`| Function | Samarin Sergey | in progress | | |
+|*Layoutable*| *Class* | Samarin Sergey | done | | |
+|`construct`| Function | Samarin Sergey | done | | |
+|`layout`|Function|Samarin Sergey | done | | |
+|`getMargin`| Function | Samarin Sergey | done | | |
+|`getPadding`| Function | Samarin Sergey | done | | |
+|`getBorderWidth`| Function | Samarin Sergey | done | | |
+|`getMeasureResult`| Function | Samarin Sergey | done | | |
+|`setMeasureResult`| Function | Samarin Sergey | done | | |
+|`getUniqueId`| Function | Samarin Sergey | done | | |
+|`setUniqueId`| Function | Samarin Sergey | done | | |
 |*LayoutChild*|*Class*||||
 |`construct`|Function||||
 |`measure`|Function||||
@@ -3024,14 +3024,14 @@
 |`rotate`| Function | Samarin Sergey | done | failed | to submit internal issue |
 |`transformPoint`| Function | Samarin Sergey | done | | |
 |`setPolyToPoly`| Function | Samarin Sergey | testskipped | | |
-|*Measurable*| *Class* | Samarin Sergey | in progress | | |
-|`construct`| Function | Samarin Sergey | in progress | | |
-|`measure`| Function | Samarin Sergey | in progress | | |
-|`getMargin`| Function | Samarin Sergey | in progress | | |
-|`getPadding`| Function | Samarin Sergey | in progress | | |
-|`getBorderWidth`| Function | Samarin Sergey | in progress | | |
-|`getUniqueId`| Function | Samarin Sergey | in progress | | |
-|`setUniqueId`| Function | Samarin Sergey | in progress | | |
+|*Measurable*| *Class* | Samarin Sergey | done | | |
+|`construct`| Function | Samarin Sergey | done | | |
+|`measure`| Function | Samarin Sergey | done | | |
+|`getMargin`| Function | Samarin Sergey | done | | |
+|`getPadding`| Function | Samarin Sergey | done | | |
+|`getBorderWidth`| Function | Samarin Sergey | done | | |
+|`getUniqueId`| Function | Samarin Sergey | done | | |
+|`setUniqueId`| Function | Samarin Sergey | done | | |
 |*MeasureUtils*|*Class*||||
 |`construct`   |Function||||
 |`measureText` |Function||||
