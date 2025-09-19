@@ -2055,7 +2055,7 @@
 | arkui.component.builder | unnamed | CustomBuilder | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type CustomBuilder = @Builder() (()=> void);` |
 | arkui.component.builder | unnamed | CustomBuilderT | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type CustomBuilderT<T> = @Builder() ((t: T)=> void);` |
 | arkui.component.builder | unnamed | PageMapBuilder | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type PageMapBuilder = @Builder() ((name: string, param: (Object | null | undefined))=> void);` |
-| arkui.component.builder | unnamed | wrapBuilder | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare function wrapBuilder<T>(builder: T): WrappedBuilder<T>` |
+| arkui.component.builder | unnamed | wrapBuilder | 0 | function |  |  |  |  | TS only |  |  |  |  | `export declare function wrapBuilder<T>(builder: T): WrappedBuilder<T>` |
 | arkui.component.builder | WrappedBuilder | WrappedBuilder | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare class WrappedBuilder<T>  {` |
 | arkui.component.builder | WrappedBuilder | builder | 0 | field |  |  |  |  | TS only |  |  |  |  | `@Builder() public builder: T;` |
 | arkui.component.builder | WrappedBuilder | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor(builder: T)` |
@@ -2408,7 +2408,8 @@
 | arkui.component.column | unnamed | SpaceType | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type SpaceType = (string | number | Resource);` |
 | arkui.component.column | ColumnOptions | ColumnOptions | 0 | interface | generated | unnamed | ColumnOptions | Native only | generated |  |  |  |  | `export interface ColumnOptions {` |
 | arkui.component.column | ColumnOptions | space | 0 | field | generated | ColumnOptions | space | Native only | generated |  |  |  |  | `space?: (string | number);` |
-| arkui.component.column | ColumnOptionsV2 | ColumnOptionsV2 | 0 | interface | Deleted because of StubbedDeclarations |  |  | Deleted because of StubbedDeclarations | TS only |  |  |  |  | `export interface ColumnOptionsV2 {` |
+| arkui.component.column | ColumnOptionsV2 | ColumnOptionsV2 | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface ColumnOptionsV2 {` |
+| arkui.component.column | ColumnOptionsV2 | space | 0 | field |  |  |  |  | TS only |  |  |  |  | `space?: SpaceType;` |
 | arkui.component.column | ColumnAttribute | ColumnAttribute | 0 | interface | blocked IDL | unnamed | Column | Native only | blocked IDL | Politov Mikhail |  |  | https://gitee.com/nikolay-igotti/idlize/issues/ICYOTV | `export declare interface ColumnAttribute extends CommonMethod {` |
 | arkui.component.column | ColumnAttribute | alignItems | 0 | method | done | Column | setAlignItems | Native only | done | Politov Mikhail | pass |  |  | `alignItems(value: (HorizontalAlign | undefined)): this` |
 | arkui.component.column | ColumnAttribute | justifyContent | 0 | method | done | Column | setJustifyContent | Native only | done | Politov Mikhail | pass |  |  | `justifyContent(value: (FlexAlign | undefined)): this` |
@@ -2440,7 +2441,11 @@
 | arkui.component.common | DividerStyle | color | 0 | field | generated | DividerStyle | color | Native only | generated |  |  |  |  | `color?: ResourceColor;` |
 | arkui.component.common | DividerStyle | startMargin | 0 | field | generated | DividerStyle | startMargin | Native only | generated |  |  |  |  | `startMargin?: Length;` |
 | arkui.component.common | DividerStyle | endMargin | 0 | field | generated | DividerStyle | endMargin | Native only | generated |  |  |  |  | `endMargin?: Length;` |
-| arkui.component.common | AnimatableArithmetic | AnimatableArithmetic | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare interface AnimatableArithmetic<T> {` |
+| arkui.component.common | AnimatableArithmetic | AnimatableArithmetic | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export declare interface AnimatableArithmetic<T> {` |
+| arkui.component.common | AnimatableArithmetic | plus | 0 | method |  |  |  |  | TS only |  |  |  |  | `plus(rhs: AnimatableArithmetic<T>): AnimatableArithmetic<T>` |
+| arkui.component.common | AnimatableArithmetic | subtract | 0 | method |  |  |  |  | TS only |  |  |  |  | `subtract(rhs: AnimatableArithmetic<T>): AnimatableArithmetic<T>` |
+| arkui.component.common | AnimatableArithmetic | multiply | 0 | method |  |  |  |  | TS only |  |  |  |  | `multiply(scale: number): AnimatableArithmetic<T>` |
+| arkui.component.common | AnimatableArithmetic | equals | 0 | method |  |  |  |  | TS only |  |  |  |  | `equals(rhs: AnimatableArithmetic<T>): boolean` |
 | arkui.component.common | unnamed | ReuseIdCallback | 0 | field | generated | unnamed | ReuseIdCallback | Native only | generated |  |  |  |  | `export type ReuseIdCallback = (()=> string);` |
 | arkui.component.common | ReuseOptions | ReuseOptions | 0 | interface | generated | unnamed | ReuseOptions | Native only | generated |  |  |  |  | `export declare interface ReuseOptions {` |
 | arkui.component.common | ReuseOptions | reuseId | 0 | field | generated | ReuseOptions | reuseId | Native only | generated |  |  |  |  | `reuseId?: ReuseIdCallback;` |
@@ -2668,7 +2673,14 @@
 | arkui.component.common | HorizontalAlignParam | HorizontalAlignParam | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export declare interface HorizontalAlignParam {` |
 | arkui.component.common | HorizontalAlignParam | anchor | 0 | field |  |  |  |  | TS only |  |  |  |  | `anchor: string;` |
 | arkui.component.common | HorizontalAlignParam | align | 0 | field |  |  |  |  | TS only |  |  |  |  | `align: HorizontalAlign;` |
-| arkui.component.common | AlignRuleOption | AlignRuleOption | 0 | interface | Deleted because of StubbedDeclarations |  |  | Deleted because of StubbedDeclarations | TS only |  |  |  |  | `export declare interface AlignRuleOption {` |
+| arkui.component.common | AlignRuleOption | AlignRuleOption | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export declare interface AlignRuleOption {` |
+| arkui.component.common | AlignRuleOption | left | 0 | field |  |  |  |  | TS only |  |  |  |  | `left?: HorizontalAlignParam;` |
+| arkui.component.common | AlignRuleOption | right | 0 | field |  |  |  |  | TS only |  |  |  |  | `right?: HorizontalAlignParam;` |
+| arkui.component.common | AlignRuleOption | middle | 0 | field |  |  |  |  | TS only |  |  |  |  | `middle?: HorizontalAlignParam;` |
+| arkui.component.common | AlignRuleOption | top | 0 | field |  |  |  |  | TS only |  |  |  |  | `top?: VerticalAlignParam;` |
+| arkui.component.common | AlignRuleOption | bottom | 0 | field |  |  |  |  | TS only |  |  |  |  | `bottom?: VerticalAlignParam;` |
+| arkui.component.common | AlignRuleOption | center | 0 | field |  |  |  |  | TS only |  |  |  |  | `center?: VerticalAlignParam;` |
+| arkui.component.common | AlignRuleOption | bias | 0 | field |  |  |  |  | TS only |  |  |  |  | `bias?: Bias;` |
 | arkui.component.common | LocalizedHorizontalAlignParam | LocalizedHorizontalAlignParam | 0 | interface | generated | unnamed | LocalizedHorizontalAlignParam | Native only | generated |  |  |  |  | `export declare interface LocalizedHorizontalAlignParam {` |
 | arkui.component.common | LocalizedHorizontalAlignParam | anchor | 0 | field | generated | LocalizedHorizontalAlignParam | anchor | Native only | generated |  |  |  |  | `anchor: string;` |
 | arkui.component.common | LocalizedHorizontalAlignParam | align | 0 | field | generated | LocalizedHorizontalAlignParam | align | Native only | generated |  |  |  |  | `align: HorizontalAlign;` |
@@ -3945,7 +3957,7 @@
 | arkui.component.common | Bindable | onChange | 0 | field | generated | Bindable_Array_Arkui_Component_Units_ResourceStr | onChange | Native only | generated |  |  |  |  | `readonly onChange: Callback<T>;` |
 | arkui.component.common | unnamed | BindableResourceStr | 0 | field | generated | unnamed | BindableResourceStr | Native only | generated |  |  |  |  | `export type BindableResourceStr = (ResourceStr | Bindable<ResourceStr> | Bindable<Resource> | Bindable<string>);` |
 | arkui.component.common | unnamed | BindableResourceStrArray | 0 | field | generated | unnamed | BindableResourceStrArray | Native only | generated |  |  |  |  | `export type BindableResourceStrArray = (ResourceStr[] | Bindable<ResourceStr[]> | Bindable<Resource[]> | Bindable<string[]>);` |
-| arkui.component.common | unnamed | $$ | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare function $$<T>(value: T): Bindable<T>` |
+| arkui.component.common | unnamed | $$ | 0 | function |  |  |  |  | TS only |  |  |  |  | `export declare function $$<T>(value: T): Bindable<T>` |
 | arkui.component.common | unnamed | applyStyles | 0 | function |  |  |  |  | TS only |  |  |  |  | `export declare function applyStyles<T extends CommonMethod>(self: T, customStyles: CustomStyles): T` |
 | arkui.CommonModifier | CommonModifier | CommonModifier | 0 | class | external |  |  | ignore | ignore |  |  |  |  | `export declare class CommonModifier implements CommonAttribute, AttributeModifier<CommonAttribute> {` |
 | arkui.CommonModifier | CommonModifier | constructor | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public constructor() {}` |
@@ -3995,6 +4007,29 @@
 | arkui.component.counter | unnamed | Counter | 0 | function | done | Counter | setCounterOptions | Native only | done | Erokhin Ilya | pass |  |  | `@memo() @ComponentBuilder() export declare function Counter(@memo() content_?: (()=> void)): CounterAttribute` |
 | arkui.CounterModifier | CounterModifier | CounterModifier | 0 | class | external |  |  | ignore | ignore |  |  |  |  | `export declare class CounterModifier implements CounterAttribute, AttributeModifier<CounterAttribute> {` |
 | arkui.CounterModifier | CounterModifier | constructor | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public constructor() {}` |
+| arkui.component.customComponent | BaseCustomDialog | BaseCustomDialog | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare abstract class BaseCustomDialog<T extends BaseCustomDialog<T, T_Options>, T_Options>  extends ExtendableComponent {` |
+| arkui.component.customComponent | BaseCustomDialog | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor(useSharedStorage?: boolean, storage?: LocalStorage)` |
+| arkui.component.customComponent | BaseCustomDialog | $_instantiate | 0 | method |  |  |  |  | TS only |  |  |  |  | `@ComponentBuilder() public static $_instantiate(factory: (()=> T), initializers?: T_Options, @Builder() content?: (()=> void)): T` |
+| arkui.component.customComponent | BaseCustomComponent | BaseCustomComponent | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare abstract class BaseCustomComponent extends ExtendableComponent {` |
+| arkui.component.customComponent | BaseCustomComponent | aboutToRecycle | 0 | method |  |  |  |  | TS only |  |  |  |  | `public aboutToRecycle(): void` |
+| arkui.component.customComponent | BaseCustomComponent | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor() {}` |
+| arkui.component.customComponent | CustomComponent | CustomComponent | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare abstract class CustomComponent<T extends CustomComponent<T, T_Options>, T_Options>  extends BaseCustomComponent {` |
+| arkui.component.customComponent | CustomComponent | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor(useSharedStorage?: boolean, storage?: LocalStorage)` |
+| arkui.component.customComponent | CustomComponent | $_instantiate | 0 | method |  |  |  |  | TS only |  |  |  |  | `@ComponentBuilder() public static $_instantiate(factory: (()=> T), initializers?: T_Options, reuseId?: string, @Builder() content?: (()=> void)): T` |
+| arkui.component.customComponent | CustomComponent | aboutToReuse | 0 | method |  |  |  |  | TS only |  |  |  |  | `public aboutToReuse(params: Record<string, Object>): void` |
+| arkui.component.customComponent | CustomComponentV2 | CustomComponentV2 | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare abstract class CustomComponentV2<T extends CustomComponentV2<T, T_Options>, T_Options>  extends BaseCustomComponent {` |
+| arkui.component.customComponent | CustomComponentV2 | $_instantiate | 0 | method |  |  |  |  | TS only |  |  |  |  | `@ComponentBuilder() public static $_instantiate(factory: (()=> T), initializers?: T_Options, reuseId?: string, @Builder() content?: (()=> void)): T` |
+| arkui.component.customComponent | CustomComponentV2 | aboutToReuse | 0 | method |  |  |  |  | TS only |  |  |  |  | `public aboutToReuse(): void` |
+| arkui.component.customComponent | CustomComponentV2 | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor() {}` |
+| arkui.component.customComponent | PageLifeCycle | PageLifeCycle | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface PageLifeCycle {` |
+| arkui.component.customComponent | PageLifeCycle | onPageShow | 0 | method |  |  |  |  | TS only |  |  |  |  | `onPageShow(): void {}` |
+| arkui.component.customComponent | PageLifeCycle | onPageHide | 0 | method |  |  |  |  | TS only |  |  |  |  | `onPageHide(): void {}` |
+| arkui.component.customComponent | PageLifeCycle | onBackPress | 0 | method |  |  |  |  | TS only |  |  |  |  | `onBackPress(): boolean {` |
+| arkui.component.customComponent | PageLifeCycle | pageTransition | 0 | method |  |  |  |  | TS only |  |  |  |  | `pageTransition(): void {}` |
+| arkui.component.customComponent | PageLifeCycle | onNewParam | 0 | method |  |  |  |  | TS only |  |  |  |  | `onNewParam(param: (object | undefined | null)): void {}` |
+| arkui.component.customComponent | LayoutCallback | LayoutCallback | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface LayoutCallback {` |
+| arkui.component.customComponent | LayoutCallback | onPlaceChildren | 0 | method |  |  |  |  | TS only |  |  |  |  | `onPlaceChildren(selfLayoutInfo: GeometryInfo, children: Array<Layoutable>, constraint: ConstraintSizeOptions): void {}` |
+| arkui.component.customComponent | LayoutCallback | onMeasureSize | 0 | method |  |  |  |  | TS only |  |  |  |  | `onMeasureSize(selfLayoutInfo: GeometryInfo, children: Array<Measurable>, constraint: ConstraintSizeOptions): SizeResult {` |
 | arkui.component.customDialogController | CustomDialogControllerOptions | CustomDialogControllerOptions | 0 | interface | generated | unnamed | CustomDialogControllerOptions | Native only | generated |  |  |  |  | `export declare interface CustomDialogControllerOptions {` |
 | arkui.component.customDialogController | CustomDialogControllerOptions | builder | 0 | field | generated | CustomDialogControllerOptions | builder | Native only | generated |  |  |  |  | `builder: (CustomBuilder | ExtendableComponent);` |
 | arkui.component.customDialogController | CustomDialogControllerOptions | cancel | 0 | field | generated | CustomDialogControllerOptions | cancel | Native only | generated |  |  |  |  | `cancel?: (()=> void);` |
@@ -4131,7 +4166,12 @@
 | arkui.DatePickerModifier | DatePickerModifier | DatePickerModifier | 0 | class | external |  |  | ignore | ignore |  |  |  |  | `export declare class DatePickerModifier implements DatePickerAttribute, AttributeModifier<DatePickerAttribute> {` |
 | arkui.DatePickerModifier | DatePickerModifier | constructor | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public constructor() {}` |
 | arkui.stateManagement.decorator | IMonitor | IMonitor | 0 | interface | external |  |  | ignore | ignore |  |  |  |  | `export declare interface IMonitor {` |
+| arkui.stateManagement.decorator | IMonitor | dirty | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `dirty: Array<string>;` |
+| arkui.stateManagement.decorator | IMonitor | value | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `value<T>(path?: string): (IMonitorValue<T> | undefined)` |
 | arkui.stateManagement.decorator | IMonitorValue | IMonitorValue | 0 | interface | external |  |  | ignore | ignore |  |  |  |  | `export declare interface IMonitorValue<T> {` |
+| arkui.stateManagement.decorator | IMonitorValue | before | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `before: T;` |
+| arkui.stateManagement.decorator | IMonitorValue | now | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `now: T;` |
+| arkui.stateManagement.decorator | IMonitorValue | path | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `path: string;` |
 | arkui.stateManagement.decorator | IDecoratedVariable | IDecoratedVariable | 0 | interface | external |  |  | ignore | ignore |  |  |  |  | `export declare interface IDecoratedVariable {` |
 | arkui.stateManagement.decorator | IDecoratedVariable | varName | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `readonly varName: string;` |
 | arkui.stateManagement.decorator | IDecoratedV1Variable | IDecoratedV1Variable | 0 | interface | external |  |  | ignore | ignore |  |  |  |  | `export declare interface IDecoratedV1Variable<T> extends IDecoratedVariable {` |
@@ -4798,8 +4838,8 @@
 | arkui.FolderStackModifier | FolderStackModifier | constructor | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public constructor() {}` |
 | arkui.component.forEach | unnamed | ItemGeneratorFunc | 0 | field |  |  |  |  | TS only |  |  |  |  | `@Builder() type ItemGeneratorFunc<T> = ((item: T, index: number)=> void);` |
 | arkui.component.forEach | unnamed | KeyGeneratorFunc | 0 | field |  |  |  |  | TS only |  |  |  |  | `type KeyGeneratorFunc<T> = ((item: T, index: number)=> string);` |
-| arkui.component.forEach | ForEachAttribute | ForEachAttribute | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export interface ForEachAttribute extends DynamicNode {` |
-| arkui.component.forEach | unnamed | ForEach | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `@ComponentBuilder() export declare function ForEach<T>(arr: Array<T>, itemGenerator: ItemGeneratorFunc<T>, keyGenerator?: KeyGeneratorFunc<T>): ForEachAttribute` |
+| arkui.component.forEach | ForEachAttribute | ForEachAttribute | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface ForEachAttribute extends DynamicNode {` |
+| arkui.component.forEach | unnamed | ForEach | 0 | function |  |  |  |  | TS only |  |  |  |  | `@ComponentBuilder() export declare function ForEach<T>(arr: Array<T>, itemGenerator: ItemGeneratorFunc<T>, keyGenerator?: KeyGeneratorFunc<T>): ForEachAttribute` |
 | arkui.component.formComponent | FormDimension | FormDimension | 0 | enum_class | generated | unnamed | FormDimension | Native only | generated |  |  |  |  | `declare enum FormDimension {` |
 | arkui.component.formComponent | FormDimension | Dimension_1_2 | 0 | enum_instance | generated | FormDimension | DIMENSION_1_2 | Native only | generated |  |  |  |  | `Dimension_1_2 = 0` |
 | arkui.component.formComponent | FormDimension | Dimension_2_2 | 0 | enum_instance | generated | FormDimension | DIMENSION_2_2 | Native only | generated |  |  |  |  | `Dimension_2_2 = 1` |
@@ -5304,8 +5344,16 @@
 | arkui.component.gesture | TapGestureParameters | count | 0 | field |  |  |  |  | TS only |  |  |  |  | `count?: number;` |
 | arkui.component.gesture | TapGestureParameters | fingers | 0 | field |  |  |  |  | TS only |  |  |  |  | `fingers?: number;` |
 | arkui.component.gesture | TapGestureParameters | distanceThreshold | 0 | field |  |  |  |  | TS only |  |  |  |  | `distanceThreshold?: number;` |
-| arkui.component.gesture | TapGesture | TapGesture | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare class TapGesture extends Gesture {` |
-| arkui.component.gesture | LongPressGesture | LongPressGesture | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare class LongPressGesture extends Gesture {` |
+| arkui.component.gesture | TapGesture | TapGesture | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare class TapGesture extends Gesture {` |
+| arkui.component.gesture | TapGesture | $_instantiate | 0 | method |  |  |  |  | TS only |  |  |  |  | `public static $_instantiate(factory: (()=> TapGesture), value?: TapGestureParameters): TapGesture` |
+| arkui.component.gesture | TapGesture | onAction | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onAction(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | TapGesture | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor() {}` |
+| arkui.component.gesture | LongPressGesture | LongPressGesture | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare class LongPressGesture extends Gesture {` |
+| arkui.component.gesture | LongPressGesture | $_instantiate | 0 | method |  |  |  |  | TS only |  |  |  |  | `public static $_instantiate(factory: (()=> LongPressGesture), value?: LongPressGestureHandlerOptions): LongPressGesture` |
+| arkui.component.gesture | LongPressGesture | onAction | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onAction(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | LongPressGesture | onActionEnd | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionEnd(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | LongPressGesture | onActionCancel | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionCancel(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | LongPressGesture | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor() {}` |
 | arkui.component.gesture | PanGestureOptions | PanGestureOptions | 0 | class | done | unnamed | PanGestureOptions | Native only | done | Politov Mikhail |  |  | wait new generation for feature_branch, to merge CTOR impl | `export declare class PanGestureOptions {` |
 | arkui.component.gesture | PanGestureOptions | constructor | 0 | method | done | PanGestureOptions | construct | Native only | done | Politov Mikhail |  |  |  | `public constructor(value?: PanGestureHandlerOptions)` |
 | arkui.component.gesture | PanGestureOptions | setDirection | 0 | method | done | PanGestureOptions | setDirection | Native only | done | Politov Mikhail |  |  |  | `public setDirection(value: PanDirection): void` |
@@ -5313,12 +5361,24 @@
 | arkui.component.gesture | PanGestureOptions | setFingers | 0 | method | done | PanGestureOptions | setFingers | Native only | done | Politov Mikhail |  |  |  | `public setFingers(value: number): void` |
 | arkui.component.gesture | PanGestureOptions | getDirection | 0 | method | done | PanGestureOptions | getDirection | Native only | done | Dudkin Sergey |  |  |  | `public getDirection(): PanDirection` |
 | arkui.component.gesture | PanGestureOptions | getDistance | 0 | method | done | PanGestureOptions | getDistance | Native only | done | Erokhin Ilya |  |  |  | `public getDistance(): number` |
-| arkui.component.gesture | PanGesture | PanGesture | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare class PanGesture extends Gesture {` |
+| arkui.component.gesture | PanGesture | PanGesture | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare class PanGesture extends Gesture {` |
+| arkui.component.gesture | PanGesture | $_instantiate | 0 | method |  |  |  |  | TS only |  |  |  |  | `public static $_instantiate(factory: (()=> PanGesture), value?: (PanGestureHandlerOptions | PanGestureOptions)): PanGesture` |
+| arkui.component.gesture | PanGesture | onActionStart | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionStart(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | PanGesture | onActionUpdate | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionUpdate(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | PanGesture | onActionEnd | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionEnd(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | PanGesture | onActionCancel | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionCancel(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | PanGesture | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor() {}` |
 | arkui.component.gesture | SwipeGesture | SwipeGesture | 0 | class | in progress | unnamed | SwipeGesture | Native only | in progress | Samarin Sergey |  |  |  | `export declare class SwipeGesture extends Gesture {` |
 | arkui.component.gesture | SwipeGesture | $_instantiate | 0 | method | in progress | SwipeGesture | $_instantiate | Native only | in progress | Samarin Sergey |  |  |  | `public static $_instantiate(factory: (()=> SwipeGesture), value?: SwipeGestureHandlerOptions): SwipeGesture` |
 | arkui.component.gesture | SwipeGesture | onAction | 0 | method | in progress | SwipeGesture | onAction | Native only | in progress | Samarin Sergey |  |  |  | `public onAction(event: Callback<GestureEvent>): this` |
 | arkui.component.gesture | SwipeGesture | constructor | 0 | method | in progress | SwipeGesture | construct | Native only | in progress | Samarin Sergey |  |  |  | `public constructor() {}` |
-| arkui.component.gesture | PinchGesture | PinchGesture | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare class PinchGesture extends Gesture {` |
+| arkui.component.gesture | PinchGesture | PinchGesture | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare class PinchGesture extends Gesture {` |
+| arkui.component.gesture | PinchGesture | $_instantiate | 0 | method |  |  |  |  | TS only |  |  |  |  | `public static $_instantiate(factory: (()=> PinchGesture), value?: PinchGestureHandlerOptions): PinchGesture` |
+| arkui.component.gesture | PinchGesture | onActionStart | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionStart(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | PinchGesture | onActionUpdate | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionUpdate(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | PinchGesture | onActionEnd | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionEnd(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | PinchGesture | onActionCancel | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionCancel(event: Callback<GestureEvent>): this` |
+| arkui.component.gesture | PinchGesture | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor() {}` |
 | arkui.component.gesture | RotationGesture | RotationGesture | 0 | class |  | unnamed | RotationGesture | Native only |  |  |  |  |  | `export declare class RotationGesture extends Gesture {` |
 | arkui.component.gesture | RotationGesture | $_instantiate | 0 | method |  | RotationGesture | $_instantiate | Native only |  |  |  |  |  | `public static $_instantiate(factory: (()=> RotationGesture), value?: RotationGestureHandlerOptions): RotationGesture` |
 | arkui.component.gesture | RotationGesture | onActionStart | 0 | method |  | RotationGesture | onActionStart | Native only |  |  |  |  |  | `public onActionStart(event: Callback<GestureEvent>): this` |
@@ -5384,7 +5444,9 @@
 | arkui.component.gesture | RotationGestureHandler | onActionUpdate | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionUpdate(event: Callback<GestureEvent>): this` |
 | arkui.component.gesture | RotationGestureHandler | onActionEnd | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionEnd(event: Callback<GestureEvent>): this` |
 | arkui.component.gesture | RotationGestureHandler | onActionCancel | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onActionCancel(event: Callback<GestureEvent>): this` |
-| arkui.component.gesture | GestureGroupGestureHandlerOptions | GestureGroupGestureHandlerOptions | 0 | interface | Deleted because of StubbedDeclarations |  |  | Deleted because of StubbedDeclarations | TS only |  |  |  |  | `export interface GestureGroupGestureHandlerOptions {` |
+| arkui.component.gesture | GestureGroupGestureHandlerOptions | GestureGroupGestureHandlerOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface GestureGroupGestureHandlerOptions {` |
+| arkui.component.gesture | GestureGroupGestureHandlerOptions | mode | 0 | field |  |  |  |  | TS only |  |  |  |  | `mode: GestureMode;` |
+| arkui.component.gesture | GestureGroupGestureHandlerOptions | gestures | 0 | field |  |  |  |  | TS only |  |  |  |  | `gestures: GestureHandler[];` |
 | arkui.component.gesture | GestureGroupHandler | GestureGroupHandler | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare class GestureGroupHandler extends GestureHandler {` |
 | arkui.component.gesture | GestureGroupHandler | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor(options?: GestureGroupGestureHandlerOptions)` |
 | arkui.component.gesture | GestureGroupHandler | onCancel | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onCancel(event: Callback<void>): this` |
@@ -5850,8 +5912,79 @@
 | arkui.component.inspector | Profiler | registerVsyncCallback | 0 | function |  | GlobalScope | Profiler_registerVsyncCallback | Native only |  |  |  |  |  | `function registerVsyncCallback(callback: Callback<string>): void` |
 | arkui.component.inspector | Profiler | unregisterVsyncCallback | 0 | function |  | GlobalScope | Profiler_unregisterVsyncCallback | Native only |  |  |  |  |  | `function unregisterVsyncCallback(): void` |
 | arkui.component.inspector | unnamed | setAppBgColor | 0 | function |  | GlobalScope | setAppBgColor | Native only |  |  |  |  |  | `export declare function setAppBgColor(value: string): void` |
-| arkui.component.lazyGridLayout | LazyGridLayoutAttribute | LazyGridLayoutAttribute | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare interface LazyGridLayoutAttribute extends CommonMethod {` |
-| arkui.component.lazyGridLayout | LazyVGridLayoutAttribute | LazyVGridLayoutAttribute | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare interface LazyVGridLayoutAttribute extends LazyGridLayoutAttribute {` |
+| arkui.component.interop | CompatibleComponentInfo | CompatibleComponentInfo | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface CompatibleComponentInfo {` |
+| arkui.component.interop | CompatibleComponentInfo | name | 0 | field |  |  |  |  | TS only |  |  |  |  | `name: string;` |
+| arkui.component.interop | CompatibleComponentInfo | component | 0 | field |  |  |  |  | TS only |  |  |  |  | `component: ESValue;` |
+| arkui.component.interop | unnamed | CompatibleInitCallback | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type CompatibleInitCallback = (()=> CompatibleComponentInfo);` |
+| arkui.component.interop | unnamed | CompatibleUpdateCallback | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type CompatibleUpdateCallback = ((component: ESValue)=> void);` |
+| arkui.component.interop | unnamed | compatibleComponent | 0 | function |  |  |  |  | TS only |  |  |  |  | `@Builder() export declare function compatibleComponent(init: CompatibleInitCallback, update: CompatibleUpdateCallback, component?: ExtendableComponent): void` |
+| arkui.component.interop | unnamed | getCompatibleState | 0 | function |  |  |  |  | TS only |  |  |  |  | `export declare function getCompatibleState<T>(state: IDecoratedV1Variable<T>): ESValue` |
+| arkui.component.interop | unnamed | compatibleWrappedBuilder | 0 | function |  |  |  |  | TS only |  |  |  |  | `@Builder() export declare function compatibleWrappedBuilder(builder: Any, ...args: FixedArray<ESValue>): void` |
+| arkui.component.interop | unnamed | transferCompatibleBuilder | 0 | function |  |  |  |  | TS only |  |  |  |  | `export declare function transferCompatibleBuilder<T extends Function>(@Builder() builder: T): ESValue` |
+| arkui.component.interop | unnamed | CompatibleUpdatableBuilder | 0 | field |  |  |  |  | TS only |  |  |  |  | `@Builder() export type CompatibleUpdatableBuilder<T> = ((arg: T)=> void);` |
+| arkui.component.interop | unnamed | transferCompatibleUpdatableBuilder | 0 | function |  |  |  |  | TS only |  |  |  |  | `export declare function transferCompatibleUpdatableBuilder<T extends Object>(builder: CompatibleUpdatableBuilder<T>): ESValue` |
+| arkui.component.lazyForEach | DataOperationType | DataOperationType | 0 | enum_class |  |  |  |  | TS only |  |  |  |  | `enum DataOperationType {` |
+| arkui.component.lazyForEach | DataOperationType | ADD | 0 | enum_instance |  |  |  |  | TS only |  |  |  |  | `ADD = "add"` |
+| arkui.component.lazyForEach | DataOperationType | DELETE | 0 | enum_instance |  |  |  |  | TS only |  |  |  |  | `DELETE = "delete"` |
+| arkui.component.lazyForEach | DataOperationType | EXCHANGE | 0 | enum_instance |  |  |  |  | TS only |  |  |  |  | `EXCHANGE = "exchange"` |
+| arkui.component.lazyForEach | DataOperationType | MOVE | 0 | enum_instance |  |  |  |  | TS only |  |  |  |  | `MOVE = "move"` |
+| arkui.component.lazyForEach | DataOperationType | CHANGE | 0 | enum_instance |  |  |  |  | TS only |  |  |  |  | `CHANGE = "change"` |
+| arkui.component.lazyForEach | DataOperationType | RELOAD | 0 | enum_instance |  |  |  |  | TS only |  |  |  |  | `RELOAD = "reload"` |
+| arkui.component.lazyForEach | DataAddOperation | DataAddOperation | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface DataAddOperation {` |
+| arkui.component.lazyForEach | DataAddOperation | type | 0 | field |  |  |  |  | TS only |  |  |  |  | `type: DataOperationType;` |
+| arkui.component.lazyForEach | DataAddOperation | index | 0 | field |  |  |  |  | TS only |  |  |  |  | `index: number;` |
+| arkui.component.lazyForEach | DataAddOperation | count | 0 | field |  |  |  |  | TS only |  |  |  |  | `count?: number;` |
+| arkui.component.lazyForEach | DataAddOperation | key | 0 | field |  |  |  |  | TS only |  |  |  |  | `key?: (string | Array<string>);` |
+| arkui.component.lazyForEach | DataDeleteOperation | DataDeleteOperation | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface DataDeleteOperation {` |
+| arkui.component.lazyForEach | DataDeleteOperation | type | 0 | field |  |  |  |  | TS only |  |  |  |  | `type: DataOperationType;` |
+| arkui.component.lazyForEach | DataDeleteOperation | index | 0 | field |  |  |  |  | TS only |  |  |  |  | `index: number;` |
+| arkui.component.lazyForEach | DataDeleteOperation | count | 0 | field |  |  |  |  | TS only |  |  |  |  | `count?: number;` |
+| arkui.component.lazyForEach | DataChangeOperation | DataChangeOperation | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface DataChangeOperation {` |
+| arkui.component.lazyForEach | DataChangeOperation | type | 0 | field |  |  |  |  | TS only |  |  |  |  | `type: DataOperationType;` |
+| arkui.component.lazyForEach | DataChangeOperation | index | 0 | field |  |  |  |  | TS only |  |  |  |  | `index: number;` |
+| arkui.component.lazyForEach | DataChangeOperation | key | 0 | field |  |  |  |  | TS only |  |  |  |  | `key?: string;` |
+| arkui.component.lazyForEach | MoveIndex | MoveIndex | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface MoveIndex {` |
+| arkui.component.lazyForEach | MoveIndex | from | 0 | field |  |  |  |  | TS only |  |  |  |  | `from: number;` |
+| arkui.component.lazyForEach | MoveIndex | to | 0 | field |  |  |  |  | TS only |  |  |  |  | `to: number;` |
+| arkui.component.lazyForEach | ExchangeIndex | ExchangeIndex | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface ExchangeIndex {` |
+| arkui.component.lazyForEach | ExchangeIndex | start | 0 | field |  |  |  |  | TS only |  |  |  |  | `start: number;` |
+| arkui.component.lazyForEach | ExchangeIndex | end | 0 | field |  |  |  |  | TS only |  |  |  |  | `end: number;` |
+| arkui.component.lazyForEach | ExchangeKey | ExchangeKey | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface ExchangeKey {` |
+| arkui.component.lazyForEach | ExchangeKey | start | 0 | field |  |  |  |  | TS only |  |  |  |  | `start: string;` |
+| arkui.component.lazyForEach | ExchangeKey | end | 0 | field |  |  |  |  | TS only |  |  |  |  | `end: string;` |
+| arkui.component.lazyForEach | DataMoveOperation | DataMoveOperation | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface DataMoveOperation {` |
+| arkui.component.lazyForEach | DataMoveOperation | type | 0 | field |  |  |  |  | TS only |  |  |  |  | `type: DataOperationType;` |
+| arkui.component.lazyForEach | DataMoveOperation | index | 0 | field |  |  |  |  | TS only |  |  |  |  | `index: MoveIndex;` |
+| arkui.component.lazyForEach | DataMoveOperation | key | 0 | field |  |  |  |  | TS only |  |  |  |  | `key?: string;` |
+| arkui.component.lazyForEach | DataExchangeOperation | DataExchangeOperation | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface DataExchangeOperation {` |
+| arkui.component.lazyForEach | DataExchangeOperation | type | 0 | field |  |  |  |  | TS only |  |  |  |  | `type: DataOperationType;` |
+| arkui.component.lazyForEach | DataExchangeOperation | index | 0 | field |  |  |  |  | TS only |  |  |  |  | `index: ExchangeIndex;` |
+| arkui.component.lazyForEach | DataExchangeOperation | key | 0 | field |  |  |  |  | TS only |  |  |  |  | `key?: ExchangeKey;` |
+| arkui.component.lazyForEach | DataReloadOperation | DataReloadOperation | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface DataReloadOperation {` |
+| arkui.component.lazyForEach | DataReloadOperation | type | 0 | field |  |  |  |  | TS only |  |  |  |  | `type: DataOperationType;` |
+| arkui.component.lazyForEach | unnamed | DataOperation | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type DataOperation = (DataAddOperation | DataDeleteOperation | DataChangeOperation | DataMoveOperation | DataExchangeOperation | DataReloadOperation);` |
+| arkui.component.lazyForEach | DataChangeListener | DataChangeListener | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface DataChangeListener {` |
+| arkui.component.lazyForEach | DataChangeListener | onDataReloaded | 0 | method |  |  |  |  | TS only |  |  |  |  | `onDataReloaded(): void` |
+| arkui.component.lazyForEach | DataChangeListener | onDataAdd | 0 | method |  |  |  |  | TS only |  |  |  |  | `onDataAdd(index: number): void` |
+| arkui.component.lazyForEach | DataChangeListener | onDataMove | 0 | method |  |  |  |  | TS only |  |  |  |  | `onDataMove(from: number, to: number): void` |
+| arkui.component.lazyForEach | DataChangeListener | onDataDelete | 0 | method |  |  |  |  | TS only |  |  |  |  | `onDataDelete(index: number): void` |
+| arkui.component.lazyForEach | DataChangeListener | onDataChange | 0 | method |  |  |  |  | TS only |  |  |  |  | `onDataChange(index: number): void` |
+| arkui.component.lazyForEach | DataChangeListener | onDatasetChange | 0 | method |  |  |  |  | TS only |  |  |  |  | `onDatasetChange(dataOperations: Array<DataOperation>): void` |
+| arkui.component.lazyForEach | IDataSource | IDataSource | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface IDataSource<T> {` |
+| arkui.component.lazyForEach | IDataSource | totalCount | 0 | method |  |  |  |  | TS only |  |  |  |  | `totalCount(): number` |
+| arkui.component.lazyForEach | IDataSource | getData | 0 | method |  |  |  |  | TS only |  |  |  |  | `getData(index: number): T` |
+| arkui.component.lazyForEach | IDataSource | registerDataChangeListener | 0 | method |  |  |  |  | TS only |  |  |  |  | `registerDataChangeListener(listener: DataChangeListener): void` |
+| arkui.component.lazyForEach | IDataSource | unregisterDataChangeListener | 0 | method |  |  |  |  | TS only |  |  |  |  | `unregisterDataChangeListener(listener: DataChangeListener): void` |
+| arkui.component.lazyForEach | LazyForEachAttribute | LazyForEachAttribute | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface LazyForEachAttribute extends DynamicNode {` |
+| arkui.component.lazyForEach | unnamed | ItemGeneratorFunc | 0 | field |  |  |  |  | TS only |  |  |  |  | `@Builder() type ItemGeneratorFunc<T> = ((item: T, index: number)=> void);` |
+| arkui.component.lazyForEach | unnamed | KeyGeneratorFunc | 0 | field |  |  |  |  | TS only |  |  |  |  | `type KeyGeneratorFunc<T> = ((item: T, index: number)=> string);` |
+| arkui.component.lazyForEach | unnamed | LazyForEach | 0 | function |  |  |  |  | TS only |  |  |  |  | `@ComponentBuilder() export declare function LazyForEach<T>(dataSource: IDataSource<T>, itemGenerator: ItemGeneratorFunc<T>, keyGenerator?: KeyGeneratorFunc<T>): LazyForEachAttribute` |
+| arkui.component.lazyGridLayout | LazyGridLayoutAttribute | LazyGridLayoutAttribute | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export declare interface LazyGridLayoutAttribute extends CommonMethod {` |
+| arkui.component.lazyGridLayout | LazyGridLayoutAttribute | rowsGap | 0 | method |  |  |  |  | TS only |  |  |  |  | `rowsGap(value: (LengthMetrics | undefined)): this` |
+| arkui.component.lazyGridLayout | LazyGridLayoutAttribute | columnsGap | 0 | method |  |  |  |  | TS only |  |  |  |  | `columnsGap(value: (LengthMetrics | undefined)): this` |
+| arkui.component.lazyGridLayout | LazyVGridLayoutAttribute | LazyVGridLayoutAttribute | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export declare interface LazyVGridLayoutAttribute extends LazyGridLayoutAttribute {` |
+| arkui.component.lazyGridLayout | LazyVGridLayoutAttribute | columnsTemplate | 0 | method |  |  |  |  | TS only |  |  |  |  | `columnsTemplate(value: (string | undefined)): this` |
+| arkui.component.lazyGridLayout | LazyVGridLayoutAttribute | attributeModifier | 0 | method |  |  |  |  | TS only |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<LazyVGridLayoutAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
 | arkui.component.lazyGridLayout | unnamed | LazyVGridLayout | 0 | function |  |  |  |  | TS only |  |  |  |  | `@memo() @ComponentBuilder() export declare function LazyVGridLayout(@memo() content_?: (()=> void)): LazyVGridLayoutAttribute` |
 | arkui.component.line | unnamed | ShapePoint | 0 | field | generated | unnamed | ShapePoint | Native only | generated |  |  |  |  | `export type ShapePoint = [Length, Length];` |
 | arkui.component.line | LineOptions | LineOptions | 0 | interface | generated | unnamed | LineOptions | Native only | generated |  |  |  |  | `export interface LineOptions {` |
@@ -6430,21 +6563,41 @@
 | arkui.component.pageTransition | SlideEffect | Bottom | 0 | enum_instance | generated | SlideEffect | BOTTOM | Native only | generated |  |  |  |  | `Bottom = ((((((0) + (1))) + (1))) + (1))` |
 | arkui.component.pageTransition | SlideEffect | START | 0 | enum_instance | generated | SlideEffect | START | Native only | generated |  |  |  |  | `START = 5` |
 | arkui.component.pageTransition | SlideEffect | END | 0 | enum_instance | generated | SlideEffect | END | Native only | generated |  |  |  |  | `END = 6` |
-| arkui.component.pageTransition | CommonTransition | CommonTransition | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare class CommonTransition {` |
+| arkui.component.pageTransition | CommonTransition | CommonTransition | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare class CommonTransition {` |
+| arkui.component.pageTransition | CommonTransition | slide | 0 | method |  |  |  |  | TS only |  |  |  |  | `public slide(value: SlideEffect): this` |
+| arkui.component.pageTransition | CommonTransition | translate | 0 | method |  |  |  |  | TS only |  |  |  |  | `public translate(value: TranslateOptions): this` |
+| arkui.component.pageTransition | CommonTransition | scale | 0 | method |  |  |  |  | TS only |  |  |  |  | `public scale(value: ScaleOptions): this` |
+| arkui.component.pageTransition | CommonTransition | opacity | 0 | method |  |  |  |  | TS only |  |  |  |  | `public opacity(value: number): this` |
+| arkui.component.pageTransition | CommonTransition | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor() {}` |
 | arkui.component.pageTransition | PageTransitionOptions | PageTransitionOptions | 0 | interface | generated | unnamed | PageTransitionOptions | Native only | generated |  |  |  |  | `export declare interface PageTransitionOptions {` |
 | arkui.component.pageTransition | PageTransitionOptions | type | 0 | field | generated | PageTransitionOptions | type | Native only | generated |  |  |  |  | `type?: RouteType;` |
 | arkui.component.pageTransition | PageTransitionOptions | duration | 0 | field | generated | PageTransitionOptions | duration | Native only | generated |  |  |  |  | `duration?: number;` |
 | arkui.component.pageTransition | PageTransitionOptions | curve | 0 | field | generated | PageTransitionOptions | curve | Native only | generated |  |  |  |  | `curve?: (Curve | string | ICurve);` |
 | arkui.component.pageTransition | PageTransitionOptions | delay | 0 | field | generated | PageTransitionOptions | delay | Native only | generated |  |  |  |  | `delay?: number;` |
 | arkui.component.pageTransition | unnamed | PageTransitionCallback | 0 | field | generated | unnamed | PageTransitionCallback | Native only | generated |  |  |  |  | `export type PageTransitionCallback = ((type: RouteType, progress: number)=> void);` |
-| arkui.component.pageTransition | PageTransitionEnter | PageTransitionEnter | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare class PageTransitionEnter extends CommonTransition {` |
-| arkui.component.pageTransition | PageTransitionExit | PageTransitionExit | 0 | class | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare class PageTransitionExit extends CommonTransition {` |
-| arkui.component.particle | unnamed | ParticleTuple | 0 | field | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export type ParticleTuple<T1, T2> = [T1, T2];` |
+| arkui.component.pageTransition | PageTransitionEnter | PageTransitionEnter | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare class PageTransitionEnter extends CommonTransition {` |
+| arkui.component.pageTransition | PageTransitionEnter | $_invoke | 0 | method |  |  |  |  | TS only |  |  |  |  | `public static $_invoke(value: PageTransitionOptions): PageTransitionEnter` |
+| arkui.component.pageTransition | PageTransitionEnter | onEnter | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onEnter(event: PageTransitionCallback): this` |
+| arkui.component.pageTransition | PageTransitionEnter | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor() {}` |
+| arkui.component.pageTransition | PageTransitionExit | PageTransitionExit | 0 | class |  |  |  |  | TS only |  |  |  |  | `export declare class PageTransitionExit extends CommonTransition {` |
+| arkui.component.pageTransition | PageTransitionExit | $_invoke | 0 | method |  |  |  |  | TS only |  |  |  |  | `public static $_invoke(value: PageTransitionOptions): PageTransitionExit` |
+| arkui.component.pageTransition | PageTransitionExit | onExit | 0 | method |  |  |  |  | TS only |  |  |  |  | `public onExit(event: PageTransitionCallback): this` |
+| arkui.component.pageTransition | PageTransitionExit | constructor | 0 | method |  |  |  |  | TS only |  |  |  |  | `public constructor() {}` |
+| arkui.component.particle | unnamed | ParticleTuple | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type ParticleTuple<T1, T2> = [T1, T2];` |
 | arkui.component.particle | VelocityOptions | VelocityOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export declare interface VelocityOptions {` |
 | arkui.component.particle | VelocityOptions | speed | 0 | field |  |  |  |  | TS only |  |  |  |  | `speed: ParticleTuple<number, number>;` |
 | arkui.component.particle | VelocityOptions | angle | 0 | field |  |  |  |  | TS only |  |  |  |  | `angle: ParticleTuple<number, number>;` |
-| arkui.component.particle | AccelerationOptions | AccelerationOptions | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare interface AccelerationOptions {` |
-| arkui.component.particle | ParticleOptions | ParticleOptions | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export interface ParticleOptions {` |
+| arkui.component.particle | AccelerationOptions | AccelerationOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export declare interface AccelerationOptions {` |
+| arkui.component.particle | AccelerationOptions | speed | 0 | field |  |  |  |  | TS only |  |  |  |  | `speed?: ParticlePropertyOptions;` |
+| arkui.component.particle | AccelerationOptions | angle | 0 | field |  |  |  |  | TS only |  |  |  |  | `angle?: ParticlePropertyOptions;` |
+| arkui.component.particle | ParticleOptions | ParticleOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface ParticleOptions {` |
+| arkui.component.particle | ParticleOptions | emitter | 0 | field |  |  |  |  | TS only |  |  |  |  | `emitter: EmitterOptions;` |
+| arkui.component.particle | ParticleOptions | color | 0 | field |  |  |  |  | TS only |  |  |  |  | `color?: ParticleColorPropertyOptions;` |
+| arkui.component.particle | ParticleOptions | opacity | 0 | field |  |  |  |  | TS only |  |  |  |  | `opacity?: ParticlePropertyOptions;` |
+| arkui.component.particle | ParticleOptions | scale | 0 | field |  |  |  |  | TS only |  |  |  |  | `scale?: ParticlePropertyOptions;` |
+| arkui.component.particle | ParticleOptions | velocity | 0 | field |  |  |  |  | TS only |  |  |  |  | `velocity?: VelocityOptions;` |
+| arkui.component.particle | ParticleOptions | acceleration | 0 | field |  |  |  |  | TS only |  |  |  |  | `acceleration?: AccelerationOptions;` |
+| arkui.component.particle | ParticleOptions | spin | 0 | field |  |  |  |  | TS only |  |  |  |  | `spin?: ParticlePropertyOptions;` |
 | arkui.component.particle | PointParticleParameters | PointParticleParameters | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface PointParticleParameters {` |
 | arkui.component.particle | PointParticleParameters | radius | 0 | field |  |  |  |  | TS only |  |  |  |  | `radius: VP;` |
 | arkui.component.particle | ImageParticleParameters | ImageParticleParameters | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface ImageParticleParameters {` |
@@ -6452,14 +6605,25 @@
 | arkui.component.particle | ImageParticleParameters | size | 0 | field |  |  |  |  | TS only |  |  |  |  | `size: ParticleTuple<Dimension, Dimension>;` |
 | arkui.component.particle | ImageParticleParameters | objectFit | 0 | field |  |  |  |  | TS only |  |  |  |  | `objectFit?: ImageFit;` |
 | arkui.component.particle | unnamed | ParticleConfigs | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type ParticleConfigs = (PointParticleParameters | ImageParticleParameters);` |
-| arkui.component.particle | EmitterProperty | EmitterProperty | 0 | interface | Deleted because of StubbedDeclarations |  |  | Deleted because of StubbedDeclarations | TS only |  |  |  |  | `export interface EmitterProperty {` |
+| arkui.component.particle | EmitterProperty | EmitterProperty | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface EmitterProperty {` |
+| arkui.component.particle | EmitterProperty | index | 0 | field |  |  |  |  | TS only |  |  |  |  | `index: number;` |
+| arkui.component.particle | EmitterProperty | emitRate | 0 | field |  |  |  |  | TS only |  |  |  |  | `emitRate?: number;` |
+| arkui.component.particle | EmitterProperty | position | 0 | field |  |  |  |  | TS only |  |  |  |  | `position?: PositionT<number>;` |
+| arkui.component.particle | EmitterProperty | size | 0 | field |  |  |  |  | TS only |  |  |  |  | `size?: SizeT<number>;` |
+| arkui.component.particle | EmitterProperty | annulusRegion | 0 | field |  |  |  |  | TS only |  |  |  |  | `annulusRegion?: ParticleAnnulusRegion;` |
 | arkui.component.particle | EmitterParticleOptions | EmitterParticleOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface EmitterParticleOptions {` |
 | arkui.component.particle | EmitterParticleOptions | type | 0 | field |  |  |  |  | TS only |  |  |  |  | `type: ParticleType;` |
 | arkui.component.particle | EmitterParticleOptions | config | 0 | field |  |  |  |  | TS only |  |  |  |  | `config: ParticleConfigs;` |
 | arkui.component.particle | EmitterParticleOptions | count | 0 | field |  |  |  |  | TS only |  |  |  |  | `count: number;` |
 | arkui.component.particle | EmitterParticleOptions | lifetime | 0 | field |  |  |  |  | TS only |  |  |  |  | `lifetime?: number;` |
 | arkui.component.particle | EmitterParticleOptions | lifetimeRange | 0 | field |  |  |  |  | TS only |  |  |  |  | `lifetimeRange?: number;` |
-| arkui.component.particle | EmitterOptions | EmitterOptions | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export interface EmitterOptions {` |
+| arkui.component.particle | EmitterOptions | EmitterOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface EmitterOptions {` |
+| arkui.component.particle | EmitterOptions | particle | 0 | field |  |  |  |  | TS only |  |  |  |  | `particle: EmitterParticleOptions;` |
+| arkui.component.particle | EmitterOptions | emitRate | 0 | field |  |  |  |  | TS only |  |  |  |  | `emitRate?: number;` |
+| arkui.component.particle | EmitterOptions | shape | 0 | field |  |  |  |  | TS only |  |  |  |  | `shape?: ParticleEmitterShape;` |
+| arkui.component.particle | EmitterOptions | position | 0 | field |  |  |  |  | TS only |  |  |  |  | `position?: ParticleTuple<Dimension, Dimension>;` |
+| arkui.component.particle | EmitterOptions | size | 0 | field |  |  |  |  | TS only |  |  |  |  | `size?: ParticleTuple<Dimension, Dimension>;` |
+| arkui.component.particle | EmitterOptions | annulusRegion | 0 | field |  |  |  |  | TS only |  |  |  |  | `annulusRegion?: ParticleAnnulusRegion;` |
 | arkui.component.particle | unnamed | ParticlePropertyUpdaterConfigs | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type ParticlePropertyUpdaterConfigs = (undefined | ParticleTuple<number, number> | Array<ParticlePropertyAnimation<number>>);` |
 | arkui.component.particle | ParticleUpdaterOptions | ParticleUpdaterOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface ParticleUpdaterOptions {` |
 | arkui.component.particle | ParticleUpdaterOptions | type | 0 | field |  |  |  |  | TS only |  |  |  |  | `type: ParticleUpdater;` |
@@ -6472,16 +6636,22 @@
 | arkui.component.particle | ParticleColorUpdaterOptions | ParticleColorUpdaterOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface ParticleColorUpdaterOptions {` |
 | arkui.component.particle | ParticleColorUpdaterOptions | type | 0 | field |  |  |  |  | TS only |  |  |  |  | `type: ParticleUpdater;` |
 | arkui.component.particle | ParticleColorUpdaterOptions | config | 0 | field |  |  |  |  | TS only |  |  |  |  | `config: ParticleColorPropertyUpdaterConfigs;` |
-| arkui.component.particle | ParticlePropertyOptions | ParticlePropertyOptions | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export interface ParticlePropertyOptions {` |
+| arkui.component.particle | ParticlePropertyOptions | ParticlePropertyOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface ParticlePropertyOptions {` |
+| arkui.component.particle | ParticlePropertyOptions | range | 0 | field |  |  |  |  | TS only |  |  |  |  | `range: ParticleTuple<number, number>;` |
+| arkui.component.particle | ParticlePropertyOptions | updater | 0 | field |  |  |  |  | TS only |  |  |  |  | `updater?: ParticleUpdaterOptions;` |
 | arkui.component.particle | unnamed | ParticleColorPropertyUpdaterConfigs | 0 | field |  |  |  |  | TS only |  |  |  |  | `export type ParticleColorPropertyUpdaterConfigs = (undefined | ParticleColorOptions | Array<ParticlePropertyAnimation<ResourceColor>>);` |
-| arkui.component.particle | ParticleColorPropertyOptions | ParticleColorPropertyOptions | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export interface ParticleColorPropertyOptions {` |
+| arkui.component.particle | ParticleColorPropertyOptions | ParticleColorPropertyOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface ParticleColorPropertyOptions {` |
+| arkui.component.particle | ParticleColorPropertyOptions | range | 0 | field |  |  |  |  | TS only |  |  |  |  | `range: ParticleTuple<ResourceColor, ResourceColor>;` |
+| arkui.component.particle | ParticleColorPropertyOptions | distributionType | 0 | field |  |  |  |  | TS only |  |  |  |  | `distributionType?: DistributionType;` |
+| arkui.component.particle | ParticleColorPropertyOptions | updater | 0 | field |  |  |  |  | TS only |  |  |  |  | `updater?: ParticleColorUpdaterOptions;` |
 | arkui.component.particle | ParticlePropertyAnimation | ParticlePropertyAnimation | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface ParticlePropertyAnimation<T> {` |
 | arkui.component.particle | ParticlePropertyAnimation | from | 0 | field |  |  |  |  | TS only |  |  |  |  | `from: T;` |
 | arkui.component.particle | ParticlePropertyAnimation | to | 0 | field |  |  |  |  | TS only |  |  |  |  | `to: T;` |
 | arkui.component.particle | ParticlePropertyAnimation | startMillis | 0 | field |  |  |  |  | TS only |  |  |  |  | `startMillis: number;` |
 | arkui.component.particle | ParticlePropertyAnimation | endMillis | 0 | field |  |  |  |  | TS only |  |  |  |  | `endMillis: number;` |
 | arkui.component.particle | ParticlePropertyAnimation | curve | 0 | field |  |  |  |  | TS only |  |  |  |  | `curve?: (Curve | ICurve);` |
-| arkui.component.particle | Particles | Particles | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export interface Particles {` |
+| arkui.component.particle | Particles | Particles | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface Particles {` |
+| arkui.component.particle | Particles | particles | 0 | field |  |  |  |  | TS only |  |  |  |  | `particles: Array<ParticleOptions>;` |
 | arkui.component.particle | ParticleType | ParticleType | 0 | enum_class | generated | unnamed | ParticleType | Native only | generated |  |  |  |  | `declare enum ParticleType {` |
 | arkui.component.particle | ParticleType | POINT | 0 | enum_instance | generated | ParticleType | POINT | Native only | generated |  |  |  |  | `POINT = "point"` |
 | arkui.component.particle | ParticleType | IMAGE | 0 | enum_instance | generated | ParticleType | IMAGE | Native only | generated |  |  |  |  | `IMAGE = "image"` |
@@ -6497,8 +6667,19 @@
 | arkui.component.particle | ParticleUpdater | NONE | 0 | enum_instance | generated | ParticleUpdater | NONE | Native only | generated |  |  |  |  | `NONE = "none"` |
 | arkui.component.particle | ParticleUpdater | RANDOM | 0 | enum_instance | generated | ParticleUpdater | RANDOM | Native only | generated |  |  |  |  | `RANDOM = "random"` |
 | arkui.component.particle | ParticleUpdater | CURVE | 0 | enum_instance | generated | ParticleUpdater | CURVE | Native only | generated |  |  |  |  | `CURVE = "curve"` |
-| arkui.component.particle | ParticleAttribute | ParticleAttribute | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare interface ParticleAttribute extends CommonMethod {` |
-| arkui.component.particle | DisturbanceFieldOptions | DisturbanceFieldOptions | 0 | interface | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare interface DisturbanceFieldOptions {` |
+| arkui.component.particle | ParticleAttribute | ParticleAttribute | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export declare interface ParticleAttribute extends CommonMethod {` |
+| arkui.component.particle | ParticleAttribute | disturbanceFields | 0 | method |  |  |  |  | TS only |  |  |  |  | `disturbanceFields(fields: (Array<DisturbanceFieldOptions> | undefined)): this` |
+| arkui.component.particle | ParticleAttribute | emitter | 0 | method |  |  |  |  | TS only |  |  |  |  | `emitter(value: (Array<EmitterProperty> | undefined)): this` |
+| arkui.component.particle | ParticleAttribute | attributeModifier | 0 | method |  |  |  |  | TS only |  |  |  |  | `attributeModifier(modifier: (AttributeModifier<ParticleAttribute> | AttributeModifier<CommonMethod> | undefined)): this` |
+| arkui.component.particle | DisturbanceFieldOptions | DisturbanceFieldOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export declare interface DisturbanceFieldOptions {` |
+| arkui.component.particle | DisturbanceFieldOptions | strength | 0 | field |  |  |  |  | TS only |  |  |  |  | `strength?: number;` |
+| arkui.component.particle | DisturbanceFieldOptions | shape | 0 | field |  |  |  |  | TS only |  |  |  |  | `shape?: DisturbanceFieldShape;` |
+| arkui.component.particle | DisturbanceFieldOptions | size | 0 | field |  |  |  |  | TS only |  |  |  |  | `size?: SizeT<number>;` |
+| arkui.component.particle | DisturbanceFieldOptions | position | 0 | field |  |  |  |  | TS only |  |  |  |  | `position?: PositionT<number>;` |
+| arkui.component.particle | DisturbanceFieldOptions | feather | 0 | field |  |  |  |  | TS only |  |  |  |  | `feather?: number;` |
+| arkui.component.particle | DisturbanceFieldOptions | noiseScale | 0 | field |  |  |  |  | TS only |  |  |  |  | `noiseScale?: number;` |
+| arkui.component.particle | DisturbanceFieldOptions | noiseFrequency | 0 | field |  |  |  |  | TS only |  |  |  |  | `noiseFrequency?: number;` |
+| arkui.component.particle | DisturbanceFieldOptions | noiseAmplitude | 0 | field |  |  |  |  | TS only |  |  |  |  | `noiseAmplitude?: number;` |
 | arkui.component.particle | DisturbanceFieldShape | DisturbanceFieldShape | 0 | enum_class | generated | unnamed | DisturbanceFieldShape | Native only | generated |  |  |  |  | `declare enum DisturbanceFieldShape {` |
 | arkui.component.particle | DisturbanceFieldShape | RECT | 0 | enum_instance | generated | DisturbanceFieldShape | RECT | Native only | generated |  |  |  |  | `RECT = 0` |
 | arkui.component.particle | DisturbanceFieldShape | CIRCLE | 0 | enum_instance | generated | DisturbanceFieldShape | CIRCLE | Native only | generated |  |  |  |  | `CIRCLE = ((0) + (1))` |
@@ -6509,8 +6690,9 @@
 | arkui.component.particle | ParticleAnnulusRegion | innerRadius | 0 | field |  |  |  |  | TS only |  |  |  |  | `innerRadius: LengthMetrics;` |
 | arkui.component.particle | ParticleAnnulusRegion | startAngle | 0 | field |  |  |  |  | TS only |  |  |  |  | `startAngle?: number;` |
 | arkui.component.particle | ParticleAnnulusRegion | endAngle | 0 | field |  |  |  |  | TS only |  |  |  |  | `endAngle?: number;` |
-| arkui.component.particle | unnamed | Particle | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `@memo() @ComponentBuilder() export declare function Particle(particles: Particles, @memo() content_?: (()=> void)): ParticleAttribute` |
+| arkui.component.particle | unnamed | Particle | 0 | function |  |  |  |  | TS only |  |  |  |  | `@memo() @ComponentBuilder() export declare function Particle(particles: Particles, @memo() content_?: (()=> void)): ParticleAttribute` |
 | arkui.ParticleModifier | ParticleModifier | ParticleModifier | 0 | class | external |  |  | ignore | ignore |  |  |  |  | `export declare class ParticleModifier implements ParticleAttribute, AttributeModifier<ParticleAttribute> {` |
+| arkui.ParticleModifier | ParticleModifier | constructor | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public constructor() {}` |
 | arkui.component.pasteButton | PasteIconStyle | PasteIconStyle | 0 | enum_class | generated | unnamed | PasteIconStyle | Native only | generated |  |  |  |  | `enum PasteIconStyle {` |
 | arkui.component.pasteButton | PasteIconStyle | LINES | 0 | enum_instance | generated | PasteIconStyle | LINES | Native only | generated |  |  |  |  | `LINES = 0` |
 | arkui.component.pasteButton | PasteDescription | PasteDescription | 0 | enum_class | generated | unnamed | PasteDescription | Native only | generated |  |  |  |  | `enum PasteDescription {` |
@@ -6906,11 +7088,35 @@
 | arkui.RenderNode | RenderNode | dispose | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public dispose(): void` |
 | arkui.RenderNode | RenderNode | lengthMetricsUnit | 0 | method | external |  |  | ignore | ignore |  |  |  |  | `public set lengthMetricsUnit(unit: LengthMetricsUnit)` |
 | arkui.RenderNode | RenderNode | lengthMetricsUnit | 1 | method | external |  |  | ignore | ignore |  |  |  |  | `public get lengthMetricsUnit(): LengthMetricsUnit` |
+| arkui.component.repeat | unnamed | RepeatArray | 0 | field |  |  |  |  | TS only |  |  |  |  | `type RepeatArray<T> = (Array<T> | ReadonlyArray<T> | Readonly<Array<T>>);` |
+| arkui.component.repeat | unnamed | TemplateTypedFunc | 0 | field |  |  |  |  | TS only |  |  |  |  | `type TemplateTypedFunc<T> = ((item: T, index: number)=> string);` |
+| arkui.component.repeat | unnamed | RepeatItemBuilder | 0 | field |  |  |  |  | TS only |  |  |  |  | `@Builder() type RepeatItemBuilder<T> = ((repeatItem: RepeatItem<T>)=> void);` |
+| arkui.component.repeat | RepeatItem | RepeatItem | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface RepeatItem<T> {` |
+| arkui.component.repeat | RepeatItem | item | 0 | field |  |  |  |  | TS only |  |  |  |  | `item: T;` |
+| arkui.component.repeat | RepeatItem | index | 0 | field |  |  |  |  | TS only |  |  |  |  | `index: number;` |
+| arkui.component.repeat | unnamed | OnLazyLoadingFunc | 0 | field |  |  |  |  | TS only |  |  |  |  | `type OnLazyLoadingFunc = ((index: number)=> void);` |
+| arkui.component.repeat | unnamed | KeyGeneratorFunc | 0 | field |  |  |  |  | TS only |  |  |  |  | `type KeyGeneratorFunc<T> = ((item: T, index: number)=> string);` |
+| arkui.component.repeat | unnamed | OnTotalCountFunc | 0 | field |  |  |  |  | TS only |  |  |  |  | `type OnTotalCountFunc = (()=> number);` |
+| arkui.component.repeat | VirtualScrollOptions | VirtualScrollOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface VirtualScrollOptions {` |
+| arkui.component.repeat | VirtualScrollOptions | totalCount | 0 | field |  |  |  |  | TS only |  |  |  |  | `totalCount?: number;` |
+| arkui.component.repeat | VirtualScrollOptions | reusable | 0 | field |  |  |  |  | TS only |  |  |  |  | `reusable?: boolean;` |
+| arkui.component.repeat | VirtualScrollOptions | onLazyLoading | 0 | field |  |  |  |  | TS only |  |  |  |  | `onLazyLoading?: OnLazyLoadingFunc;` |
+| arkui.component.repeat | VirtualScrollOptions | onTotalCount | 0 | field |  |  |  |  | TS only |  |  |  |  | `onTotalCount?: OnTotalCountFunc;` |
+| arkui.component.repeat | VirtualScrollOptions | disableVirtualScroll | 0 | field |  |  |  |  | TS only |  |  |  |  | `disableVirtualScroll?: boolean;` |
+| arkui.component.repeat | TemplateOptions | TemplateOptions | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface TemplateOptions {` |
+| arkui.component.repeat | TemplateOptions | cachedCount | 0 | field |  |  |  |  | TS only |  |  |  |  | `cachedCount?: number;` |
+| arkui.component.repeat | RepeatAttribute | RepeatAttribute | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface RepeatAttribute<T> extends DynamicNode {` |
+| arkui.component.repeat | RepeatAttribute | each | 0 | method |  |  |  |  | TS only |  |  |  |  | `each(itemGenerator: RepeatItemBuilder<T>): this` |
+| arkui.component.repeat | RepeatAttribute | key | 0 | method |  |  |  |  | TS only |  |  |  |  | `key(keyGenerator: KeyGeneratorFunc<T>): this` |
+| arkui.component.repeat | RepeatAttribute | virtualScroll | 0 | method |  |  |  |  | TS only |  |  |  |  | `virtualScroll(virtualScrollOptions?: VirtualScrollOptions): this` |
+| arkui.component.repeat | RepeatAttribute | template | 0 | method |  |  |  |  | TS only |  |  |  |  | `template(type: string, itemBuilder: RepeatItemBuilder<T>, templateOptions?: TemplateOptions): this` |
+| arkui.component.repeat | RepeatAttribute | templateId | 0 | method |  |  |  |  | TS only |  |  |  |  | `templateId(typedFunc: TemplateTypedFunc<T>): this` |
+| arkui.component.repeat | unnamed | Repeat | 0 | function |  |  |  |  | TS only |  |  |  |  | `@ComponentBuilder() export declare function Repeat<T>(arr: RepeatArray<T>): RepeatAttribute<T>` |
 | arkui.external.resource | unnamed | Resource | 0 | field | external |  |  | ignore | ignore |  |  |  |  | `export type Resource = __Resource__;` |
 | arkui.external.resource | unnamed | _r | 0 | function | external |  |  | ignore | ignore |  |  |  |  | `declare function _r(bundleName: string, moduleName: string, name: string, ...params: string[]): Resource` |
 | arkui.external.resource | unnamed | _rawfile | 0 | function | external |  |  | ignore | ignore |  |  |  |  | `declare function _rawfile(bundleName: string, moduleName: string, name: string): Resource` |
-| arkui.component.resources | unnamed | _r | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare function _r(id: number, type: number, bundleName: string, moduleName: string, ...params: Object[]): Resource` |
-| arkui.component.resources | unnamed | _rawfile | 0 | function | Deleted because of DeletedDeclarations |  |  | Deleted because of DeletedDeclarations | TS only |  |  |  |  | `export declare function _rawfile(id: number, type: number, bundleName: string, moduleName: string, ...params: Object[]): Resource` |
+| arkui.component.resources | unnamed | _r | 0 | function |  |  |  |  | TS only |  |  |  |  | `export declare function _r(id: number, type: number, bundleName: string, moduleName: string, ...params: Object[]): Resource` |
+| arkui.component.resources | unnamed | _rawfile | 0 | function |  |  |  |  | TS only |  |  |  |  | `export declare function _rawfile(id: number, type: number, bundleName: string, moduleName: string, ...params: Object[]): Resource` |
 | arkui.component.richEditor | RichEditorDeleteDirection | RichEditorDeleteDirection | 0 | enum_class | generated | unnamed | RichEditorDeleteDirection | Native only | generated |  |  |  |  | `declare enum RichEditorDeleteDirection {` |
 | arkui.component.richEditor | RichEditorDeleteDirection | BACKWARD | 0 | enum_instance | generated | RichEditorDeleteDirection | BACKWARD | Native only | generated |  |  |  |  | `BACKWARD = 0` |
 | arkui.component.richEditor | RichEditorDeleteDirection | FORWARD | 0 | enum_instance | generated | RichEditorDeleteDirection | FORWARD | Native only | generated |  |  |  |  | `FORWARD = ((0) + (1))` |
@@ -7181,7 +7387,8 @@
 | arkui.component.rootScene | unnamed | RootScene | 0 | function | done | RootScene | setRootSceneOptions | Native only | done | Spirin Andrey |  |  |  | `@memo() @ComponentBuilder() export declare function RootScene(session: RootSceneSession, @memo() content_?: (()=> void)): RootSceneAttribute` |
 | arkui.component.row | RowOptions | RowOptions | 0 | interface | generated | unnamed | RowOptions | Native only | generated |  |  |  |  | `export declare interface RowOptions {` |
 | arkui.component.row | RowOptions | space | 0 | field | generated | RowOptions | space | Native only | generated |  |  |  |  | `space?: (string | number);` |
-| arkui.component.row | RowOptionsV2 | RowOptionsV2 | 0 | interface | Deleted because of StubbedDeclarations |  |  | Deleted because of StubbedDeclarations | TS only |  |  |  |  | `export interface RowOptionsV2 {` |
+| arkui.component.row | RowOptionsV2 | RowOptionsV2 | 0 | interface |  |  |  |  | TS only |  |  |  |  | `export interface RowOptionsV2 {` |
+| arkui.component.row | RowOptionsV2 | space | 0 | field |  |  |  |  | TS only |  |  |  |  | `space?: SpaceType;` |
 | arkui.component.row | RowAttribute | RowAttribute | 0 | interface | done | unnamed | Row | Native only | done | Andrey Khudenkikh | pass |  |  | `export declare interface RowAttribute extends CommonMethod {` |
 | arkui.component.row | RowAttribute | alignItems | 0 | method | done | Row | setAlignItems | Native only | done | Andrey Khudenkikh | pass |  |  | `alignItems(value: (VerticalAlign | undefined)): this` |
 | arkui.component.row | RowAttribute | justifyContent | 0 | method | done | Row | setJustifyContent | Native only | done | Andrey Khudenkikh | pass |  |  | `justifyContent(value: (FlexAlign | undefined)): this` |
@@ -7608,7 +7815,7 @@
 | arkui.component.slider | SliderBlockStyle | SliderBlockStyle | 0 | interface | generated | unnamed | SliderBlockStyle | Native only | generated |  |  |  |  | `export declare interface SliderBlockStyle {` |
 | arkui.component.slider | SliderBlockStyle | type | 0 | field | generated | SliderBlockStyle | type | Native only | generated |  |  |  |  | `type: SliderBlockType;` |
 | arkui.component.slider | SliderBlockStyle | image | 0 | field | generated | SliderBlockStyle | image | Native only | generated |  |  |  |  | `image?: ResourceStr;` |
-| arkui.component.slider | SliderBlockStyle | shape | 0 | field | Deleted because of DeletedMembers |  |  | Deleted because of DeletedMembers | TS only |  |  |  |  | `shape?: (CircleAttribute | EllipseAttribute | PathAttribute | RectAttribute);` |
+| arkui.component.slider | SliderBlockStyle | shape | 0 | field |  |  |  |  | TS only |  |  |  |  | `shape?: (CircleAttribute | EllipseAttribute | PathAttribute | RectAttribute);` |
 | arkui.component.slider | unnamed | SliderTriggerChangeCallback | 0 | field | generated | unnamed | SliderTriggerChangeCallback | Native only | generated |  |  |  |  | `export type SliderTriggerChangeCallback = ((value: number, mode: SliderChangeMode)=> void);` |
 | arkui.component.slider | SliderConfiguration | SliderConfiguration | 0 | interface | generated | unnamed | SliderConfiguration | Native only | generated |  |  |  |  | `export declare interface SliderConfiguration extends CommonConfiguration<SliderConfiguration> {` |
 | arkui.component.slider | SliderConfiguration | value | 0 | field | generated | SliderConfiguration | value | Native only | generated |  |  |  |  | `value: number;` |
@@ -9864,106 +10071,4 @@
 | arkui.component.xcomponent | XComponentParameters | type | 0 | field | generated | XComponentParameters | type | Native only | generated |  |  |  |  | `type: XComponentType;` |
 | arkui.component.xcomponent | XComponentParameters | nativeXComponentHandler | 0 | field | generated | XComponentParameters | nativeXComponentHandler | Native only | generated |  |  |  |  | `nativeXComponentHandler: Callback<NativeXComponentPointer>;` |
 | arkui.component.xcomponent | XComponentParameters | controller | 0 | field | generated | XComponentParameters | controller | Native only | generated |  |  |  |  | `controller?: XComponentController;` |
-| arkui.component.xcomponent | unnamed | XComponent | 0 | function | blocked IDL | XComponent | setXComponentOptions | Native only | blocked IDL | Tuzhilkin Ivan | test blocked |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+), demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `@memo() @ComponentBuilder() export declare function XComponent(params: (XComponentParameters | XComponentOptions | NativeXComponentParameters), @memo() content_?: (()=> void)): XComponentAttribute` || arkui.component.customComponent | custom_component | unnamed | BaseCustomDialog | 0 | class | Deleted package | `export declare abstract class BaseCustomDialog<T extends BaseCustomDialog<T, T_Options>, T_Options>  extends ExtendableComponent {` |
-| arkui.component.customComponent | BaseCustomDialog | constructor | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `public constructor(useSharedStorage?: boolean, storage?: LocalStorage)` |
-| arkui.component.customComponent | BaseCustomDialog | $_instantiate | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `@ComponentBuilder() public static $_instantiate(factory: (()=> T), initializers?: T_Options, @Builder() content?: (()=> void)): T` |
-| arkui.component.customComponent | BaseCustomComponent | BaseCustomComponent | 0 | class | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export declare abstract class BaseCustomComponent extends ExtendableComponent {` |
-| arkui.component.customComponent | BaseCustomComponent | aboutToRecycle | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `public aboutToRecycle(): void` |
-| arkui.component.customComponent | BaseCustomComponent | constructor | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `public constructor() {}` |
-| arkui.component.customComponent | CustomComponent | CustomComponent | 0 | class | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export declare abstract class CustomComponent<T extends CustomComponent<T, T_Options>, T_Options>  extends BaseCustomComponent {` |
-| arkui.component.customComponent | CustomComponent | constructor | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `public constructor(useSharedStorage?: boolean, storage?: LocalStorage)` |
-| arkui.component.customComponent | CustomComponent | $_instantiate | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `@ComponentBuilder() public static $_instantiate(factory: (()=> T), initializers?: T_Options, reuseId?: string, @Builder() content?: (()=> void)): T` |
-| arkui.component.customComponent | CustomComponent | aboutToReuse | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `public aboutToReuse(params: Record<string, Object>): void` |
-| arkui.component.customComponent | CustomComponentV2 | CustomComponentV2 | 0 | class | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export declare abstract class CustomComponentV2<T extends CustomComponentV2<T, T_Options>, T_Options>  extends BaseCustomComponent {` |
-| arkui.component.customComponent | CustomComponentV2 | $_instantiate | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `@ComponentBuilder() public static $_instantiate(factory: (()=> T), initializers?: T_Options, reuseId?: string, @Builder() content?: (()=> void)): T` |
-| arkui.component.customComponent | CustomComponentV2 | aboutToReuse | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `public aboutToReuse(): void` |
-| arkui.component.customComponent | CustomComponentV2 | constructor | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `public constructor() {}` |
-| arkui.component.customComponent | PageLifeCycle | PageLifeCycle | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface PageLifeCycle {` |
-| arkui.component.customComponent | PageLifeCycle | onPageShow | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onPageShow(): void {}` |
-| arkui.component.customComponent | PageLifeCycle | onPageHide | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onPageHide(): void {}` |
-| arkui.component.customComponent | PageLifeCycle | onBackPress | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onBackPress(): boolean {` |
-| arkui.component.customComponent | PageLifeCycle | pageTransition | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `pageTransition(): void {}` |
-| arkui.component.customComponent | PageLifeCycle | onNewParam | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onNewParam(param: (object | undefined | null)): void {}` |
-| arkui.component.customComponent | LayoutCallback | LayoutCallback | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface LayoutCallback {` |
-| arkui.component.customComponent | LayoutCallback | onPlaceChildren | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onPlaceChildren(selfLayoutInfo: GeometryInfo, children: Array<Layoutable>, constraint: ConstraintSizeOptions): void {}` |
-| arkui.component.customComponent | LayoutCallback | onMeasureSize | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onMeasureSize(selfLayoutInfo: GeometryInfo, children: Array<Measurable>, constraint: ConstraintSizeOptions): SizeResult {` |
-| arkui.component.lazyForEach | DataOperationType | DataOperationType | 0 | enum_class | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `enum DataOperationType {` |
-| arkui.component.lazyForEach | DataOperationType | ADD | 0 | enum_instance | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `ADD = "add"` |
-| arkui.component.lazyForEach | DataOperationType | DELETE | 0 | enum_instance | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `DELETE = "delete"` |
-| arkui.component.lazyForEach | DataOperationType | EXCHANGE | 0 | enum_instance | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `EXCHANGE = "exchange"` |
-| arkui.component.lazyForEach | DataOperationType | MOVE | 0 | enum_instance | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `MOVE = "move"` |
-| arkui.component.lazyForEach | DataOperationType | CHANGE | 0 | enum_instance | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `CHANGE = "change"` |
-| arkui.component.lazyForEach | DataOperationType | RELOAD | 0 | enum_instance | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `RELOAD = "reload"` |
-| arkui.component.lazyForEach | DataAddOperation | DataAddOperation | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface DataAddOperation {` |
-| arkui.component.lazyForEach | DataAddOperation | type | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `type: DataOperationType;` |
-| arkui.component.lazyForEach | DataAddOperation | index | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `index: number;` |
-| arkui.component.lazyForEach | DataAddOperation | count | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `count?: number;` |
-| arkui.component.lazyForEach | DataAddOperation | key | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `key?: (string | Array<string>);` |
-| arkui.component.lazyForEach | DataDeleteOperation | DataDeleteOperation | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface DataDeleteOperation {` |
-| arkui.component.lazyForEach | DataDeleteOperation | type | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `type: DataOperationType;` |
-| arkui.component.lazyForEach | DataDeleteOperation | index | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `index: number;` |
-| arkui.component.lazyForEach | DataDeleteOperation | count | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `count?: number;` |
-| arkui.component.lazyForEach | DataChangeOperation | DataChangeOperation | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface DataChangeOperation {` |
-| arkui.component.lazyForEach | DataChangeOperation | type | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `type: DataOperationType;` |
-| arkui.component.lazyForEach | DataChangeOperation | index | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `index: number;` |
-| arkui.component.lazyForEach | DataChangeOperation | key | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `key?: string;` |
-| arkui.component.lazyForEach | MoveIndex | MoveIndex | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface MoveIndex {` |
-| arkui.component.lazyForEach | MoveIndex | from | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `from: number;` |
-| arkui.component.lazyForEach | MoveIndex | to | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `to: number;` |
-| arkui.component.lazyForEach | ExchangeIndex | ExchangeIndex | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface ExchangeIndex {` |
-| arkui.component.lazyForEach | ExchangeIndex | start | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `start: number;` |
-| arkui.component.lazyForEach | ExchangeIndex | end | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `end: number;` |
-| arkui.component.lazyForEach | ExchangeKey | ExchangeKey | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface ExchangeKey {` |
-| arkui.component.lazyForEach | ExchangeKey | start | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `start: string;` |
-| arkui.component.lazyForEach | ExchangeKey | end | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `end: string;` |
-| arkui.component.lazyForEach | DataMoveOperation | DataMoveOperation | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface DataMoveOperation {` |
-| arkui.component.lazyForEach | DataMoveOperation | type | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `type: DataOperationType;` |
-| arkui.component.lazyForEach | DataMoveOperation | index | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `index: MoveIndex;` |
-| arkui.component.lazyForEach | DataMoveOperation | key | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `key?: string;` |
-| arkui.component.lazyForEach | DataExchangeOperation | DataExchangeOperation | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface DataExchangeOperation {` |
-| arkui.component.lazyForEach | DataExchangeOperation | type | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `type: DataOperationType;` |
-| arkui.component.lazyForEach | DataExchangeOperation | index | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `index: ExchangeIndex;` |
-| arkui.component.lazyForEach | DataExchangeOperation | key | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `key?: ExchangeKey;` |
-| arkui.component.lazyForEach | DataReloadOperation | DataReloadOperation | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface DataReloadOperation {` |
-| arkui.component.lazyForEach | DataReloadOperation | type | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `type: DataOperationType;` |
-| arkui.component.lazyForEach | unnamed | DataOperation | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export type DataOperation = (DataAddOperation | DataDeleteOperation | DataChangeOperation | DataMoveOperation | DataExchangeOperation | DataReloadOperation);` |
-| arkui.component.lazyForEach | DataChangeListener | DataChangeListener | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface DataChangeListener {` |
-| arkui.component.lazyForEach | DataChangeListener | onDataReloaded | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onDataReloaded(): void` |
-| arkui.component.lazyForEach | DataChangeListener | onDataAdd | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onDataAdd(index: number): void` |
-| arkui.component.lazyForEach | DataChangeListener | onDataMove | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onDataMove(from: number, to: number): void` |
-| arkui.component.lazyForEach | DataChangeListener | onDataDelete | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onDataDelete(index: number): void` |
-| arkui.component.lazyForEach | DataChangeListener | onDataChange | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onDataChange(index: number): void` |
-| arkui.component.lazyForEach | DataChangeListener | onDatasetChange | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onDatasetChange(dataOperations: Array<DataOperation>): void` |
-| arkui.component.lazyForEach | IDataSource | IDataSource | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface IDataSource<T> {` |
-| arkui.component.lazyForEach | IDataSource | totalCount | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `totalCount(): number` |
-| arkui.component.lazyForEach | IDataSource | getData | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `getData(index: number): T` |
-| arkui.component.lazyForEach | IDataSource | registerDataChangeListener | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `registerDataChangeListener(listener: DataChangeListener): void` |
-| arkui.component.lazyForEach | IDataSource | unregisterDataChangeListener | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `unregisterDataChangeListener(listener: DataChangeListener): void` |
-| arkui.component.lazyForEach | LazyForEachAttribute | LazyForEachAttribute | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface LazyForEachAttribute extends DynamicNode {` |
-| arkui.component.lazyForEach | unnamed | ItemGeneratorFunc | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `@Builder() type ItemGeneratorFunc<T> = ((item: T, index: number)=> void);` |
-| arkui.component.lazyForEach | unnamed | KeyGeneratorFunc | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `type KeyGeneratorFunc<T> = ((item: T, index: number)=> string);` |
-| arkui.component.lazyForEach | unnamed | LazyForEach | 0 | function | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `@ComponentBuilder() export declare function LazyForEach<T>(dataSource: IDataSource<T>, itemGenerator: ItemGeneratorFunc<T>, keyGenerator?: KeyGeneratorFunc<T>): LazyForEachAttribute` |
-| arkui.component.repeat | unnamed | RepeatArray | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `type RepeatArray<T> = (Array<T> | ReadonlyArray<T> | Readonly<Array<T>>);` |
-| arkui.component.repeat | unnamed | TemplateTypedFunc | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `type TemplateTypedFunc<T> = ((item: T, index: number)=> string);` |
-| arkui.component.repeat | unnamed | RepeatItemBuilder | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `@Builder() type RepeatItemBuilder<T> = ((repeatItem: RepeatItem<T>)=> void);` |
-| arkui.component.repeat | RepeatItem | RepeatItem | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface RepeatItem<T> {` |
-| arkui.component.repeat | RepeatItem | item | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `item: T;` |
-| arkui.component.repeat | RepeatItem | index | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `index: number;` |
-| arkui.component.repeat | unnamed | OnLazyLoadingFunc | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `type OnLazyLoadingFunc = ((index: number)=> void);` |
-| arkui.component.repeat | unnamed | KeyGeneratorFunc | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `type KeyGeneratorFunc<T> = ((item: T, index: number)=> string);` |
-| arkui.component.repeat | unnamed | OnTotalCountFunc | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `type OnTotalCountFunc = (()=> number);` |
-| arkui.component.repeat | VirtualScrollOptions | VirtualScrollOptions | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface VirtualScrollOptions {` |
-| arkui.component.repeat | VirtualScrollOptions | totalCount | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `totalCount?: number;` |
-| arkui.component.repeat | VirtualScrollOptions | reusable | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `reusable?: boolean;` |
-| arkui.component.repeat | VirtualScrollOptions | onLazyLoading | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onLazyLoading?: OnLazyLoadingFunc;` |
-| arkui.component.repeat | VirtualScrollOptions | onTotalCount | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `onTotalCount?: OnTotalCountFunc;` |
-| arkui.component.repeat | VirtualScrollOptions | disableVirtualScroll | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `disableVirtualScroll?: boolean;` |
-| arkui.component.repeat | TemplateOptions | TemplateOptions | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface TemplateOptions {` |
-| arkui.component.repeat | TemplateOptions | cachedCount | 0 | field | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `cachedCount?: number;` |
-| arkui.component.repeat | RepeatAttribute | RepeatAttribute | 0 | interface | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `export interface RepeatAttribute<T> extends DynamicNode {` |
-| arkui.component.repeat | RepeatAttribute | each | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `each(itemGenerator: RepeatItemBuilder<T>): this` |
-| arkui.component.repeat | RepeatAttribute | key | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `key(keyGenerator: KeyGeneratorFunc<T>): this` |
-| arkui.component.repeat | RepeatAttribute | virtualScroll | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `virtualScroll(virtualScrollOptions?: VirtualScrollOptions): this` |
-| arkui.component.repeat | RepeatAttribute | template | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `template(type: string, itemBuilder: RepeatItemBuilder<T>, templateOptions?: TemplateOptions): this` |
-| arkui.component.repeat | RepeatAttribute | templateId | 0 | method | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `templateId(typedFunc: TemplateTypedFunc<T>): this` |
-| arkui.component.repeat | unnamed | Repeat | 0 | function | Deleted package |  |  | Deleted package | TS only |  |  |  |  | `@ComponentBuilder() export declare function Repeat<T>(arr: RepeatArray<T>): RepeatAttribute<T>` |
+| arkui.component.xcomponent | unnamed | XComponent | 0 | function | blocked IDL | XComponent | setXComponentOptions | Native only | blocked IDL | Tuzhilkin Ivan | test blocked |  | https://gitee.com/nikolay-igotti/idlize/issues/IB8FFO, https://gitee.com/openharmony/arkui_ace_engine/issues/IAZ229 (+), demo blocked by https://gitee.com/nikolay-igotti/idlize/issues/IC4WKA | `@memo() @ComponentBuilder() export declare function XComponent(params: (XComponentParameters | XComponentOptions | NativeXComponentParameters), @memo() content_?: (()=> void)): XComponentAttribute` |
