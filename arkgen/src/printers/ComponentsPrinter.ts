@@ -299,7 +299,7 @@ class ArkTsComponentFileVisitor extends TSLikeComponentFileVisitor {
         if (!this.options.isDeclared)
             imports.addFeature('TypeChecker', '#components')
         if (this.library.useMemoM3) {
-            imports.addFeatures(['memo', 'memo_stable'], '@koalaui/runtime/annotations')
+            imports.addFeatures(['memo', 'memo_stable'], '^arkui.stateManagement.runtime')
             imports.addFeatures(['ComponentBuilder'], '@koalaui/builderLambda')
         }
     }

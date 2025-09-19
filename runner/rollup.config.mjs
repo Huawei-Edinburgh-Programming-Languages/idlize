@@ -57,6 +57,7 @@ export default {
     external: [
         "commander",
         "typescript",
+        "@idlizer/interfaces",
         "@idlizer/arkgen/app",
         "@idlizer/etsgen/app"
     ],
