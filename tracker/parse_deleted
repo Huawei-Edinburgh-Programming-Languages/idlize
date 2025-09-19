@@ -2,11 +2,13 @@
 
 SDK_PATH=../sdk-patched-arkts/api
 
-INPUTS="${SDK_PATH}/arkui/component/repeat.d.ets,${SDK_PATH}/arkui/component/customComponent.d.ets,${SDK_PATH}/arkui/component/lazyForEach.d.ets"
+#INPUTS="${SDK_PATH}/arkui/component/repeat.d.ets,${SDK_PATH}/arkui/component/customComponent.d.ets,${SDK_PATH}/arkui/component/lazyForEach.d.ets"
 
 node ../etsgen --ets2idl \
     --output-dir out \
     --base-dir ${SDK_PATH} \
-    --input-files ${INPUTS} \
+    --input-dir ${SDK_PATH} \
     --ignore-default-config --options-file deleted-config.json \
-    --trace-status ../doc/DELETED_SDK_STATUS.md
+    --trace-status ../doc/FULL_SDK_STATUS.md
+
+#    --input-files ${INPUTS} \

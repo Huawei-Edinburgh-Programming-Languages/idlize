@@ -1,4 +1,11 @@
 {
+    "managed": [
+        "api.internal.component.ets",
+        "arkui.AttributeUpdater",
+        "arkui.AttributeUpdaterFlag",
+        "arkui.component",
+        "arkui.stateManagement.internal"
+    ],
     "include": [
         "arkui",
         "ohos.animator",

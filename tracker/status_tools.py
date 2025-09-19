@@ -107,12 +107,23 @@ def PrintStatus(f, s):
     f.write('|'.join(r).strip())
     f.write('\n')
 
+def inpkg(s, packages):
+    for pkg in packages:
+        if s.startswith(pkg):
+            return True
+    return False
+
 def Split():
     sdk = ReadSdk()
     capi = ReadCapi()
     old = ReadManaged(True)
     ms = []
+    with open(JSON_FILE) as f:
+        config = json.load(f)
+    managed = config['managed']
     for s in sdk:
+        if not inpkg(s.pkg, managed):
+            continue
         res = FindStatus(capi, s.pkg, s.parent, s.name, s.ovr)
         if not res:
             ms.append(s)
@@ -132,12 +143,6 @@ def PrepareSdk():
     include = config['include']
     exclude = config['exclude']
 
-    def inpkg(s, packages):
-        for pkg in packages:
-            if s.startswith(pkg):
-                return True
-        return False
-
     with open(SDK_STATUS, 'w') as fo:
         with open(FULL_SDK_STATUS) as fi:
             fo.write(fi.readline())
@@ -146,12 +151,12 @@ def PrepareSdk():
                 if inpkg(pkg, include) and not inpkg(pkg, exclude):
                     fo.write(line)
 
-        # Append deleted packages        
-        deleted = ReadSdk(DELETED_SDK_STATUS)
-        for i in deleted:
-            r = list(i)
-            r[7] = 'Deleted package'
-            PrintStatus(fo, r)
+#        # Append deleted packages        
+#        deleted = ReadSdk(DELETED_SDK_STATUS)
+#        for i in deleted:
+#            r = list(i)
+#            r[7] = 'Deleted package'
+#            PrintStatus(fo, r)
 
 def PostprocessStatus(inp):
     if inp.type in ['interface', 'enum_class', 'class', 'namespace']:
@@ -187,7 +192,7 @@ def GenerateFullStatus():
                 res.c_parent = cs.c_parent
                 res.c_name = cs.c_name
                 res.c_status = cs.status
-                res.ts_status = '-'
+                res.ts_status = 'Native only'
                 res.owner = cs.owner
                 res.test_status = cs.test_status
                 res.test_version = cs.test_version
@@ -205,11 +210,15 @@ def GenerateFullStatus():
                 res.c_parent = cs.c_parent
                 res.c_name = cs.c_name
                 res.c_status = cs.status
-                res.ts_status = 'Native only'
+                res.ts_status = ts.status
                 res.owner = f'{cs.owner}/{ts.owner}'
                 res.test_status = f'{cs.test_status}/{ts.test_status}'
                 res.test_version = f'{cs.test_version}/{ts.test_version}'
                 res.comment = f'{cs.comment}/{ts.comment}'
+            else:
+                res.status = 'external'
+                res.c_status = 'ignore'
+                res.ts_status = 'ignore'
             PostprocessStatus(res)
             PrintStatus(f, astuple(res))
         for s in sdk:
