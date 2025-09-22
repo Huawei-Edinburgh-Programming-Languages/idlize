@@ -106,7 +106,7 @@
     "CANGJIE SUBSET": "#----------------------",
     "build:cj:callsitekey": "cd ../external/incremental-cj && npm run build:cj:callsitekey",
     "gen-idl:subset:cj": "node ../dtsgen --dts2idl --base-dir ./tests/cangjie-subset-idl/api --input-dir ./tests/cangjie-subset-idl/api/@internal/component/ets,./tests/cangjie-subset-idl/api,./tests/cangjie-subset-idl/api/arkui,./tests/cangjie-subset-idl/api/global --output-dir ./out/cangjie/generated/idl",
-    "gen:subset:cj": "node . --no-implicit-predefined --api-version 99 --idl2peer --input-dir ./out/cangjie/generated/idl,./tests/idls --output-dir ./out/cangjie/generated --language cangjie",
+    "gen:subset:cj": "node . --no-implicit-predefined --api-version 99 --idl2peer --input-dir ./out/cangjie/generated/idl,./tests/idls --output-dir ./out/cangjie/generated --input-files ./tests/subset/api/@ohos.base.idl --language cangjie",
     "build:subset:cj": "cjpm build",
     "build-native:subset:cj": "cd ./native && meson setup -Dsource_set=cangjie build-cangjie-native-dummy && meson compile --verbose -C build-cangjie-native-dummy && meson install -C build-cangjie-native-dummy",
     "exec:subset:cj": "LD_LIBRARY_PATH=./native/build-cangjie-native-dummy:./../external/incremental-cj/runtime/callsitekey:$LD_LIBRARY_PATH && ACE_LIBRARY_PATH=./native/build-cangjie-native-dummy ./build/cj/release/bin/main",

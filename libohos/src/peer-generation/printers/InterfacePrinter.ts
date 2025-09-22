@@ -981,7 +981,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
         throw new Error("Internal error: namespaces are not allowed on the CJ layer")
     }
     convertInterface(node: idl.IDLInterface): void {
-        if (['RuntimeType', 'CallbackResource', 'Materialized'].includes(node.name))
+        if (['RuntimeType', 'CallbackResource', 'Materialized', 'MaterializedBaseTag', 'Want', 'ErrorCallback'].includes(node.name))
             return
         if (this.seenInterfaceNames.has(node.name)) {
             console.log(`interface name: '${node.name}' already exists`)
@@ -1000,7 +1000,8 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
         returnType: idl.IDLType | undefined): string {
         const paramsType = this.printParameters(parameters)
         const retType = this.convertType(returnType !== undefined ? returnType : idl.IDLVoidType)
-        return `public type ${node.name} = (${paramsType}) -> ${retType}`
+        const typeParams = node.typeParameters && node.typeParameters?.length != 0 ? `<${node.typeParameters.map(it => it.split('extends')[0].split('=')[0]).join(', ')}>` : ''
+        return `public type ${node.name}${typeParams} = (${paramsType}) -> ${retType}` // 
     }
     protected printParameters(parameters: idl.IDLParameter[]): string {
         return parameters

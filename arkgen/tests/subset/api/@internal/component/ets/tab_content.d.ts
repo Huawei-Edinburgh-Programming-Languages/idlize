@@ -47,7 +47,7 @@ declare class SubTabBarStyle {
 
     constructor(content: ResourceStr);
 
-    constructor(content: ResourceStr);
+    // constructor(content: ResourceStr);
 
     static of(content: ResourceStr): SubTabBarStyle;
 
@@ -61,10 +61,8 @@ declare class SubTabBarStyle {
 
     labelStyle(value: LabelStyle): SubTabBarStyle;
 
-    padding(value: Padding | Dimension): SubTabBarStyle;
-
-    padding(padding: LocalizedPadding): SubTabBarStyle;
-
+    padding(value: Padding | Dimension | LocalizedPadding): SubTabBarStyle;
+    
     id(value: string): SubTabBarStyle;
 }
 

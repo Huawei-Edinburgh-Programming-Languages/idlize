@@ -66,10 +66,6 @@ declare interface LayoutChild {
     layout(childLayoutInfo: LayoutInfo): void
 }
 
-// declare interface Callback<T, V = void> {
-//   (data: T): V;
-// }
-
 declare interface BaseEvent {
     source: SourceType;
     axisHorizontal?: number;

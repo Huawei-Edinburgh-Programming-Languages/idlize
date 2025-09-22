@@ -409,7 +409,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             if (allowNamedOverloads(this.library.language)) {
                 this.writeNamedOverloadsGroups(decl.methods, writer)
             }
-        }, superInterface, clazz.generics?.map(sanitizeGenerics))
+        }, superInterfaces, clazz.generics?.map(sanitizeGenerics))
         if (idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.DefaultExport) && writer.language != Language.CJ) {
             writer.writeLines([
                 `export default ${decl.name}`

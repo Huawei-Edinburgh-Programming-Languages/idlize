@@ -1632,7 +1632,7 @@ interface NavigationInterface {
    * @atomicservice
    * @since 11
    */
-  (): NavigationAttribute;
+  // (): NavigationAttribute;
 
   /**
    * Called when the navigator view interface is used, with route table provided.
