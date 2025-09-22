@@ -221,7 +221,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
         const writer = this.printer
 
         const ctorCall = writer.makeMethodCall(implementationClassName, ctor.sig.name,
-            ctorSig.args.map((_, index) => writer.makeString(ctorSig.argsNames[index]))
+            ctorSig.args.map((_, index) => writer.makeString(writer.escapeKeyword(ctorSig.argsNames[index])))
         )
 
         const ctorArgs = [writer.makeString(MATERIALIZED_TAG), ctorCall]
@@ -409,8 +409,8 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             if (allowNamedOverloads(this.library.language)) {
                 this.writeNamedOverloadsGroups(decl.methods, writer)
             }
-        }, superInterfaces, clazz.generics?.map(sanitizeGenerics))
-        if (idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.DefaultExport)) {
+        }, superInterface, clazz.generics?.map(sanitizeGenerics))
+        if (idl.hasExtAttribute(decl, idl.IDLExtendedAttributes.DefaultExport) && writer.language != Language.CJ) {
             writer.writeLines([
                 `export default ${decl.name}`
             ])
@@ -540,7 +540,7 @@ abstract class MaterializedFileVisitorBase implements MaterializedFileVisitor {
             this.printMethods(clazz, nonStaticMethodsFilter)
         }, superClassName, interfaces.length === 0 ? undefined : interfaces, classTypeParameters)
 
-        if (idl.isClassSubkind(clazz.decl) && idl.hasExtAttribute(clazz.decl, idl.IDLExtendedAttributes.DefaultExport)) {
+        if (idl.isClassSubkind(clazz.decl) && idl.hasExtAttribute(clazz.decl, idl.IDLExtendedAttributes.DefaultExport) && printer.language != Language.CJ) {
             printer.writeLines([
                 `export default ${clazz.decl.name}`
             ])

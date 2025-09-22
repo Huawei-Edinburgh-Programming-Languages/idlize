@@ -576,6 +576,8 @@ declare interface Rectangle {
     height?: Length;
 }
 
+function toIncludeDouble(value?: double)
+
 declare interface RectResult {
     x: number;
     y: number;

@@ -72,9 +72,9 @@ export class CJCheckDefinedExpression implements LanguageExpression {
 }
 
 export class CJCastExpression implements LanguageExpression {
-    constructor(public value: LanguageExpression, public type: string, private unsafe = false) {}
+    constructor(public value: String, public type: string, private unsafe = false) {}
     asString(): string {
-        return `match (${this.value.asString()} as ${this.type}) { case Some(x) => x; case None => throw Exception("Cast is not succeeded")}`
+        return `match (${this.value} as ${this.type}) { case Some(x) => x; case None => throw Exception("Cast is not succeeded")}`
     }
 }
 
@@ -361,7 +361,7 @@ export class CJLanguageWriter extends LanguageWriter {
         this.pushIndent()
         if (delegationCall) {
             const delegationType = (delegationCall?.delegationType == DelegationType.THIS) ? "this" : "super"
-            this.print(`${delegationType}(${delegationCall.delegationArgs.map(it =>it.asString()).join(", ")})`)
+            this.print(`${delegationType}(${delegationCall.delegationArgs.map(it => this.escapeKeyword(it.asString())).join(", ")})`)
         }
         op(this)
         this.popIndent()
@@ -382,6 +382,12 @@ export class CJLanguageWriter extends LanguageWriter {
         this.printer.print(`}`)
     }
     writeProperty(propName: string, propType: idl.IDLType, modifiers: FieldModifier[], getter?: { method: Method, op?: () => void }, setter?: { method: Method, op: () => void }, initExpr?: LanguageExpression): void {
+        const isReadonly = modifiers.includes(FieldModifier.READONLY)
+        const isGetter = modifiers.includes(FieldModifier.GET)
+        const isSetter = modifiers.includes(FieldModifier.SET)
+        const isImmutable = isReadonly || (isGetter && !isSetter)
+        let isStatic = modifiers.includes(FieldModifier.STATIC)
+
         let containerName = propName.concat("_container")
         let truePropName = this.escapeKeyword(propName)
         if (getter) {
@@ -389,15 +395,13 @@ export class CJLanguageWriter extends LanguageWriter {
                 this.print(`private var ${containerName}: ${this.getNodeName(propType)}`)
             }
         }
-        let isStatic = modifiers.includes(FieldModifier.STATIC)
-        let isMutable = !modifiers.includes(FieldModifier.READONLY)
         let initializer = initExpr ? ` = ${initExpr.asString()}` : ""
-        this.print(`public ${isMutable ? "mut " : ""}${isStatic ? "static " : "open "}prop ${truePropName}: ${this.getNodeName(propType)}${initializer}`)
+        this.print(`public ${isImmutable ? "" : "mut "}${isStatic ? "static " : "open "}prop ${truePropName}: ${this.getNodeName(propType)}${initializer}`)
         if (getter) {
             this.print('{')
             this.pushIndent()
             this.writeGetterImplementation(getter.method, getter.op)
-            if (isMutable) {
+            if (!isImmutable) {
                 if (setter) {
                     this.writeSetterImplementation(setter.method, setter ? setter.op : (writer) => {this.print(`${containerName} = ${truePropName}`)})
                 } else {
@@ -523,7 +527,7 @@ export class CJLanguageWriter extends LanguageWriter {
         this.print(`println(\"${message}\")`)
     }
     makeCast(value: LanguageExpression, node: idl.IDLNode, options?:MakeCastOptions): LanguageExpression {
-        return new CJCastExpression(value, this.getNodeName(node), options?.unsafe ?? false)
+        return new CJCastExpression(this.escapeKeyword(value.asString()), this.getNodeName(node), options?.unsafe ?? false)
     }
     typeInstanceOf(type: idl.IDLEntry, value: string, members?: string[]): LanguageExpression {
         if (idl.isInterface(type)) {

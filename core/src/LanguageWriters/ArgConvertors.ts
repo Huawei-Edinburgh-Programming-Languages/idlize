@@ -1103,13 +1103,13 @@ export class UnionConvertor extends BaseArgConvertor {
     }
 }
 
-export class FunctionConvertor extends BaseArgConvertor { //
+export class FunctionConvertor extends BaseArgConvertor {
     constructor(private library: LibraryInterface, param: string) {
         // TODO: pass functions as integers to native side.
         super(idl.IDLFunctionType, [RuntimeType.FUNCTION], false, false, param)
     }
     convertorArg(param: string, writer: LanguageWriter): string {
-       throw new Error('Shall not be used')
+        throw new Error('Shall not be used')
     }
     convertorSerialize(param: string, value: string, writer: LanguageWriter): LanguageStatement {
         throw new Error('Shall not be used')

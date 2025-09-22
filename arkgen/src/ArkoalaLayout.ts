@@ -27,6 +27,7 @@ export function HandwrittenModule(language: Language, isSdk = false) {
     switch (language) {
         case Language.TS: return "./handwritten"
         case Language.ARKTS: return isSdk ? './index' : "#handwritten"
+        case Language.CJ: return "./Handwritten"
         case Language.KOTLIN: return "./handwritten"
         default: throw new Error("Not implemented")
     }
