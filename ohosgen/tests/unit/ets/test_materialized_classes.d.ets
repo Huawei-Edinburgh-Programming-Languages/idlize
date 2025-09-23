@@ -35,7 +35,7 @@ export namespace test_materialized_classes {
 
 
     export class MaterializedComplexArguments extends MaterializedWithCreateMethod {
-        method3(interface: UtilityInterface): UtilityInterface
+        method3(utilityInterface: UtilityInterface): UtilityInterface
         method4(array: number[]): string[]
         method5(arrayInterfaces: UtilityInterface[]): UtilityInterface[]
     }
