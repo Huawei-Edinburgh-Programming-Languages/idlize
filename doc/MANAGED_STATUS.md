@@ -454,9 +454,9 @@
 | arkui.component.navigation | unnamed | NavBar | 0 |  |  |  |  |  |
 | arkui.component.navigation | NavigationAttribute | attributeModifier | 0 |  |  |  |  |  |
 | arkui.component.nodeContainer | NodeContainerAttribute | attributeModifier | 0 |  |  |  |  |  |
-| arkui.component.pageTransition | unnamed | CommonTransition | 0 |  | Deleted because of DeletedDeclarations |  |  |  |
-| arkui.component.pageTransition | unnamed | PageTransitionEnter | 0 |  | Deleted because of DeletedDeclarations |  |  |  |
-| arkui.component.pageTransition | unnamed | PageTransitionExit | 0 |  | Deleted because of DeletedDeclarations |  |  |  |
+| arkui.component.pageTransition | unnamed | CommonTransition | 0 | Kirill Kirichenko | Done |  |  |  |
+| arkui.component.pageTransition | unnamed | PageTransitionEnter | 0 | Kirill Kirichenko | Done |  |  |  |
+| arkui.component.pageTransition | unnamed | PageTransitionExit | 0 | Kirill Kirichenko | Done |  |  |  |
 | arkui.component.particle | unnamed | ParticleTuple | 0 |  | Deleted because of DeletedDeclarations |  |  |  |
 | arkui.component.particle | unnamed | VelocityOptions | 0 |  |  |  |  |  |
 | arkui.component.particle | VelocityOptions | speed | 0 |  |  |  |  |  |
