@@ -258,7 +258,12 @@ function checkDataInterfaces() {
   const r1 = testDataInterface(dataIface)
   checkDataTestResult("interface", dataIface, r1.propBoolean, r1.propNumber, r1.propString, r1.propObject)
 
-  const dataClass: DataClass = { propBoolean: valBoolean, propNumber: valNumber, propString: valString, propObject: valObject }
+  const dataClass = new DataClass()
+  dataClass.propBoolean = valBoolean
+  dataClass.propNumber = valNumber
+  dataClass.propString = valString
+  dataClass.propObject = valObject
+
   const r2 = testDataClass(dataClass)
   checkDataTestResult("class", dataIface, r2.propBoolean, r2.propNumber, r2.propString, r2.propObject)
 
