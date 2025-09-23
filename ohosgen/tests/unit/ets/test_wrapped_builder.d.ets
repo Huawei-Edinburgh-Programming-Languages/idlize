@@ -1,4 +1,4 @@
-
+/*
 // TBD: use declare instead of export
 export interface CustomComponentShape {
   shapeStyle: number
@@ -18,3 +18,4 @@ export class CustomComponentSample {
 
   // getSample(val: any): any
 }
+*/

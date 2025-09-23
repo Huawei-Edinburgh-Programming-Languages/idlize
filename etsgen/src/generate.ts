@@ -587,6 +587,9 @@ class IDLVisitor extends arkts.AbstractVisitor {
             if (arkts.isETSModule(node) && node.ident?.name !== 'ETSGLOBAL') {
                 return this.processNode(this.visitETSModule, node)
             }
+            if (arkts.isVariableDeclaration(node)) {
+                return this.processNode(this.visitVariableDeclaration, node)
+            }
 
             //////////////////
 
@@ -639,6 +642,21 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 return idl.createEnumMember(enumNames[index], result, type, value, { extendedAttributes })
             }, it, index))
         this.entries.push(result)
+        return node
+    }
+
+    visitVariableDeclaration(node: arkts.VariableDeclaration): arkts.VariableDeclaration {
+        for (const decl of node.declarators) {
+            const id = decl.id
+            if (arkts.isIdentifier(id)) {
+                const name = id.name
+                if (node.kind == arkts.Es2pandaVariableDeclarationKind.VARIABLE_DECLARATION_KIND_CONST) {
+                    // TBD: parse constant type and value
+                    const result = idl.createConstant(name, idl.IDLBooleanType, "true")
+                    this.entries.push(result)
+                }
+            }
+        }
         return node
     }
 
