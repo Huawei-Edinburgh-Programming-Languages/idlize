@@ -25,13 +25,12 @@ import {
     capitalize,
     createConstructPeerMethod,
     generatorConfiguration,
-    getHookMethod,
     isImportAttr,
 } from '@idlizer/core'
 import { createGlobalScopeLegacy } from './GlobalScopeUtils';
 import { collectDeclarationTargets } from "./DeclarationTargetCollector"
 import { collectPeersForFile } from './PeersCollector'
-import { peerGeneratorConfiguration } from "../DefaultConfiguration"
+import { getHookMethod, peerGeneratorConfiguration } from "../DefaultConfiguration"
 
 const STATUSES = ["Total", "In Progress", "Done", "Blocked", "Managed side", "TestSkipped", "Out of Scope"]
 const TOP_PARENT = 'unnamed'
