@@ -536,7 +536,9 @@
             "ComponentContent",
             "ComponentContentBase",
             "TabContent",
-            "ListItem"
+            "ListItem",
+            "$r",
+            "$rawfile"
         ],
         "ignoreEntry": [
             "Optional",
