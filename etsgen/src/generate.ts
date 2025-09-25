@@ -652,7 +652,8 @@ class IDLVisitor extends arkts.AbstractVisitor {
                 const name = id.name
                 if (node.kind == arkts.Es2pandaVariableDeclarationKind.VARIABLE_DECLARATION_KIND_CONST) {
                     // TBD: parse constant type and value
-                    const result = idl.createConstant(name, idl.IDLBooleanType, "true")
+                    const value = guessTypeAndValue(decl.init)
+                    const result = idl.createConstant(name, idl.IDLBooleanType, value)
                     this.entries.push(result)
                 }
             }
@@ -1811,4 +1812,13 @@ class IDLVisitor extends arkts.AbstractVisitor {
     private traceDeleted(reason: string) {
         this.saveStatus(reason)
     }
+}
+
+function guessTypeAndValue(initExpr: arkts.Expression | undefined): string {
+    if (!initExpr) return ""
+
+    const value = initExpr.toString
+    if (value == "true" || value == "false") return value
+    if (!isNaN(parseFloat(value))) return value
+    return `"${value}"`
 }

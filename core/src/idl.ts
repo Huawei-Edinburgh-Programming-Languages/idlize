@@ -1591,9 +1591,11 @@ export function nameWithType(
 }
 
 export function printConstant(idl: IDLConstant): PrintedLine[] {
+    // TBD: use undefined init value
+    const initExpr = idl.value == "" ? "" : ` = ${idl.value}`
     return [
         ...printExtendedAttributes(idl, 1),
-        `const ${nameWithType(idl)} = ${idl.value};`
+        `const ${nameWithType(idl)}${initExpr};`
     ]
 }
 
