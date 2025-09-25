@@ -1001,7 +1001,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
         const paramsType = this.printParameters(parameters)
         const retType = this.convertType(returnType !== undefined ? returnType : idl.IDLVoidType)
         const typeParams = node.typeParameters && node.typeParameters?.length != 0 ? `<${node.typeParameters.map(it => it.split('extends')[0].split('=')[0]).join(', ')}>` : ''
-        return `public type ${node.name}${typeParams} = (${paramsType}) -> ${retType}` // 
+        return `public type ${node.name}${typeParams} = (${paramsType}) -> ${retType}`
     }
     protected printParameters(parameters: idl.IDLParameter[]): string {
         return parameters

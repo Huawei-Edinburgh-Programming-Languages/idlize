@@ -24,9 +24,9 @@ declare type LengthMetricsUnit = import('../api/arkui/Graphics').LengthMetricsUn
 
 declare type LengthMetrics = import('../api/arkui/Graphics').LengthMetrics;
 
-declare type ErrorCallback = import('../api/@ohos.base').ErrorCallback;
+// declare type ErrorCallback = import('../api/@ohos.base').ErrorCallback;
 
-declare type Want = import('../api/@ohos.base').Want;
+// declare type Want = import('../api/@ohos.base').Want;
 
 declare type Length = string | number | Resource;
 
