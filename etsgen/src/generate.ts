@@ -647,13 +647,14 @@ class IDLVisitor extends arkts.AbstractVisitor {
 
     visitVariableDeclaration(node: arkts.VariableDeclaration): arkts.VariableDeclaration {
         for (const decl of node.declarators) {
+            console.log(decl.dumpJson())
             const id = decl.id
             if (arkts.isIdentifier(id)) {
                 const name = id.name
+                id.typeAnnotation
                 if (node.kind == arkts.Es2pandaVariableDeclarationKind.VARIABLE_DECLARATION_KIND_CONST) {
-                    // TBD: parse constant type and value
-                    const value = guessTypeAndValue(decl.init)
-                    const result = idl.createConstant(name, idl.IDLBooleanType, value)
+                    const [type, value] = this.guessTypeAndValue(name, id.typeAnnotation, decl.init)
+                    const result = idl.createConstant(name, type, value)
                     this.entries.push(result)
                 }
             }
@@ -1812,13 +1813,14 @@ class IDLVisitor extends arkts.AbstractVisitor {
     private traceDeleted(reason: string) {
         this.saveStatus(reason)
     }
-}
 
-function guessTypeAndValue(initExpr: arkts.Expression | undefined): string {
-    if (!initExpr) return ""
-
-    const value = initExpr.toString
-    if (value == "true" || value == "false") return value
-    if (!isNaN(parseFloat(value))) return value
-    return `"${value}"`
+    private guessTypeAndValue(name: string, type?: arkts.TypeNode, initExpr?: arkts.Expression): [idl.IDLType, string | undefined] {
+        if (type) return [this.serializeType(type), arkts.isStringLiteral(initExpr) ? `"${initExpr.toString}"` : initExpr?.toString]
+        if (!initExpr) throw new Error(`Constant ${name} neither has type nor the initializer`)
+        const value = initExpr.toString
+        if (arkts.isBooleanLiteral(initExpr)) return [idl.IDLBooleanType, value]
+        if (arkts.isNumberLiteral(initExpr)) return [idl.IDLNumberType, value]
+        if (arkts.isStringLiteral(initExpr)) return [idl.IDLStringType, `"${value}"`]
+        throw new Error(`Unknown initExpr type for constant: ${name} with value: ${value}`)
+    }
 }
