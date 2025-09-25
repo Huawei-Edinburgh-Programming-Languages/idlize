@@ -95,7 +95,7 @@ export function createCallbackKindPrinter(language: Language): PrinterFunction {
         return [{
             over: {
                 node: library.resolveTypeReference(idl.createReferenceType("CallbackKind")) as idl.IDLEntry,
-                role: LayoutNodeRole.PEER,
+                role: LayoutNodeRole.INTERFACE,
             },
             generate,
         }]
@@ -596,7 +596,7 @@ export function createDeserializeAndCallPrinter(libraryName: string, language: L
         return [{
             over: {
                 node: library.resolveTypeReference(idl.createReferenceType("deserializeAndCallCallback")) as idl.IDLEntry,
-                role: LayoutNodeRole.PEER,
+                role: LayoutNodeRole.INTERFACE,
             },
             generate: () => {
                 const content = library.createLanguageWriter(language)

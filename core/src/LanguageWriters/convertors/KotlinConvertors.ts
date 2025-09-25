@@ -20,13 +20,19 @@ import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from '../nameConvertor'
 import { removePoints } from '../../util'
 import { InteropReturnTypeConvertor } from './InteropConvertors'
+import { LayoutNodeRole } from '../../peer-generation/LayoutManager'
 
 export class KotlinTypeNameConvertor implements NodeConvertor<string>, IdlNameConvertor {
 
     constructor(protected resolver: ReferenceResolver) { }
 
-    convert(node: idl.IDLNode): string {
+    convert(node: idl.IDLNode, role: LayoutNodeRole = LayoutNodeRole.INTERFACE): string {
+        switch (role) {
+            case LayoutNodeRole.INTERFACE:
         return convertNode(this, node)
+            default:
+                throw new Error(`LayoutNodeRole ${role.name} is not supported yet for KotlinTypeNameConvertor, please implement it`)
+        }
     }
 
     convertNamespace(node: idl.IDLNamespace): string {

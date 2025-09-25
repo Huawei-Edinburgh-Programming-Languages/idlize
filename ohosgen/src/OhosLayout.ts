@@ -94,9 +94,9 @@ export class OhosTsLayout implements LayoutManagerStrategy {
         switch (role) {
             case LayoutNodeRole.SERIALIZER: return this.selectSerializer(node)
             case LayoutNodeRole.INTERFACE: return this.selectInterface(node)
-            case LayoutNodeRole.PEER: return this.selectPeer(node)
+            case LayoutNodeRole.NATIVE_MODULE: return this.selectInterface(node)
             case LayoutNodeRole.GLOBAL: return this.selectGlobal(node)
-            case LayoutNodeRole.COMPONENT: return ''
+            default: throw new Error(`Unknown layout role ${role.name}`)
         }
     }
 }
@@ -169,9 +169,8 @@ export class OhosKotlinLayout implements LayoutManagerStrategy {
         switch (role) {
             case LayoutNodeRole.SERIALIZER: return this.selectSerializer(node)
             case LayoutNodeRole.INTERFACE: return this.selectInterface(node)
-            case LayoutNodeRole.PEER: return this.selectPeer(node)
             case LayoutNodeRole.GLOBAL: return this.selectGlobal(node)
-            case LayoutNodeRole.COMPONENT: return ''
+            default: throw new Error(`Unknown layout role ${role.name}`)
         }
     }
 }

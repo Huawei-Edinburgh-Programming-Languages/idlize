@@ -15,24 +15,19 @@
 
 import { IDLEntry } from "../idl";
 
-export enum LayoutNodeRole {
-    PEER,
-    INTERFACE,
-    GLOBAL,
-    COMPONENT,
-    SERIALIZER,
-}
+export class LayoutNodeRole {
+    protected constructor(public name: string) {}
 
-export type LayoutTargetDescriptionHint =
-      'component.implementation'
-    | 'component.interface'
-    | 'component.function'
-    | 'component.modifier'
+    static INTERFACE = new LayoutNodeRole("interface")
+    static MATERIALIZED_INTERNAL = new LayoutNodeRole("materialized_internal")
+    static GLOBAL = new LayoutNodeRole("global")
+    static SERIALIZER = new LayoutNodeRole("serializer")
+    static NATIVE_MODULE = new LayoutNodeRole("native_module")
+}
 
 export interface LayoutTargetDescription {
     node: IDLEntry
     role: LayoutNodeRole
-    hint?: LayoutTargetDescriptionHint
 }
 
 export interface LayoutManagerStrategy {

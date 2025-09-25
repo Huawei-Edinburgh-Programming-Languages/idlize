@@ -18,26 +18,13 @@ import { generatorConfiguration, generatorTypePrefix } from "../../config"
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from "../nameConvertor"
 import { PrimitiveTypesInstance } from '../../peer-generation/PrimitiveType'
 import { InteropArgConvertor } from './InteropConvertors'
-import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
 import { maybeTransformManagedCallback } from '../ArgConvertors'
 import { qualifiedName } from '../../peer-generation/idl/common'
 import { isInIdlizeInternal } from '../../idl'
 import { LibraryInterface } from '../../LibraryInterface'
 import { isTopLevelConflicted } from '../../peer-generation/ConflictingDeclarations'
 import { Language } from '../../Language'
-
-function isSubtypeTopLevelConflicted(library: LibraryInterface, node: idl.IDLType) {
-    let hasConflicts = false
-    idl.forEachChild(node, (child) => {
-        if (idl.isReferenceType(child)) {
-            const decl = library.resolveTypeReference(child)
-            if (decl) {
-                hasConflicts ||= isTopLevelConflicted(library, Language.CPP, decl)
-            }
-        }
-    })
-    return hasConflicts
-}
+import { LayoutNodeRole } from '../../peer-generation/LayoutManager'
 
 export interface ConvertResult {
     text: string,
@@ -272,7 +259,9 @@ export class CppConvertor extends GenericCppConvertor implements IdlNameConverto
         return idl.isPrimitiveType(type)
     }
 
-    convert(node: idl.IDLNode): string {
+    convert(node: idl.IDLNode, role: LayoutNodeRole = LayoutNodeRole.INTERFACE): string {
+        if (role !== LayoutNodeRole.INTERFACE)
+            throw new Error("Only LayoutNodeRole.INTERFACE is supported for CppConvertor!")
         return this.unwrap(node, this.convertNode(node))
     }
 }
@@ -282,7 +271,9 @@ export class CppNameConvertor implements IdlNameConvertor {
     constructor(protected library: LibraryInterface) {
         this.cppConvertor = new GenericCppConvertor(library)
     }
-    convert(node: idl.IDLNode): string {
+    convert(node: idl.IDLNode, role: LayoutNodeRole = LayoutNodeRole.INTERFACE): string {
+        if (role !== LayoutNodeRole.INTERFACE)
+            throw new Error("Only LayoutNodeRole.INTERFACE is supported for CppNameConvertor!")
         return this.cppConvertor.convertNode(node).text
     }
 }
@@ -293,7 +284,9 @@ export class StructureNameConvertor extends CppConvertor {
         this.isInsideStructure = true
     }
 
-    convert(node: idl.IDLNode): string {
+    convert(node: idl.IDLNode, role: LayoutNodeRole = LayoutNodeRole.INTERFACE): string {
+        if (role !== LayoutNodeRole.INTERFACE)
+            throw new Error("Only LayoutNodeRole.INTERFACE is supported for StructureNameConvertor!")
         return this.convertNode(node).text
     }
 }

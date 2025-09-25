@@ -18,7 +18,8 @@ import { capitalize, stringOrNone, Language, generifiedTypeName, sanitizeGeneric
     getSuper, ReferenceResolver, MaterializedMethod, DelegationType, LanguageExpression,
     DelegationCall, getInternalClassName, LanguageWriter, LayoutNodeRole, MaterializedClass, MaterializedField,
     qualifiedName, PeerMethodSignature, removePoints, maybeRestoreGenerics,
-    PACKAGE_IDLIZE_INTERNAL, isMaterialized, PeerLibrary } from '@idlizer/core'
+    PACKAGE_IDLIZE_INTERNAL, isMaterialized, PeerLibrary, 
+    LibraryInterface} from '@idlizer/core'
 import { writePeerMethod } from "./PeersPrinter"
 import {
     FieldModifier,
@@ -851,13 +852,14 @@ function isSuperClassMaterialized(library: PeerLibrary, superClass?: idl.IDLRefe
     return superClassDecl ? idl.isInterface(superClassDecl) && isMaterialized(superClassDecl, library) : false
 }
 
-function getSuperName(clazz: MaterializedClass, resolver:ReferenceResolver): string | undefined {
+function getSuperName(clazz: MaterializedClass, library: LibraryInterface): string | undefined {
     const superClass = clazz.superClass
     if (!superClass) return undefined
-    const decl = resolver.resolveTypeReference(superClass)
+    const decl = library.resolveTypeReference(superClass)
     if (!decl) return undefined
     const nsName = idl.getQualifiedName(decl, 'namespace.name')
-    return clazz.isInterface ? getInternalClassName(nsName) : nsName
+    const nameConvetor = library.createTypeNameConvertor(library.language)
+    return clazz.isInterface ? nameConvetor.convert(decl, LayoutNodeRole.MATERIALIZED_INTERNAL) : nsName
 }
 
 // TBD: Refactor tagged method staff

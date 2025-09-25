@@ -50,7 +50,7 @@ import {
 } from '@idlizer/libohos'
 import { getReferenceTo } from '../knownReferences'
 import { componentToAttributesInterface } from './PeersPrinter'
-import { HandwrittenModule } from '../ArkoalaLayout'
+import { ArkoalaLayoutNodeRole, HandwrittenModule } from '../ArkoalaLayout'
 
 export function shiftIfIsNotEmpty(line:string): string {
     if (line.length > 0) {
@@ -140,7 +140,7 @@ class TSLikeComponentFileVisitor implements ComponentFileVisitor {
             if (this.library.language === Language.TS) {
                 imports.addFeature("isInstanceOf", "@koalaui/interop")
             }
-            imports.addFeature(componentToPeerClass(peer.componentName), this.library.layout.resolve({node: component.attributeDeclaration, role: LayoutNodeRole.PEER}))
+            imports.addFeature(componentToPeerClass(peer.componentName), this.library.layout.resolve({node: component.attributeDeclaration, role: ArkoalaLayoutNodeRole.COMPONENT_PEER}))
         }
         if (peer.originalParentFilename) {
             let [parentRef] = component.attributeDeclaration.inheritance
@@ -149,7 +149,7 @@ class TSLikeComponentFileVisitor implements ComponentFileVisitor {
                 const parentComponent = findComponentByDeclaration(this.library, parentDecl as idl.IDLInterface)!
                 const parentGeneratedPath = this.library.layout.resolve({
                     node: parentDecl,
-                    role: LayoutNodeRole.COMPONENT
+                    role: ArkoalaLayoutNodeRole.COMPONENT_IMPLEMENTATION
                 })
                 if (!this.options.isDeclared)
                     imports.addFeature(generateArkComponentName(parentComponent.name), `./${parentGeneratedPath}`)
@@ -230,8 +230,7 @@ class TSLikeComponentFileVisitor implements ComponentFileVisitor {
             generate,
             over: {
                 node: component.attributeDeclaration,
-                role: LayoutNodeRole.COMPONENT,
-                hint: 'component.implementation'
+                role: ArkoalaLayoutNodeRole.COMPONENT_IMPLEMENTATION,
             }
         }]
     }
@@ -262,8 +261,7 @@ class TSLikeComponentFileVisitor implements ComponentFileVisitor {
                         content: printer,
                         over: {
                             node: component.attributeDeclaration,
-                            role: LayoutNodeRole.COMPONENT,
-                            hint: 'component.function'
+                            role: ArkoalaLayoutNodeRole.COMPONENT_FUNCTION,
                         }
                     }]
                 const declaredPostrix = this.options.isDeclared ? "decl_" : ""
@@ -292,8 +290,7 @@ class TSLikeComponentFileVisitor implements ComponentFileVisitor {
             generate,
             over: {
                 node: component.attributeDeclaration,
-                role: LayoutNodeRole.COMPONENT,
-                hint: 'component.function'
+                role: ArkoalaLayoutNodeRole.COMPONENT_FUNCTION,
             }
         }]
     }
@@ -397,8 +394,7 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
             generate,
             over: {
                 node: component.attributeDeclaration,
-                role: LayoutNodeRole.COMPONENT,
-                hint: 'component.implementation'
+                role: ArkoalaLayoutNodeRole.COMPONENT_IMPLEMENTATION,
             }
         }]
     }
@@ -433,8 +429,7 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
             generate,
             over: {
                 node: component.attributeDeclaration,
-                role: LayoutNodeRole.COMPONENT,
-                hint: 'component.function'
+                role: ArkoalaLayoutNodeRole.COMPONENT_FUNCTION,
             }
         }]
     }

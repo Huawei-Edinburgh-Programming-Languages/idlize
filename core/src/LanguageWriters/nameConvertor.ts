@@ -14,9 +14,11 @@
  */
 
 import * as idl from '../idl'
+import { LayoutNodeRole } from '../peer-generation/LayoutManager'
 
 export interface IdlNameConvertor {
     convert(node: idl.IDLNode): string
+    convert(node: idl.IDLNode, role: LayoutNodeRole): string
 }
 
 export interface TypeConvertor<T> {

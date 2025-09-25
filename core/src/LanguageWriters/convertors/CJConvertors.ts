@@ -16,6 +16,7 @@
 import * as idl from '../../idl'
 import { CJKeywords } from '../../languageSpecificKeywords'
 import { generateSyntheticIdlNodeName } from '../../peer-generation/idl/common'
+import { LayoutNodeRole } from '../../peer-generation/LayoutManager'
 import { ReferenceResolver } from '../../peer-generation/ReferenceResolver'
 import { removePoints } from '../../util'
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor } from '../nameConvertor'
@@ -27,13 +28,19 @@ export class CJTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
         protected resolver: ReferenceResolver
     ) { }
 
-    convert(node: idl.IDLNode): string {
-        if (idl.isType(node) && idl.isReferenceType(node)) {
-            if (node.name.startsWith('%TEXT%:')) {
-                return node.name.substring(7)
+    convert(node: idl.IDLNode, role: LayoutNodeRole = LayoutNodeRole.INTERFACE): string {
+        switch (role) {
+            case LayoutNodeRole.INTERFACE:  {
+                if (idl.isType(node) && idl.isReferenceType(node)) {
+                    if (node.name.startsWith('%TEXT%:')) {
+                        return node.name.substring(7)
+                    }
+                }
+                return convertNode(this, node)
             }
+            default:
+                throw new Error("LayoutNodeRole is not supported for ")
         }
-        return convertNode(this, node)
     }
 
     /***** TypeConvertor<string> **********************************/

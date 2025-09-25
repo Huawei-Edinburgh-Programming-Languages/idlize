@@ -508,7 +508,7 @@ export function createGeneratedNativeModulePrinter(module: NativeModuleType, mor
         return [{
             over: {
                 node: library.resolveTypeReference(idl.createReferenceType(module.name)) as idl.IDLInterface,
-                role: LayoutNodeRole.PEER
+                role: LayoutNodeRole.NATIVE_MODULE
             },
             generate,
         }]

@@ -19,6 +19,7 @@ import { collapseIdlPeerMethods, collectComponents, collectDeclDependencies, col
 import { collectPeersForFile } from "@idlizer/libohos";
 import { expandComponentWithSupers, generateAttributeModifierSignature } from './ComponentsPrinter';
 import { getReferenceTo } from '../knownReferences';
+import { ArkoalaLayoutNodeRole } from '../ArkoalaLayout';
 
 function capitalizeFirstLetter(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -132,8 +133,7 @@ class ModifiersFileVisitor {
                 const parentComponent = findComponentByDeclaration(this.library, parentDecl as idl.IDLInterface)!
                 const parentGeneratedPath = this.library.layout.resolve({
                     node: parentDecl,
-                    role: LayoutNodeRole.COMPONENT,
-                    hint: 'component.modifier'
+                    role: ArkoalaLayoutNodeRole.COMPONENT_MODIFIER,
                 })
                 importsCollector.addFeature(this.generateAttributeSetName(parentComponent.name), `./${parentGeneratedPath}`)
                 if (parentComponent.attributeDeclaration.inheritance.length) {
@@ -148,7 +148,7 @@ class ModifiersFileVisitor {
         collectDeclItself(this.library, idl.createReferenceType(getReferenceTo('AttributeUpdaterFlag')), importsCollector)
         const peerLocation = this.library.layout.resolve({
             node: component.attributeDeclaration,
-            role: LayoutNodeRole.COMPONENT,
+            role: ArkoalaLayoutNodeRole.COMPONENT_PEER,
         })
         importsCollector.addFeature(componentToPeerClass(component.name), `./${peerLocation}`)
         importsCollector.addFeatures(["int32"], "@koalaui/common")
@@ -411,8 +411,7 @@ class ModifiersFileVisitor {
             generate,
             over: {
                 node: component.attributeDeclaration,
-                role: LayoutNodeRole.COMPONENT,
-                hint: 'component.modifier'
+                role: ArkoalaLayoutNodeRole.COMPONENT_MODIFIER,
             }
         }]
     }

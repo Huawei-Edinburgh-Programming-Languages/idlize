@@ -1141,7 +1141,7 @@ export class MaterializedClassConvertor extends BaseArgConvertor {
                 return `MaterializedBase.toPeerPtr(${writer.escapeKeyword(param)})`
             default:
                 if (isInExternalModule(this.declaration)) {
-                    const extractor = getExtractor(this.declaration, writer.language, true)
+                    const extractor = getExtractor(this.library, this.declaration, true)
                     return `${extractor.receiver}.${extractor.method}(${param})`
                 }
                 return `toPeerPtr(${param})`

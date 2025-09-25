@@ -21,6 +21,13 @@ import { isComponentDeclaration, NativeModule, peerGeneratorConfiguration } from
 const BASE_PATH = 'framework'
 const getGeneratedFilePath = (p:string) => path.join(BASE_PATH, p)
 
+export class ArkoalaLayoutNodeRole extends LayoutNodeRole {
+    static COMPONENT_PEER = new ArkoalaLayoutNodeRole("component.interface")
+    static COMPONENT_MODIFIER = new ArkoalaLayoutNodeRole("component.modifier")
+    static COMPONENT_FUNCTION = new ArkoalaLayoutNodeRole("component.function")
+    static COMPONENT_IMPLEMENTATION = new ArkoalaLayoutNodeRole("component.implementation")
+}
+
 export const SyntheticModule = "./SyntheticDeclarations"
 export function HandwrittenModule(language: Language, isSdk = false) {
     // does this switch needed here?
@@ -149,7 +156,7 @@ export class ArkTsLayout extends CommonLayoutBase {
     // replace point symbol inside names, but not when it is a part of path
     readonly replacePattern = /(\.)[^\.\/]/g
     resolve(target: idl.LayoutTargetDescription): string {
-        if (target.hint === 'component.modifier') {
+        if (target.role === ArkoalaLayoutNodeRole.COMPONENT_MODIFIER) {
             return modifierNameGenerator(target.node.name)
         }
         if (target.node.name === NativeModule.Generated.name)

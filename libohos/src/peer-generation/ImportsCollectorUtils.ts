@@ -14,12 +14,12 @@
  */
 
 import * as idl from "@idlizer/core/idl"
-import { Language, LayoutNodeRole, isStaticMaterialized, maybeRestoreGenerics, isInExternalModule, isInStdlibModule, isTopLevelConflicted } from "@idlizer/core"
+import { Language, LayoutNodeRole, isStaticMaterialized, maybeRestoreGenerics, isInExternalModule, isInStdlibModule, isTopLevelConflicted, wrapCurrentFileDescription } from "@idlizer/core"
 import { ImportFeature, ImportsCollector } from "./ImportsCollector"
 import { createDependenciesCollector } from "./idl/IdlDependenciesCollector"
-import { getInternalClassName, isMaterialized, PeerLibrary, maybeTransformManagedCallback } from "@idlizer/core"
+import { isMaterialized, PeerLibrary, maybeTransformManagedCallback } from "@idlizer/core"
 
-export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | idl.IDLReferenceType): ImportFeature {
+export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | idl.IDLReferenceType, role: LayoutNodeRole = LayoutNodeRole.INTERFACE): ImportFeature {
     const featureNameConvertor = library.createTypeNameConvertor(library.language)
     if (idl.isReferenceType(node)) {
         const decl = library.resolveTypeReference(node)
@@ -33,13 +33,17 @@ export function convertDeclToFeature(library: PeerLibrary, node: idl.IDLEntry | 
         return { module: '', feature: '' }
     }
 
-    let feature = featureNameConvertor.convert(node).split(".")[0]
+    let feature = featureNameConvertor.convert(node, role).split(".")[0]
     let alias: string | undefined
     if ([Language.TS, Language.ARKTS].includes(library.language)) {
         if (isTopLevelConflicted(library, library.language, node)) {
             const featureNs = idl.getNamespaceName(node)
             alias = feature
-            feature = featureNs.at(0) ?? node.name
+            feature = featureNs.at(0) ?? wrapCurrentFileDescription(
+                // trying to calculate name of entry in context of file, where it is declared
+                {node, role},
+                () => featureNameConvertor.convert(node, role),
+            )
         }
     }
 
@@ -105,12 +109,8 @@ export function collectDeclItself(
         emitter.addFeature(feature.feature, feature.module, feature.alias, feature.isDefault)
         if (options?.includeMaterializedInternals) {
             if (idl.isInterface(node) && isMaterialized(node, library) && !isStaticMaterialized(node, library) && !isInExternalModule(node)) {
-                const ns = idl.getNamespaceName(node)
-                if (ns !== '') {
-                    emitter.addFeature(ns.split('.')[0], feature.module)
-                } else {
-                    emitter.addFeature(getInternalClassName(node.name), feature.module)
-                }
+                const materializedInternalFeature = convertDeclToFeature(library, node, LayoutNodeRole.MATERIALIZED_INTERNAL)
+                emitter.addFeature(materializedInternalFeature)
             }
         }
         if (options?.includeTransformedCallbacks) {

@@ -177,10 +177,6 @@ export function getInternalClassName(name: string): string {
     return `${name}Internal`
 }
 
-export function getInternalClassQualifiedName(target: idl.IDLEntry, pattern: idl.QNPattern = "package.namespace.name", language?: Language): string {
-    return getInternalClassName(qualifiedName(target, language ?? ".", pattern))
-}
-
 export function getMaterializedFileName(name:string): string {
     const pascalCase = name.split('_').map(x => capitalize(x)).join('')
     return `Ark${pascalCase}Materialized`

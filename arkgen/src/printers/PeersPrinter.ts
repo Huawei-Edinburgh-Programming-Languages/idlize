@@ -51,7 +51,7 @@ import {
     peerGeneratorConfiguration,
     writePeerMethod
 } from "@idlizer/libohos";
-import { HandwrittenModule } from '../ArkoalaLayout';
+import { ArkoalaLayoutNodeRole, HandwrittenModule } from '../ArkoalaLayout';
 
 export function componentToPeerClass(component: string) {
     return `Ark${component}Peer`
@@ -90,7 +90,7 @@ class PeerFileVisitor {
         this.getDefaultPeerImports(this.library.language, imports)
         if (peer.originalParentFilename) {
             const parentComponent = findComponentByName(this.library, peer.parentComponentName!)
-            imports.addFeature(this.generatePeerParentName(peer), this.library.layout.resolve({node: parentComponent!.attributeDeclaration, role: LayoutNodeRole.PEER}))
+            imports.addFeature(this.generatePeerParentName(peer), this.library.layout.resolve({node: parentComponent!.attributeDeclaration, role: ArkoalaLayoutNodeRole.COMPONENT_PEER}))
         }
         const component = findComponentByType(this.library, idl.createReferenceType(peer.originalClassName!))!
         collectDeclDependencies(this.library, component.attributeDeclaration, imports, { expandTypedefs: true })
@@ -206,7 +206,7 @@ class PeerFileVisitor {
             return {
                 over: {
                     node: component!.attributeDeclaration,
-                    role: LayoutNodeRole.PEER,
+                    role: ArkoalaLayoutNodeRole.COMPONENT_PEER,
                 },
                 generate: () => {
                     const imports = new ImportsCollector()
@@ -258,7 +258,7 @@ class CJPeerFileVisitor extends PeerFileVisitor {
             return {
                 over: {
                     node: component!.attributeDeclaration,
-                    role: LayoutNodeRole.PEER,
+                    role: ArkoalaLayoutNodeRole.COMPONENT_PEER,
                 },
                 generate: () => {
                     const printer = this.library.createLanguageWriter()
@@ -285,7 +285,7 @@ class KotlinPeerFileVisitor extends PeerFileVisitor {
             return {
                 over: {
                     node: component!.attributeDeclaration,
-                    role: LayoutNodeRole.PEER,
+                    role: ArkoalaLayoutNodeRole.COMPONENT_PEER,
                 },
                 generate: () => {
                     const printer = this.library.createLanguageWriter()

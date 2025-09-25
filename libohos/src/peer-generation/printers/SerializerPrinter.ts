@@ -126,7 +126,7 @@ class SerializerPrinter {
                 peerExpr = writer.makeMethodCall("MaterializedBase", "toPeerPtr", [valueExpr])
                 break
             default:
-                const extractor = getExtractor(target, writer.language)
+                const extractor = getExtractor(this.library, target)
                 peerExpr = extractor.receiver
                     ? writer.makeMethodCall(extractor.receiver, extractor.method, [valueExpr])
                     : writer.makeFunctionCall(extractor.method, [valueExpr])
@@ -249,7 +249,7 @@ class SerializerPrinter {
             return
         }
 
-        const extractor = getExtractor(target, writer.language, false)
+        const extractor = getExtractor(this.library, target, false)
         writer.writeStatement(
             writer.makeReturn(
                 writer.makeMethodCall(extractor.receiver!, extractor.method, [writer.makeString(`ptr`)])))

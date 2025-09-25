@@ -18,6 +18,7 @@ import { Language } from '../../Language'
 import { LibraryInterface } from '../../LibraryInterface'
 import { isTopLevelConflicted } from '../../peer-generation/ConflictingDeclarations'
 import { isDeclaredInCurrentFile, LayoutNodeRole } from '../../peer-generation/LayoutManager'
+import { getInternalClassName } from '../../peer-generation/Materialized'
 import { maybeRestoreGenerics } from '../../transformers/GenericTransformer'
 import { convertNode, convertType, IdlNameConvertor, NodeConvertor, TypeConvertor } from '../nameConvertor'
 
@@ -37,8 +38,16 @@ export class TSTypeNameConvertor implements NodeConvertor<string>, IdlNameConver
         }
         return undefined
     }
-    convert(node: idl.IDLNode): string {
-        return convertNode(this, node)
+    convert(node: idl.IDLNode, role: LayoutNodeRole = LayoutNodeRole.INTERFACE): string {
+        switch (role) {
+            case LayoutNodeRole.INTERFACE:
+                return convertNode(this, node)
+            case LayoutNodeRole.MATERIALIZED_INTERNAL: {
+                return getInternalClassName(convertNode(this, node))
+            }
+            default:
+                throw new Error(`LayoutNodeRole ${role.name} is not supported yet for TSTypeNameConvertor, please implement it`)
+        }
     }
 
     convertNamespace(node: idl.IDLNamespace): string {

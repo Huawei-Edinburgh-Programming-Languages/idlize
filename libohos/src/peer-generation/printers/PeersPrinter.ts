@@ -147,7 +147,7 @@ export function writePeerMethod(library: PeerLibrary, printer: LanguageWriter, m
                 if (isNamedNode(returnType)
                     && (returnType.name === method.originalParentName || isMaterializedType(returnType, writer.resolver))) {
                     result = [
-                        ...constructMaterializedObject(writer, signature, "obj", returnValName),
+                        ...constructMaterializedObject(library, writer, signature, "obj", returnValName),
                         writer.makeReturn(writer.makeString("obj"))
                     ]
                 } else if (returnType == idl.IDLAnyType) {
@@ -235,7 +235,7 @@ function returnsThis(method: PeerMethod, returnType: IDLType) {
     return !!method.sig.context && returnType === IDLThisType
 }
 
-function constructMaterializedObject(writer: LanguageWriter, signature: MethodSignature,
+function constructMaterializedObject(library: PeerLibrary, writer: LanguageWriter, signature: MethodSignature,
     resultName: string, peerPtrName: string): LanguageStatement[] {
     const retType = signature.returnType
     if (!idl.isReferenceType(retType)) {
@@ -250,7 +250,7 @@ function constructMaterializedObject(writer: LanguageWriter, signature: MethodSi
     if (!idl.isInterface(decl)) {
         throw new Error(`Materialized class ${decl.name}, kind: ${decl.kind} must be an IDL interface`)
     }
-    const extractor = getExtractor(decl, writer.language, false)
+    const extractor = getExtractor(library, decl, false)
     return [
         writer.makeAssign(
             `${resultName}`,

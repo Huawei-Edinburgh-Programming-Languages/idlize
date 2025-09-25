@@ -803,9 +803,6 @@ export class ArkTSInterfacesVisitor implements InterfacesVisitor {
                 over: {
                     node: entry,
                     role: LayoutNodeRole.INTERFACE,
-                    hint: idl.hasExtAttribute(entry, idl.IDLExtendedAttributes.ComponentModifier)
-                        ? 'component.modifier'
-                        : undefined
                 }
             })
         }

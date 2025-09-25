@@ -18,8 +18,8 @@ import * as fs from "fs"
 import * as idl from "./idl"
 import { Language } from './Language'
 import { getModuleFor, isInExternalModule } from './peer-generation/modules'
-import { getInternalClassName, getInternalClassQualifiedName } from './peer-generation/Materialized'
 import { LibraryInterface } from './LibraryInterface'
+import { LayoutNodeRole } from './peer-generation/LayoutManager'
 
 export function arrayAt<T>(array: T[] | undefined, index: number): T | undefined {
     return array ? array[index >= 0 ? index : array.length + index] : undefined
@@ -393,15 +393,13 @@ function getExtractorClass(target: idl.IDLInterface, toPtr: boolean = true): str
     return toPtr ? "Peer" : ""
 }
 
-export function getExtractor(target: idl.IDLInterface, lang: Language, toPtr: boolean = true): { receiver?: string, method: string } {
+export function getExtractor(library: LibraryInterface, target: idl.IDLInterface, toPtr: boolean = true): { receiver?: string, method: string } {
 
     const receiver = isInExternalModule(target)
         ? `extractors`
         : toPtr
             ? undefined // TBD: update to MaterializedBase when import is updated
-            : (lang == Language.CJ || lang == Language.KOTLIN)
-                ? getInternalClassName(target.name)
-                : getInternalClassQualifiedName(target, "namespace.name", lang)
+            : library.createTypeNameConvertor(library.language).convert(target, LayoutNodeRole.MATERIALIZED_INTERNAL)
 
     const extractorClass = getExtractorClass(target, toPtr)
     const method = toPtr ? `to${extractorClass}Ptr` : `from${extractorClass}Ptr`
