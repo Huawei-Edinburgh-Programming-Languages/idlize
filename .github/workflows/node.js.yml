@@ -1,0 +1,42 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "boole_main" ]
+  pull_request:
+    branches: [ "boole_main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        submodules: true
+    - name: More git setup
+      run: git submodule update --remote && cd external && git fetch origin boole_main:boole_main --depth=1 && git switch boole_main
+    - name: Authenticate NPM repositories
+      run: echo registry=https://repo.huaweicloud.com/repository/npm/ > ~/.npmrc ;
+           echo @ohos:registry=https://repo.harmonyos.com/npm/ >> ~/.npmrc ;
+           echo strict-ssl=false >> ~/.npmrc ;
+           echo lockfile=false >> ~/.npmrc ;
+           echo @idlizer:registry=https://nexus.cn.bz-openlab.ru:10443/repository/koala-npm/ >> ~/.npmrc ;
+           echo @koalaui:registry=https://nexus.cn.bz-openlab.ru:10443/repository/koala-npm/ >> ~/.npmrc ;
+           echo @panda:registry=https://nexus.cn.bz-openlab.ru:10443/repository/koala-npm/ >> ~/.npmrc ;
+           echo '//nexus.cn.bz-openlab.ru:10443/repository/koala-npm/:_auth=${{ secrets.NPM_TOKEN }}' >> ~/.npmrc
+    # - name: Use Node.js ${{ matrix.node-version }}
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     node-version: ${{ matrix.node-version }}
+    #     cache: 'npm'
+    - run: npm i --verbose --no-audit && cd external && npm i
+    # todo: rest of the built process
