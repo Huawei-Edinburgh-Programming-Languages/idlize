@@ -38,5 +38,9 @@ jobs:
     #   with:
     #     node-version: ${{ matrix.node-version }}
     #     cache: 'npm'
-    - run: npm i --verbose --no-audit && cd external && npm i
-    # todo: rest of the built process
+    - name: npm install
+      run: npm i --verbose --no-audit && cd external && npm i
+    - name: dtsgen
+      run: cd dtsgen && npm run compile
+    - name: arkgen
+      run: cd arkgen && npm run compile && npm run gen-idl:subset:arkts && npm run gen:subset:arkts
