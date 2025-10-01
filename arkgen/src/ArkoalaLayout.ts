@@ -235,7 +235,7 @@ export class CJLayout extends CommonLayoutBase {
                         if (idl.isInterfaceSubkind(node)) {
                             return this.getPath(toFileName(node.name) + 'Internal', 'interfaces')
                         }
-                        return this.getPath(toFileName(node.name), 'interface')
+                        return this.getPath(toFileName(node.name), 'interfaces')
                     }
                     return this.getPath(`${this.prefix}${toFileName(node.name)}`, 'interfaces')
                 }
