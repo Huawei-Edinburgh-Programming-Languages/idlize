@@ -43,4 +43,4 @@ jobs:
     - name: dtsgen
       run: cd dtsgen && npm run compile
     - name: arkgen
-      run: cd arkgen && npm run compile && npm run gen-idl:subset:arkts && npm run gen:subset:arkts
+      run: cd arkgen && npm run compile && npm run gen-idl:subset:cj && npm run gen:subset:cj
