@@ -141,7 +141,25 @@ export function installFiles(outDir: string, library: PeerLibrary, files: Map<st
         }
         if (library.language === Language.CJ) {
             imports.clear()
-            codePrefix.push('package idlize', 'import std.collection.*', 'import Interop.*', 'import KoalaRuntime.*', 'import KoalaRuntime.memoize.*', 'import std.time.DateTime')
+
+            const hasCustomPackage = content.some(line => line.trim().startsWith('package '))
+
+            if (!hasCustomPackage) {
+                const pkgDir = path.dirname(filePath)
+                const pkg = ['idlize'].concat(pkgDir.split('/').filter(Boolean)).join('.')
+                codePrefix.push(`package ${pkg}`, '')
+            }
+
+            codePrefix.push('','import std.collection.*', 'import Interop.*', 'import KoalaRuntime.*', 'import KoalaRuntime.memoize.*', 'import std.time.DateTime', '')
+
+            const folder = path.dirname(filePath)
+            if (folder.endsWith('interfaces')) {
+                codePrefix.push('import idlize.cores.*', '')
+            } else if (folder.endsWith('components')) {
+                codePrefix.push('import idlize.peers.*', '')
+            } else if (folder.endsWith('peers')) {
+                codePrefix.push('import idlize.interfaces.*', 'import idlize.cores.*', '')
+            }
         }
 
         const importsWriter = library.createLanguageWriter()

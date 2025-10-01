@@ -50,7 +50,7 @@ export function printCallbacksKindsImports(language: Language, writer: LanguageW
         imports.print(writer, '')
     }
     if (language === Language.CJ) {
-        writer.print('package idlize\n')
+        // package is set in LayoutManager.installFiles for CJ
     }
 }
 
@@ -77,7 +77,7 @@ export function createCallbackKindPrinter(language: Language): PrinterFunction {
                 imports.addFeatures(['int32', 'float32'], '@koalaui/common')
             }
             if (language === Language.CJ) {
-                writer.print('package idlize\n')
+                // package is set in LayoutManager.installFiles for CJ
             }
             let callbacksKindsEnum = idl.createEnum(
                 CallbackKind, [], {}

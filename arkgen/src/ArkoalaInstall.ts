@@ -102,6 +102,23 @@ class CJArkoalaInstall extends BaseArkoalaInstall {
     get tsArkoalaDir(): string {
         throw new Error("Not implemented")
     }
+    
+    // Cangjie specific directories
+    get peerDir(): string {
+        return path.join(this.managedDir, "peers")
+    }
+    get componentDir(): string {
+        return path.join(this.managedDir, "components")
+    }
+    get interfaceDir(): string {
+        return path.join(this.managedDir, "interfaces")
+    }
+    get coreDir(): string {
+        return path.join(this.managedDir, "cores")
+    }
+    get testDir(): string {
+        return path.join(this.managedDir, "tests")
+    }
 }
 
 class KotlinArkoalaInstall extends BaseArkoalaInstall {
