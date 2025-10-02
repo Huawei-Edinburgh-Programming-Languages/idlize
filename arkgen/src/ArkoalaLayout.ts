@@ -239,7 +239,7 @@ export class CJLayout extends CommonLayoutBase {
                     }
                     return this.getPath(`${this.prefix}${toFileName(node.name)}`, 'interfaces')
                 }
-                return this.getPath(`Common`, 'cores')
+                return this.getPath(`Common`, 'interfaces')
             }
             case LayoutNodeRole.PEER: {
                 if (idl.isInterface(node)) {
@@ -250,7 +250,7 @@ export class CJLayout extends CommonLayoutBase {
                 return this.getPath(`CommonPeer`, 'peers')
             }
             case LayoutNodeRole.GLOBAL: {
-                return this.getPath('GlobalScope', 'cores')
+                return this.getPath('GlobalScope', 'interfaces')
             }
             case LayoutNodeRole.COMPONENT: {
                 return this.getPath('Ark' + node.name, 'components')

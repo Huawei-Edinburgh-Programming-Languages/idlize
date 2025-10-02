@@ -135,12 +135,9 @@ function copyArkoalaFiles(config: {
                     const baseName = path.basename(file)
                     switch (baseName) {
                         // peers
-                        case 'CallbackKind.cj':
-                        case 'ArkUINativeModule.cj':
                         case 'ComponentBase.cj':
                         case 'NativePeerNode.cj':
                         case 'PeerNode.cj':
-                        case 'TestNativeModule.cj':
                         destPath = path.join((arkoala as any).peerDir, baseName)
                         break
                         // interfaces
@@ -161,6 +158,50 @@ function copyArkoalaFiles(config: {
                     }
                     fs.mkdirSync(path.dirname(destPath), { recursive: true })
                     copyFile(fromPath, destPath)
+
+                    try {
+                        const isFrameworkSrc = destPath.endsWith('/framework/cangjie/src/Main.cj') || destPath.endsWith('/framework/cangjie/src/Handwritten.cj')
+                        const isPeerFile = destPath.endsWith('/peers/ComponentBase.cj') || destPath.endsWith('/peers/NativePeerNode.cj') || destPath.endsWith('/peers/PeerNode.cj')
+                        const isInterfaceFile = destPath.endsWith('/interfaces/CallbackTransformer.cj') || destPath.endsWith('/interfaces/CallbacksChecker.cj')
+                        // const isInterfacesHelper = /\/cjv2\/src\/(interfaces|cores)\/(CallbackTransformer|CallbacksChecker)\.cj$/.test(destPath)
+                        if (isFrameworkSrc) {
+                            let content = fs.readFileSync(destPath, 'utf-8')
+                            // 修正包名
+                            if (isFrameworkSrc) {
+                                content = content.replace(/^package\s+\w+/m, 'package demo')
+                            }
+                            // 为 Main.cj 添加必要 imports（幂等处理）
+                            if (destPath.endsWith('/Main.cj')) {
+                                const ensure = (line: string) => (content.includes(line) ? '' : line + '\n')
+                                const insertAt = content.indexOf('\n', content.indexOf('package')) + 1
+                                const extra = [
+                                    ensure('import idlize.components.*'),
+                                    ensure('import idlize.peers.*'),
+                                    ensure('import idlize.interfaces.*'),
+                                ].join('')
+                                content = content.slice(0, insertAt) + extra + content.slice(insertAt)
+                            }
+                            // // interfaces/commonPara 帮助类不应导入自身包，移除旧导入
+                            // if (isInterfacesHelper) {
+                            //     content = content.replace(/^import\s+idlize\.(cores|interfaces|commonPara)\.\*\s*$/gm, '')
+                            // }
+                            fs.writeFileSync(destPath, content)
+                        } else if (isPeerFile) {
+                            let content = fs.readFileSync(destPath, 'utf-8')
+                            // 为peer文件添加正确的package声明
+                            if (!content.includes('package idlize.peers')) {
+                                content = 'package idlize.peers\n\n' + content
+                            }
+                            fs.writeFileSync(destPath, content)
+                        } else if (isInterfaceFile) {
+                            let content = fs.readFileSync(destPath, 'utf-8')
+                            // 为interface文件添加正确的package声明
+                            if (!content.includes('package idlize.interfaces')) {
+                                content = content.replace(/^package\s+\w+/m, 'package idlize.interfaces')
+                            }
+                            fs.writeFileSync(destPath, content)
+                        }
+                    } catch {}
                     break
                 }
             }
@@ -386,14 +427,14 @@ export function generateArkoalaFromIdl(config: {
 
     if (peerLibrary.language == Language.CJ) {
         writeIntegratedFile(
-            path.join(arkoala.managedDir, NativeModule.ArkUI.name + peerLibrary.language.extension),
-            printCJPredefinedNativeFunctions(peerLibrary, NativeModule.ArkUI).printToString().concat(
+            path.join(arkoala.managedDir, 'peers', NativeModule.ArkUI.name + peerLibrary.language.extension),
+            'package idlize.peers\n\n' + printCJPredefinedNativeFunctions(peerLibrary, NativeModule.ArkUI).printToString().concat(
                 printPredefinedNativeModule(peerLibrary, NativeModule.ArkUI).content.getOutput().join('\n')
             )
         )
         writeIntegratedFile(
-            path.join(arkoala.managedDir, NativeModule.Test.name + peerLibrary.language.extension),
-            printCJPredefinedNativeFunctions(peerLibrary, NativeModule.Test).printToString().concat(
+            path.join(arkoala.managedDir, 'peers', NativeModule.Test.name + peerLibrary.language.extension),
+            'package idlize.peers\n\n' + printCJPredefinedNativeFunctions(peerLibrary, NativeModule.Test).printToString().concat(
                 printPredefinedNativeModule(peerLibrary, NativeModule.Test).content.getOutput().join('\n')
             )
         )
@@ -403,13 +444,77 @@ export function generateArkoalaFromIdl(config: {
         //         printPredefinedNativeModule(peerLibrary, NativeModule.Interop).content.getOutput().join('\n')
         //     )
         // )
-        writeFile(path.join(arkoala.managedDir, 'CallbackKind' + peerLibrary.language.extension),
-            makeCallbacksKinds(peerLibrary, peerLibrary.language),
+        writeFile(path.join(arkoala.managedDir, 'peers', 'CallbackKind' + peerLibrary.language.extension),
+            'package idlize.peers\n\n' + makeCallbacksKinds(peerLibrary, peerLibrary.language),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
             }
         )
+
+        // Generate empty.cj as a compilation helper file
+        writeFile(path.join(arkoala.managedDir, 'empty.cj'),
+            'package idlize',
+            {
+                onlyIntegrated: config.onlyIntegrated,
+                integrated: true
+            }
+        )
+
+        // Generate cjpm.toml for cjv2 (idlize package)
+        const cjv2Dir = path.join(arkoala.root, 'arkoala-cj/cjv2')
+        const frameworkDir = path.join(arkoala.root, 'arkoala-cj/framework/cangjie')
+        const externalRoot = path.join(__dirname, '../../external')
+        const interopPath = path.join(externalRoot, 'interop/src/cangjie')
+        const runtimePath = path.join(externalRoot, 'incremental-cj/runtime')
+
+        const cjv2Toml = [
+            '[package]',
+            '  name = "idlize"',
+            '  version = "1.0.0"',
+            '  description = "Generated Cangjie v2 module"',
+            '  cjc-version = "0.59.6"',
+            '  src-dir = "./src"',
+            '  target-dir = "./build"',
+            '  output-type = "static"',
+            '  compile-option = "--error-count-limit all"',
+            '  link-option = ""',
+            '  package-configuration = {}',
+            '',
+            '[dependencies]',
+            `  Interop = { path = "${interopPath}" }`,
+            `  KoalaRuntime = { path = "${runtimePath}" }`,
+            ''
+        ].join('\n')
+        writeFile(path.join(cjv2Dir, 'cjpm.toml'), cjv2Toml, {
+            onlyIntegrated: config.onlyIntegrated,
+            integrated: true,
+        })
+
+        // Generate cjpm.toml for framework demo package and depend on idlize
+        const frameworkToml = [
+            '[package]',
+            '  name = "demo"',
+            '  version = "1.0.0"',
+            '  description = "Cangjie framework demo module"',
+            '  cjc-version = "0.59.6"',
+            '  src-dir = "./src"',
+            '  target-dir = "./build"',
+            '  output-type = "static"',
+            '  compile-option = "--error-count-limit all"',
+            '  link-option = ""',
+            '  package-configuration = {}',
+            '',
+            '[dependencies]',
+            `  Interop = { path = "${interopPath}" }`,
+            `  KoalaRuntime = { path = "${runtimePath}" }`,
+            `  idlize = { path = "${cjv2Dir}" }`,
+            ''
+        ].join('\n')
+        writeFile(path.join(frameworkDir, 'cjpm.toml'), frameworkToml, {
+            onlyIntegrated: config.onlyIntegrated,
+            integrated: true,
+        })
     }
 
     if (peerLibrary.language == Language.KOTLIN) {
