@@ -229,7 +229,7 @@ export class CJLayout extends CommonLayoutBase {
                         return this.getPath(`${this.prefix}${toFileName(node.name)}`, 'components')
                     }
                     if (idl.isBuilderClass(node)) {
-                        return this.getPath(`${this.prefix}${toFileName(node.name)}Builder`, 'components')
+                        return this.getPath(`${this.prefix}${toFileName(node.name)}Builder`, 'interfaces')
                     }
                     if (idl.isMaterialized(node, this.library)) {
                         if (idl.isInterfaceSubkind(node)) {
@@ -247,7 +247,7 @@ export class CJLayout extends CommonLayoutBase {
                         return this.getPath(`${this.prefix}${toFileName(node.name)}Peer`, 'peers')
                     }
                 }
-                return this.getPath(`CommonPeer`, 'peers')
+                return this.getPath(`CommonPeer`, 'interfaces')
             }
             case LayoutNodeRole.GLOBAL: {
                 return this.getPath('GlobalScope', 'interfaces')

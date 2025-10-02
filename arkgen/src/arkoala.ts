@@ -143,11 +143,8 @@ function copyArkoalaFiles(config: {
                         // interfaces
                         case 'CallbacksChecker.cj':
                         case 'CallbackTransformer.cj':
-                        destPath = path.join((arkoala as any).interfaceDir, baseName)
-                        break
-                        // Handwritten.cj
                         case 'Handwritten.cj':
-                        destPath = path.join(arkoala.root, file)
+                        destPath = path.join((arkoala as any).interfaceDir, baseName)
                         break
                         default:
                         destPath = path.join(arkoala.root, file)
@@ -160,17 +157,14 @@ function copyArkoalaFiles(config: {
                     copyFile(fromPath, destPath)
 
                     try {
-                        const isFrameworkSrc = destPath.endsWith('/framework/cangjie/src/Main.cj') || destPath.endsWith('/framework/cangjie/src/Handwritten.cj')
+                        const isFrameworkSrc = destPath.endsWith('/framework/cangjie/src/Main.cj')
                         const isPeerFile = destPath.endsWith('/peers/ComponentBase.cj') || destPath.endsWith('/peers/NativePeerNode.cj') || destPath.endsWith('/peers/PeerNode.cj')
-                        const isInterfaceFile = destPath.endsWith('/interfaces/CallbackTransformer.cj') || destPath.endsWith('/interfaces/CallbacksChecker.cj')
-                        // const isInterfacesHelper = /\/cjv2\/src\/(interfaces|cores)\/(CallbackTransformer|CallbacksChecker)\.cj$/.test(destPath)
+                        const isInterfaceFile = destPath.endsWith('/interfaces/CallbackTransformer.cj') || destPath.endsWith('/interfaces/CallbacksChecker.cj') || destPath.endsWith('/interfaces/Handwritten.cj')
                         if (isFrameworkSrc) {
                             let content = fs.readFileSync(destPath, 'utf-8')
-                            // 修正包名
                             if (isFrameworkSrc) {
                                 content = content.replace(/^package\s+\w+/m, 'package demo')
                             }
-                            // 为 Main.cj 添加必要 imports（幂等处理）
                             if (destPath.endsWith('/Main.cj')) {
                                 const ensure = (line: string) => (content.includes(line) ? '' : line + '\n')
                                 const insertAt = content.indexOf('\n', content.indexOf('package')) + 1
@@ -181,23 +175,29 @@ function copyArkoalaFiles(config: {
                                 ].join('')
                                 content = content.slice(0, insertAt) + extra + content.slice(insertAt)
                             }
-                            // // interfaces/commonPara 帮助类不应导入自身包，移除旧导入
-                            // if (isInterfacesHelper) {
-                            //     content = content.replace(/^import\s+idlize\.(cores|interfaces|commonPara)\.\*\s*$/gm, '')
-                            // }
+
                             fs.writeFileSync(destPath, content)
                         } else if (isPeerFile) {
                             let content = fs.readFileSync(destPath, 'utf-8')
-                            // 为peer文件添加正确的package声明
+                            // peers 's package declaration
                             if (!content.includes('package idlize.peers')) {
-                                content = 'package idlize.peers\n\n' + content
+                                content = content.replace(/^package\s+\w+/m, 'package idlize.peers')
                             }
                             fs.writeFileSync(destPath, content)
                         } else if (isInterfaceFile) {
                             let content = fs.readFileSync(destPath, 'utf-8')
-                            // 为interface文件添加正确的package声明
+                            // interfaces 's package declaration
                             if (!content.includes('package idlize.interfaces')) {
                                 content = content.replace(/^package\s+\w+/m, 'package idlize.interfaces')
+                            }
+                            
+                            // changes for Handwritten.cj
+                            if (destPath.endsWith('/interfaces/Handwritten.cj')) {
+                                // keep only package and the CustomNodeBuilder type
+                                const pkg = (content.match(/^package\s+[^\n]+/m)?.[0] ?? 'package idlize.interfaces')
+                                const typeLineMatch = content.match(/^\s*public\s+type\s+CustomNodeBuilder\s*=\s*\(parentNode:\s*Int64\)\s*->\s*Int64\s*$/m)
+                                const typeLine = typeLineMatch ? typeLineMatch[0] : 'public type CustomNodeBuilder = (parentNode: Int64) -> Int64'
+                                content = pkg + "\n\n" + typeLine + "\n"
                             }
                             fs.writeFileSync(destPath, content)
                         }
@@ -428,13 +428,13 @@ export function generateArkoalaFromIdl(config: {
     if (peerLibrary.language == Language.CJ) {
         writeIntegratedFile(
             path.join(arkoala.managedDir, 'peers', NativeModule.ArkUI.name + peerLibrary.language.extension),
-            'package idlize.peers\n\n' + printCJPredefinedNativeFunctions(peerLibrary, NativeModule.ArkUI).printToString().concat(
+            'package idlize.peers\n\nimport std.collection.*\nimport Interop.*\n\n' + printCJPredefinedNativeFunctions(peerLibrary, NativeModule.ArkUI).printToString().concat(
                 printPredefinedNativeModule(peerLibrary, NativeModule.ArkUI).content.getOutput().join('\n')
             )
         )
         writeIntegratedFile(
             path.join(arkoala.managedDir, 'peers', NativeModule.Test.name + peerLibrary.language.extension),
-            'package idlize.peers\n\n' + printCJPredefinedNativeFunctions(peerLibrary, NativeModule.Test).printToString().concat(
+            'package idlize.peers\n\nimport std.collection.*\nimport Interop.*\n\n' + printCJPredefinedNativeFunctions(peerLibrary, NativeModule.Test).printToString().concat(
                 printPredefinedNativeModule(peerLibrary, NativeModule.Test).content.getOutput().join('\n')
             )
         )
@@ -445,7 +445,7 @@ export function generateArkoalaFromIdl(config: {
         //     )
         // )
         writeFile(path.join(arkoala.managedDir, 'peers', 'CallbackKind' + peerLibrary.language.extension),
-            'package idlize.peers\n\n' + makeCallbacksKinds(peerLibrary, peerLibrary.language),
+            'package idlize.peers\n\nimport std.collection.*\nimport Interop.*\n\n' + makeCallbacksKinds(peerLibrary, peerLibrary.language),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true

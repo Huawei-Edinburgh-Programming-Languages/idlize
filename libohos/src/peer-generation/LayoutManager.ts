@@ -159,11 +159,14 @@ export function installFiles(outDir: string, library: PeerLibrary, files: Map<st
             const folder = path.dirname(filePath)
             if (folder.endsWith('components')) {
                 codePrefix.push('import idlize.peers.*', '')
+                codePrefix.push('import idlize.interfaces.*', '')
+                codePrefix.push('import idlize.interfaces.Resource as IResource', '')
             } else if (folder.endsWith('peers')) {
                 codePrefix.push('import idlize.interfaces.*', '')
+                codePrefix.push('import idlize.interfaces.Resource as IResource', '')
             }
 
-            // 特殊处理 Main.cj 文件
+            // for Main.cj file
             const fileName = path.basename(filePath, '.cj')
             if (fileName === 'Main') {
                 const demoInstallPath = path.join(path.dirname(filePath), 'demo', 'Main.cj')
@@ -176,7 +179,16 @@ export function installFiles(outDir: string, library: PeerLibrary, files: Map<st
 
         const importsWriter = library.createLanguageWriter()
         imports.print(importsWriter, filePath, outDir)
-        const completeCode = codePrefix.concat(importsWriter.getOutput()).concat(content).join('\n')
+        let body = content.join('\n')
+        // In non-interfaces (peers/components) files, rewrite unqualified Resource to IResource to avoid ambiguity
+        if (library.language === Language.CJ) {
+            const folder = path.dirname(filePath)
+            if (folder.endsWith('components') || folder.endsWith('peers')) {
+                // replace standalone Resource tokens (not part of a larger identifier or qualified name)
+                body = body.replace(/(?<![\w\.])Resource\b/g, 'IResource')
+            }
+        }
+        const completeCode = codePrefix.concat(importsWriter.getOutput()).join('\n') + '\n' + body
         const text = tsCopyrightAndWarning(completeCode)
 
         const installPath = join(outDir, filePath) + extension
