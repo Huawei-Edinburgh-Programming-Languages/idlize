@@ -1027,52 +1027,25 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
         CJDeclarationConvertor.seenSynteticUnions.add(name)
         
         const members = type.types.map(it => it)
-        writer.writeClass(name, () => {
-            const intType = idl.IDLI32Type
-            const selector = 'selector'
-            writer.writeFieldDeclaration(selector, intType, [FieldModifier.PRIVATE], false)
-            writer.writeMethodImplementation(new Method('getSelector', new MethodSignature(intType, []), [MethodModifier.PUBLIC]), () => {
-                writer.writeStatement(
-                    writer.makeReturn(
-                        writer.makeString(selector)
-                    )
-                )
-            })
-
-            const param = 'param'
-            for (const [index, memberType] of members.entries()) {
-                const memberName = `value${index}`
-                writer.writeFieldDeclaration(memberName, idl.maybeOptional(memberType, true), [FieldModifier.PRIVATE], true, writer.makeString(`None<${writer.getNodeName(memberType)}>`))
-
-                writer.writeConstructorImplementation(
-                    'init',
-                    new NamedMethodSignature(idl.IDLVoidType, [memberType], [param]),
-                    () => {
-                        writer.writeStatement(
-                            writer.makeAssign(memberName, undefined, writer.makeString(param), false)
-                        )
-                        writer.writeStatement(
-                            writer.makeAssign(selector, undefined, writer.makeString(index.toString()), false)
-                        )
-                    }
-                )
-
-                writer.writeMethodImplementation(
-                    new Method(`getValue${index}`, new MethodSignature(memberType, []), [MethodModifier.PUBLIC]),
-                    () => {
-                        writer.print(`if (let Some(${memberName}) <- ${memberName}) {`)
-                        writer.pushIndent()
-                        writer.writeStatement(
-                            writer.makeReturn(
-                                writer.makeString(memberName)
-                            )
-                        )
-                        writer.popIndent()
-                        writer.print(`} else { throw Exception("Wrong selector value inside Union ${type.name}") }`)
-                    }
-                )
-            }
-        })
+      
+        writer.print(`public enum ${name} {`)
+        writer.pushIndent()
+        
+        for (const [index, memberType] of members.entries()) {
+            const typeName = writer.getNodeName(memberType)
+            // Replace non-alphanumeric chars with _
+            let sanitizedName = typeName.replace(/[^a-zA-Z0-9]/g, '_')
+            // Remove underscores at the beginning and the end of a enum member name
+            sanitizedName = sanitizedName.replace(/^_+|_+$/g, '')
+            // Replace multiple consecutive underscores with single underscore
+            sanitizedName = sanitizedName.replace(/_+/g, '_')
+            const variantName = `As${sanitizedName}`
+            const separator = index < members.length - 1 ? '' : ''
+            writer.print(`| ${variantName}(${typeName})${separator}`)
+        }
+        
+        writer.popIndent()
+        writer.print(`}`)
     }
 
     private makeTuple(writer: LanguageWriter, type: idl.IDLInterface): void {
