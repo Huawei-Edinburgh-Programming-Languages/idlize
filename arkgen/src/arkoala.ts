@@ -129,7 +129,38 @@ function copyArkoalaFiles(config: {
                 const fromPath = path.join(from, file)
                 if (fs.existsSync(fromPath)) {
                     found = true
-                    copyFile(fromPath, path.join(arkoala.root, file))
+                    let destPath: string
+                    const hasPeerDir = (arkoala as any).peerDir !== undefined
+                    if (hasPeerDir) {
+                    const baseName = path.basename(file)
+                    switch (baseName) {
+                        // peers
+                        case 'CallbackKind.cj':
+                        case 'ArkUINativeModule.cj':
+                        case 'ComponentBase.cj':
+                        case 'NativePeerNode.cj':
+                        case 'PeerNode.cj':
+                        case 'TestNativeModule.cj':
+                        destPath = path.join((arkoala as any).peerDir, baseName)
+                        break
+                        // interfaces
+                        case 'CallbacksChecker.cj':
+                        case 'CallbackTransformer.cj':
+                        destPath = path.join((arkoala as any).interfaceDir, baseName)
+                        break
+                        // Handwritten.cj
+                        case 'Handwritten.cj':
+                        destPath = path.join(arkoala.root, file)
+                        break
+                        default:
+                        destPath = path.join(arkoala.root, file)
+                        break
+                    }
+                    } else {
+                        destPath = path.join(arkoala.root, file)
+                    }
+                    fs.mkdirSync(path.dirname(destPath), { recursive: true })
+                    copyFile(fromPath, destPath)
                     break
                 }
             }
