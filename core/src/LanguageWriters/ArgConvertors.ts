@@ -1029,6 +1029,49 @@ export class UnionConvertor extends BaseArgConvertor {
         throw new Error("Do not use for union")
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
+        // For Cangjie, generate new match expression for enum instead of the old method
+        if (printer.language === Language.CJ) {
+            return new ProxyStatement((writer) => {
+                writer.print(`match(${value}) {`)
+                writer.pushIndent()
+                
+                for (const [index, it] of this.memberConvertors.entries()) {
+                    const typeName = printer.getNodeName(it.idlType)
+                    // Generate variant name: As + sanitized type name
+                    let sanitizedName = typeName.replace(/[^a-zA-Z0-9]/g, '_')
+                    sanitizedName = sanitizedName.replace(/^_+|_+$/g, '')
+                    sanitizedName = sanitizedName.replace(/_+/g, '_')
+                    const variantName = `As${sanitizedName}`
+                    const varName = `${value}ForIdx${index}`
+                    
+                    writer.print(`case ${variantName}(${varName}) => {`)
+                    writer.pushIndent()
+                    
+                    // Write selector
+                    writer.writeStatement(
+                        writer.makeStatement(
+                            writer.makeMethodCall(
+                                `${param}Serializer`, "writeInt8",
+                                [writer.makeString(writer.castToInt(index.toString(), 8))]
+                            )
+                        )
+                    )
+                    
+                    // Write value serialization
+                    if (!(it instanceof UndefinedConvertor)) {
+                        writer.writeStatement(it.convertorSerialize(param, varName, writer))
+                    }
+                    
+                    writer.popIndent()
+                    writer.print(`}`)
+                }
+                
+                writer.popIndent()
+                writer.print(`}`)
+            })
+        }
+
+        // For other languages, use the original if-else chain
         const branches: BranchStatement[] = this.memberConvertors.map((it, index) => {
             const discriminator = this.unionChecker.makeDiscriminator(value, index, printer)
             const statements: LanguageStatement[] = []
