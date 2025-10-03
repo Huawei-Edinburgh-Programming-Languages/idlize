@@ -31,3 +31,14 @@ export class NativeModuleType {
 }
 
 export const InteropModuleType = new NativeModuleType("InteropNativeModule")
+
+export const VariantNaming = {
+    PREFIX: "As",
+    generateName(inputName: string): string {
+        // Generate variant name: As + sanitized type name
+        let sanitizedName = inputName.replace(/[^a-zA-Z0-9]/g, '_')
+        sanitizedName = sanitizedName.replace(/^_+|_+$/g, '')
+        sanitizedName = sanitizedName.replace(/_+/g, '_')
+        return `${this.PREFIX}${sanitizedName}`
+    }
+};

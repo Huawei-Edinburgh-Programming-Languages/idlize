@@ -32,7 +32,8 @@ import {
     zipStrip,
     collapseTypes,
     isInplacedGeneric,
-    maybeRestoreGenerics
+    maybeRestoreGenerics,
+    VariantNaming
 } from '@idlizer/core'
 import { PrinterFunction, PrinterResult } from '../LayoutManager'
 import { peerGeneratorConfiguration } from '../../DefaultConfiguration'
@@ -1028,13 +1029,7 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
         
         const members = type.types.map((memberType, index) => {
             const typeName = writer.getNodeName(memberType)
-            // Replace non-alphanumeric chars with _. For example for ArrayList<String> it will be ArrayList_String as a enum name.
-            let sanitizedName = typeName.replace(/[^a-zA-Z0-9]/g, '_')
-            // Remove underscores at the beginning and the end of a enum member name
-            sanitizedName = sanitizedName.replace(/^_+|_+$/g, '')
-            // Replace multiple consecutive underscores with single underscore
-            sanitizedName = sanitizedName.replace(/_+/g, '_')
-            const variantName = `As${sanitizedName}`
+            const variantName = VariantNaming.generateName(typeName)
             
             return {
                 name: `${variantName}(${typeName})`,

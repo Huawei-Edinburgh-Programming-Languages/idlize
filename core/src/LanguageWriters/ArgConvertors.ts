@@ -28,7 +28,7 @@ import {
     ProxyStatement,
     ExpressionStatement
 } from "./LanguageWriter";
-import { NativeModuleType, RuntimeType } from "./common";
+import { NativeModuleType, RuntimeType, VariantNaming } from "./common";
 import { generatorConfiguration, generatorTypePrefix } from "../config"
 import { LibraryInterface } from "../LibraryInterface";
 import { capitalize, getExtractor, getTransformer, hashCodeFromString, throwException, warn } from "../util";
@@ -1037,11 +1037,7 @@ export class UnionConvertor extends BaseArgConvertor {
                 
                 for (const [index, it] of this.memberConvertors.entries()) {
                     const typeName = printer.getNodeName(it.idlType)
-                    // Generate variant name: As + sanitized type name
-                    let sanitizedName = typeName.replace(/[^a-zA-Z0-9]/g, '_')
-                    sanitizedName = sanitizedName.replace(/^_+|_+$/g, '')
-                    sanitizedName = sanitizedName.replace(/_+/g, '_')
-                    const variantName = `As${sanitizedName}`
+                    const variantName = VariantNaming.generateName(typeName)
                     const varName = `${value}ForIdx${index}`
                     
                     writer.print(`case ${variantName}(${varName}) => `)
@@ -1117,10 +1113,7 @@ export class UnionConvertor extends BaseArgConvertor {
                     if (writer.language == Language.CJ) {
                         //Change the variant name to "As..."
                         const typeName = writer.getNodeName(it.idlType)
-                        let sanitizedName = typeName.replace(/[^a-zA-Z0-9]/g, '_')
-                        sanitizedName = sanitizedName.replace(/^_+|_+$/g, '')
-                        sanitizedName = sanitizedName.replace(/_+/g, '_')
-                        const variantName = `As${sanitizedName}`
+                        const variantName = VariantNaming.generateName(typeName)
                         //Using the new name
                         return writer.makeAssign(receiver, undefined, writer.makeFunctionCall(variantName, [expr]), false)
                     } else if (writer.language == Language.KOTLIN){//Keep the same strategy for other languages 
