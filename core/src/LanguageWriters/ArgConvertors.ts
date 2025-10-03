@@ -1044,7 +1044,7 @@ export class UnionConvertor extends BaseArgConvertor {
                     const variantName = `As${sanitizedName}`
                     const varName = `${value}ForIdx${index}`
                     
-                    writer.print(`case ${variantName}(${varName}) => {`)
+                    writer.print(`case ${variantName}(${varName}) => `)
                     writer.pushIndent()
                     
                     // Write selector
@@ -1063,7 +1063,6 @@ export class UnionConvertor extends BaseArgConvertor {
                     }
                     
                     writer.popIndent()
-                    writer.print(`}`)
                 }
                 
                 writer.popIndent()
