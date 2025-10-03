@@ -27,6 +27,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y python3-pip ninja-build
         pip install meson
+    - name: Clone cangjie binary repository
+      uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+      with:
+        owner: 'Huawei-Edinburgh-Programming-Languages'
+        repository: 'cj-sdk-mirror'
+        access-token: ${{ secrets.ACCESS_TOKEN }}
     - name: More git setup
       run: |
         BRANCH="${{ github.head_ref || github.ref_name }}"
@@ -52,5 +58,7 @@ jobs:
       run: npm i --verbose --no-audit && cd external && npm i
     - name: dtsgen
       run: cd dtsgen && npm run compile
+    - name: Extract cj sdk
+      run: tar -xzf cj-sdk-mirror/cangjie-sdk-linux-x64-1.0.1.tar.gz -C ~
     - name: arkgen
-      run: cd arkgen && npm run clean && npm run all:subset:cj && npm run clean && npm run all:boole:demo1
+      run: source ~/cangjie/envsetup.sh && cd arkgen && npm run clean && npm run all:subset:cj && npm run clean && npm run all:boole:demo1
