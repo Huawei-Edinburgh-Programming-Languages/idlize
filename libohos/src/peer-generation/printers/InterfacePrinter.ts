@@ -1026,26 +1026,24 @@ class CJDeclarationConvertor implements DeclarationConvertor<void> {
         }
         CJDeclarationConvertor.seenSynteticUnions.add(name)
         
-        const members = type.types.map(it => it)
-      
-        writer.print(`public enum ${name} {`)
-        writer.pushIndent()
-        
-        for (const [index, memberType] of members.entries()) {
+        const members = type.types.map((memberType, index) => {
             const typeName = writer.getNodeName(memberType)
-            // Replace non-alphanumeric chars with _
+            // Replace non-alphanumeric chars with _. For example for ArrayList<String> it will be ArrayList_String as a enum name.
             let sanitizedName = typeName.replace(/[^a-zA-Z0-9]/g, '_')
             // Remove underscores at the beginning and the end of a enum member name
             sanitizedName = sanitizedName.replace(/^_+|_+$/g, '')
             // Replace multiple consecutive underscores with single underscore
             sanitizedName = sanitizedName.replace(/_+/g, '_')
             const variantName = `As${sanitizedName}`
-            const separator = index < members.length - 1 ? '' : ''
-            writer.print(`| ${variantName}(${typeName})${separator}`)
-        }
+            
+            return {
+                name: `${variantName}(${typeName})`,
+                stringId: undefined,
+                numberId: index
+            }
+        })
         
-        writer.popIndent()
-        writer.print(`}`)
+        writer.writeEnum(name, members, { isExport: true }, () => {})
     }
 
     private makeTuple(writer: LanguageWriter, type: idl.IDLInterface): void {
