@@ -357,7 +357,10 @@ export class CJLanguageWriter extends LanguageWriter {
         this.writeDeclaration(name, signature, modifiers)
     }
     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: this) => void, delegationCall?: DelegationCall, modifiers?: MethodModifier[]) {
-        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + ' ' : ''}init(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.getNodeName(idl.maybeOptional(it, signature.isArgOptional(index)))}`).join(", ")}) {`)
+        const modifiersText = (modifiers && modifiers.length > 0)
+            ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ')
+            : 'public'
+        this.printer.print(`${modifiersText} init(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.getNodeName(idl.maybeOptional(it, signature.isArgOptional(index)))}`).join(", ")}) {`)
         this.pushIndent()
         if (delegationCall) {
             const delegationType = (delegationCall?.delegationType == DelegationType.THIS) ? "this" : "super"
