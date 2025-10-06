@@ -28,7 +28,7 @@ import {
     ProxyStatement,
     ExpressionStatement
 } from "./LanguageWriter";
-import { NativeModuleType, RuntimeType } from "./common";
+import { NativeModuleType, RuntimeType, VariantNaming } from "./common";
 import { generatorConfiguration, generatorTypePrefix } from "../config"
 import { LibraryInterface } from "../LibraryInterface";
 import { capitalize, getExtractor, getTransformer, hashCodeFromString, throwException, warn } from "../util";
@@ -1029,6 +1029,44 @@ export class UnionConvertor extends BaseArgConvertor {
         throw new Error("Do not use for union")
     }
     convertorSerialize(param: string, value: string, printer: LanguageWriter): LanguageStatement {
+        // For Cangjie, generate new match expression for enum instead of the old method
+        if (printer.language === Language.CJ) {
+            return new ProxyStatement((writer) => {
+                writer.print(`match(${value}) {`)
+                writer.pushIndent()
+                
+                for (const [index, it] of this.memberConvertors.entries()) {
+                    const typeName = printer.getNodeName(it.idlType)
+                    const variantName = VariantNaming.generateName(typeName)
+                    const varName = `${value}ForIdx${index}`
+                    
+                    writer.print(`case ${variantName}(${varName}) => `)
+                    writer.pushIndent()
+                    
+                    // Write selector
+                    writer.writeStatement(
+                        writer.makeStatement(
+                            writer.makeMethodCall(
+                                `${param}Serializer`, "writeInt8",
+                                [writer.makeString(writer.castToInt(index.toString(), 8))]
+                            )
+                        )
+                    )
+                    
+                    // Write value serialization
+                    if (!(it instanceof UndefinedConvertor)) {
+                        writer.writeStatement(it.convertorSerialize(param, varName, writer))
+                    }
+                    
+                    writer.popIndent()
+                }
+                
+                writer.popIndent()
+                writer.print(`}`)
+            })
+        }
+
+        // For other languages, use the original if-else chain
         const branches: BranchStatement[] = this.memberConvertors.map((it, index) => {
             const discriminator = this.unionChecker.makeDiscriminator(value, index, printer)
             const statements: LanguageStatement[] = []
@@ -1072,9 +1110,15 @@ export class UnionConvertor extends BaseArgConvertor {
             const stmt = new BlockStatement([
                 writer.makeSetUnionSelector(bufferName, `${index}`),
                 it.convertorDeserialize(`${bufferName}BufU`, deserializerName, (expr) => {
-                    if (writer.language == Language.CJ || writer.language == Language.KOTLIN) {
+                    if (writer.language == Language.CJ) {
+                        //Change the variant name to "As..."
+                        const typeName = writer.getNodeName(it.idlType)
+                        const variantName = VariantNaming.generateName(typeName)
+                        //Using the new name
+                        return writer.makeAssign(receiver, undefined, writer.makeFunctionCall(variantName, [expr]), false)
+                    } else if (writer.language == Language.KOTLIN){//Keep the same strategy for other languages 
                         return writer.makeAssign(receiver, undefined, writer.makeFunctionCall(writer.getNodeName(this.type), [expr]), false)
-                    } else {
+                    }else{
                         return writer.makeAssign(receiver, undefined, expr, false)
                     }
                 }, writer),
