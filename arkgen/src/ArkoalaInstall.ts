@@ -113,9 +113,6 @@ class CJArkoalaInstall extends BaseArkoalaInstall {
     get interfaceDir(): string {
         return path.join(this.managedDir, "interfaces")
     }
-    // get coreDir(): string {
-    //     return path.join(this.managedDir, "cores")
-    // }
     get testDir(): string {
         return path.join(this.managedDir, "tests")
     }
