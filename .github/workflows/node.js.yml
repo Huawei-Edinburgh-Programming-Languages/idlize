@@ -61,4 +61,4 @@ jobs:
     - name: Extract cj sdk
       run: tar -xzf cj-sdk-mirror/cangjie-sdk-linux-x64-1.0.1.tar.gz -C ~
     - name: arkgen
-      run: source ~/cangjie/envsetup.sh && cd arkgen && npm run clean && npm run all:subset:cj && npm run clean && npm run all:boole:demo1
+      run: source ~/cangjie/envsetup.sh && cd arkgen && npm run clean && npm run all:subset:cj && npm run clean && npm run all:boole:demo1:cj
