@@ -23,7 +23,12 @@ jobs:
       with:
         submodules: true
     - name: More git setup
-      run: git submodule update --remote && cd external && git fetch origin boole_main:boole_main --depth=1 && git switch boole_main
+      run: |
+        BRANCH="${{ github.head_ref || github.ref_name }}"
+        git submodule update --remote
+        cd external
+        BRANCH=$(git ls-remote --exit-code --heads origin ${BRANCH} &>/dev/null && echo "${BRANCH}" || echo "boole_main")
+        git fetch origin ${BRANCH}:${BRANCH} --depth=1 && git switch ${BRANCH}
     - name: Authenticate NPM repositories
       run: echo registry=https://repo.huaweicloud.com/repository/npm/ > ~/.npmrc ;
            echo @ohos:registry=https://repo.harmonyos.com/npm/ >> ~/.npmrc ;
