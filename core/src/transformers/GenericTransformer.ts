@@ -241,7 +241,9 @@ function inplaceDefaultReferenceGenerics(
                     .map((it, index) => `${it}${defaults[index] ? '='+defaults[index] : ''}`)
                     .join(', ')}>`
                 const referenceDetails = `${node.name}<${node.typeArguments.map(it => idl.printType(it)).join(", ")}>`
-                throw new Error(`Can not validate reference to ${declarationDetails} declaration: reference ${referenceDetails} has not enough generic arguments or declaration does not have enough default generic values. Reference defined at: ${node.fileName}`)
+                const nodeLoc = `${node.fileName}:${node.nodeLocation?.range?.start.line}-${node.nodeLocation?.range?.start.character}`
+                const declLoc = `${decl.fileName}:${decl.nodeLocation?.range?.start.line}-${decl.nodeLocation?.range?.start.character}`
+                throw new Error(`Can not validate reference to ${declarationDetails} declaration: reference ${referenceDetails} has not enough generic arguments or declaration does not have enough default generic values. Reference defined at: ${nodeLoc}. Declaration at ${declLoc}.`)
             }
             node.typeArguments.push(defaults[node.typeArguments.length]!)
         }
