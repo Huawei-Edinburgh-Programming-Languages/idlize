@@ -52,7 +52,8 @@ class CJLambdaExpression extends LambdaExpression {
         protected writer: LanguageWriter,
         signature: MethodSignature,
         resolver: ReferenceResolver,
-        body?: LanguageStatement[]) {
+        body?: LanguageStatement[],
+        public indentDepth?: number) {
         super(writer, signature, resolver, body)
     }
     protected get statementHasSemicolon(): boolean {
@@ -60,7 +61,19 @@ class CJLambdaExpression extends LambdaExpression {
     }
     asString(): string {
         const params = this.signature.args.map((it, i) => `${this.writer.escapeKeyword(this.signature.argName(i))}: ${this.writer.getNodeName(it)}`)
-        return `{${params.join(", ")} => ${this.bodyAsString()} }`
+        const bodyString = this.bodyAsString()
+        
+        // For single line lambda expressions, it would be the same
+        if (!bodyString || bodyString.trim().length === 0 || (!bodyString.includes('\n') && bodyString.length < 80)) {
+            return `{${params.join(", ")} => ${bodyString}}`
+        }
+        
+        // For multi-line lambda expressions, properly indent each line
+        let output: string[] = []
+        output.push(`{${params.join(", ")} => `)
+        output.push(indentedBy(bodyString, (this.indentDepth ?? 0) + 1))
+        output.push(indentedBy('}', this.indentDepth ?? 0))
+        return output.join('\n')
     }
 }
 
@@ -496,8 +509,8 @@ export class CJLanguageWriter extends LanguageWriter {
             return this.makeNaryOp(op, [this.makeRuntimeType(type), this.makeString(`Int32(${typeVarName})`)])
         }
     }
-    makeLambda(signature: MethodSignature, body?: LanguageStatement[]): LanguageExpression {
-        return new CJLambdaExpression(this, signature, this.resolver, body)
+    makeLambda(signature: MethodSignature, body?: LanguageStatement[], indentDepth?: number): LanguageExpression {
+        return new CJLambdaExpression(this, signature, this.resolver, body, indentDepth)
     }
     makeThrowError(message: string): LanguageStatement {
         return new CJThrowErrorStatement(message)

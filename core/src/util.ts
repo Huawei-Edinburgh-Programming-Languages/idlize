@@ -70,9 +70,12 @@ export function getOrPut<K, V>(map: Map<K, V>, key: K, create: (key: K) => V): V
 
 export function indentedBy(input: string, indentedBy: number): string {
     if (input.length > 0 || input.endsWith('\n')) {
+        const lines = input.split('\n')
         let space = ""
+        // For multiple-line strings, indent each line. For single-line strings, this will keep the original behavior.
         for (let i = 0; i < indentedBy; i++) space += "    "
-        return `${space}${input}`
+        return lines.map(line => line.trim().length > 0 ? `${space}${line}` : line).join('\n')
+            
     } else {
         return ""
     }
