@@ -188,7 +188,7 @@ declare enum ShadowType {
 declare interface ShadowOptions {
     radius: number | Resource;
     type?: ShadowType;
-    color?: Color;
+    color?: Color | string | Resource | ColoringStrategy;
     offsetX?: number | Resource;
     offsetY?: number | Resource;
     fill?: boolean;
