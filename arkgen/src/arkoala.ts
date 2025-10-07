@@ -129,7 +129,7 @@ function copyArkoalaFiles(config: {
                 const fromPath = path.join(from, file)
                 if (fs.existsSync(fromPath)) {
                     found = true
-                    copyFile(fromPath, path.join(arkoala.root, file))
+                    copyFile(fromPath,path.join(arkoala.root, file))
                     break
                 }
             }
