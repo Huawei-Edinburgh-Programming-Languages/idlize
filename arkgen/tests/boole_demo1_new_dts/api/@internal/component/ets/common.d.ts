@@ -19861,7 +19861,7 @@ declare interface ContentModifier<T> {
    * @atomicservice
    * @since 12
    */
-  applyContent(): WrappedBuilder<[T]>
+  applyContent(): WrappedBuilder<T>
 }
 
 /**
@@ -32263,30 +32263,6 @@ declare interface KeyframeState {
    * @since 12
    */
   event: () => void;
-}
-
-
-/**
- * Defines the basic callback.
- *
- * @typedef Callback<T, V = void>
- * @syscap SystemCapability.ArkUI.ArkUI.Full
- * @crossplatform
- * @atomicservice
- * @since 12
- */
-declare interface Callback<T, V = void> {
-  /**
-   * Defines the callback info.
-   *
-   * @param { T } data - the data will be used in the callback.
-   * @returns { V } - Returns result of the callback.
-   * @syscap SystemCapability.ArkUI.ArkUI.Full
-   * @crossplatform
-   * @atomicservice
-   * @since 12
-   */
-  (data: T): V;
 }
 
 /**

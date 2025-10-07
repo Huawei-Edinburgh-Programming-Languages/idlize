@@ -22,7 +22,7 @@
 import { Resource as _Resource } from '../../global/resource';
 import { Color, BorderStyle, FontWeight, FontStyle, DividerMode} from './enums';
 import { OutlineStyle } from './common';
-import { LengthMetricsUnit as _LengthMetricsUnit, LengthMetrics as _LengthMetrics, ColorMetrics as _ColorMetrics } from '../Graphics';
+import { LengthMetricsUnit as _LengthMetricsUnit, LengthMetrics as _LengthMetrics, ColorMetrics as _ColorMetrics } from '../api/arkui/Graphics';
 /*** endif */
 
 /**
