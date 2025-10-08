@@ -129,7 +129,7 @@ function copyArkoalaFiles(config: {
                 const fromPath = path.join(from, file)
                 if (fs.existsSync(fromPath)) {
                     found = true
-                    copyFile(fromPath, path.join(arkoala.root, file))
+                    copyFile(fromPath,path.join(arkoala.root, file))
                     break
                 }
             }
@@ -355,14 +355,14 @@ export function generateArkoalaFromIdl(config: {
 
     if (peerLibrary.language == Language.CJ) {
         writeIntegratedFile(
-            path.join(arkoala.managedDir, NativeModule.ArkUI.name + peerLibrary.language.extension),
-            printCJPredefinedNativeFunctions(peerLibrary, NativeModule.ArkUI).printToString().concat(
+            path.join(arkoala.managedDir, 'peers', NativeModule.ArkUI.name + peerLibrary.language.extension),
+            'package idlize.peers\n\nimport std.collection.*\nimport Interop.*\n\n' + printCJPredefinedNativeFunctions(peerLibrary, NativeModule.ArkUI).printToString().concat(
                 printPredefinedNativeModule(peerLibrary, NativeModule.ArkUI).content.getOutput().join('\n')
             )
         )
         writeIntegratedFile(
-            path.join(arkoala.managedDir, NativeModule.Test.name + peerLibrary.language.extension),
-            printCJPredefinedNativeFunctions(peerLibrary, NativeModule.Test).printToString().concat(
+            path.join(arkoala.managedDir, 'peers', NativeModule.Test.name + peerLibrary.language.extension),
+            'package idlize.peers\n\nimport std.collection.*\nimport Interop.*\n\n' + printCJPredefinedNativeFunctions(peerLibrary, NativeModule.Test).printToString().concat(
                 printPredefinedNativeModule(peerLibrary, NativeModule.Test).content.getOutput().join('\n')
             )
         )
@@ -372,13 +372,77 @@ export function generateArkoalaFromIdl(config: {
         //         printPredefinedNativeModule(peerLibrary, NativeModule.Interop).content.getOutput().join('\n')
         //     )
         // )
-        writeFile(path.join(arkoala.managedDir, 'CallbackKind' + peerLibrary.language.extension),
-            makeCallbacksKinds(peerLibrary, peerLibrary.language),
+        writeFile(path.join(arkoala.managedDir, 'peers', 'CallbackKind' + peerLibrary.language.extension),
+            'package idlize.peers\n\nimport std.collection.*\nimport Interop.*\n\n' + makeCallbacksKinds(peerLibrary, peerLibrary.language),
             {
                 onlyIntegrated: config.onlyIntegrated,
                 integrated: true
             }
         )
+
+        // Generate empty.cj as a compilation helper file
+        writeFile(path.join(arkoala.managedDir, 'empty.cj'),
+            'package idlize',
+            {
+                onlyIntegrated: config.onlyIntegrated,
+                integrated: true
+            }
+        )
+
+        // Generate cjpm.toml for cjv2 (idlize package)
+        const cjv2Dir = path.join(arkoala.root, 'arkoala-cj/cjv2')
+        const frameworkDir = path.join(arkoala.root, 'arkoala-cj/framework/cangjie')
+        const externalRoot = path.join(__dirname, '../../external')
+        const interopPath = path.join(externalRoot, 'interop/src/cangjie')
+        const runtimePath = path.join(externalRoot, 'incremental-cj/runtime')
+
+        const cjv2Toml = [
+            '[package]',
+            '  name = "idlize"',
+            '  version = "1.0.0"',
+            '  description = "Generated Cangjie v2 module"',
+            '  cjc-version = "0.59.6"',
+            '  src-dir = "./src"',
+            '  target-dir = "./build"',
+            '  output-type = "static"',
+            '  compile-option = "--error-count-limit all"',
+            '  link-option = ""',
+            '  package-configuration = {}',
+            '',
+            '[dependencies]',
+            `  Interop = { path = "${interopPath}" }`,
+            `  KoalaRuntime = { path = "${runtimePath}" }`,
+            ''
+        ].join('\n')
+        writeFile(path.join(cjv2Dir, 'cjpm.toml'), cjv2Toml, {
+            onlyIntegrated: config.onlyIntegrated,
+            integrated: true,
+        })
+
+        // Generate cjpm.toml for framework demo package and depend on idlize
+        const frameworkToml = [
+            '[package]',
+            '  name = "demo"',
+            '  version = "1.0.0"',
+            '  description = "Cangjie framework demo module"',
+            '  cjc-version = "0.59.6"',
+            '  src-dir = "./src"',
+            '  target-dir = "./build"',
+            '  output-type = "static"',
+            '  compile-option = "--error-count-limit all"',
+            '  link-option = ""',
+            '  package-configuration = {}',
+            '',
+            '[dependencies]',
+            `  Interop = { path = "${interopPath}" }`,
+            `  KoalaRuntime = { path = "${runtimePath}" }`,
+            `  idlize = { path = "${cjv2Dir}" }`,
+            ''
+        ].join('\n')
+        writeFile(path.join(frameworkDir, 'cjpm.toml'), frameworkToml, {
+            onlyIntegrated: config.onlyIntegrated,
+            integrated: true,
+        })
     }
 
     if (peerLibrary.language == Language.KOTLIN) {

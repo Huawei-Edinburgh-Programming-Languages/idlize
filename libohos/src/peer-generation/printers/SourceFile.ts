@@ -196,9 +196,7 @@ export class CJSourceFile extends SourceFile {
         return fileWriter.getOutput().join("\n")
     }
     public printImports(writer: LanguageWriter): void {
-        writer.print(`package idlize\n`)
-        writer.print(`import std.collection.*`)
-        writer.print(`import Interop.*\n`)
+        // package/imports are handled centrally in LayoutManager.installFiles for CJ
     }
     protected onMerge(file: this): void {
 

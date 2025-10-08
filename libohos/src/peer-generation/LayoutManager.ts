@@ -141,12 +141,54 @@ export function installFiles(outDir: string, library: PeerLibrary, files: Map<st
         }
         if (library.language === Language.CJ) {
             imports.clear()
-            codePrefix.push('package idlize', 'import std.collection.*', 'import Interop.*', 'import KoalaRuntime.*', 'import KoalaRuntime.memoize.*', 'import std.time.DateTime')
+
+            const hasCustomPackage = content.some(line => line.trim().startsWith('package '))
+
+            if (!hasCustomPackage) {
+                const folder = path.dirname(filePath)
+                let pkg = 'idlize'
+                
+                if (folder !== '.' && folder !== 'arkoala-cj/cjv2/src') {
+                    pkg = 'idlize.' + folder.replace(/\//g, '.').replace(/^arkoala-cj\.cjv2\.src\.?/, '')
+                }
+                codePrefix.push(`package ${pkg}`, '')
+            }
+
+            codePrefix.push('','import std.collection.*', 'import Interop.*', 'import KoalaRuntime.*', 'import KoalaRuntime.memoize.*', 'import std.time.DateTime', '')
+
+            const folder = path.dirname(filePath)
+            if (folder.endsWith('components')) {
+                codePrefix.push('import idlize.peers.*', '')
+                codePrefix.push('import idlize.interfaces.*', '')
+                codePrefix.push('import idlize.interfaces.Resource as IResource', '')
+            } else if (folder.endsWith('peers')) {
+                codePrefix.push('import idlize.interfaces.*', '')
+                codePrefix.push('import idlize.interfaces.Resource as IResource', '')
+            }
+
+            // for Main.cj file
+            const fileName = path.basename(filePath, '.cj')
+            if (fileName === 'Main') {
+                const demoInstallPath = path.join(path.dirname(filePath), 'demo', 'Main.cj')
+                const text = tsCopyrightAndWarning(
+                    codePrefix.concat(content).join('\n')
+                )
+                writeIntegratedFile(demoInstallPath, text, 'producing')
+            }
         }
 
         const importsWriter = library.createLanguageWriter()
         imports.print(importsWriter, filePath, outDir)
-        const completeCode = codePrefix.concat(importsWriter.getOutput()).concat(content).join('\n')
+        let body = content.join('\n')
+        // In non-interfaces (peers/components) files, rewrite unqualified Resource to IResource to avoid ambiguity
+        if (library.language === Language.CJ) {
+            const folder = path.dirname(filePath)
+            if (folder.endsWith('components') || folder.endsWith('peers')) {
+                // replace standalone Resource tokens (not part of a larger identifier or qualified name)
+                body = body.replace(/(?<![\w\.])Resource\b/g, 'IResource')
+            }
+        }
+        const completeCode = codePrefix.concat(importsWriter.getOutput()).join('\n') + '\n' + body
         const text = tsCopyrightAndWarning(completeCode)
 
         const installPath = join(outDir, filePath) + extension

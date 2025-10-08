@@ -1,0 +1,28 @@
+From c99403f7a55a220166b467d28a75bb4190ff4d35 Mon Sep 17 00:00:00 2001
+From: BinaRoy <1336789600@qq.com>
+Date: Mon, 6 Oct 2025 13:56:52 +0100
+Subject: [PATCH] make init func public
+
+---
+ core/src/LanguageWriters/writers/CJLanguageWriter.ts | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/core/src/LanguageWriters/writers/CJLanguageWriter.ts b/core/src/LanguageWriters/writers/CJLanguageWriter.ts
+index 5b82805ce..5d24f7b68 100644
+--- a/core/src/LanguageWriters/writers/CJLanguageWriter.ts
++++ b/core/src/LanguageWriters/writers/CJLanguageWriter.ts
+@@ -357,7 +357,10 @@ export class CJLanguageWriter extends LanguageWriter {
+         this.writeDeclaration(name, signature, modifiers)
+     }
+     writeConstructorImplementation(className: string, signature: MethodSignature, op: (writer: this) => void, delegationCall?: DelegationCall, modifiers?: MethodModifier[]) {
+-        this.printer.print(`${modifiers ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ') + ' ' : ''}init(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.getNodeName(idl.maybeOptional(it, signature.isArgOptional(index)))}`).join(", ")}) {`)
++        const modifiersText = (modifiers && modifiers.length > 0)
++            ? modifiers.map((it) => MethodModifier[it].toLowerCase()).join(' ')
++            : 'public'
++        this.printer.print(`${modifiersText} init(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.getNodeName(idl.maybeOptional(it, signature.isArgOptional(index)))}`).join(", ")}) {`)
+         this.pushIndent()
+         if (delegationCall) {
+             const delegationType = (delegationCall?.delegationType == DelegationType.THIS) ? "this" : "super"
+-- 
+2.34.1
+

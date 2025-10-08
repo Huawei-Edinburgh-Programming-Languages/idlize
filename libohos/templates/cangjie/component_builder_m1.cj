@@ -21,9 +21,7 @@ public func Ark%COMPONENT_NAME%(
     let styleHolder = %COMPONENT_ATTRIBUTE_NAME%StyleHolder(style)
     let contentHolder = %COMPONENT_ATTRIBUTE_NAME%ContentHolder(content_)
     let receiver = remember({ => %COMPONENT_CLASS_NAME%() })
-    NodeAttach<%PEER_CLASS_NAME%>({ => 
-        %PEER_CLASS_NAME%.create(receiver, 0) 
-    }) {
+    NodeAttach<%PEER_CLASS_NAME%>({ => %PEER_CLASS_NAME%.create(receiver, 0) }) {
         %PEER_CALLABLE_INVOKE%
         if (let Some(style) <- styleHolder.value) {
             style(receiver)

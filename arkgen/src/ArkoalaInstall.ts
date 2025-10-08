@@ -91,7 +91,7 @@ class ArkTSArkoalaInstall extends BaseArkoalaInstall {
 
 class CJArkoalaInstall extends BaseArkoalaInstall {
     get managedDir(): string {
-        return path.join(this.root, "arkoala-cj/framework/cangjie/src")
+        return path.join(this.root, "arkoala-cj/cjv2/src")
     }
     get managedSdkDir(): string {
         throw new Error("Not implemented")
@@ -101,6 +101,20 @@ class CJArkoalaInstall extends BaseArkoalaInstall {
     }
     get tsArkoalaDir(): string {
         throw new Error("Not implemented")
+    }
+    
+    // Cangjie specific directories
+    get peerDir(): string {
+        return path.join(this.managedDir, "peers")
+    }
+    get componentDir(): string {
+        return path.join(this.managedDir, "components")
+    }
+    get interfaceDir(): string {
+        return path.join(this.managedDir, "interfaces")
+    }
+    get testDir(): string {
+        return path.join(this.managedDir, "tests")
     }
 }
 
