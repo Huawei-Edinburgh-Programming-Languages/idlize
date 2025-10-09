@@ -275,6 +275,7 @@ class CJArrayResizeStatement implements LanguageStatement {
 export class CJLanguageWriter extends LanguageWriter {
     protected typeConvertor: IdlNameConvertor
     protected typeForeignConvertor: IdlNameConvertor
+    private isInsideInterface: boolean = false
     constructor(printer: IndentedPrinter,
                 resolver: ReferenceResolver,
                 typeConvertor: IdlNameConvertor,
@@ -329,7 +330,9 @@ export class CJLanguageWriter extends LanguageWriter {
         let extendsClause = superInterfaces ? ` <: ${superInterfaces.join(" & ")}` : ''
         this.printer.print(`public interface ${name}${extendsClause} {`)
         this.pushIndent()
+        this.isInsideInterface = true
         op(this)
+        this.isInsideInterface = false
         this.popIndent()
         this.printer.print(`}`)
     }
@@ -412,7 +415,9 @@ export class CJLanguageWriter extends LanguageWriter {
             }
         }
         let initializer = initExpr ? ` = ${initExpr.asString()}` : ""
-        this.print(`public ${isImmutable ? "" : "mut "}${isStatic ? "static " : "open "}prop ${truePropName}: ${this.getNodeName(propType)}${initializer}`)
+        const publicModifier = this.isInsideInterface ? "" : "public "
+        const openModifier = (isStatic || this.isInsideInterface) ? "" : "open "
+        this.print(`${publicModifier}${isImmutable ? "" : "mut "}${isStatic ? "static " : openModifier}prop ${truePropName}: ${this.getNodeName(propType)}${initializer}`)
         if (getter) {
             this.print('{')
             this.pushIndent()
@@ -466,9 +471,10 @@ export class CJLanguageWriter extends LanguageWriter {
         let prefix = modifiers
             ?.filter(it => this.supportedModifiers.includes(it))
             .map(it => this.mapMethodModifier(it)).join(" ")
-        prefix = prefix ? prefix + " " : "public "
+        prefix = prefix ? prefix + " " : (this.isInsideInterface ? "" : "public ")
         const typeParams = generics?.length ? `<${generics.join(", ")}>` : ""
-        this.print(`${prefix}${(modifiers?.includes(MethodModifier.SETTER) || modifiers?.includes(MethodModifier.GETTER)) ? '' : `${(modifiers?.includes(MethodModifier.STATIC) || modifiers?.includes(MethodModifier.PRIVATE)) ? '' : 'open '}func `}${this.escapeKeyword(name)}${typeParams}(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.getNodeName(idl.maybeOptional(it, signature.isArgOptional(index)))}`).join(", ")})${this.getNodeName(signature.returnType) =='this' ? '': `: ${this.getNodeName(signature.returnType)}`}${postfix ?? ""}`)
+        const openModifier = (modifiers?.includes(MethodModifier.STATIC) || modifiers?.includes(MethodModifier.PRIVATE) || this.isInsideInterface) ? '' : 'open '
+        this.print(`${prefix}${(modifiers?.includes(MethodModifier.SETTER) || modifiers?.includes(MethodModifier.GETTER)) ? '' : `${openModifier}func `}${this.escapeKeyword(name)}${typeParams}(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.getNodeName(idl.maybeOptional(it, signature.isArgOptional(index)))}`).join(", ")})${this.getNodeName(signature.returnType) =='this' ? '': `: ${this.getNodeName(signature.returnType)}`}${postfix ?? ""}`)
     }
     writeNativeFunctionCall(printer: LanguageWriter, name: string, signature: MethodSignature) {
         printer.print(`return unsafe { ${name}(${signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}`).join(", ")}) }`)
