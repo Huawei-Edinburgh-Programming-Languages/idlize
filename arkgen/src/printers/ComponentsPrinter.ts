@@ -59,6 +59,34 @@ export function shiftIfIsNotEmpty(line:string): string {
     return ""
 }
 
+const API_METADATA_TAGS = ['since', 'syscap', 'form', 'crossplatform', 'atomicservice', 'systemapi', 'FAModelOnly', 'StageModelOnly']
+
+function getJSDocFromPeerNode(node: idl.IDLEntry | undefined, memberName?: string): string | undefined {
+    let docinfo: string | undefined
+    if (memberName && node && idl.isInterface(node)) {
+        const method = node.methods?.find(m => m.name === memberName)
+        docinfo = method?.documentation
+    } else {
+        docinfo = node?.documentation
+    }
+
+    if (!docinfo) return undefined
+    
+    const tags = new Map<string, string | boolean>()
+    for (const [, name, value] of docinfo.matchAll(/@(\w+)(?:\s+([^\n@]+))?/g)) {
+        if (API_METADATA_TAGS.includes(name)) tags.set(name, value?.trim().replace(/\*\/?\s*$/, '') || true)
+    }
+    
+    const since = tags.get('since')
+    if (!since) return undefined
+    
+    return `// @!APILevel[${[since, ...Array.from(tags.entries())
+        .filter(([k]) => k !== 'since')
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([k, v]) => typeof v === 'boolean' ? `${k}: true` : `${k}: "${v}"`)
+    ].join(', ')}]` 
+}
+
 export function generateArkComponentName(component: string) {
     return `Ark${component}Component`
 }
@@ -326,8 +354,15 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
         }
     ) { }
 
-    private overloadsPrinter(printer:LanguageWriter) {
-        return new OverloadsPrinter(this.library, printer, this.library.language, true, this.library.useMemoM3)
+    private overloadsPrinter(printer:LanguageWriter, component?: IdlComponentDeclaration) {
+        const overloadsPrinter = new OverloadsPrinter(this.library, printer, this.library.language, true, this.library.useMemoM3)
+        if (component) {
+            overloadsPrinter.setMethodPrefixEmitter((_peer: string, method: Method, printer: LanguageWriter) => {
+                const comment = getJSDocFromPeerNode(component.attributeDeclaration, method.name)
+                if (comment) printer.print(comment)
+            })
+        }
+        return overloadsPrinter
     }
 
     visit(): PrinterResult[] {
@@ -354,7 +389,12 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
             const componentClassName = generateArkComponentName(peer.componentName)
             const parentComponentClassName = peer.parentComponentName ? generateArkComponentName(peer.parentComponentName!) : `ComponentBase`
             const peerClassName = componentToPeerClass(peer.componentName)
-
+            
+            const comment = getJSDocFromPeerNode(component.interfaceDeclaration) ||
+                           getJSDocFromPeerNode(component.attributeDeclaration)
+            if (comment) {
+                printer.print(comment)
+            }
 
             printer.writeClass(componentClassName, (writer) => {
                 writer.writeMethodImplementation(
@@ -379,7 +419,7 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
                 )
                 // for (const grouped of groupOverloads(filteredMethods))
                 for (const grouped of peer.methods)
-                    this.overloadsPrinter(printer).printGroupedComponentOverloads(peer.originalClassName!, [grouped])
+                    this.overloadsPrinter(printer, component).printGroupedComponentOverloads(peer.originalClassName!, [grouped])
                 // todo stub until we can process AttributeModifier
                 if (isCommonMethod(peer.originalClassName!) || peer.originalClassName == "ContainerSpanAttribute")
                     writer.print(`public func attributeModifier(modifier: AttributeModifier<Object>) { throw Exception("not implemented") }`)
