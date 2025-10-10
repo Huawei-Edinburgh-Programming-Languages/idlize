@@ -156,6 +156,27 @@ function removeSuffix(path: string, suffix: string): string {
     return path.endsWith(suffix) ? path.slice(0, -suffix.length) : path;
 }
 
+function generateCjpmToml(pkgName: string, desc: string, deps: [string, string][] = [], srcDir: string = './src', targetDir: string = './build'): string {
+    const dependencies = deps.map(dep => `  ${dep[0]} = { path = "${dep[1]}" }` )
+    return [
+            '[package]',
+            `  name = "${pkgName}"`,
+            '  version = "1.0.0"',
+            `  description = "${desc}"`,
+            '  cjc-version = "0.59.6"',
+            `  src-dir = "${srcDir}"`,
+            `  target-dir = "${targetDir}"`,
+            '  output-type = "static"',
+            '  compile-option = "--error-count-limit all"',
+            '  link-option = ""',
+            '  package-configuration = {}',
+            '',
+            '[dependencies]',
+            ...dependencies,
+            ''
+        ].join('\n')
+}
+
 export function generateArkoalaFromIdl(config: {
     outDir: string,
     arkoalaDestination: string | undefined,
@@ -390,56 +411,14 @@ export function generateArkoalaFromIdl(config: {
         )
 
         // Generate cjpm.toml for cjv2 (idlize package)
-        const cjv2Dir = path.join(arkoala.root, 'arkoala-cj/cjv2')
-        const frameworkDir = path.join(arkoala.root, 'arkoala-cj/framework/cangjie')
-        const externalRoot = path.join(__dirname, '../../external')
-        const interopPath = path.join(externalRoot, 'interop/src/cangjie')
-        const runtimePath = path.join(externalRoot, 'incremental-cj/runtime')
+        const cjv2Dir = path.join(arkoala.root, 'arkoala-cj', 'cjv2')
+        const externalForCjv2Dir = path.join(...cjv2Dir.split(path.sep).map(_ => '..'), '..', 'external')
+        const interopForCjv2Dir = path.join(externalForCjv2Dir, 'interop', 'src', 'cangjie')
+        const runtimeForCjv2Dir = path.join(externalForCjv2Dir, 'incremental-cj', 'runtime')
 
-        const cjv2Toml = [
-            '[package]',
-            '  name = "idlize"',
-            '  version = "1.0.0"',
-            '  description = "Generated Cangjie v2 module"',
-            '  cjc-version = "0.59.6"',
-            '  src-dir = "./src"',
-            '  target-dir = "./build"',
-            '  output-type = "static"',
-            '  compile-option = "--error-count-limit all"',
-            '  link-option = ""',
-            '  package-configuration = {}',
-            '',
-            '[dependencies]',
-            `  Interop = { path = "${interopPath}" }`,
-            `  KoalaRuntime = { path = "${runtimePath}" }`,
-            ''
-        ].join('\n')
+        const cjv2Deps: [string, string][] = [['Interop', interopForCjv2Dir], ['KoalaRuntime', runtimeForCjv2Dir]]
+        const cjv2Toml = generateCjpmToml('idlize', 'Generated Cangjie v2 module', cjv2Deps)
         writeFile(path.join(cjv2Dir, 'cjpm.toml'), cjv2Toml, {
-            onlyIntegrated: config.onlyIntegrated,
-            integrated: true,
-        })
-
-        // Generate cjpm.toml for framework demo package and depend on idlize
-        const frameworkToml = [
-            '[package]',
-            '  name = "demo"',
-            '  version = "1.0.0"',
-            '  description = "Cangjie framework demo module"',
-            '  cjc-version = "0.59.6"',
-            '  src-dir = "./src"',
-            '  target-dir = "./build"',
-            '  output-type = "static"',
-            '  compile-option = "--error-count-limit all"',
-            '  link-option = ""',
-            '  package-configuration = {}',
-            '',
-            '[dependencies]',
-            `  Interop = { path = "${interopPath}" }`,
-            `  KoalaRuntime = { path = "${runtimePath}" }`,
-            `  idlize = { path = "${cjv2Dir}" }`,
-            ''
-        ].join('\n')
-        writeFile(path.join(frameworkDir, 'cjpm.toml'), frameworkToml, {
             onlyIntegrated: config.onlyIntegrated,
             integrated: true,
         })

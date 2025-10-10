@@ -91,7 +91,7 @@ class ArkTSArkoalaInstall extends BaseArkoalaInstall {
 
 class CJArkoalaInstall extends BaseArkoalaInstall {
     get managedDir(): string {
-        return path.join(this.root, "arkoala-cj/cjv2/src")
+        return path.join(this.root, 'arkoala-cj', 'cjv2', 'src')
     }
     get managedSdkDir(): string {
         throw new Error("Not implemented")

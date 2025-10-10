@@ -148,13 +148,19 @@ export function installFiles(outDir: string, library: PeerLibrary, files: Map<st
                 const folder = path.dirname(filePath)
                 let pkg = 'idlize'
                 
-                if (folder !== '.' && folder !== 'arkoala-cj/cjv2/src') {
-                    pkg = 'idlize.' + folder.replace(/\//g, '.').replace(/^arkoala-cj\.cjv2\.src\.?/, '')
+                if (folder !== '.' && folder !== path.join('arkoala-cj', 'cjv2', 'src')) {
+                    pkg = 'idlize.' + folder.replace(path.sep, '.')
                 }
                 codePrefix.push(`package ${pkg}`, '')
             }
 
-            codePrefix.push('','import std.collection.*', 'import Interop.*', 'import KoalaRuntime.*', 'import KoalaRuntime.memoize.*', 'import std.time.DateTime', '')
+            codePrefix.push('')
+            codePrefix.push('import std.collection.*')
+            codePrefix.push('import Interop.*')
+            codePrefix.push('import KoalaRuntime.*')
+            codePrefix.push('import KoalaRuntime.memoize.*')
+            codePrefix.push('import std.time.DateTime')
+            codePrefix.push('')
 
             const folder = path.dirname(filePath)
             if (folder.endsWith('components')) {
