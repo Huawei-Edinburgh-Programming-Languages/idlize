@@ -149,7 +149,7 @@ export function installFiles(outDir: string, library: PeerLibrary, files: Map<st
                 let pkg = 'idlize'
                 
                 if (folder !== '.' && folder !== path.join('arkoala-cj', 'cjv2', 'src')) {
-                    pkg = 'idlize.' + folder.replace(/\//g, '.')
+                    pkg = 'idlize.' + folder.replace(path.sep, '.')
                 }
                 codePrefix.push(`package ${pkg}`, '')
             }
