@@ -26,6 +26,7 @@ import { UndefinedConvertor } from "@idlizer/core"
 import { UnionRuntimeTypeChecker, zipMany } from "@idlizer/core";
 import { getHookMethod, peerGeneratorConfiguration } from '../../DefaultConfiguration';
 import { injectPatch } from '../common';
+import { getAPIAnnotation } from './lang/APIAnnotationUtils';
 
 function collapseReturnTypes(types: idl.IDLType[], language?: Language) {
     let returnType: idl.IDLType = collapseTypes(types)
@@ -256,13 +257,9 @@ export function collapseSameMethodsIDL(methods:idl.IDLMethod[], language?: Langu
         }
 }
 
-type MethodPrefixEmitter =
-  ((peer: string, method: Method, printer: LanguageWriter) => void) | undefined;
-
 export class OverloadsPrinter {
     private static undefinedConvertor: UndefinedConvertor | undefined
     private posfix: string = ""
-    private prefixEmitter: MethodPrefixEmitter;
 
     constructor(private library: PeerLibrary, private printer: LanguageWriter, private language: Language, private isComponent: boolean, private useMemoM3: boolean) {
         // TODO: UndefinedConvertor is not known during static initialization because of cyclic dependencies
@@ -273,10 +270,6 @@ export class OverloadsPrinter {
 
     setPostfix(postfix?: string) {
         this.posfix = postfix ?? ""
-    }
-
-    setMethodPrefixEmitter(fn?: (peer: string, method: Method, printer: LanguageWriter) => void) {
-        this.prefixEmitter = fn;
     }
 
     printGroupedComponentOverloads(peer: string, peerMethods: (PeerMethod)[]) {
@@ -314,9 +307,10 @@ export class OverloadsPrinter {
             collapsedMethod.name = methods[0].uniqueOverloadName
         }
         const key = peer + '.' + collapsedMethod.name
-        if (this.prefixEmitter) {
-            this.prefixEmitter(peer, collapsedMethod, this.printer);
-        }
+
+        const comment = getAPIAnnotation(methods[0].decl)
+        if (comment) this.printer.print(comment)
+
         this.printer.writeMethodImplementation(collapsedMethod, (writer) => {
             injectPatch(this.printer, key, peerGeneratorConfiguration().patchMaterialized)
             if (this.isComponent) {
