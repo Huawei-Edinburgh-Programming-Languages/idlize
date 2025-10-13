@@ -38,6 +38,7 @@ import {
     IdlComponentDeclaration,
     ImportsCollector,
     OverloadsPrinter,
+    getAPIAnnotation,
     PrinterResult,
     readLangTemplate,
     TargetFile,
@@ -354,7 +355,12 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
             const componentClassName = generateArkComponentName(peer.componentName)
             const parentComponentClassName = peer.parentComponentName ? generateArkComponentName(peer.parentComponentName!) : `ComponentBase`
             const peerClassName = componentToPeerClass(peer.componentName)
-
+            
+            const comment = getAPIAnnotation(component.interfaceDeclaration) ||
+                           getAPIAnnotation(component.attributeDeclaration)
+            if (comment) {
+                printer.print(comment)
+            }
 
             printer.writeClass(componentClassName, (writer) => {
                 writer.writeMethodImplementation(

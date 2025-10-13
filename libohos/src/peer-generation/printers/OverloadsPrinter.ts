@@ -26,6 +26,7 @@ import { UndefinedConvertor } from "@idlizer/core"
 import { UnionRuntimeTypeChecker, zipMany } from "@idlizer/core";
 import { getHookMethod, peerGeneratorConfiguration } from '../../DefaultConfiguration';
 import { injectPatch } from '../common';
+import { getAPIAnnotation } from './lang/APIAnnotationUtils';
 
 function collapseReturnTypes(types: idl.IDLType[], language?: Language) {
     let returnType: idl.IDLType = collapseTypes(types)
@@ -306,6 +307,10 @@ export class OverloadsPrinter {
             collapsedMethod.name = methods[0].uniqueOverloadName
         }
         const key = peer + '.' + collapsedMethod.name
+
+        const comment = getAPIAnnotation(methods[0].decl)
+        if (comment) this.printer.print(comment)
+
         this.printer.writeMethodImplementation(collapsedMethod, (writer) => {
             injectPatch(this.printer, key, peerGeneratorConfiguration().patchMaterialized)
             if (this.isComponent) {
