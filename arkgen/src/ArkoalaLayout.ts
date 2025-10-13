@@ -207,12 +207,12 @@ export class CJLayout extends CommonLayoutBase {
         ["checkArkoalaCallbacks", "./CallbacksChecker"],
         ["CallbackTransformer", "./CallbackTransformer"],
     ])
-    private getPath(file:string, subdir?: string):string {
-        if (subdir) {
-            return path.join(subdir, file)
-        }
-        return path.join('.', file)
+    private getPath(file:string, subdir: string = "."):string {
+        return path.join(subdir, file)
     }
+    private interfacesFolder = 'interfaces'
+    private componentsFolder = 'components'
+    private peersFolder = 'peers'
 
     resolve({ node, role }: idl.LayoutTargetDescription): string {
         switch (role) {
@@ -220,43 +220,43 @@ export class CJLayout extends CommonLayoutBase {
             case LayoutNodeRole.INTERFACE: {
                 const ns = idl.getNamespaceName(node)
                 if (ns !== '') {
-                    // if defined inside a namespace -> interfaces folder
-                    // TODO: is this correct??
-                    return this.getPath(`${this.prefix}${ns.split('.').map(it => idl.capitalize(it)).join('')}Namespace`, 'interfaces')
+                    // if defined inside a namespace -> use namespace name for file name and put it in interfaces folder
+                    return this.getPath(`${ns.split('.').map(it => idl.capitalize(it)).join('')}Namespace`, this.interfacesFolder)
                 }
                 if (idl.isInterface(node)) {
                     const component = findComponentByDeclaration(this.library, node)
                     if (component) {
                         // This is an interface to build components. E.g. BlankInterface, ColumnInterface
-                        return this.getPath(`${this.prefix}${toFileName(component.name)}`, 'components')
+                        return this.getPath(`${toFileName(component.name)}`, this.componentsFolder)
                     }
                     if (idl.isBuilderClass(node)) {
-                        return this.getPath(`${this.prefix}${toFileName(node.name)}Builder`, 'interfaces')
+                        return this.getPath(`${toFileName(node.name)}Builder`, this.interfacesFolder)
                     }
                     if (idl.isMaterialized(node, this.library)) {
                         if (idl.isInterfaceSubkind(node)) {
-                            return this.getPath(toFileName(node.name) + 'Internal', 'interfaces')
+                            return this.getPath(`${toFileName(node.name)}Internal`, this.interfacesFolder)
                         }
-                        return this.getPath(toFileName(node.name), 'interfaces')
+                        return this.getPath(toFileName(node.name), this.interfacesFolder)
                     }
-                    return this.getPath(`${this.prefix}${toFileName(node.name)}`, 'interfaces')
+                    return this.getPath(`${toFileName(node.name)}`, this.interfacesFolder)
                 }
-                return this.getPath(`Common`, 'interfaces')
+                return this.getPath(`Common`, this.interfacesFolder)
             }
             case LayoutNodeRole.PEER: {
                 if (idl.isInterface(node)) {
-                    if (isComponentDeclaration(this.library, node)) {
-                        return this.getPath(`${this.prefix}${toFileName(node.name)}Peer`, 'peers')
+                    const component = findComponentByDeclaration(this.library, node)
+                    if (component) {
+                        return this.getPath(`${toFileName(component.name)}Peer`, this.peersFolder)
                     }
                 }
-                return this.getPath(`CommonPeer`, 'interfaces')
+                return this.getPath(`CommonPeer`, this.interfacesFolder)
             }
             case LayoutNodeRole.GLOBAL: {
-                return this.getPath('GlobalScope', 'interfaces')
+                return this.getPath('GlobalScope', this.interfacesFolder)
             }
             case LayoutNodeRole.COMPONENT: {
                 const component = findComponentByDeclaration(this.library, node)
-                return this.getPath('Ark' + (component?.name ?? node.name), 'components')
+                return this.getPath(component?.name ?? node.name, this.componentsFolder)
             }
         }
     }
