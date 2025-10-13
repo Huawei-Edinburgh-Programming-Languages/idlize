@@ -16,7 +16,7 @@
 import * as path from 'node:path'
 import { Language, LayoutManagerStrategy, LayoutNodeRole, PeerLibrary } from '@idlizer/core'
 import * as idl from '@idlizer/core'
-import { isComponentDeclaration, NativeModule, peerGeneratorConfiguration } from '@idlizer/libohos'
+import { findComponentByDeclaration, isComponentDeclaration, NativeModule, peerGeneratorConfiguration } from '@idlizer/libohos'
 
 const BASE_PATH = 'framework'
 const getGeneratedFilePath = (p:string) => path.join(BASE_PATH, p)
@@ -213,20 +213,22 @@ export class CJLayout extends CommonLayoutBase {
         }
         return path.join('.', file)
     }
-    
+
     resolve({ node, role }: idl.LayoutTargetDescription): string {
         switch (role) {
             case LayoutNodeRole.SERIALIZER:
             case LayoutNodeRole.INTERFACE: {
-                if (idl.isEntry(node)) {
-                    const ns = idl.getNamespaceName(node)
-                    if (ns !== '') {
-                        return this.getPath(`${this.prefix}${ns.split('.').map(it => idl.capitalize(it)).join('')}Namespace`, 'interfaces')
-                    }
+                const ns = idl.getNamespaceName(node)
+                if (ns !== '') {
+                    // if defined inside a namespace -> interfaces folder
+                    // TODO: is this correct??
+                    return this.getPath(`${this.prefix}${ns.split('.').map(it => idl.capitalize(it)).join('')}Namespace`, 'interfaces')
                 }
                 if (idl.isInterface(node)) {
-                    if (isComponentDeclaration(this.library, node)) {
-                        return this.getPath(`${this.prefix}${toFileName(node.name)}`, 'components')
+                    const component = findComponentByDeclaration(this.library, node)
+                    if (component) {
+                        // This is an interface to build components. E.g. BlankInterface, ColumnInterface
+                        return this.getPath(`${this.prefix}${toFileName(component.name)}`, 'components')
                     }
                     if (idl.isBuilderClass(node)) {
                         return this.getPath(`${this.prefix}${toFileName(node.name)}Builder`, 'interfaces')
@@ -253,7 +255,8 @@ export class CJLayout extends CommonLayoutBase {
                 return this.getPath('GlobalScope', 'interfaces')
             }
             case LayoutNodeRole.COMPONENT: {
-                return this.getPath('Ark' + node.name, 'components')
+                const component = findComponentByDeclaration(this.library, node)
+                return this.getPath('Ark' + (component?.name ?? node.name), 'components')
             }
         }
     }

@@ -70,7 +70,7 @@ export function isComponentDeclaration(library: LibraryInterface, decl: idl.IDLE
     return collectComponents(library).some(it => it.interfaceDeclaration === decl || it.attributeDeclaration === decl)
 }
 
-export function findComponentByDeclaration(library: LibraryInterface, iface: idl.IDLInterface): IdlComponentDeclaration | undefined {
+export function findComponentByDeclaration(library: LibraryInterface, iface: idl.IDLEntry): IdlComponentDeclaration | undefined {
     return collectComponents(library).find(it =>
         it.interfaceDeclaration === iface || it.attributeDeclaration === iface)
 }
