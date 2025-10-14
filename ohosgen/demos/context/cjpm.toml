@@ -2,7 +2,7 @@
 
 [package]
   cjc-version = "0.58.3"
-  compile-option = "-L ./build/native/cangjie -l CONTEXT_NativeBridgeCJ"
+  compile-option = "-g -L ./build/native/cangjie -l CONTEXT_NativeBridgeCJ"
   description = "config file for cj-context build"
   link-option = ""
   name = "idlize"
