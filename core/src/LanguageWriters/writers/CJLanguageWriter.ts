@@ -190,8 +190,6 @@ export class CJEnumWithGetter implements LanguageStatement {
             return {name: it.name, id: it.initializer}
         })
 
-        const isStringEnum = initializers.every(it => typeof it.id == 'string')
-
         let memberValue = 0
         const members: {
             name: string,
@@ -213,50 +211,51 @@ export class CJEnumWithGetter implements LanguageStatement {
         }
 
         let enumName = idl.getNamespaceName(this.enumEntity).concat(this.enumEntity.name)
-        
-        // Generate new enum style
-        writer.print(`${this.isExport ? "public " : ""}enum ${enumName} {`)
-        writer.pushIndent()
-        
-        // Write enum members
-        for (let i = 0; i < members.length; i++) {
-            const member = members[i]
-            const prefix = '|'
-            writer.print(`${prefix}${member.name}`)
-        }
-        
-        writer.print(`public func getValue(): Int32 {`)
-        writer.pushIndent()
-        writer.print(`match(this) {`)
-        writer.pushIndent()
-        
-        for (const member of members) {
-            writer.print(`case ${member.name} => ${member.numberId}`)
-        }
-        
-        writer.popIndent()
-        writer.print(`}`)
-        writer.popIndent()
-        writer.print(`}`)
 
-        writer.print(`public static func parseValue(value: Int32): ${enumName} {`)
-        writer.pushIndent()
-        writer.print(`match(value) {`)
-        writer.pushIndent()
-        
-        for (const member of members) {
-            writer.print(`case ${member.numberId} => ${member.name}`)
-        }
-        
-        writer.print(`case _ => throw Exception("Invalid ${enumName} value: \${value}")`)
-        
-        writer.popIndent()
-        writer.print(`}`)
-        writer.popIndent()
-        writer.print(`}`)
+        const getValueSignature = new MethodSignature(
+            idl.IDLI32Type,
+            [],
+            undefined,
+            undefined,
+            undefined,
+            []
+        )
 
-        writer.popIndent()
-        writer.print(`}`)
+        const parseValueSignature = new MethodSignature(
+            idl.createReferenceType(this.enumEntity),
+            [idl.IDLI32Type],
+            undefined,
+            undefined,
+            undefined,
+            ['value']
+        )
+
+        writer.writeEnum(enumName, members, { isExport: this.isExport }, (w) => {
+            const cjWriter = w as CJLanguageWriter
+            
+            // getValue() 
+            cjWriter.writeFunctionImplementationWithModifiers('getValue', getValueSignature, (writer: CJLanguageWriter) => {
+                writer.print(`match(this) {`)
+                writer.pushIndent()
+                for (const member of members) {
+                    writer.print(`case ${member.name} => ${member.numberId}`)
+                }
+                writer.popIndent()
+                writer.print(`}`)
+            })
+            
+            // parseValue() 
+            cjWriter.writeFunctionImplementationWithModifiers('parseValue', parseValueSignature, (writer: CJLanguageWriter) => {
+                writer.print(`match(value) {`)
+                writer.pushIndent()
+                for (const member of members) {
+                    writer.print(`case ${member.numberId} => ${member.name}`)
+                }
+                writer.print(`case _ => throw Exception("Invalid ${enumName} value: \${value}")`)
+                writer.popIndent()
+                writer.print(`}`)
+            }, [MethodModifier.PUBLIC, MethodModifier.STATIC])
+        })
     }
 }
 
@@ -366,6 +365,32 @@ export class CJLanguageWriter extends LanguageWriter {
     }
     writeFunctionImplementation(name: string, signature: MethodSignature, op: (writer: this) => void): void {
         this.printer.print(`${this.generateFunctionDeclaration(name, signature)} {`)
+        this.printer.pushIndent()
+        op(this)
+        this.printer.popIndent()
+        this.printer.print('}')
+    }
+    
+    writeFunctionImplementationWithModifiers(
+        name: string,
+        signature: MethodSignature,
+        op: (writer: this) => void,
+        modifiers?: MethodModifier[]
+    ): void {
+        // default: public
+        let modifiersText = 'public'
+        if (modifiers && modifiers.length > 0) {
+            const modifierStrings = modifiers.map((it) => MethodModifier[it].toLowerCase())
+            modifiersText = modifierStrings.join(' ')
+        }
+    
+        const args = signature.args
+            .map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.getNodeName(it)}`)
+            .join(", ")
+    
+        const functionDeclaration = `${modifiersText} func ${name}(${args}): ${this.getNodeName(signature.returnType)}`
+    
+        this.printer.print(`${functionDeclaration} {`)
         this.printer.pushIndent()
         op(this)
         this.printer.popIndent()
