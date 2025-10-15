@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
@@ -27,12 +27,16 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y python3-pip ninja-build
         pip install meson
-    - name: Clone cangjie binary repository
-      uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+    - name: Cache cj SDK
+      id: cache-cj-sdk
+      uses: actions/cache@v4
       with:
-        owner: 'Huawei-Edinburgh-Programming-Languages'
-        repository: 'cj-sdk-mirror'
-        access-token: ${{ secrets.ACCESS_TOKEN }}
+        key: cjc-sdk-v1.0.3
+        path: |
+          ~/cangjie-sdk.tar.gz
+    - if: ${{ steps.cache-cj-sdk.outputs.cache-hit != 'true' }}
+      name: Download Cangjie sdk
+      run: curl -o ~/cangjie-sdk.tar.gz -sf 'https://cangjie-lang.cn/v1/files/auth/downLoad?nsId=142267&fileName=cangjie-sdk-linux-x64-1.0.3.tar.gz&objectKey=68e725c23115f673ef1280fc'
     - name: More git setup
       run: |
         BRANCH="${{ github.head_ref || github.ref_name }}"
@@ -49,16 +53,23 @@ jobs:
            echo @koalaui:registry=https://nexus.cn.bz-openlab.ru:10443/repository/koala-npm/ >> ~/.npmrc ;
            echo @panda:registry=https://nexus.cn.bz-openlab.ru:10443/repository/koala-npm/ >> ~/.npmrc ;
            echo '//nexus.cn.bz-openlab.ru:10443/repository/koala-npm/:_auth=${{ secrets.NPM_TOKEN }}' >> ~/.npmrc
-    # - name: Use Node.js ${{ matrix.node-version }}
-    #   uses: actions/setup-node@v4
-    #   with:
-    #     node-version: ${{ matrix.node-version }}
-    #     cache: 'npm'
+    - name: Cache node modules
+      id: cache-npm
+      uses: actions/cache@v4
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
     - name: npm install
       run: npm i --verbose --no-audit && cd external && npm i
     - name: dtsgen
       run: cd dtsgen && npm run compile
     - name: Extract cj sdk
-      run: tar -xzf cj-sdk-mirror/cangjie-sdk-linux-x64-1.0.1.tar.gz -C ~
+      run: tar -xzf ~/cangjie-sdk.tar.gz -C ~
     - name: arkgen
       run: source ~/cangjie/envsetup.sh && cd arkgen && npm run clean && npm run all:subset:cj && npm run clean && npm run all:boole:demo1:cj
