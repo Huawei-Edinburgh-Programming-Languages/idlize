@@ -208,7 +208,7 @@ export class CJLayout extends CommonLayoutBase {
         ["CallbackTransformer", "./CallbackTransformer"],
     ])
     private getPath(file:string, subdir: string = "."):string {
-        return path.join(subdir, file)
+        return path.join(subdir, `${this.prefix}${file}`)
     }
     private interfacesFolder = 'interfaces'
     private componentsFolder = 'components'
