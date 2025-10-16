@@ -407,15 +407,18 @@ type MethodArgPrintHintOrNone = PrintHint | undefined
 
 export class MethodSignature {
     public argsModifiers: ArgumentModifier[][] | undefined
+    public methodModifiers: MethodModifier[] | undefined
     constructor(
         public returnType: idl.IDLType,
         public args: idl.IDLType[],
         public defaults: stringOrNone[]|undefined = undefined,
         argsModifiers: (ArgumentModifier[]|ArgumentModifier|undefined)[]|undefined = undefined,
         public printHints?: MethodArgPrintHintOrNone[],
-        public argNames?: string[]
+        public argNames?: string[],
+        methodModifiers?: MethodModifier[]
     ) {
         this.argsModifiers = argsModifiers?.map(it => it===undefined ? [] : Array.isArray(it) ? it : [it])
+        this.methodModifiers = methodModifiers
     }
 
     argName(index: number): string {
