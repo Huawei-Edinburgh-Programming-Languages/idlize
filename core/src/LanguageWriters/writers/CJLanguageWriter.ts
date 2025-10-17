@@ -233,10 +233,8 @@ export class CJEnumWithGetter implements LanguageStatement {
         )
 
         writer.writeEnum(enumName, members, { isExport: this.isExport }, (w) => {
-            const cjWriter = w as CJLanguageWriter
-            
             // getValue() 
-            cjWriter.writeFunctionImplementation('getValue', getValueSignature, (writer: CJLanguageWriter) => {
+            w.writeFunctionImplementation('getValue', getValueSignature, (writer: LanguageWriter) => {
                 writer.print(`match(this) {`)
                 writer.pushIndent()
                 for (const member of members) {
@@ -247,7 +245,7 @@ export class CJEnumWithGetter implements LanguageStatement {
             })
             
             // parseValue() 
-            cjWriter.writeFunctionImplementation('parseValue', parseValueSignature, (writer: CJLanguageWriter) => {
+            w.writeFunctionImplementation('parseValue', parseValueSignature, (writer: LanguageWriter) => {
                 writer.print(`match(value) {`)
                 writer.pushIndent()
                 for (const member of members) {
