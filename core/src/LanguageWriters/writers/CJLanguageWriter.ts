@@ -371,12 +371,7 @@ export class CJLanguageWriter extends LanguageWriter {
         this.printer.print('}')
     }
     private generateFunctionDeclaration(name: string, signature: MethodSignature): string {
-        let modifiersText = 'public'
-        if (signature.methodModifiers && signature.methodModifiers.length > 0) {
-            const modifierStrings = signature.methodModifiers.map((it) => MethodModifier[it].toLowerCase())
-            modifiersText = modifierStrings.join(' ')
-        }
-        
+        let modifiersText  = signature.methodModifiers?.map((it) => MethodModifier[it].toLowerCase()).join(' ') ?? 'public'
         const args = signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.getNodeName(it)}`)
         return `${modifiersText} func ${name}(${args.join(", ")}): ${this.getNodeName(signature.returnType)}`
     }
