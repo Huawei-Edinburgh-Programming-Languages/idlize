@@ -190,8 +190,6 @@ export class CJEnumWithGetter implements LanguageStatement {
             return {name: it.name, id: it.initializer}
         })
 
-        const isStringEnum = initializers.every(it => typeof it.id == 'string')
-
         let memberValue = 0
         const members: {
             name: string,
@@ -213,23 +211,49 @@ export class CJEnumWithGetter implements LanguageStatement {
         }
 
         let enumName = idl.getNamespaceName(this.enumEntity).concat(this.enumEntity.name)
-        writer.writeClass(enumName, () => {
-            const enumType = idl.createReferenceType(this.enumEntity)
-            members.forEach(it => {
-                writer.writeFieldDeclaration(it.name, enumType, [FieldModifier.PUBLIC, FieldModifier.STATIC, FieldModifier.FINAL], false,
-                    writer.makeString(`${enumName}(${it.numberId})`)
-                )
+
+        const getValueSignature = new MethodSignature(
+            idl.IDLI32Type,
+            [],
+            undefined,
+            undefined,
+            undefined,
+            [],
+            [MethodModifier.PUBLIC]
+        )
+
+        const parseValueSignature = new MethodSignature(
+            idl.createReferenceType(this.enumEntity),
+            [idl.IDLI32Type],
+            undefined,
+            undefined,
+            undefined,
+            ['value'],
+            [MethodModifier.PUBLIC, MethodModifier.STATIC]
+        )
+
+        writer.writeEnum(enumName, members, { isExport: this.isExport }, (w) => {
+            // getValue() 
+            w.writeFunctionImplementation('getValue', getValueSignature, (writer: LanguageWriter) => {
+                writer.print(`match(this) {`)
+                writer.pushIndent()
+                for (const member of members) {
+                    writer.print(`case ${member.name} => ${member.numberId}`)
+                }
+                writer.popIndent()
+                writer.print(`}`)
             })
-
-            const value = 'value'
-            const intType = idl.IDLI32Type
-            writer.writeFieldDeclaration(value, intType, [FieldModifier.PUBLIC, FieldModifier.FINAL], false)
-
-            const signature = new MethodSignature(idl.IDLVoidType, [intType])
-            writer.writeConstructorImplementation(enumName, signature, () => {
-                writer.writeStatement(
-                    writer.makeAssign(value, undefined, writer.makeString(signature.argName(0)), false)
-                )
+            
+            // parseValue() 
+            w.writeFunctionImplementation('parseValue', parseValueSignature, (writer: LanguageWriter) => {
+                writer.print(`match(value) {`)
+                writer.pushIndent()
+                for (const member of members) {
+                    writer.print(`case ${member.numberId} => ${member.name}`)
+                }
+                writer.print(`case _ => throw Exception("Invalid ${enumName} value: \${value}")`)
+                writer.popIndent()
+                writer.print(`}`)
             })
         })
     }
@@ -347,8 +371,9 @@ export class CJLanguageWriter extends LanguageWriter {
         this.printer.print('}')
     }
     private generateFunctionDeclaration(name: string, signature: MethodSignature): string {
+        let modifiersText  = signature.methodModifiers?.map((it) => MethodModifier[it].toLowerCase()).join(' ') ?? 'public'
         const args = signature.args.map((it, index) => `${this.escapeKeyword(signature.argName(index))}: ${this.getNodeName(it)}`)
-        return `public func ${name}(${args.join(", ")}): ${this.getNodeName(signature.returnType)}`
+        return `${modifiersText} func ${name}(${args.join(", ")}): ${this.getNodeName(signature.returnType)}`
     }
     writeMethodCall(receiver: string, method: string, params: string[], nullable = false): void {
         params = params.map(argName => this.escapeKeyword(argName))
@@ -486,7 +511,7 @@ export class CJLanguageWriter extends LanguageWriter {
         this.print(`func ${name}(${signture}): ${this.typeForeignConvertor.convert(method.signature.returnType)}`)
     }
     override i32FromEnum(value: LanguageExpression, _enumEntry: idl.IDLEnum): LanguageExpression {
-        return this.makeString(`${value.asString()}.value`)
+        return this.makeString(`${value.asString()}.getValue()`)
     }
     makeAssign(variableName: string, type: idl.IDLType | undefined, expr: LanguageExpression, isDeclared: boolean = true, isConst: boolean = true): LanguageStatement {
         return new CJAssignStatement(this.escapeKeyword(variableName), type, expr, isDeclared, isConst)
@@ -611,7 +636,7 @@ export class CJLanguageWriter extends LanguageWriter {
         return this.makeString(`${value}.value${index}`)
     }
     enumFromI32(value: LanguageExpression, enumEntry: idl.IDLEnum): LanguageExpression {
-        return this.makeString(`${this.getNodeName(enumEntry)}(${value.asString()})`)
+        return this.makeString(`${this.getNodeName(enumEntry)}.parseValue(${value.asString()})`)
     }
     makeEnumEntity(enumEntity: idl.IDLEnum, options: { isExport: boolean, isDeclare?: boolean }): LanguageStatement {
         return new CJEnumWithGetter(enumEntity, options.isExport)
