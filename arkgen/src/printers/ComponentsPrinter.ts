@@ -396,7 +396,7 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
                     writer.print('// we call this function outside of class, so need to make it public')
                     writer.writeMethodCall('super', applyAttributesFinish, [])
                 })
-            }, parentComponentClassName, [`${peer.originalClassName!}Interfaces`])
+            }, parentComponentClassName, ["CommonMethodInterfaces"])
             return { content: printer, imports}
         }
         return [{
@@ -429,6 +429,7 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
             printer.writeLines(readLangTemplate(`component_builder_${declaredPostrix}${stagePostfix}`, this.library.language)
                 .replaceAll("%COMPONENT_NAME%", component.name)
                 .replaceAll("%COMPONENT_ATTRIBUTE_NAME%", componentInterfaceName)
+                .replaceAll("%STYLE_PARAMETER_TYPE%", "CommonMethodInterfaces")
                 .replaceAll("%FUNCTION_PARAMETERS%", shiftIfIsNotEmpty(paramsList ? `,\n${paramsList}`: ""))
                 .replaceAll("%COMPONENT_CLASS_NAME%", componentClassImplName)
                 .replaceAll("%PEER_CLASS_NAME%", peerClassName)
