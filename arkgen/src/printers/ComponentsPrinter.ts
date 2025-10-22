@@ -346,6 +346,29 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
         return imports
     }
 
+    private findBaseMethodClass(type: idl.IDLType, seenInterfaces: Set<string>): string | null {
+        if (!idl.isReferenceType(type)) return null
+        const typeName = type.name
+
+        if (seenInterfaces.has(typeName)) return null
+        seenInterfaces.add(typeName)
+
+        const resolvedType = this.library.resolveTypeReference(type)
+        if (!resolvedType || !idl.isInterface(resolvedType)) return null
+
+        if (resolvedType.inheritance && resolvedType.inheritance.length > 0) {
+            const parentBase = this.findBaseMethodClass(resolvedType.inheritance[0], seenInterfaces)
+            if (parentBase) return parentBase
+        }
+
+        if (isCommonMethod(typeName)) {
+            return typeName;
+        }
+        // I am still thinking about the situation that the inheritance is not pointed to the "CommonMethod" or the Intermediate class
+
+        return null;
+    }
+
     private printComponent(peer: PeerClass): PrinterResult[] {
         const component = findComponentByType(this.library, idl.createReferenceType(peer.originalClassName!))!
         const generate = () => {
@@ -361,6 +384,19 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
             if (comment) {
                 printer.print(comment)
             }
+
+            const implementsInterfaces: string[] = []
+            const seenInterfaces = new Set<string>()
+            
+            component.attributeDeclaration.inheritance?.forEach(it => {
+                const baseMethodClass = this.findBaseMethodClass(it, seenInterfaces)
+                if (baseMethodClass) {
+                    const interfaceName = `${baseMethodClass}Interfaces`
+                    if (!implementsInterfaces.includes(interfaceName)) {
+                        implementsInterfaces.push(interfaceName)
+                    }
+                }
+            })
 
             printer.writeClass(componentClassName, (writer) => {
                 writer.writeMethodImplementation(
@@ -396,7 +432,7 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
                     writer.print('// we call this function outside of class, so need to make it public')
                     writer.writeMethodCall('super', applyAttributesFinish, [])
                 })
-            }, parentComponentClassName, ["CommonMethodInterfaces"])
+            }, parentComponentClassName, implementsInterfaces)
             return { content: printer, imports}
         }
         return [{
@@ -425,11 +461,21 @@ class CJComponentFileVisitor implements ComponentFileVisitor {
             const peerClassName = componentToPeerClass(peer.componentName)
             const declaredPostrix = this.options.isDeclared ? "decl_" : ""
             const stagePostfix = this.library.useMemoM3 ? "m3" : "m1"
+            
+            let styleParameterType = "CommonMethodInterfaces"  // default
+            if (component.attributeDeclaration.inheritance && component.attributeDeclaration.inheritance.length > 0) {
+                const seenInterfaces = new Set<string>()
+                const baseMethodClass = this.findBaseMethodClass(component.attributeDeclaration.inheritance[0], seenInterfaces)
+                if (baseMethodClass) {
+                    styleParameterType = `${baseMethodClass}Interfaces`
+                }
+            }
+            
             let paramsList = mappedCallableParams?.join(", ")
             printer.writeLines(readLangTemplate(`component_builder_${declaredPostrix}${stagePostfix}`, this.library.language)
                 .replaceAll("%COMPONENT_NAME%", component.name)
                 .replaceAll("%COMPONENT_ATTRIBUTE_NAME%", componentInterfaceName)
-                .replaceAll("%STYLE_PARAMETER_TYPE%", "CommonMethodInterfaces")
+                .replaceAll("%STYLE_PARAMETER_TYPE%", styleParameterType)
                 .replaceAll("%FUNCTION_PARAMETERS%", shiftIfIsNotEmpty(paramsList ? `,\n${paramsList}`: ""))
                 .replaceAll("%COMPONENT_CLASS_NAME%", componentClassImplName)
                 .replaceAll("%PEER_CLASS_NAME%", peerClassName)
