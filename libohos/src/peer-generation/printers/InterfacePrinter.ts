@@ -33,7 +33,8 @@ import {
     collapseTypes,
     isInplacedGeneric,
     maybeRestoreGenerics,
-    VariantNaming
+    VariantNaming,
+    isCommonMethod
 } from '@idlizer/core'
 import { PrinterFunction, PrinterResult } from '../LayoutManager'
 import { peerGeneratorConfiguration } from '../../DefaultConfiguration'
@@ -818,9 +819,11 @@ export class CJInterfacesVisitor implements InterfacesVisitor {
     constructor(
         protected readonly peerLibrary: PeerLibrary
     ) { }
-
     private shouldNotPrint(entry: idl.IDLEntry): boolean {
-        return idl.isInterface(entry) && (isMaterialized(entry, this.peerLibrary) || isBuilderClass(entry))
+        if (idl.isInterface(entry) && isCommonMethod(entry.name)) {
+            return false
+        }
+        return idl.isInterface(entry) && (isMaterialized(entry, this.peerLibrary) || isBuilderClass(entry) || isComponentDeclaration(this.peerLibrary, entry))
             || idl.isMethod(entry)
     }
 

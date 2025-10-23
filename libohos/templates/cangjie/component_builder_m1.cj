@@ -1,6 +1,6 @@
 class %COMPONENT_ATTRIBUTE_NAME%StyleHolder {
-    var value: ?((attributes: %COMPONENT_ATTRIBUTE_NAME%Interfaces) -> Unit)
-    init (value: ?((attributes: %COMPONENT_ATTRIBUTE_NAME%Interfaces) -> Unit)) {
+    var value: ?((attributes: %STYLE_PARAMETER_TYPE%) -> Unit)
+    init (value: ?((attributes: %STYLE_PARAMETER_TYPE%) -> Unit)) {
         this.value = value
     }
 }
@@ -15,7 +15,7 @@ class %COMPONENT_ATTRIBUTE_NAME%ContentHolder {
 
 @Memo
 public func Ark%COMPONENT_NAME%(
-    style: ?((attributes: %COMPONENT_ATTRIBUTE_NAME%Interfaces) -> Unit),
+    style: ?((attributes: %STYLE_PARAMETER_TYPE%) -> Unit),
     content_: ?(() -> Unit)%FUNCTION_PARAMETERS%
 ): Unit {
     let styleHolder = %COMPONENT_ATTRIBUTE_NAME%StyleHolder(style)
