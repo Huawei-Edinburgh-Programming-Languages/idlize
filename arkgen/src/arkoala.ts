@@ -167,7 +167,7 @@ function generateCjpmToml(pkgName: string, desc: string, deps: [string, string][
             `  src-dir = "${srcDir}"`,
             `  target-dir = "${targetDir}"`,
             '  output-type = "static"',
-            '  compile-option = "--error-count-limit all"',
+            '  compile-option = "-g --error-count-limit all"',
             '  link-option = ""',
             '  package-configuration = {}',
             '',
